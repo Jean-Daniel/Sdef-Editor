@@ -21,6 +21,9 @@
 #import "SdefXMLGenerator.h"
 #import "SdefExporterController.h"
 
+
+NSString * const SdefObjectDragType = @"SdefObjectDragType";
+
 @implementation SdefDocument
 
 - (id)init {
@@ -132,12 +135,6 @@
 }
 
 - (id)outlineView:(NSOutlineView *)outlineView child:(int)index ofItem:(id)item {
-/*
-  if (nil == item) {
-    return (index == 0) ? (id)_imports : (id)_dictionary;
-  }
-  return [item childAtIndex:index];
- */
   return (nil != item) ? [item childAtIndex:index] : _dictionary;
 }
 
@@ -146,10 +143,91 @@
 }
 
 #pragma mark -
-//- (BOOL)prepareSavePanel:(NSSavePanel *)savePanel {
-//  return YES;
-//}
+#pragma mark Drag & Drop
+- (BOOL)outlineView:(NSOutlineView *)outlineView writeItems:(NSArray *)items toPasteboard:(NSPasteboard *)pboard {
+  id selection = [items objectAtIndex:0];
+  if (selection != [self dictionary] && [selection objectType] != kSdefCollectionType && [selection isEditable]) {
+    NSPasteboard *pboard = [NSPasteboard pasteboardWithName:NSDragPboard];
+    [pboard declareTypes:[NSArray arrayWithObject:SdefObjectDragType] owner:self];
+    id value = [NSData dataWithBytes:&selection length:sizeof(id)];
+    [pboard setData:value forType:SdefObjectDragType];
+    return YES;
+  } else {
+    return NO;
+  }
+}
 
+- (NSDragOperation)outlineView:(NSOutlineView *)outlineView validateDrop:(id <NSDraggingInfo>)info
+                  proposedItem:(id)item proposedChildIndex:(int)index {
+  NSPasteboard *pboard = [info draggingPasteboard];
+  
+  if (item == nil && index < 0)
+    return NSDragOperationNone;
+  
+  if (![[pboard types] containsObject:SdefObjectDragType]) {
+    return NSDragOperationNone;
+  }
+  id value = [pboard dataForType:SdefObjectDragType];
+  id *addr = (id *)[value bytes];
+  SdefObject *object = addr[0];
+  
+  SdefObjectType srcType = [[object parent] objectType];  
+  if (srcType != [item objectType]) {
+    return NSDragOperationNone;
+  }
+  
+  if (srcType == kSdefCollectionType && [item contentType] != [[object parent] contentType]) {
+    return NSDragOperationNone;
+  }
+
+  return ([object findRoot] != [self dictionary]) ? NSDragOperationCopy : NSDragOperationMove;
+}
+
+- (BOOL)outlineView:(NSOutlineView *)outlineView acceptDrop:(id <NSDraggingInfo>)info item:(id)item childIndex:(int)index {
+  NSPasteboard *pboard = [info draggingPasteboard];
+  if (![[pboard types] containsObject:SdefObjectDragType]) {
+    return NO;
+  }
+  id value = [pboard dataForType:SdefObjectDragType];
+  id *addr = (id *)[value bytes];
+  SdefObject *object = addr[0];
+  
+  /* if same parent and index -1 */
+  if (index < 0 && [object parent] == item) {
+    return YES;
+  }
+  /* If line above */
+  if (index >= 0 && index < [item childCount] && object == [item childAtIndex:index]) {
+    return YES;
+  }
+  /* If line belove */
+  if (index > 0 && index <= [item childCount] && object == [item childAtIndex:index-1]) {
+    return YES;
+  }
+
+  unsigned srcIdx = [[object parent] indexOfChild:object];
+  if ([object findRoot] == [self dictionary]) {
+    [object retain];
+    [object remove];
+    if (index < 0)
+      [item appendChild:object];
+    else {
+      [item insertChild:object atIndex:(srcIdx <= index) ? index -1 : index];
+    }
+    [object release];
+  } else {
+    id copy = [object copy];
+    if (index < 0)
+      [item appendChild:copy];
+    else {
+      [item insertChild:copy atIndex:index];
+    }
+    [copy release];
+  }
+  return YES;
+}
+
+#pragma mark -
 - (NSDictionary *)fileAttributesToWriteToFile:(NSString *)fullDocumentPath
                                        ofType:(NSString *)documentTypeName
                                 saveOperation:(NSSaveOperationType)saveOperationType {
