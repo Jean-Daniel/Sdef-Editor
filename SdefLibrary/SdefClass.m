@@ -255,30 +255,21 @@ static unsigned SdefAccessorFlagFromString(NSString *str) {
 #pragma mark Protocols Implementations
 - (id)copyWithZone:(NSZone *)aZone {
   SdefElement *copy = [super copyWithZone:aZone];
-  copy->sd_hidden = sd_hidden;
   copy->sd_access = sd_access;
   copy->sd_accessors = sd_accessors;
-  copy->sd_impl = [sd_impl copyWithZone:aZone];
-  copy->sd_desc = [sd_desc copyWithZone:aZone];
   return copy;
 }
 
 - (void)encodeWithCoder:(NSCoder *)aCoder {
   [super encodeWithCoder:aCoder];
   [aCoder encodeInt:sd_access forKey:@"SEAccess"];
-  [aCoder encodeBool:sd_hidden forKey:@"SEHidden"];
   [aCoder encodeInt:sd_accessors forKey:@"SEAccessors"];
-  [aCoder encodeObject:sd_desc forKey:@"SEDescription"];
-  [aCoder encodeObject:sd_impl forKey:@"SEImplementation"];
 }
 
 - (id)initWithCoder:(NSCoder *)aCoder {
   if (self = [super initWithCoder:aCoder]) {
     sd_access = [aCoder decodeIntForKey:@"SEAccess"];
-    sd_hidden = [aCoder decodeBoolForKey:@"SEHidden"];
     sd_accessors = [aCoder decodeIntForKey:@"SEAccessors"];
-    sd_desc = [[aCoder decodeObjectForKey:@"SEDescription"] retain];
-    sd_impl = [[aCoder decodeObjectForKey:@"SEImplementation"] retain];
   }
   return self;
 }
@@ -297,19 +288,7 @@ static unsigned SdefAccessorFlagFromString(NSString *str) {
 }
 
 - (void)dealloc {
-  [sd_impl release];
-  [sd_desc release];
   [super dealloc];
-}
-
-- (SdefImplementation *)impl {
-  return sd_impl;
-}
-- (void)setImpl:(SdefImplementation *)newImpl {
-  if (sd_impl != newImpl) {
-    [sd_impl release];
-    sd_impl = [newImpl retain];
-  }
 }
 
 - (unsigned)access {
@@ -331,29 +310,6 @@ static unsigned SdefAccessorFlagFromString(NSString *str) {
   if (sd_accessors != accessors) {
     [[[[self document] undoManager] prepareWithInvocationTarget:self] setAccess:sd_accessors];
     sd_accessors = accessors;
-  }
-}
-
-- (BOOL)isHidden {
-  return sd_hidden;
-}
-
-- (void)setHidden:(BOOL)newHidden {
-  if (sd_hidden != newHidden) {
-    [[[[self document] undoManager] prepareWithInvocationTarget:self] setHidden:sd_hidden];
-    sd_hidden = newHidden;
-  }
-}
-
-- (NSString *)desc {
-  return sd_desc;
-}
-
-- (void)setDesc:(NSString *)newDesc {
-  if (sd_desc != newDesc) {
-    [[[self document] undoManager] registerUndoWithTarget:self selector:_cmd object:sd_desc];
-    [sd_desc release];
-    sd_desc = [newDesc copy];
   }
 }
 
@@ -412,6 +368,7 @@ static unsigned SdefAccessorFlagFromString(NSString *str) {
 - (SdefXMLNode *)xmlNode {
   id node;
   if (node = [super xmlNode]) {
+    [node removeAttributeForKey:@"name"];
     id attr = [self name];
     if (nil != attr) [node setAttribute:attr forKey:@"type"];
     
@@ -422,16 +379,6 @@ static unsigned SdefAccessorFlagFromString(NSString *str) {
     attr = SDAccessStringFromFlag([self access]);
     if (nil != attr) [node setAttribute:attr forKey:@"access"];
     
-    if ([self isHidden]) [node setAttribute:@"hidden" forKey:@"hidden"];
-        
-    attr = [self desc];
-    if (nil != attr) [node setAttribute:attr forKey:@"description"];
-    
-    /* Implementation */
-    id impl = [[self impl] xmlNode];
-    if (nil != impl) {
-      [node prependChild:impl];
-    }
     /* Accessors */
     id accessors = [SdefAccessorStringsFromFlag([self accessors]) objectEnumerator];
     id acc;
@@ -455,8 +402,6 @@ static unsigned SdefAccessorFlagFromString(NSString *str) {
   [super setAttributes:attrs];
   
   [self setName:[attrs objectForKey:@"type"]];
-  [self setDesc:[attrs objectForKey:@"description"]];
-  [self setHidden:[attrs objectForKey:@"hidden"] != nil];
   [self setAccess:SDAccessFlagFromString([attrs objectForKey:@"access"])];
 }
 
@@ -601,21 +546,15 @@ static unsigned SdefAccessorFlagFromString(NSString *str) {
 #pragma mark Protocols Implementations
 - (id)copyWithZone:(NSZone *)aZone {
   SdefRespondsTo *copy = [super copyWithZone:aZone];
-  copy->sd_hidden = sd_hidden;
-  copy->sd_impl = [sd_impl copyWithZone:aZone];
   return copy;
 }
 
 - (void)encodeWithCoder:(NSCoder *)aCoder {
   [super encodeWithCoder:aCoder];
-  [aCoder encodeBool:sd_hidden forKey:@"SRHidden"];
-  [aCoder encodeObject:sd_impl forKey:@"SRImplementation"];
 }
 
 - (id)initWithCoder:(NSCoder *)aCoder {
   if (self = [super initWithCoder:aCoder]) {
-    sd_hidden = [aCoder decodeBoolForKey:@"SRHidden"];
-    sd_impl = [[aCoder decodeObjectForKey:@"SRImplementation"] retain];
   }
   return self;
 }
@@ -632,61 +571,11 @@ static unsigned SdefAccessorFlagFromString(NSString *str) {
   return @"Member";
 }
 
-- (void)dealloc {
-  [sd_impl release];
-  [super dealloc];
-}
-
-- (SdefImplementation *)impl {
-  return sd_impl;
-}
-
-- (void)setImpl:(SdefImplementation *)newImpl {
-  if (sd_impl != newImpl) {
-    [sd_impl release];
-    sd_impl = [newImpl retain];
-  }
-}
-
-- (BOOL)isHidden {
-  return sd_hidden;
-}
-
-- (void)setHidden:(BOOL)newHidden {
-  if (sd_hidden != newHidden) {
-    [[[[self document] undoManager] prepareWithInvocationTarget:self] setHidden:sd_hidden];
-    sd_hidden = newHidden;
-  }
-}
-
 #pragma mark -
 #pragma mark XML Generation
 
-- (SdefXMLNode *)xmlNode {
-  id node;
-  if (node = [super xmlNode]) {
-    id attr = [self name];
-    if (nil != attr) [node setAttribute:attr forKey:@"name"];
-    if ([self isHidden]) [node setAttribute:@"hidden" forKey:@"hidden"];
-    
-    id impl = [[self impl] xmlNode];
-    if (nil != impl) {
-      [node prependChild:impl];
-    }
-  }
-  return node;
-}
-
 - (NSString *)xmlElementName {
   return @"responds-to";
-}
-
-#pragma mark -
-#pragma mark Parsing
-
-- (void)setAttributes:(NSDictionary *)attrs {
-  [super setAttributes:attrs];
-  [self setHidden:[attrs objectForKey:@"hidden"] != nil];
 }
 
 @end

@@ -113,30 +113,18 @@ extern unsigned SDAccessFlagFromString(NSString *str);
 
 @end
 
-@interface SdefElement : SdefObject <NSCopying, NSCoding> {
-  SdefImplementation *sd_impl;
+@interface SdefElement : SdefTerminologyElement <NSCopying, NSCoding> {
   unsigned int sd_accessors; /* index | name | id | range | relative | test */
   
   /* Attributs */
   unsigned sd_access; /* ( kSDElementRead | kSDElementWrite ) */
-  BOOL sd_hidden;
-  NSString *sd_desc;
 }
-
-- (SdefImplementation *)impl;
-- (void)setImpl:(SdefImplementation *)anImpl;
 
 - (unsigned)access;
 - (void)setAccess:(unsigned)newAccess;
 
 - (unsigned)accessors;
 - (void)setAccessors:(unsigned)accessors;
-
-- (BOOL)isHidden;
-- (void)setHidden:(BOOL)flag;
-
-- (NSString *)desc;
-- (void)setDesc:(NSString *)newDesc;
 
 @end
 
@@ -157,15 +145,7 @@ extern unsigned SDAccessFlagFromString(NSString *str);
 
 @end
 
-@interface SdefRespondsTo : SdefObject <NSCopying, NSCoding> {
-  SdefImplementation *sd_impl;
-  BOOL sd_hidden;
+@interface SdefRespondsTo : SdefTerminologyElement <NSCopying, NSCoding> {
 }
-
-- (SdefImplementation *)impl;
-- (void)setImpl:(SdefImplementation *)anImpl;
-
-- (BOOL)isHidden;
-- (void)setHidden:(BOOL)flag;
 
 @end
