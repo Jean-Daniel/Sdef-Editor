@@ -34,6 +34,7 @@
     [nib instantiateNibWithOwner:self topLevelObjects:&_nibTopLevelObjects];
     [_nibTopLevelObjects retain];
     [nib release];
+    [_nibTopLevelObjects makeObjectsPerformSelector:@selector(release)];
   }
   return self;
 }
@@ -43,6 +44,12 @@
   [_object release];
   [_nibTopLevelObjects release];
   [super dealloc];
+}
+
+#pragma mark -
+- (void)documentWillClose:(SdefDocument *)aDocument {
+  [ownerController setContent:nil];
+  [objectController unbind:@"contentObject"];
 }
 
 - (NSView *)sdefView {

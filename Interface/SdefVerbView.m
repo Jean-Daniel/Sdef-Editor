@@ -9,6 +9,7 @@
 #import "SdefVerbView.h"
 #import "SdefVerb.h"
 #import "SdefArguments.h"
+#import "ShadowMacros.h"
 
 @implementation SdefVerbView
 

@@ -11,6 +11,8 @@
 @class SdefObject;
 @interface SdefViewController : NSObject {
   IBOutlet NSView *sdefView;
+  IBOutlet NSObjectController *ownerController;
+  IBOutlet NSObjectController *objectController;
 @private
   NSArray *_types;
   SdefObject *_object;
