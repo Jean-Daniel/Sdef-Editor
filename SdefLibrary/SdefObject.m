@@ -147,10 +147,11 @@ NSString * const SdefObjectDidChangeNameNotification = @"SdefObjectDidChangeName
 #pragma mark Notifications
 - (void)appendChild:(SKTreeNode *)child {
   [[[self document] undoManager] registerUndoWithTarget:child selector:@selector(remove) object:nil];
-  [self willChange:NSKeyValueChangeInsertion valuesAtIndexes:[NSIndexSet indexSetWithIndex:[self childCount]] forKey:@"children"];
+  NSIndexSet *idxSet = [NSIndexSet indexSetWithIndex:[self childCount]];
+  [self willChange:NSKeyValueChangeInsertion valuesAtIndexes:idxSet forKey:@"children"];
   [super appendChild:child];
   [(SdefObject *)child setEditable:[self isEditable]];
-  [self didChange:NSKeyValueChangeInsertion valuesAtIndexes:[NSIndexSet indexSetWithIndex:[self childCount]] forKey:@"children"];
+  [self didChange:NSKeyValueChangeInsertion valuesAtIndexes:idxSet forKey:@"children"];
   [[NSNotificationCenter defaultCenter] postNotificationName:SdefObjectDidAppendChildNotification
                                                       object:self
                                                     userInfo:[NSDictionary dictionaryWithObject:child forKey:SdefNewTreeNode]];
@@ -168,14 +169,18 @@ NSString * const SdefObjectDidChangeNameNotification = @"SdefObjectDidChangeName
 }
 
 - (void)insertChild:(id)child atIndex:(unsigned)idx {
-  /* Super call prepend or insertsibling, so no need to undo & notify here. */
+  /* Super call prepend or insertSibling, so no need to undo & notify here. */
   [super insertChild:child atIndex:idx];
 }
 
 - (void)insertSibling:(SKTreeNode *)newSibling {
   [[[self document] undoManager] registerUndoWithTarget:newSibling selector:@selector(remove) object:nil];
+  id parent = [self parent];
+  id idx = [NSIndexSet indexSetWithIndex:[parent indexOfChild:self] + 1];
+  [parent willChange:NSKeyValueChangeInsertion valuesAtIndexes:idx forKey:@"children"];
   [super insertSibling:newSibling];
   [(SdefObject *)newSibling setEditable:[self isEditable]];
+  [parent didChange:NSKeyValueChangeInsertion valuesAtIndexes:idx forKey:@"children"];
   [[NSNotificationCenter defaultCenter] postNotificationName:SdefObjectDidAppendChildNotification
                                                       object:[self parent]
                                                     userInfo:[NSDictionary dictionaryWithObject:newSibling forKey:SdefNewTreeNode]];
@@ -201,8 +206,11 @@ NSString * const SdefObjectDidChangeNameNotification = @"SdefObjectDidChangeName
 }
 
 - (void)removeAllChildren {
+  id idxes = [NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0, [self childCount])];
   [[NSNotificationCenter defaultCenter] postNotificationName:SdefObjectWillRemoveAllChildrenNotification object:self];
+  [self willChange:NSKeyValueChangeRemoval valuesAtIndexes:idxes forKey:@"children"];
   [super removeAllChildren];
+  [self didChange:NSKeyValueChangeRemoval valuesAtIndexes:idxes forKey:@"children"];
   [[NSNotificationCenter defaultCenter] postNotificationName:SdefObjectDidRemoveAllChildrenNotification object:self];
 }
 
