@@ -1,7 +1,7 @@
 {
     IBClasses = (
         {
-            ACTIONS = {export = id; }; 
+            ACTIONS = {exportTerminology = id; }; 
             CLASS = FirstResponder; 
             LANGUAGE = ObjC; 
             SUPERCLASS = NSObject; 
@@ -9,9 +9,11 @@
         {
             ACTIONS = {
                 importAete = id; 
+                importApplicationAete = id; 
                 importCocoaTerminology = id; 
                 openInspector = id; 
                 openSuite = id; 
+                preferences = id; 
             }; 
             CLASS = SdefEditor; 
             LANGUAGE = ObjC; 
