@@ -11,17 +11,12 @@
 #import "SdefVerb.h"
 #import "SdefSuite.h"
 #import "SdefClass.h"
+#import "SdefContents.h"
 #import "SdefArguments.h"
 #import "SdefEnumeration.h"
 #import "SdefClassManager.h"
 
 @implementation SdefImporter
-
-- (id)init {
-  if (self = [super init]) {
-  }
-  return self;
-}
 
 - (id)initWithContentsOfFile:(NSString *)file {
   if (self = [super init]) {
@@ -93,23 +88,8 @@
   [sd_warnings addObject:[NSDictionary dictionaryWithObjectsAndKeys:warning, @"warning", value, @"value", nil]];
 }
 
+#pragma mark -
 #pragma mark Post Processor
-- (BOOL)resolveObjectType:(SdefObject *)obj {
-  return NO;
-}
-
-- (void)postProcessClass:(SdefClass *)aClass {
-  
-}
-
-- (void)postProcessCommand:(SdefVerb *)aCmd {
-
-}
-
-- (void)postProcessEnumeration:(SdefEnumeration *)anEnumeration {
-  
-}
-
 - (void)postProcess {
   SdefSuite *suite;
   id items = [suites objectEnumerator];
@@ -136,6 +116,105 @@
       [self postProcessCommand:command ];
     }
   }
+}
+
+- (BOOL)resolveObjectType:(SdefObject *)obj {
+  return NO;
+}
+
+#pragma mark Class
+- (void)postProcessClass:(SdefClass *)aClass {
+  SdefObject *item;
+  
+  item = [aClass contents];
+  if ([[(SdefContents *)item type] length] > 0) {
+    [self postProcessContents:(SdefContents *)item forClass:aClass];
+  }
+  
+  id items = [[aClass elements] childEnumerator];
+  while (item = [items nextObject]) {
+    [self postProcessElement:(SdefElement *)item inClass:aClass];
+  }
+  
+  items = [[aClass properties] childEnumerator];
+  while (item = [items nextObject]) {
+    [self postProcessProperty:(SdefProperty *)item inClass:aClass];
+  }
+  
+  items = [[aClass commands] childEnumerator];
+  while (item = [items nextObject]) {
+    [self postProcessRespondsTo:(SdefRespondsTo *)item inClass:aClass];
+  }  
+}
+
+- (void)postProcessContents:(SdefContents *)aContents forClass:aClass {
+  if (![self resolveObjectType:aContents]) {
+    [self addWarning:[NSString stringWithFormat:@"Unable to resolve contents type: %@", [aContents type]]
+            forValue:[aClass name]];
+  }  
+}
+
+- (void)postProcessElement:(SdefElement *)anElement inClass:(SdefClass *)aClass {
+  if (![self resolveObjectType:anElement]) {
+    [self addWarning:[NSString stringWithFormat:@"Unable to resolve element type: %@", [anElement type]]
+            forValue:[aClass name]];
+  }
+}
+
+- (void)postProcessProperty:(SdefProperty *)aProperty inClass:(SdefClass *)aClass {
+  if (![self resolveObjectType:aProperty]) {
+    [self addWarning:[NSString stringWithFormat:@"Unable to resolve type: %@", [aProperty type]]
+            forValue:[NSString stringWithFormat:@"%@->%@", [aClass name], [aProperty name]]];
+  }
+}
+
+- (void)postProcessRespondsTo:(SdefRespondsTo *)aCmd inClass:(SdefClass *)aClass {
+}
+
+#pragma mark Verb
+- (void)postProcessCommand:(SdefVerb *)aCmd {
+  SdefObject *item = nil;
+  id items = [aCmd childEnumerator];
+  while (item = [items nextObject]) {
+    [self postProcessParameter:(SdefParameter *)item inCommand:aCmd];
+  }
+  
+  item = [aCmd directParameter];
+  if ([[(SdefDirectParameter *)item type] length] != 0) {
+    [self postProcessDirectParameter:(SdefDirectParameter *)item inCommand:aCmd];
+  }
+  
+  item = [aCmd result];
+  if ([[(SdefResult *)item type] length] != 0) {
+    [self postProcessResult:(SdefResult *)item inCommand:aCmd];
+  }
+}
+
+- (void)postProcessDirectParameter:(SdefDirectParameter *)aParameter inCommand:(SdefVerb *)aCmd {
+  if (![self resolveObjectType:aParameter]) {
+    [self addWarning:[NSString stringWithFormat:@"Unable to resolve Direct-Param type: %@", [aParameter type]]
+            forValue:[NSString stringWithFormat:@"%@()", [aCmd name]]];
+  }
+}
+
+- (void)postProcessParameter:(SdefParameter *)aParameter inCommand:(SdefVerb *)aCmd {
+  if (![self resolveObjectType:aParameter]) {
+    [self addWarning:[NSString stringWithFormat:@"Unable to resolve type: %@", [aParameter type]]
+            forValue:[NSString stringWithFormat:@"%@(%@)", [aCmd name], [aParameter name]]];
+  }
+}
+
+- (void)postProcessResult:(SdefResult *)aResult inCommand:(SdefVerb *)aCmd {
+  if (![self resolveObjectType:aResult]) {
+    [self addWarning:[NSString stringWithFormat:@"Unable to resolve Result type: %@", [aResult type]]
+            forValue:[NSString stringWithFormat:@"%@()", [aCmd name]]];
+  }
+}
+
+#pragma mark -
+#pragma mark Enumeration
+- (void)postProcessEnumeration:(SdefEnumeration *)anEnumeration {
+  
 }
 
 @end

@@ -8,7 +8,9 @@
 
 #import <Cocoa/Cocoa.h>
 
-@class SdefClassManager, SdefObject, SdefClass, SdefVerb, SdefEnumeration;
+@class SdefClassManager, SdefObject, SdefEnumeration;
+@class SdefVerb, SdefDirectParameter, SdefParameter, SdefResult;
+@class SdefClass, SdefContents, SdefElement, SdefProperty, SdefRespondsTo;
 @interface SdefImporter : NSObject {
 @protected
   NSMutableArray *suites;
@@ -17,7 +19,6 @@
   NSMutableArray *sd_warnings;
 }
 
-- (id)init;
 - (id)initWithContentsOfFile:(NSString *)file;
 
 /*!
@@ -35,10 +36,24 @@
 
 #pragma mark -
 - (void)postProcess;
+- (BOOL)resolveObjectType:(SdefObject *)obj;
+
+#pragma mark Class
 - (void)postProcessClass:(SdefClass *)aClass;
+- (void)postProcessContents:(SdefContents *)aContents forClass:aClass;
+- (void)postProcessElement:(SdefElement *)anElement inClass:(SdefClass *)aClass;
+- (void)postProcessProperty:(SdefProperty *)aProperty inClass:(SdefClass *)aClass;
+- (void)postProcessRespondsTo:(SdefRespondsTo *)aCmd inClass:(SdefClass *)aClass;
+
+#pragma mark Verb
 - (void)postProcessCommand:(SdefVerb *)aCommand;
+- (void)postProcessDirectParameter:(SdefDirectParameter *)aParameter inCommand:(SdefVerb *)aCmd;
+- (void)postProcessParameter:(SdefParameter *)aParameter inCommand:(SdefVerb *)aCmd;
+- (void)postProcessResult:(SdefResult *)aResult inCommand:(SdefVerb *)aCmd;
+
+#pragma mark Enumeration
 - (void)postProcessEnumeration:(SdefEnumeration *)anEnumeration;
 
-- (BOOL)resolveObjectType:(SdefObject *)obj;
+
 
 @end

@@ -14,6 +14,7 @@
 #import "SdefSuite.h"
 #import "SdefClass.h"
 #import "SdefObject.h"
+#import "SdefContents.h"
 #import "SdefArguments.h"
 #import "SdefEnumeration.h"
 #import "SdefImplementation.h"
@@ -121,7 +122,8 @@ static NSString *DecomposeCocoaType(NSString *type, NSString **suite);
   [[cmd impl] setSdClass:[suite objectForKey:@"CommandClass"]];
   
   /* Result */
-  [[cmd result] setType:[suite objectForKey:@"Type"]];
+  if ([(NSString *)[suite objectForKey:@"Type"] length])
+    [[cmd result] setType:[suite objectForKey:@"Type"]];
   
   /* Direct Parameter */
   id direct = [suite objectForKey:@"UnnamedArgument"];
@@ -269,7 +271,6 @@ static NSString *DecomposeCocoaType(NSString *type, NSString **suite);
               break;
           case NSAlertAlternateReturn:
             [sd_suites addObject:suite];
-            DLog(@"Load Suite: %@", suite);
             break;
       }
       [title release];
@@ -315,6 +316,7 @@ static NSString *DecomposeCocoaType(NSString *type, NSString **suite);
   }
 }
 
+#pragma mark -
 - (void)postProcessClass:(SdefClass *)aClass {
   id suite = nil;
   id superclass = [aClass inherits];
@@ -330,77 +332,64 @@ static NSString *DecomposeCocoaType(NSString *type, NSString **suite);
               forValue:[aClass name]];
     }
   }
-  
-  SdefObject *item;
-  id items = [[aClass elements] childrenEnumerator];
-  while (item = [items nextObject]) {
-    if ([[item valueForKey:@"type"] isEqualToString:@"NSArray"]) 
-      [self addWarning:@"Element NSArray type set to \"list of any\""
-              forValue:[aClass name]];
-    if (![self resolveObjectType:item]) {
-      [self addWarning:[NSString stringWithFormat:@"Unable to resolve element type: %@", [item valueForKey:@"type"]]
-              forValue:[aClass name]];
-    }
-  }
-  
-  items = [[aClass properties] childrenEnumerator];
-  while (item = [items nextObject]) {
-    if ([[item valueForKey:@"type"] isEqualToString:@"NSArray"])
-      [self addWarning:@"NSArray type set to \"list of any\""
-              forValue:[NSString stringWithFormat:@"%@->%@", [aClass name], [item name]]];
-    if (![self resolveObjectType:item]) {
-      [self addWarning:[NSString stringWithFormat:@"Unable to resolve type: %@", [item valueForKey:@"type"]]
-              forValue:[NSString stringWithFormat:@"%@->%@", [aClass name], [item name]]];
-    }
-  }
-  
-  items = [[aClass commands] childrenEnumerator];
-  while (item = [items nextObject]) {
-    id cmdName = DecomposeCocoaName([item name], &suite);
-    if (suite)
-      [self loadSuite:suite];
-    SdefVerb *cmd = [manager verbWithCocoaName:cmdName inSuite:suite];
-    if (cmd) {
-      [item setName:[cmd name]];
-    } else {
-      [self addWarning:[NSString stringWithFormat:@"Unable to resolve command: %@", [item name]]
-              forValue:[aClass name]];
-    }
+  [super postProcessClass:aClass];
+}
+
+- (void)postProcessContents:(SdefContents *)aContents forClass:aClass {
+  if ([[aContents type] isEqualToString:@"NSArray"])
+    [self addWarning:@"Contents NSArray type set to \"list of any\""
+            forValue:[aClass name]];
+  [super postProcessContents:aContents forClass:aClass];
+}
+
+- (void)postProcessElement:(SdefElement *)anElement inClass:(SdefClass *)aClass {
+  if ([[anElement type] isEqualToString:@"NSArray"]) 
+    [self addWarning:@"Element NSArray type set to \"list of any\""
+            forValue:[aClass name]];
+  [super postProcessElement:anElement inClass:aClass];
+}
+
+- (void)postProcessProperty:(SdefProperty *)aProperty inClass:(SdefClass *)aClass {
+  if ([[aProperty type] isEqualToString:@"NSArray"])
+    [self addWarning:@"NSArray type set to \"list of any\""
+            forValue:[NSString stringWithFormat:@"%@->%@", [aClass name], [aProperty name]]];
+  [super postProcessProperty:aProperty inClass:aClass];
+}
+
+- (void)postProcessRespondsTo:(SdefRespondsTo *)aCmd inClass:(SdefClass *)aClass {
+  NSString *suite = nil;
+  NSString *cmdName = DecomposeCocoaName([aCmd name], &suite);
+  if (suite)
+    [self loadSuite:suite];
+  SdefVerb *cmd = [manager verbWithCocoaName:cmdName inSuite:suite];
+  if (cmd) {
+    [aCmd setName:[cmd name]];
+  } else {
+    [self addWarning:[NSString stringWithFormat:@"Unable to resolve command: %@", [aCmd name]]
+            forValue:[aClass name]];
   }
 }
 
-- (void)postProcessCommand:(SdefVerb *)aCmd {
-  SdefObject *item = nil;
-  id items = [aCmd childrenEnumerator];
-  while (item = [items nextObject]) {
-    if ([[(SdefParameter *)item type] isEqualToString:@"NSArray"])
-      [self addWarning:@"NSArray type set to \"list of any\""
-              forValue:[NSString stringWithFormat:@"%@(%@)", [aCmd name], [item name]]];
-    if (![self resolveObjectType:item]) {
-      [self addWarning:[NSString stringWithFormat:@"Unable to resolve type: %@", [(SdefParameter *)item type]]
-              forValue:[NSString stringWithFormat:@"%@(%@)", [aCmd name], [item name]]];
-    }
-  }
-  
-  item = [aCmd directParameter];
-  if ([[(SdefDirectParameter *)item type] isEqualToString:@"NSArray"])
+#pragma mark -
+- (void)postProcessParameter:(SdefParameter *)aParameter inCommand:(SdefVerb *)aCmd {
+  if ([[aParameter type] isEqualToString:@"NSArray"])
+    [self addWarning:@"NSArray type set to \"list of any\""
+            forValue:[NSString stringWithFormat:@"%@(%@)", [[aParameter parent] name], [aParameter name]]];
+  [super postProcessParameter:aParameter inCommand:aCmd];
+}
+
+- (void)postProcessDirectParameter:(SdefDirectParameter *)aParameter inCommand:(SdefVerb *)aCmd {
+  if ([[aParameter type] isEqualToString:@"NSArray"])
     [self addWarning:@"Direct-Param NSArray type set to \"list of any\""
             forValue:[NSString stringWithFormat:@"%@()", [aCmd name]]];
-  if (![self resolveObjectType:item]) {
-    [self addWarning:[NSString stringWithFormat:@"Unable to resolve Direct-Param type: %@", [(SdefDirectParameter *)item type]]
+  [super postProcessDirectParameter:aParameter inCommand:aCmd];
+}
+
+- (void)postProcessResult:(SdefResult *)aResult inCommand:(SdefVerb *)aCmd {
+  if ([[aResult type] isEqualToString:@"NSArray"])
+    [self addWarning:@"Result NSArray type set to \"list of any\""
             forValue:[NSString stringWithFormat:@"%@()", [aCmd name]]];
-  }
-  
-  item = [aCmd result];
-  if ([[(SdefResult *)item type] length] != 0) {
-    if ([[(SdefResult *)item type] isEqualToString:@"NSArray"])
-      [self addWarning:@"Result NSArray type set to \"list of any\""
-              forValue:[NSString stringWithFormat:@"%@()", [aCmd name]]];
-    if (![self resolveObjectType:item]) {
-      [self addWarning:[NSString stringWithFormat:@"Unable to resolve Result type: %@", [(SdefResult *)item type]]
-              forValue:[NSString stringWithFormat:@"%@()", [aCmd name]]];
-    }
-  }
+  [super postProcessResult:aResult inCommand:aCmd];
 }
 
 - (void)postProcess {
