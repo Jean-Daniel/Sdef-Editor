@@ -27,10 +27,12 @@
 
 - (void)encodeWithCoder:(NSCoder *)aCoder {
   [super encodeWithCoder:aCoder];
+  [aCoder encodeConditionalObject:sd_document forKey:@"SDDocument"];
 }
 
 - (id)initWithCoder:(NSCoder *)aCoder {
   if (self = [super initWithCoder:aCoder]) {
+    sd_document = [aCoder decodeObjectForKey:@"SDDocument"];
   }
   return self;
 }
