@@ -115,15 +115,15 @@
 /* Returns menu idx */
 - (id)transformedValue:(id)value {
   unsigned access = [value unsignedIntValue];
-  unsigned idx;
+  unsigned idx = 0;
   if (!access || ((access & kSDElementRead) && (access & kSDElementWrite))) {
-    return SKUInt(0);
+    idx = 0;
   } else if (access & kSDElementRead) {
-    return SKUInt(1);
+    idx = 1;
   } else if (access & kSDElementWrite) {
-    return SKUInt(2);
+    idx = 2;
   }
-  return SKUInt(0);
+  return SKUInt(idx);
 }
 
 /* Returns access value */
