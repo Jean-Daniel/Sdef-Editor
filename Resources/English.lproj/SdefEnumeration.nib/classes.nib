@@ -5,7 +5,7 @@
         {
             CLASS = SdefEnumerationView; 
             LANGUAGE = ObjC; 
-            OUTLETS = {tab = id; }; 
+            OUTLETS = {enumerators = NSArrayController; tab = id; }; 
             SUPERCLASS = SdefViewController; 
         }, 
         {

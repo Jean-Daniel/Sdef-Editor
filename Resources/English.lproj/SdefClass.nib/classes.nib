@@ -5,7 +5,13 @@
         {
             CLASS = SdefClassView; 
             LANGUAGE = ObjC; 
-            OUTLETS = {tab = NSTabView; }; 
+            OUTLETS = {
+                commands = NSArrayController; 
+                elements = NSArrayController; 
+                events = NSArrayController; 
+                properties = NSArrayController; 
+                tab = NSTabView; 
+            }; 
             SUPERCLASS = SdefViewController; 
         }, 
         {

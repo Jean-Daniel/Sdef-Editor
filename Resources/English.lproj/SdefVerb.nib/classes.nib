@@ -5,7 +5,7 @@
         {
             CLASS = SdefVerbView; 
             LANGUAGE = ObjC; 
-            OUTLETS = {tab = NSTabView; }; 
+            OUTLETS = {parameters = NSArrayController; tab = NSTabView; }; 
             SUPERCLASS = SdefViewController; 
         }, 
         {
