@@ -11,6 +11,8 @@
 #import "SdefSuite.h"
 #import "ShadowMacros.h"
 
+#import "SdefImplementation.h"
+#import "SdefEnumeration.h"
 #import "SdefDictionary.h"
 #import "SdefSuite.h"
 #import "SdefVerb.h"
@@ -22,7 +24,7 @@
   static NSArray *types;
   if (nil == types) {
     types = [[NSArray alloc] initWithObjects:
-      @"any", 
+      @"any",
       @"string",
       @"number",
       @"integer",
@@ -39,13 +41,19 @@
   return types;
 }
 
-- (id)initWithDocument:(SdefDocument *)aDocument {
+- (id)init {
   if (self = [super init]) {
-    sd_document = aDocument;
     sd_types = [[NSMutableArray alloc] init];
     sd_events = [[NSMutableArray alloc] init];
     sd_classes = [[NSMutableArray alloc] init];
     sd_commands = [[NSMutableArray alloc] init];
+  }
+  return self;
+}
+
+- (id)initWithDocument:(SdefDocument *)aDocument {
+  if (self = [self init]) {
+    sd_document = aDocument;
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(didAppendChild:)
                                                  name:SdefObjectDidAppendChildNotification
@@ -104,6 +112,7 @@
 }
 
 #pragma mark -
+#pragma mark Notification Handling
 - (void)didAppendChild:(NSNotification *)aNotification {
   id node = [aNotification object];
   if (sd_document && [node document] == sd_document) {
@@ -160,21 +169,15 @@
   }
 }
 
-#pragma mark -
-- (SdefClass *)superClassOfClass:(SdefClass *)aClass {
-  NSString *parent = [aClass inherits];
-  if (parent) {
-    id classes = [sd_classes objectEnumerator];
-    id class;
-    while (class = [classes nextObject]) {
-      if (class != aClass && [[class name] isEqualToString:parent]) {
-        return class;
-      }
-    }
-  }
-  return nil;
+- (void)didAddDictionary:(NSNotification *)aNotification {
+  [self addDictionary:[[aNotification userInfo] objectForKey:SdefNewTreeNode]];
 }
 
+- (void)willRemoveDictionary:(NSNotification *)aNotification {
+  [self removeDictionary:[[aNotification userInfo] objectForKey:SdefRemovedTreeNode]];
+}
+
+#pragma mark -
 - (NSArray *)types {
   id types = [NSMutableArray arrayWithArray:[[self class] baseTypes]];
   id items = [sd_types objectEnumerator];
@@ -219,13 +222,85 @@
   return classes;
 }
 
-#pragma mark -
-- (void)didAddDictionary:(NSNotification *)aNotification {
-  [self addDictionary:[[aNotification userInfo] objectForKey:SdefNewTreeNode]];
+- (SdefClass *)superClassOfClass:(SdefClass *)aClass {
+  NSString *parent = [aClass inherits];
+  if (parent) {
+    id classes = [sd_classes objectEnumerator];
+    id class;
+    while (class = [classes nextObject]) {
+      if (class != aClass && [[class name] isEqualToString:parent]) {
+        return class;
+      }
+    }
+  }
+  return nil;
 }
 
-- (void)willRemoveDictionary:(NSNotification *)aNotification {
-  [self removeDictionary:[[aNotification userInfo] objectForKey:SdefRemovedTreeNode]];
+#pragma mark -
+typedef BOOL (*EqualIMP)(id, SEL, id);
+- (NSString *)sdefTypeForCocoaType:(NSString *)cocoaType {
+  if (!cocoaType) return nil;
+  
+  EqualIMP isEqual;
+  SEL cmd = @selector(isEqualToString:);
+  isEqual = (EqualIMP)[cocoaType methodForSelector:cmd];
+  
+  if (isEqual(cocoaType, cmd, @"NSNumber<Bool>")) 			return @"boolean";
+  if (isEqual(cocoaType, cmd, @"NSString"))  				return @"string";
+  if (isEqual(cocoaType, cmd, @"NSNumber<Int>")) 			return @"integer";
+  if (isEqual(cocoaType, cmd, @"NSNumber")) 				return @"number";
+  if (isEqual(cocoaType, cmd, @"NSObject")) 				return @"any";
+  if (isEqual(cocoaType, cmd, @"NSString<FilePath>"))  		return @"file";
+  if (isEqual(cocoaType, cmd, @"NSNumber<Double>")) 		return @"real";
+  if (isEqual(cocoaType, cmd, @"NSNumber<TypeCode>"))		return @"type";
+  if (isEqual(cocoaType, cmd, @"NSDictionary"))				return @"record";
+  if (isEqual(cocoaType, cmd, @"NSScriptObjectSpecifier")) 	return @"object";
+  if (isEqual(cocoaType, cmd, @"NSData<QDPoint>"))			return @"point";
+  if (isEqual(cocoaType, cmd, @"NSPositionalSpecifier")) 	return @"location";
+  if (isEqual(cocoaType, cmd, @"NSData<QDRect>"))			return @"rectangle";
+  if (isEqual(cocoaType, cmd, @"NSArray"))					return @"list of any";
+  
+  return nil;
 }
+
+- (SdefVerb *)verbWithCocoaName:(NSString *)cocoaName inSuite:(NSString *)suite {
+  id verbs = [[[self events] arrayByAddingObjectsFromArray:[self commands]] objectEnumerator];
+  SdefVerb *verb;
+  while (verb = [verbs nextObject]) {
+    if ([cocoaName isEqualToString:[verb cocoaName]]) {
+      if (!suite || [suite isEqualToString:[[verb suite] cocoaName]]) {
+        return verb;
+      }
+    }
+  }
+  return nil;
+}
+
+- (SdefObject *)sdefTypeWithCocoaType:(NSString *)cocoaType inSuite:(NSString *)suite {
+  id enums = [sd_types objectEnumerator];
+  SdefEnumeration *enume;
+  while (enume = [enums nextObject]) {
+    if ([cocoaType isEqualToString:[enume cocoaName]]) {
+      if (!suite || [suite isEqualToString:[[enume suite] cocoaName]]) {
+        return enume;
+      }
+    }
+  }
+  return [self sdefClassWithCocoaClass:cocoaType inSuite:suite];
+}
+
+- (SdefClass *)sdefClassWithCocoaClass:(NSString *)cocoaClass inSuite:(NSString *)suite {
+  id classes = [[self classes] objectEnumerator];
+  SdefClass *class;
+  while (class = [classes nextObject]) {
+    if ([cocoaClass isEqualToString:[class cocoaClass]]) {
+      if (!suite || [suite isEqualToString:[[class suite] cocoaName]]) {
+        return class;
+      }
+    }
+  }
+  return nil;
+}
+
 
 @end

@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 #import "SKTreeNode.h"
 
-@class SdefClass, SdefDocument, SdefDictionary;
+@class SdefSuite, SdefObject, SdefClass, SdefVerb, SdefDocument, SdefDictionary;
 @interface SdefClassManager : NSObject {
 @private
   SdefDocument *sd_document;
@@ -21,6 +21,9 @@
 - (void)addDictionary:(SdefDictionary *)aDico;
 - (void)removeDictionary:(SdefDictionary *)aDico;
 
+- (void)addSuite:(SdefSuite *)aSuite;
+- (void)removeSuite:(SdefSuite *)aSuite;
+
 - (NSArray *)types;
 - (NSArray *)classes;
 
@@ -29,5 +32,11 @@
 
 - (SdefClass *)classWithName:(NSString *)name;
 - (SdefClass *)superClassOfClass:(SdefClass *)aClass;
+- (SdefClass *)superClassOfClass:(SdefClass *)aClass;
+
+- (NSString *)sdefTypeForCocoaType:(NSString *)cocoaType;
+- (SdefVerb *)verbWithCocoaName:(NSString *)cocoaName inSuite:(NSString *)suite;
+- (SdefClass *)sdefClassWithCocoaClass:(NSString *)cocoaClass inSuite:(NSString *)suite;
+- (SdefObject *)sdefTypeWithCocoaType:(NSString *)cocoaType inSuite:(NSString *)suite;
 
 @end
