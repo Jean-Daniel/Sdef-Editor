@@ -1,0 +1,99 @@
+//
+//  SdefObjectInspector.m
+//  Sdef Editor
+//
+//  Created by Grayfox on 19/01/05.
+//  Copyright 2005 Shadow Lab. All rights reserved.
+//
+
+#import "SdefObjectInspector.h"
+
+#import "ShadowMacros.h"
+
+#import "SdefObject.h"
+#import "SdefDocument.h"
+#import "SdefWindowController.h"
+
+@implementation SdefObjectInspector
+
++ (id)sharedInspector {
+  static id inspector = nil;
+  if (!inspector) {
+    inspector = [[self alloc] init];
+  }
+  return inspector;
+}
+
+- (id)init {
+  if (self = [super initWithWindowNibName:@"SdefInspector"]) {
+    [self setWindowFrameAutosaveName:@"SdefObjectInspector"];
+    needsUpdate = NO;
+  }
+  return self;
+}
+
+- (void)dealloc {
+  [super dealloc];
+}
+
+#pragma mark -
+- (void)windowDidUpdate:(NSNotification *)notification {
+  if (needsUpdate && [NSApp isActive]) {
+    [self willChangeValueForKey:@"content"];
+    [self didChangeValueForKey:@"content"];
+//    DLog(@"Comments: %@", [[sd_doc selection] comments]);
+//    DLog(@"Selection: %@", [[sd_doc selection] synonyms]);
+//    DLog(@"Documentation: %@", [[sd_doc selection] documentation]);
+    needsUpdate = NO;
+  }
+}
+
+- (SdefObject *)content {
+  return [sd_doc selection];
+}
+
+- (SdefDocument *)document {
+  return sd_doc;
+}
+
+- (void)setDocument:(SdefDocument *)aDocument {
+  if (sd_doc != aDocument) {
+    sd_doc = aDocument;
+    needsUpdate = YES;
+  }
+}
+
+- (void)setMainWindow:(NSWindow *)mainWindow {
+  if ([NSApp isActive]) {
+    NSWindowController *controller = [mainWindow windowController];
+    if (controller && [controller isKindOfClass:[SdefWindowController class]]) {
+      [self setDocument:[controller document]];
+    } else {
+      [self setDocument:nil];
+    }
+  }
+}
+
+- (void)windowDidLoad {
+  [super windowDidLoad];
+  [self setMainWindow:[NSApp mainWindow]];
+  [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(mainWindowChanged:) name:NSWindowDidBecomeMainNotification object:nil];
+  [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(mainWindowResigned:) name:NSWindowDidResignMainNotification object:nil];
+  [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(selectionChanged:) name:SdefDictionarySelectionDidChangeNotification object:nil];
+}
+
+- (void)mainWindowChanged:(NSNotification *)aNotification {
+  [self setMainWindow:[aNotification object]];
+}
+
+- (void)mainWindowResigned:(NSNotification *)aNotification {
+  [self setMainWindow:nil];
+}
+
+- (void)selectionChanged:(NSNotification *)aNotification {
+  if ([aNotification object] == sd_doc) {
+    needsUpdate = YES;
+  }
+}
+
+@end
