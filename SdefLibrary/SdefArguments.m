@@ -8,6 +8,7 @@
 
 #import "SdefArguments.h"
 #import "SdefXMLNode.h"
+#import "SdefDocument.h"
 
 @implementation SdefDirectParameter
 
@@ -46,6 +47,7 @@
 
 - (void)setType:(NSString *)newType {
   if (sd_type != newType) {
+    [[[self document] undoManager] registerUndoWithTarget:self selector:_cmd object:sd_type];
     [sd_type release];
     sd_type = [newType copy];
   }
@@ -57,6 +59,7 @@
 
 - (void)setDesc:(NSString *)newDesc {
   if (sd_desc != newDesc) {
+    [[[self document] undoManager] registerUndoWithTarget:self selector:_cmd object:sd_desc];
     [sd_desc release];
     sd_desc = [newDesc copy];
   }
@@ -119,6 +122,7 @@
 
 - (void)setOptional:(BOOL)newOptional {
   if (sd_optional != newOptional) {
+    [[[[self document] undoManager] prepareWithInvocationTarget:self] setOptional:sd_optional];
     sd_optional = newOptional;
   }
 }
@@ -129,6 +133,7 @@
 
 - (void)setType:(NSString *)newType {
   if (sd_type != newType) {
+    [[[self document] undoManager] registerUndoWithTarget:self selector:_cmd object:sd_type];
     [sd_type release];
     sd_type = [newType copy];
   }
@@ -190,6 +195,7 @@
 
 - (void)setType:(NSString *)newType {
   if (sd_type != newType) {
+    [[[self document] undoManager] registerUndoWithTarget:self selector:_cmd object:sd_type];
     [sd_type release];
     sd_type = [newType copy];
   }
@@ -201,6 +207,7 @@
 
 - (void)setDesc:(NSString *)newDesc {
   if (sd_desc != newDesc) {
+    [[[self document] undoManager] registerUndoWithTarget:self selector:_cmd object:sd_desc];
     [sd_desc release];
     sd_desc = [newDesc copy];
   }

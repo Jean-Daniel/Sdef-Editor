@@ -8,6 +8,7 @@
 
 #import "SdefImplementation.h"
 #import "SdefXMLNode.h"
+#import "SdefDocument.h"
 
 @implementation SdefImplementation
 
@@ -24,6 +25,7 @@
 
 - (void)setSdClass:(NSString *)newSdClass {
   if (sd_class != newSdClass) {
+    [[[self document] undoManager] registerUndoWithTarget:self selector:_cmd object:sd_class];
     [sd_class release];
     sd_class = [newSdClass copy];
   }
@@ -35,6 +37,7 @@
 
 - (void)setKey:(NSString *)newKey {
   if (sd_key != newKey) {
+    [[[self document] undoManager] registerUndoWithTarget:self selector:_cmd object:sd_key];
     [sd_key release];
     sd_key = [newKey copy];
   }
@@ -46,6 +49,7 @@
 
 - (void)setMethod:(NSString *)newMethod {
   if (sd_method != newMethod) {
+    [[[self document] undoManager] registerUndoWithTarget:self selector:_cmd object:sd_method];
     [sd_method release];
     sd_method = [newMethod copy];
   }

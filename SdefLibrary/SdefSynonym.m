@@ -10,28 +10,40 @@
 
 @implementation SdefSynonym
 
++ (SDObjectType)objectType {
+  return kSDSynonymType;
+}
+
++ (NSString *)defaultName {
+  return @"synonym";
+}
+
++ (NSString *)defaultIconName {
+  return @"Misc";
+}
+
 - (void)dealloc {
   [super dealloc];
 }
 
-- (BOOL)hidden {
-  return hidden;
+- (NSString *)desc {
+  return nil;
 }
 
-- (void)setHidden:(BOOL)newHidden {
-  if (hidden != newHidden) {
-    hidden = newHidden;
-  }
+- (void)setDesc:(NSString *)description {
 }
 
-- (OSType)code {
-  return code;
+#pragma mark -
+#pragma mark XML Generation
+
+- (NSString *)xmlElementName {
+  return @"synonym";
 }
 
-- (void)setCode:(OSType)newCode {
-  if (code != newCode) {
-    code = newCode;
-  }
-}
+#pragma mark -
+#pragma mark Parsing
+
+
+
 
 @end

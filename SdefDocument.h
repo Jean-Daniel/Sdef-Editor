@@ -8,15 +8,18 @@
 
 #import <Cocoa/Cocoa.h>
 
-@class SdefDictionary, SdefClassManager, SdefImports;
+@class SdefObject, SdefDictionary, SdefClassManager, SdefImports;
 @interface SdefDocument : NSDocument {
 @private
-  SdefDictionary *dictionary;
+  SdefDictionary *_dictionary;
   SdefClassManager *_manager;
   SdefImports *_imports;
 }
 
-- (SdefImports *)imports;
+- (SdefObject *)selection;
+
+//- (SdefImports *)imports;
+- (SdefClassManager *)manager;
 - (SdefDictionary *)dictionary;
 - (void)setDictionary:(SdefDictionary *)dictionary;
 

@@ -8,7 +8,9 @@
 
 #import <Cocoa/Cocoa.h>
 
-@class SdefDocumentationWindow;
+extern NSString * const SdefDictionarySelectionDidChangeNotification;
+
+@class SdefObject, SdefDocumentationWindow;
 @interface SdefWindowController : NSWindowController {
   IBOutlet NSOutlineView *outline;
   IBOutlet NSTabView *inspector;
@@ -17,6 +19,7 @@
 }
 
 - (id)initWithOwner:(id)owner;
+- (SdefObject *)selection;
 
 @end
 

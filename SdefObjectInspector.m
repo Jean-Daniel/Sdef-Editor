@@ -33,6 +33,7 @@
 }
 
 - (void)dealloc {
+  [[NSNotificationCenter defaultCenter] removeObserver:self];
   [super dealloc];
 }
 
@@ -52,11 +53,11 @@
   return [sd_doc selection];
 }
 
-- (SdefDocument *)document {
+- (SdefDocument *)displayedDocument {
   return sd_doc;
 }
 
-- (void)setDocument:(SdefDocument *)aDocument {
+- (void)setDisplayedDocument:(SdefDocument *)aDocument {
   if (sd_doc != aDocument) {
     sd_doc = aDocument;
     needsUpdate = YES;
@@ -67,9 +68,9 @@
   if ([NSApp isActive]) {
     NSWindowController *controller = [mainWindow windowController];
     if (controller && [controller isKindOfClass:[SdefWindowController class]]) {
-      [self setDocument:[controller document]];
+      [self setDisplayedDocument:[controller document]];
     } else {
-      [self setDocument:nil];
+      [self setDisplayedDocument:nil];
     }
   }
 }

@@ -7,11 +7,14 @@
 //
 
 #import "SdefObject.h"
+#import "SdefDocument.h"
 #import "SdefDocumentation.h"
-
+#import "SdefXMLGenerator.h"
 #import "ShadowMacros.h"
 #import "SKFunctions.h"
+#import "SdefComment.h"
 #import "SdefXMLNode.h"
+#import "SdefSynonym.h"
 #import "SdefImplementation.h"
 
 @implementation SdefObject
@@ -23,6 +26,10 @@
     [self exposeBinding:@"name"];
     tooLate = YES;
   }
+}
+
++ (BOOL)automaticallyNotifiesObserversForKey:(NSString *)key {
+  return ![key isEqualToString:@"children"];
 }
 
 + (SDObjectType)objectType {
@@ -55,9 +62,10 @@
 
 - (id)initEmpty {
   if (self = [super init]) {
-    [self setIcon:[NSImage imageNamed:[[self class] defaultIconName]]]; 
-    [self setEditable:YES];
+    [self setIcon:[NSImage imageNamed:[[self class] defaultIconName]]];
+    sd_comments = [[NSMutableArray alloc] init];
     [self setRemovable:YES];
+    [self setEditable:YES];
   }
   return self;
 }
@@ -81,7 +89,9 @@
 - (void)dealloc {
   [sd_icon release];
   [sd_name release];
+  [sd_synonyms release];
   [sd_comments release];
+  [sd_documentation release];
   [sd_childComments release];
   [super dealloc];
 }
@@ -95,52 +105,99 @@
 #pragma mark -
 #pragma mark Notifications
 - (void)appendChild:(SKTreeNode *)child {
+  [[[self document] undoManager] registerUndoWithTarget:child selector:@selector(remove) object:nil];
+  [self willChange:NSKeyValueChangeInsertion valuesAtIndexes:[NSIndexSet indexSetWithIndex:[self childCount]] forKey:@"children"];
   [super appendChild:child];
   [(SdefObject *)child setEditable:[self isEditable]];
-  [[NSNotificationCenter defaultCenter] postNotificationName:@"SDTreeNodeDidAppendNodeNotification"
+  [self didChange:NSKeyValueChangeInsertion valuesAtIndexes:[NSIndexSet indexSetWithIndex:[self childCount]] forKey:@"children"];
+  [[NSNotificationCenter defaultCenter] postNotificationName:@"SdefObjectDidAppendChild"
                                                       object:self
                                                     userInfo:[NSDictionary dictionaryWithObject:child forKey:@"NewTreeNode"]];
 }
 
 - (void)prependChild:(SKTreeNode *)child {
+  [[[self document] undoManager] registerUndoWithTarget:child selector:@selector(remove) object:nil];
+  [self willChange:NSKeyValueChangeInsertion valuesAtIndexes:[NSIndexSet indexSetWithIndex:0] forKey:@"children"];
   [super prependChild:child];
   [(SdefObject *)child setEditable:[self isEditable]];
-  [[NSNotificationCenter defaultCenter] postNotificationName:@"SDTreeNodeDidAppendNodeNotification"
+  [self didChange:NSKeyValueChangeInsertion valuesAtIndexes:[NSIndexSet indexSetWithIndex:0] forKey:@"children"];
+  [[NSNotificationCenter defaultCenter] postNotificationName:@"SdefObjectDidAppendChild"
                                                       object:self
                                                     userInfo:[NSDictionary dictionaryWithObject:child forKey:@"NewTreeNode"]];
 }
 
+- (void)insertChild:(id)child atIndex:(unsigned)idx {
+  /* Super call prepend or insertsibling, so no need to notify. */
+//  [[[self document] undoManager] registerUndoWithTarget:child selector:@selector(remove) object:nil];
+//  [self willChange:NSKeyValueChangeInsertion valuesAtIndexes:[NSIndexSet indexSetWithIndex:idx] forKey:@"children"];
+  [super insertChild:child atIndex:idx];
+//  [self didChange:NSKeyValueChangeInsertion valuesAtIndexes:[NSIndexSet indexSetWithIndex:idx] forKey:@"children"];
+//  [[NSNotificationCenter defaultCenter] postNotificationName:@"SdefObjectDidAppendChild"
+//                                                      object:self
+//                                                    userInfo:[NSDictionary dictionaryWithObject:child forKey:@"NewTreeNode"]];
+}
+
 - (void)insertSibling:(SKTreeNode *)newSibling {
+  [[[self document] undoManager] registerUndoWithTarget:newSibling selector:@selector(remove) object:nil];
   [super insertSibling:newSibling];
   [(SdefObject *)newSibling setEditable:[self isEditable]];
-  [[NSNotificationCenter defaultCenter] postNotificationName:@"SDTreeNodeDidAppendNodeNotification"
+  [[NSNotificationCenter defaultCenter] postNotificationName:@"SdefObjectDidAppendChild"
                                                       object:[self parent]
                                                     userInfo:[NSDictionary dictionaryWithObject:newSibling forKey:@"NewTreeNode"]];
 }
 
 - (void)remove {
-  [[NSNotificationCenter defaultCenter] postNotificationName:@"SDTreeNodeWillRemoveNodeNotification"
+  id parent = [self parent];
+  unsigned idx = [parent indexOfChildren:self];
+  [[[[self document] undoManager] prepareWithInvocationTarget:parent] insertChild:self atIndex:idx];
+  [[NSNotificationCenter defaultCenter] postNotificationName:@"SdefObjectWillRemoveChild"
                                                       object:[self parent]
                                                     userInfo:[NSDictionary dictionaryWithObject:self forKey:@"RemovedTreeNode"]];
-  id parent = [self parent];
+  [parent willChange:NSKeyValueChangeRemoval valuesAtIndexes:[NSIndexSet indexSetWithIndex:idx] forKey:@"children"];
   [super remove];
-  [[NSNotificationCenter defaultCenter] postNotificationName:@"SDTreeNodeDidRemoveNodeNotification"
+  [parent didChange:NSKeyValueChangeRemoval valuesAtIndexes:[NSIndexSet indexSetWithIndex:idx] forKey:@"children"];
+  [[NSNotificationCenter defaultCenter] postNotificationName:@"SdefObjectDidRemoveChild"
                                                       object:parent];
 }
 
+- (void)removeChildAtIndex:(unsigned)idx {
+  /* Super call -remove, so no need to undo here */
+//  id child = [self childAtIndex:idx];
+//  [[[[self document] undoManager] prepareWithInvocationTarget:self] insertChild:child atIndex:idx];
+//  [[NSNotificationCenter defaultCenter] postNotificationName:@"SdefObjectWillRemoveChild"
+//                                                      object:self
+//                                                    userInfo:[NSDictionary dictionaryWithObject:child forKey:@"RemovedTreeNode"]];
+//  [self willChange:NSKeyValueChangeRemoval valuesAtIndexes:[NSIndexSet indexSetWithIndex:idx] forKey:@"children"];
+  [super removeChildAtIndex:idx];
+//  [self didChange:NSKeyValueChangeRemoval valuesAtIndexes:[NSIndexSet indexSetWithIndex:idx] forKey:@"children"];
+//  [[NSNotificationCenter defaultCenter] postNotificationName:@"SdefObjectDidRemoveChild"
+//                                                      object:self];
+}
+
 - (void)removeAllChildren {
-  [[NSNotificationCenter defaultCenter] postNotificationName:@"SDTreeNodeWillRemoveAllChildrenNotification" object:self];
+  [[NSNotificationCenter defaultCenter] postNotificationName:@"SdefObjectWillRemoveAllChildren" object:self];
   [super removeAllChildren];
-  [[NSNotificationCenter defaultCenter] postNotificationName:@"SDTreeNodeDidRemoveAllChildrenNotification" object:self];
+  [[NSNotificationCenter defaultCenter] postNotificationName:@"SdefObjectDidRemoveAllChildren" object:self];
 }
 
 #pragma mark -
+- (SdefDocument *)document {
+  id root = [self findRoot];
+  return (root != self) ? [root document] : nil;
+}
 
 - (SDObjectType)objectType {
   return [[self class] objectType];
 }
 
 - (void)createContent {
+}
+
+- (void)createSynonyms {
+  id synonyms = [SdefCollection nodeWithName:@"Synonyms"];
+  [synonyms setContentType:[SdefSynonym class]];
+  [synonyms setElementName:@"synonyms"];
+  [self setSynonyms:synonyms];
 }
 
 #pragma mark -
@@ -162,8 +219,9 @@
 
 - (void)setName:(NSString *)newName {
   if (sd_name != newName) {
-    [sd_name release];
     [[NSNotificationCenter defaultCenter] postNotificationName:@"SDTreeNodeWillChangeNameNotification" object:self];
+    [[[self document] undoManager] registerUndoWithTarget:self selector:_cmd object:sd_name];
+    [sd_name release];
     sd_name = [newName copy];
     [[NSNotificationCenter defaultCenter] postNotificationName:@"SDTreeNodeDidChangeNameNotification" object:self];
   }
@@ -180,6 +238,7 @@
   sd_flags.editable = (flag) ? 1 : 0;
   if (recu) {
     [[self documentation] setEditable:flag];
+    [[self synonyms] setEditable:flag recursive:recu];
     id nodes = [self childrenEnumerator];
     id node;
     while (node = [nodes nextObject]) {
@@ -196,6 +255,11 @@
   sd_flags.removable = (removable) ? 1 : 0;
 }
 
+#pragma mark Optionals children
+- (BOOL)hasDocumentation {
+  return sd_documentation != nil;
+}
+
 - (SdefDocumentation *)documentation {
   return sd_documentation;
 }
@@ -206,6 +270,28 @@
     sd_documentation = [doc retain];
     [sd_documentation setEditable:[self isEditable]];
   }	
+}
+
+- (BOOL)hasSynonyms {
+  return sd_synonyms != nil;
+}
+
+- (SdefCollection *)synonyms {
+  return sd_synonyms;
+}
+
+- (void)setSynonyms:(SdefCollection *)synonyms {
+  if (sd_synonyms != synonyms) {
+    [sd_synonyms release];
+    sd_synonyms = [synonyms retain];
+    [sd_synonyms setEditable:[self isEditable]];
+  }
+}
+
+
+#pragma mark Comments
+- (BOOL)hasComments {
+  return [sd_comments count] > 0;
 }
 
 - (NSArray *)comments {
@@ -223,15 +309,13 @@
   if (!sd_comments) {
     sd_comments = [[NSMutableArray alloc] init];
   }
-  [sd_comments addObject:comment];
+  id cmnt = [SdefComment commentWithString:comment];
+//  [[[self document] undoManager] registerUndoWithTarget:sd_comments selector:@selector(removeObject:) object:cmnt];
+  [sd_comments addObject:cmnt];
 }
 
 - (void)removeCommentAtIndex:(unsigned)index {
   [sd_comments removeObjectAtIndex:index];
-  if (sd_comments && [sd_comments count] == 0) {
-    [sd_comments release];
-    sd_comments = nil;
-  }
 }
 
 #pragma mark -
@@ -241,12 +325,14 @@
 }
 
 - (void)setChildren:(NSArray *)objects {
+  [self willChangeValueForKey:@"children"];
   [self removeAllChildren];
   id children = [objects objectEnumerator];
   id child;
   while (child = [children nextObject]) {
     [self appendChild:child];
   }
+  [self didChangeValueForKey:@"children"];
 }
 
 - (unsigned)countOfChildren {
@@ -279,10 +365,15 @@
   node = [SdefXMLNode nodeWithElementName:[self xmlElementName]];
   if (node) {
     NSAssert1([node elementName] != nil, @"%@ return an invalid node", self);
-    [node setComments:[self comments]];
+    if ([self hasComments])
+      [node setComments:[self comments]];
     id documentation = [[self documentation] xmlNode];
     if (nil != documentation) {
       [node prependChild:documentation];
+    }
+    id synonyms = [[self synonyms] xmlNode];
+    if (nil != synonyms) {
+      [node appendChild:synonyms];
     }
     children = [self childrenEnumerator];
     while (child = [children nextObject]) {
@@ -315,6 +406,11 @@
     [parser setDelegate:documentation];
     [documentation setComments:sd_childComments];
     [documentation release];
+  } else if ([elementName isEqualToString:@"synonyms"]) {
+    SdefCollection *synonyms = [self synonyms];
+    [self appendChild:synonyms]; /* Append to parse, and remove after */
+    [parser setDelegate:synonyms];
+    [synonyms setComments:sd_childComments];
   } else if ([elementName isEqualToString:@"cocoa"] && [self respondsToSelector:@selector(setImpl:)]) {
     SdefImplementation *cocoa = [(SdefObject *)[SdefImplementation alloc] initWithAttributes:attributeDict];
     [(id)self setImpl:cocoa];
@@ -330,9 +426,6 @@
   if (![elementName isEqualToString:@"cocoa"]) { /* cocoa isn't handle as a child node, but as an ivar */
     [parser setDelegate:[self parent]];
   }
-  if ([elementName isEqualToString:@"documentation"]) {
-    [self remove];
-  }
 }
 
 // A comment (Text in a <!-- --> block) is reported to the delegate as a single string
@@ -340,7 +433,7 @@
   if (nil == sd_childComments) {
     sd_childComments = [[NSMutableArray alloc] init];
   }
-  [sd_childComments addObject:comment];
+  [sd_childComments addObject:[SdefComment commentWithString:[comment stringByUnescapingEntities:nil]]];
 }
 
 @end
@@ -420,6 +513,14 @@
   }
 }
 
+// sent when an end tag is encountered. The various parameters are supplied as above.
+- (void)parser:(NSXMLParser *)parser didEndElement:(NSString *)elementName namespaceURI:(NSString *)namespaceURI qualifiedName:(NSString *)qName {
+  [super parser:parser didEndElement:elementName namespaceURI:namespaceURI qualifiedName:qName];
+  if ([elementName isEqualToString:@"synonyms"]) {
+    [self remove];
+  }
+}
+
 @end
 
 #pragma mark -
@@ -464,6 +565,7 @@
 
 - (void)setHidden:(BOOL)newHidden {
   if (sd_hidden != newHidden) {
+    [[[[self document] undoManager] prepareWithInvocationTarget:self] setHidden:sd_hidden];
     sd_hidden = newHidden;
   }
 }
@@ -496,6 +598,7 @@
 
 - (void)setCodeStr:(NSString *)str {
   if (sd_code != str) {
+    [[[self document] undoManager] registerUndoWithTarget:self selector:_cmd object:sd_code];
     [sd_code release];
     sd_code = [str copy];
   }
@@ -507,6 +610,7 @@
 
 - (void)setDesc:(NSString *)newDesc {
   if (sd_desc != newDesc) {
+    [[[self document] undoManager] registerUndoWithTarget:self selector:_cmd object:sd_desc];
     [sd_desc release];
     sd_desc = [newDesc copy];
   }

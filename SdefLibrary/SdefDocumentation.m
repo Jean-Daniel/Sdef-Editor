@@ -7,7 +7,7 @@
 //
 
 #import "SdefDocumentation.h"
-
+#import "SdefXMLGenerator.h"
 
 @implementation SdefDocumentation
 
@@ -79,7 +79,15 @@
   if (!content) {
     content = [[NSMutableString alloc] init];
   }
-  [content appendString:string];
+  [content appendString:[string stringByUnescapingEntities:nil]];
+}
+
+// sent when an end tag is encountered. The various parameters are supplied as above.
+- (void)parser:(NSXMLParser *)parser didEndElement:(NSString *)elementName namespaceURI:(NSString *)namespaceURI qualifiedName:(NSString *)qName {
+  [super parser:parser didEndElement:elementName namespaceURI:namespaceURI qualifiedName:qName];
+  if ([elementName isEqualToString:[self xmlElementName]]) {
+    [self remove];
+  }
 }
 
 @end

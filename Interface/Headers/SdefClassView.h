@@ -10,6 +10,10 @@
 
 @interface SdefClassView : SdefViewController {
   IBOutlet NSTabView *tab;
+  IBOutlet NSArrayController *properties;
+  IBOutlet NSArrayController *elements;
+  IBOutlet NSArrayController *commands;
+  IBOutlet NSArrayController *events;
 }
 
 @end

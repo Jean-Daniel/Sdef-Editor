@@ -22,15 +22,10 @@
 
 extern NSString * const kSDSynonymsCollection;
 
-@interface SdefSynonym : SdefObject {
-  BOOL hidden;
-  OSType code;
+@interface SdefSynonym : SdefTerminologyElement {
 }
 
-- (BOOL)hidden;
-- (void)setHidden:(BOOL)newHidden;
-
-- (OSType)code;
-- (void)setCode:(OSType)newCode;
+- (NSString *)desc;
+- (void)setDesc:(NSString *)description;
 
 @end

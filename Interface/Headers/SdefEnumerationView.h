@@ -10,6 +10,7 @@
 
 @interface SdefEnumerationView : SdefViewController {
   IBOutlet id tab;
+  IBOutlet NSArrayController *enumerators;
 }
 
 @end

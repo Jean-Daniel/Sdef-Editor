@@ -12,6 +12,7 @@
 @implementation SdefDocumentationWindow
 
 + (void)initialize {
+  [super initialize];
   [self setKeys:[NSArray arrayWithObject:@"object"] triggerChangeNotificationsForDependentKey:@"title"];
 }
 

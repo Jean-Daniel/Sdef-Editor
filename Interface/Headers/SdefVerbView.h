@@ -10,6 +10,7 @@
 
 @interface SdefVerbView : SdefViewController {
   IBOutlet id tab;
+  IBOutlet id parameters;
 }
 
 @end

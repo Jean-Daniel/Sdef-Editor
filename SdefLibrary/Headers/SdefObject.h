@@ -35,23 +35,24 @@ typedef enum {
   kSDDocumentationType		= 'Docu'
 } SDObjectType;
 
-@class SdefXMLNode, SdefDocumentation;
+@class SdefXMLNode, SdefDocumentation, SdefCollection, SdefDocument;
 @interface SdefObject : SKTreeNode {
 @protected
   NSMutableArray *sd_childComments;
 @private
   NSImage *sd_icon;
   NSString *sd_name;
+  SdefCollection *sd_synonyms;
   struct {
-    unsigned int editable:4;
-    unsigned int removable:4;
+    unsigned int editable:1;
+    unsigned int removable:1;
+    unsigned int reserved:6;
   } sd_flags;
   NSMutableArray *sd_comments;
   SdefDocumentation *sd_documentation;
 }
 
 + (SDObjectType)objectType;
-- (SDObjectType)objectType;
 
 + (NSString *)defaultName;
 + (NSString *)defaultIconName;
@@ -63,6 +64,12 @@ typedef enum {
 - (id)initWithName:(NSString *)newName;
 - (id)initWithAttributes:(NSDictionary *)attributes;
 
+- (SDObjectType)objectType;
+- (void)createContent;
+- (void)createSynonyms;
+- (SdefDocument *)document;
+
+#pragma mark -
 - (NSImage *)icon;
 - (void)setIcon:(NSImage *)newIcon;
 
@@ -76,22 +83,30 @@ typedef enum {
 - (BOOL)isRemovable;
 - (void)setRemovable:(BOOL)removable;
 
-- (void)createContent;
-- (void)setAttributes:(NSDictionary *)attrs;
+- (BOOL)hasSynonyms;
+- (BOOL)hasDocumentation;
 
 - (SdefDocumentation *)documentation;
 - (void)setDocumentation:(SdefDocumentation *)doc;
 
-- (SdefXMLNode *)xmlNode;
-- (NSString *)xmlElementName;
+- (SdefCollection *)synonyms;
+- (void)setSynonyms:(SdefCollection *)newSynonyms;
 
+#pragma mark -
 - (NSArray *)comments;
 - (void)setComments:(NSArray *)comments;
 - (void)addComment:(NSString *)comment;
 - (void)removeCommentAtIndex:(unsigned)index;
 
+#pragma mark -
+- (void)setAttributes:(NSDictionary *)attrs;
+
+- (SdefXMLNode *)xmlNode;
+- (NSString *)xmlElementName;
+
 @end
 
+#pragma mark -
 @interface SdefCollection : SdefObject {
   Class _contentType;
   NSString *sd_elementName;
@@ -104,6 +119,7 @@ typedef enum {
 - (void)setElementName:(NSString *)aName;
 @end
 
+#pragma mark -
 @class SdefImplementation;
 @interface SdefTerminologyElement : SdefObject {
 @private
@@ -127,6 +143,7 @@ typedef enum {
 
 @end
 
+#pragma mark -
 @interface SdefImports : SdefCollection {  
 }
 

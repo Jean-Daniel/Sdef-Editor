@@ -12,6 +12,7 @@
 @interface SdefViewController : NSObject {
   IBOutlet NSView *sdefView;
 @private
+  NSArray *_types;
   SdefObject *_object;
   NSArray *_nibTopLevelObjects;
 }
@@ -24,5 +25,19 @@
 - (void)setObject:(SdefObject *)newObject;
 
 - (void)selectObject:(SdefObject*)object;
+
+@end
+
+@interface SdefAccessTransformer : NSValueTransformer {
+}
+
++ (id)transformer;
+
+@end
+
+@interface SdefObjectNameTransformer : NSValueTransformer {
+}
+
++ (id)transformer;
 
 @end

@@ -11,6 +11,7 @@
 #import "SdefDocumentation.h"
 #import "SdefImplementation.h"
 #import "SdefXMLNode.h"
+#import "SdefDocument.h"
 
 NSString *SDAccessStringFromFlag(unsigned flag) {
   id str = nil;
@@ -53,6 +54,7 @@ unsigned SDAccessFlagFromString(NSString *str) {
 }
 
 - (void)createContent {
+  [self createSynonyms];
   [self setDocumentation:[SdefDocumentation node]];
   [self setContents:[SdefContents node]];
   
@@ -102,6 +104,7 @@ unsigned SDAccessFlagFromString(NSString *str) {
 
 - (void)setPlural:(NSString *)newPlural {
   if (sd_plural != newPlural) {
+    [[[self document] undoManager] registerUndoWithTarget:self selector:_cmd object:sd_plural];
     [sd_plural release];
     sd_plural = [newPlural copy];
   }
@@ -113,6 +116,7 @@ unsigned SDAccessFlagFromString(NSString *str) {
 
 - (void)setInherits:(NSString *)newInherits {
   if (sd_inherits != newInherits) {
+    [[[self document] undoManager] registerUndoWithTarget:self selector:_cmd object:sd_inherits];
     [sd_inherits release];
     sd_inherits = [newInherits copy];
   }
@@ -227,6 +231,7 @@ unsigned SDAccessFlagFromString(NSString *str) {
 
 - (void)setAccess:(unsigned)newAccess {
   if (access != newAccess) {
+    [[[[self document] undoManager] prepareWithInvocationTarget:self] setAccess:access];
     access = newAccess;
   }
 }
@@ -237,6 +242,7 @@ unsigned SDAccessFlagFromString(NSString *str) {
 
 - (void)setHidden:(BOOL)newHidden {
   if (hidden != newHidden) {
+    [[[[self document] undoManager] prepareWithInvocationTarget:self] setHidden:hidden];
     hidden = newHidden;
   }
 }
@@ -247,6 +253,7 @@ unsigned SDAccessFlagFromString(NSString *str) {
 
 - (void)setDesc:(NSString *)newDesc {
   if (desc != newDesc) {
+    [[[self document] undoManager] registerUndoWithTarget:self selector:_cmd object:desc];
     [desc release];
     desc = [newDesc copy];
   }
@@ -328,6 +335,11 @@ unsigned SDAccessFlagFromString(NSString *str) {
   [super dealloc];
 }
 
+- (void)createContent {
+  [self createSynonyms];
+  [super createContent];
+}
+
 #pragma mark -
 - (NSString *)type {
   return sd_type;
@@ -335,6 +347,7 @@ unsigned SDAccessFlagFromString(NSString *str) {
 
 - (void)setType:(NSString *)aType {
   if (sd_type != aType) {
+    [[[self document] undoManager] registerUndoWithTarget:self selector:_cmd object:sd_type];
     [sd_type release];
     sd_type = [aType copy];
   }
@@ -344,6 +357,7 @@ unsigned SDAccessFlagFromString(NSString *str) {
   return sd_access;
 }
 - (void)setAccess:(unsigned)newAccess {
+  [[[[self document] undoManager] prepareWithInvocationTarget:self] setAccess:sd_access];
   sd_access = newAccess;
 }
 
@@ -351,6 +365,7 @@ unsigned SDAccessFlagFromString(NSString *str) {
   return sd_notInProperties;
 }
 - (void)setNotInProperties:(BOOL)flag {
+  [[[[self document] undoManager] prepareWithInvocationTarget:self] setNotInProperties:sd_notInProperties];
   sd_notInProperties = flag;
 }
 
@@ -428,6 +443,7 @@ unsigned SDAccessFlagFromString(NSString *str) {
 
 - (void)setHidden:(BOOL)newHidden {
   if (sd_hidden != newHidden) {
+    [[[[self document] undoManager] prepareWithInvocationTarget:self] setHidden:sd_hidden];
     sd_hidden = newHidden;
   }
 }

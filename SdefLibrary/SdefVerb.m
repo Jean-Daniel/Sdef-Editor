@@ -26,6 +26,7 @@
 }
 
 - (void)createContent {
+  [self createSynonyms];
   [self setResult:[SdefResult node]];
   [self setDocumentation:[SdefDocumentation node]];
   [self setDirectParameter:[SdefDirectParameter node]];

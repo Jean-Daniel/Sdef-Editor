@@ -13,6 +13,7 @@
 @implementation SdefVerbView
 
 + (void)initialize {
+  [super initialize];
   [self setKeys:[NSArray arrayWithObject:@"object"] triggerChangeNotificationsForDependentKey:@"verbLabel"];
 }
 
@@ -26,7 +27,10 @@
   int idx = -1;
   SdefVerb *content = [self object];
   if (anObject == content) idx = 0;
-  else if ([anObject isKindOfClass:[SdefParameter class]]) idx = 1;
+  else if ([anObject parent] == content)  {
+    idx = 1;
+    [parameters setSelectedObjects:[NSArray arrayWithObject:anObject]];
+  }
   if (idx >= 0)
     [tab selectTabViewItemAtIndex:idx];
 }

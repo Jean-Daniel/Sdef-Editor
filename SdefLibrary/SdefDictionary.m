@@ -13,6 +13,14 @@
 
 @implementation SdefDictionary
 
++ (void)initialize {
+  static BOOL tooLate = NO;
+  if (!tooLate) {
+    [self setKeys:[NSArray arrayWithObject:@"name"] triggerChangeNotificationsForDependentKey:@"title"];
+    tooLate = YES;
+  }
+}
+
 + (SDObjectType)objectType {
   return kSDDictionaryType;
 }
@@ -41,6 +49,14 @@
 
 - (void)setTitle:(NSString *)newTitle {
   [self setName:newTitle];
+}
+
+- (SdefDocument *)document {
+  return sd_document;
+}
+
+- (void)setDocument:(SdefDocument *)document {
+  sd_document = document;
 }
 
 - (NSArray *)suites {

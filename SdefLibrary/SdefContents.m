@@ -9,6 +9,7 @@
 #import "SdefContents.h"
 #import "SdefClass.h"
 #import "SdefXMLNode.h"
+#import "SdefDocument.h"
 
 @implementation SdefContents
 
@@ -39,6 +40,7 @@
 
 - (void)setType:(NSString *)aType {
   if (sd_type != aType) {
+    [[[self document] undoManager] registerUndoWithTarget:self selector:_cmd object:sd_type];
     [sd_type release];
     sd_type = [aType copy];
   }
@@ -48,6 +50,7 @@
   return sd_access;
 }
 - (void)setAccess:(unsigned)newAccess {
+  [[[[self document] undoManager] prepareWithInvocationTarget:self] setAccess:sd_access];
   sd_access = newAccess;
 }
 

@@ -23,40 +23,8 @@
 }
 
 - (void)createContent {
+  [self createSynonyms];
   [self setDocumentation:[SdefDocumentation node]];
-}
-
-- (NSArray *)enumerators {
-  return [self children];
-}
-
-- (void)setEnumerators:(NSArray *)objects {
-  [self removeAllChildren];
-  id children = [objects objectEnumerator];
-  id child;
-  while (child = [children nextObject]) {
-    [self appendChild:child];
-  }
-}
-
-- (unsigned)countOfEnumerators {
-  return [self childCount];
-}
-
-- (id)objectInEnumeratorsAtIndex:(unsigned)index {
-  return [self childAtIndex:index];
-}
-
-- (void)insertObject:(id)object inEnumeratorsAtIndex:(unsigned)index {
-  [self insertChild:object atIndex:index];
-}
-
-- (void)removeObjectFromEnumeratorsAtIndex:(unsigned)index {
-  [self removeChildAtIndex:index];
-}
-
-- (void)replaceObjectInEnumeratorsAtIndex:(unsigned)index withObject:(id)object {
-  [self replaceChildAtIndex:index withChild:object];
 }
 
 #pragma mark -

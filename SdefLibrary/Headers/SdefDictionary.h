@@ -16,14 +16,18 @@
  >
 */
 
+@class SdefDocument;
 @interface SdefDictionary : SdefObject {
 @private
   NSString *sd_title;
+  SdefDocument *sd_document;
 }
 
 - (NSString *)title;
 - (void)setTitle:(NSString *)newTitle;
 
 - (NSArray *)suites;
+- (SdefDocument *)document;
+- (void)setDocument:(SdefDocument *)document;
 
 @end

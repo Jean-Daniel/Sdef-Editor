@@ -16,7 +16,12 @@
 #import "SdefDocument.h"
 #import "SdefDocumentationWindow.h"
 
-static BOOL SDEditorExistsForItem(SdefObject *item) {
+#define IsObjectOwner(item)		 		[item findRoot] == (id)[(SdefDocument *)[self document] dictionary]  \
+										/* || item == [[self document] imports] */
+
+NSString * const SdefDictionarySelectionDidChangeNotification = @"SdefDictionarySelectionDidChange";
+
+static inline BOOL SDEditorExistsForItem(SdefObject *item) {
   switch ([item objectType]) {
     case kSDDictionaryType:
     case kSDSuiteType:
@@ -43,23 +48,23 @@ static BOOL SDEditorExistsForItem(SdefObject *item) {
     
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(didAppendNode:)
-                                                 name:@"SDTreeNodeDidAppendNodeNotification"
+                                                 name:@"SdefObjectDidAppendChild"
                                                object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(willRemoveNode:)
-                                                 name:@"SDTreeNodeWillRemoveNodeNotification"
+                                                 name:@"SdefObjectWillRemoveChild"
                                                object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(didRemoveNode:)
-                                                 name:@"SDTreeNodeDidRemoveNodeNotification"
+                                                 name:@"SdefObjectDidRemoveChild"
                                                object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(willRemoveAllNodes:)
-                                                 name:@"SDTreeNodeWillRemoveAllChildrenNotification"
+                                                 name:@"SdefObjectWillRemoveAllChildren"
                                                object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(didRemoveNode:)
-                                                 name:@"SDTreeNodeDidRemoveAllChildrenNotification"
+                                                 name:@"SdefObjectDidRemoveAllChildren"
                                                object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(didChangeNodeName:)
@@ -75,13 +80,19 @@ static BOOL SDEditorExistsForItem(SdefObject *item) {
   [super dealloc];
 }
 
+#pragma mark -
+- (SdefObject *)selection {
+  return [outline itemAtRow:[outline selectedRow]];
+}
+
 - (void)didChangeNodeName:(NSNotification *)aNotification {
   [outline reloadItem:[aNotification object]];
 }
 
+#pragma mark -
 - (void)didAppendNode:(NSNotification *)aNotification {
   id item = [aNotification object];
-  if ([item findRoot] == (id)[(SdefDocument *)[self document] dictionary] || item == [[self document] imports]) {
+  if (IsObjectOwner(item)) {
     [outline reloadItem:item reloadChildren:[outline isItemExpanded:item]];
     if ([outline isExpandable:item]) {
       [outline expandItem:item];
@@ -91,7 +102,7 @@ static BOOL SDEditorExistsForItem(SdefObject *item) {
 
 - (void)willRemoveNode:(NSNotification *)aNotification {
   id item = [aNotification object];
-  if ([item findRoot] == (id)[(SdefDocument *)[self document] dictionary] || item == [[self document] imports]) {
+  if (IsObjectOwner(item)) {
     if ([item childCount] == 1) {
       [outline collapseItem:item];
     }
@@ -100,39 +111,29 @@ static BOOL SDEditorExistsForItem(SdefObject *item) {
 
 - (void)didRemoveNode:(NSNotification *)aNotification {
   id item = [aNotification object];
-  if ([item findRoot] == (id)[(SdefDocument *)[self document] dictionary] || item == [[self document] imports]) {
+  if (IsObjectOwner(item)) {
     [outline reloadItem:item reloadChildren:[item childCount] != 0];
   }
 }
 
 - (void)willRemoveAllNodes:(NSNotification *)aNotification {
   id item = [aNotification object];
-  if ([item findRoot] == (id)[(SdefDocument *)[self document] dictionary] || item == [[self document] imports]) {
+  if (IsObjectOwner(item)) {
     [outline collapseItem:item];
   }
 }
 
 - (void)windowDidLoad {
   [super windowDidLoad];
+}
+
+- (void)awakeFromNib {
   [outline setDataSource:[self document]];
+  [outline setDoubleAction:@selector(openInspector:)];
+  [outline setTarget:[NSApp delegate]];
 }
 
 #pragma mark -
-
-- (IBAction)viewDocumentation:(id)sender {
-  SdefDocumentationWindow *sheet = [[SdefDocumentationWindow alloc] init];
-  [sheet setObject:[sender itemAtRow:[sender selectedRow]]];
-  [NSApp beginSheet:[sheet window]
-     modalForWindow:[self window]
-      modalDelegate:self
-     didEndSelector:@selector(documentationDidEnd:returnCode:context:)
-        contextInfo:nil];
-}
-
-- (void)documentationDidEnd:(NSWindow *)sheet returnCode:(int)code context:(id)ctxt {
-  [[sheet windowController] autorelease];
-}
-
 - (void)outlineViewSelectionDidChange:(NSNotification *)notification {
   NSOutlineView *view = [notification object];
   SdefObject *selection = [view itemAtRow:[view selectedRow]];
@@ -149,6 +150,7 @@ static BOOL SDEditorExistsForItem(SdefObject *item) {
     [ctrl setObject:item];
     [ctrl selectObject:selection];
   }
+  [[NSNotificationCenter defaultCenter] postNotificationName:SdefDictionarySelectionDidChangeNotification object:[self document]];
 }
 
 - (void)outlineView:(NSOutlineView *)outlineView willDisplayCell:(id)cell forTableColumn:(NSTableColumn *)tableColumn item:(id)item {
@@ -165,7 +167,6 @@ static BOOL SDEditorExistsForItem(SdefObject *item) {
 }
 
 - (void)deleteSelectionInOutlineView:(NSOutlineView *)outlineView {
-  ShadowTrace();
   id item = [outlineView itemAtRow:[outlineView selectedRow]];
   if (item != [(SdefDocument *)[self document] dictionary] && [item isRemovable]) {
     id parent = [item parent];

@@ -13,7 +13,7 @@
 @interface SdefClassManager : NSObject {
 @private
   SdefDocument *sd_document;
-  NSMutableArray *sd_classes;
+  NSMutableArray *sd_classes, *sd_commands, *sd_events, *sd_types;
 }
 
 - (id)initWithDocument:(SdefDocument *)aDocument;
