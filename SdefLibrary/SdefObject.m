@@ -25,8 +25,8 @@ NSString * const SdefObjectDidRemoveChildNotification = @"SdefObjectDidRemoveChi
 NSString * const SdefObjectWillRemoveAllChildrenNotification = @"SdefObjectWillRemoveAllChildren";
 NSString * const SdefObjectDidRemoveAllChildrenNotification = @"SdefObjectDidRemoveAllChildren";
 
-NSString * const SDTreeNodeWillChangeNameNotification = @"SDTreeNodeWillChangeName";
-NSString * const SDTreeNodeDidChangeNameNotification = @"SDTreeNodeDidChangeName";
+NSString * const SdefObjectWillChangeNameNotification = @"SdefObjectWillChangeName";
+NSString * const SdefObjectDidChangeNameNotification = @"SdefObjectDidChangeName";
 
 @implementation SdefObject
 #pragma mark Protocols Implementations
@@ -82,8 +82,8 @@ NSString * const SDTreeNodeDidChangeNameNotification = @"SDTreeNodeDidChangeName
   return ![key isEqualToString:@"children"];
 }
 
-+ (SDObjectType)objectType {
-  return kSDUndefinedType;
++ (SdefObjectType)objectType {
+  return kSdefUndefinedType;
 }
 
 + (NSString *)defaultName {
@@ -193,7 +193,7 @@ NSString * const SDTreeNodeDidChangeNameNotification = @"SDTreeNodeDidChangeName
 
 - (void)remove {
   id parent = [self parent];
-  unsigned idx = [parent indexOfChildren:self];
+  unsigned idx = [parent indexOfChild:self];
   [[[[self document] undoManager] prepareWithInvocationTarget:parent] insertChild:self atIndex:idx];
   [[NSNotificationCenter defaultCenter] postNotificationName:SdefObjectWillRemoveChildNotification
                                                       object:[self parent]
@@ -218,19 +218,22 @@ NSString * const SDTreeNodeDidChangeNameNotification = @"SDTreeNodeDidChangeName
 
 #pragma mark -
 - (SdefSuite *)suite {
+  return [self firstParentOfType:kSdefSuiteType];
+}
+
+- (id)firstParentOfType:(SdefObjectType)aType {
   id parent = self;
-  while (parent && ([parent objectType] != kSDSuiteType)) {
+  while (parent && ([parent objectType] != aType)) {
     parent = [parent parent];
   }
-  return parent;
+  return parent;  
 }
 
 - (SdefDocument *)document {
-  id root = [self findRoot];
-  return (root != self) ? [root document] : nil;
+  return [[self firstParentOfType:kSdefDictionaryType] document];
 }
 
-- (SDObjectType)objectType {
+- (SdefObjectType)objectType {
   return [[self class] objectType];
 }
 
@@ -263,11 +266,11 @@ NSString * const SDTreeNodeDidChangeNameNotification = @"SDTreeNodeDidChangeName
 
 - (void)setName:(NSString *)newName {
   if (sd_name != newName) {
-    [[NSNotificationCenter defaultCenter] postNotificationName:SDTreeNodeWillChangeNameNotification object:self];
+    [[NSNotificationCenter defaultCenter] postNotificationName:SdefObjectWillChangeNameNotification object:self];
     [[[self document] undoManager] registerUndoWithTarget:self selector:_cmd object:sd_name];
     [sd_name release];
     sd_name = [newName copy];
-    [[NSNotificationCenter defaultCenter] postNotificationName:SDTreeNodeDidChangeNameNotification object:self];
+    [[NSNotificationCenter defaultCenter] postNotificationName:SdefObjectDidChangeNameNotification object:self];
   }
 }
 
@@ -520,8 +523,8 @@ NSString * const SDTreeNodeDidChangeNameNotification = @"SDTreeNodeDidChangeName
 }
 
 #pragma mark -
-+ (SDObjectType)objectType {
-  return kSDCollectionType;
++ (SdefObjectType)objectType {
+  return kSdefCollectionType;
 }
 
 + (NSString *)defaultIconName {
@@ -807,8 +810,8 @@ NSString * const SDTreeNodeDidChangeNameNotification = @"SDTreeNodeDidChangeName
   sd_owner = anObject;
 }
 
-- (SdefDocument *)document {
-  return [sd_owner document];
+- (id)firstParentOfType:(SdefObjectType)aType {
+  return [[self owner] firstParentOfType:aType];
 }
 
 @end
@@ -832,8 +835,8 @@ NSString * const SDTreeNodeDidChangeNameNotification = @"SDTreeNodeDidChangeName
 }
 
 #pragma mark -
-+ (SDObjectType)objectType {
-  return kSDImportsType;
++ (SdefObjectType)objectType {
+  return kSdefImportsType;
 }
 
 + (NSString *)defaultName {

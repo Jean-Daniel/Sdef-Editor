@@ -10,30 +10,30 @@
 #import "SKTreeNode.h"
 
 typedef enum {
-  kSDUndefinedType		 	= 0,
-  kSDDictionaryType 		= 'Dico',
-  kSDSuiteType				= 'Suit',
-  kSDCollectionType			= 'Cole',
-  kSDImportsType			= 'Impo',
+  kSdefUndefinedType		= 0,
+  kSdefDictionaryType 		= 'Dico',
+  kSdefSuiteType			= 'Suit',
+  kSdefCollectionType		= 'Cole',
+  kSdefImportsType			= 'Impo',
   /* Class */
-  kSDClassType				= 'Clas',
-  kSDContentsType			= 'Cont',
-  kSDPropertyType			= 'Prop',
-  kSDElementType			= 'Elmt',
-  kSDRespondsToType			= 'ReTo',
+  kSdefClassType			= 'Clas',
+  kSdefContentsType			= 'Cont',
+  kSdefPropertyType			= 'Prop',
+  kSdefElementType			= 'Elmt',
+  kSdefRespondsToType		= 'ReTo',
   /* Verbs */
-  kSDVerbType				= 'Verb',
-  kSDParameterType			= 'Para',
-  kSDDirectParameterType	= 'DiPa',
-  kSDResultType				= 'Resu',
+  kSdefVerbType				= 'Verb',
+  kSdefParameterType		= 'Para',
+  kSdefDirectParameterType	= 'DiPa',
+  kSdefResultType			= 'Resu',
   /* Enumeration */
-  kSDEnumerationType		= 'Enum',
-  kSDEnumeratorType			= 'Enor',
+  kSdefEnumerationType		= 'Enum',
+  kSdefEnumeratorType		= 'Enor',
   /* Misc */
-  kSDCocoaType				= 'Coco',
-  kSDSynonymType			= 'Syno',
-  kSDDocumentationType		= 'Docu'
-} SDObjectType;
+  kSdefCocoaType			= 'Coco',
+  kSdefSynonymType			= 'Syno',
+  kSdefDocumentationType	= 'Docu'
+} SdefObjectType;
 
 extern NSString * const SdefNewTreeNode;
 extern NSString * const SdefRemovedTreeNode;
@@ -43,8 +43,8 @@ extern NSString * const SdefObjectDidRemoveChildNotification;
 extern NSString * const SdefObjectWillRemoveAllChildrenNotification;
 extern NSString * const SdefObjectDidRemoveAllChildrenNotification;
 
-extern NSString * const SDTreeNodeWillChangeNameNotification;
-extern NSString * const SDTreeNodeDidChangeNameNotification;
+extern NSString * const SdefObjectWillChangeNameNotification;
+extern NSString * const SdefObjectDidChangeNameNotification;
 
 extern NSString *SdefNameForCocoaName(NSString *cocoa);
 extern NSString *CocoaNameForSdefName(NSString *cocoa, BOOL isClass);
@@ -66,7 +66,7 @@ extern NSString *CocoaNameForSdefName(NSString *cocoa, BOOL isClass);
   SdefDocumentation *sd_documentation;
 }
 
-+ (SDObjectType)objectType;
++ (SdefObjectType)objectType;
 
 + (NSString *)defaultName;
 + (NSString *)defaultIconName;
@@ -78,12 +78,15 @@ extern NSString *CocoaNameForSdefName(NSString *cocoa, BOOL isClass);
 - (id)initWithName:(NSString *)newName;
 - (id)initWithAttributes:(NSDictionary *)attributes;
 
-- (SDObjectType)objectType;
+- (SdefObjectType)objectType;
 - (void)createContent;
 - (void)createSynonyms;
 
 #pragma mark -
+
 - (SdefSuite *)suite;
+- (id)firstParentOfType:(SdefObjectType)aType;
+
 - (SdefDocument *)document;
 
 - (NSImage *)icon;
