@@ -111,8 +111,9 @@ static unsigned SdefAccessorFlagFromString(NSString *str) {
 
 - (void)createContent {
   [super createContent];
-  [self createSynonyms];
-  [self setDocumentation:[SdefDocumentation node]];
+  sd_flags.hasSynonyms = 1;
+  sd_flags.hasDocumentation = 1;
+//  [self setDocumentation:[SdefDocumentation node]];
   [self setContents:[SdefContents node]];
   
   id child = [SdefCollection nodeWithName:NSLocalizedStringFromTable(@"Elements", @"SdefLibrary", @"Elements collection default name")];
@@ -493,7 +494,7 @@ static unsigned SdefAccessorFlagFromString(NSString *str) {
 
 - (void)createContent {
   [super createContent];
-  [self createSynonyms];
+  sd_flags.hasSynonyms = 1;
 }
 
 #pragma mark -

@@ -60,12 +60,11 @@
 }
 
 - (void)dealloc {
-//  ShadowTrace();
   [super dealloc];
 }
 
 - (void)createContent {
-  [self setDocumentation:[SdefDocumentation node]];
+  sd_flags.hasDocumentation = 1;
 }
 
 - (NSString *)title {

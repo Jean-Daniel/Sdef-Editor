@@ -9,6 +9,7 @@
 #import "SdefArguments.h"
 #import "SdefXMLNode.h"
 #import "SdefDocument.h"
+#import "SKExtensions.h"
 
 @implementation SdefDirectParameter
 - (id)copyWithZone:(NSZone *)aZone {
@@ -96,7 +97,7 @@
   if ([self type] && (node = [super xmlNode])) {
     id attr;
     if (attr = [self type]) [node setAttribute:attr forKey:@"type"];
-    if (attr = [self desc]) [node setAttribute:attr forKey:@"description"];
+    if (attr = [self desc]) [node setAttribute:[attr stringByEscapingEntities:nil] forKey:@"description"];
     if ([self isOptional]) [node setAttribute:@"optional" forKey:@"optional"];
     [node setEmpty:YES];
   }
@@ -112,7 +113,7 @@
 
 - (void)setAttributes:(NSDictionary *)attrs {
   [self setType:[attrs objectForKey:@"type"]];
-  [self setDesc:[attrs objectForKey:@"description"]];
+  [self setDesc:[[attrs objectForKey:@"description"] stringByUnescapingEntities:nil]];
   [self setOptional:[attrs objectForKey:@"optional"] != nil];
 }
 
@@ -284,7 +285,7 @@
   if ([self type] && (node = [super xmlNode])) {
     id attr;
     if (attr = [self type]) [node setAttribute:attr forKey:@"type"];
-    if (attr = [self desc]) [node setAttribute:attr forKey:@"description"];
+    if (attr = [self desc]) [node setAttribute:[attr stringByEscapingEntities:nil] forKey:@"description"];
     [node setEmpty:YES];
   }
   return node;
@@ -298,7 +299,7 @@
 #pragma mark Parsing
 - (void)setAttributes:(NSDictionary *)attrs {
   [self setType:[attrs objectForKey:@"type"]];
-  [self setDesc:[attrs objectForKey:@"description"]];
+  [self setDesc:[[attrs objectForKey:@"description"] stringByUnescapingEntities:nil]];
 }
 
 @end

@@ -40,8 +40,8 @@
 
 - (void)createContent {
   [super createContent];
-  [self createSynonyms];
-  [self setDocumentation:[SdefDocumentation node]];
+  sd_flags.hasSynonyms = 1;
+  sd_flags.hasDocumentation = 1;
 }
 
 #pragma mark -

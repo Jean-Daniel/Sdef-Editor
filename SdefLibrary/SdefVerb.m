@@ -58,9 +58,10 @@
 
 - (void)createContent {
   [super createContent];
-  [self createSynonyms];
+  sd_flags.hasSynonyms = 1;
   [self setResult:[SdefResult node]];
-  [self setDocumentation:[SdefDocumentation node]];
+  sd_flags.hasDocumentation = 1;
+//  [self setDocumentation:[SdefDocumentation node]];
   [self setDirectParameter:[SdefDirectParameter node]];
 }
 

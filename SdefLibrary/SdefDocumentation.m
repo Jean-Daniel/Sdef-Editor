@@ -7,7 +7,8 @@
 //
 
 #import "SdefDocumentation.h"
-#import "SdefXMLGenerator.h"
+#import "SKExtensions.h"
+
 #import "SdefDocument.h"
 
 @implementation SdefDocumentation
