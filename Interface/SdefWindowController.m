@@ -209,10 +209,9 @@ static inline BOOL SdefEditorExistsForItem(SdefObject *item) {
 - (IBAction)sortByName:(id)sender {
   if ([outline selectedRow] != -1) {
     SdefObject *item = [outline itemAtRow:[outline selectedRow]];
-    if ([item hasChildren] && [[item firstChild] isRemovable] && [item childCount] > 1) {
-      id desc = [[NSSortDescriptor alloc] initWithKey:@"name" ascending:YES selector:@selector(caseInsensitiveCompare:)];
-      [item sortUsingDescriptors:[NSArray arrayWithObject:desc]];
-      [desc release];
+    /* If contains user objects */
+    if ([[item firstChild] isRemovable]) {
+      [item sortByName];
     }
   }
 }

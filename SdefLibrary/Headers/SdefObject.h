@@ -55,8 +55,9 @@ extern NSString *SdefNameForCocoaName(NSString *cocoa);
 extern NSString *CocoaNameForSdefName(NSString *cocoa, BOOL isClass);
 
 #pragma mark -
+@class SdefClassManager, SdefDocument;
 @class SdefImplementation, SdefDocumentation;
-@class SdefSuite, SdefCollection, SdefDocument;
+@class SdefDictionary, SdefSuite, SdefCollection;
 @interface SdefObject : SKTreeNode <NSCopying, NSCoding> {
 @protected
   struct {
@@ -93,12 +94,16 @@ extern NSString *CocoaNameForSdefName(NSString *cocoa, BOOL isClass);
 
 #pragma mark -
 - (SdefDocument *)document;
+- (SdefClassManager *)classManager;
 
 - (SdefSuite *)suite;
+- (SdefDictionary *)dictionary;
 - (id)firstParentOfType:(SdefObjectType)aType;
 
 - (NSString *)location;
 - (NSString *)objectTypeName;
+
+- (void)sortByName;
 
 #pragma mark -
 - (NSImage *)icon;

@@ -27,6 +27,7 @@ typedef enum {
 }
 
 - (void)createToolbar;
+- (IBAction)limitSearch:(id)sender;
 
 - (void)loadSymbols;
 - (void)addSuite:(SdefSuite *)aSuite;

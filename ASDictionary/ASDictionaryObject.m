@@ -56,7 +56,7 @@
     return @"anything";
   if (equal(type, equalSel, @"rectangle"))
     return @"bounding rectangle";
-  id manager = [[self document] manager];
+  id manager = [self classManager];
   if (manager) {
     id enume = [manager enumerationWithName:type];
     if (enume) {

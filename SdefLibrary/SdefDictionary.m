@@ -10,17 +10,15 @@
 #import "ShadowMacros.h"
 
 #import "SdefSuite.h"
+#import "SdefClassManager.h"
 #import "SdefDocumentation.h"
 
 @implementation SdefDictionary
 #pragma mark Protocols Implementations
 - (id)copyWithZone:(NSZone *)aZone {
-//  id document = sd_document;
-//  sd_document = nil; /* If document != nil => register some undo */
   SdefDictionary *copy = [super copyWithZone:aZone];
-//  sd_document = document;
+  copy->sd_manager = nil;
   copy->sd_document = nil;
-//  [copy setDocument:sd_document];
   return copy;
 }
 
@@ -71,6 +69,23 @@
 
 - (void)setDocument:(SdefDocument *)document {
   sd_document = document;
+  [sd_manager setDocument:sd_document];
+}
+
+- (SdefClassManager *)classManager {
+  if (!sd_manager) {
+    sd_manager = [(SdefClassManager *)[SdefClassManager alloc] initWithDictionary:self];
+  }
+  return sd_manager;
+}
+
+- (void)setClassManager:(SdefClassManager *)aManager {
+  if (sd_manager != aManager) {
+    [sd_manager setDictionary:nil];
+    [sd_manager release];
+    sd_manager = [aManager retain];
+    [sd_manager setDictionary:self];
+  }
 }
 
 - (NSArray *)suites {

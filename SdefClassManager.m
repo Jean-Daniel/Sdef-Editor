@@ -59,9 +59,9 @@
   return self;
 }
 
-- (id)initWithDocument:(SdefDocument *)aDocument {
+- (id)initWithDictionary:(SdefDictionary *)aDictionary {
   if (self = [self init]) {
-    sd_document = aDocument;
+    [self setDictionary:aDictionary];
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(didAppendChild:)
                                                  name:SdefObjectDidAppendChildNotification
@@ -80,7 +80,26 @@
   [sd_events release];
   [sd_classes release];
   [sd_commands release];
+  [sd_dictionary release];
   [super dealloc];
+}
+
+- (void)setDictionary:(SdefDictionary *)aDico {
+  if (sd_dictionary != aDico) {
+    if (sd_dictionary) {
+      [self removeDictionary:sd_dictionary];
+      [sd_dictionary release];
+    }
+    sd_dictionary = [aDico retain];
+    if (sd_dictionary) {
+      [self addDictionary:sd_dictionary];
+    }
+    [self setDocument:[sd_dictionary document]];
+  }
+}
+
+- (void)setDocument:(SdefDocument *)aDocument {
+  sd_document = aDocument;
 }
 
 #pragma mark -
@@ -227,8 +246,9 @@
 #pragma mark -
 #pragma mark Notification Handling
 - (void)didAppendChild:(NSNotification *)aNotification {
-  id node = [aNotification object];
-  if (sd_document && [node document] == sd_document) {
+  SdefObject *node = [aNotification object];
+  if ((sd_dictionary && [node dictionary] == sd_dictionary) ||
+      (sd_document && [node document] == sd_document)) {
     id child = [[aNotification userInfo] objectForKey:SdefNewTreeNode];
     switch ([child objectType]) {
       case kSdefSuiteType:
@@ -255,8 +275,9 @@
 }
 
 - (void)willRemoveChild:(NSNotification *)aNotification {
-  id node = [aNotification object];
-  if (sd_document && [node document] == sd_document) {
+  SdefObject *node = [aNotification object];
+  if ((sd_dictionary && [node dictionary] == sd_dictionary) ||
+      (sd_document && [node document] == sd_document)) {
     id child = [[aNotification userInfo] objectForKey:SdefRemovedTreeNode];
     switch ([child objectType]) {
       case kSdefSuiteType:

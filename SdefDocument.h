@@ -12,18 +12,20 @@ extern NSString * const SdefObjectDragType;
 
 @class SdefObject, SdefDictionary, SdefClassManager, SdefImports;
 @class SdefWindowController, SdefSymbolBrowser;
+
+extern SdefDictionary *SdefLoadDictionary(NSString *filename);
+extern SdefDictionary *SdefLoadDictionaryData(NSData *data);
+
 @interface SdefDocument : NSDocument {
 @private
-  SdefDictionary *_dictionary;
-  SdefClassManager *_manager;
-  SdefImports *_imports;
+  SdefDictionary *sd_dictionary;
+//  SdefImports *sd_imports;
 }
 
 - (SdefObject *)selection;
 - (SdefSymbolBrowser *)symbolBrowser;
 - (SdefWindowController *)documentWindow;
 
-- (SdefClassManager *)manager;
 - (SdefDictionary *)dictionary;
 - (void)setDictionary:(SdefDictionary *)dictionary;
 

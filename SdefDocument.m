@@ -14,7 +14,7 @@
 
 #import "SdefWindowController.h"
 #import "SdefSymbolBrowser.h"
-#import "SdefClassManager.h"
+//#import "SdefClassManager.h"
 #import "SdefDictionary.h"
 #import "SdefObject.h"
 #import "SdefSuite.h"
@@ -35,14 +35,14 @@ NSString * const SdefObjectDragType = @"SdefObjectDragType";
     [dictionary appendChild:[SdefSuite node]];
     [self setDictionary:dictionary];
     [dictionary release];
-    _manager = [[SdefClassManager alloc] initWithDocument:self];
+//    _manager = [[SdefClassManager alloc] initWithDocument:self];
   }
   return self;
 }
 
 - (void)dealloc {
-  [_dictionary release];
-  [_manager release];
+  [sd_dictionary release];
+//  [_manager release];
   [super dealloc];
 }
 
@@ -142,28 +142,14 @@ NSString * const SdefObjectDragType = @"SdefObjectDragType";
 }
 
 - (BOOL)loadDataRepresentation:(NSData *)data ofType:(NSString *)type {
-  BOOL result = NO;
-  if (_manager) {
-    [_manager release];
-  }
-  _manager = [[SdefClassManager alloc] initWithDocument:self];
-  
   if ([type isEqualToString:ScriptingDefinitionFileType]) {
-    id parser = [[SdefParser alloc] init];
-    result = [parser parseData:data];
-    [self setDictionary:[parser document]];
-    [parser release];
+    [self setDictionary:SdefLoadDictionaryData(data)];
   }
-  
-  [_manager addDictionary:[self dictionary]];
-  return result;
+  return [self dictionary] != nil;
 }
 
 #pragma mark -
 #pragma mark SdefDocument Specific
-- (SdefClassManager *)manager {
-  return _manager;
-}
 
 - (SdefObject *)selection {
   id controllers = [self windowControllers];
@@ -171,24 +157,25 @@ NSString * const SdefObjectDragType = @"SdefObjectDragType";
 }
 
 - (SdefDictionary *)dictionary {
-  return _dictionary;
+  return sd_dictionary;
 }
 
 - (void)setDictionary:(SdefDictionary *)newDictionary {
-  if (_dictionary != newDictionary) {
-    [_dictionary setDocument:nil];
-    [_dictionary release];
-    _dictionary = [newDictionary retain];
-    [_dictionary setDocument:self];
+  if (sd_dictionary != newDictionary) {
+    [sd_dictionary setDocument:nil];
+    [sd_dictionary release];
+    sd_dictionary = [newDictionary retain];
+    [sd_dictionary setDocument:self];
     [[self undoManager] removeAllActions];
     [self updateChangeCount:NSChangeCleared];
+    /* Update [sd_dictionary classManager] */
   }
 }
 
 #pragma mark -
 #pragma mark OutlineView DataSource
 - (BOOL)outlineView:(NSOutlineView *)outlineView isItemExpandable:(id)item {
-  return (nil == item) ? YES : [item firstChild] != nil;
+  return (nil == item) ? YES : [item hasChildren];
 }
 
 - (int)outlineView:(NSOutlineView *)outlineView numberOfChildrenOfItem:(id)item {
@@ -196,7 +183,7 @@ NSString * const SdefObjectDragType = @"SdefObjectDragType";
 }
 
 - (id)outlineView:(NSOutlineView *)outlineView child:(int)index ofItem:(id)item {
-  return (nil != item) ? [item childAtIndex:index] : _dictionary;
+  return (nil == item) ? [self dictionary] : [item childAtIndex:index];
 }
 
 - (id)outlineView:(NSOutlineView *)outlineView objectValueForTableColumn:(NSTableColumn *)tableColumn byItem:(id)item {
@@ -350,3 +337,22 @@ NSString * const SdefObjectDragType = @"SdefObjectDragType";
 }
 
 @end
+#pragma mark -
+SdefDictionary *SdefLoadDictionary(NSString *filename) {
+  NSData *data = [[NSData alloc] initWithContentsOfFile:filename];
+  SdefDictionary *dictionary = SdefLoadDictionaryData(data);
+  [data release];
+  return dictionary;
+}
+
+SdefDictionary *SdefLoadDictionaryData(NSData *data) {
+  SdefDictionary *result = nil;
+  if (data) {
+    id parser = [[SdefParser alloc] init];
+    if ([parser parseData:data]) {
+      result = [[parser document] retain];
+    }
+    [parser release];
+  }
+  return [result autorelease];
+}

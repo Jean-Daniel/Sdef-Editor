@@ -11,6 +11,7 @@
 #import "SKTableDataSource.h"
 #import "SKAppKitExtensions.h"
 
+#import "SdefWindowController.h"
 #import "SdefDictionary.h"
 #import "SdefDocument.h"
 #import "SdefObject.h"
@@ -42,6 +43,8 @@ static BOOL SdefSearchFilter(NSString *search, SdefObject *object, void *ctxt);
 }
 
 - (void)dealloc {
+  ShadowTrace();
+  [searchField setTarget:nil];
   [[NSNotificationCenter defaultCenter] removeObserver:self];
   [super dealloc];
 }
@@ -131,9 +134,12 @@ static BOOL SdefSearchFilter(NSString *search, SdefObject *object, void *ctxt);
     id symbol = [symbols objectAtIndex:row];
     id ctrl = [[self document] documentWindow];
     [ctrl setSelection:symbol];
-    [[ctrl window] makeKeyAndOrderFront:sender];
+    [ctrl showWindow:sender];
   }
 }
+
+#define NSStringContains(str, substr)		([str rangeOfString:substr \
+                                                        options:NSCaseInsensitiveSearch | NSLiteralSearch].location != NSNotFound)
 
 #pragma mark Search Support
 BOOL SdefSearchFilter(NSString *search, SdefObject *object, void *ctxt) {
@@ -142,10 +148,10 @@ BOOL SdefSearchFilter(NSString *search, SdefObject *object, void *ctxt) {
   SdefSearchField field = *(SdefSearchField *)ctxt;
   switch (field) {
     case kSdefSearchAll:
-      return [[object name] startsWithString:search options:NSCaseInsensitiveSearch] || 
-      [[object objectTypeName] startsWithString:search options:NSCaseInsensitiveSearch] ||
-      [[object codeStr] startsWithString:search options:NSCaseInsensitiveSearch] ||
-      [[object location] startsWithString:search options:NSCaseInsensitiveSearch];
+      return NSStringContains([object name], search) ||
+      NSStringContains([(id)object codeStr], search) ||
+      NSStringContains([object objectTypeName], search) ||
+      NSStringContains([object location], search);
     case kSdefSearchSymbol:
       str = [object name];
       break;
@@ -153,7 +159,7 @@ BOOL SdefSearchFilter(NSString *search, SdefObject *object, void *ctxt) {
       str = [object objectTypeName];
       break;
     case kSdefSearchCode:
-      str = [object codeStr];
+      str = [(id)object codeStr];
       break;
     case kSdefSearchSuite:
       str = [object location];
@@ -161,7 +167,7 @@ BOOL SdefSearchFilter(NSString *search, SdefObject *object, void *ctxt) {
     default:
       break;
   }
-  return str ? [str startsWithString:search options:NSCaseInsensitiveSearch] : NO;
+  return str ? NSStringContains(str, search) : NO;
 }
 
 - (void)limitSearch:(id)sender {
@@ -178,7 +184,7 @@ BOOL SdefSearchFilter(NSString *search, SdefObject *object, void *ctxt) {
       label = NSLocalizedString(@"SEARCH_FIELD", @"Inspector Toolbar item label");
     }
     [search setLabel:label];
-    [symbols search:searchField];
+    [symbols rearrangeObjects];
   }
 }
 
@@ -194,7 +200,7 @@ BOOL SdefSearchFilter(NSString *search, SdefObject *object, void *ctxt) {
 }
 
 - (void)addSuite:(SdefSuite *)aSuite {
-  [symbols addObject:aSuite];
+  //[symbols addObject:aSuite];
   /* Enumeration/Enumerators */
   id items = [[aSuite types] childEnumerator];
   SdefObject *item;
@@ -225,7 +231,7 @@ BOOL SdefSearchFilter(NSString *search, SdefObject *object, void *ctxt) {
 }
 
 - (void)removeSuite:(SdefSuite *)aSuite {
-  [symbols removeObject:aSuite];
+//   [symbols removeObject:aSuite];
   /* Enumeration/Enumerators */
   id items = [[aSuite types] childEnumerator];
   SdefObject *item;

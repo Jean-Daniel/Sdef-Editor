@@ -16,10 +16,11 @@
  >
 */
 
-@class SdefDocument;
+@class SdefDocument, SdefClassManager;
 @interface SdefDictionary : SdefObject <NSCopying, NSCoding> {
 @private
   SdefDocument *sd_document;
+  SdefClassManager *sd_manager;
 }
 
 - (NSString *)title;
@@ -28,5 +29,8 @@
 - (NSArray *)suites;
 - (SdefDocument *)document;
 - (void)setDocument:(SdefDocument *)document;
+
+- (SdefClassManager *)classManager;
+- (void)setClassManager:(SdefClassManager *)aManager;
 
 @end

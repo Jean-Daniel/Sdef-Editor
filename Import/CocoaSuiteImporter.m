@@ -17,8 +17,10 @@
 #import "SdefSuite.h"
 #import "SdefClass.h"
 #import "SdefObject.h"
+#import "SdefDocument.h"
 #import "SdefContents.h"
 #import "SdefArguments.h"
+#import "SdefDictionary.h"
 #import "SdefEnumeration.h"
 #import "SdefImplementation.h"
 
@@ -96,11 +98,32 @@ static NSString *DecomposeCocoaType(NSString *type, NSString **suite);
 
 #pragma mark -
 #pragma mark Importer
+static NSArray *ASKStandardsSuites() {
+  static NSArray *asksuites = nil;
+  if (!asksuites) {
+    asksuites = [[NSArray alloc] initWithObjects:
+      @"ASKApplicationSuite",
+      @"ASKContainerViewSuite",
+      @"ASKControlViewSuite",
+      @"ASKDataViewSuite",
+      @"ASKDocumentSuite",
+      @"ASKDragAndDropSuite",
+      @"ASKMenuSuite",
+      @"ASKPanelSuite",
+      @"ASKPluginSuite",
+      @"ASKTextViewSuite",
+      nil];
+  }
+  return asksuites;
+}
+
 - (void)loadSuite:(NSString *)suite {
   while (suite && ![sd_suites containsObject:suite]) {
     NSString *suitePath = nil;
     if ([suite isEqualToString:@"NSCoreSuite"] || [suite isEqualToString:@"NSTextSuite"]) {
       suitePath = [[NSBundle mainBundle] pathForResource:suite ofType:@"sdef"];
+    } else if ([ASKStandardsSuites() containsObject:suite]) {
+      suitePath = [[NSBundle mainBundle] pathForResource:@"ASKDictionary" ofType:@"sdef"];
     } else {
       NSOpenPanel *openPanel = nil;
       NSString *title = [[NSString alloc] initWithFormat:@"Where is the Suite \"%@\"?", suite];
@@ -127,11 +150,9 @@ static NSString *DecomposeCocoaType(NSString *type, NSString **suite);
       [title release];
     }
     if (suitePath) {
-      id parser = [[SdefParser alloc] init];
-      NSData *data = [[NSData alloc] initWithContentsOfFile:suitePath];
-      if (data && [parser parseData:data]) {
+      SdefDictionary *dico = SdefLoadDictionary(suitePath);
+      if (dico) {
         unsigned idx;
-        SdefObject *dico = [parser document];
         for (idx=0; idx<[dico childCount]; idx++) {
           id sdefSuite = [dico childAtIndex:idx];
           [manager addSuite:sdefSuite];
@@ -139,8 +160,6 @@ static NSString *DecomposeCocoaType(NSString *type, NSString **suite);
           DLog(@"Load Suite: %@", [sdefSuite cocoaName]);
         }
       }
-      [data release];
-      [parser release]; 
     }
   }
 }

@@ -98,7 +98,7 @@
 }
 
 - (SdefClassManager *)classManager {
-  return [[self document] manager];
+  return [[self object] classManager];
 }
 
 - (NSArray *)types {

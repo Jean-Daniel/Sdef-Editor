@@ -16,6 +16,7 @@
 #import "SdefComment.h"
 #import "SdefSynonym.h"
 #import "SdefDocument.h"
+#import "SdefDictionary.h"
 #import "SdefDocumentation.h"
 #import "SdefImplementation.h"
 
@@ -236,11 +237,16 @@ NSString * const SdefObjectDidChangeNameNotification = @"SdefObjectDidChangeName
 - (SdefSuite *)suite {
   return [self firstParentOfType:kSdefSuiteType];
 }
+- (SdefDictionary *)dictionary {
+  return [self firstParentOfType:kSdefDictionaryType];
+}
+
 - (NSString *)location {
   id parent;
   /* If parent is a Class or an Enumeration and parent != self */
   if (((parent = [self firstParentOfType:kSdefClassType]) ||
-       (parent = [self firstParentOfType:kSdefEnumerationType])) && parent != self) {
+       (parent = [self firstParentOfType:kSdefEnumerationType]) || 
+       (parent = [self firstParentOfType:kSdefVerbType])) && parent != self) {
     return [NSString stringWithFormat:@"%@:%@", [(id)[self suite] name], [parent name]];
   } else {
     return [(id)[self suite] name];
@@ -255,8 +261,21 @@ NSString * const SdefObjectDidChangeNameNotification = @"SdefObjectDidChangeName
   return parent;  
 }
 
+- (void)sortByName {
+  static NSArray *sorts = nil;
+  if (!sorts) {
+    NSSortDescriptor *name = [[NSSortDescriptor alloc] initWithKey:@"name" ascending:YES selector:@selector(caseInsensitiveCompare:)];
+    sorts = [[NSArray alloc] initWithObjects:name, nil];
+    [name release];
+  }
+  [self sortUsingDescriptors:sorts];
+}
+
 - (SdefDocument *)document {
-  return [[self firstParentOfType:kSdefDictionaryType] document];
+  return [[self dictionary] document];
+}
+- (SdefClassManager *)classManager {
+  return [[self dictionary] classManager];
 }
 
 - (SdefObjectType)objectType {
