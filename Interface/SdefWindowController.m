@@ -188,10 +188,7 @@ static inline BOOL SdefEditorExistsForItem(SdefObject *item) {
 }
 
 - (void)outlineView:(NSOutlineView *)outlineView willDisplayCell:(id)cell forTableColumn:(NSTableColumn *)tableColumn item:(id)item {
-  if ([[tableColumn identifier] isEqualToString:@"documentation"]) {
-    [cell setTransparent:[item documentation] == nil];
-    [cell setEnabled:[item documentation] != nil];
-  } else if ([[tableColumn identifier] isEqualToString:@"_item"]) {
+  if ([[tableColumn identifier] isEqualToString:@"_item"]) {
     if ([outlineView rowForItem:item] == [outlineView selectedRow]) {
       [cell setTextColor:([[self window] firstResponder] == self) ? [NSColor whiteColor] : [NSColor blackColor]];
     } else {
