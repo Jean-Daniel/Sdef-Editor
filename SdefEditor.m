@@ -13,9 +13,21 @@
 #import "SdefSuite.h"
 #import "SdefDocument.h"
 #import "SdefDictionary.h"
+#import "ImporterWarning.h"
 #import "CocoaSuiteImporter.h"
 #import "SdefObjectInspector.h"
 
+#if defined (DEBUG)
+#import <Foundation/NSDebug.h>
+#endif
+
+int main(int argc, char *argv[]) {
+#if defined (DEBUG)  
+  NSDebugEnabled = YES;
+  NSHangOnUncaughtException = YES;
+#endif
+  return NSApplicationMain(argc, (const char **) argv);
+}
 
 NSString * const ScriptingDefinitionFileType = @"ScriptingDefinition";
 
@@ -61,16 +73,30 @@ NSString * const ScriptingDefinitionFileType = @"ScriptingDefinition";
     case NSCancelButton:
       return;
   }
-  CocoaSuiteImporter *importer = [[CocoaSuiteImporter alloc] initWithFile:[[openPanel filenames] objectAtIndex:0]];
-  SdefSuite *suite = [importer sdefSuite];
-  if (suite) {
-    SdefDocument *doc = [[NSDocumentController sharedDocumentController] openUntitledDocumentOfType:ScriptingDefinitionFileType display:NO];
-    [[doc dictionary] appendChild:suite];
-    [doc showWindows];
-  } else {
+  id file = [[openPanel filenames] objectAtIndex:0];
+  CocoaSuiteImporter *importer = [[CocoaSuiteImporter alloc] initWithFile:file];
+  @try {
+    SdefSuite *suite = [importer sdefSuite];
+    if (suite) {
+      SdefDocument *doc = [[NSDocumentController sharedDocumentController] openUntitledDocumentOfType:ScriptingDefinitionFileType display:NO];
+      [[doc dictionary] removeAllChildren];
+      [[doc dictionary] appendChild:suite];
+      [[doc undoManager] removeAllActions];
+      [doc updateChangeCount:NSChangeCleared];
+      [doc showWindows];
+      if ([importer warnings]) {
+        ImporterWarning *alert = [[ImporterWarning alloc] init];
+        [alert setWarnings:[importer warnings]];
+        [alert showWindow:nil];
+      }
+    } else {
+      NSBeep();
+    }
+  } @catch (id exception) {
+    SKLogException(exception);
     NSBeep();
   }
-  [importer release]; 
+  [importer release];
 }
 
 @end

@@ -13,6 +13,7 @@
 #import "SdefVerb.h"
 #import "SdefSuite.h"
 #import "SdefClass.h"
+#import "SdefObject.h"
 #import "SdefArguments.h"
 #import "SdefEnumeration.h"
 #import "SdefImplementation.h"
@@ -88,7 +89,6 @@
 
 #pragma mark -
 #pragma mark Importer
-
 - (SdefEnumeration *)importEnumeration:(NSString *)name fromSuite:(NSDictionary *)suite andTerminology:(NSDictionary *)terminology {
   SdefEnumeration *enume = [SdefEnumeration nodeWithName:SdefNameForCocoaName(name)];
   [[enume impl] setName:name];
@@ -265,24 +265,60 @@ static NSString *DecomposeCocoaType(NSString *type, NSString **suite) {
   return [type substringWithRange:NSMakeRange(dot+1, end - dot - 1)];  
 }
 
-- (void)loadSuite:(NSString *)suite inManager:(SdefClassManager *)manager {
-  if (!suite || [sd_suites containsObject:suite]) {
-    return;
-  }
-  if ([suite isEqualToString:@"NSCoreSuite"] || [suite isEqualToString:@"NSTextSuite"]) {
-    id parser = [[SdefParser alloc] init];
-    NSString *suitePath = [[NSBundle mainBundle] pathForResource:suite ofType:@"sdef"];
-    NSData *data = [[NSData alloc] initWithContentsOfFile:suitePath];
-    if (data && [parser parseData:data])
-      [manager addDictionary:[parser document]];
-    [data release];
-    [parser release]; 
-  } else {
-    // Ask user
-  }
-  DLog(@"Load Suite: %@", suite);
-  [sd_suites addObject:suite];
+- (void)addWarning:(NSString *)warning forValue:(NSString *)value {
+  [sd_warnings addObject:[NSDictionary dictionaryWithObjectsAndKeys:warning, @"warning", value, @"value", nil]];
 }
+
+- (void)loadSuite:(NSString *)suite inManager:(SdefClassManager *)manager {
+  while (suite && ![sd_suites containsObject:suite]) {
+    NSString *suitePath = nil;
+    if ([suite isEqualToString:@"NSCoreSuite"] || [suite isEqualToString:@"NSTextSuite"]) {
+      suitePath = [[NSBundle mainBundle] pathForResource:suite ofType:@"sdef"];
+    } else {
+      NSOpenPanel *openPanel = nil;
+      NSString *title = [[NSString alloc] initWithFormat:@"Where is the Suite \"%@\"?", suite];
+      switch (NSRunAlertPanel(title, @"Sdef Editor need the suite \"%@\" to correctly import your file", @"Find", @"Ignore", nil, suite)) {
+        case NSAlertDefaultReturn:
+          openPanel = [NSOpenPanel openPanel];
+          [openPanel setMessage:title];
+          [openPanel setCanChooseFiles:YES];
+          [openPanel setCanCreateDirectories:NO];
+          [openPanel setCanChooseDirectories:NO];
+          [openPanel setAllowsMultipleSelection:NO];
+          [openPanel setTreatsFilePackagesAsDirectories:YES];
+          switch([openPanel runModalForTypes:[NSArray arrayWithObjects:@"sdef", NSFileTypeForHFSTypeCode('Sdef'), nil]]) {
+            case NSOKButton:
+              suitePath = [[openPanel filenames] objectAtIndex:0];
+              break;
+          }
+            if (suitePath) 
+              break;
+          case NSAlertAlternateReturn:
+            [sd_suites addObject:suite];
+            DLog(@"Load Suite: %@", suite);
+            break;
+      }
+      [title release];
+    }
+    if (suitePath) {
+      id parser = [[SdefParser alloc] init];
+      NSData *data = [[NSData alloc] initWithContentsOfFile:suitePath];
+      if (data && [parser parseData:data]) {
+        unsigned idx;
+        SdefObject *dico = [parser document];
+        for (idx=0; idx<[dico childCount]; idx++) {
+          id sdefSuite = [dico childAtIndex:idx];
+          [manager addSuite:sdefSuite];
+          [sd_suites addObject:[sdefSuite cocoaName]];
+          DLog(@"Load Suite: %@", [sdefSuite cocoaName]);
+        }
+      }
+      [data release];
+      [parser release]; 
+    }
+  }
+}
+
 
 - (BOOL)resolveObjectType:(SdefObject *)obj withManager:(SdefClassManager *)manager {
   NSString *suite = nil, *typename = nil, *type;
@@ -299,7 +335,6 @@ static NSString *DecomposeCocoaType(NSString *type, NSString **suite) {
     [obj setValue:typename forKey:@"type"];
     return YES;
   } else {
-    DLog(@"Unable to resolve Type: %@", [obj valueForKey:@"type"]);
     return NO;
   }
 }
@@ -315,7 +350,8 @@ static NSString *DecomposeCocoaType(NSString *type, NSString **suite) {
     if (parent) {
       [aClass setInherits:[parent name]];
     } else {
-      [sd_warnings addObject:[NSString stringWithFormat:@"%@: Unable to resolve super class name: %@", [aClass name], [aClass inherits]]];
+      [self addWarning:[NSString stringWithFormat:@"Unable to resolve super class name: %@", [aClass inherits]]
+              forValue:[aClass name]];
     }
   }
   
@@ -323,18 +359,22 @@ static NSString *DecomposeCocoaType(NSString *type, NSString **suite) {
   id items = [[aClass elements] childrenEnumerator];
   while (item = [items nextObject]) {
     if ([[item valueForKey:@"type"] isEqualToString:@"NSArray"]) 
-      [sd_warnings addObject:[NSString stringWithFormat:@"%@: Element NSArray type set to \"list of any\"", [aClass name]]];
+      [self addWarning:@"Element NSArray type set to \"list of any\""
+              forValue:[aClass name]];
     if (![self resolveObjectType:item withManager:manager]) {
-      [sd_warnings addObject:[NSString stringWithFormat:@"%@: Unable to resolve element type: %@", [aClass name], [item valueForKey:@"type"]]];
+      [self addWarning:[NSString stringWithFormat:@"Unable to resolve element type: %@", [item valueForKey:@"type"]]
+              forValue:[aClass name]];
     }
   }
   
   items = [[aClass properties] childrenEnumerator];
   while (item = [items nextObject]) {
     if ([[item valueForKey:@"type"] isEqualToString:@"NSArray"])
-      [sd_warnings addObject:[NSString stringWithFormat:@"%@->%@: NSArray type set to \"list of any\"", [aClass name], [item name]]];
+      [self addWarning:@"NSArray type set to \"list of any\""
+              forValue:[NSString stringWithFormat:@"%@->%@", [aClass name], [item name]]];
     if (![self resolveObjectType:item withManager:manager]) {
-      [sd_warnings addObject:[NSString stringWithFormat:@"%@->%@: Unable to resolve type: %@", [aClass name], [item name], [item valueForKey:@"type"]]];
+      [self addWarning:[NSString stringWithFormat:@"Unable to resolve type: %@", [item valueForKey:@"type"]]
+              forValue:[NSString stringWithFormat:@"%@->%@", [aClass name], [item name]]];
     }
   }
   
@@ -347,7 +387,8 @@ static NSString *DecomposeCocoaType(NSString *type, NSString **suite) {
     if (cmd) {
       [item setName:[cmd name]];
     } else {
-      [sd_warnings addObject:[NSString stringWithFormat:@"%@->%@(): Unable to resolve command: %@", [aClass name], [item name]]];
+      [self addWarning:[NSString stringWithFormat:@"Unable to resolve command: %@", [item name]]
+              forValue:[aClass name]];
     }
   }
 }
@@ -357,24 +398,30 @@ static NSString *DecomposeCocoaType(NSString *type, NSString **suite) {
   id items = [aCmd childrenEnumerator];
   while (item = [items nextObject]) {
     if ([[item valueForKey:@"type"] isEqualToString:@"NSArray"])
-      [sd_warnings addObject:[NSString stringWithFormat:@"%@(%@): NSArray type set to \"list of any\"", [aCmd name], [item name]]];
+      [self addWarning:@"NSArray type set to \"list of any\""
+              forValue:[NSString stringWithFormat:@"%@(%@)", [aCmd name], [item name]]];
     if (![self resolveObjectType:item withManager:manager]) {
-      [sd_warnings addObject:[NSString stringWithFormat:@"%@(%@): Unable to resolve type: %@", [aCmd name], [item name], [item valueForKey:@"type"]]];
+      [self addWarning:[NSString stringWithFormat:@"Unable to resolve type: %@", [item valueForKey:@"type"]]
+              forValue:[NSString stringWithFormat:@"%@(%@)", [aCmd name], [item name]]];
     }
   }
   
   item = [aCmd directParameter];
   if ([[item valueForKey:@"type"] isEqualToString:@"NSArray"])
-    [sd_warnings addObject:[NSString stringWithFormat:@"%@(): Direct-Param NSArray type set to \"list of any\"", [aCmd name]]];
+    [self addWarning:@"Direct-Param NSArray type set to \"list of any\""
+            forValue:[NSString stringWithFormat:@"%@()", [aCmd name]]];
   if (![self resolveObjectType:item withManager:manager]) {
-    [sd_warnings addObject:[NSString stringWithFormat:@"%@(): Unable to resolve Direct-Param type: %@", [aCmd name], [item valueForKey:@"type"]]];
+    [self addWarning:[NSString stringWithFormat:@"Unable to resolve Direct-Param type: %@", [item valueForKey:@"type"]]
+            forValue:[NSString stringWithFormat:@"%@()", [aCmd name]]];
   }
   
   item = [aCmd result];
   if ([[item valueForKey:@"type"] isEqualToString:@"NSArray"])
-    [sd_warnings addObject:[NSString stringWithFormat:@"%@(): Result NSArray type set to \"list of any\"", [aCmd name]]];
+    [self addWarning:@"Result NSArray type set to \"list of any\""
+            forValue:[NSString stringWithFormat:@"%@()", [aCmd name]]];
   if (![self resolveObjectType:item withManager:manager]) {
-    [sd_warnings addObject:[NSString stringWithFormat:@"%@(): Unable to resolve Result type: %@", [aCmd name], [item valueForKey:@"type"]]];
+    [self addWarning:[NSString stringWithFormat:@"Unable to resolve Result type: %@", [item valueForKey:@"type"]]
+            forValue:[NSString stringWithFormat:@"%@()", [aCmd name]]];
   } 
 }
 
@@ -462,7 +509,10 @@ static NSString *DecomposeCocoaType(NSString *type, NSString **suite) {
   }
   
   [self postProcessor];
-  DLog(@"WARNINGS: %@", sd_warnings);
+  if ([sd_warnings count] == 0) {
+    [sd_warnings release];
+    sd_warnings = nil;
+  }
   return YES;
 }
 
