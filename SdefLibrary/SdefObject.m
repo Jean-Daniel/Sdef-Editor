@@ -80,7 +80,7 @@ NSString * const SdefObjectDidChangeNameNotification = @"SdefObjectDidChangeName
 }
 
 + (BOOL)automaticallyNotifiesObserversForKey:(NSString *)key {
-  return ![key isEqualToString:@"children"];
+  return ![key isEqualToString:@"children"] && ![key isEqualToString:@"name"];
 }
 
 + (SdefObjectType)objectType {
@@ -259,8 +259,10 @@ NSString * const SdefObjectDidChangeNameNotification = @"SdefObjectDidChangeName
   if (sd_name != newName) {
     [[NSNotificationCenter defaultCenter] postNotificationName:SdefObjectWillChangeNameNotification object:self];
     [[[self document] undoManager] registerUndoWithTarget:self selector:_cmd object:sd_name];
+    [self willChangeValueForKey:@"name"];
     [sd_name release];
     sd_name = [newName copy];
+    [self didChangeValueForKey:@"name"];
     [[NSNotificationCenter defaultCenter] postNotificationName:SdefObjectDidChangeNameNotification object:self];
   }
 }
@@ -658,6 +660,7 @@ NSString * const SdefObjectDidChangeNameNotification = @"SdefObjectDidChangeName
 
 @end
 
+/*
 #pragma mark -
 @implementation SdefImports  
 #pragma mark Protocols Implementation
@@ -690,6 +693,7 @@ NSString * const SdefObjectDidChangeNameNotification = @"SdefObjectDidChangeName
 }
 
 @end
+*/
 #pragma mark -
 #pragma mark Publics Functions
 NSString *CocoaNameForSdefName(NSString *sdefName, BOOL isClass) {

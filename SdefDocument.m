@@ -202,7 +202,7 @@ NSString * const SdefObjectDragType = @"SdefObjectDragType";
     return YES;
   }
 
-  unsigned srcIdx = [[object parent] indexOfChild:object];
+  unsigned srcIdx = [object index];
   if ([object findRoot] == [self dictionary]) {
     /* Have to check parent before removing object */
     if (([object parent] == item) && (srcIdx <= index)) index--;

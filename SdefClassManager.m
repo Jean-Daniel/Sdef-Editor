@@ -39,6 +39,7 @@
       @"record",
       @"rectangle",
       @"string",
+      @"type",
       nil];
   }
   return types;
@@ -193,9 +194,9 @@
         [sd_classes addObject:child];
         break;
       case kSdefVerbType:
-        if ([[child xmlElementName] isEqualToString:@"command"]) {
+        if ([child isCommand]) {
           [sd_commands addObject:child];
-        } else if ([[child xmlElementName] isEqualToString:@"event"]) {
+        } else {
           [sd_events addObject:child];
         }
         break;
@@ -221,9 +222,9 @@
         [sd_classes removeObject:child];
         break;
       case kSdefVerbType:
-        if ([[child xmlElementName] isEqualToString:@"command"]) {
+        if ([child isCommand]) {
           [sd_commands removeObject:child];
-        } else if ([[child xmlElementName] isEqualToString:@"event"]) {
+        } else {
           [sd_events removeObject:child];
         }
         break;

@@ -53,7 +53,7 @@ typedef struct AeteHeader AeteHeader;
       sd_aetes = [[NSMutableArray alloc] initWithCapacity:count];
       for (idx = 1; idx <= count; idx++) {
         CFDataRef data = NULL;
-        ShadowAEGetNthCFData(&aetes, idx, typeAETE, &data);
+        ShadowAEGetNthCFDataFromDescList(&aetes, idx, typeAETE, &data);
         if (data) {
           [sd_aetes addObject:(id)data];
           CFRelease(data);
@@ -219,7 +219,7 @@ typedef struct AeteHeader AeteHeader;
       [info remove];
     } else if (SKHFSTypeCodeFromFileType([info codeStr]) == kAESpecialClassProperties) {
       if ([[info name] isEqualToString:@"<Plural>"]) {
-        unsigned idx = [[aClass parent] indexOfChild:aClass];
+        unsigned idx = [aClass index];
         [[[aClass parent] childAtIndex:idx-1] setPlural:[aClass name]];
         [aClass remove];
       } else {
