@@ -13,6 +13,7 @@
 
 - (id)init {
   if (self = [super initWithWindowNibName:@"SdefImporterWarning"]) {
+    [self setWindowFrameAutosaveName:@"SdefWarningReport"];
   }
   return self;
 }
