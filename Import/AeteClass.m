@@ -162,6 +162,7 @@
         case formRange:
           [self setAccRange:YES];
           break;
+        case formUniqueID:
         case formPropertyID:
           [self setAccId:YES];
           break;
