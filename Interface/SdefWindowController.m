@@ -14,6 +14,7 @@
 
 #import "SdefObject.h"
 #import "SdefDocument.h"
+#import "SdefDictionary.h"
 #import "SdefDocumentationWindow.h"
 
 #define IsObjectOwner(item)		 		[item findRoot] == (id)[(SdefDocument *)[self document] dictionary]  \
@@ -127,6 +128,15 @@ static inline BOOL SDEditorExistsForItem(SdefObject *item) {
   [super windowDidLoad];
 }
 
+- (void)windowWillClose:(NSNotification *)notification {
+  [[_viewControllers allValues] makeObjectsPerformSelector:@selector(setObject:) withObject:nil];
+  [[_viewControllers allValues] makeObjectsPerformSelector:@selector(documentWillClose:) withObject:[self document]];
+}
+
+//- (NSString *)windowTitleForDocumentDisplayName:(NSString *)displayName {
+//  return [NSString stringWithFormat:@"%@ : %@", displayName, [[(SdefDocument *)[self document] dictionary] name]];
+//}
+
 - (void)awakeFromNib {
   [outline setDataSource:[self document]];
   [outline setDoubleAction:@selector(openInspector:)];
@@ -168,7 +178,7 @@ static inline BOOL SDEditorExistsForItem(SdefObject *item) {
 
 - (void)deleteSelectionInOutlineView:(NSOutlineView *)outlineView {
   id item = [outlineView itemAtRow:[outlineView selectedRow]];
-  if (item != [(SdefDocument *)[self document] dictionary] && [item isRemovable]) {
+  if (item != [(SdefDocument *)[self document] dictionary] && [item isEditable] && [item isRemovable]) {
     id parent = [item parent];
     [item remove];
     if ([outlineView selectedRow] <= 0) {
@@ -223,6 +233,29 @@ static inline BOOL SDEditorExistsForItem(SdefObject *item) {
   }
 }
 
+#pragma mark -
+#pragma mark Copy/Paste
+/*
+- (IBAction)copy:(id)sender {
+  id selection = [self selection];
+  id pboard = [NSPasteboard generalPasteboard];
+  [pboard declareTypes:[NSArray arrayWithObjects:SdefTreePboardType, NSStringPboardType, nil] owner:nil];
+  [pboard setString:[selection name] forType:NSStringPboardType];
+  [pboard setData:[NSKeyedArchiver archivedDataWithRootObject:selection] forType:SdefTreePboardType];
+}
+
+- (IBAction)paste:(id)sender {
+  id pboard = [NSPasteboard generalPasteboard];
+  if (![[pboard types] containsObject:SdefTreePboardType]) return;
+  
+  id selection = [self selection];
+  id data = [pboard dataForType:SdefTreePboardType];
+  SdefObject *tree = [NSKeyedUnarchiver unarchiveObjectWithData:data];
+  switch ([tree objectType]) {
+    
+  }
+}
+*/
 @end
 
 #pragma mark -
@@ -232,3 +265,47 @@ static inline BOOL SDEditorExistsForItem(SdefObject *item) {
   return [self indexOfTabViewItem:[self selectedTabViewItem]]; 
 }
 @end
+
+NSString * const SdefTreePboardType = @"SdefTreeType";
+
+/*
+#pragma mark -
+@implementation SdefEditorPasteManager
+
++ (id)sharedManager {
+  static id shared = nil;
+  if (!shared) {
+    shared = [[self alloc] init];
+  }
+  return shared;
+}
+
+- (void)dealloc {
+  [sd_content release];
+  [super dealloc];
+}
+
+- (id)content {
+  return sd_content;
+}
+
+- (void)setContent:(SdefObject *)content {
+  if (sd_content != content) {
+    [sd_content release];
+    sd_content = [content retain];
+  }
+}
+
+- (void)pasteboard:(NSPasteboard *)sender provideDataForType:(NSString *)type {
+  if ([type isEqualToString:SdefTreePboardType] && sd_content) {
+    [sender setData:[NSKeyedArchiver archivedDataWithRootObject:sd_content] forType:type];
+  }
+  [sender setString:@"<Empty>" forType:type];
+}
+
+- (void)pasteboardChangedOwner:(NSPasteboard *)sender {
+  [self setContent:nil];
+}
+
+@end
+*/
