@@ -9,7 +9,6 @@
 #import "SdefObject.h"
 
 @interface SdefParameter : SdefTerminologyElement <NSCopying, NSCoding> {
-  BOOL sd_optional;
   NSString *sd_type; 
 }
 
@@ -23,7 +22,6 @@
 
 #pragma mark -
 @interface SdefDirectParameter : SdefOrphanObject <NSCopying, NSCoding> {
-  BOOL sd_optional;
   NSString *sd_type; 
   NSString *sd_desc;
 }

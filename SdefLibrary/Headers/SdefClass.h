@@ -76,12 +76,12 @@ enum {
 };
 
 enum {
-  kSdefAccessorIndex = 1 << 0,
-  kSdefAccessorName = 1 << 1,
-  kSdefAccessorID = 1 << 2,
-  kSdefAccessorRange = 1 << 3,
+  kSdefAccessorIndex 	= 1 << 0,
+  kSdefAccessorName 	= 1 << 1,
+  kSdefAccessorID 		= 1 << 2,
+  kSdefAccessorRange 	= 1 << 3,
   kSdefAccessorRelative = 1 << 4,
-  kSdefAccessorTest = 1 << 5
+  kSdefAccessorTest 	= 1 << 5
 };
 
 extern NSString *SDAccessStringFromFlag(unsigned flag);
@@ -149,7 +149,6 @@ extern unsigned SDAccessFlagFromString(NSString *str);
 @interface SdefProperty : SdefTerminologyElement <NSCopying, NSCoding> {
   NSString *sd_type;
   unsigned sd_access;
-  BOOL sd_notInProperties; 
 }
 
 - (NSString *)type;

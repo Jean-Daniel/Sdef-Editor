@@ -259,6 +259,13 @@ static unsigned SdefAccessorFlagFromString(NSString *str) {
 
 + (void)initialize {
   [self setKeys:[NSArray arrayWithObject:@"name"] triggerChangeNotificationsForDependentKey:@"type"];
+  id accessors = [NSArray arrayWithObject:@"accessors"]; 
+  [self setKeys:accessors triggerChangeNotificationsForDependentKey:@"accIndex"];
+  [self setKeys:accessors triggerChangeNotificationsForDependentKey:@"accId"];
+  [self setKeys:accessors triggerChangeNotificationsForDependentKey:@"accName"];
+  [self setKeys:accessors triggerChangeNotificationsForDependentKey:@"accRange"];
+  [self setKeys:accessors triggerChangeNotificationsForDependentKey:@"accRelative"];
+  [self setKeys:accessors triggerChangeNotificationsForDependentKey:@"accTest"];
 }
 
 #pragma mark Protocols Implementations
@@ -326,7 +333,7 @@ static unsigned SdefAccessorFlagFromString(NSString *str) {
 
 - (void)setAccessors:(unsigned)accessors {
   if (sd_accessors != accessors) {
-    [[[[self document] undoManager] prepareWithInvocationTarget:self] setAccess:sd_accessors];
+    [[[[self document] undoManager] prepareWithInvocationTarget:self] setAccessors:sd_accessors];
     sd_accessors = accessors;
   }
 }
@@ -337,48 +344,48 @@ static unsigned SdefAccessorFlagFromString(NSString *str) {
   return sd_accessors & kSdefAccessorIndex;
 }
 - (void)setAccIndex:(BOOL)flag {
-  if (flag) sd_accessors |= kSdefAccessorIndex;
-  else sd_accessors &= ~kSdefAccessorIndex;
+  if (flag) [self setAccessors:[self accessors] | kSdefAccessorIndex];
+  else [self setAccessors:[self accessors] & ~kSdefAccessorIndex];
 }
 
 - (BOOL)accId {
   return sd_accessors & kSdefAccessorID;
 }
 - (void)setAccId:(BOOL)flag {
-  if (flag) sd_accessors |= kSdefAccessorID;
-  else sd_accessors &= ~kSdefAccessorID;
+  if (flag) [self setAccessors:[self accessors] | kSdefAccessorID];
+  else [self setAccessors:[self accessors] & ~kSdefAccessorID];
 }
 
 - (BOOL)accName {
   return sd_accessors & kSdefAccessorName;
 }
 - (void)setAccName:(BOOL)flag {
-  if (flag) sd_accessors |= kSdefAccessorName;
-  else sd_accessors &= ~kSdefAccessorName;
+  if (flag) [self setAccessors:[self accessors] | kSdefAccessorName];
+  else [self setAccessors:[self accessors] & ~kSdefAccessorName];
 }
 
 - (BOOL)accRange {
   return sd_accessors & kSdefAccessorRange;
 }
 - (void)setAccRange:(BOOL)flag {
-  if (flag) sd_accessors |= kSdefAccessorRange;
-  else sd_accessors &= ~kSdefAccessorRange;
+  if (flag) [self setAccessors:[self accessors] | kSdefAccessorRange];
+  else [self setAccessors:[self accessors] & ~kSdefAccessorRange];
 }
 
 - (BOOL)accRelative {
   return sd_accessors & kSdefAccessorRelative;
 }
 - (void)setAccRelative:(BOOL)flag {
-  if (flag) sd_accessors |= kSdefAccessorRelative;
-  else sd_accessors &= ~kSdefAccessorRelative;
+  if (flag) [self setAccessors:[self accessors] | kSdefAccessorRelative];
+  else [self setAccessors:[self accessors] & ~kSdefAccessorRelative];
 }
 
 - (BOOL)accTest {
   return sd_accessors & kSdefAccessorTest;
 }
 - (void)setAccTest:(BOOL)flag {
-  if (flag) sd_accessors |= kSdefAccessorTest;
-  else sd_accessors &= ~kSdefAccessorTest;
+  if (flag) [self setAccessors:[self accessors] | kSdefAccessorTest];
+  else [self setAccessors:[self accessors] & ~kSdefAccessorTest];
 }
 
 #pragma mark -
@@ -448,7 +455,6 @@ static unsigned SdefAccessorFlagFromString(NSString *str) {
 - (id)copyWithZone:(NSZone *)aZone {
   SdefProperty *copy = [super copyWithZone:aZone];
   copy->sd_access = sd_access;
-  copy->sd_notInProperties = sd_notInProperties;
   copy->sd_type = [sd_type copyWithZone:aZone];
   return copy;
 }
@@ -457,14 +463,12 @@ static unsigned SdefAccessorFlagFromString(NSString *str) {
   [super encodeWithCoder:aCoder];
   [aCoder encodeObject:sd_type forKey:@"SPType"];
   [aCoder encodeInt:sd_access forKey:@"SPAccess"];
-  [aCoder encodeBool:sd_notInProperties forKey:@"SPNotInProperties"];
 }
 
 - (id)initWithCoder:(NSCoder *)aCoder {
   if (self = [super initWithCoder:aCoder]) {
     sd_access = [aCoder decodeIntForKey:@"SPAccess"];
     sd_type = [[aCoder decodeObjectForKey:@"SPType"] retain];
-    sd_notInProperties = [aCoder decodeBoolForKey:@"SPNotInProperties"];
   }
   return self;
 }
@@ -514,11 +518,14 @@ static unsigned SdefAccessorFlagFromString(NSString *str) {
 }
 
 - (BOOL)isNotInProperties {
-  return sd_notInProperties;
+  return sd_flags.notInProperties;
 }
 - (void)setNotInProperties:(BOOL)flag {
-  [[[[self document] undoManager] prepareWithInvocationTarget:self] setNotInProperties:sd_notInProperties];
-  sd_notInProperties = flag;
+  flag = flag ? 1 : 0;
+  if (flag != sd_flags.notInProperties) {
+    [[[[self document] undoManager] prepareWithInvocationTarget:self] setNotInProperties:sd_flags.notInProperties];
+    sd_flags.notInProperties = flag;
+  }
 }
 
 #pragma mark -

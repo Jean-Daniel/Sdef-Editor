@@ -13,7 +13,6 @@
 @implementation SdefDirectParameter
 - (id)copyWithZone:(NSZone *)aZone {
   SdefDirectParameter *copy = [super copyWithZone:aZone];
-  copy->sd_optional = sd_optional;
   copy->sd_desc = [sd_desc copyWithZone:aZone];
   copy->sd_type = [sd_type copyWithZone:aZone];
   return copy;
@@ -22,14 +21,12 @@
 - (void)encodeWithCoder:(NSCoder *)aCoder {
   [super encodeWithCoder:aCoder];
   [aCoder encodeObject:sd_type forKey:@"SDType"];
-  [aCoder encodeBool:sd_optional forKey:@"SDOptional"];
   [aCoder encodeObject:sd_desc forKey:@"SDDescription"];
 }
 
 - (id)initWithCoder:(NSCoder *)aCoder {
   if (self = [super initWithCoder:aCoder]) {
     sd_type = [[aCoder decodeObjectForKey:@"SDType"] retain];
-    sd_optional = [aCoder decodeBoolForKey:@"SDOptional"];
     sd_desc = [[aCoder decodeObjectForKey:@"SDDescription"] retain];
   }
   return self;
@@ -56,13 +53,14 @@
 
 #pragma mark -
 - (BOOL)isOptional {
-  return sd_optional;
+  return sd_flags.optional;
 }
 
 - (void)setOptional:(BOOL)newOptional {
-  if (sd_optional != newOptional) {
-    [[[[self document] undoManager] prepareWithInvocationTarget:self] setOptional:sd_optional];
-    sd_optional = newOptional;
+  newOptional = newOptional ? 1 : 0;
+  if (sd_flags.optional != newOptional) {
+    [[[[self document] undoManager] prepareWithInvocationTarget:self] setOptional:sd_flags.optional];
+    sd_flags.optional = newOptional;
   }
 }
 
@@ -124,7 +122,6 @@
 @implementation SdefParameter
 - (id)copyWithZone:(NSZone *)aZone {
   SdefParameter *copy = [super copyWithZone:aZone];
-  copy->sd_optional = sd_optional;
   copy->sd_type = [sd_type copyWithZone:aZone];
   return copy;
 }
@@ -132,13 +129,11 @@
 - (void)encodeWithCoder:(NSCoder *)aCoder {
   [super encodeWithCoder:aCoder];
   [aCoder encodeObject:sd_type forKey:@"SDType"];
-  [aCoder encodeBool:sd_optional forKey:@"SDOptional"];
 }
 
 - (id)initWithCoder:(NSCoder *)aCoder {
   if (self = [super initWithCoder:aCoder]) {
     sd_type = [[aCoder decodeObjectForKey:@"SDType"] retain];
-    sd_optional = [aCoder decodeBoolForKey:@"SDOptional"];
   }
   return self;
 }
@@ -163,13 +158,14 @@
 
 #pragma mark -
 - (BOOL)isOptional {
-  return sd_optional;
+  return sd_flags.optional;
 }
 
 - (void)setOptional:(BOOL)newOptional {
-  if (sd_optional != newOptional) {
-    [[[[self document] undoManager] prepareWithInvocationTarget:self] setOptional:sd_optional];
-    sd_optional = newOptional;
+  newOptional = newOptional ? 1 : 0;
+  if (sd_flags.optional != newOptional) {
+    [[[[self document] undoManager] prepareWithInvocationTarget:self] setOptional:sd_flags.optional];
+    sd_flags.optional = newOptional;
   }
 }
 

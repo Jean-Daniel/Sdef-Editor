@@ -277,10 +277,10 @@ NSString * const SdefObjectDidChangeNameNotification = @"SdefObjectDidChangeName
 - (BOOL)isEditable {
   return sd_flags.editable == 1;
 }
-
 - (void)setEditable:(BOOL)flag {
   [self setEditable:flag recursive:NO];
 }
+
 - (void)setEditable:(BOOL)flag recursive:(BOOL)recu {
   sd_flags.editable = (flag) ? 1 : 0;
   if (recu) {
@@ -297,7 +297,6 @@ NSString * const SdefObjectDidChangeNameNotification = @"SdefObjectDidChangeName
 - (BOOL)isRemovable {
   return sd_flags.removable == 1;
 }
-
 - (void)setRemovable:(BOOL)removable {
   sd_flags.removable = (removable) ? 1 : 0;
 }
@@ -610,7 +609,6 @@ NSString * const SdefObjectDidChangeNameNotification = @"SdefObjectDidChangeName
 #pragma mark Protocols Implementation
 - (id)copyWithZone:(NSZone *)aZone {
   SdefTerminologyElement *copy = [super copyWithZone:aZone];
-  copy->sd_hidden = sd_hidden;
   copy->sd_code = [sd_code copyWithZone:aZone];
   copy->sd_desc = [sd_desc copyWithZone:aZone];
   copy->sd_impl = [sd_impl copyWithZone:aZone];
@@ -620,7 +618,6 @@ NSString * const SdefObjectDidChangeNameNotification = @"SdefObjectDidChangeName
 
 - (void)encodeWithCoder:(NSCoder *)aCoder {
   [super encodeWithCoder:aCoder];
-  [aCoder encodeBool:sd_hidden forKey:@"STHidden"];
   [aCoder encodeObject:sd_code forKey:@"STCodeStr"];
   [aCoder encodeObject:sd_desc forKey:@"STDescription"];
   [aCoder encodeObject:sd_impl forKey:@"STImplementation"];
@@ -628,7 +625,6 @@ NSString * const SdefObjectDidChangeNameNotification = @"SdefObjectDidChangeName
 
 - (id)initWithCoder:(NSCoder *)aCoder {
   if (self = [super initWithCoder:aCoder]) {
-    sd_hidden = [aCoder decodeBoolForKey:@"STHidden"];
     sd_code = [[aCoder decodeObjectForKey:@"STCodeStr"] retain];
     sd_desc = [[aCoder decodeObjectForKey:@"STDescription"] retain];
     sd_impl = [[aCoder decodeObjectForKey:@"STImplementation"] retain];
@@ -677,13 +673,14 @@ NSString * const SdefObjectDidChangeNameNotification = @"SdefObjectDidChangeName
 }
 
 - (BOOL)isHidden {
-  return sd_hidden;
+  return sd_flags.hidden;
 }
 
-- (void)setHidden:(BOOL)newHidden {
-  if (sd_hidden != newHidden) {
-    [[[[self document] undoManager] prepareWithInvocationTarget:self] setHidden:sd_hidden];
-    sd_hidden = newHidden;
+- (void)setHidden:(BOOL)flag {
+  flag = flag ? 1 : 0;
+  if (sd_flags.hidden != flag) {
+    [[[[self document] undoManager] prepareWithInvocationTarget:self] setHidden:sd_flags.hidden];
+    sd_flags.hidden = flag;
   }
 }
 

@@ -53,15 +53,18 @@ extern NSString *CocoaNameForSdefName(NSString *cocoa, BOOL isClass);
 @interface SdefObject : SKTreeNode <NSCopying, NSCoding> {
 @protected
   NSMutableArray *sd_childComments;
+  struct {
+    unsigned int hidden:1;
+    unsigned int optional:1;
+    unsigned int editable:1;
+    unsigned int removable:1;
+    unsigned int notInProperties:1;
+    unsigned int :3;
+  } sd_flags;
 @private
   NSImage *sd_icon;
   NSString *sd_name;
   SdefCollection *sd_synonyms;
-  struct {
-    unsigned int editable:1;
-    unsigned int removable:1;
-    unsigned int :6;
-  } sd_flags;
   NSMutableArray *sd_comments;
   SdefDocumentation *sd_documentation;
 }
@@ -142,7 +145,6 @@ extern NSString *CocoaNameForSdefName(NSString *cocoa, BOOL isClass);
 @class SdefImplementation;
 @interface SdefTerminologyElement : SdefObject <NSCopying, NSCoding> {
 @private
-  BOOL sd_hidden;
   NSString *sd_code; 
   NSString *sd_desc;
   SdefImplementation *sd_impl;
@@ -152,7 +154,7 @@ extern NSString *CocoaNameForSdefName(NSString *cocoa, BOOL isClass);
 - (void)setImpl:(SdefImplementation *)newImpl;
 
 - (BOOL)isHidden;
-- (void)setHidden:(BOOL)newHidden;
+- (void)setHidden:(BOOL)isHidden;
 
 - (NSString *)codeStr;
 - (void)setCodeStr:(NSString *)str;
