@@ -33,6 +33,7 @@
     [sd_document release];
     sd_document = nil;
   }
+  if (!document) return NO;
   NSXMLParser *parser = [[NSXMLParser alloc] initWithData:document];
   [parser setShouldResolveExternalEntities:YES];
   [parser setDelegate:self];
