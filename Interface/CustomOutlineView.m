@@ -14,7 +14,7 @@
 
 @implementation CustomOutlineView
 
-- (IBAction)delete:(id)sender {
+- (IBAction)deleteSelection:(id)sender {
   if ([[self delegate] respondsToSelector:@selector(deleteSelectionInOutlineView:)]) {
     [[self delegate] deleteSelectionInOutlineView:self];
   } else {
@@ -26,7 +26,7 @@
   switch ([theEvent keyCode]) {
     case 0x033: //kVirtualDeleteKey:
     case 0x075: //kVirtualForwardDeleteKey:
-      [self delete:nil];
+      [self deleteSelection:nil];
       break;
     case 0x024: //kVirtualReturnKey:
     case 0x04C: //kVirtualEnterKey:
