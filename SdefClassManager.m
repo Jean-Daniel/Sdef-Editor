@@ -10,6 +10,7 @@
 #import "SdefClass.h"
 #import "SdefSuite.h"
 #import "ShadowMacros.h"
+#import "SKFunctions.h"
 
 #import "SdefImplementation.h"
 #import "SdefEnumeration.h"
@@ -25,17 +26,18 @@
   if (nil == types) {
     types = [[NSArray alloc] initWithObjects:
       @"any",
-      @"string",
-      @"number",
-      @"integer",
-      @"real",
       @"boolean",
-      @"object",
-      @"location",
-      @"record",
+      @"date",
       @"file",
+      @"integer",
+      @"location",
+      @"number",
+      @"object",
       @"point",
+      @"real",
+      @"record",
       @"rectangle",
+      @"string",
       nil];
   }
   return types;
@@ -96,7 +98,7 @@
 }
 
 - (void)addDictionary:(SdefDictionary *)aDico {
-  id suites = [aDico childrenEnumerator];
+  id suites = [aDico childEnumerator];
   SdefSuite *suite;
   while (suite = [suites nextObject]) {
     [self addSuite:suite];
@@ -104,7 +106,7 @@
 }
 
 - (void)removeDictionary:(SdefDictionary *)aDico {
-  id suites = [aDico childrenEnumerator];
+  id suites = [aDico childEnumerator];
   SdefSuite *suite;
   while (suite = [suites nextObject]) {
     [self removeSuite:suite];
@@ -129,9 +131,9 @@
         [sd_classes addObject:child];
         break;
       case kSdefVerbType:
-        if ([child isKindOfClass:[SdefCommand class]]) {
+        if ([[child xmlElementName] isEqualToString:@"command"]) {
           [sd_commands addObject:child];
-        } else if ([child isKindOfClass:[SdefEvent class]]) {
+        } else if ([[child xmlElementName] isEqualToString:@"event"]) {
           [sd_events addObject:child];
         }
         break;
@@ -157,9 +159,9 @@
         [sd_classes removeObject:child];
         break;
       case kSdefVerbType:
-        if ([child isKindOfClass:[SdefCommand class]]) {
+        if ([[child xmlElementName] isEqualToString:@"command"]) {
           [sd_commands removeObject:child];
-        } else if ([child isKindOfClass:[SdefEvent class]]) {
+        } else if ([[child xmlElementName] isEqualToString:@"event"]) {
           [sd_events removeObject:child];
         }
         break;
@@ -237,6 +239,7 @@
 }
 
 #pragma mark -
+#pragma mark Cocoa to Sdef
 typedef BOOL (*EqualIMP)(id, SEL, id);
 - (NSString *)sdefTypeForCocoaType:(NSString *)cocoaType {
   if (!cocoaType) return nil;
@@ -252,6 +255,7 @@ typedef BOOL (*EqualIMP)(id, SEL, id);
   if (isEqual(cocoaType, cmd, @"NSObject")) 				return @"any";
   if (isEqual(cocoaType, cmd, @"NSString<FilePath>"))  		return @"file";
   if (isEqual(cocoaType, cmd, @"NSNumber<Double>")) 		return @"real";
+  if (isEqual(cocoaType, cmd, @"NSDate"))					return @"date";
   if (isEqual(cocoaType, cmd, @"NSNumber<TypeCode>"))		return @"type";
   if (isEqual(cocoaType, cmd, @"NSDictionary"))				return @"record";
   if (isEqual(cocoaType, cmd, @"NSScriptObjectSpecifier")) 	return @"object";
@@ -302,5 +306,97 @@ typedef BOOL (*EqualIMP)(id, SEL, id);
   return nil;
 }
 
+#pragma mark -
+#pragma mark 'aete' to Sdef
+
+- (NSString *)sdefTypeForAeteType:(NSString *)aType {
+  if (!aType) return nil;
+  switch (SKHFSTypeCodeFromFileType(aType)) {
+    case typeNull:
+      return nil;
+    case typeBoolean:
+      return @"boolean";
+    case typeUnicodeText:
+    case typeIntlText:
+    case typeUTF8Text:
+    case typeCString:
+    case typeText:
+      return @"string";
+    case 'nmbr':
+      return @"number";
+    case typeSInt16:
+    case typeSInt32:
+    case typeUInt32:
+    case typeSInt64:
+      return @"integer";
+    case typeIEEE32BitFloatingPoint:
+    case typeIEEE64BitFloatingPoint:
+      return @"real";
+    case typeWildCard:
+      return @"any";
+    case typeAlias:
+    case typeFSS:
+    case typeFSRef:
+    case typeFileURL:
+    case 'file':
+      return @"file";
+    case typeType:
+    case typeKeyword:
+      return @"type";
+    case typeAERecord:
+    case typeEventRecord:
+      return @"record";
+    case typeObjectSpecifier:
+      return @"object";
+    case typeQDPoint:
+      return @"point";
+    case typeInsertionLoc:
+      return @"location";
+    case typeQDRectangle:
+      return @"rectangle";
+    case typeLongDateTime:
+      return @"date";
+  }
+  return nil;
+}
+
+- (SdefVerb *)verbWithCode:(NSString *)aCode inSuite:(NSString *)suiteCode {
+  id verbs = [[[self events] arrayByAddingObjectsFromArray:[self commands]] objectEnumerator];
+  SdefVerb *verb;
+  while (verb = [verbs nextObject]) {
+    if ([aCode isEqualToString:[verb codeStr]]) {
+      if (!suiteCode || [suiteCode isEqualToString:[[verb suite] codeStr]]) {
+        return verb;
+      }
+    }
+  }
+  return nil;
+}
+
+- (SdefClass *)sdefClassWithCode:(NSString *)aCode inSuite:(NSString *)suiteCode {
+  id classes = [[self classes] objectEnumerator];
+  SdefClass *class;
+  while (class = [classes nextObject]) {
+    if ([aCode isEqualToString:[class codeStr]]) {
+      if (!suiteCode || [suiteCode isEqualToString:[[class suite] codeStr]]) {
+        return class;
+      }
+    }
+  }
+  return nil;
+}
+
+- (SdefObject *)sdefTypeWithCode:(NSString *)aCode inSuite:(NSString *)suiteCode {
+  id enums = [sd_types objectEnumerator];
+  SdefEnumeration *enume;
+  while (enume = [enums nextObject]) {
+    if ([aCode isEqualToString:[enume codeStr]]) {
+      if (!suiteCode || [suiteCode isEqualToString:[[enume suite] codeStr]]) {
+        return enume;
+      }
+    }
+  }
+  return [self sdefClassWithCode:aCode inSuite:suiteCode];
+}
 
 @end

@@ -34,9 +34,18 @@
 - (SdefClass *)superClassOfClass:(SdefClass *)aClass;
 - (SdefClass *)superClassOfClass:(SdefClass *)aClass;
 
+#pragma mark -
+#pragma mark Cocoa Additions
 - (NSString *)sdefTypeForCocoaType:(NSString *)cocoaType;
 - (SdefVerb *)verbWithCocoaName:(NSString *)cocoaName inSuite:(NSString *)suite;
 - (SdefClass *)sdefClassWithCocoaClass:(NSString *)cocoaClass inSuite:(NSString *)suite;
 - (SdefObject *)sdefTypeWithCocoaType:(NSString *)cocoaType inSuite:(NSString *)suite;
+
+#pragma mark -
+#pragma mark 'aete' Additions
+- (NSString *)sdefTypeForAeteType:(NSString *)aType;
+- (SdefVerb *)verbWithCode:(NSString *)aCode inSuite:(NSString *)suiteCode;
+- (SdefClass *)sdefClassWithCode:(NSString *)aCode inSuite:(NSString *)suiteCode;
+- (SdefObject *)sdefTypeWithCode:(NSString *)aCode inSuite:(NSString *)suiteCode;
 
 @end
