@@ -23,6 +23,7 @@
 #import "SdefXMLGenerator.h"
 #import "SdefExporterController.h"
 
+#import "ASDictionary.h"
 
 NSString * const SdefObjectDragType = @"SdefObjectDragType";
 
@@ -72,7 +73,7 @@ NSString * const SdefObjectDragType = @"SdefObjectDragType";
     [self addWindowController:browser];
     [browser release];
   }
-  [[browser window] makeKeyAndOrderFront:sender];
+  [browser showWindow:sender];
 }
 
 - (IBAction)exportTerminology:(id)sender {
@@ -87,6 +88,38 @@ NSString * const SdefObjectDragType = @"SdefObjectDragType";
 
 - (void)exportSheetDidEnd:(NSWindow *)aWindow returnCode:(int)resut context:(id)ctxt {
   [[aWindow windowController] autorelease];
+}
+
+- (IBAction)exportASDictionary:(id)sender {
+  id panel = [NSSavePanel savePanel];
+  [panel setCanSelectHiddenExtension:YES];
+  [panel setRequiredFileType:@"asdictionary"];
+  [panel setTitle:@"Create AppleScript Dictionary."];
+  [panel beginSheetForDirectory:nil
+                           file:[[self displayName] stringByDeletingPathExtension]
+                 modalForWindow:[[self documentWindow] window]
+                  modalDelegate:self
+                 didEndSelector:@selector(exportASDictionary:returnCode:context:)
+                    contextInfo:nil];
+}
+- (void)exportASDictionary:(NSSavePanel *)aPanel returnCode:(int)result context:(id)ctxt {
+  id file;
+  if ((result == NSOKButton) && (file = [aPanel filename])) {
+    id dico = nil;
+    @try {
+      dico = AppleScriptDictionaryFromSdefDictionary([self dictionary]);
+    } @catch (id exception) {
+      dico = nil;
+      SKLogException(exception);
+    }
+    if (!dico || ![NSArchiver archiveRootObject:dico toFile:file]) {
+      NSBeginAlertSheet(@"Unable to create ASDictionary!",
+                        @"OK", nil, nil,
+                        [[self documentWindow] window],
+                        nil, nil, nil, nil, @"An unknow error prevent creation.");
+    }
+  }
+                             
 }
 
 #pragma mark -
