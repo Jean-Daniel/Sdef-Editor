@@ -10,6 +10,7 @@
 #import "ShadowMacros.h"
 #import "SdefParser.h"
 #import "SdefObject.h"
+#import "SdefEditor.h"
 
 @implementation SdefImportsView
 
@@ -23,7 +24,7 @@
   [openPanel setCanCreateDirectories:NO];
   [openPanel beginSheetForDirectory:nil
                                file:nil
-                              types:[NSArray arrayWithObject:@"sdef"]
+                              types:[NSArray arrayWithObjects:@"sdef", NSFileTypeForHFSTypeCode(kScriptingDefinitionHFSType), nil]
                      modalForWindow:[[self sdefView] window]
                       modalDelegate:self
                      didEndSelector:@selector(openPanelDidEnd:returnCode:context:)

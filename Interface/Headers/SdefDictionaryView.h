@@ -9,7 +9,7 @@
 #import "SdefViewController.h"
 
 @interface SdefDictionaryView : SdefViewController {
-
+  
 }
 
 - (IBAction)addSuite:(id)sender;

@@ -10,7 +10,7 @@
 #import "ShadowMacros.h"
 #import "SdefDocument.h"
 #import "SdefProcessor.h"
-
+#import "SdefEditor.h"
 
 static NSString *SystemMajorVersion() {
   SInt32 macVersion;
@@ -160,7 +160,7 @@ static NSString *SystemMajorVersion() {
   [openPanel setCanChooseDirectories:NO];
   [openPanel setAllowsMultipleSelection:YES];
   [openPanel setTreatsFilePackagesAsDirectories:YES];
-  switch ([openPanel runModalForTypes:[NSArray arrayWithObject:@"sdef"]]) {
+  switch ([openPanel runModalForTypes:[NSArray arrayWithObjects:@"sdef", NSFileTypeForHFSTypeCode(kScriptingDefinitionHFSType), nil]]) {
     case NSCancelButton:
       return;
   }
@@ -169,7 +169,8 @@ static NSString *SystemMajorVersion() {
   while (file = [files nextObject]) {
     id dico = [[NSDictionary alloc] initWithObjectsAndKeys:
       file, @"path",
-      [[file lastPathComponent] stringByDeletingPathExtension], @"name", nil];
+      [[NSFileManager defaultManager] displayNameAtPath:file], @"name",
+      [[NSWorkspace sharedWorkspace] iconForFile:file], @"icon", nil];
     [includes addObject:dico];
     [dico release];
   }
