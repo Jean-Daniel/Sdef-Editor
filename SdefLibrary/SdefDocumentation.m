@@ -68,47 +68,8 @@
 
 - (void)setContent:(NSString *)newContent {
   if (sd_content != newContent) {
-    //[[[self document] undoManager] registerUndoWithTarget:self selector:_cmd object:sd_content];
     [sd_content release];
     sd_content = [newContent retain];
-  }
-}
-
-
-#pragma mark -
-#pragma mark XML Generation
-
-- (SdefXMLNode *)xmlNode {
-  id node = nil;
-  if (sd_content != nil) {
-    if (node = [super xmlNode]) {
-      [node setContent:sd_content];
-    }
-  }
-  return node;
-}
-
-- (NSString *)xmlElementName {
-  return @"documentation";
-}
-
-#pragma mark -
-#pragma mark Parsing
-
-// This returns the string of the characters encountered thus far. You may not necessarily get the longest character run.
-// The parser reserves the right to hand these to the delegate as potentially many calls in a row to -parser:foundCharacters:
-- (void)parser:(NSXMLParser *)parser foundCharacters:(NSString *)string {
-  if (!sd_content) {
-    sd_content = [[NSMutableString alloc] init];
-  }
-  [sd_content appendString:[string stringByUnescapingEntities:nil]];
-}
-
-// sent when an end tag is encountered. The various parameters are supplied as above.
-- (void)parser:(NSXMLParser *)parser didEndElement:(NSString *)elementName namespaceURI:(NSString *)namespaceURI qualifiedName:(NSString *)qName {
-  [super parser:parser didEndElement:elementName namespaceURI:namespaceURI qualifiedName:qName];
-  if ([elementName isEqualToString:[self xmlElementName]]) {
-    [self remove];
   }
 }
 

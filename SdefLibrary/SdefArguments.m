@@ -7,7 +7,6 @@
 //
 
 #import "SdefArguments.h"
-#import "SdefXMLNode.h"
 #import "SdefDocument.h"
 #import "SKExtensions.h"
 
@@ -89,34 +88,6 @@
   }
 }
 
-#pragma mark -
-#pragma mark XML Generation
-
-- (SdefXMLNode *)xmlNode {
-  id node = nil;
-  if ([self type] && (node = [super xmlNode])) {
-    id attr;
-    if (attr = [self type]) [node setAttribute:attr forKey:@"type"];
-    if (attr = [self desc]) [node setAttribute:[attr stringByEscapingEntities:nil] forKey:@"description"];
-    if ([self isOptional]) [node setAttribute:@"optional" forKey:@"optional"];
-    [node setEmpty:YES];
-  }
-  return node;
-}
-
-- (NSString *)xmlElementName {
-  return @"direct-parameter";
-}
-
-#pragma mark -
-#pragma mark Parsing
-
-- (void)setAttributes:(NSDictionary *)attrs {
-  [self setType:[attrs objectForKey:@"type"]];
-  [self setDesc:[[attrs objectForKey:@"description"] stringByUnescapingEntities:nil]];
-  [self setOptional:[attrs objectForKey:@"optional"] != nil];
-}
-
 @end
 
 #pragma mark -
@@ -180,32 +151,6 @@
     [sd_type release];
     sd_type = [newType copy];
   }
-}
-
-#pragma mark -
-#pragma mark XML Generation
-
-- (SdefXMLNode *)xmlNode {
-  id node;
-  if (node = [super xmlNode]) {
-    id attr;
-    if (attr = [self type]) [node setAttribute:attr forKey:@"type"];
-    if ([self isOptional]) [node setAttribute:@"optional" forKey:@"optional"];
-  }
-  return node;
-}
-
-- (NSString *)xmlElementName {
-  return @"parameter";
-}
-
-#pragma mark -
-#pragma mark Parsing
-
-- (void)setAttributes:(NSDictionary *)attrs {
-  [super setAttributes:attrs];
-  [self setType:[attrs objectForKey:@"type"]];
-  [self setOptional:[attrs objectForKey:@"optional"] != nil];
 }
 
 @end
@@ -275,31 +220,6 @@
     [sd_desc release];
     sd_desc = [newDesc copy];
   }
-}
-
-#pragma mark -
-#pragma mark XML Generation
-
-- (SdefXMLNode *)xmlNode {
-  id node = nil;
-  if ([self type] && (node = [super xmlNode])) {
-    id attr;
-    if (attr = [self type]) [node setAttribute:attr forKey:@"type"];
-    if (attr = [self desc]) [node setAttribute:[attr stringByEscapingEntities:nil] forKey:@"description"];
-    [node setEmpty:YES];
-  }
-  return node;
-}
-
-- (NSString *)xmlElementName {
-  return @"result";
-}
-
-#pragma mark -
-#pragma mark Parsing
-- (void)setAttributes:(NSDictionary *)attrs {
-  [self setType:[attrs objectForKey:@"type"]];
-  [self setDesc:[[attrs objectForKey:@"description"] stringByUnescapingEntities:nil]];
 }
 
 @end

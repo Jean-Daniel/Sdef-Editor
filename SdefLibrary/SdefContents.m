@@ -8,7 +8,6 @@
 
 #import "SdefContents.h"
 #import "SdefClass.h"
-#import "SdefXMLNode.h"
 #import "SdefDocument.h"
 
 @implementation SdefContents
@@ -91,48 +90,6 @@
 - (id)firstParentOfType:(SdefObjectType)aType {
   id owner = [self owner];
   return ([owner objectType] == aType) ? owner : [owner firstParentOfType:aType];
-}
-
-#pragma mark -
-#pragma mark XML Generation
-
-- (SdefXMLNode *)xmlNode {
-  id node = nil;
-  if (sd_type && (node = [super xmlNode])) {
-    id attr = [self type];
-    if (nil != attr) [node setAttribute:attr forKey:@"type"];
-    if (![self name]) [node setAttribute:@"contents" forKey:@"name"];
-    
-    if ([self access] == (kSdefAccessRead | kSdefAccessWrite)) attr = @"rw";
-    else if ([self access] == kSdefAccessRead) attr = @"r";
-    else if ([self access] == kSdefAccessWrite) attr = @"w";
-    else attr = nil;
-    attr = SDAccessStringFromFlag([self access]);
-    if (nil != attr) [node setAttribute:attr forKey:@"access"];
-  }
-  return node;
-}
-
-- (NSString *)xmlElementName {
-  return @"contents";
-}
-
-#pragma mark -
-#pragma mark Parsing
-
-- (void)setAttributes:(NSDictionary *)attrs {
-  [super setAttributes:attrs];
-  
-  [self setType:[attrs objectForKey:@"type"]];
-  [self setAccess:SDAccessFlagFromString([attrs objectForKey:@"access"])];
-}
-
-// sent when an end tag is encountered. The various parameters are supplied as above.
-- (void)parser:(NSXMLParser *)parser didEndElement:(NSString *)elementName namespaceURI:(NSString *)namespaceURI qualifiedName:(NSString *)qName {
-  [super parser:parser didEndElement:elementName namespaceURI:namespaceURI qualifiedName:qName];
-  if ([elementName isEqualToString:@"contents"]) {
-    [self remove];
-  }
 }
 
 @end

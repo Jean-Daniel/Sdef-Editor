@@ -7,7 +7,6 @@
 //
 
 #import "SdefImplementation.h"
-#import "SdefXMLNode.h"
 #import "SdefDocument.h"
 
 @implementation SdefImplementation
@@ -81,44 +80,6 @@
     [sd_method release];
     sd_method = [newMethod copy];
   }
-}
-
-#pragma mark -
-#pragma mark XML Generation
-
-- (SdefXMLNode *)xmlNode {
-  id node = [super xmlNode];
-  id attr = [self name];
-  if (nil != attr)
-    [node setAttribute:attr forKey:@"name"];
-  
-  attr = [self sdClass];
-  if (nil != attr)
-    [node setAttribute:attr forKey:@"class"];
-  
-  attr = [self key];
-  if ([self key])
-    [node setAttribute:attr forKey:@"key"];
-  
-  attr = [self method];
-  if (nil != attr)
-    [node setAttribute:attr forKey:@"method"];
-  [node setEmpty:YES];
-  return [node attributeCount] > 0 ? node : nil;
-}
-
-- (NSString *)xmlElementName {
-  return @"cocoa";
-}
-
-#pragma mark -
-#pragma mark Parsing
-
-- (void)setAttributes:(NSDictionary *)attrs {
-  [super setAttributes:attrs];
-  [self setKey:[attrs objectForKey:@"key"]];
-  [self setMethod:[attrs objectForKey:@"method"]];
-  [self setSdClass:[attrs objectForKey:@"class"]];
 }
 
 @end

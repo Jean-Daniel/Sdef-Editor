@@ -6,7 +6,6 @@
 //  Copyright 2005 Shadow Lab. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
 #import "SKTreeNode.h"
 
 typedef enum {
@@ -35,7 +34,6 @@ typedef enum {
   kSdefDocumentationType	= 'Docu'
 } SdefObjectType;
 
-extern NSMutableArray *sd_childComments;
 
 extern NSString * const SdefNewTreeNode;
 extern NSString * const SdefRemovedTreeNode;
@@ -82,13 +80,11 @@ extern NSString *CocoaNameForSdefName(NSString *cocoa, BOOL isClass);
 
 - (id)initEmpty;
 - (id)initWithName:(NSString *)newName;
-- (id)initWithAttributes:(NSDictionary *)attributes;
 
 - (SdefObjectType)objectType;
 - (void)createContent;
 
 #pragma mark -
-
 - (SdefSuite *)suite;
 - (id)firstParentOfType:(SdefObjectType)aType;
 
@@ -107,12 +103,11 @@ extern NSString *CocoaNameForSdefName(NSString *cocoa, BOOL isClass);
 - (BOOL)isRemovable;
 - (void)setRemovable:(BOOL)removable;
 
-- (BOOL)hasSynonyms;
 - (BOOL)hasDocumentation;
-
 - (SdefDocumentation *)documentation;
 - (void)setDocumentation:(SdefDocumentation *)doc;
 
+- (BOOL)hasSynonyms;
 - (SdefCollection *)synonyms;
 - (void)setSynonyms:(SdefCollection *)newSynonyms;
 
@@ -121,12 +116,6 @@ extern NSString *CocoaNameForSdefName(NSString *cocoa, BOOL isClass);
 - (void)setComments:(NSArray *)comments;
 - (void)addComment:(NSString *)comment;
 - (void)removeCommentAtIndex:(unsigned)index;
-
-#pragma mark -
-- (void)setAttributes:(NSDictionary *)attrs;
-
-- (SdefXMLNode *)xmlNode;
-- (NSString *)xmlElementName;
 
 @end
 

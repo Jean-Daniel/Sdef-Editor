@@ -84,9 +84,6 @@ enum {
   kSdefAccessorTest 	= 1 << 5
 };
 
-extern NSString *SDAccessStringFromFlag(unsigned flag);
-extern unsigned SDAccessFlagFromString(NSString *str);
-
 /* class, property, and contents */
 @class SdefDocumentation, SdefContents;
 @interface SdefClass : SdefTerminologyElement <NSCopying, NSCoding> {

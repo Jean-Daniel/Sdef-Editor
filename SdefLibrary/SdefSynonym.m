@@ -49,17 +49,5 @@
 - (void)setDesc:(NSString *)description {
 }
 
-#pragma mark -
-#pragma mark XML Generation
-
-- (NSString *)xmlElementName {
-  return @"synonym";
-}
-
-#pragma mark -
-#pragma mark Parsing
-
-
-
 
 @end
