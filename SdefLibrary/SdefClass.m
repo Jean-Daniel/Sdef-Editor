@@ -109,6 +109,7 @@ static unsigned SdefAccessorFlagFromString(NSString *str) {
 }
 
 - (void)createContent {
+  [super createContent];
   [self createSynonyms];
   [self setDocumentation:[SdefDocumentation node]];
   [self setContents:[SdefContents node]];

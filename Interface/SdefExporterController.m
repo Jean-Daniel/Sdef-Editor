@@ -11,6 +11,15 @@
 #import "SdefDocument.h"
 #import "SdefProcessor.h"
 
+
+static NSString *SystemMajorVersion() {
+  SInt32 macVersion;
+  if (Gestalt(gestaltSystemVersion, &macVersion) == noErr) {
+    return [NSString stringWithFormat:@"%x.%x", (macVersion >> 8) & 0xff, (macVersion >> 4) & 0xf];
+  }
+  return @"10.3";
+}
+
 @implementation SdefExporterController
 
 + (void)initialize {
@@ -22,8 +31,27 @@
   if (self = [super initWithWindowNibName:@"SdefExport"]) {
     cocoaFormat = YES;
     resourceFormat = YES;
+    [self setVersion:SystemMajorVersion()];
   }
   return self;
+}
+
+- (void)dealloc {
+  [sd_version release];
+  [super dealloc];
+}
+
+#pragma mark -
+
+- (NSString *)version {
+  return sd_version;
+}
+
+- (void)setVersion:(NSString *)version {
+  if (sd_version != version) {
+    [sd_version release];
+    sd_version = [version retain];
+  }
 }
 
 - (SdefDocument *)sdefDocument {
@@ -77,7 +105,7 @@
   if (cocoaFormat) format |= (kSdefScriptSuiteFormat | kSdefScriptTerminologyFormat);
   [proc setFormat:format];
   
-  [proc setVersion:@"10.3"];
+  [proc setVersion:sd_version ? : SystemMajorVersion()];
   
   NSString *result = [proc process];
   if (result) {

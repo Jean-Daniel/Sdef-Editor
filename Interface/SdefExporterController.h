@@ -13,11 +13,15 @@
   IBOutlet NSArrayController *includes;
   SdefDocument *sd_document;
   
+  NSString *sd_version;
   BOOL includeCore, includeText;
   BOOL resourceFormat, cocoaFormat, rsrcFormat;
 }
 
 - (void)compileResourceFile:(NSString *)folder;
+
+- (NSString *)version;
+- (void)setVersion:(NSString *)version;
 
 - (SdefDocument *)sdefDocument;
 - (void)setSdefDocument:(SdefDocument *)adocument;
