@@ -44,6 +44,7 @@
 }
 
 - (void)createContent {
+  [super createContent];
   [self setDocumentation:[SdefDocumentation node]];
   
   id child = [SdefCollection nodeWithName:NSLocalizedStringFromTable(@"Types", @"SdefLibrary", @"Types Collection default name")];
