@@ -18,6 +18,8 @@
 }
 
 - (void)dealloc {
+  [warningsTable setDelegate:nil];
+  [warningsTable setDataSource:nil];
   [sd_warnings release];
   [super dealloc];
 }

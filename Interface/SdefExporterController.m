@@ -82,6 +82,8 @@ static NSString *SystemMajorVersion() {
     case NSCancelButton:
       return;
   }
+  if (![[openPanel filenames] count]) return;
+  
   SdefProcessor *proc = [[SdefProcessor alloc] initWithSdefDocument:[self sdefDocument]];
   [proc setOutput:[[openPanel filenames] objectAtIndex:0]];
   
