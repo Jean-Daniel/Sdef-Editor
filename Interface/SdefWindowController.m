@@ -119,8 +119,13 @@ static inline BOOL SdefEditorExistsForItem(SdefObject *item) {
     }
     id child = [[aNotification userInfo] objectForKey:SdefNewTreeNode];
     int row = [outline rowForItem:child];
-    if (row > 0)
-      [outline selectRow:[outline rowForItem:child] byExtendingSelection:NO];
+    if (row > 0) {
+      if ([outline selectedRow] == row) {
+        [[NSNotificationCenter defaultCenter] postNotificationName:NSOutlineViewSelectionDidChangeNotification object:outline];
+      } else {
+        [outline selectRow:[outline rowForItem:child] byExtendingSelection:NO];
+      }
+    }
   }
 }
 
@@ -186,17 +191,17 @@ static inline BOOL SdefEditorExistsForItem(SdefObject *item) {
   }
   [[NSNotificationCenter defaultCenter] postNotificationName:SdefDictionarySelectionDidChangeNotification object:[self document]];
 }
-
-- (void)outlineView:(NSOutlineView *)outlineView willDisplayCell:(id)cell forTableColumn:(NSTableColumn *)tableColumn item:(id)item {
-  if ([[tableColumn identifier] isEqualToString:@"_item"]) {
-    if ([outlineView rowForItem:item] == [outlineView selectedRow]) {
-      [cell setTextColor:([[self window] firstResponder] == self) ? [NSColor whiteColor] : [NSColor blackColor]];
-    } else {
-      [cell setTextColor:([item isEditable]) ? [NSColor textColor] : [NSColor disabledControlTextColor]];
-    }
-  }
-}
-
+/*
+ - (void)outlineView:(NSOutlineView *)outlineView willDisplayCell:(id)cell forTableColumn:(NSTableColumn *)tableColumn item:(id)item {
+   if ([[tableColumn identifier] isEqualToString:@"_item"]) {
+     if ([outlineView rowForItem:item] == [outlineView selectedRow]) {
+       [cell setTextColor:([[self window] firstResponder] == self) ? [NSColor whiteColor] : [NSColor blackColor]];
+     } else {
+       [cell setTextColor:([item isEditable]) ? [NSColor textColor] : [NSColor disabledControlTextColor]];
+     }
+   }
+ }
+ */
 - (void)deleteSelectionInOutlineView:(NSOutlineView *)outlineView {
   id item = [outlineView itemAtRow:[outlineView selectedRow]];
   if (item != [(SdefDocument *)[self document] dictionary] && [item isEditable] && [item isRemovable]) {
@@ -221,10 +226,10 @@ static inline BOOL SdefEditorExistsForItem(SdefObject *item) {
         class = @"SdefDictionaryView";
         nibName = @"SdefDictionary";
         break;
-      case kSdefImportsType:
-        class = @"SdefImportsView";
-        nibName = @"SdefImports";
-        break;
+//      case kSdefImportsType:
+//        class = @"SdefImportsView";
+//        nibName = @"SdefImports";
+//        break;
       case kSdefClassType:
         class = @"SdefClassView";
         nibName = @"SdefClass";
@@ -292,7 +297,8 @@ static inline BOOL SdefEditorExistsForItem(SdefObject *item) {
       break;
     default:
       [pboard declareTypes:[NSArray arrayWithObjects:SdefTreePboardType, SdefInfoPboardType, NSStringPboardType, nil] owner:nil];
-      if ([selection objectType] == kSdefRespondsToType) {
+      if ([selection objectType] == kSdefRespondsToType || 
+          ([selection objectType] == kSdefCollectionType && [[selection contentType] objectType] == kSdefRespondsToType)) {
         id str = nil;
         SdefClass *class = [selection firstParentOfType:kSdefClassType];
         if ([selection parent] == [class commands] || selection == [class commands]) {
@@ -301,7 +307,8 @@ static inline BOOL SdefEditorExistsForItem(SdefObject *item) {
           str = @"events";
         }
         [pboard setString:str forType:SdefInfoPboardType];
-      } else if ([selection objectType] == kSdefVerbType) {
+      } else if ([selection objectType] == kSdefVerbType || 
+                 ([selection objectType] == kSdefCollectionType && [[selection contentType] objectType] == kSdefVerbType)) {
         id str = nil;
         SdefSuite *suite = [selection firstParentOfType:kSdefSuiteType];
         if ([selection parent] == [suite commands] || selection == [suite commands]) {
