@@ -146,7 +146,6 @@
 
 // ...and this reports a fatal error to the delegate. The parser will stop parsing.
 - (void)parser:(NSXMLParser *)parser parseErrorOccurred:(NSError *)parseError {
-  ShadowTrace();
   DLog(@"Error: %@, %@", parseError, [parseError userInfo]);
 }
 

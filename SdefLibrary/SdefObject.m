@@ -436,6 +436,11 @@
   [sd_childComments addObject:[SdefComment commentWithString:[comment stringByUnescapingEntities:nil]]];
 }
 
+// ...and this reports a fatal error to the delegate. The parser will stop parsing.
+- (void)parser:(NSXMLParser *)parser parseErrorOccurred:(NSError *)parseError {
+  DLog(@"Parse error in %@: %@", [self name], parseError);
+}
+
 @end
 
 #pragma mark -
