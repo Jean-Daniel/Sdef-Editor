@@ -47,7 +47,7 @@
 
 #pragma mark -
 - (BOOL)isEmpty {
-  return ![self hasChildren];
+  return ![self hasChildren] && ([self content] == nil);
 }
 - (void)setEmpty:(BOOL)flag {
   if (empty != flag) {
