@@ -7,6 +7,7 @@
 //
 
 #import "SdefDocument.h"
+#import "SdefEditor.h"
 
 #import "ShadowMacros.h"
 #import "SKFunctions.h"
@@ -32,25 +33,13 @@ NSString * const SdefObjectDragType = @"SdefObjectDragType";
     [dictionary appendChild:[SdefSuite node]];
     [self setDictionary:dictionary];
     [dictionary release];
-//    _imports = [[SdefImports alloc] init];
     _manager = [[SdefClassManager alloc] initWithDocument:self];
-/*
-    [[NSNotificationCenter defaultCenter] addObserver:_manager
-                                             selector:@selector(didAddDictionary:)
-                                                 name:SdefObjectDidAppendChildNotification
-                                               object:_imports];
-    [[NSNotificationCenter defaultCenter] addObserver:_manager
-                                             selector:@selector(willRemoveDictionary:)
-                                                 name:SdefObjectWillRemoveChildNotification
-                                               object:_imports];
- */
   }
   return self;
 }
 
 - (void)dealloc {
   [_dictionary release];
-//  [_imports release];
   [_manager release];
   [super dealloc];
 }
@@ -71,6 +60,7 @@ NSString * const SdefObjectDragType = @"SdefObjectDragType";
 }
 
 #pragma mark -
+#pragma mark NSDocument Methods
 - (void)makeWindowControllers {
   id controller = [[SdefWindowController alloc] initWithOwner:nil];
   [self addWindowController:controller];
@@ -78,28 +68,35 @@ NSString * const SdefObjectDragType = @"SdefObjectDragType";
 }
 
 - (NSData *)dataRepresentationOfType:(NSString *)type {
-  SdefXMLGenerator *gen = [[SdefXMLGenerator alloc] initWithRoot:[self dictionary]];
-  id data = [gen xmlData];
-  [gen release];
+  id data = nil;
+  if ([type isEqualToString:ScriptingDefinitionFileType]) {
+    SdefXMLGenerator *gen = [[SdefXMLGenerator alloc] initWithRoot:[self dictionary]];
+    data = [gen xmlData];
+    [gen release];
+  }
   return data;
 }
 
 - (BOOL)loadDataRepresentation:(NSData *)data ofType:(NSString *)type {
-  [_manager removeDictionary:[self dictionary]];
-  id parser = [[SdefParser alloc] init];
-  BOOL result = [parser parseData:data];
-  [self setDictionary:[parser document]];
-  [parser release];
+  BOOL result = NO;
+  if (_manager) {
+    [_manager release];
+  }
+  _manager = [[SdefClassManager alloc] initWithDocument:self];
+  
+  if ([type isEqualToString:ScriptingDefinitionFileType]) {
+    id parser = [[SdefParser alloc] init];
+    result = [parser parseData:data];
+    [self setDictionary:[parser document]];
+    [parser release];
+  }
+  
   [_manager addDictionary:[self dictionary]];
   return result;
 }
 
 #pragma mark -
-/*
- - (SdefImports *)imports {
-   return _imports;
- }
- */
+#pragma mark SdefDocument Specific
 - (SdefClassManager *)manager {
   return _manager;
 }
@@ -125,7 +122,7 @@ NSString * const SdefObjectDragType = @"SdefObjectDragType";
 }
 
 #pragma mark -
-
+#pragma mark OutlineView DataSource
 - (BOOL)outlineView:(NSOutlineView *)outlineView isItemExpandable:(id)item {
   return (nil == item) ? YES : [item firstChild] != nil;
 }
