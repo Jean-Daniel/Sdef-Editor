@@ -12,10 +12,14 @@
 
 #import "SdefSuite.h"
 #import "SdefDocument.h"
+#import "AeteImporter.h"
 #import "SdefDictionary.h"
 #import "ImporterWarning.h"
 #import "CocoaSuiteImporter.h"
 #import "SdefObjectInspector.h"
+#import "ImportApplicationAete.h"
+
+#import "SKApplication.h"
 
 #if defined (DEBUG)
 #import <Foundation/NSDebug.h>
@@ -30,15 +34,24 @@ int main(int argc, char *argv[]) {
 }
 
 NSString * const ScriptingDefinitionFileType = @"ScriptingDefinition";
+NSString * const CocoaScriptSuiteFileType = @"CocoaScriptSuite";
 
 #if defined (DEBUG)
-#import "AeteImporter.h"
 @interface SdefEditor (DebugFacility)
 - (void)createDebugMenu;
 @end
 #endif
 
 @implementation SdefEditor
+
+- (id)init {
+  if (self = [super init]) {
+    [[NSUserDefaults standardUserDefaults] registerDefaults:[NSDictionary dictionaryWithObjectsAndKeys:
+      SKBool(YES), @"SdefOpenAtStartup",
+      nil]];
+  }
+  return self;
+}
 
 - (void)awakeFromNib {
   [NSApp setDelegate:self];
@@ -49,6 +62,14 @@ NSString * const ScriptingDefinitionFileType = @"ScriptingDefinition";
 
 - (IBAction)openInspector:(id)sender {
   [[SdefObjectInspector sharedInspector] showWindow:sender];
+}
+
+- (IBAction)preferences:(id)sender {
+  static NSWindowController *preferences = nil;
+  if (!preferences) {
+    preferences = [[NSWindowController alloc] initWithWindowNibName:@"Preferences"];
+  }
+  [preferences showWindow:sender];
 }
 
 - (IBAction)openSuite:(id)sender {
@@ -92,6 +113,7 @@ NSString * const ScriptingDefinitionFileType = @"ScriptingDefinition";
       if ([importer warnings]) {
         ImporterWarning *alert = [[ImporterWarning alloc] init];
         [alert setWarnings:[importer warnings]];
+        [alert setReleaseWhenClose:YES];
         [alert showWindow:nil];
       }
     } else {
@@ -103,24 +125,15 @@ NSString * const ScriptingDefinitionFileType = @"ScriptingDefinition";
   }
 }
 
-- (IBAction)importCocoaTerminology:(id)sender {
-  NSOpenPanel *openPanel = [NSOpenPanel openPanel];
-  [openPanel setPrompt:NSLocalizedString(@"Import", @"Import a Cocoa Terminology.")];
-  [openPanel setMessage:NSLocalizedString(@"Choose a Cocoa .scriptSuite File", @"Choose Cocoa File Import Message.")];
-  [openPanel setCanChooseFiles:YES];
-  [openPanel setCanCreateDirectories:NO];
-  [openPanel setCanChooseDirectories:NO];
-  [openPanel setAllowsMultipleSelection:NO];
-  [openPanel setTreatsFilePackagesAsDirectories:YES];
-  switch([openPanel runModalForTypes:[NSArray arrayWithObject:@"scriptSuite"]]) {
-    case NSCancelButton:
-      return;
-  }
-  if (![[openPanel filenames] count]) return;
-  
-  id file = [[openPanel filenames] objectAtIndex:0];
+- (void)importCocoaScriptFile:(NSString *)file {
   CocoaSuiteImporter *importer = [[CocoaSuiteImporter alloc] initWithContentsOfFile:file];
   if (![importer terminology]) {
+    NSOpenPanel *openPanel = [NSOpenPanel openPanel];
+    [openPanel setCanChooseFiles:YES];
+    [openPanel setCanCreateDirectories:NO];
+    [openPanel setCanChooseDirectories:NO];
+    [openPanel setAllowsMultipleSelection:NO];
+    [openPanel setTreatsFilePackagesAsDirectories:YES];
     [openPanel setPrompt:@"Open Terminology"];
     [openPanel setMessage:[NSString stringWithFormat:@"Where is %@.scriptTerminology?",
       [[file lastPathComponent] stringByDeletingPathExtension]]];
@@ -139,6 +152,25 @@ NSString * const ScriptingDefinitionFileType = @"ScriptingDefinition";
   [importer release];
 }
 
+- (IBAction)importCocoaTerminology:(id)sender {
+  NSOpenPanel *openPanel = [NSOpenPanel openPanel];
+  [openPanel setPrompt:NSLocalizedString(@"Import", @"Import a Cocoa Terminology.")];
+  [openPanel setMessage:NSLocalizedString(@"Choose a Cocoa .scriptSuite File", @"Choose Cocoa File Import Message.")];
+  [openPanel setCanChooseFiles:YES];
+  [openPanel setCanCreateDirectories:NO];
+  [openPanel setCanChooseDirectories:NO];
+  [openPanel setAllowsMultipleSelection:NO];
+  [openPanel setTreatsFilePackagesAsDirectories:YES];
+  switch([openPanel runModalForTypes:[NSArray arrayWithObject:@"scriptSuite"]]) {
+    case NSCancelButton:
+      return;
+  }
+  if (![[openPanel filenames] count]) return;
+  
+  id file = [[openPanel filenames] objectAtIndex:0];
+  [self importCocoaScriptFile:file];
+}
+
 - (IBAction)importAete:(id)sender {
   NSOpenPanel *openPanel = [NSOpenPanel openPanel];
   [openPanel setPrompt:NSLocalizedString(@"Import", @"Import default button.")];
@@ -148,7 +180,7 @@ NSString * const ScriptingDefinitionFileType = @"ScriptingDefinition";
   [openPanel setCanChooseDirectories:NO];
   [openPanel setAllowsMultipleSelection:NO];
   [openPanel setTreatsFilePackagesAsDirectories:YES];
-  switch([openPanel runModalForTypes:[NSArray arrayWithObjects:@"rsrc", NSFileTypeForHFSTypeCode('rsrc'), nil]]) {
+  switch([openPanel runModalForTypes:nil]) {
     case NSCancelButton:
       return;
   }
@@ -160,25 +192,63 @@ NSString * const ScriptingDefinitionFileType = @"ScriptingDefinition";
   [aete release];
 }
 
+- (IBAction)importApplicationAete:(id)sender {
+  ImportApplicationAete *panel = [[ImportApplicationAete alloc] init];
+  [panel showWindow:sender];
+  [NSApp runModalForWindow:[panel window]];
+  SKApplication *appli = [panel selection];
+  if (appli) {
+    if (![appli isRunning]) {
+      [appli launch];
+    }
+    id aete = nil;
+    switch ([appli idType]) {
+      case kSKApplicationOSType:
+        aete = [[AeteImporter alloc] initWithApplicationSignature:[appli signature]]; 
+        break;
+      case kSKApplicationBundleIdentifier:
+        aete = [[AeteImporter alloc] initWithApplicationBundleIdentifier:[appli identifier]];
+        break;
+      default:
+        aete = nil;
+    }
+    if (aete) {
+      [self importWithImporter:aete];
+      [aete release];
+    } else {
+      NSBeep();
+    }
+  }
+  [panel release];
+}
+
 #pragma mark -
 #pragma mark Application Delegate
 - (BOOL)application:(NSApplication *)theApplication openFile:(NSString *)filename {
+  id type = [[NSDocumentController sharedDocumentController] typeFromFileExtension:[filename pathExtension]];
+  if ([type isEqualToString:ScriptingDefinitionFileType]) return NO;
+  else if ([type isEqualToString:CocoaScriptSuiteFileType]) {
+    [self importCocoaScriptFile:filename];
+    return YES;
+  }
   return NO;
+}
+
+- (BOOL)applicationShouldOpenUntitledFile:(NSApplication *)sender {
+  return [[NSUserDefaults standardUserDefaults] boolForKey:@"SdefOpenAtStartup"];
 }
 
 #pragma mark -
 #pragma mark Debug Menu
 #if defined (DEBUG)
 - (void)createDebugMenu {
-  /*
   id debugMenu = [[NSMenuItem alloc] initWithTitle:@"" action:nil keyEquivalent:@""];
   id menu = [[NSMenu alloc] initWithTitle:@"Debug"];
-  [menu addItemWithTitle:@"Import 'aete'" action:@selector(importAete:) keyEquivalent:@""];
+  [menu addItemWithTitle:@"Import Application 'aete'" action:@selector(importApplicationAete:) keyEquivalent:@""];
   [debugMenu setSubmenu:menu];
   [menu release];
   [[NSApp mainMenu] insertItem:debugMenu atIndex:[[NSApp mainMenu] numberOfItems] -1];
   [debugMenu release];
-   */
 }
 
 #endif

@@ -9,11 +9,14 @@
 #import <Cocoa/Cocoa.h>
 
 extern NSString * const ScriptingDefinitionFileType;
+extern NSString * const CocoaScriptSuiteFileType;
 
+@class SdefImporter;
 @interface SdefEditor : NSObject {
 
 }
 
 - (IBAction)openInspector:(id)sender;
+- (void)importWithImporter:(SdefImporter *)importer;
 
 @end

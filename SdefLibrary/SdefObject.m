@@ -361,7 +361,6 @@ NSString * const SdefObjectDidChangeNameNotification = @"SdefObjectDidChangeName
     sd_comments = [[NSMutableArray alloc] init];
   }
   id cmnt = [SdefComment commentWithString:comment];
-//  [[[self document] undoManager] registerUndoWithTarget:sd_comments selector:@selector(removeObject:) object:cmnt];
   [sd_comments addObject:cmnt];
 }
 
