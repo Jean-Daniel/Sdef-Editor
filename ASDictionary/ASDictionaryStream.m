@@ -156,66 +156,9 @@ static ASDictionaryStyle stdStyles[4];
   [str release];
 }
 
-//- (void)setStyleForASPreferences:(NSString *)aString {
-//  if (!aString)
-//    [NSException raise:NSInvalidArgumentException format:@"aString parameter must not be nil!"];
-//  
-//  NSArray *values = [aString componentsSeparatedByString:@";"];
-//  
-//  /* Get font family and style */
-//  if ([[values objectAtIndex:1] rangeOfString:@"i"].location != NSNotFound)
-//    [self setItalic:YES];
-//  
-//  [self setFontFamily:[values objectAtIndex:0]];
-//  
-//  [self setSize:[[values objectAtIndex:2] intValue]];
-//  
-//  id colors = [[values objectAtIndex:3] componentsSeparatedByString:@" "];
-//  if ([colors count] == 3) {
-//    [self setRed:[[colors objectAtIndex:0] intValue]
-//           green:[[colors objectAtIndex:1] intValue]
-//            blue:[[colors objectAtIndex:2] intValue]];
-//  } else {
-//    [self setRed:0 green:0 blue:0];
-//  }
-//}
-
 - (void)setASDictionaryStyle:(ASDictionaryStyleType)aStyle {
-//  int fontIdx = -1;
   [self setStyle:normal];
   [[self class] getStyle:&as_style forApplescriptStyle:aStyle];
-  /*
-   switch (aStyle) {
-     case kASStyleComment:
-       fontIdx = 4;
-       break;
-     case kASStyleStandard:
-       [self setRed:0 green:0 blue:0];
-       as_style.fontSize = 12;
-       as_style.fontStyle = normal;
-       as_style.fontFamily = kFontIDTimes;
-       return;
-     case kASStyleLanguageKeyword:
-       fontIdx = 2;
-       break;
-     case kASStyleApplicationKeyword:
-       fontIdx = 3;
-       [self setBold:YES];
-       break;
-   }
-   if (fontIdx != -1) {
-     CFPreferencesAppSynchronize(CFSTR("com.apple.applescript"));
-     CFArrayRef asFonts = CFPreferencesCopyValue(CFSTR("AppleScriptTextStyles"),
-                                                 CFSTR("com.apple.applescript"),
-                                                 kCFPreferencesCurrentUser,
-                                                 kCFPreferencesAnyHost);
-     if (asFonts && fontIdx < CFArrayGetCount(asFonts)) {
-       CFStringRef styleStr = CFArrayGetValueAtIndex(asFonts, fontIdx);
-       [self setStyleForASPreferences:(NSString *)styleStr];
-       CFRelease(asFonts);
-     }
-   }
-   */
 }
 
 - (void)setFont:(NSFont *)aFont {

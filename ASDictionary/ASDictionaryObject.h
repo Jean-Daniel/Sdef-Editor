@@ -13,6 +13,6 @@
 
 - (NSDictionary *)asdictionary;
 - (NSDictionary *)asdictionaryString;
-- (NSString *)sdefTypeToASDictionaryType:(NSString *)type;
+- (NSString *)asDictionaryTypeForType:(NSString *)type isList:(BOOL *)list;
 
 @end

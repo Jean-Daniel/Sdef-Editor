@@ -8,9 +8,5 @@
 
 #import <Cocoa/Cocoa.h>
 
-
-@interface ASDictionary : NSObject {
-
-}
-
-@end
+@class SdefDictionary;
+extern NSDictionary *AppleScriptDictionaryFromSdefDictionary(SdefDictionary *sdef);

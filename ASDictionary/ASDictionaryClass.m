@@ -107,17 +107,7 @@
 
 @implementation SdefElement (ASDictionary) 
 
-- (void)appendStringToStream:(ASDictionaryStream *)stream {
-  [stream setASDictionaryStyle:kASStyleStandard];
-  [stream appendString:@"\t"];
-  [stream closeStyle];
-  
-  [stream setASDictionaryStyle:kASStyleApplicationKeyword];
-  [stream appendString:[self name] ? : @"<untitled>"];
-  [stream closeStyle];
-  
-  [stream setASDictionaryStyle:kASStyleStandard];
-  
+- (void)writeAccessorsStringToStream:(id)stream {
   BOOL isEmpty = YES;
   if ([self accName])  {
     isEmpty = NO;
@@ -152,6 +142,20 @@
       [stream appendString:@","];
     [stream appendString:@" by ID"];
   }
+}
+
+- (void)appendStringToStream:(ASDictionaryStream *)stream {
+  [stream setASDictionaryStyle:kASStyleStandard];
+  [stream appendString:@"\t"];
+  [stream closeStyle];
+  
+  [stream setASDictionaryStyle:kASStyleApplicationKeyword];
+  [stream appendString:[self name] ? : @"<untitled>"];
+  [stream closeStyle];
+  
+  [stream setASDictionaryStyle:kASStyleStandard];
+  [self writeAccessorsStringToStream:stream];
+
   [stream appendString:@"\r"];
   [stream closeStyle];
 }
@@ -173,7 +177,7 @@
   [stream closeStyle];
   
   [stream setASDictionaryStyle:kASStyleLanguageKeyword];
-  [stream appendString:[self sdefTypeToASDictionaryType:[self type]]];
+  [stream appendString:[self asDictionaryTypeForType:[self type] isList:nil]];
   [stream closeStyle];
   
   if (([self access] & kSdefAccessWrite) == 0) {

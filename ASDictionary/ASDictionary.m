@@ -11,24 +11,27 @@
 
 #import "SdefDictionary.h"
 #import "ASDictionaryObject.h"
+#import "ASDictionaryStream.h"
 
 #pragma mark -
-@implementation ASDictionary
 
-+ (NSDictionary *)asdictionaryFromSdefDictionary:(SdefDictionary *)sdef {
+NSDictionary *AppleScriptDictionaryFromSdefDictionary(SdefDictionary *sdef) {
   NSMutableArray *suites = [[NSMutableArray alloc] init];
   NSDictionary *asdict = [[NSDictionary alloc] initWithObjectsAndKeys:
     [sdef name], @"dictionary name",
     suites, @"script dictionary",
     nil];
   [suites release];
+  /* Load AppleScript User Preferences */
+  [ASDictionaryStream loadStandardsAppleScriptStyles];
   
-  id children = [sdef childEnumerator];
   SdefObject *suite;
-  while (suite = [children nextObject]) {
-    [suites addObject:[suite asdictionary]];
+  NSEnumerator *enume = [sdef childEnumerator];
+  while (suite = [enume nextObject]) {
+    id asSuite = [suite asdictionary];
+    if (asSuite)
+      [suites addObject:asSuite];
   }
-  return asdict;
+  return [asdict autorelease];
 }
 
-@end

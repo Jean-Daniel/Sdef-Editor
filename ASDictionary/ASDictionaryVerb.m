@@ -101,16 +101,17 @@
 @implementation SdefDirectParameter (ASDictionary)
 
 - (void)appendStringToStream:(ASDictionaryStream *)stream {
-  id type = [self type];
-  if ([type startsWithString:@"list of"]) {
+  BOOL list;
+  id type = [self asDictionaryTypeForType:[self type] isList:&list];
+  
+  if (list) {
     [stream setASDictionaryStyle:kASStyleStandard];
     [stream appendString:@"a list of "];
-    type = [type substringFromIndex:8];
     [stream closeStyle];
   }
   
   [stream setASDictionaryStyle:kASStyleLanguageKeyword];
-  [stream appendString:[self sdefTypeToASDictionaryType:type]];
+  [stream appendString:type];
   [stream closeStyle];
   
   if ([[self desc] length]) {
@@ -143,16 +144,17 @@
   [stream appendString:@"  "];
   [stream closeStyle];
   
-  id type = [self type];
-  if ([type startsWithString:@"list of"]) {
+  BOOL list;
+  id type = [self asDictionaryTypeForType:[self type] isList:&list];
+  
+  if (list) {
     [stream setASDictionaryStyle:kASStyleStandard];
     [stream appendString:@"a list of "];
     [stream closeStyle];
-    type = [type substringFromIndex:8];
   }
   
   [stream setASDictionaryStyle:kASStyleLanguageKeyword];
-  [stream appendString:[self sdefTypeToASDictionaryType:type]];
+  [stream appendString:type];
   [stream closeStyle];
   
   if ([self isOptional]) {
@@ -179,15 +181,17 @@
   [stream setASDictionaryStyle:kASStyleStandard];
   [stream appendString:@"\tResult:   "];
  
-  id type = [self type];
-  if ([type startsWithString:@"list of"]) {
+  BOOL list;
+  id type = [self asDictionaryTypeForType:[self type] isList:&list];
+  
+  if (list) {
+    [stream setASDictionaryStyle:kASStyleStandard];
     [stream appendString:@"a list of "];
-    type = [type substringFromIndex:8];
   }
   [stream closeStyle];
   
   [stream setASDictionaryStyle:kASStyleLanguageKeyword];
-  [stream appendString:[self sdefTypeToASDictionaryType:type]];
+  [stream appendString:type];
   [stream closeStyle];
   
   if ([[self desc] length]) {

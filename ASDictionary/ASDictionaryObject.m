@@ -9,6 +9,8 @@
 #import "ASDictionaryObject.h"
 #import "SdefClassManager.h"
 #import "SdefDocument.h"
+#import "SKExtensions.h"
+#import "ShadowBase.h"
 
 @implementation SdefObject (ASDictionary)
 
@@ -24,24 +26,35 @@
   return nil;
 }
 
-- (NSString *)sdefTypeToASDictionaryType:(NSString *)type {
+- (NSString *)asDictionaryTypeForType:(NSString *)type isList:(BOOL *)list {
   if (!type) return @"";
+  if (list)
+    *list = NO;
   
-  if ([type isEqualToString:@"string"])
+  if ([type startsWithString:@"list of "]) {
+    if (list)
+      *list = YES;
+    type = [type substringFromIndex:8];
+  }
+  
+  SEL equalSel = @selector(isEqualToString:);
+  EqualIMP equal = (EqualIMP)[type methodForSelector:equalSel];
+  
+  if (equal(type, equalSel, @"string"))
     return @"Unicode text";
-  if ([type isEqualToString:@"real"])
+  if (equal(type, equalSel, @"real"))
     return @"small real";
-  if ([type isEqualToString:@"type"])
+  if (equal(type, equalSel, @"type"))
     return @"type class";
-  if ([type isEqualToString:@"file"])
+  if (equal(type, equalSel, @"file"))
     return @"alias";
-  if ([type isEqualToString:@"object"])
+  if (equal(type, equalSel, @"object"))
     return @"reference";
-  if ([type isEqualToString:@"location"])
+  if (equal(type, equalSel, @"location"))
     return @"location reference";
-  if ([type isEqualToString:@"any"])
+  if (equal(type, equalSel, @"any"))
     return @"anything";
-  if ([type isEqualToString:@"rectangle"])
+  if (equal(type, equalSel, @"rectangle"))
     return @"bounding rectangle";
   id manager = [[self document] manager];
   if (manager) {
