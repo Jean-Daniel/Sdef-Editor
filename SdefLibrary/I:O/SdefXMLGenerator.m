@@ -201,24 +201,3 @@ inline NSString *SdefEditorComment() {
 }
 
 @end
-
-@implementation NSString (XMLEscaping) 
-- (NSString *)stringByEscapingEntities:(NSDictionary *)entities {
-  NSString *str = CFXMLCreateStringByEscapingEntities(kCFAllocatorDefault, (CFStringRef)self, (CFDictionaryRef)entities);
-  if ([str length] == 0) {
-    [str release];
-    str = [self copy];
-  }
-  return [str autorelease];
-}
-
-- (NSString *)stringByUnescapingEntities:(NSDictionary *)entities {
-  NSString *str = CFXMLCreateStringByUnescapingEntities(kCFAllocatorDefault, (CFStringRef)self, (CFDictionaryRef)entities);
-  if ([str length] == 0) {
-    [str release];
-    str = [self copy];
-  }
-  return [str autorelease];
-}
-
-@end

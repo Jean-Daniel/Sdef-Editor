@@ -23,8 +23,3 @@
 - (void)setRoot:(SdefObject *)anObject;
 
 @end
-
-@interface NSString (XMLEscaping) 
-- (NSString *)stringByEscapingEntities:(NSDictionary *)entities;
-- (NSString *)stringByUnescapingEntities:(NSDictionary *)entities;
-@end
