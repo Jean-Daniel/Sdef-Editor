@@ -6,10 +6,9 @@
 //  Copyright 2005 Shadow Lab. All rights reserved.
 //
 
-#import <Cocoa/Cocoa.h>
+#import "SKWindowController.h"
 
-
-@interface ImporterWarning : NSWindowController {
+@interface ImporterWarning : SKWindowController {
   IBOutlet NSTableView *warningsTable;
   NSArray *sd_warnings;
 }

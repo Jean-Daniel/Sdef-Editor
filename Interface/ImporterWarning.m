@@ -8,14 +8,14 @@
 
 #import "ImporterWarning.h"
 
-
 @implementation ImporterWarning
 
-- (id)init {
-  if (self = [super initWithWindowNibName:@"SdefImporterWarning"]) {
-    [self setWindowFrameAutosaveName:@"SdefWarningReport"];
-  }
-  return self;
++ (NSString *)nibName {
+  return @"SdefImporterWarning";
+}
+
++ (NSString *)frameAutoSaveName {
+  return @"SdefWarningReport";
 }
 
 - (void)dealloc {
@@ -25,28 +25,13 @@
   [super dealloc];
 }
 
-- (void)awakeFromNib {
-
-}
-
+#pragma mark -
 - (void)setWarnings:(NSArray *)warnings {
   if (sd_warnings != warnings) {
     [sd_warnings release];
     sd_warnings = [warnings retain];
     [warningsTable reloadData];
   }
-}
-
-#pragma mark -
-- (void)close:(id)sender {
-  if ([[self window] isSheet]) {
-    [NSApp endSheet:[self window]];
-  }
-  [self close];
-}
-
-- (void)windowWillClose:(NSNotification *)aNotification {
-  [self autorelease];
 }
 
 #pragma mark -
