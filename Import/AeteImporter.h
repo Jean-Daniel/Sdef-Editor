@@ -9,10 +9,11 @@
 #import "SdefImporter.h"
 
 @interface AeteImporter : SdefImporter {
-  NSData *sd_rsrc;
+  NSMutableArray *sd_aetes;
 }
 
 - (id)initWithFSRef:(FSRef *)aRef;
 - (id)initWithApplicationSignature:(OSType)signature;
+- (id)initWithApplicationBundleIdentifier:(NSString *)identifier;
 
 @end

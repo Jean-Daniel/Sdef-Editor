@@ -31,24 +31,37 @@ typedef struct AeteHeader AeteHeader;
 
 @implementation AeteImporter
 
-- (id)initWithApplicationSignature:(OSType)signature {
+- (id)_initWithAppleEvent:(AppleEvent *)theEvent {
+  long count = 0;
+  AEDescList aetes = {typeNull, nil};
   if (self = [super init]) {
-    AppleEvent theEvent;
-    OSStatus err = ShadowAECreateEventWithTargetSignature(signature, kASAppleScriptSuite, kGetAETE, &theEvent);
+    OSStatus err = ShadowAEAddMagnitude(theEvent);
     if (noErr == err) {
-      err = ShadowAEAddMagnitude(&theEvent);
+      err = ShadowAEAddSubject(theEvent);
     }
     if (noErr == err) {
-      err = ShadowAEAddSubject(&theEvent);
+      err = ShadowAEAddSInt32(theEvent, keyDirectObject, 0);
     }
     if (noErr == err) {
-      err = ShadowAEAddSInt32(&theEvent, keyDirectObject, 0);
+      err = ShadowAESendEventReturnAEDescList(theEvent, &aetes);
     }
     if (noErr == err) {
-      err = ShadowAESendEventReturnCFData(&theEvent, typeAETE, (CFDataRef *)&sd_rsrc);
+      err = AECountItems(&aetes, &count);
     }
-    ShadowAEDisposeDesc(&theEvent);
-    if (!sd_rsrc) {
+    if (noErr == err) {
+      SInt32 idx;
+      sd_aetes = [[NSMutableArray alloc] initWithCapacity:count];
+      for (idx = 1; idx <= count; idx++) {
+        CFDataRef data = NULL;
+        ShadowAEGetNthCFData(&aetes, idx, typeAETE, &data);
+        if (data) {
+          [sd_aetes addObject:(id)data];
+          CFRelease(data);
+        }
+      }
+      ShadowAEDisposeDesc(&aetes);
+    }
+    if (!sd_aetes || ![sd_aetes count]) {
       [self release];
       self = nil;
     }
@@ -56,17 +69,57 @@ typedef struct AeteHeader AeteHeader;
   return self;
 }
 
+- (id)initWithApplicationSignature:(OSType)signature {
+    AppleEvent theEvent;
+    OSStatus err = ShadowAECreateEventWithTargetSignature(signature, kASAppleScriptSuite, kGetAETE, &theEvent);
+    if (noErr == err) {
+      self = [self _initWithAppleEvent:&theEvent];
+    } else {
+      [self release];
+      self = nil;
+    }
+    ShadowAEDisposeDesc(&theEvent);
+  return self;
+}
+
+- (id)initWithApplicationBundleIdentifier:(NSString *)identifier {
+  AppleEvent theEvent;
+  OSStatus err = ShadowAECreateEventWithTargetBundleID((CFStringRef)identifier, kASAppleScriptSuite, kGetAETE, &theEvent);
+  if (noErr == err) {
+    self = [self _initWithAppleEvent:&theEvent];
+  } else {
+    [self release];
+    self = nil;
+  }
+  ShadowAEDisposeDesc(&theEvent);
+  return self;
+}
+
 - (id)initWithFSRef:(FSRef *)aRef {
   if (self = [super init]) {
     short fileRef;
-    if(noErr == FSOpenResourceFile(aRef, 0, NULL, fsRdPerm, &fileRef)) {
-      if (Count1Resources(kAETerminologyExtension) > 0) {
-        Handle aeteH = Get1IndResource(kAETerminologyExtension, 1);
-        sd_rsrc = [[NSData alloc] initWithHandle:aeteH];
+    OSStatus err = FSOpenResourceFile(aRef, 0, NULL, fsRdPerm, &fileRef);
+    if (mapReadErr == err) {
+      HFSUniStr255 rsrcName;
+      if (noErr == FSGetResourceForkName(&rsrcName)) {
+        err = FSOpenResourceFile(aRef, rsrcName.length, rsrcName.unicode, fsRdPerm, &fileRef);
+      }
+    }
+    if(noErr == err) {
+      unsigned idx;
+      short count = Count1Resources(kAETerminologyExtension);
+      sd_aetes = [[NSMutableArray alloc] initWithCapacity:count];
+      for (idx = 1; idx <= count; idx++) {
+        Handle aeteH = Get1IndResource(kAETerminologyExtension, idx);
+        id aete = [[NSData alloc] initWithHandle:aeteH];
+        if (aete) {
+          [sd_aetes addObject:aete];
+          [aete release];
+        }
       }
       CloseResFile(fileRef);
     }
-    if (!sd_rsrc) {
+    if (!sd_aetes) {
       [self release];
       self = nil;
     }
@@ -86,45 +139,48 @@ typedef struct AeteHeader AeteHeader;
 }
 
 - (void)dealloc {
-  [sd_rsrc release];
+  [sd_aetes release];
   [super dealloc];
 }
 
-- (NSString *)description {
-  AeteHeader *header = (AeteHeader *)[sd_rsrc bytes];
-  return [NSString stringWithFormat:@"<%@ %p> {version: %x.%x, suites: %d}",
-    NSStringFromClass([self class]), self,
-    header->majorVersion, header->minorVersion, header->suiteCount];
-}
+//- (NSString *)description {
+//  AeteHeader *header = (AeteHeader *)[sd_rsrc bytes];
+//  return [NSString stringWithFormat:@"<%@ %p> {version: %x.%x, suites: %d}",
+//    NSStringFromClass([self class]), self,
+//    header->majorVersion, header->minorVersion, header->suiteCount];
+//}
 
-#pragma mark -
-
-- (unsigned)suiteCount {
-  AeteHeader *header = (AeteHeader *)[sd_rsrc bytes];
-  return header->suiteCount;
-}
+//#pragma mark -
+//
+//- (unsigned)suiteCount {
+//  AeteHeader *header = (AeteHeader *)[sd_rsrc bytes];
+//  return header->suiteCount;
+//}
 
 #pragma mark -
 #pragma mark Parsing
 
 - (BOOL)import {
-  if (!sd_rsrc) return NO;
-  
-  @try {
-    BytePtr bytes = (BytePtr)[sd_rsrc bytes];
-    ByteOffset offset = 0;
-    AeteHeader *header = (AeteHeader *)bytes;
-    bytes += sizeof(AeteHeader);
-    offset += sizeof(AeteHeader);
-    unsigned idx = 0;
-    for (idx=0; idx<header->suiteCount; idx++) {
-      SdefSuite *suite = [SdefSuite node];
-      bytes += [suite parseData:bytes];
-      [suites addObject:suite];
+  id aetes = [sd_aetes objectEnumerator];
+  NSData *aete;
+  while (aete = [aetes nextObject]) {
+    @try {
+      BytePtr bytes = (BytePtr)[aete bytes];
+      ByteOffset offset = 0;
+      AeteHeader *header = (AeteHeader *)bytes;
+      bytes += sizeof(AeteHeader);
+      offset += sizeof(AeteHeader);
+      unsigned idx = 0;
+      for (idx=0; idx<header->suiteCount; idx++) {
+        SdefSuite *suite = [SdefSuite node];
+        bytes += [suite parseData:bytes];
+        [suites addObject:suite];
+      }
+    } @catch (id exception) {
+      SKLogException(exception);
+      [suites removeAllObjects];
+      return NO;
     }
-  } @catch (id exception) {
-    SKLogException(exception);
-    return NO;
   }
   return YES;
 }
