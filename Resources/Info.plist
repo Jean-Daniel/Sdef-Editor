@@ -12,7 +12,7 @@
 				<string>sdef</string>
 			</array>
 			<key>CFBundleTypeIconFile</key>
-			<string></string>
+			<string>SdefFile</string>
 			<key>CFBundleTypeMIMETypes</key>
 			<array>
 				<string>text/xml</string>
@@ -42,7 +42,7 @@
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleSignature</key>
-	<string>????</string>
+	<string>SdEd</string>
 	<key>CFBundleVersion</key>
 	<string>1.0</string>
 	<key>NSMainNibFile</key>
