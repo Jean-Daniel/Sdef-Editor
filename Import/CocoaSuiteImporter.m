@@ -7,6 +7,7 @@
 //
 
 #import "CocoaSuiteImporter.h"
+#import "SdefEditor.h"
 
 #import "ShadowMacros.h"
 
@@ -112,7 +113,7 @@ static NSString *DecomposeCocoaType(NSString *type, NSString **suite);
           [openPanel setCanChooseDirectories:NO];
           [openPanel setAllowsMultipleSelection:NO];
           [openPanel setTreatsFilePackagesAsDirectories:YES];
-          switch([openPanel runModalForTypes:[NSArray arrayWithObjects:@"sdef", NSFileTypeForHFSTypeCode('Sdef'), nil]]) {
+          switch([openPanel runModalForTypes:[NSArray arrayWithObjects:@"sdef", NSFileTypeForHFSTypeCode(kScriptingDefinitionHFSType), nil]]) {
             case NSOKButton:
               suitePath = ([[openPanel filenames] count]) ? [[openPanel filenames] objectAtIndex:0] : nil;
               break;
