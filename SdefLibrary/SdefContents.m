@@ -39,8 +39,8 @@
 }
 
 #pragma mark -
-+ (SDObjectType)objectType {
-  return kSDContentsType;
++ (SdefObjectType)objectType {
+  return kSdefContentsType;
 }
 
 + (NSString *)defaultIconName {
@@ -88,8 +88,9 @@
   sd_owner = anObject;
 }
 
-- (SdefDocument *)document {
-  return [sd_owner document];
+- (id)firstParentOfType:(SdefObjectType)aType {
+  id owner = [self owner];
+  return ([owner objectType] == aType) ? owner : [owner firstParentOfType:aType];
 }
 
 #pragma mark -

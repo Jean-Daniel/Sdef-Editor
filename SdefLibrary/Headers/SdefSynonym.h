@@ -20,8 +20,6 @@
  <!-- at least one of "name" and "code" is required. -->
  */
 
-extern NSString * const kSDSynonymsCollection;
-
 @interface SdefSynonym : SdefTerminologyElement <NSCopying, NSCoding> {
 }
 

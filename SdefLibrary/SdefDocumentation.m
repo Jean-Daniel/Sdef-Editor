@@ -31,8 +31,8 @@
 }
 
 #pragma mark -
-+ (SDObjectType)objectType {
-  return kSDDocumentationType;
++ (SdefObjectType)objectType {
+  return kSdefDocumentationType;
 }
 
 + (NSString *)defaultName {

@@ -46,8 +46,8 @@
   }
 }
 
-+ (SDObjectType)objectType {
-  return kSDDictionaryType;
++ (SdefObjectType)objectType {
+  return kSdefDictionaryType;
 }
 
 + (NSString *)defaultName {

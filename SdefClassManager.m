@@ -118,17 +118,17 @@
   if (sd_document && [node document] == sd_document) {
     id child = [[aNotification userInfo] objectForKey:SdefNewTreeNode];
     switch ([child objectType]) {
-      case kSDSuiteType:
+      case kSdefSuiteType:
         [self addSuite:child];
         break;
-      case kSDEnumerationType:
+      case kSdefEnumerationType:
         [sd_types addObject:child];
         break;
-      case kSDClassType:
+      case kSdefClassType:
         [sd_types addObject:child];
         [sd_classes addObject:child];
         break;
-      case kSDVerbType:
+      case kSdefVerbType:
         if ([child isKindOfClass:[SdefCommand class]]) {
           [sd_commands addObject:child];
         } else if ([child isKindOfClass:[SdefEvent class]]) {
@@ -146,17 +146,17 @@
   if (sd_document && [node document] == sd_document) {
     id child = [[aNotification userInfo] objectForKey:SdefRemovedTreeNode];
     switch ([child objectType]) {
-      case kSDSuiteType:
+      case kSdefSuiteType:
         [self removeSuite:child];
         break;
-      case kSDEnumerationType:
+      case kSdefEnumerationType:
         [sd_types removeObject:child];
         break;
-      case kSDClassType:
+      case kSdefClassType:
         [sd_types removeObject:child];
         [sd_classes removeObject:child];
         break;
-      case kSDVerbType:
+      case kSdefVerbType:
         if ([child isKindOfClass:[SdefCommand class]]) {
           [sd_commands removeObject:child];
         } else if ([child isKindOfClass:[SdefEvent class]]) {

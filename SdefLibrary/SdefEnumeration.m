@@ -26,8 +26,8 @@
 }
 
 #pragma mark -
-+ (SDObjectType)objectType {
-  return kSDEnumerationType;
++ (SdefObjectType)objectType {
+  return kSdefEnumerationType;
 }
 
 + (NSString *)defaultName {
@@ -90,8 +90,8 @@
 }
 
 #pragma mark -
-+ (SDObjectType)objectType {
-  return kSDEnumeratorType;
++ (SdefObjectType)objectType {
+  return kSdefEnumeratorType;
 }
 
 + (NSString *)defaultName {

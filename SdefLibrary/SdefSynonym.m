@@ -26,8 +26,8 @@
 }
 
 #pragma mark -
-+ (SDObjectType)objectType {
-  return kSDSynonymType;
++ (SdefObjectType)objectType {
+  return kSdefSynonymType;
 }
 
 + (NSString *)defaultName {

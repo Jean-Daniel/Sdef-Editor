@@ -36,8 +36,8 @@
 }
 
 #pragma mark -
-+ (SDObjectType)objectType {
-  return kSDDirectParameterType;
++ (SdefObjectType)objectType {
+  return kSdefDirectParameterType;
 }
 
 + (NSString *)defaultName {
@@ -144,8 +144,8 @@
 }
 
 #pragma mark -
-+ (SDObjectType)objectType {
-  return kSDParameterType;
++ (SdefObjectType)objectType {
+  return kSdefParameterType;
 }
 
 + (NSString *)defaultName {
@@ -237,8 +237,8 @@
 }
 
 #pragma mark -
-+ (SDObjectType)objectType {
-  return kSDResultType;
++ (SdefObjectType)objectType {
+  return kSdefResultType;
 }
 
 + (NSString *)defaultName {

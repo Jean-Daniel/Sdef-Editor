@@ -89,8 +89,8 @@ static unsigned SdefAccessorFlagFromString(NSString *str) {
 }
 
 #pragma mark -
-+ (SDObjectType)objectType {
-  return kSDClassType;
++ (SdefObjectType)objectType {
+  return kSdefClassType;
 }
 
 + (NSString *)defaultName {
@@ -284,8 +284,8 @@ static unsigned SdefAccessorFlagFromString(NSString *str) {
 }
 
 #pragma mark -
-+ (SDObjectType)objectType {
-  return kSDElementType;
++ (SdefObjectType)objectType {
+  return kSdefElementType;
 }
 
 + (NSString *)defaultName {
@@ -470,8 +470,8 @@ static unsigned SdefAccessorFlagFromString(NSString *str) {
 }
 
 #pragma mark -
-+ (SDObjectType)objectType {
-  return kSDPropertyType;
++ (SdefObjectType)objectType {
+  return kSdefPropertyType;
 }
 
 + (NSString *)defaultName {
@@ -578,8 +578,8 @@ static unsigned SdefAccessorFlagFromString(NSString *str) {
 }
 
 #pragma mark -
-+ (SDObjectType)objectType {
-  return kSDRespondsToType;
++ (SdefObjectType)objectType {
+  return kSdefRespondsToType;
 }
 
 + (NSString *)defaultName {

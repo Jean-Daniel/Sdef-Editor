@@ -23,10 +23,6 @@
  <!ELEMENT commands (command+)>
  <!ELEMENT events (event+)>
 */
-extern NSString * const kSDTypesCollection;
-extern NSString * const kSDClassesCollection;
-extern NSString * const kSDCommandsCollection;
-extern NSString * const kSDEventsCollection;
 
 @class SdefDocumentation;
 @interface SdefSuite : SdefTerminologyElement <NSCopying, NSCoding> {

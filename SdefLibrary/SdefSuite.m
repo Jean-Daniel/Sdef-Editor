@@ -31,8 +31,8 @@
 }
 
 #pragma mark -
-+ (SDObjectType)objectType {
-  return kSDSuiteType;
++ (SdefObjectType)objectType {
+  return kSdefSuiteType;
 }
 
 + (NSString *)defaultName {
@@ -106,7 +106,7 @@
   } else {
     [super parser:parser didStartElement:elementName namespaceURI:namespaceURI qualifiedName:qName attributes:attributeDict];
   }
-  if (sd_childComments && [[parser delegate] objectType] == kSDCollectionType) {
+  if (sd_childComments && [[parser delegate] objectType] == kSdefCollectionType) {
     [[parser delegate] setComments:sd_childComments];
     [sd_childComments release];
     sd_childComments = nil;

@@ -35,8 +35,8 @@
 }
 
 #pragma mark -
-+ (SDObjectType)objectType {
-  return kSDVerbType;
++ (SdefObjectType)objectType {
+  return kSdefVerbType;
 }
 
 + (NSString *)defaultIconName {
