@@ -75,6 +75,15 @@ enum {
   kSDElementWrite = 1 << 1,
 };
 
+enum {
+  kSdefAccessorIndex = 1 << 0,
+  kSdefAccessorName = 1 << 1,
+  kSdefAccessorID = 1 << 2,
+  kSdefAccessorRange = 1 << 3,
+  kSdefAccessorRelative = 1 << 4,
+  kSdefAccessorTest = 1 << 5
+};
+
 extern NSString *SDAccessStringFromFlag(unsigned flag);
 extern unsigned SDAccessFlagFromString(NSString *str);
 
@@ -106,12 +115,12 @@ extern unsigned SDAccessFlagFromString(NSString *str);
 
 @interface SdefElement : SdefObject {
   SdefImplementation *sd_impl;
-  unsigned int accessors; /* index | name | id | range | relative | test */
+  unsigned int sd_accessors; /* index | name | id | range | relative | test */
   
   /* Attributs */
-  unsigned access; /* ( kSDElementRead | kSDElementWrite ) */
-  BOOL hidden;
-  NSString *desc;
+  unsigned sd_access; /* ( kSDElementRead | kSDElementWrite ) */
+  BOOL sd_hidden;
+  NSString *sd_desc;
 }
 
 - (SdefImplementation *)impl;
@@ -119,6 +128,9 @@ extern unsigned SDAccessFlagFromString(NSString *str);
 
 - (unsigned)access;
 - (void)setAccess:(unsigned)newAccess;
+
+- (unsigned)accessors;
+- (void)setAccessors:(unsigned)accessors;
 
 - (BOOL)isHidden;
 - (void)setHidden:(BOOL)flag;

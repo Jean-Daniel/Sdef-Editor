@@ -23,4 +23,6 @@
 - (SdefDictionary *)dictionary;
 - (void)setDictionary:(SdefDictionary *)dictionary;
 
+- (IBAction)export:(id)sender;
+
 @end

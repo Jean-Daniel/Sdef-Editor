@@ -570,30 +570,22 @@
   }
 }
 
-- (OSType)code {
-  return NSHFSTypeCodeFromFileType(sd_code);
-}
-
-- (void)setCode:(OSType)newCode {
-  [self setCodeStr:NSFileTypeForHFSTypeCode(newCode)];
-}
+//- (BOOL)validateCodeStr:(id *)ioValue error:(NSError **)error {
+//  NSString *str = *ioValue;
+//  if ([str length] < 4) {
+//    *ioValue = @"****";
+//  } else if ([str length] > 4) {
+//    str = [str stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+//    if ([str length] > 4)
+//      *ioValue = [str substringToIndex:4];
+//    else 
+//      *ioValue = str;
+//  }
+//  return YES;
+//}
 
 - (NSString *)codeStr {
   return sd_code;
-}
-
-- (BOOL)validateCodeStr:(id *)ioValue error:(NSError **)error {
-  NSString *str = *ioValue;
-  if ([str length] < 4) {
-    *ioValue = @"****";
-  } else if ([str length] > 4) {
-    str = [str stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
-    if ([str length] > 4)
-      *ioValue = [str substringToIndex:4];
-    else 
-      *ioValue = str;
-  }
-  return YES;
 }
 
 - (void)setCodeStr:(NSString *)str {

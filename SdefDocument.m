@@ -18,6 +18,7 @@
 
 #import "SdefParser.h"
 #import "SdefXMLGenerator.h"
+#import "SdefExporterController.h"
 
 @implementation SdefDocument
 
@@ -50,8 +51,18 @@
   [super dealloc];
 }
 
-- (void)awakeFromNib {
-//  [outline setIndentationPerLevel:10];
+- (IBAction)export:(id)sender {
+  SdefExporterController *exporter = [[SdefExporterController alloc] init];
+  [exporter setSdefDocument:self];
+  [NSApp beginSheet:[exporter window]
+     modalForWindow:[[[self windowControllers] objectAtIndex:0] window]
+      modalDelegate:self
+     didEndSelector:@selector(exportSheetDidEnd:returnCode:context:)
+        contextInfo:nil];
+}
+
+- (void)exportSheetDidEnd:(NSWindow *)aWindow returnCode:(int)resut context:(id)ctxt {
+  [[aWindow windowController] autorelease];
 }
 
 - (void)canCloseDocumentWithDelegate:(id)delegate shouldCloseSelector:(SEL)shouldCloseSelector contextInfo:(void *)contextInfo {

@@ -18,7 +18,7 @@
 
 - (SdefObject *)content;
 
-- (SdefDocument *)document;
-- (void)setDocument:(SdefDocument *)aDocument;
+- (SdefDocument *)displayedDocument;
+- (void)setDisplayedDocument:(SdefDocument *)aDocument;
 
 @end

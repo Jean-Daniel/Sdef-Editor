@@ -135,8 +135,8 @@ typedef enum {
 - (BOOL)isHidden;
 - (void)setHidden:(BOOL)newHidden;
 
-- (OSType)code;
-- (void)setCode:(OSType)newCode;
+- (NSString *)codeStr;
+- (void)setCodeStr:(NSString *)str;
 
 - (NSString *)desc;
 - (void)setDesc:(NSString *)newDesc;

@@ -32,6 +32,36 @@ unsigned SDAccessFlagFromString(NSString *str) {
   return flag;
 }
 
+static NSArray *SdefAccessorStringsFromFlag(unsigned flag) {
+  NSMutableArray *strings = [NSMutableArray array];
+  if (flag & kSdefAccessorIndex) [strings addObject:@"index"];
+  if (flag & kSdefAccessorID) [strings addObject:@"id"];
+  if (flag & kSdefAccessorName) [strings addObject:@"name"];
+  if (flag & kSdefAccessorRange) [strings addObject:@"range"];
+  if (flag & kSdefAccessorRelative) [strings addObject:@"relative"];
+  if (flag & kSdefAccessorTest) [strings addObject:@"test"];
+  return strings;
+}
+
+static unsigned SdefAccessorFlagFromString(NSString *str) {
+  unsigned flag = 0;
+  if (str && [str rangeOfString:@"index"].location != NSNotFound) {
+    flag |= kSdefAccessorIndex;
+  } else if (str && [str rangeOfString:@"name"].location != NSNotFound) {
+    flag |= kSdefAccessorName;
+  } else if (str && [str rangeOfString:@"id"].location != NSNotFound) {
+    flag |= kSdefAccessorID;
+  } else if (str && [str rangeOfString:@"range"].location != NSNotFound) {
+    flag |= kSdefAccessorRange;
+  } else if (str && [str rangeOfString:@"relative"].location != NSNotFound) {
+    flag |= kSdefAccessorRelative;
+  } else if (str && [str rangeOfString:@"test"].location != NSNotFound) {
+    flag |= kSdefAccessorTest;
+  }
+  return flag;
+}
+
+
 @implementation SdefClass
 
 + (SDObjectType)objectType {
@@ -211,7 +241,7 @@ unsigned SDAccessFlagFromString(NSString *str) {
 
 - (void)dealloc {
   [sd_impl release];
-  [desc release];
+  [sd_desc release];
   [super dealloc];
 }
 
@@ -226,42 +256,102 @@ unsigned SDAccessFlagFromString(NSString *str) {
 }
 
 - (unsigned)access {
-  return access;
+  return sd_access;
 }
 
 - (void)setAccess:(unsigned)newAccess {
-  if (access != newAccess) {
-    [[[[self document] undoManager] prepareWithInvocationTarget:self] setAccess:access];
-    access = newAccess;
+  if (sd_access != newAccess) {
+    [[[[self document] undoManager] prepareWithInvocationTarget:self] setAccess:sd_access];
+    sd_access = newAccess;
+  }
+}
+
+- (unsigned)accessors {
+  return sd_accessors;
+}
+
+- (void)setAccessors:(unsigned)accessors {
+  if (sd_accessors != accessors) {
+    [[[[self document] undoManager] prepareWithInvocationTarget:self] setAccess:sd_accessors];
+    sd_accessors = accessors;
   }
 }
 
 - (BOOL)isHidden {
-  return hidden;
+  return sd_hidden;
 }
 
 - (void)setHidden:(BOOL)newHidden {
-  if (hidden != newHidden) {
-    [[[[self document] undoManager] prepareWithInvocationTarget:self] setHidden:hidden];
-    hidden = newHidden;
+  if (sd_hidden != newHidden) {
+    [[[[self document] undoManager] prepareWithInvocationTarget:self] setHidden:sd_hidden];
+    sd_hidden = newHidden;
   }
 }
 
 - (NSString *)desc {
-  return desc;
+  return sd_desc;
 }
 
 - (void)setDesc:(NSString *)newDesc {
-  if (desc != newDesc) {
-    [[[self document] undoManager] registerUndoWithTarget:self selector:_cmd object:desc];
-    [desc release];
-    desc = [newDesc copy];
+  if (sd_desc != newDesc) {
+    [[[self document] undoManager] registerUndoWithTarget:self selector:_cmd object:sd_desc];
+    [sd_desc release];
+    sd_desc = [newDesc copy];
   }
 }
 
 #pragma mark -
-#pragma mark XML Generation
+#pragma mark Accessors KVC
+- (BOOL)accIndex {
+  return sd_accessors & kSdefAccessorIndex;
+}
+- (void)setAccIndex:(BOOL)flag {
+  if (flag) sd_accessors |= kSdefAccessorIndex;
+  else sd_accessors &= ~kSdefAccessorIndex;
+}
 
+- (BOOL)accId {
+  return sd_accessors & kSdefAccessorID;
+}
+- (void)setAccId:(BOOL)flag {
+  if (flag) sd_accessors |= kSdefAccessorID;
+  else sd_accessors &= ~kSdefAccessorID;
+}
+
+- (BOOL)accName {
+  return sd_accessors & kSdefAccessorName;
+}
+- (void)setAccName:(BOOL)flag {
+  if (flag) sd_accessors |= kSdefAccessorName;
+  else sd_accessors &= ~kSdefAccessorName;
+}
+
+- (BOOL)accRange {
+  return sd_accessors & kSdefAccessorRange;
+}
+- (void)setAccRange:(BOOL)flag {
+  if (flag) sd_accessors |= kSdefAccessorRange;
+  else sd_accessors &= ~kSdefAccessorRange;
+}
+
+- (BOOL)accRelative {
+  return sd_accessors & kSdefAccessorRelative;
+}
+- (void)setAccRelative:(BOOL)flag {
+  if (flag) sd_accessors |= kSdefAccessorRelative;
+  else sd_accessors &= ~kSdefAccessorRelative;
+}
+
+- (BOOL)accTest {
+  return sd_accessors & kSdefAccessorTest;
+}
+- (void)setAccTest:(BOOL)flag {
+  if (flag) sd_accessors |= kSdefAccessorTest;
+  else sd_accessors &= ~kSdefAccessorTest;
+}
+
+#pragma mark -
+#pragma mark XML Generation
 - (SdefXMLNode *)xmlNode {
   id node;
   if (node = [super xmlNode]) {
@@ -275,14 +365,23 @@ unsigned SDAccessFlagFromString(NSString *str) {
     attr = SDAccessStringFromFlag([self access]);
     if (nil != attr) [node setAttribute:attr forKey:@"access"];
     
+    if ([self isHidden]) [node setAttribute:@"hidden" forKey:@"hidden"];
+        
     attr = [self desc];
     if (nil != attr) [node setAttribute:attr forKey:@"description"];
     
-    if ([self isHidden]) [node setAttribute:@"hidden" forKey:@"hidden"];
-    
+    /* Implementation */
     id impl = [[self impl] xmlNode];
     if (nil != impl) {
       [node prependChild:impl];
+    }
+    /* Accessors */
+    id accessors = [SdefAccessorStringsFromFlag([self accessors]) objectEnumerator];
+    id acc;
+    while (acc = [accessors nextObject]) {
+      id accNode = [SdefXMLNode nodeWithElementName:@"accessor"];
+      [accNode setAttribute:acc forKey:@"style"];
+      [node appendChild:accNode];
     }
   }
   return node;
@@ -304,7 +403,15 @@ unsigned SDAccessFlagFromString(NSString *str) {
   [self setAccess:SDAccessFlagFromString([attrs objectForKey:@"access"])];
 }
 
-#warning TODO: Parse accessor
+- (void)parser:(NSXMLParser *)parser didStartElement:(NSString *)elementName namespaceURI:(NSString *)namespaceURI qualifiedName:(NSString *)qName attributes:(NSDictionary *)attributeDict {
+  if ([elementName isEqualToString:@"accessor"]) {
+    id str = [attributeDict objectForKey:@"style"];
+    if (str)
+      [self setAccessors:[self accessors] | SdefAccessorFlagFromString(str)];
+  } else {
+    [super parser:parser didStartElement:elementName namespaceURI:namespaceURI qualifiedName:qName attributes:attributeDict];
+  }
+}
 
 // sent when an end tag is encountered. The various parameters are supplied as above.
 - (void)parser:(NSXMLParser *)parser didEndElement:(NSString *)elementName namespaceURI:(NSString *)namespaceURI qualifiedName:(NSString *)qName {
