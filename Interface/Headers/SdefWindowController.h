@@ -8,6 +8,9 @@
 
 #import <Cocoa/Cocoa.h>
 
+extern NSString * const SdefTreePboardType;
+extern NSString * const SdefInfoPboardType;
+
 extern NSString * const SdefDictionarySelectionDidChangeNotification;
 
 @class SdefObject;
@@ -26,17 +29,3 @@ extern NSString * const SdefDictionarySelectionDidChangeNotification;
 @interface NSTabView (Extension)
 - (int)indexOfSelectedTabViewItem;
 @end
-
-extern NSString * const SdefTreePboardType;
-
-/*
-@interface SdefEditorPasteManager : NSObject {
-  SdefObject *sd_content;
-}
-
-+ (id)sharedManager;
-- (id)content;
-- (void)setContent:(SdefObject *)content;
-
-@end
-*/

@@ -12,28 +12,35 @@
 #import "ShadowMacros.h"
 #import "SKFunctions.h"
 
+#import "SdefVerb.h"
+#import "SdefClass.h"
+#import "SdefSuite.h"
 #import "SdefObject.h"
 #import "SdefDocument.h"
 #import "SdefDictionary.h"
+#import "SdefEnumeration.h"
 
 #define IsObjectOwner(item)		 		[item findRoot] == (id)[(SdefDocument *)[self document] dictionary]  \
 										/* || item == [[self document] imports] */
 
+NSString * const SdefTreePboardType = @"SdefTreeType";
+NSString * const SdefInfoPboardType = @"SdefInfoType";
+
 NSString * const SdefDictionarySelectionDidChangeNotification = @"SdefDictionarySelectionDidChange";
 
-static inline BOOL SDEditorExistsForItem(SdefObject *item) {
+static inline BOOL SdefEditorExistsForItem(SdefObject *item) {
   switch ([item objectType]) {
-    case kSDDictionaryType:
-    case kSDSuiteType:
-    case kSDImportsType:
+    case kSdefDictionaryType:
+    case kSdefSuiteType:
+    case kSdefImportsType:
       /* Class */
-    case kSDClassType:
+    case kSdefClassType:
       /* Verbs */
-    case kSDVerbType:
+    case kSdefVerbType:
       /* Enumeration */
-    case kSDEnumerationType:  
+    case kSdefEnumerationType:  
       /* Misc */
-    case kSDSynonymType:
+    case kSdefSynonymType:
       return YES;
     default:
       return NO;
@@ -68,7 +75,7 @@ static inline BOOL SDEditorExistsForItem(SdefObject *item) {
                                                object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(didChangeNodeName:)
-                                                 name:SDTreeNodeDidChangeNameNotification
+                                                 name:SdefObjectDidChangeNameNotification
                                                object:nil];    
   }
   return self;
@@ -97,16 +104,23 @@ static inline BOOL SDEditorExistsForItem(SdefObject *item) {
 
 #pragma mark -
 - (void)didAppendNode:(NSNotification *)aNotification {
-  id item = [aNotification object];
+  SdefObject *item = [aNotification object];
   if (IsObjectOwner(item)) {
-    [outline reloadItem:item reloadChildren:[outline isItemExpanded:item]];
-    if ([outline isExpandable:item]) {
-      [outline expandItem:item];
-      id child = [[aNotification userInfo] objectForKey:SdefNewTreeNode];
-      int row = [outline rowForItem:child];
-      if (row > 0)
-        [outline selectRow:[outline rowForItem:child] byExtendingSelection:NO];
+    SdefObject *parent = item;
+    id path = [NSMutableArray array];
+    do {
+      [path addObject:parent];
+      parent = [parent parent];
+    } while (parent);
+    [outline reloadItem:item reloadChildren:YES];
+    id parents = [path reverseObjectEnumerator];
+    while (parent = [parents nextObject]) {
+      [outline expandItem:parent];
     }
+    id child = [[aNotification userInfo] objectForKey:SdefNewTreeNode];
+    int row = [outline rowForItem:child];
+    if (row > 0)
+      [outline selectRow:[outline rowForItem:child] byExtendingSelection:NO];
   }
 }
 
@@ -157,10 +171,10 @@ static inline BOOL SDEditorExistsForItem(SdefObject *item) {
   NSOutlineView *view = [notification object];
   SdefObject *selection = [view itemAtRow:[view selectedRow]];
   SdefObject *item = selection;
-  while (item && !SDEditorExistsForItem(item)) {
+  while (item && !SdefEditorExistsForItem(item)) {
     item = [item parent];
   }
-  if ([item objectType] != kSDUndefinedType) {
+  if ([item objectType] != kSdefUndefinedType) {
     id str = SKFileTypeForHFSTypeCode([item objectType]);
     unsigned idx = [inspector indexOfTabViewItemWithIdentifier:str];
     NSAssert1(idx != NSNotFound, @"Unable to find tab item for identifier \"%@\"", str);
@@ -189,10 +203,10 @@ static inline BOOL SDEditorExistsForItem(SdefObject *item) {
   id item = [outlineView itemAtRow:[outlineView selectedRow]];
   if (item != [(SdefDocument *)[self document] dictionary] && [item isEditable] && [item isRemovable]) {
     id parent = [item parent];
+    unsigned idx = [parent indexOfChild:item];
     [item remove];
-    if ([outlineView selectedRow] <= 0) {
-      [outlineView selectRow:[outlineView rowForItem:parent] byExtendingSelection:NO];
-    }
+    [outlineView selectRow:[outline rowForItem:(idx > 0) ? [parent childAtIndex:idx-1] : parent]
+      byExtendingSelection:NO];
   } else {
     NSBeep();
   }
@@ -205,27 +219,27 @@ static inline BOOL SDEditorExistsForItem(SdefObject *item) {
     id class = nil;
     id nibName = nil;
     switch (SKHFSTypeCodeFromFileType(key)) {
-      case kSDDictionaryType:
+      case kSdefDictionaryType:
         class = @"SdefDictionaryView";
         nibName = @"SdefDictionary";
         break;
-      case kSDImportsType:
+      case kSdefImportsType:
         class = @"SdefImportsView";
         nibName = @"SdefImports";
         break;
-      case kSDClassType:
+      case kSdefClassType:
         class = @"SdefClassView";
         nibName = @"SdefClass";
         break;
-      case kSDSuiteType:
+      case kSdefSuiteType:
         class = @"SdefSuiteView";
         nibName = @"SdefSuite";
         break;
-      case kSDEnumerationType:
+      case kSdefEnumerationType:
         class = @"SdefEnumerationView";
         nibName = @"SdefEnumeration";
         break;
-      case kSDVerbType:
+      case kSdefVerbType:
         class = @"SdefVerbView";
         nibName = @"SdefVerb";
         break;
@@ -244,27 +258,169 @@ static inline BOOL SDEditorExistsForItem(SdefObject *item) {
 
 #pragma mark -
 #pragma mark Copy/Paste
-/*
+- (BOOL)validateMenuItem:(NSMenuItem *)anItem {
+  SEL action = [anItem action];
+  id selection = [self selection];
+  if (action == @selector(copy:) || action == @selector(cut:)) {
+    switch ([selection objectType]) {
+      case kSdefUndefinedType:
+      case kSdefDictionaryType:
+        return NO;
+      case kSdefCollectionType:
+        if ([selection childCount] == 0)
+          return NO;
+      default:
+        break;
+    }
+  }
+  if (action == @selector(delete:) || action == @selector(cut:)) {
+    if (![selection isRemovable] || [(SdefDocument *)[self document] dictionary] == selection)
+      return NO;
+  }
+  if (action == @selector(paste:)) {
+    if (![selection isEditable] || ![[[NSPasteboard generalPasteboard] types] containsObject:SdefTreePboardType])
+      return NO;
+  }
+  return YES;
+}
+
 - (IBAction)copy:(id)sender {
   id selection = [self selection];
-  id pboard = [NSPasteboard generalPasteboard];
-  [pboard declareTypes:[NSArray arrayWithObjects:SdefTreePboardType, NSStringPboardType, nil] owner:nil];
-  [pboard setString:[selection name] forType:NSStringPboardType];
-  [pboard setData:[NSKeyedArchiver archivedDataWithRootObject:selection] forType:SdefTreePboardType];
+  NSPasteboard *pboard = [NSPasteboard generalPasteboard];
+  switch ([selection objectType]) {
+    case kSdefUndefinedType:
+    case kSdefDictionaryType:
+      NSBeep();
+      break;
+    default:
+      [pboard declareTypes:[NSArray arrayWithObjects:SdefTreePboardType, SdefInfoPboardType, NSStringPboardType, nil] owner:nil];
+      if ([selection objectType] == kSdefRespondsToType) {
+        id str = nil;
+        SdefClass *class = [selection firstParentOfType:kSdefClassType];
+        if ([selection parent] == [class commands] || selection == [class commands]) {
+          str = @"commands";
+        } else if ([selection parent] == [class events] || selection == [class events]) {
+          str = @"events";
+        }
+        [pboard setString:str forType:SdefInfoPboardType];
+      } else {
+        [pboard setString:@"" forType:SdefInfoPboardType];
+      }
+      [pboard setString:[selection name] forType:NSStringPboardType];
+      [pboard setData:[NSKeyedArchiver archivedDataWithRootObject:selection] forType:SdefTreePboardType];
+  }
+}
+
+- (IBAction)delete:(id)sender {
+  [self deleteSelectionInOutlineView:outline];
+}
+
+- (IBAction)cut:(id)sender {
+  [self copy:sender];
+  [self delete:sender];
 }
 
 - (IBAction)paste:(id)sender {
-  id pboard = [NSPasteboard generalPasteboard];
+  NSPasteboard *pboard = [NSPasteboard generalPasteboard];
   if (![[pboard types] containsObject:SdefTreePboardType]) return;
   
   id selection = [self selection];
   id data = [pboard dataForType:SdefTreePboardType];
   SdefObject *tree = [NSKeyedUnarchiver unarchiveObjectWithData:data];
+  if (!tree) return;
+  
+  id destination = nil;
   switch ([tree objectType]) {
-    
+    case kSdefUndefinedType:
+    case kSdefDictionaryType:
+      NSBeep();
+      break;
+    case kSdefSuiteType:
+      destination = [selection firstParentOfType:kSdefDictionaryType];
+      break;
+      /* 4 main types */
+    case kSdefEnumerationType:
+      destination = [(SdefSuite *)[selection firstParentOfType:kSdefSuiteType] types];
+      break;
+    case kSdefClassType:
+      destination = [(SdefSuite *)[selection firstParentOfType:kSdefSuiteType] classes];
+      break;
+    case kSdefVerbType:
+      if ([tree isKindOfClass:[SdefCommand class]]) {
+        destination = [(SdefSuite *)[selection firstParentOfType:kSdefSuiteType] commands];
+      } else if ([tree isKindOfClass:[SdefEvent class]]) {
+        destination = [[selection firstParentOfType:kSdefSuiteType] events];
+      }
+      break;
+      /* 4 Class content type */
+    case kSdefElementType:
+      destination = [[selection firstParentOfType:kSdefClassType] elements];
+      break;
+    case kSdefPropertyType:
+      destination = [(SdefClass *)[selection firstParentOfType:kSdefClassType] properties];
+      break;
+    case kSdefRespondsToType:
+    {
+      id str = [pboard stringForType:SdefInfoPboardType];
+      @try {
+        destination = [(SdefClass *)[selection firstParentOfType:kSdefClassType] valueForKey:str];
+      } @catch (id exception) {
+        SKLogException(exception);
+        destination = nil;
+      }
+    }
+      break;
+      /* Misc */
+    case kSdefEnumeratorType:
+      destination = [selection firstParentOfType:kSdefEnumerationType];
+      break;
+    case kSdefParameterType:
+      destination = [selection firstParentOfType:kSdefVerbType];
+      break;
+    case kSdefCollectionType:
+    {
+      id type = [(SdefCollection *)tree contentType];
+      SdefSuite *suite = [selection firstParentOfType:kSdefSuiteType];
+      SdefClass *class = [selection firstParentOfType:kSdefClassType];
+      if (type == [SdefEnumeration class]) destination = [suite types];
+      else if (type == [SdefClass class]) destination = [suite classes];
+      else if (type == [SdefCommand class]) destination = [suite commands];
+      else if (type == [SdefEvent class]) destination = [suite events];
+      
+      else if (type == [SdefElement class]) destination = [class elements];
+      else if (type == [SdefProperty class]) destination = [class properties];
+      else if (type == [SdefRespondsTo class]) {
+        id str = [pboard stringForType:SdefInfoPboardType];
+        @try {
+          destination = [class valueForKey:str];
+        } @catch (id exception) {
+          SKLogException(exception);
+          destination = nil;
+        }
+      }
+    }
+      break;
+    default:
+      break;
   }
+  if (destination) {
+    if ([tree objectType] == kSdefCollectionType) {
+      id children = [tree childrenEnumerator];
+      id child;
+      while (child = [children nextObject]) {
+        [child retain];
+        [child remove];
+        [destination appendChild:child];
+        [child release];
+      }
+    } else {
+      [destination appendChild:tree];
+    }
+  }
+  else
+    NSBeep();
 }
-*/
+
 @end
 
 #pragma mark -
@@ -274,47 +430,3 @@ static inline BOOL SDEditorExistsForItem(SdefObject *item) {
   return [self indexOfTabViewItem:[self selectedTabViewItem]]; 
 }
 @end
-
-NSString * const SdefTreePboardType = @"SdefTreeType";
-
-/*
-#pragma mark -
-@implementation SdefEditorPasteManager
-
-+ (id)sharedManager {
-  static id shared = nil;
-  if (!shared) {
-    shared = [[self alloc] init];
-  }
-  return shared;
-}
-
-- (void)dealloc {
-  [sd_content release];
-  [super dealloc];
-}
-
-- (id)content {
-  return sd_content;
-}
-
-- (void)setContent:(SdefObject *)content {
-  if (sd_content != content) {
-    [sd_content release];
-    sd_content = [content retain];
-  }
-}
-
-- (void)pasteboard:(NSPasteboard *)sender provideDataForType:(NSString *)type {
-  if ([type isEqualToString:SdefTreePboardType] && sd_content) {
-    [sender setData:[NSKeyedArchiver archivedDataWithRootObject:sd_content] forType:type];
-  }
-  [sender setString:@"<Empty>" forType:type];
-}
-
-- (void)pasteboardChangedOwner:(NSPasteboard *)sender {
-  [self setContent:nil];
-}
-
-@end
-*/
