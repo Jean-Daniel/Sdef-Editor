@@ -57,6 +57,8 @@ description  %Text;        #IMPLIED
   // Code into verb are split into class & ID that are two concat four char codes (i.e. eavtquit).
 }
 
+- (BOOL)isCommand;
+
 - (SdefResult *)result;
 - (void)setResult:(SdefResult *)aResult;
 

@@ -55,7 +55,13 @@
   [sd_direct release];
   [super dealloc];
 }
+#pragma mark -
 
+- (BOOL)isCommand {
+  id suite = [self suite];
+  return [self parent] == [suite commands];
+}
+  
 - (void)createContent {
   [super createContent];
   sd_flags.hasSynonyms = 1;

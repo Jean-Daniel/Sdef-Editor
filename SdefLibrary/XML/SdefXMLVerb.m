@@ -32,9 +32,10 @@
 }
 
 - (NSString *)xmlElementName {
-  if ([[[self parent] xmlElementName] isEqualToString:@"commands"]) {
+  id suite = [self suite];
+  if ([self parent] == [suite commands]) {
     return @"command";
-  } else if ([[[self parent] xmlElementName] isEqualToString:@"events"])
+  } else if ([self parent] == [suite events])
     return @"event"; 
   return nil;
 }
