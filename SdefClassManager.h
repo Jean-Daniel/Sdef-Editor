@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 #import "SKTreeNode.h"
 
-@class SdefClass, SdefDocument;
+@class SdefClass, SdefDocument, SdefDictionary;
 @interface SdefClassManager : NSObject {
 @private
   SdefDocument *sd_document;
@@ -17,6 +17,9 @@
 }
 
 - (id)initWithDocument:(SdefDocument *)aDocument;
+
+- (void)addDictionary:(SdefDictionary *)aDico;
+- (void)removeDictionary:(SdefDictionary *)aDico;
 
 - (NSArray *)types;
 - (NSArray *)classes;

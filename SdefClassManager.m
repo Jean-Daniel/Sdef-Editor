@@ -15,13 +15,6 @@
 #import "SdefSuite.h"
 #import "SdefVerb.h"
 
-@interface SdefSuite (ClassQueries)
-
-- (SdefClass *)classWithName:(NSString *)name;
-- (NSArray *)subclassesOfClass:(SdefClass *)class;
-
-@end
-
 #pragma mark -
 @implementation SdefClassManager
 
@@ -133,6 +126,8 @@
           [sd_events addObject:child];
         }
         break;
+      default:
+        break;
     }
   }
 }
@@ -158,6 +153,8 @@
         } else if ([child isKindOfClass:[SdefEvent class]]) {
           [sd_events removeObject:child];
         }
+        break;
+      default:
         break;
     }
   }
@@ -212,7 +209,14 @@
 }
 
 - (NSArray *)subclassesOfClass:(SdefClass *)class {
-  
+  id classes = [NSMutableArray array];
+  id items = [sd_classes objectEnumerator];
+  SdefClass *item;
+  while (item = [items nextObject]) {
+    if ([[item inherits] isEqualToString:[class name]])
+      [classes addObject:item];
+  }
+  return classes;
 }
 
 #pragma mark -
@@ -222,24 +226,6 @@
 
 - (void)willRemoveDictionary:(NSNotification *)aNotification {
   [self removeDictionary:[[aNotification userInfo] objectForKey:@"RemovedTreeNode"]];
-}
-
-@end
-
-#pragma mark -
-@implementation SdefSuite (ClassQueries)
-
-- (SdefClass *)classWithName:(NSString *)name {
-  id classes = [[self classes] childrenEnumerator];
-  id class;
-  while (class = [classes nextObject]) {
-    if ([[class name] isEqualToString:name])
-      return class;
-  }
-  return nil;
-}
-
-- (NSArray *)subclassesOfClass:(SdefClass *)class {
 }
 
 @end
