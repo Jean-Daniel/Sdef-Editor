@@ -3,7 +3,6 @@
         {CLASS = FirstResponder; LANGUAGE = ObjC; SUPERCLASS = NSObject; }, 
         {CLASS = SKImageAndTextCell; LANGUAGE = ObjC; SUPERCLASS = NSTextFieldCell; }, 
         {
-            ACTIONS = {}; 
             CLASS = SdefClassView; 
             LANGUAGE = ObjC; 
             OUTLETS = {
