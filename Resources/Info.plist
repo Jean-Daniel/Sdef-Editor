@@ -21,7 +21,7 @@
 			<string>ScriptingDefinition</string>
 			<key>CFBundleTypeOSTypes</key>
 			<array>
-				<string>SDef</string>
+				<string>Sdef</string>
 			</array>
 			<key>CFBundleTypeRole</key>
 			<string>Editor</string>
