@@ -112,22 +112,26 @@ static inline BOOL SdefEditorExistsForItem(SdefObject *item) {
   }
 }
 
-- (void)setSelection:(SdefObject *)anObject {
+- (void)setSelection:(SdefObject *)anObject display:(BOOL)display {
   if (IsObjectOwner(anObject)) {
-    [self displayObject:anObject];
+    if (display) [self displayObject:anObject];
     /* Select Row */
-      int row = [outline rowForItem:anObject];
-      if (row > 0) {
-        if ([outline selectedRow] == row) {
-          [[NSNotificationCenter defaultCenter] postNotificationName:NSOutlineViewSelectionDidChangeNotification object:outline];
-        } else {
-          [outline selectRow:row byExtendingSelection:NO];
-          [outline scrollRowToVisible:row];
-        }
+    int row = [outline rowForItem:anObject];
+    if (row > 0) {
+      if ([outline selectedRow] == row) {
+        [[NSNotificationCenter defaultCenter] postNotificationName:NSOutlineViewSelectionDidChangeNotification object:outline];
+      } else {
+        [outline selectRow:row byExtendingSelection:NO];
+        [outline scrollRowToVisible:row];
       }
-      if (SdefEditorExistsForItem(anObject))
-        [[self window] makeFirstResponder:outline];
     }
+    if (SdefEditorExistsForItem(anObject))
+      [[self window] makeFirstResponder:outline];
+  }
+}
+
+- (void)setSelection:(SdefObject *)anObject {
+  [self setSelection:anObject display:YES];
 }
 
 - (void)didChangeNodeName:(NSNotification *)aNotification {
@@ -252,8 +256,7 @@ static inline BOOL SdefEditorExistsForItem(SdefObject *item) {
     id parent = [item parent];
     unsigned idx = [parent indexOfChild:item];
     [item remove];
-    [outlineView selectRow:[outline rowForItem:(idx > 0) ? [parent childAtIndex:idx-1] : parent]
-      byExtendingSelection:NO];
+    [self setSelection:((idx > 0) ? [parent childAtIndex:idx-1] : parent) display:NO];
   } else {
     NSBeep();
   }
