@@ -50,10 +50,12 @@
   }
   sd_document = [(SdefObject *)[SdefDictionary alloc] init];
 }
+/*
 // sent when the parser has completed parsing. If this is encountered, the parse was successful.
 - (void)parserDidEndDocument:(NSXMLParser *)parser {
 }
-
+*/
+/*
 #pragma mark DTD Handling
 // DTD handling methods for various declarations.
 - (void)parser:(NSXMLParser *)parser foundNotationDeclarationWithName:(NSString *)name publicID:(NSString *)publicID systemID:(NSString *)systemID {
@@ -79,6 +81,7 @@
 - (void)parser:(NSXMLParser *)parser foundExternalEntityDeclarationWithName:(NSString *)name publicID:(NSString *)publicID systemID:(NSString *)systemID {
   ShadowTrace();
 }
+*/
 
 #pragma mark Element Handling
 // sent when the parser finds an element start tag.
@@ -94,11 +97,13 @@
   }
 }
 
+/*
 // sent when an end tag is encountered. The various parameters are supplied as above.
 - (void)parser:(NSXMLParser *)parser didEndElement:(NSString *)elementName namespaceURI:(NSString *)namespaceURI qualifiedName:(NSString *)qName {
   ShadowTrace();
 }
-
+*/
+/*
 #pragma mark Mapping Handling
 // sent when the parser first sees a namespace attribute.
 // In the case of the cvslog tag, before the didStartElement:, you'd get one of these with prefix == @"" and namespaceURI == @"http://xml.apple.com/cvslog" (i.e. the default namespace)
@@ -111,7 +116,8 @@
 - (void)parser:(NSXMLParser *)parser didEndMappingPrefix:(NSString *)prefix {
   ShadowTrace();
 }
-
+*/
+/*
 #pragma mark Other Objects Handling
 // This returns the string of the characters encountered thus far. You may not necessarily get the longest character run.
 // The parser reserves the right to hand these to the delegate as potentially many calls in a row to -parser:foundCharacters:
@@ -129,6 +135,7 @@
 - (void)parser:(NSXMLParser *)parser foundProcessingInstructionWithTarget:(NSString *)target data:(NSString *)data {
   ShadowTrace();
 }
+*/
 
 // A comment (Text in a <!-- --> block) is reported to the delegate as a single string
 - (void)parser:(NSXMLParser *)parser foundComment:(NSString *)comment {
@@ -136,7 +143,7 @@
     [sd_document addComment:[comment stringByUnescapingEntities:nil]];
   }
 }
-
+/*
 // this reports a CDATA block to the delegate as an NSData.
 - (void)parser:(NSXMLParser *)parser foundCDATA:(NSData *)CDATABlock {
   ShadowTrace();
@@ -146,7 +153,7 @@
 - (NSData *)parser:(NSXMLParser *)parser resolveExternalEntityName:(NSString *)name systemID:(NSString *)systemID {
   ShadowTrace();
 }
-
+*/
 // ...and this reports a fatal error to the delegate. The parser will stop parsing.
 - (void)parser:(NSXMLParser *)parser parseErrorOccurred:(NSError *)parseError {
   DLog(@"Error: %@, %@", parseError, [parseError userInfo]);
@@ -154,7 +161,7 @@
 
 // If validation is on, this will report a fatal validation error to the delegate. The parser will stop parsing.
 - (void)parser:(NSXMLParser *)parser validationErrorOccurred:(NSError *)validationError {
-  ShadowTrace();
+  DLog(@"Error: %@, %@", validationError, [validationError userInfo]);
 }
 
 @end
