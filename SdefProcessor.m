@@ -56,8 +56,13 @@
   // so this class isn't as useful for a task that you need to send info to, not just receive.
   [task setStandardOutput:[NSPipe pipe]];
   [task setStandardError:[task standardOutput]];
+  
   // The path to the binary is the first argument that was passed in
-  [task setLaunchPath:[[NSBundle mainBundle] pathForResource:@"sdp" ofType:@""]];
+  if ([[NSUserDefaults standardUserDefaults] boolForKey:@"SdefBuildInSdp"])
+    [task setLaunchPath:[[NSBundle mainBundle] pathForResource:@"sdp" ofType:@""]];
+  else {
+    [task setLaunchPath:[[NSUserDefaults standardUserDefaults] stringForKey:@"SdefSdpToolPath"]];
+  }
   
   id args = [[NSMutableArray alloc] init];
   
@@ -125,7 +130,11 @@
   
   if (input) {
     id data = [sd_input dataRepresentationOfType:ScriptingDefinitionFileType];
-    [input writeData:data];
+    @try {
+      [input writeData:data];
+    } @catch (id exception) {
+      SKLogException(exception);
+    }
     [input closeFile];
   }
   [task waitUntilExit];
