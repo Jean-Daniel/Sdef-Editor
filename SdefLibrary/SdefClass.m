@@ -69,6 +69,7 @@ static unsigned SdefAccessorFlagFromString(NSString *str) {
   copy->sd_plural = [sd_plural copyWithZone:aZone];
   copy->sd_inherits = [sd_inherits copyWithZone:aZone];
   copy->sd_contents = [sd_contents copyWithZone:aZone];
+  [copy->sd_contents setOwner:copy];
   return copy;
 }
 
@@ -102,6 +103,7 @@ static unsigned SdefAccessorFlagFromString(NSString *str) {
 }
 
 - (void)dealloc {
+  [sd_contents setOwner:nil];
   [sd_plural release];
   [sd_inherits release];
   [sd_contents release];
@@ -151,6 +153,7 @@ static unsigned SdefAccessorFlagFromString(NSString *str) {
   if (sd_contents != contents) {
     [sd_contents release];
     sd_contents = [contents retain];
+    [sd_contents setOwner:self];
     [sd_contents setEditable:[self isEditable]];
   }
 }
@@ -234,11 +237,10 @@ static unsigned SdefAccessorFlagFromString(NSString *str) {
   } else if ([elementName isEqualToString:@"responds-to-events"]) {
     [parser setDelegate:[self events]];
   } else if ([elementName isEqualToString:@"contents"]) {
-    id contents = [(SdefObject *)[SdefContents alloc] initWithAttributes:attributeDict];
-    [self setContents:contents];
+    SdefContents *contents = [self contents];
+    [contents setAttributes:attributeDict];
     [self appendChild:contents]; /* will be removed when finish parsing */
     [parser setDelegate:contents];
-    [contents release];
   } else {
     [super parser:parser didStartElement:elementName namespaceURI:namespaceURI qualifiedName:qName attributes:attributeDict];
   }
