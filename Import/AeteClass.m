@@ -152,16 +152,22 @@
       switch (*ID) {
         case formAbsolutePosition:
           [self setAccIndex:YES];
+          break;
         case formRelativePosition:
           [self setAccRelative:YES];
+          break;
         case formTest:
           [self setAccTest:YES];
+          break;
         case formRange:
           [self setAccRange:YES];
+          break;
         case formPropertyID:
           [self setAccId:YES];
+          break;
         case formName:
           [self setAccName:YES];
+          break;
       }
       bytes += 4;
     }
