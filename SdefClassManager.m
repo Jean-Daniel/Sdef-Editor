@@ -151,6 +151,16 @@
   return nil;
 }
 
+- (SdefEnumeration *)enumerationWithName:(NSString *)name {
+  id types = [sd_types objectEnumerator];
+  id enumeration;
+  while (enumeration = [types nextObject]) {
+    if ([enumeration isMemberOfClass:[SdefEnumeration class]] && [[enumeration name] isEqualToString:name])
+      return enumeration;
+  }
+  return nil;
+}
+
 - (NSArray *)subclassesOfClass:(SdefClass *)class {
   id classes = [NSMutableArray array];
   id items = [sd_classes objectEnumerator];

@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 #import "SKTreeNode.h"
 
-@class SdefSuite, SdefObject, SdefClass, SdefVerb, SdefDocument, SdefDictionary;
+@class SdefSuite, SdefObject, SdefEnumeration, SdefClass, SdefVerb, SdefDocument, SdefDictionary;
 @interface SdefClassManager : NSObject {
 @private
   SdefDocument *sd_document;
@@ -31,8 +31,10 @@
 - (NSArray *)events;
 
 - (SdefClass *)classWithName:(NSString *)name;
+- (NSArray *)subclassesOfClass:(SdefClass *)aClass;
 - (SdefClass *)superClassOfClass:(SdefClass *)aClass;
-- (SdefClass *)superClassOfClass:(SdefClass *)aClass;
+
+- (SdefEnumeration *)enumerationWithName:(NSString *)name;
 
 #pragma mark -
 #pragma mark Cocoa Additions
