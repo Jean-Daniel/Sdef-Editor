@@ -83,9 +83,11 @@ NSMutableArray *sd_childComments;
     [documentation release];
   } else if ([elementName isEqualToString:@"synonyms"]) {
     SdefCollection *synonyms = [self synonyms];
-    [self appendChild:synonyms]; /* Append to parse, and remove after */
-    [parser setDelegate:synonyms];
-    [synonyms setComments:sd_childComments];
+    if (synonyms) {
+      [self appendChild:synonyms]; /* Append to parse, and remove after */
+      [parser setDelegate:synonyms];
+      [synonyms setComments:sd_childComments];
+    }
   } else if ([elementName isEqualToString:@"cocoa"]) {
     SdefImplementation *cocoa = [self impl];
     if (cocoa) {
@@ -114,7 +116,12 @@ NSMutableArray *sd_childComments;
 
 // ...and this reports a fatal error to the delegate. The parser will stop parsing.
 - (void)parser:(NSXMLParser *)parser parseErrorOccurred:(NSError *)parseError {
-  DLog(@"Parse error in %@: %@", [self name], parseError);
+  DLog(@"Error: %@, %@", parseError, [parseError userInfo]);
+}
+
+// If validation is on, this will report a fatal validation error to the delegate. The parser will stop parsing.
+- (void)parser:(NSXMLParser *)parser validationErrorOccurred:(NSError *)validationError {
+  DLog(@"Error: %@, %@", validationError, [validationError userInfo]);
 }
 
 @end

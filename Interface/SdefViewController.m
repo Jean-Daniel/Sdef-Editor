@@ -28,13 +28,17 @@
   [self setKeys:[NSArray arrayWithObject:@"object"] triggerChangeNotificationsForDependentKey:@"events"];
 }
 
++ (BOOL)automaticallyNotifiesObserversForKey:(NSString *)key {
+  return ![key isEqualToString:@"object"];
+}
+
 - (id)initWithNibName:(NSString *)name {
   if (self = [super init]) {
     id nib = [[NSNib alloc] initWithNibNamed:name bundle:nil];
     [nib instantiateNibWithOwner:self topLevelObjects:&_nibTopLevelObjects];
     [_nibTopLevelObjects retain];
-    [nib release];
     [_nibTopLevelObjects makeObjectsPerformSelector:@selector(release)];
+    [nib release];
   }
   return self;
 }
@@ -62,8 +66,10 @@
 
 - (void)setObject:(SdefObject *)newObject {
   if (_object != newObject) {
+    [self willChangeValueForKey:@"object"];
     [_object release];
     _object = [newObject retain];
+    [self didChangeValueForKey:@"object"];
   }
   [_types release];
   _types = nil;

@@ -178,8 +178,10 @@ extern NSString *CocoaNameForSdefName(NSString *cocoa, BOOL isClass);
 
 @end
 
+/*
 #pragma mark -
 @interface SdefImports : SdefCollection <NSCopying, NSCoding> {  
 }
 
 @end
+*/
