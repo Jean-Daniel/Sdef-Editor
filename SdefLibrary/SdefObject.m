@@ -30,6 +30,11 @@ NSString * const SdefObjectDidRemoveAllChildrenNotification = @"SdefObjectDidRem
 NSString * const SdefObjectWillChangeNameNotification = @"SdefObjectWillChangeName";
 NSString * const SdefObjectDidChangeNameNotification = @"SdefObjectDidChangeName";
 
+#if !defined(DEBUG)
+__private_extern__
+#endif
+NSMutableArray *sd_childComments;
+
 @implementation SdefObject
 #pragma mark Protocols Implementations
 - (id)copyWithZone:(NSZone *)aZone {
@@ -41,7 +46,6 @@ NSString * const SdefObjectDidChangeNameNotification = @"SdefObjectDidChangeName
   copy->sd_synonyms = [sd_synonyms copyWithZone:aZone];
   copy->sd_documentation = [sd_documentation copyWithZone:aZone];
   [copy->sd_documentation setOwner:copy];
-  copy->sd_childComments = [sd_childComments copyWithZone:aZone];
   return copy;
 }
 
@@ -144,7 +148,6 @@ NSString * const SdefObjectDidChangeNameNotification = @"SdefObjectDidChangeName
   [sd_comments release];
   [sd_documentation setOwner:nil];
   [sd_documentation release];
-  [sd_childComments release];
   [super dealloc];
 }
 

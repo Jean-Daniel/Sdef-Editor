@@ -35,6 +35,8 @@ typedef enum {
   kSdefDocumentationType	= 'Docu'
 } SdefObjectType;
 
+extern NSMutableArray *sd_childComments;
+
 extern NSString * const SdefNewTreeNode;
 extern NSString * const SdefRemovedTreeNode;
 extern NSString * const SdefObjectDidAppendChildNotification;
@@ -52,7 +54,6 @@ extern NSString *CocoaNameForSdefName(NSString *cocoa, BOOL isClass);
 @class SdefXMLNode, SdefSuite, SdefDocumentation, SdefCollection, SdefDocument;
 @interface SdefObject : SKTreeNode <NSCopying, NSCoding> {
 @protected
-  NSMutableArray *sd_childComments;
   struct {
     unsigned int hidden:1;
     unsigned int optional:1;
