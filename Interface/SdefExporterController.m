@@ -108,19 +108,26 @@ static NSString *SystemMajorVersion() {
   [proc setFormat:format];
   
   [proc setVersion:sd_version ? : SystemMajorVersion()];
-  
-  NSString *result = [proc process];
-  if (result) {
-    NSRunAlertPanel(NSLocalizedString(@"Warning: Scripting Definition Processor says:", @"sdp return a value: message title"),
-                    result,
-                    NSLocalizedString(@"OK", @"Default Button"), nil, nil);
-  }
-  
-  if (rsrcFormat) {
-    [self compileResourceFile:[proc output]];
-    if (!resourceFormat) {
-      [[NSFileManager defaultManager] removeFileAtPath:[[proc output] stringByAppendingPathComponent:@"Scripting.r"] handler:nil];
+  @try {
+    NSString *result = [proc process];
+    if (result) {
+      NSRunAlertPanel(NSLocalizedString(@"Warning: Scripting Definition Processor says:", @"sdp return a value: message title"),
+                      result,
+                      NSLocalizedString(@"OK", @"Default Button"), nil, nil);
     }
+    if (rsrcFormat) {
+      [self compileResourceFile:[proc output]];
+      if (!resourceFormat) {
+        [[NSFileManager defaultManager] removeFileAtPath:[[proc output] stringByAppendingPathComponent:@"Scripting.r"] handler:nil];
+      }
+    }
+  } @catch (id exception) {
+    [proc release];
+    proc = nil;
+    SKLogException(exception);
+    NSRunAlertPanel(NSLocalizedString(@"Undefined error while exporting", @"sdp exception"),
+                    NSLocalizedString(@"An Undefined error prevent exportation: %@", @"sdp exception"),
+                    NSLocalizedString(@"OK", @"Default Button"), nil, nil, exception);  
   }
   [proc release];
   [self close:sender];
@@ -132,7 +139,15 @@ static NSString *SystemMajorVersion() {
     return;
   }
   NSString *dest = [folder stringByAppendingPathComponent:@"Scripting.rsrc"];
-  id rez = [NSTask launchedTaskWithLaunchPath:[[NSBundle mainBundle] pathForResource:@"Rez" ofType:@""]
+  id rezTool = nil;
+  // The path to the binary is the first argument that was passed in
+  if ([[NSUserDefaults standardUserDefaults] boolForKey:@"SdefBuildInRez"])
+    rezTool = [[NSBundle mainBundle] pathForResource:@"sdp" ofType:@""];
+  else {
+    rezTool = [[NSUserDefaults standardUserDefaults] stringForKey:@"SdefRezToolPath"];
+  }
+  
+  id rez = [NSTask launchedTaskWithLaunchPath:rezTool
                                      arguments:[NSArray arrayWithObjects:resource, @"-o", dest, @"-useDF", nil]];
   [rez waitUntilExit];
 }
