@@ -112,9 +112,12 @@
 
 - (void)setDictionary:(SdefDictionary *)newDictionary {
   if (_dictionary != newDictionary) {
+    [_dictionary setDocument:nil];
     [_dictionary release];
     _dictionary = [newDictionary retain];
     [_dictionary setDocument:self];
+    [[self undoManager] removeAllActions];
+    [self updateChangeCount:NSChangeCleared];
   }
 }
 
