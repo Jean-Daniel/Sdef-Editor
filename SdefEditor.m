@@ -45,10 +45,15 @@ const OSType kCocoaScriptSuiteHFSType = 'ScSu';
 @end
 #endif
 
+@interface SdefDocumentController : NSDocumentController {
+}
+@end
+
 @implementation SdefEditor
 
 - (id)init {
   if (self = [super init]) {
+    [[SdefDocumentController alloc] init];
     [[NSUserDefaults standardUserDefaults] registerDefaults:[NSDictionary dictionaryWithObjectsAndKeys:
       SKBool(YES), @"SdefOpenAtStartup",
       SKBool(YES), @"SdefBuildInSdp",
@@ -56,12 +61,12 @@ const OSType kCocoaScriptSuiteHFSType = 'ScSu';
       @"/Developer/Tools/sdp", @"SdefSdpToolPath",
       @"/Developer/Tools/Rez", @"SdefRezToolPath",
       nil]];
+    [NSApp setDelegate:self];
   }
   return self;
 }
 
 - (void)awakeFromNib {
-  [NSApp setDelegate:self];
 #if defined (DEBUG)
   [self createDebugMenu];
 #endif
@@ -259,5 +264,17 @@ const OSType kCocoaScriptSuiteHFSType = 'ScSu';
 }
 
 #endif
+
+@end
+
+@implementation SdefDocumentController
+
+- (void)noteNewRecentDocument:(NSDocument *)aDocument {
+  id path = [aDocument fileName];
+  if (![[[NSBundle mainBundle] pathForResource:@"NSCoreSuite" ofType:@"sdef"] isEqualToString:path] &&
+      ![[[NSBundle mainBundle] pathForResource:@"NSTextSuite" ofType:@"sdef"] isEqualToString:path]) {
+    [super noteNewRecentDocument:aDocument];
+  }
+}
 
 @end
