@@ -32,7 +32,7 @@ static NSString *DecomposeCocoaType(NSString *type, NSString **suite);
 
 - (id)initWithContentsOfFile:(NSString *)file {
   id term = [[file stringByDeletingPathExtension] stringByAppendingPathExtension:@"scriptTerminology"];
-  if (![[NSFileManager defaultManager] fileExistsAtPath:file] || ![[NSFileManager defaultManager] fileExistsAtPath:term]) {
+  if (![[NSFileManager defaultManager] fileExistsAtPath:file]) {
     [self release];
     self = nil;
   } else {
