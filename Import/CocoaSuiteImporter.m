@@ -10,6 +10,8 @@
 
 #import "ShadowMacros.h"
 
+#import "CocoaObject.h"
+
 #import "SdefVerb.h"
 #import "SdefSuite.h"
 #import "SdefClass.h"
@@ -93,158 +95,6 @@ static NSString *DecomposeCocoaType(NSString *type, NSString **suite);
 
 #pragma mark -
 #pragma mark Importer
-- (SdefEnumeration *)importEnumeration:(NSString *)name fromSuite:(NSDictionary *)suite andTerminology:(NSDictionary *)terminology {
-  SdefEnumeration *enume = [SdefEnumeration nodeWithName:SdefNameForCocoaName(name)];
-  [[enume impl] setName:name];
-  [enume setCodeStr:[suite objectForKey:@"AppleEventCode"]];
-  id codes = [suite objectForKey:@"Enumerators"];
-  id keys = [terminology keyEnumerator];
-  id key;
-  while (key = [keys nextObject]) {
-    id enumDesc = [terminology objectForKey:key];
-    id enumerator = [SdefEnumerator nodeWithName:[enumDesc objectForKey:@"Name"]];
-    [enumerator setDesc:[enumDesc objectForKey:@"Description"]];
-    [enumerator setCodeStr:[codes objectForKey:key]];
-    [[enumerator impl] setName:key];
-    [enume appendChild:enumerator];
-  }
-  return enume;
-}
-
-- (SdefVerb *)importCommand:(NSString *)name fromSuite:(NSDictionary *)suite andTerminology:(NSDictionary *)terminology {
-  SdefVerb *cmd = [SdefVerb nodeWithName:[terminology objectForKey:@"Name"]];
-  [cmd setDesc:[terminology objectForKey:@"Description"]];
-  [cmd setCodeStr:[[suite objectForKey:@"AppleEventClassCode"] stringByAppendingString:[suite objectForKey:@"AppleEventCode"]]];
-  
-  if (![SdefNameForCocoaName(name) isEqualToString:[cmd name]])
-    [[cmd impl] setName:name];
-  
-  [[cmd impl] setSdClass:[suite objectForKey:@"CommandClass"]];
-  
-  /* Result */
-  if ([(NSString *)[suite objectForKey:@"Type"] length])
-    [[cmd result] setType:[suite objectForKey:@"Type"]];
-  
-  /* Direct Parameter */
-  id direct = [suite objectForKey:@"UnnamedArgument"];
-  if (direct) {
-    [[cmd directParameter] setOptional:[[direct objectForKey:@"Optional"] isEqualToString:@"YES"]];
-    [[cmd directParameter] setDesc:[[terminology objectForKey:@"UnnamedArgument"] objectForKey:@"Description"]];
-    [[cmd directParameter] setType:[direct objectForKey:@"Type"]];
-  }
-  
-  id args = [suite objectForKey:@"Arguments"];
-  id argsTerm = [terminology objectForKey:@"Arguments"];
-  
-  id keys = [argsTerm keyEnumerator];
-  id key;
-  while (key = [keys nextObject]) {
-    id argSuite = [args objectForKey:key];
-    id argTerm = [argsTerm objectForKey:key];
-    SdefParameter *arg = [SdefParameter nodeWithName:[argTerm objectForKey:@"Name"]];
-    [arg setDesc:[argTerm objectForKey:@"Description"]];
-    [arg setType:[argSuite objectForKey:@"Type"]];
-    [arg setCodeStr:[argSuite objectForKey:@"AppleEventCode"]];
-    [arg setOptional:[[argSuite objectForKey:@"Optional"] isEqualToString:@"YES"]];
-    [[arg impl] setKey:key];
-    [cmd appendChild:arg];
-  }
-  return cmd;
-}
-
-- (SdefClass *)importClass:(NSString *)name fromSuite:(NSDictionary *)suite andTerminology:(NSDictionary *)terminology {
-  SdefClass *class = [SdefClass nodeWithName:[terminology objectForKey:@"Name"]];
-  [class setDesc:[terminology objectForKey:@"Description"]];
-  id plural = [terminology objectForKey:@"PluralName"];
-  if (![[[class name] stringByAppendingString:@"s"] isEqualToString:plural]) {
-    [class setPlural:plural];
-  }
-  [class setCodeStr:[suite objectForKey:@"AppleEventCode"]];
-  [class setInherits:[suite objectForKey:@"Superclass"]];
-  
-  [[class impl] setSdClass:name];
-  
-  NSMutableDictionary *suiteItems = [[NSMutableDictionary alloc] initWithDictionary:[suite objectForKey:@"Attributes"]];
-  [suiteItems addEntriesFromDictionary:[suite objectForKey:@"ToOneRelationships"]];
-  NSMutableDictionary *termItems = [[NSMutableDictionary alloc] initWithDictionary:[terminology objectForKey:@"Attributes"]];
-  [termItems addEntriesFromDictionary:[terminology objectForKey:@"ToOneRelationships"]];
-  NSString *content = [suite objectForKey:@"DefaultSubcontainerAttribute"];
-  id key, keys = [suiteItems keyEnumerator];
-  while (key = [keys nextObject]) {
-    id suiteAttr = [suiteItems objectForKey:key];
-    id termAttr = [termItems objectForKey:key];
-    SdefProperty *property = nil;
-    if (content && [key isEqualToString:content]) {
-      property = (id)[class contents];
-      id value = [termAttr objectForKey:@"Name"];
-      if (![value isEqualToString:@"contents"]) {
-        [property setName:value];
-      }
-      value = [suiteAttr objectForKey:@"AppleEventCode"];
-      if (![value isEqualToString:@"pcnt"]) {
-        [property setCodeStr:value];
-      }
-    } else {
-      property = [SdefProperty nodeWithName:[termAttr objectForKey:@"Name"]];
-      [property setCodeStr:[suiteAttr objectForKey:@"AppleEventCode"]];
-      [[class properties] appendChild:property];
-    }
-    [property setType:[suiteAttr objectForKey:@"Type"]];
-    [property setDesc:[termAttr objectForKey:@"Description"]];
-    /* Access */
-    unsigned access = kSdefAccessRead | kSdefAccessWrite;
-    if ([[suiteAttr objectForKey:@"ReadOnly"] isEqualToString:@"YES"]) {
-      access = kSdefAccessRead;
-    }
-    [property setAccess:access];
-    
-    /* Cocoa Method */
-    if (![key isEqualToString:[termAttr objectForKey:@"Name"]])
-      [[property impl] setMethod:key];
-  }
-  
-  [suiteItems release];
-  [termItems release];
-  
-  suiteItems = [suite objectForKey:@"ToManyRelationships"];
-  keys = [suiteItems keyEnumerator];
-  while (key = [keys nextObject]) {
-    id suiteElt = [suiteItems objectForKey:key];
-    
-    SdefElement *element = [SdefElement nodeWithName:[suiteElt objectForKey:@"Type"]];
-    [element setCodeStr:[suiteElt objectForKey:@"AppleEventCode"]];
-    
-    /* Access */
-    unsigned access = kSdefAccessRead | kSdefAccessWrite;
-    if ([[suiteElt objectForKey:@"ReadOnly"] isEqualToString:@"YES"]) {
-      access = kSdefAccessRead;
-    }
-    [element setAccess:access];
-    
-    /* Cocoa Method */
-    if (![key isEqualToString:[suiteElt objectForKey:@"Name"]])
-      [[element impl] setMethod:key];
-    
-    [[class elements] appendChild:element];
-  }
-  
-  suiteItems = [suite objectForKey:@"SupportedCommands"];
-  keys = [suiteItems keyEnumerator];
-  while (key = [keys nextObject]) {
-    id method = [suiteItems objectForKey:key];
-    
-    SdefRespondsTo *cmd = [SdefRespondsTo nodeWithName:key];
-    
-    /* Cocoa Method */
-    if (![key isEqualToString:method])
-      [[cmd impl] setMethod:method];
-    
-    [[class commands] appendChild:cmd];
-  }
-  
-  return class;
-}
-
 - (void)loadSuite:(NSString *)suite {
   while (suite && ![sd_suites containsObject:suite]) {
     NSString *suitePath = nil;
@@ -410,51 +260,13 @@ static NSString *DecomposeCocoaType(NSString *type, NSString **suite);
   if (![self suite] || ![self terminology])
     return NO;
   
-  SdefSuite *suite = [[SdefSuite alloc] initWithName:[sd_terminology objectForKey:@"Name"]];
-  [suites addObject:suite];
-  
-  [suite setDesc:[sd_terminology objectForKey:@"Description"]];
-  [suite setCodeStr:[sd_suite objectForKey:@"AppleEventCode"]];
-  [[suite impl] setName:[sd_suite objectForKey:@"Name"]];
-  
-  /* Enumerations */
-  id termItems = [sd_terminology objectForKey:@"Enumerations"];
-  id suiteItems = [sd_suite objectForKey:@"Enumerations"];
-  
-  id keys = [suiteItems keyEnumerator];
-  id key;
-  while (key = [keys nextObject]) {
-    SdefEnumeration *child = [self importEnumeration:key
-                                           fromSuite:[suiteItems objectForKey:key]
-                                      andTerminology:[termItems objectForKey:key]];
-    if (child) [[suite types] appendChild:child];
+  SdefSuite *suite = [[SdefSuite alloc] initWithName:nil suite:[self suite] andTerminology:[self terminology]];
+  if (suite) {
+    [suites addObject:suite];
+    [suite release];
+    return YES;
   }
-  
-  /* Commands */
-  termItems = [sd_terminology objectForKey:@"Commands"];
-  suiteItems = [sd_suite objectForKey:@"Commands"];
-  
-  keys = [suiteItems keyEnumerator];
-  while (key = [keys nextObject]) {
-    SdefVerb *child = [self importCommand:key
-                                fromSuite:[suiteItems objectForKey:key]
-                           andTerminology:[termItems objectForKey:key]];
-    if (child) [[suite commands] appendChild:child];
-  }
-  
-  /* Classes */
-  termItems = [sd_terminology objectForKey:@"Classes"];
-  suiteItems = [sd_suite objectForKey:@"Classes"];
-  
-  keys = [suiteItems keyEnumerator];
-  while (key = [keys nextObject]) {
-    SdefClass *child = [self importClass:key
-                               fromSuite:[suiteItems objectForKey:key]
-                          andTerminology:[termItems objectForKey:key]];
-    if (child) [[suite classes] appendChild:child];
-  }
-  
-  return YES;
+  return NO;
 }
 
 @end
