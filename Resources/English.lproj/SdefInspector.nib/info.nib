@@ -29,6 +29,8 @@
 	</dict>
 	<key>IBLastGroupID</key>
 	<string>4</string>
+	<key>IBOldestOS</key>
+	<integer>3</integer>
 	<key>IBOpenObjects</key>
 	<array>
 		<integer>8</integer>

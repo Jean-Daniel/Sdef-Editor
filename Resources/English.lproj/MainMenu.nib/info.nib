@@ -11,6 +11,8 @@
 	</dict>
 	<key>IBFramework Version</key>
 	<string>364.0</string>
+	<key>IBOldestOS</key>
+	<integer>3</integer>
 	<key>IBOpenObjects</key>
 	<array>
 		<integer>29</integer>
