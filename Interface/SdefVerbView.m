@@ -37,4 +37,12 @@
     [tab selectTabViewItemAtIndex:idx];
 }
 
+//- (void)tableViewSelectionDidChange:(NSNotification *)aNotification {
+//  id table = [aNotification object];
+//  int row = [table selectedRow];
+//  if (row >= 0 && row < [[self object] childCount]) {
+//    [self revealObjectInTree:[[self object] childAtIndex:row]];
+//  }
+//}
+
 @end

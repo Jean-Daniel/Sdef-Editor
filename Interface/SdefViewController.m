@@ -11,6 +11,7 @@
 #import "SdefDocument.h"
 #import "ShadowMacros.h"
 #import "SdefClassManager.h"
+#import "SdefWindowController.h"
 
 @implementation SdefViewController
 
@@ -78,6 +79,23 @@
 - (void)selectObject:(SdefObject*)object {
 }
 
+- (void)revealObjectInTree:(SdefObject *)anObject {
+  id ctrls = [[self document] windowControllers];
+  if (anObject && [ctrls count] > 0) {
+    id ctrl = [ctrls objectAtIndex:0];
+    [ctrl setSelection:anObject];
+  }
+}
+
+- (void)revealInTree:(id)sender {
+  int row = [sender clickedRow];
+  if (row >= 0 && row < [[self object] childCount]) {
+    [self revealObjectInTree:[[self object] childAtIndex:row]];
+  }
+}
+
+#pragma mark -
+#pragma mark Document accessor
 - (SdefDocument *)document {
   return [[self object] document];
 }

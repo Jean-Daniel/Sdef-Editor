@@ -12,6 +12,11 @@
 
 @implementation SdefDictionaryView
 
+- (void)awakeFromNib {
+  [suitesTable setTarget:self];
+  [suitesTable setDoubleAction:@selector(revealInTree:)];
+}
+
 - (IBAction)addSuite:(id)sender {
   [[self object] appendChild:[SdefSuite node]];
 }

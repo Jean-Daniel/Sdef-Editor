@@ -8,7 +8,7 @@
 
 #import <Cocoa/Cocoa.h>
 
-@class SdefObject;
+@class SdefObject, SdefDocument, SdefClassManager;
 @interface SdefViewController : NSObject {
   IBOutlet NSView *sdefView;
   IBOutlet NSObjectController *ownerController;
@@ -27,6 +27,11 @@
 - (void)setObject:(SdefObject *)newObject;
 
 - (void)selectObject:(SdefObject*)object;
+
+- (void)revealObjectInTree:(SdefObject *)anObject;
+
+- (SdefDocument *)document;
+- (SdefClassManager *)classManager;
 
 @end
 

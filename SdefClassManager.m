@@ -161,6 +161,26 @@
   return nil;
 }
 
+- (SdefVerb *)commandWithName:(NSString *)name {
+  id cmds = [sd_commands objectEnumerator];
+  id cmd;
+  while (cmd = [cmds nextObject]) {
+    if ([[cmd name] isEqualToString:name])
+      return cmd;
+  }
+  return nil;
+}
+
+- (SdefVerb *)eventWithName:(NSString *)name {
+  id events = [sd_events objectEnumerator];
+  id event;
+  while (event = [events nextObject]) {
+    if ([[event name] isEqualToString:name])
+      return event;
+  }
+  return nil;
+}
+
 - (NSArray *)subclassesOfClass:(SdefClass *)class {
   id classes = [NSMutableArray array];
   id items = [sd_classes objectEnumerator];

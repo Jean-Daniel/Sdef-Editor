@@ -10,6 +10,10 @@
 
 @interface SdefSuiteView : SdefViewController {
   IBOutlet NSTabView *tab;
+  IBOutlet id typeTable;
+  IBOutlet id classTable;
+  IBOutlet id commandTable;
+  IBOutlet id eventTable;
 }
 
 @end

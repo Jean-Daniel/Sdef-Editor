@@ -11,6 +11,49 @@
 
 @implementation SdefSuiteView
 
+- (void)awakeFromNib {
+  [typeTable setTarget:self];
+  [typeTable setDoubleAction:@selector(revealType:)];
+  [classTable setTarget:self];
+  [classTable setDoubleAction:@selector(revealClass:)];
+  [commandTable setTarget:self];
+  [commandTable setDoubleAction:@selector(revealCommand:)];
+  [eventTable setTarget:self];
+  [eventTable setDoubleAction:@selector(revealEvent:)];
+}
+
+- (void)revealType:(id)sender {
+  int row = [sender clickedRow];
+  id objs = [(SdefSuite *)[self object] types];
+  if (row >= 0 && row < [objs childCount]) {
+    [self revealObjectInTree:[objs childAtIndex:row]];
+  }
+}
+
+- (void)revealClass:(id)sender {
+  int row = [sender clickedRow];
+  id objs = [[self object] classes];
+  if (row >= 0 && row < [objs childCount]) {
+    [self revealObjectInTree:[objs childAtIndex:row]];
+  }
+}
+
+- (void)revealCommand:(id)sender {
+  int row = [sender clickedRow];
+  id objs = [(SdefSuite *)[self object] commands];
+  if (row >= 0 && row < [objs childCount]) {
+    [self revealObjectInTree:[objs childAtIndex:row]];
+  }
+}
+
+- (void)revealEvent:(id)sender {
+  int row = [sender clickedRow];
+  id objs = [[self object] events];
+  if (row >= 0 && row < [objs childCount]) {
+    [self revealObjectInTree:[objs childAtIndex:row]];
+  }
+}
+
 - (void)selectObject:(SdefObject*)anObject {
   int idx = -1;
   SdefSuite *content = [self object];

@@ -31,10 +31,12 @@
 - (NSArray *)events;
 
 - (SdefClass *)classWithName:(NSString *)name;
+- (SdefVerb *)eventWithName:(NSString *)name;
+- (SdefVerb *)commandWithName:(NSString *)name;
+- (SdefEnumeration *)enumerationWithName:(NSString *)name;
+
 - (NSArray *)subclassesOfClass:(SdefClass *)aClass;
 - (SdefClass *)superClassOfClass:(SdefClass *)aClass;
-
-- (SdefEnumeration *)enumerationWithName:(NSString *)name;
 
 #pragma mark -
 #pragma mark Cocoa Additions

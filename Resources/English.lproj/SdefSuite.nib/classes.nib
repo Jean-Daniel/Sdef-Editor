@@ -5,7 +5,13 @@
         {
             CLASS = SdefSuiteView; 
             LANGUAGE = ObjC; 
-            OUTLETS = {tab = NSTabView; }; 
+            OUTLETS = {
+                classTable = NSTableView; 
+                commandTable = NSTableView; 
+                eventTable = NSTableView; 
+                tab = NSTabView; 
+                typeTable = NSTableView; 
+            }; 
             SUPERCLASS = SdefViewController; 
         }, 
         {

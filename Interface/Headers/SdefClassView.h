@@ -14,6 +14,9 @@
   IBOutlet NSArrayController *elements;
   IBOutlet NSArrayController *commands;
   IBOutlet NSArrayController *events;
+  
+  IBOutlet id commandTable;
+  IBOutlet id eventTable;
 }
 
 @end
