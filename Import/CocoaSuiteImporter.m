@@ -21,9 +21,15 @@
 #import "SdefParser.h"
 #import "SdefClassManager.h"
 
+
+#pragma mark Statics Methods Declaration
+static NSString *DecomposeCocoaName(NSString *type, NSString **suite);
+static NSString *DecomposeCocoaType(NSString *type, NSString **suite);
+
+#pragma mark -
 @implementation CocoaSuiteImporter
 
-- (id)initWithFile:(NSString *)file {
+- (id)initWithContentsOfFile:(NSString *)file {
   id term = [[file stringByDeletingPathExtension] stringByAppendingPathExtension:@"scriptTerminology"];
   if (![[NSFileManager defaultManager] fileExistsAtPath:file] || ![[NSFileManager defaultManager] fileExistsAtPath:term]) {
     [self release];
@@ -35,10 +41,11 @@
 }
 
 - (id)initWithSuiteFile:(NSString *)suite andTerminologyFile:(NSString *)aTerm {
-  if (self = [super init]) {
+  if (self = [super initWithContentsOfFile:suite]) {
     [self setSuite:[NSDictionary dictionaryWithContentsOfFile:suite]];
-    [self setTerminology:[NSDictionary dictionaryWithContentsOfFile:aTerm]];
-    if (![self suite] || ![self terminology]) {
+    if (aTerm)
+      [self setTerminology:[NSDictionary dictionaryWithContentsOfFile:aTerm]];
+    if (![self suite]) {
       [self release];
       self = nil;
     }
@@ -48,21 +55,17 @@
 
 
 - (void)dealloc {
+  [sd_suites release];
+  
   [sd_suite release];
-  [sd_warnings release];
-  [sd_sdefSuite release];
   [sd_terminology release];
   [super dealloc];
 }
 
 #pragma mark -
-- (NSArray *)warnings {
-  return sd_warnings;
-}
 
 - (SdefSuite *)sdefSuite {
-  if (!sd_sdefSuite) [self import];
-  return sd_sdefSuite;
+  return [[self sdefSuites] objectAtIndex:0];
 }
 
 - (NSDictionary *)suite {
@@ -107,8 +110,8 @@
   return enume;
 }
 
-- (SdefCommand *)importCommand:(NSString *)name fromSuite:(NSDictionary *)suite andTerminology:(NSDictionary *)terminology {
-  SdefCommand *cmd = [SdefCommand nodeWithName:[terminology objectForKey:@"Name"]];
+- (SdefVerb *)importCommand:(NSString *)name fromSuite:(NSDictionary *)suite andTerminology:(NSDictionary *)terminology {
+  SdefVerb *cmd = [SdefVerb nodeWithName:[terminology objectForKey:@"Name"]];
   [cmd setDesc:[terminology objectForKey:@"Description"]];
   [cmd setCodeStr:[[suite objectForKey:@"AppleEventClassCode"] stringByAppendingString:[suite objectForKey:@"AppleEventCode"]]];
   
@@ -240,36 +243,7 @@
   return class;
 }
 
-static NSString *DecomposeCocoaName(NSString *type, NSString **suite) {
-  unsigned idx = [type rangeOfString:@"." options:NSLiteralSearch].location;
-  if (suite)
-    *suite = (idx != NSNotFound) ? [type substringToIndex:idx] : nil;
-  return (idx != NSNotFound) ? [type substringFromIndex:idx+1] : type;
-}
-
-static NSString *DecomposeCocoaType(NSString *type, NSString **suite) {
-  *suite = NULL;
-  if ([type rangeOfString:@"."].location == NSNotFound) return type;
-  
-  if ([type rangeOfString:@"NSNumber" options:NSAnchoredSearch].location == NSNotFound) {
-    return DecomposeCocoaName(type, suite);
-  }
-  
-  unsigned dot = [type rangeOfString:@"." options:NSLiteralSearch].location;
-  unsigned start = [type rangeOfString:@"<" options:NSLiteralSearch].location;
-  unsigned end = [type rangeOfString:@">" options:NSLiteralSearch].location;
-  if (NSNotFound == dot || NSNotFound == start || NSNotFound == end)
-    return nil;
-  if (suite)
-    *suite = [type substringWithRange:NSMakeRange(start+1, dot - start - 1)];
-  return [type substringWithRange:NSMakeRange(dot+1, end - dot - 1)];  
-}
-
-- (void)addWarning:(NSString *)warning forValue:(NSString *)value {
-  [sd_warnings addObject:[NSDictionary dictionaryWithObjectsAndKeys:warning, @"warning", value, @"value", nil]];
-}
-
-- (void)loadSuite:(NSString *)suite inManager:(SdefClassManager *)manager {
+- (void)loadSuite:(NSString *)suite {
   while (suite && ![sd_suites containsObject:suite]) {
     NSString *suitePath = nil;
     if ([suite isEqualToString:@"NSCoreSuite"] || [suite isEqualToString:@"NSTextSuite"]) {
@@ -288,7 +262,7 @@ static NSString *DecomposeCocoaType(NSString *type, NSString **suite) {
           [openPanel setTreatsFilePackagesAsDirectories:YES];
           switch([openPanel runModalForTypes:[NSArray arrayWithObjects:@"sdef", NSFileTypeForHFSTypeCode('Sdef'), nil]]) {
             case NSOKButton:
-              suitePath = [[openPanel filenames] objectAtIndex:0];
+              suitePath = ([[openPanel filenames] count]) ? [[openPanel filenames] objectAtIndex:0] : nil;
               break;
           }
             if (suitePath) 
@@ -319,17 +293,19 @@ static NSString *DecomposeCocoaType(NSString *type, NSString **suite) {
   }
 }
 
-
-- (BOOL)resolveObjectType:(SdefObject *)obj withManager:(SdefClassManager *)manager {
+#pragma mark Post Processor
+- (BOOL)resolveObjectType:(SdefObject *)obj {
   NSString *suite = nil, *typename = nil, *type;
   type = [obj valueForKey:@"type"];
   if (!type) return YES;
-  type = DecomposeCocoaType(type, &suite);
-  if (suite) {
-    [self loadSuite:suite inManager:manager];
-    typename = [[manager sdefTypeWithCocoaType:type inSuite:suite] name];
-  } else {
+  
+  if ([type rangeOfString:@"." options:NSLiteralSearch].location == NSNotFound)
     typename = [manager sdefTypeForCocoaType:type];
+  if (!typename) {
+    type = DecomposeCocoaType(type, &suite);
+    if (suite)
+      [self loadSuite:suite];
+    typename = [[manager sdefTypeWithCocoaType:type inSuite:suite] name];
   }
   if (typename) {
     [obj setValue:typename forKey:@"type"];
@@ -339,13 +315,13 @@ static NSString *DecomposeCocoaType(NSString *type, NSString **suite) {
   }
 }
 
-- (void)postProcessClass:(SdefClass *)aClass withManager:(SdefClassManager *)manager {
+- (void)postProcessClass:(SdefClass *)aClass {
   id suite = nil;
   id superclass = [aClass inherits];
   if (superclass) {
     superclass = DecomposeCocoaName(superclass, &suite);
     if (suite)
-      [self loadSuite:suite inManager:manager];
+      [self loadSuite:suite];
     SdefClass *parent = [manager sdefClassWithCocoaClass:superclass inSuite:suite];
     if (parent) {
       [aClass setInherits:[parent name]];
@@ -361,7 +337,7 @@ static NSString *DecomposeCocoaType(NSString *type, NSString **suite) {
     if ([[item valueForKey:@"type"] isEqualToString:@"NSArray"]) 
       [self addWarning:@"Element NSArray type set to \"list of any\""
               forValue:[aClass name]];
-    if (![self resolveObjectType:item withManager:manager]) {
+    if (![self resolveObjectType:item]) {
       [self addWarning:[NSString stringWithFormat:@"Unable to resolve element type: %@", [item valueForKey:@"type"]]
               forValue:[aClass name]];
     }
@@ -372,7 +348,7 @@ static NSString *DecomposeCocoaType(NSString *type, NSString **suite) {
     if ([[item valueForKey:@"type"] isEqualToString:@"NSArray"])
       [self addWarning:@"NSArray type set to \"list of any\""
               forValue:[NSString stringWithFormat:@"%@->%@", [aClass name], [item name]]];
-    if (![self resolveObjectType:item withManager:manager]) {
+    if (![self resolveObjectType:item]) {
       [self addWarning:[NSString stringWithFormat:@"Unable to resolve type: %@", [item valueForKey:@"type"]]
               forValue:[NSString stringWithFormat:@"%@->%@", [aClass name], [item name]]];
     }
@@ -382,7 +358,7 @@ static NSString *DecomposeCocoaType(NSString *type, NSString **suite) {
   while (item = [items nextObject]) {
     id cmdName = DecomposeCocoaName([item name], &suite);
     if (suite)
-      [self loadSuite:suite inManager:manager];
+      [self loadSuite:suite];
     SdefVerb *cmd = [manager verbWithCocoaName:cmdName inSuite:suite];
     if (cmd) {
       [item setName:[cmd name]];
@@ -393,83 +369,64 @@ static NSString *DecomposeCocoaType(NSString *type, NSString **suite) {
   }
 }
 
-- (void)postProcessCommand:(SdefCommand *)aCmd withManager:(SdefClassManager *)manager {
+- (void)postProcessCommand:(SdefVerb *)aCmd {
   SdefObject *item = nil;
   id items = [aCmd childrenEnumerator];
   while (item = [items nextObject]) {
-    if ([[item valueForKey:@"type"] isEqualToString:@"NSArray"])
+    if ([[(SdefParameter *)item type] isEqualToString:@"NSArray"])
       [self addWarning:@"NSArray type set to \"list of any\""
               forValue:[NSString stringWithFormat:@"%@(%@)", [aCmd name], [item name]]];
-    if (![self resolveObjectType:item withManager:manager]) {
-      [self addWarning:[NSString stringWithFormat:@"Unable to resolve type: %@", [item valueForKey:@"type"]]
+    if (![self resolveObjectType:item]) {
+      [self addWarning:[NSString stringWithFormat:@"Unable to resolve type: %@", [(SdefParameter *)item type]]
               forValue:[NSString stringWithFormat:@"%@(%@)", [aCmd name], [item name]]];
     }
   }
   
   item = [aCmd directParameter];
-  if ([[item valueForKey:@"type"] isEqualToString:@"NSArray"])
+  if ([[(SdefDirectParameter *)item type] isEqualToString:@"NSArray"])
     [self addWarning:@"Direct-Param NSArray type set to \"list of any\""
             forValue:[NSString stringWithFormat:@"%@()", [aCmd name]]];
-  if (![self resolveObjectType:item withManager:manager]) {
-    [self addWarning:[NSString stringWithFormat:@"Unable to resolve Direct-Param type: %@", [item valueForKey:@"type"]]
+  if (![self resolveObjectType:item]) {
+    [self addWarning:[NSString stringWithFormat:@"Unable to resolve Direct-Param type: %@", [(SdefDirectParameter *)item type]]
             forValue:[NSString stringWithFormat:@"%@()", [aCmd name]]];
   }
   
   item = [aCmd result];
-  if ([[item valueForKey:@"type"] isEqualToString:@"NSArray"])
-    [self addWarning:@"Result NSArray type set to \"list of any\""
-            forValue:[NSString stringWithFormat:@"%@()", [aCmd name]]];
-  if (![self resolveObjectType:item withManager:manager]) {
-    [self addWarning:[NSString stringWithFormat:@"Unable to resolve Result type: %@", [item valueForKey:@"type"]]
-            forValue:[NSString stringWithFormat:@"%@()", [aCmd name]]];
-  } 
+  if ([[(SdefResult *)item type] length] != 0) {
+    if ([[(SdefResult *)item type] isEqualToString:@"NSArray"])
+      [self addWarning:@"Result NSArray type set to \"list of any\""
+              forValue:[NSString stringWithFormat:@"%@()", [aCmd name]]];
+    if (![self resolveObjectType:item]) {
+      [self addWarning:[NSString stringWithFormat:@"Unable to resolve Result type: %@", [(SdefResult *)item type]]
+              forValue:[NSString stringWithFormat:@"%@()", [aCmd name]]];
+    }
+  }
 }
 
-- (void)postProcessor {
-  if (!sd_sdefSuite) return;
-  id manager = [[SdefClassManager alloc] init];
+- (void)postProcess {
+  id suite = [suites count] ? [suites objectAtIndex:0] : nil;
+  if (!suite) return;
+  
   sd_suites = [[NSMutableArray alloc] init];
-
-  [manager addSuite:sd_sdefSuite];
-  [sd_suites addObject:[sd_sdefSuite cocoaName]];
+  [sd_suites addObject:[suite cocoaName]];
   
-  /* Classes */
-  id items = [[sd_sdefSuite classes] childrenEnumerator];
-  SdefClass *class;
-  while (class = [items nextObject]) {
-    [self postProcessClass:class withManager:manager];
-  }
+  [super postProcess];
   
-  /* Commands */
-  items = [[sd_sdefSuite commands] childrenEnumerator];
-  SdefCommand *command;
-  while (command = [items nextObject]) {
-    [self postProcessCommand:command withManager:manager];
-  }
-  
-  [manager release];
   [sd_suites release];
   sd_suites = nil;
 }
 
+#pragma mark Import
 - (BOOL)import {
-  if (sd_sdefSuite) {
-    [sd_sdefSuite release];
-    sd_sdefSuite = nil;
-  }
-  if (sd_warnings) {
-    [sd_warnings release];
-    sd_warnings = nil;
-  }
   if (![self suite] || ![self terminology])
     return NO;
   
-  sd_warnings = [[NSMutableArray alloc] init];
+  SdefSuite *suite = [[SdefSuite alloc] initWithName:[sd_terminology objectForKey:@"Name"]];
+  [suites addObject:suite];
   
-  sd_sdefSuite = [[SdefSuite alloc] initWithName:[sd_terminology objectForKey:@"Name"]];
-  [sd_sdefSuite setDesc:[sd_terminology objectForKey:@"Description"]];
-  [sd_sdefSuite setCodeStr:[sd_suite objectForKey:@"AppleEventCode"]];
-  [[sd_sdefSuite impl] setName:[sd_suite objectForKey:@"Name"]];
+  [suite setDesc:[sd_terminology objectForKey:@"Description"]];
+  [suite setCodeStr:[sd_suite objectForKey:@"AppleEventCode"]];
+  [[suite impl] setName:[sd_suite objectForKey:@"Name"]];
   
   /* Enumerations */
   id termItems = [sd_terminology objectForKey:@"Enumerations"];
@@ -481,7 +438,7 @@ static NSString *DecomposeCocoaType(NSString *type, NSString **suite) {
     SdefEnumeration *child = [self importEnumeration:key
                                            fromSuite:[suiteItems objectForKey:key]
                                       andTerminology:[termItems objectForKey:key]];
-    if (child) [[sd_sdefSuite types] appendChild:child];
+    if (child) [[suite types] appendChild:child];
   }
   
   /* Commands */
@@ -490,10 +447,10 @@ static NSString *DecomposeCocoaType(NSString *type, NSString **suite) {
   
   keys = [suiteItems keyEnumerator];
   while (key = [keys nextObject]) {
-    SdefCommand *child = [self importCommand:key
-                                   fromSuite:[suiteItems objectForKey:key]
-                              andTerminology:[termItems objectForKey:key]];
-    if (child) [[sd_sdefSuite commands] appendChild:child];
+    SdefVerb *child = [self importCommand:key
+                                fromSuite:[suiteItems objectForKey:key]
+                           andTerminology:[termItems objectForKey:key]];
+    if (child) [[suite commands] appendChild:child];
   }
   
   /* Classes */
@@ -505,15 +462,30 @@ static NSString *DecomposeCocoaType(NSString *type, NSString **suite) {
     SdefClass *child = [self importClass:key
                                fromSuite:[suiteItems objectForKey:key]
                           andTerminology:[termItems objectForKey:key]];
-    if (child) [[sd_sdefSuite classes] appendChild:child];
+    if (child) [[suite classes] appendChild:child];
   }
   
-  [self postProcessor];
-  if ([sd_warnings count] == 0) {
-    [sd_warnings release];
-    sd_warnings = nil;
-  }
   return YES;
 }
 
 @end
+
+#pragma mark -
+#pragma mark Statics Methods Implementation
+static NSString *DecomposeCocoaName(NSString *type, NSString **suite) {
+  *suite = NULL;
+  unsigned idx = [type rangeOfString:@"." options:NSLiteralSearch].location;
+  if (suite)
+    *suite = (idx != NSNotFound) ? [type substringToIndex:idx] : nil;
+  return (idx != NSNotFound) ? [type substringFromIndex:idx+1] : type;
+}
+
+/* Extract string between "<" and ">" and try to decompose it */
+static NSString *DecomposeCocoaType(NSString *type, NSString **suite) {
+  unsigned start = [type rangeOfString:@"<" options:NSLiteralSearch].location;
+  unsigned end = [type rangeOfString:@">" options:NSLiteralSearch].location;
+  if (NSNotFound != start || NSNotFound != end) {
+    type = [type substringWithRange:NSMakeRange(start+1, end - start - 1)];
+  }
+  return DecomposeCocoaName(type, suite);  
+}

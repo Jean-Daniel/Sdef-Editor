@@ -6,22 +6,19 @@
 //  Copyright 2005 Shadow Lab. All rights reserved.
 //
 
-#import <Cocoa/Cocoa.h>
+#import "SdefImporter.h"
 
 @class SdefSuite ;
-@interface CocoaSuiteImporter : NSObject {
-  SdefSuite *sd_sdefSuite;
+@interface CocoaSuiteImporter : SdefImporter {
   NSDictionary *sd_suite;
   NSDictionary *sd_terminology;
 
   NSMutableArray *sd_suites;
-  NSMutableArray *sd_warnings;
 }
 
-- (id)initWithFile:(NSString *)file;
+- (id)initWithContentsOfFile:(NSString *)file;
 - (id)initWithSuiteFile:(NSString *)suite andTerminologyFile:(NSString *)aTerm;
 
-- (BOOL)import;
 - (SdefSuite *)sdefSuite;
 
 - (NSDictionary *)suite;
@@ -30,6 +27,5 @@
 - (NSDictionary *)terminology;
 - (void)setTerminology:(NSDictionary *)aTerminology;
 
-- (NSArray *)warnings;
-
 @end
+
