@@ -11,6 +11,7 @@
 #import "ShadowMacros.h"
 
 #import "SdefSuite.h"
+#import "Preferences.h"
 #import "SdefDocument.h"
 #import "AeteImporter.h"
 #import "SdefDictionary.h"
@@ -48,6 +49,10 @@ NSString * const CocoaScriptSuiteFileType = @"CocoaScriptSuite";
   if (self = [super init]) {
     [[NSUserDefaults standardUserDefaults] registerDefaults:[NSDictionary dictionaryWithObjectsAndKeys:
       SKBool(YES), @"SdefOpenAtStartup",
+      SKBool(YES), @"SdefBuildInSdp",
+      SKBool(YES), @"SdefBuildInRez",
+      @"/Developer/Tools/sdp", @"SdefSdpToolPath",
+      @"/Developer/Tools/Rez", @"SdefRezToolPath",
       nil]];
   }
   return self;
@@ -65,9 +70,9 @@ NSString * const CocoaScriptSuiteFileType = @"CocoaScriptSuite";
 }
 
 - (IBAction)preferences:(id)sender {
-  static NSWindowController *preferences = nil;
+  static Preferences *preferences = nil;
   if (!preferences) {
-    preferences = [[NSWindowController alloc] initWithWindowNibName:@"Preferences"];
+    preferences = [[Preferences alloc] init];
   }
   [preferences showWindow:sender];
 }
