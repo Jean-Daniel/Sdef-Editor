@@ -156,8 +156,11 @@ inline NSString *SdefEditorComment() {
   CFRelease(node);
   CFRelease(url);
   
-  [self insertWhiteSpace];  
-  [self insertComment:SdefEditorComment()];
+  NSString *signature = SdefEditorComment();
+  if ([signature length]) {
+    [self insertWhiteSpace];  
+    [self insertComment:signature];
+  }
 }
 
 - (void)appendXMLNode:(SdefXMLNode *)node {
