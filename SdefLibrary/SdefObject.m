@@ -286,7 +286,7 @@ NSString * const SdefObjectDidChangeNameNotification = @"SdefObjectDidChangeName
   if (recu) {
     [[self documentation] setEditable:flag];
     [[self synonyms] setEditable:flag recursive:recu];
-    id nodes = [self childrenEnumerator];
+    id nodes = [self childEnumerator];
     id node;
     while (node = [nodes nextObject]) {
       [node setEditable:flag recursive:recu];
@@ -424,7 +424,7 @@ NSString * const SdefObjectDidChangeNameNotification = @"SdefObjectDidChangeName
     if (nil != synonyms) {
       [node appendChild:synonyms];
     }
-    children = [self childrenEnumerator];
+    children = [self childEnumerator];
     while (child = [children nextObject]) {
       id childNode = [child xmlNode];
       if (childNode) {

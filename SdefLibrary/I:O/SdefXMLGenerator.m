@@ -179,7 +179,7 @@ inline NSString *SdefEditorComment() {
   if (nil != content) {
     [self insertTextNode:[content stringByEscapingEntities:nil]];
   }
-  id children = [node childrenEnumerator];
+  id children = [node childEnumerator];
   id child;
   while (child = [children nextObject]) {
     [self appendXMLNode:child];

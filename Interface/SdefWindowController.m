@@ -425,7 +425,7 @@ static inline BOOL SdefEditorExistsForItem(SdefObject *item) {
   }
   if (destination) {
     if ([tree objectType] == kSdefCollectionType) {
-      id children = [tree childrenEnumerator];
+      id children = [tree childEnumerator];
       id child;
       while (child = [children nextObject]) {
         [child retain];

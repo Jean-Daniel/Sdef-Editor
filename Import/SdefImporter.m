@@ -116,21 +116,21 @@
   while (suite = [items nextObject]) {
     
     /* Enumerations */
-    id items = [[suite types] childrenEnumerator];
+    id items = [[suite types] childEnumerator];
     SdefEnumeration *enumeration;
     while (enumeration = [items nextObject]) {
       [self postProcessEnumeration:enumeration];
     }
     
     /* Classes */
-    items = [[suite classes] childrenEnumerator];
+    items = [[suite classes] childEnumerator];
     SdefClass *class;
     while (class = [items nextObject]) {
       [self postProcessClass:class];
     }
     
     /* Commands */
-    items = [[suite commands] childrenEnumerator];
+    items = [[suite commands] childEnumerator];
     SdefVerb *command;
     while (command = [items nextObject]) {
       [self postProcessCommand:command ];
