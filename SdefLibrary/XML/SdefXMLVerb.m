@@ -7,6 +7,7 @@
 //
 
 #import "SdefVerb.h"
+#import "SdefSuite.h"
 #import "SdefXMLNode.h"
 #import "SKExtensions.h"
 #import "SdefXMLObject.h"
@@ -32,7 +33,7 @@
 }
 
 - (NSString *)xmlElementName {
-  id suite = [self suite];
+  SdefSuite *suite = [self suite];
   if ([self parent] == [suite commands]) {
     return @"command";
   } else if ([self parent] == [suite events])
