@@ -52,6 +52,8 @@
 		};
 		1058C7A8FEA54F5311CA2CBB = {
 			children = (
+				981D86A707ADB0FE006BC0E9,
+				981D86A807ADB0FE006BC0E9,
 				2A37F4C5FDCFA73011CA2CEA,
 				2A37F4C4FDCFA73011CA2CEA,
 			);
@@ -190,8 +192,10 @@
 				98168DDB07A27782002B893D,
 				9852F79307A2B15600157438,
 				9863F7D2078B376B0022F623,
+				98057B2307B50A5B00C2D3C7,
 				98A52D3F079F1F96003F17E8,
 				9868410507A30B15001694EA,
+				9803414307ADC6B00052F203,
 				8D15AC360486D014006FF6A4,
 				089C165FFE840EACC02AAC07,
 				98F15DE207A42653007A93DA,
@@ -201,9 +205,11 @@
 				98EA0B8B078C883E00ECCB4B,
 				2A37F4B6FDCFA73011CA2CEA,
 				9836439507A0814D00DBABD3,
+				98786EC607B19DA000A4B171,
 				98D3A8CE079EC9870049A8FC,
 				2A37F4B4FDCFA73011CA2CEA,
 				986B93CE07AB08F700AB131C,
+				98298DCA07AE822E00F09708,
 			);
 			isa = PBXGroup;
 			path = Resources;
@@ -251,7 +257,7 @@
 			fileEncoding = 4;
 			isa = PBXFileReference;
 			lastKnownFileType = sourcecode.c.h;
-			path = "SDef Editor_Prefix.pch";
+			path = "Sdef Editor_Prefix.pch";
 			refType = 4;
 			sourceTree = "<group>";
 		};
@@ -342,44 +348,47 @@
 		8D15AC2B0486D014006FF6A4 = {
 			buildActionMask = 2147483647;
 			files = (
-				8D15AC2D0486D014006FF6A4,
-				8D15AC2E0486D014006FF6A4,
-				8D15AC2F0486D014006FF6A4,
-				98BF08EB078A08DD0035ECA2,
-				98D363A7078A7E8C00669D72,
-				98D363A8078A7E8C00669D72,
-				98D363A9078A7E8C00669D72,
-				98D363AA078A7E8C00669D72,
-				98D363AB078A7E8C00669D72,
-				98D363AD078A7E8C00669D72,
 				9863F7A6078B2E0C0022F623,
+				98D5AAE7078C6FDD00DD07B7,
 				9863F7A7078B2E0C0022F623,
+				98D363A8078A7E8C00669D72,
+				98D363AD078A7E8C00669D72,
+				98D363AB078A7E8C00669D72,
+				98F15DEC07A42696007A93DA,
+				98BF08EB078A08DD0035ECA2,
+				98D5AABE078C6EA700DD07B7,
+				98D363AA078A7E8C00669D72,
 				9863F7A8078B2E0C0022F623,
 				9863F7A9078B2E0C0022F623,
-				98D5AABE078C6EA700DD07B7,
-				98D5AAE7078C6FDD00DD07B7,
-				98EA0B8A078C883900ECCB4B,
-				98EA0C4C078C929D00ECCB4B,
-				98EA0D0C078C9E4F00ECCB4B,
-				9820CD270793467D008D397F,
+				98D363A7078A7E8C00669D72,
+				98D363A9078A7E8C00669D72,
 				9820CD280793467D008D397F,
-				98F3F2180795194500D8BFAE,
-				98F711BC079C5D5A0059078F,
-				98D3AE5F079DD05800DDB6CE,
-				98D3A8D0079EC9870049A8FC,
-				98A52D40079F1F96003F17E8,
-				9836439707A0814D00DBABD3,
-				98168DDC07A27782002B893D,
-				98168E0107A29025002B893D,
-				98168E0507A29036002B893D,
-				9852F79407A2B15600157438,
-				9868410607A30B15001694EA,
+				9820CD270793467D008D397F,
+				8D15AC2F0486D014006FF6A4,
 				98F15DE607A42653007A93DA,
 				98F15DE707A42653007A93DA,
-				98F15DEC07A42696007A93DA,
-				98D127AB07A6BD53001B486F,
+				98168E0107A29025002B893D,
+				98168E0507A29036002B893D,
+				98F711BC079C5D5A0059078F,
+				98D3A8D0079EC9870049A8FC,
+				98F3F2180795194500D8BFAE,
+				9836439707A0814D00DBABD3,
+				8D15AC2E0486D014006FF6A4,
+				98EA0D0C078C9E4F00ECCB4B,
+				98EA0C4C078C929D00ECCB4B,
+				98EA0B8A078C883900ECCB4B,
+				98D3AE5F079DD05800DDB6CE,
+				98298DCC07AE822E00F09708,
 				986B93D007AB08F700AB131C,
-				986B93D707AB0AE400AB131C,
+				98786EC807B19DA000A4B171,
+				8D15AC2D0486D014006FF6A4,
+				98A52D40079F1F96003F17E8,
+				9868410607A30B15001694EA,
+				9803414407ADC6B00052F203,
+				98168DDC07A27782002B893D,
+				9852F79407A2B15600157438,
+				98D3E3A707B4D75C001F1318,
+				98057B5907B50A5B00C2D3C7,
 			);
 			isa = PBXResourcesBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -405,44 +414,70 @@
 		8D15AC300486D014006FF6A4 = {
 			buildActionMask = 2147483647;
 			files = (
-				98757FF307885F280038C05B,
-				98758017078863820038C05B,
-				98D5AA46078C662300DD07B7,
-				98EF19B9078B182F0073D736,
-				98757FD7078855C90038C05B,
-				98FE75A9079C401600BD6154,
-				98168DD607A27735002B893D,
-				98168DBC07A26C9C002B893D,
-				988FDDF5078F5607003374B6,
-				9875806007886E6F0038C05B,
-				9875801D078863FA0038C05B,
-				98EF19CC078B206B0073D736,
-				98BF08D1078A06A50035ECA2,
-				98BF08E1078A08120035ECA2,
+				98D3A8C7079EC8670049A8FC,
+				98A05AC407AD2850008D897D,
+				98757FD9078855C90038C05B,
+				98298DDD07AE863D00F09708,
 				98757FD6078855C90038C05B,
 				98757FD8078855C90038C05B,
+				98BF08D1078A06A50035ECA2,
+				98BF08E1078A08120035ECA2,
+				98757FD7078855C90038C05B,
+				98298DA507AE7E7200F09708,
+				98D5AA46078C662300DD07B7,
+				98758017078863820038C05B,
+				98D3A9DE079EF4B50049A8FC,
 				98D363B9078A7FDD00669D72,
-				98758031078864F40038C05B,
-				98D29C95078FD2AB008FA9F6,
-				987580280788646A0038C05B,
 				98757FE8078856590038C05B,
-				98D3A8B2079EBEF60049A8FC,
-				98CC7E82078D1E5700A112B4,
 				98758035078865170038C05B,
 				98757FEF07885F1A0038C05B,
-				98D3A9DE079EF4B50049A8FC,
+				98758031078864F40038C05B,
+				98757FF307885F280038C05B,
+				987580280788646A0038C05B,
+				98758022078864330038C05B,
+				9875801D078863FA0038C05B,
+				98CC7E82078D1E5700A112B4,
+				989B7E1107B01BEE004251EA,
+				989B7E1807B04205004251EA,
+				98D29C95078FD2AB008FA9F6,
+				989B7E0307B01A57004251EA,
+				98D42D8C07AF6AF00040927F,
+				988FDDF5078F5607003374B6,
+				989B7E2407B042E5004251EA,
+				989B7E1C07B04264004251EA,
+				989B7E2E07B043D5004251EA,
+				986B93D807AB0AE400AB131C,
+				983E11280790B702002171F5,
+				98D3A8B2079EBEF60049A8FC,
+				98EF19B9078B182F0073D736,
+				98168DBC07A26C9C002B893D,
+				98298DBD07AE817D00F09708,
+				98FE75A9079C401600BD6154,
+				98168DD607A27735002B893D,
+				9875806007886E6F0038C05B,
+				98EF19CC078B206B0073D736,
 				98F711AD079C5D170059078F,
 				98D3AE63079DD08600DDB6CE,
-				98758022078864330038C05B,
-				98D3A8C7079EC8670049A8FC,
-				98757FD9078855C90038C05B,
-				983E11280790B702002171F5,
 				98F3F21B0795197200D8BFAE,
 				98EA0CFC078C9D2100ECCB4B,
 				98EA0C55078C92C600ECCB4B,
 				98EA0B99078C886300ECCB4B,
+				98ECBD2E07AD7336008DE854,
+				98A059F907ACF85E008D897D,
+				98A05A1E07AD0956008D897D,
+				98A05A2207AD0965008D897D,
+				98A05A7907AD1973008D897D,
+				98A05AA307AD235C008D897D,
+				98A05B0F07AD3D57008D897D,
 				98D127AC07A6BD53001B486F,
-				986B93D807AB0AE400AB131C,
+				989A76BD07B050C1005FC1CD,
+				989A76CD07B053B1005FC1CD,
+				98F2D2D707B2096500F2EEC2,
+				98F2D2DE07B20B7500F2EEC2,
+				98F2D2F007B20DAF00F2EEC2,
+				98F2D30F07B2C96800F2EEC2,
+				98F2D31907B2CB0300F2EEC2,
+				98F2D33207B2D42400F2EEC2,
 			);
 			isa = PBXSourcesBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -487,14 +522,40 @@
 //982
 //983
 //984
+		9803414307ADC6B00052F203 = {
+			isa = PBXFileReference;
+			lastKnownFileType = image.icns;
+			path = ScriptSuiteIcon.icns;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		9803414407ADC6B00052F203 = {
+			fileRef = 9803414307ADC6B00052F203;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		98057B2307B50A5B00C2D3C7 = {
+			isa = PBXFileReference;
+			lastKnownFileType = folder;
+			name = "Sdef Editor Help";
+			path = "Misc/Sdef Editor Help";
+			refType = 2;
+			sourceTree = SOURCE_ROOT;
+		};
+		98057B5907B50A5B00C2D3C7 = {
+			fileRef = 98057B2307B50A5B00C2D3C7;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
 		98168DB907A26C9C002B893D = {
 			fileEncoding = 4;
 			isa = PBXFileReference;
 			lastKnownFileType = sourcecode.c.h;
-			name = SdefExporterController.h;
-			path = Interface/SdefExporterController.h;
-			refType = 2;
-			sourceTree = SOURCE_ROOT;
+			path = SdefExporterController.h;
+			refType = 4;
+			sourceTree = "<group>";
 		};
 		98168DBA07A26C9C002B893D = {
 			fileEncoding = 4;
@@ -573,6 +634,22 @@
 			settings = {
 			};
 		};
+		981D86A707ADB0FE006BC0E9 = {
+			isa = PBXFileReference;
+			lastKnownFileType = wrapper.framework;
+			name = ApplicationServices.framework;
+			path = /System/Library/Frameworks/ApplicationServices.framework;
+			refType = 0;
+			sourceTree = "<absolute>";
+		};
+		981D86A807ADB0FE006BC0E9 = {
+			isa = PBXFileReference;
+			lastKnownFileType = wrapper.framework;
+			name = Carbon.framework;
+			path = /System/Library/Frameworks/Carbon.framework;
+			refType = 0;
+			sourceTree = "<absolute>";
+		};
 		9820CD250793467D008D397F = {
 			isa = PBXFileReference;
 			lastKnownFileType = image.tiff;
@@ -603,6 +680,112 @@
 			isa = PBXFileReference;
 			lastKnownFileType = image.tiff;
 			path = Content.tiff;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		9821A16F07ADC09C003204C1 = {
+			children = (
+				98A05A1B07AD0956008D897D,
+				98A05A1C07AD0956008D897D,
+				98A05A7807AD1973008D897D,
+				98A05AA207AD235C008D897D,
+				98A05A2007AD0965008D897D,
+				98A05B0E07AD3D57008D897D,
+			);
+			isa = PBXGroup;
+			name = "Aete Parser";
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		98298DA407AE7E7200F09708 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.objc;
+			path = SKWindowController.m;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		98298DA507AE7E7200F09708 = {
+			fileRef = 98298DA407AE7E7200F09708;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		98298DA707AE7E7D00F09708 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
+			name = SKWindowController.h;
+			path = Headers/SKWindowController.h;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		98298DBC07AE817D00F09708 = {
+			fileEncoding = 4;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.objc;
+			path = ImportApplicationAete.m;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		98298DBD07AE817D00F09708 = {
+			fileRef = 98298DBC07AE817D00F09708;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		98298DBE07AE818400F09708 = {
+			fileEncoding = 4;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
+			path = ImportApplicationAete.h;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		98298DCA07AE822E00F09708 = {
+			children = (
+				98298DCB07AE822E00F09708,
+			);
+			isa = PBXVariantGroup;
+			name = ImportApplicationAete.nib;
+			path = "";
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		98298DCB07AE822E00F09708 = {
+			isa = PBXFileReference;
+			lastKnownFileType = wrapper.nib;
+			name = English;
+			path = English.lproj/ImportApplicationAete.nib;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		98298DCC07AE822E00F09708 = {
+			fileRef = 98298DCA07AE822E00F09708;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		98298DDC07AE863D00F09708 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.objc;
+			path = SKApplication.m;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		98298DDD07AE863D00F09708 = {
+			fileRef = 98298DDC07AE863D00F09708;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		98298DDF07AE864500F09708 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
+			name = SKApplication.h;
+			path = Headers/SKApplication.h;
 			refType = 4;
 			sourceTree = "<group>";
 		};
@@ -640,8 +823,8 @@
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 1;
-			shellPath = /bin/sh;
-			shellScript = "find \"${BUILD_DIR}\" -name \".svn\" -print0 | xargs -0 rm -rf";
+			shellPath = /bin/tcsh;
+			shellScript = "setenv PATH ${PATH}:~${USER}/bin\n\nSvnEraser \"${BUILD_DIR}\"\nDSStoreEraser \"${BUILD_DIR}\"\n";
 		};
 		983E11250790B702002171F5 = {
 			fileEncoding = 4;
@@ -761,11 +944,13 @@
 		};
 		9863FF0A079DF709000EDF96 = {
 			children = (
+				98F2D33307B2D43100F2EEC2,
 				986B93D507AB0AE400AB131C,
 				983E11250790B702002171F5,
 				98D3A8AF079EBEF60049A8FC,
 				98EF19B6078B182F0073D736,
 				98168DB907A26C9C002B893D,
+				98298DBE07AE818400F09708,
 			);
 			isa = PBXGroup;
 			path = Headers;
@@ -813,10 +998,9 @@
 			fileEncoding = 4;
 			isa = PBXFileReference;
 			lastKnownFileType = sourcecode.c.h;
-			name = ImporterWarning.h;
-			path = Interface/ImporterWarning.h;
-			refType = 2;
-			sourceTree = SOURCE_ROOT;
+			path = ImporterWarning.h;
+			refType = 4;
+			sourceTree = "<group>";
 		};
 		986B93D607AB0AE400AB131C = {
 			fileEncoding = 4;
@@ -826,12 +1010,6 @@
 			path = Interface/ImporterWarning.m;
 			refType = 2;
 			sourceTree = SOURCE_ROOT;
-		};
-		986B93D707AB0AE400AB131C = {
-			fileRef = 986B93D507AB0AE400AB131C;
-			isa = PBXBuildFile;
-			settings = {
-			};
 		};
 		986B93D807AB0AE400AB131C = {
 			fileRef = 986B93D607AB0AE400AB131C;
@@ -937,6 +1115,7 @@
 				98D3AD54079D728D00DDB6CE,
 				98D3AD52079D727300DDB6CE,
 				98D3AD50079D726100DDB6CE,
+				98A05ABB07AD2850008D897D,
 			);
 			isa = PBXGroup;
 			name = ShadowKit;
@@ -1138,6 +1317,8 @@
 			children = (
 				987580250788646A0038C05B,
 				987580260788646A0038C05B,
+				989A76C007B050D8005FC1CD,
+				989A76BC07B050C1005FC1CD,
 			);
 			isa = PBXGroup;
 			name = "Suite definition";
@@ -1290,6 +1471,30 @@
 			settings = {
 			};
 		};
+		98786EC607B19DA000A4B171 = {
+			children = (
+				98786EC707B19DA000A4B171,
+			);
+			isa = PBXVariantGroup;
+			name = Preferences.nib;
+			path = "";
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		98786EC707B19DA000A4B171 = {
+			isa = PBXFileReference;
+			lastKnownFileType = wrapper.nib;
+			name = English;
+			path = English.lproj/Preferences.nib;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		98786EC807B19DA000A4B171 = {
+			fileRef = 98786EC607B19DA000A4B171;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
 		988FDDF2078F5607003374B6 = {
 			fileEncoding = 4;
 			isa = PBXFileReference;
@@ -1314,17 +1519,285 @@
 		};
 		988FDDF6078F560F003374B6 = {
 			children = (
-				98CC7E7F078D1E5700A112B4,
+				98D4290907AF6A4B0040927F,
 				98CC7E80078D1E5700A112B4,
-				98D29C92078FD2AB008FA9F6,
+				989B7E1007B01BEE004251EA,
+				989B7E1707B04205004251EA,
 				98D29C93078FD2AB008FA9F6,
-				988FDDF2078F5607003374B6,
+				989B7E0107B01A57004251EA,
+				989A76CC07B053B1005FC1CD,
+				98D42D8B07AF6AF00040927F,
 				988FDDF3078F5607003374B6,
+				989B7E2307B042E5004251EA,
+				989B7E1B07B04264004251EA,
+				989B7E2D07B043D5004251EA,
 			);
 			isa = PBXGroup;
-			path = "I:O";
+			path = XML;
 			refType = 4;
 			sourceTree = "<group>";
+		};
+		989A76BC07B050C1005FC1CD = {
+			fileEncoding = 4;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.objc;
+			path = SdefValue.m;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		989A76BD07B050C1005FC1CD = {
+			fileRef = 989A76BC07B050C1005FC1CD;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		989A76C007B050D8005FC1CD = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
+			name = SdefValue.h;
+			path = Headers/SdefValue.h;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		989A76CC07B053B1005FC1CD = {
+			fileEncoding = 4;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.objc;
+			path = SdefXMLValue.m;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		989A76CD07B053B1005FC1CD = {
+			fileRef = 989A76CC07B053B1005FC1CD;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		989B7E0107B01A57004251EA = {
+			fileEncoding = 4;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.objc;
+			path = SdefXMLClass.m;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		989B7E0307B01A57004251EA = {
+			fileRef = 989B7E0107B01A57004251EA;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		989B7E1007B01BEE004251EA = {
+			fileEncoding = 4;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.objc;
+			path = SdefXMLVerb.m;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		989B7E1107B01BEE004251EA = {
+			fileRef = 989B7E1007B01BEE004251EA;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		989B7E1707B04205004251EA = {
+			fileEncoding = 4;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.objc;
+			path = SdefXMLSuite.m;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		989B7E1807B04205004251EA = {
+			fileRef = 989B7E1707B04205004251EA;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		989B7E1B07B04264004251EA = {
+			fileEncoding = 4;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.objc;
+			path = SdefXMLDictionary.m;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		989B7E1C07B04264004251EA = {
+			fileRef = 989B7E1B07B04264004251EA;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		989B7E2307B042E5004251EA = {
+			fileEncoding = 4;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.objc;
+			path = SdefXMLCommons.m;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		989B7E2407B042E5004251EA = {
+			fileRef = 989B7E2307B042E5004251EA;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		989B7E2D07B043D5004251EA = {
+			fileEncoding = 4;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.objc;
+			path = SdefXMLEnumeration.m;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		989B7E2E07B043D5004251EA = {
+			fileRef = 989B7E2D07B043D5004251EA;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		98A059F607ACF85E008D897D = {
+			fileEncoding = 4;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
+			path = AeteImporter.h;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		98A059F707ACF85E008D897D = {
+			fileEncoding = 4;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.objc;
+			path = AeteImporter.m;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		98A059F907ACF85E008D897D = {
+			fileRef = 98A059F707ACF85E008D897D;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		98A05A1B07AD0956008D897D = {
+			fileEncoding = 4;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
+			path = AeteObject.h;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		98A05A1C07AD0956008D897D = {
+			fileEncoding = 4;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.objc;
+			path = AeteObject.m;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		98A05A1E07AD0956008D897D = {
+			fileRef = 98A05A1C07AD0956008D897D;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		98A05A2007AD0965008D897D = {
+			fileEncoding = 4;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.objc;
+			path = AeteSuite.m;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		98A05A2207AD0965008D897D = {
+			fileRef = 98A05A2007AD0965008D897D;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		98A05A7807AD1973008D897D = {
+			fileEncoding = 4;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.objc;
+			path = AeteVerb.m;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		98A05A7907AD1973008D897D = {
+			fileRef = 98A05A7807AD1973008D897D;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		98A05AA207AD235C008D897D = {
+			fileEncoding = 4;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.objc;
+			path = AeteClass.m;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		98A05AA307AD235C008D897D = {
+			fileRef = 98A05AA207AD235C008D897D;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		98A05ABB07AD2850008D897D = {
+			children = (
+				98A05ABC07AD2850008D897D,
+				98A05AC007AD2850008D897D,
+			);
+			isa = PBXGroup;
+			path = AppleEvent;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		98A05ABC07AD2850008D897D = {
+			children = (
+				98A05ABE07AD2850008D897D,
+			);
+			isa = PBXGroup;
+			path = Headers;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		98A05ABE07AD2850008D897D = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
+			path = ShadowAEUtils.h;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		98A05AC007AD2850008D897D = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.c;
+			path = ShadowAEUtils.c;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		98A05AC407AD2850008D897D = {
+			fileRef = 98A05AC007AD2850008D897D;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		98A05B0E07AD3D57008D897D = {
+			fileEncoding = 4;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.objc;
+			path = AeteEnumeration.m;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		98A05B0F07AD3D57008D897D = {
+			fileRef = 98A05B0E07AD3D57008D897D;
+			isa = PBXBuildFile;
+			settings = {
+			};
 		};
 		98A52D3F079F1F96003F17E8 = {
 			isa = PBXFileReference;
@@ -1342,11 +1815,13 @@
 		98B88EE307934CE50058F599 = {
 			children = (
 				9863FF0A079DF709000EDF96,
+				98F2D33107B2D42400F2EEC2,
 				986B93D607AB0AE400AB131C,
 				983E11260790B702002171F5,
 				98D3A8B0079EBEF60049A8FC,
 				98EF19B7078B182F0073D736,
 				98168DBA07A26C9C002B893D,
+				98298DBC07AE817D00F09708,
 				98EF19CD078B20720073D736,
 			);
 			isa = PBXGroup;
@@ -1437,6 +1912,12 @@
 		};
 		98D127A807A6BD3D001B486F = {
 			children = (
+				98ECBD2B07AD7336008DE854,
+				98ECBD2C07AD7336008DE854,
+				9821A16F07ADC09C003204C1,
+				98F2D2D807B2097800F2EEC2,
+				98A059F607ACF85E008D897D,
+				98A059F707ACF85E008D897D,
 				98D127A907A6BD53001B486F,
 				98D127AA07A6BD53001B486F,
 			);
@@ -1460,12 +1941,6 @@
 			path = CocoaSuiteImporter.m;
 			refType = 4;
 			sourceTree = "<group>";
-		};
-		98D127AB07A6BD53001B486F = {
-			fileRef = 98D127A907A6BD53001B486F;
-			isa = PBXBuildFile;
-			settings = {
-			};
 		};
 		98D127AC07A6BD53001B486F = {
 			fileRef = 98D127AA07A6BD53001B486F;
@@ -1675,7 +2150,8 @@
 			fileEncoding = 4;
 			isa = PBXFileReference;
 			lastKnownFileType = sourcecode.c.h;
-			path = SdefComment.h;
+			name = SdefComment.h;
+			path = Headers/SdefComment.h;
 			refType = 4;
 			sourceTree = "<group>";
 		};
@@ -1707,6 +2183,7 @@
 		};
 		98D3AD4F079D724800DDB6CE = {
 			children = (
+				98D3E3A607B4D75C001F1318,
 				98757FDA078855D80038C05B,
 				98757FDC078855D80038C05B,
 				98757FE0078855DD0038C05B,
@@ -1720,6 +2197,7 @@
 			children = (
 				98D3AD51079D726800DDB6CE,
 				98757FD3078855C90038C05B,
+				98298DDC07AE863D00F09708,
 			);
 			isa = PBXGroup;
 			path = Foundation;
@@ -1729,6 +2207,7 @@
 		98D3AD51079D726800DDB6CE = {
 			children = (
 				98757FDB078855D80038C05B,
+				98298DDF07AE864500F09708,
 			);
 			isa = PBXGroup;
 			name = Headers;
@@ -1758,6 +2237,7 @@
 			children = (
 				98D3AD55079D729600DDB6CE,
 				98BF08D0078A06A50035ECA2,
+				98298DA407AE7E7200F09708,
 			);
 			isa = PBXGroup;
 			path = AppKit;
@@ -1767,6 +2247,7 @@
 		98D3AD55079D729600DDB6CE = {
 			children = (
 				98BF08D3078A06B30035ECA2,
+				98298DA707AE7E7D00F09708,
 			);
 			isa = PBXGroup;
 			name = Headers;
@@ -1818,6 +2299,54 @@
 			isa = PBXBuildFile;
 			settings = {
 			};
+		};
+		98D3E3A607B4D75C001F1318 = {
+			fileEncoding = 4;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
+			path = ShadowBase.h;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		98D3E3A707B4D75C001F1318 = {
+			fileRef = 98D3E3A607B4D75C001F1318;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		98D4290907AF6A4B0040927F = {
+			children = (
+				98CC7E7F078D1E5700A112B4,
+				98D29C92078FD2AB008FA9F6,
+				98D42D8D07AF6AFF0040927F,
+				988FDDF2078F5607003374B6,
+			);
+			isa = PBXGroup;
+			path = Headers;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		98D42D8B07AF6AF00040927F = {
+			fileEncoding = 4;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.objc;
+			path = SdefXMLObject.m;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		98D42D8C07AF6AF00040927F = {
+			fileRef = 98D42D8B07AF6AF00040927F;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		98D42D8D07AF6AFF0040927F = {
+			fileEncoding = 4;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
+			path = SdefXMLObject.h;
+			refType = 4;
+			sourceTree = "<group>";
 		};
 		98D5AA43078C662300DD07B7 = {
 			fileEncoding = 4;
@@ -2062,6 +2591,28 @@
 			settings = {
 			};
 		};
+		98ECBD2B07AD7336008DE854 = {
+			fileEncoding = 4;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
+			path = SdefImporter.h;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		98ECBD2C07AD7336008DE854 = {
+			fileEncoding = 4;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.objc;
+			path = SdefImporter.m;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		98ECBD2E07AD7336008DE854 = {
+			fileRef = 98ECBD2C07AD7336008DE854;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
 		98EF19B6078B182F0073D736 = {
 			fileEncoding = 4;
 			isa = PBXFileReference;
@@ -2180,6 +2731,120 @@
 			isa = PBXBuildFile;
 			settings = {
 			};
+		};
+		98F2D2D407B2096500F2EEC2 = {
+			fileEncoding = 4;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
+			path = CocoaObject.h;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		98F2D2D507B2096500F2EEC2 = {
+			fileEncoding = 4;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.objc;
+			path = CocoaObject.m;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		98F2D2D707B2096500F2EEC2 = {
+			fileRef = 98F2D2D507B2096500F2EEC2;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		98F2D2D807B2097800F2EEC2 = {
+			children = (
+				98F2D2D407B2096500F2EEC2,
+				98F2D30E07B2C96800F2EEC2,
+				98F2D31807B2CB0300F2EEC2,
+				98F2D2DD07B20B7500F2EEC2,
+				98F2D2D507B2096500F2EEC2,
+				98F2D2EF07B20DAF00F2EEC2,
+			);
+			isa = PBXGroup;
+			name = "Cocoa Parser";
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		98F2D2DD07B20B7500F2EEC2 = {
+			fileEncoding = 4;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.objc;
+			path = CocoaSuite.m;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		98F2D2DE07B20B7500F2EEC2 = {
+			fileRef = 98F2D2DD07B20B7500F2EEC2;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		98F2D2EF07B20DAF00F2EEC2 = {
+			fileEncoding = 4;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.objc;
+			path = CocoaEnumeration.m;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		98F2D2F007B20DAF00F2EEC2 = {
+			fileRef = 98F2D2EF07B20DAF00F2EEC2;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		98F2D30E07B2C96800F2EEC2 = {
+			fileEncoding = 4;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.objc;
+			path = CocoaVerb.m;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		98F2D30F07B2C96800F2EEC2 = {
+			fileRef = 98F2D30E07B2C96800F2EEC2;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		98F2D31807B2CB0300F2EEC2 = {
+			fileEncoding = 4;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.objc;
+			path = CocoaClass.m;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		98F2D31907B2CB0300F2EEC2 = {
+			fileRef = 98F2D31807B2CB0300F2EEC2;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		98F2D33107B2D42400F2EEC2 = {
+			fileEncoding = 4;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.objc;
+			path = Preferences.m;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		98F2D33207B2D42400F2EEC2 = {
+			fileRef = 98F2D33107B2D42400F2EEC2;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		98F2D33307B2D43100F2EEC2 = {
+			fileEncoding = 4;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
+			path = Preferences.h;
+			refType = 4;
+			sourceTree = "<group>";
 		};
 		98F3F2160795194500D8BFAE = {
 			children = (

@@ -188,21 +188,21 @@ static NSString *DecomposeCocoaType(NSString *type, NSString **suite);
 
 - (void)postProcessContents:(SdefContents *)aContents forClass:aClass {
   if ([[aContents type] isEqualToString:@"NSArray"])
-    [self addWarning:@"Contents NSArray type set to \"list of any\""
+    [self addWarning:@"Contents NSArray type import as \"list of any\""
             forValue:[aClass name]];
   [super postProcessContents:aContents forClass:aClass];
 }
 
 - (void)postProcessElement:(SdefElement *)anElement inClass:(SdefClass *)aClass {
   if ([[anElement type] isEqualToString:@"NSArray"]) 
-    [self addWarning:@"Element NSArray type set to \"list of any\""
+    [self addWarning:@"Element NSArray type import as \"list of any\""
             forValue:[aClass name]];
   [super postProcessElement:anElement inClass:aClass];
 }
 
 - (void)postProcessProperty:(SdefProperty *)aProperty inClass:(SdefClass *)aClass {
   if ([[aProperty type] isEqualToString:@"NSArray"])
-    [self addWarning:@"NSArray type set to \"list of any\""
+    [self addWarning:@"NSArray type import as \"list of any\""
             forValue:[NSString stringWithFormat:@"%@->%@", [aClass name], [aProperty name]]];
   [super postProcessProperty:aProperty inClass:aClass];
 }
@@ -224,21 +224,21 @@ static NSString *DecomposeCocoaType(NSString *type, NSString **suite);
 #pragma mark -
 - (void)postProcessParameter:(SdefParameter *)aParameter inCommand:(SdefVerb *)aCmd {
   if ([[aParameter type] isEqualToString:@"NSArray"])
-    [self addWarning:@"NSArray type set to \"list of any\""
+    [self addWarning:@"NSArray type import as \"list of any\""
             forValue:[NSString stringWithFormat:@"%@(%@)", [[aParameter parent] name], [aParameter name]]];
   [super postProcessParameter:aParameter inCommand:aCmd];
 }
 
 - (void)postProcessDirectParameter:(SdefDirectParameter *)aParameter inCommand:(SdefVerb *)aCmd {
   if ([[aParameter type] isEqualToString:@"NSArray"])
-    [self addWarning:@"Direct-Param NSArray type set to \"list of any\""
+    [self addWarning:@"Direct-Param NSArray type import as \"list of any\""
             forValue:[NSString stringWithFormat:@"%@()", [aCmd name]]];
   [super postProcessDirectParameter:aParameter inCommand:aCmd];
 }
 
 - (void)postProcessResult:(SdefResult *)aResult inCommand:(SdefVerb *)aCmd {
   if ([[aResult type] isEqualToString:@"NSArray"])
-    [self addWarning:@"Result NSArray type set to \"list of any\""
+    [self addWarning:@"Result NSArray type import as \"list of any\""
             forValue:[NSString stringWithFormat:@"%@()", [aCmd name]]];
   [super postProcessResult:aResult inCommand:aCmd];
 }

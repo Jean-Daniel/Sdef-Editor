@@ -192,7 +192,7 @@
 
 - (void)postProcessDirectParameter:(SdefDirectParameter *)aParameter inCommand:(SdefVerb *)aCmd {
   if (![self resolveObjectType:aParameter]) {
-    [self addWarning:[NSString stringWithFormat:@"Unable to resolve Direct-Param type: %@", [aParameter type]]
+    [self addWarning:[NSString stringWithFormat:@"Unable to resolve Direct-Parameter type: %@", [aParameter type]]
             forValue:[NSString stringWithFormat:@"%@()", [aCmd name]]];
   }
 }

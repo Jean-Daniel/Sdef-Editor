@@ -223,7 +223,7 @@ typedef struct AeteHeader AeteHeader;
         [[[aClass parent] childAtIndex:idx-1] setPlural:[aClass name]];
         [aClass remove];
       } else {
-        [self addWarning:@"Unable to understand Special Properties" forValue:[aClass name]];
+        [self addWarning:@"Unable to import Special Properties" forValue:[aClass name]];
       }      
     }
   }

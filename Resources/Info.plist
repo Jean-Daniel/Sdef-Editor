@@ -30,6 +30,48 @@
 			<key>NSDocumentClass</key>
 			<string>SdefDocument</string>
 		</dict>
+		<dict>
+			<key>CFBundleTypeExtensions</key>
+			<array>
+				<string>scriptSuite</string>
+			</array>
+			<key>CFBundleTypeIconFile</key>
+			<string>ScriptSuiteIcon</string>
+			<key>CFBundleTypeMIMETypes</key>
+			<array>
+				<string>text/xml</string>
+			</array>
+			<key>CFBundleTypeName</key>
+			<string>CocoaScriptSuite</string>
+			<key>CFBundleTypeOSTypes</key>
+			<array>
+				<string>ScSu</string>
+			</array>
+			<key>CFBundleTypeRole</key>
+			<string>Viewer</string>
+			<key>LSTypeIsPackage</key>
+			<false/>
+		</dict>
+		<dict>
+			<key>CFBundleTypeExtensions</key>
+			<array>
+				<string>scriptTerminology</string>
+			</array>
+			<key>CFBundleTypeMIMETypes</key>
+			<array>
+				<string>text/xml</string>
+			</array>
+			<key>CFBundleTypeName</key>
+			<string>CocoaTerminology</string>
+			<key>CFBundleTypeOSTypes</key>
+			<array>
+				<string>ScTe</string>
+			</array>
+			<key>CFBundleTypeRole</key>
+			<string>None</string>
+			<key>LSTypeIsPackage</key>
+			<false/>
+		</dict>
 	</array>
 	<key>CFBundleExecutable</key>
 	<string>Sdef Editor</string>
