@@ -34,7 +34,7 @@
 	<key>CFBundleExecutable</key>
 	<string>Sdef Editor</string>
 	<key>CFBundleIconFile</key>
-	<string></string>
+	<string>SdefEditor</string>
 	<key>CFBundleIdentifier</key>
 	<string>fr.shadowlab.SdefEditor</string>
 	<key>CFBundleInfoDictionaryVersion</key>

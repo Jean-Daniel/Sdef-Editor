@@ -11,7 +11,11 @@
         {
             CLASS = SdefViewController; 
             LANGUAGE = ObjC; 
-            OUTLETS = {sdefView = NSView; }; 
+            OUTLETS = {
+                objectController = NSObjectController; 
+                ownerController = NSObjectController; 
+                sdefView = NSView; 
+            }; 
             SUPERCLASS = NSObject; 
         }
     ); 

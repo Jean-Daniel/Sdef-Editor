@@ -6,6 +6,7 @@
             ACTIONS = {addSuite = id; }; 
             CLASS = SdefDictionaryView; 
             LANGUAGE = ObjC; 
+            OUTLETS = {objectController = NSObjectController; }; 
             SUPERCLASS = SdefViewController; 
         }, 
         {
