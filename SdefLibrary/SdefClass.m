@@ -470,8 +470,8 @@ static unsigned SdefAccessorFlagFromString(NSString *str) {
 }
 
 - (void)createContent {
-  [self createSynonyms];
   [super createContent];
+  [self createSynonyms];
 }
 
 #pragma mark -

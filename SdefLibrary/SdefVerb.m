@@ -48,6 +48,7 @@
 }
 
 - (void)createContent {
+  [super createContent];
   [self createSynonyms];
   [self setResult:[SdefResult node]];
   [self setDocumentation:[SdefDocumentation node]];

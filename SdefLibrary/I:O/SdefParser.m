@@ -132,7 +132,7 @@
 // A comment (Text in a <!-- --> block) is reported to the delegate as a single string
 - (void)parser:(NSXMLParser *)parser foundComment:(NSString *)comment {
   if (![comment isEqualToString:SdefEditorComment()]) {
-    [sd_document addComment:comment];
+    [sd_document addComment:[comment stringByUnescapingEntities:nil]];
   }
 }
 
