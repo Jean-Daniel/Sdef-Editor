@@ -25,6 +25,8 @@
 }
 
 - (NSString *)sdefTypeToASDictionaryType:(NSString *)type {
+  if (!type) return @"";
+  
   if ([type isEqualToString:@"string"])
     return @"Unicode text";
   if ([type isEqualToString:@"real"])

@@ -23,7 +23,8 @@
 
 - (NSDictionary *)asdictionary {
   id dict = [NSMutableDictionary dictionary];
-  [dict setObject:[self name] forKey:@"name"];
+  NSString *name = [self name];
+  [dict setObject:(name) ? name : @"<untitled>" forKey:@"name"];
   [dict setObject:[self asdictionaryString] forKey:@"content"];
   return dict;
 }
@@ -31,16 +32,19 @@
 - (NSDictionary *)asdictionaryString {
   ASDictionaryStream *stream = [[ASDictionaryStream alloc] init];
   [stream setFontFamily:@"Times" style:bold | underline size:14];
-  [stream appendFormat:@"Class %@: ", [self name]];
+  NSString *name = [self name];
+  [stream appendFormat:@"Class %@: ", (name) ? name : @"<untitled>"];
   [stream closeStyle];
   
   [stream setStyle:underline];
   [stream appendString:[self desc] ? : @""];
+  [stream closeStyle];
+  
+  [stream setASDictionaryStyle:kASStyleStandard];
   [stream appendString:@"\n"];
+  [stream closeStyle];
   
   if ([self plural]) {
-    [stream closeStyle];
-    
     [stream setASDictionaryStyle:kASStyleStandard];
     [stream appendString:@"Plural form:\n\t"];
     [stream closeStyle];
@@ -48,30 +52,31 @@
     [stream setASDictionaryStyle:kASStyleApplicationKeyword];
     [stream appendString:[self plural]];
     [stream appendString:@"\n"];
+    [stream closeStyle];
   }
   
-  if ([[self elements] hasChildren]) {
-    [stream closeStyle];
-    
+  if ([[self elements] hasChildren]) {    
     [stream setASDictionaryStyle:kASStyleStandard];
     [stream appendString:@"Elements:\n"];
+    [stream closeStyle];
     
     id elements = [[self elements] childEnumerator];
     SdefElement *elt;
     while (elt = [elements nextObject]) {
-      [stream closeStyle];
-      [elt appendStringToStream:stream];
+      @try {
+        [elt appendStringToStream:stream];
+      } @catch (id exception) {
+        SKLogException(exception);
+      }
     }
   }
   
-  if ([[self properties] hasChildren] || [self inherits]) {
-    [stream closeStyle];
-    
+  if ([[self properties] hasChildren] || [self inherits]) {    
     [stream setASDictionaryStyle:kASStyleStandard];
     [stream appendString:@"Properties:\n"];
+    [stream closeStyle];
     
     if ([self inherits]) {
-      [stream closeStyle];
       SdefProperty *parent = [[SdefProperty alloc] initWithName:@"<Inheritance>"];
       [parent setType:[self inherits]];
       [parent setAccess:kSdefAccessRead];
@@ -82,8 +87,11 @@
     id properties = [[self properties] childEnumerator];
     id prop;
     while (prop = [properties nextObject]) {
-      [stream closeStyle];
-      [prop appendStringToStream:stream];
+      @try {
+        [prop appendStringToStream:stream];
+      } @catch (id exception) {
+        SKLogException(exception);
+      }
     }
   }
   
@@ -100,9 +108,12 @@
 @implementation SdefElement (ASDictionary) 
 
 - (void)appendStringToStream:(ASDictionaryStream *)stream {
-  [stream setASDictionaryStyle:kASStyleApplicationKeyword];
+  [stream setASDictionaryStyle:kASStyleStandard];
   [stream appendString:@"\t"];
-  [stream appendString:[self name]];
+  [stream closeStyle];
+  
+  [stream setASDictionaryStyle:kASStyleApplicationKeyword];
+  [stream appendString:[self name] ? : @"<untitled>"];
   [stream closeStyle];
   
   [stream setASDictionaryStyle:kASStyleStandard];
@@ -141,7 +152,8 @@
       [stream appendString:@","];
     [stream appendString:@" by ID"];
   }
-  [stream appendString:@"\n"];
+  [stream appendString:@"\r"];
+  [stream closeStyle];
 }
 
 @end
@@ -149,9 +161,11 @@
 @implementation SdefProperty (ASDictionary) 
 
 - (void)appendStringToStream:(ASDictionaryStream *)stream {
-  [stream setASDictionaryStyle:kASStyleApplicationKeyword];
   [stream appendString:@"\t"];
-  [stream appendString:[self name]];
+  [stream closeStyle];
+  
+  [stream setASDictionaryStyle:kASStyleApplicationKeyword];
+  [stream appendString:[self name] ? : @"<untitled>"];
   [stream closeStyle];
   
   [stream setASDictionaryStyle:kASStyleStandard];
@@ -160,20 +174,22 @@
   
   [stream setASDictionaryStyle:kASStyleLanguageKeyword];
   [stream appendString:[self sdefTypeToASDictionaryType:[self type]]];
+  [stream closeStyle];
   
   if (([self access] & kSdefAccessWrite) == 0) {
-    [stream closeStyle];
     [stream setASDictionaryStyle:kASStyleStandard];
     [stream appendString:@"  [r/o]"];
+    [stream closeStyle];
   }
   
   if ([[self desc] length]) {
-    [stream closeStyle];
     [stream setASDictionaryStyle:kASStyleComment];
     [stream appendString:@"  -- "];
     [stream appendString:[self desc]];
+    [stream closeStyle];
   }
   [stream appendString:@"\n"];
+  [stream closeStyle];
 }
 
 @end

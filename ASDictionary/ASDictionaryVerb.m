@@ -10,6 +10,7 @@
 #import "ASDictionaryStream.h"
 #import "SdefVerb.h"
 #import "SdefArguments.h"
+#import "SKExtensions.h"
 
 @interface SdefDirectParameter (ASDictionary)
 - (void)appendStringToStream:(ASDictionaryStream *)stream;
@@ -28,7 +29,8 @@
 
 - (NSDictionary *)asdictionary {
   id dict = [NSMutableDictionary dictionary];
-  [dict setObject:[self name] forKey:@"name"];
+  NSString *name = [self name];
+  [dict setObject:(name) ? name : @"<untitled>" forKey:@"name"];
   [dict setObject:[self asdictionaryString] forKey:@"content"];
   return dict;
 }
@@ -36,26 +38,31 @@
 - (NSDictionary *)asdictionaryString {
   ASDictionaryStream *stream = [[ASDictionaryStream alloc] init];
   [stream setFontFamily:@"Times" style:bold | underline size:14];
-  [stream appendString:[self name]];
+  [stream appendString:[self name] ? : @"<untitled>"];
   [stream appendString:@": "];
   [stream closeStyle];
   
   [stream setStyle:underline];
   [stream appendString:[self desc] ? : @""];
-  [stream appendString:@"\n\t"];
+  [stream appendString:@"\n"];
+  [stream closeStyle];
+  
+  [stream setASDictionaryStyle:kASStyleStandard];
+  [stream appendString:@"\t"];
   [stream closeStyle];
   
   [stream setASDictionaryStyle:kASStyleApplicationKeyword];
-  [stream appendString:[self name]];
+  [stream appendString:[self name] ? : @"<untitled>"];
+  [stream closeStyle];
   
   if ([[self directParameter] type]) {
-    [stream closeStyle];
     [stream setASDictionaryStyle:kASStyleStandard];
     [stream appendString:@"  "];
-
+    [stream closeStyle];
     [[self directParameter] appendStringToStream:stream];
   } else {
     [stream appendString:@"\n"];
+    [stream closeStyle];
   }
   
   id params = [self childEnumerator];
@@ -63,10 +70,6 @@
   /* Required parameters */
   while (param = [params nextObject]) {
     if (![param isOptional]) {
-      [stream closeStyle];
-      [stream setASDictionaryStyle:kASStyleStandard];
-      [stream appendString:@"\t\t"];
-      
       [param appendStringToStream:stream];
     }
   }
@@ -75,19 +78,11 @@
   params = [self childEnumerator];
   while (param = [params nextObject]) {
     if ([param isOptional]) {
-      [stream closeStyle];
-      [stream setASDictionaryStyle:kASStyleStandard];
-      [stream appendString:@"\t\t"];      
-      
       [param appendStringToStream:stream];
     }
   }
   
   if ([[self result] type]) {
-    [stream closeStyle];
-    [stream setASDictionaryStyle:kASStyleStandard];
-    [stream appendString:@"\t"];
-
     [[self result] appendStringToStream:stream];
   }
   
@@ -107,23 +102,25 @@
 
 - (void)appendStringToStream:(ASDictionaryStream *)stream {
   id type = [self type];
-  if ([type rangeOfString:@"list of" options:NSAnchoredSearch | NSLiteralSearch].location != NSNotFound) {
+  if ([type startsWithString:@"list of"]) {
     [stream setASDictionaryStyle:kASStyleStandard];
     [stream appendString:@"a list of "];
     type = [type substringFromIndex:8];
+    [stream closeStyle];
   }
   
-  [stream closeStyle];
   [stream setASDictionaryStyle:kASStyleLanguageKeyword];
   [stream appendString:[self sdefTypeToASDictionaryType:type]];
-
+  [stream closeStyle];
+  
   if ([[self desc] length]) {
-    [stream closeStyle];
     [stream setASDictionaryStyle:kASStyleComment];
     [stream appendString:@"  -- "];
     [stream appendString:[self desc]];
+    [stream closeStyle];
   }
   [stream appendString:@"\n"];
+  [stream closeStyle];
 }
 
 @end
@@ -131,19 +128,23 @@
 @implementation SdefParameter (ASDictionary)
 
 - (void)appendStringToStream:(ASDictionaryStream *)stream {
+  [stream setASDictionaryStyle:kASStyleStandard];
+  [stream appendString:@"\t\t"];
   if ([self isOptional]) {
     [stream appendString:@"["];
   }
   [stream closeStyle];
   
   [stream setASDictionaryStyle:kASStyleApplicationKeyword];
-  [stream appendString:[self name]];
+  [stream appendString:[self name] ? : @"<untitled>"];
   [stream closeStyle];
   
+  [stream setASDictionaryStyle:kASStyleStandard];
   [stream appendString:@"  "];
+  [stream closeStyle];
   
   id type = [self type];
-  if ([type rangeOfString:@"list of" options:NSAnchoredSearch | NSLiteralSearch].location != NSNotFound) {
+  if ([type startsWithString:@"list of"]) {
     [stream setASDictionaryStyle:kASStyleStandard];
     [stream appendString:@"a list of "];
     [stream closeStyle];
@@ -152,20 +153,22 @@
   
   [stream setASDictionaryStyle:kASStyleLanguageKeyword];
   [stream appendString:[self sdefTypeToASDictionaryType:type]];
+  [stream closeStyle];
   
   if ([self isOptional]) {
-    [stream closeStyle];
     [stream setASDictionaryStyle:kASStyleStandard];
     [stream appendString:@"]"];
+    [stream closeStyle];
   }
   
   if ([[self desc] length]) {
-    [stream closeStyle];
     [stream setASDictionaryStyle:kASStyleComment];
     [stream appendString:@"  -- "];
     [stream appendString:[self desc]];
+    [stream closeStyle];
   }
   [stream appendString:@"\n"];
+  [stream closeStyle];
 }
 
 @end
@@ -173,23 +176,28 @@
 @implementation SdefResult (ASDictionary)
 
 - (void)appendStringToStream:(ASDictionaryStream *)stream {
-  [stream appendString:@"Result:   "];
+  [stream setASDictionaryStyle:kASStyleStandard];
+  [stream appendString:@"\tResult:   "];
+ 
   id type = [self type];
-  if ([type rangeOfString:@"list of" options:NSAnchoredSearch | NSLiteralSearch].location != NSNotFound) {
+  if ([type startsWithString:@"list of"]) {
     [stream appendString:@"a list of "];
     type = [type substringFromIndex:8];
   }
   [stream closeStyle];
+  
   [stream setASDictionaryStyle:kASStyleLanguageKeyword];
   [stream appendString:[self sdefTypeToASDictionaryType:type]];
+  [stream closeStyle];
   
   if ([[self desc] length]) {
-    [stream closeStyle];
     [stream setASDictionaryStyle:kASStyleComment];
     [stream appendString:@"  -- "];
     [stream appendString:[self desc]];
+    [stream closeStyle];
   }
   [stream appendString:@"\n"];
+  [stream closeStyle];
 }
 
 @end

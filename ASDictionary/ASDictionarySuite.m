@@ -6,44 +6,67 @@
 //  Copyright 2005 Shadow Lab. All rights reserved.
 //
 
+#include <Carbon/Carbon.h>
+
 #import "ASDictionaryObject.h"
 #import "ASDictionaryStream.h"
+#import "SKFunctions.h"
 #import "SdefSuite.h"
 
 @implementation SdefSuite (ASDictionary)
 
 - (NSDictionary *)asdictionary {
+  if (SKHFSTypeCodeFromFileType([self codeStr]) == kASTypeNamesSuite) /* Hidden terms */
+    return nil;
+  
   id dict = [NSMutableDictionary dictionary];
-  [dict setObject:[self name] forKey:@"name"];
+  NSString *name = [self name];
+  [dict setObject:(name) ? name : @"<untitled>" forKey:@"name"];
   [dict setObject:[self asdictionaryString] forKey:@"suite description"];
   
   id classes = [NSMutableArray array];
   id objects = [[self classes] childEnumerator];
   SdefObject *object;
   while (object = [objects nextObject]) {
-    [classes addObject:[object asdictionary]];
+    @try {
+      [classes addObject:[object asdictionary]];
+    } @catch (id exception) {
+      SKLogException(exception);
+    }
   }
   if ([classes count])
     [dict setObject:classes forKey:@"classes"];
   
+  /* Commands */
   id events = [NSMutableArray array];
   objects = [[self commands] childEnumerator];
   while (object = [objects nextObject]) {
-    [events addObject:[object asdictionary]];
+    @try {
+      [events addObject:[object asdictionary]];
+    } @catch (id exception) {
+      SKLogException(exception);
+    }
   }
+  /* Events */
   objects = [[self events] childEnumerator];
   while (object = [objects nextObject]) {
-    [events addObject:[object asdictionary]];
+    @try {
+      [events addObject:[object asdictionary]];
+    } @catch (id exception) {
+      SKLogException(exception);
+    }
   }
   if ([events count])
     [dict setObject:events forKey:@"events"];
+  
   return dict;
 }
 
 - (NSDictionary *)asdictionaryString {
   ASDictionaryStream *stream = [[ASDictionaryStream alloc] init];
   [stream setFontFamily:@"Times" style:bold size:18];
-  [stream appendString:[self name]];
+  NSString *name = [self name];
+  [stream appendString:(name) ? : @"<untitled>"];
   [stream appendString:@": "];
   [stream closeStyle];
   

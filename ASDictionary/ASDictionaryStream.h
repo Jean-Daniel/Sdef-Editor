@@ -24,10 +24,10 @@ struct ASDictionaryStyle {
 typedef struct ASDictionaryStyle ASDictionaryStyle;
 
 typedef enum {
-  kASStyleComment,
-  kASStyleStandard,
-  kASStyleLanguageKeyword,
-  kASStyleApplicationKeyword,
+  kASStyleComment 			 = 0,
+  kASStyleStandard			 = 1,
+  kASStyleLanguageKeyword	 = 2,
+  kASStyleApplicationKeyword = 3,
 } ASDictionaryStyleType;
 
 #pragma mark -
@@ -41,6 +41,9 @@ extern NSAttributedString *AttributedStringForASDictionaryString(NSDictionary *c
   NSMutableString *as_string;
   ASDictionaryStyle as_style;
 }
+
++ (void)loadStandardsAppleScriptStyles;
++ (void)getStyle:(ASDictionaryStyle *)style forApplescriptStyle:(ASDictionaryStyleType)aStyle;
 
 - (id)initWithString:(NSString *)aString;
 - (id)initWithAttributedString:(NSAttributedString *)aString;

@@ -7,14 +7,85 @@
 //
 
 #import "ASDictionaryStream.h"
-
+#import "ShadowMacros.h"
 
 #pragma mark Private Functions Declaration
 static NSFont *FontForASDictionaryStyle(ASDictionaryStyle *style);
 static void ASDictionaryStyleForFont(NSFont *aFont, ASDictionaryStyle *style);
+static void ASGetStyleForASPreferences(CFStringRef str, ASDictionaryStyle *style);
+
+static __inline__ SInt16 ASFontFamilyIDForFamilyName(CFStringRef name);
+static __inline__ BOOL ASDictionaryStyleEqualsStyle(ASDictionaryStyle *style1, ASDictionaryStyle *style2);
 
 #pragma mark -
 @implementation ASDictionaryStream
+
+static ASDictionaryStyle stdStyles[4];
+
++ (void)loadStandardsAppleScriptStyles {
+  @synchronized (self) {
+    memset(stdStyles, 0, 4 * sizeof(ASDictionaryStyle));
+    CFPreferencesAppSynchronize(CFSTR("com.apple.applescript"));
+    CFArrayRef asFonts = CFPreferencesCopyValue(CFSTR("AppleScriptTextStyles"),
+                                                CFSTR("com.apple.applescript"),
+                                                kCFPreferencesCurrentUser,
+                                                kCFPreferencesAnyHost);
+    if (asFonts && CFArrayGetCount(asFonts) >= 3) { /* index max = 4 */
+      CFStringRef styleStr;
+      styleStr = CFArrayGetValueAtIndex(asFonts, 2);
+      ASGetStyleForASPreferences(styleStr, &stdStyles[kASStyleLanguageKeyword]);
+      
+      styleStr = CFArrayGetValueAtIndex(asFonts, 3);
+      ASGetStyleForASPreferences(styleStr, &stdStyles[kASStyleApplicationKeyword]);
+      stdStyles[kASStyleApplicationKeyword].fontStyle |= bold;
+      
+      styleStr = CFArrayGetValueAtIndex(asFonts, 4);
+      ASGetStyleForASPreferences(styleStr, &stdStyles[kASStyleComment]);
+    } else {
+      ASDictionaryStyle *style;
+      style = &stdStyles[kASStyleLanguageKeyword];
+      style->fontFamily = ASFontFamilyIDForFamilyName(CFSTR("Verdana"));
+      style->fontStyle = normal;
+      style->fontSize = 12;
+      style->green = 0;
+      style->blue = 65535;
+      style->red = 0;
+    
+      style = &stdStyles[kASStyleApplicationKeyword];
+      style->fontFamily = ASFontFamilyIDForFamilyName(CFSTR("Verdana"));
+      style->fontStyle = bold;
+      style->fontSize = 12;
+      style->green = 0;
+      style->blue = 65535;
+      style->red = 0;
+      
+      style = &stdStyles[kASStyleComment];
+      style->fontFamily = ASFontFamilyIDForFamilyName(CFSTR("Verdana"));
+      style->fontStyle = italic;
+      style->fontSize = 12;
+      style->green = 19660;
+      style->blue = 19660;
+      style->red = 19660;
+    }
+    ASGetStyleForASPreferences(NULL, &stdStyles[kASStyleStandard]);
+    if (asFonts) CFRelease(asFonts);
+  }
+}
+
++ (void)getStyle:(ASDictionaryStyle *)style forApplescriptStyle:(ASDictionaryStyleType)aStyle {
+  @synchronized (self) {
+    ASDictionaryStyle *stdStyle = &stdStyles[aStyle];
+    if (stdStyle->fontFamily == 0) stdStyle = &stdStyles[kASStyleStandard];
+    style->fontFamily = stdStyle->fontFamily;
+    style->fontStyle = stdStyle->fontStyle;
+    style->fontSize = stdStyle->fontSize;
+    style->green = stdStyle->green;
+    style->blue = stdStyle->blue;
+    style->red = stdStyle->red;
+  }
+}
+
+#pragma mark -
 - (id)init {
   if (self = [super init]) {
     as_string = [[NSMutableString alloc] init];
@@ -85,63 +156,66 @@ static void ASDictionaryStyleForFont(NSFont *aFont, ASDictionaryStyle *style);
   [str release];
 }
 
-- (void)setStyleForASPreferences:(NSString *)aString {
-  if (!aString)
-    [NSException raise:NSInvalidArgumentException format:@"aString parameter must not be nil!"];
-  
-  NSArray *values = [aString componentsSeparatedByString:@";"];
-  
-  /* Get font family and style */
-  if ([[values objectAtIndex:1] rangeOfString:@"i"].location != NSNotFound)
-    [self setItalic:YES];
-  
-  [self setFontFamily:[values objectAtIndex:0]];
-  
-  [self setSize:[[values objectAtIndex:2] intValue]];
-  
-  id colors = [[values objectAtIndex:3] componentsSeparatedByString:@" "];
-  if ([colors count] == 3) {
-    [self setRed:[[colors objectAtIndex:0] intValue]
-           green:[[colors objectAtIndex:1] intValue]
-            blue:[[colors objectAtIndex:2] intValue]];
-  } else {
-    [self setRed:0 green:0 blue:0];
-  }
-}
+//- (void)setStyleForASPreferences:(NSString *)aString {
+//  if (!aString)
+//    [NSException raise:NSInvalidArgumentException format:@"aString parameter must not be nil!"];
+//  
+//  NSArray *values = [aString componentsSeparatedByString:@";"];
+//  
+//  /* Get font family and style */
+//  if ([[values objectAtIndex:1] rangeOfString:@"i"].location != NSNotFound)
+//    [self setItalic:YES];
+//  
+//  [self setFontFamily:[values objectAtIndex:0]];
+//  
+//  [self setSize:[[values objectAtIndex:2] intValue]];
+//  
+//  id colors = [[values objectAtIndex:3] componentsSeparatedByString:@" "];
+//  if ([colors count] == 3) {
+//    [self setRed:[[colors objectAtIndex:0] intValue]
+//           green:[[colors objectAtIndex:1] intValue]
+//            blue:[[colors objectAtIndex:2] intValue]];
+//  } else {
+//    [self setRed:0 green:0 blue:0];
+//  }
+//}
 
 - (void)setASDictionaryStyle:(ASDictionaryStyleType)aStyle {
-  int fontIdx = -1;
+//  int fontIdx = -1;
   [self setStyle:normal];
-  switch (aStyle) {
-    case kASStyleComment:
-      fontIdx = 4;
-      break;
-    case kASStyleStandard:
-      [self setRed:0 green:0 blue:0];
-      as_style.fontSize = 12;
-      as_style.fontStyle = normal;
-      as_style.fontFamily = kFontIDTimes;
-      return;
-    case kASStyleLanguageKeyword:
-      fontIdx = 2;
-      break;
-    case kASStyleApplicationKeyword:
-      fontIdx = 3;
-      [self setBold:YES];
-      break;
-  }
-  if (fontIdx != -1) {
-    CFPreferencesAppSynchronize(CFSTR("com.apple.applescript"));
-    CFArrayRef asFonts = CFPreferencesCopyValue(CFSTR("AppleScriptTextStyles"),
-                                                CFSTR("com.apple.applescript"),
-                                                kCFPreferencesCurrentUser,
-                                                kCFPreferencesAnyHost);
-    if (asFonts && fontIdx < CFArrayGetCount(asFonts)) {
-      CFStringRef styleStr = CFArrayGetValueAtIndex(asFonts, fontIdx);
-      [self setStyleForASPreferences:(NSString *)styleStr];
-      CFRelease(asFonts);
-    }
-  }
+  [[self class] getStyle:&as_style forApplescriptStyle:aStyle];
+  /*
+   switch (aStyle) {
+     case kASStyleComment:
+       fontIdx = 4;
+       break;
+     case kASStyleStandard:
+       [self setRed:0 green:0 blue:0];
+       as_style.fontSize = 12;
+       as_style.fontStyle = normal;
+       as_style.fontFamily = kFontIDTimes;
+       return;
+     case kASStyleLanguageKeyword:
+       fontIdx = 2;
+       break;
+     case kASStyleApplicationKeyword:
+       fontIdx = 3;
+       [self setBold:YES];
+       break;
+   }
+   if (fontIdx != -1) {
+     CFPreferencesAppSynchronize(CFSTR("com.apple.applescript"));
+     CFArrayRef asFonts = CFPreferencesCopyValue(CFSTR("AppleScriptTextStyles"),
+                                                 CFSTR("com.apple.applescript"),
+                                                 kCFPreferencesCurrentUser,
+                                                 kCFPreferencesAnyHost);
+     if (asFonts && fontIdx < CFArrayGetCount(asFonts)) {
+       CFStringRef styleStr = CFArrayGetValueAtIndex(asFonts, fontIdx);
+       [self setStyleForASPreferences:(NSString *)styleStr];
+       CFRelease(asFonts);
+     }
+   }
+   */
 }
 
 - (void)setFont:(NSFont *)aFont {
@@ -158,10 +232,7 @@ static void ASDictionaryStyleForFont(NSFont *aFont, ASDictionaryStyle *style);
 }
 
 - (void)setFontFamily:(NSString *)aFamily {
-  Str255 fName;
-  CopyCStringToPascal([aFamily cString],  fName);
-  FMFontFamily family = FMGetFontFamilyFromName(fName);
-  as_style.fontFamily  = (family > 0) ? family : kFontIDTimes;
+  as_style.fontFamily = ASFontFamilyIDForFamilyName((CFStringRef)aFamily);
 }
 
 - (void)setFontFamily:(NSString *)fontName style:(FMFontStyle)aStyle size:(FMFontSize)aSize {
@@ -195,21 +266,78 @@ static void ASDictionaryStyleForFont(NSFont *aFont, ASDictionaryStyle *style);
 
 - (void)closeStyle {
   FontInfo info;
-  OSStatus err = FetchFontInfo(as_style.fontFamily, as_style.fontSize, normal /*as_style.fontStyle*/, &info);
-  if (noErr == err) {
-    as_style.fontWidth = info.widMax;
-    as_style.fontAscent = info.ascent;
+  if (as_style.position != [as_string length]) {
+    OSStatus err = FetchFontInfo(as_style.fontFamily, as_style.fontSize, normal /*as_style.fontStyle*/, &info);
+    if (noErr == err) {
+      as_style.fontWidth = info.widMax;
+      as_style.fontAscent = info.ascent;
+    }
+    ASDictionaryStyle *previous = nil;
+    if ([as_styles length] > sizeof(ASDictionaryStyle)) {
+      previous = ([as_styles mutableBytes] + [as_styles length] - sizeof(ASDictionaryStyle));
+    }
+    if (!previous || !ASDictionaryStyleEqualsStyle(&as_style, previous)) {
+      [as_styles appendBytes:&as_style length:sizeof(ASDictionaryStyle)];
+      UInt16 *data = [as_styles mutableBytes];
+      *data = ([as_styles length] - 2) / sizeof(ASDictionaryStyle);
+    }
+    as_style.position = [as_string length];
   }
-  [as_styles appendBytes:&as_style length:sizeof(ASDictionaryStyle)];
-  UInt16 *data = [as_styles mutableBytes];
-  *data = ([as_styles length] - 2) / sizeof(ASDictionaryStyle);
-  as_style.position = [as_string length];
 }
 
 @end
 
 #pragma mark -
 #pragma mark Private Functions Implementation
+static void ASGetStyleForASPreferences(CFStringRef str, ASDictionaryStyle *style) {
+  CFArrayRef values = str ? CFStringCreateArrayBySeparatingStrings(kCFAllocatorDefault, str, CFSTR(";")) : NULL;
+  if (!values || CFArrayGetCount(values) < 4) {
+    if (values) CFRelease(values);
+    values = NULL;
+  }
+  
+  /* Get font family and style */
+  if (values && CFStringFind(CFArrayGetValueAtIndex(values, 1), CFSTR("i"), kCFCompareCaseInsensitive).location != kCFNotFound)
+    style->fontStyle = italic;
+  else
+    style->fontStyle = normal;
+  
+  style->fontFamily = values ? ASFontFamilyIDForFamilyName(CFArrayGetValueAtIndex(values, 0)) : kFontIDTimes;
+  
+  UInt16 size = values ? CFStringGetIntValue(CFArrayGetValueAtIndex(values, 2)) : 0;
+  style->fontSize = (size > 0) ? size : 12;
+  
+  CFArrayRef colors = values ? CFStringCreateArrayBySeparatingStrings(kCFAllocatorDefault, CFArrayGetValueAtIndex(values, 3), CFSTR(" ")) : NULL;
+  if (colors && CFArrayGetCount(colors) == 3) {
+    style->red = CFStringGetIntValue(CFArrayGetValueAtIndex(colors, 0));
+    style->green = CFStringGetIntValue(CFArrayGetValueAtIndex(colors, 1));
+    style->blue = CFStringGetIntValue(CFArrayGetValueAtIndex(colors, 2));
+  } else {
+    style->red = 0;
+    style->green = 0;
+    style->blue = 0;
+  }
+  if (colors) CFRelease(colors);
+  if (values) CFRelease(values);
+}
+
+static __inline__ SInt16 ASFontFamilyIDForFamilyName(CFStringRef name) {
+  Str255 fName;
+  FMFontFamily family = -1;
+  if (CFStringGetPascalString (name, fName, 255, CFStringGetSystemEncoding()))
+    family = FMGetFontFamilyFromName(fName);
+  return (family > 0) ? family : kFontIDTimes;
+}
+
+static __inline__ BOOL ASDictionaryStyleEqualsStyle(ASDictionaryStyle *style1, ASDictionaryStyle *style2) {
+  return style1->fontFamily == style2->fontFamily &&
+  style1->fontStyle == style2->fontStyle &&
+  style1->fontSize == style2->fontSize &&
+  style1->red == style2->red &&
+  style1->green == style2->green &&
+  style1->blue == style2->blue;
+}
+
 NSFont *FontForASDictionaryStyle(ASDictionaryStyle *style) {
   NSFont *font = nil;
   FMFont oFont;
