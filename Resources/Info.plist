@@ -9,6 +9,20 @@
 		<dict>
 			<key>CFBundleTypeExtensions</key>
 			<array>
+				<string>sdtpl</string>
+			</array>
+			<key>CFBundleTypeIconFile</key>
+			<string>Templates</string>
+			<key>CFBundleTypeName</key>
+			<string>SdefTemplateFile</string>
+			<key>CFBundleTypeRole</key>
+			<string>None</string>
+			<key>LSTypeIsPackage</key>
+			<true/>
+		</dict>
+		<dict>
+			<key>CFBundleTypeExtensions</key>
+			<array>
 				<string>sdef</string>
 			</array>
 			<key>CFBundleTypeIconFile</key>

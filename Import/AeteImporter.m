@@ -189,7 +189,7 @@ typedef struct AeteHeader AeteHeader;
 - (BOOL)resolveObjectType:(SdefObject *)obj {
   NSString *type = [obj valueForKey:@"type"];
   BOOL isList = NO;
-  if ([type rangeOfString:@"list of" options:NSLiteralSearch | NSAnchoredSearch].location != NSNotFound) {
+  if ([type startsWithString:@"list of"]) {
     isList = YES;
     type = [type substringFromIndex:8];
   }

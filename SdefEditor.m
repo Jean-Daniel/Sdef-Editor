@@ -21,6 +21,7 @@
 #import "ImportApplicationAete.h"
 
 #import "SKApplication.h"
+#import "SdtplExporter.h"
 
 #if defined (DEBUG)
 #import <Foundation/NSDebug.h>
@@ -58,6 +59,7 @@ const OSType kCocoaScriptSuiteHFSType = 'ScSu';
       SKBool(YES), @"SdefOpenAtStartup",
       SKBool(YES), @"SdefBuildInSdp",
       SKBool(YES), @"SdefBuildInRez",
+      SKBool(YES), @"SdefAutoSelectItem",
       @"/Developer/Tools/sdp", @"SdefSdpToolPath",
       @"/Developer/Tools/Rez", @"SdefRezToolPath",
       nil]];
@@ -257,10 +259,25 @@ const OSType kCocoaScriptSuiteHFSType = 'ScSu';
   id debugMenu = [[NSMenuItem alloc] initWithTitle:@"" action:nil keyEquivalent:@""];
   id menu = [[NSMenu alloc] initWithTitle:@"Debug"];
   [menu addItemWithTitle:@"Import Application 'aete'" action:@selector(importApplicationAete:) keyEquivalent:@""];
+  [menu addItemWithTitle:@"Create dictionary" action:@selector(asDictionary:) keyEquivalent:@""];
+  [menu addItemWithTitle:@"Create XHTML dictionary" action:@selector(SdtplExporter:) keyEquivalent:@""];
   [debugMenu setSubmenu:menu];
   [menu release];
   [[NSApp mainMenu] insertItem:debugMenu atIndex:[[NSApp mainMenu] numberOfItems] -1];
   [debugMenu release];
+}
+
+- (void)asDictionary:(id)sender {
+  id dico = AppleScriptDictionaryFromSdefDictionary([[[NSApp orderedDocuments] objectAtIndex:0] dictionary]);
+  [NSArchiver archiveRootObject:dico toFile:[@"~/Desktop/TestDico.asdictionary" stringByExpandingTildeInPath]];
+}
+
+- (void)SdtplExporter:(id)sender {
+  id exporter = [[SdtplExporter alloc] initWithTemplate:[@"~/Desktop/AppleRTFDictionary.sdtpl" stringByExpandingTildeInPath]];
+  [exporter setDictionary:[[[NSApp orderedDocuments] objectAtIndex:0] dictionary]];
+  id file = [@"~/Desktop/Dictionary.html" stringByExpandingTildeInPath];
+  [exporter writeToFile:file atomically:YES];
+  [exporter release];
 }
 
 #endif
