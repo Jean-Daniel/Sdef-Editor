@@ -10,7 +10,7 @@
 #import "SdefXMLObject.h"
 #import "SdefClass.h"
 #import "SdefSuite.h"
-#import "ShadowMacros.h"
+#import "ShadowBase.h"
 #import "SKFunctions.h"
 
 #import "SdefImplementation.h"
@@ -243,7 +243,6 @@
 
 #pragma mark -
 #pragma mark Cocoa to Sdef
-typedef BOOL (*EqualIMP)(id, SEL, id);
 - (NSString *)sdefTypeForCocoaType:(NSString *)cocoaType {
   if (!cocoaType) return nil;
   
