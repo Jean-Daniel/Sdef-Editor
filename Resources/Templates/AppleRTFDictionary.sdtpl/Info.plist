@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>DisplayName</key>
+	<string>Apple Dictionary RTF</string>
+	<key>InlineToc</key>
+	<false/>
+	<key>DictionaryTemplate</key>
+	<string>Template.rtf</string>
+	<key>PreviewFile</key>
+	<string></string>
+	<key>RemoveBlockLine</key>
+	<true/>
+	<key>Templates</key>
+	<dict>
+		<key>Direct_Parameter_Description</key>
+		<string>-- %@</string>
+		<key>Parameter_Description</key>
+		<string>-- %@</string>
+		<key>Property_Description</key>
+		<string>-- %@</string>
+		<key>ReadOnly</key>
+		<string>[r/o]</string>
+		<key>Result_Description</key>
+		<string>-- %@</string>
+	</dict>
+	<key>Version</key>
+	<integer>1</integer>
+</dict>
+</plist>

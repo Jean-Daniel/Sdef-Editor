@@ -1,0 +1,21 @@
+{
+    IBClasses = (
+        {CLASS = FirstResponder; LANGUAGE = ObjC; SUPERCLASS = NSObject; }, 
+        {CLASS = Preview; LANGUAGE = ObjC; SUPERCLASS = WebView; }, 
+        {
+            ACTIONS = {close = id; }; 
+            CLASS = SKWindowController; 
+            LANGUAGE = ObjC; 
+            SUPERCLASS = NSWindowController; 
+        }, 
+        {CLASS = SdtplExporter; LANGUAGE = ObjC; SUPERCLASS = NSObject; }, 
+        {
+            ACTIONS = {changeTemplate = id; export = id; showPreview = id; }; 
+            CLASS = SdtplWindow; 
+            LANGUAGE = ObjC; 
+            OUTLETS = {templates = NSPopUpButton; tplController = NSObjectController; }; 
+            SUPERCLASS = SKWindowController; 
+        }
+    ); 
+    IBVersion = 1; 
+}

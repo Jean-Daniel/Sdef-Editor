@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE dictionary SYSTEM "file://localhost/System/Library/DTDs/sdef.dtd">
+<dictionary title="Dictionary">
+	<suite name="Suite" code="suit" description="A Sample Suite">
+		<types>
+			<enumeration name="eSrA" code="eSrA">
+				<enumerator name="albums" code="kSrL" description="albums only"/>
+				<enumerator name="all" code="kSrA" description="all text fields"/>
+				<enumerator name="artists" code="kSrR" description="artists only"/>
+				<enumerator name="composers" code="kSrC" description="composers only"/>
+				<enumerator name="displayed" code="kSrV" description="visible text fields"/>
+				<enumerator name="songs" code="kSrS" description="song names only"/>
+			</enumeration>
+		</types>
+		<classes>
+			<class name="track" code="cTrk" description="playable audio source" plural="tracks" inherits="item">
+				<properties>
+					<property name="album" code="pAlb" description="the album containing the track" type="string" access="rw"/>
+					<property name="artist" code="pArt" description="the artist/source of the track" type="string" access="rw"/>
+					<property name="bit rate" code="pBRt" description="the bit rate of the track (in kbps)" type="integer" access="r"/>
+					<property name="bpm" code="pBPM" description="the tempo of this track in beats per minute" type="integer" access="rw"/>
+					<property name="comment" code="pCmt" description="freeform notes about the track" type="string" access="rw"/>
+					<property name="compilation" code="pAnt" description="is this track from a compilation album?" type="boolean" access="rw"/>
+					<property name="composer" code="pCmp" description="the composer of the track" type="string" access="rw"/>
+					<property name="duration" code="pDur" description="the length of the track in seconds" type="integer" access="r"/>
+					<property name="enabled" code="enbl" description="is this track checked for playback?" type="boolean" access="rw"/>
+					<property name="EQ" code="pEQp" description="the name of the EQ preset of the track" type="string" access="rw"/>
+					<property name="track count" code="pTrC" description="the total number of tracks on the source album" type="integer" access="rw"/>
+					<property name="track number" code="pTrN" description="the index of the track on the source album" type="integer" access="rw"/>
+					<property name="volume adjustment" code="pAdj" description="relative volume adjustment of the track (-100% to 100%)" type="integer" access="rw"/>
+					<property name="year" code="pYr " description="the year the track was recorded/released" type="integer" access="rw"/>
+				</properties>
+			</class>
+			<class name="file track" code="cFlT" description="a track representing an audio file (MP3, AIFF, etc.)" plural="file tracks" inherits="track">
+				<properties>
+					<property name="location" code="pLoc" description="the location of the file represented by this track" type="file" access="r"/>
+				</properties>
+			</class>
+			<class name="audio CD track" code="cCDT" description="a track on an audio CD" plural="audio CD tracks" inherits="track">
+				<properties>
+					<property name="location" code="pLoc" description="the location of the file represented by this track" type="file" access="r"/>
+				</properties>
+			</class>
+			<class name="library playlist" code="cLiP" description="the master music library playlist" plural="library playlists" inherits="playlist">
+				<elements>
+					<element type="file track">
+						<accessor style="index"/>
+						<accessor style="id"/>
+						<accessor style="name"/>
+					</element>
+					<element type="URL track">
+						<accessor style="index"/>
+						<accessor style="id"/>
+						<accessor style="name"/>
+					</element>
+					<element type="shared track"/>
+				</elements>
+			</class>
+			<class name="shared track" code="cShT" description="a track residing in a shared library" plural="shared tracks" inherits="track"/>
+			<class name="playlist" code="cPly" description="a list of songs/streams" plural="playlists" inherits="item">
+				<elements>
+					<element type="track">
+						<accessor style="index"/>
+						<accessor style="id"/>
+						<accessor style="name"/>
+					</element>
+				</elements>
+				<properties>
+					<property name="duration" code="pDur" description="the total length of all songs (in seconds)" type="integer" access="r"/>
+					<property name="index" code="pidx" description="the index of the playlist in internal application order" type="integer" access="r"/>
+					<property name="name" code="pnam" description="the name of the playlist" type="string" access="rw"/>
+					<property name="shuffle" code="pShf" description="play the songs in this playlist in random order?" type="boolean" access="rw"/>
+					<property name="size" code="pSiz" description="the total size of all songs (in bytes)" type="integer" access="r"/>
+					<property name="time" code="pTim" description="the length of all songs in MM:SS format" type="string" access="r"/>
+					<property name="visible" code="pvis" description="is this playlist visible in the Source list?" type="boolean" access="r"/>
+				</properties>
+			</class>
+			<class name="URL track" code="cURT" description="a track representing a network stream" plural="URL tracks" inherits="track">
+				<properties>
+					<property name="address" code="pURL" description="the URL for this track" type="string" access="rw"/>
+				</properties>
+			</class>
+		</classes>
+		<commands>
+			<command name="back track" code="hookBack" description="reposition to beginning of current track or go to previous track if already at start of current track"/>
+			<command name="convert" code="hookConv" description="convert one or more files or tracks">
+				<direct-parameter type="list of object" description="the file(s)/tracks(s) to convert"/>
+				<result type="track" description="reference to converted track(s)"/>
+			</command>
+			<command name="fast forward" code="hookFast" description="skip forward in a playing track"/>
+			<command name="next track" code="hookNext" description="advance to the next track in the current playlist"/>
+			<command name="pause" code="hookPaus" description="pause playback"/>
+			<command name="play" code="hookPlay" description="play the current track or the specified track or file.">
+				<direct-parameter type="object" description="item to play" optional="optional"/>
+			</command>
+			<command name="playpause" code="hookPlPs" description="toggle the playing/paused state of the current track"/>
+			<command name="previous track" code="hookPrev" description="return to the previous track in the current playlist"/>
+			<command name="refresh" code="hookRfrs" description="update file track information from the current information in the track’s file">
+				<direct-parameter type="file track" description="the file track to update"/>
+			</command>
+			<command name="resume" code="hookResu" description="disable fast forward/rewind and resume playback, if playing."/>
+			<command name="rewind" code="hookRwnd" description="skip backwards in a playing track"/>
+			<command name="search" code="hookSrch" description="search a playlist for tracks matching the search string. Identical to entering search text in the Search field in iTunes.">
+				<direct-parameter type="playlist" description="the playlist to search"/>
+				<result type="track" description="reference to found track(s)"/>
+				<parameter name="for" code="pTrm" description="the search text" type="string"/>
+				<parameter name="only" code="pAre" description="area to search (default is all)" type="eSrA" optional="optional"/>
+			</command>
+			<command name="stop" code="hookStop" description="stop playback"/>
+		</commands>
+	</suite>
+</dictionary>

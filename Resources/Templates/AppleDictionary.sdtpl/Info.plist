@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>DictionaryTemplate</key>
+	<string>Template.tpl</string>
+	<key>DisplayName</key>
+	<string>Apple Dictionary</string>
+	<key>HTMLCreateLinks</key>
+	<true/>
+	<key>HTMLInlineStyle</key>
+	<true/>
+	<key>HTMLStyleSheets</key>
+	<dict>
+		<key>Green</key>
+		<string>asgreen.css</string>
+		<key>Standard</key>
+		<string>asdictionary.css</string>
+	</dict>
+	<key>InlineToc</key>
+	<false/>
+	<key>PreviewFile</key>
+	<string></string>
+	<key>RemoveBlockLine</key>
+	<false/>
+	<key>RequireFileType</key>
+	<string>html</string>
+	<key>TemplateFormat</key>
+	<string>HTML</string>
+	<key>TemplateStrings</key>
+	<dict>
+		<key>Direct_Parameter_Description</key>
+		<string>-- %@</string>
+		<key>Parameter_Description</key>
+		<string>-- %@</string>
+		<key>Property_Description</key>
+		<string>-- %@</string>
+		<key>ReadOnly</key>
+		<string>[r/o]</string>
+		<key>Result_Description</key>
+		<string>-- %@</string>
+	</dict>
+	<key>TocTemplate</key>
+	<string></string>
+	<key>Version</key>
+	<real>1</real>
+</dict>
+</plist>
