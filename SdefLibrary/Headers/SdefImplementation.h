@@ -21,12 +21,11 @@
 */
 
 @class SdefDocument;
-@interface SdefImplementation : SdefObject <NSCopying, NSCoding> {
+@interface SdefImplementation : SdefOrphanObject <NSCopying, NSCoding> {
 @private
   NSString *sd_class;
   NSString *sd_key;
   NSString *sd_method;
-  SdefObject *sd_owner;
 }
 
 - (NSString *)sdClass;
@@ -37,8 +36,5 @@
 
 - (NSString *)method;
 - (void)setMethod:(NSString *)newMethod;
-
-- (id)owner;
-- (void)setOwner:(SdefObject *)anObject;
 
 @end

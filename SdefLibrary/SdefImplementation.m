@@ -14,7 +14,6 @@
 #pragma mark Protocols Implementations
 - (id)copyWithZone:(NSZone *)aZone {
   SdefImplementation *copy = [super copyWithZone:aZone];
-  copy->sd_owner = nil;
   copy->sd_key = [sd_key copyWithZone:aZone];
   copy->sd_class = [sd_class copyWithZone:aZone];
   copy->sd_method = [sd_method copyWithZone:aZone];
@@ -26,7 +25,6 @@
   [aCoder encodeObject:sd_key forKey:@"SIKey"];
   [aCoder encodeObject:sd_class forKey:@"SIClass"];
   [aCoder encodeObject:sd_method forKey:@"SIMethod"];
-  [aCoder encodeConditionalObject:sd_owner forKey:@"SIOwner"];
 }
 
 - (id)initWithCoder:(NSCoder *)aCoder {
@@ -34,12 +32,10 @@
     sd_key = [[aCoder decodeObjectForKey:@"SIKey"] retain];
     sd_class = [[aCoder decodeObjectForKey:@"SIClass"] retain];
     sd_method = [[aCoder decodeObjectForKey:@"SIMethod"] retain];
-    sd_owner = [aCoder decodeObjectForKey:@"SIOwner"];
   }
   return self;
 }
 
-#pragma mark -
 - (void)dealloc {
   [sd_key release];
   [sd_class release];
@@ -47,6 +43,13 @@
   [super dealloc];
 }
 
+- (NSString *)description {
+  return [NSString stringWithFormat:@"<%@ %p> {name: %@, key:%@, class:%@ , method:%@}",
+    NSStringFromClass([self class]), self,
+    [self name], [self key], [self sdClass], [self method]];
+}
+
+#pragma mark -
 - (NSString *)sdClass {
   return sd_class;
 }
@@ -78,18 +81,6 @@
     [sd_method release];
     sd_method = [newMethod copy];
   }
-}
-
-- (id)owner {
-  return sd_owner;
-}
-
-- (void)setOwner:(SdefObject *)anObject {
-  sd_owner = anObject;
-}
-
-- (SdefDocument *)document {
-  return [sd_owner document];
 }
 
 #pragma mark -
