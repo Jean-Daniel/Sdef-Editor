@@ -9,6 +9,7 @@
 #import "SdefDocument.h"
 
 #import "ShadowMacros.h"
+#import "SKFunctions.h"
 
 #import "SdefWindowController.h"
 #import "SdefClassManager.h"
@@ -83,10 +84,12 @@
 }
 
 - (BOOL)loadDataRepresentation:(NSData *)data ofType:(NSString *)type {
+  [_manager removeDictionary:[self dictionary]];
   id parser = [[SdefParser alloc] init];
   BOOL result = [parser parseData:data];
   [self setDictionary:[parser document]];
   [parser release];
+  [_manager addDictionary:[self dictionary]];
   return result;
 }
 
