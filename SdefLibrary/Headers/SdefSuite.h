@@ -26,11 +26,15 @@
 
 @class SdefDocumentation;
 @interface SdefSuite : SdefTerminologyElement <NSCopying, NSCoding> {
+#if !defined (TIGER_SDEF)
+  SdefCollection *sd_values;
+#endif
 }
 
 - (SdefCollection *)types;
 - (SdefCollection *)classes;
 - (SdefCollection *)commands;
 - (SdefCollection *)events;
+- (SdefCollection *)values;
 
 @end

@@ -28,6 +28,8 @@ typedef enum {
   /* Enumeration */
   kSdefEnumerationType		= 'Enum',
   kSdefEnumeratorType		= 'Enor',
+  /* Value */
+  kSdefValueType			= 'Valu',
   /* Misc */
   kSdefCocoaType			= 'Coco',
   kSdefSynonymType			= 'Syno',
@@ -46,10 +48,14 @@ extern NSString * const SdefObjectDidRemoveAllChildrenNotification;
 extern NSString * const SdefObjectWillChangeNameNotification;
 extern NSString * const SdefObjectDidChangeNameNotification;
 
+#pragma mark -
+#pragma mark Publics Functions Declaration
 extern NSString *SdefNameForCocoaName(NSString *cocoa);
 extern NSString *CocoaNameForSdefName(NSString *cocoa, BOOL isClass);
 
-@class SdefXMLNode, SdefSuite, SdefDocumentation, SdefCollection, SdefDocument;
+#pragma mark -
+@class SdefImplementation, SdefDocumentation;
+@class SdefSuite, SdefCollection, SdefDocument;
 @interface SdefObject : SKTreeNode <NSCopying, NSCoding> {
 @protected
   struct {
@@ -85,11 +91,12 @@ extern NSString *CocoaNameForSdefName(NSString *cocoa, BOOL isClass);
 - (void)createContent;
 
 #pragma mark -
+- (SdefDocument *)document;
+
 - (SdefSuite *)suite;
 - (id)firstParentOfType:(SdefObjectType)aType;
 
-- (SdefDocument *)document;
-
+#pragma mark -
 - (NSImage *)icon;
 - (void)setIcon:(NSImage *)newIcon;
 
@@ -110,6 +117,10 @@ extern NSString *CocoaNameForSdefName(NSString *cocoa, BOOL isClass);
 - (BOOL)hasSynonyms;
 - (SdefCollection *)synonyms;
 - (void)setSynonyms:(SdefCollection *)newSynonyms;
+
+- (BOOL)hasImplementation;
+- (SdefImplementation *)impl;
+- (void)setImpl:(SdefImplementation *)newImpl;
 
 #pragma mark -
 - (NSArray *)comments;
@@ -133,16 +144,12 @@ extern NSString *CocoaNameForSdefName(NSString *cocoa, BOOL isClass);
 @end
 
 #pragma mark -
-@class SdefImplementation;
 @interface SdefTerminologyElement : SdefObject <NSCopying, NSCoding> {
 @private
   NSString *sd_code; 
   NSString *sd_desc;
   SdefImplementation *sd_impl;
 }
-
-- (SdefImplementation *)impl;
-- (void)setImpl:(SdefImplementation *)newImpl;
 
 - (BOOL)isHidden;
 - (void)setHidden:(BOOL)isHidden;
