@@ -9,7 +9,10 @@
 #import <Cocoa/Cocoa.h>
 
 extern NSString * const ScriptingDefinitionFileType;
+extern const OSType kScriptingDefinitionHFSType;
+
 extern NSString * const CocoaScriptSuiteFileType;
+extern const OSType kCocoaScriptSuiteHFSType;
 
 @class SdefImporter;
 @interface SdefEditor : NSObject {

@@ -35,7 +35,9 @@ int main(int argc, char *argv[]) {
 }
 
 NSString * const ScriptingDefinitionFileType = @"ScriptingDefinition";
+const OSType kScriptingDefinitionHFSType = 'Sdef';
 NSString * const CocoaScriptSuiteFileType = @"CocoaScriptSuite";
+const OSType kCocoaScriptSuiteHFSType = 'ScSu';
 
 #if defined (DEBUG)
 @interface SdefEditor (DebugFacility)
