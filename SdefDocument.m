@@ -212,7 +212,7 @@ NSString * const SdefObjectDragType = @"SdefObjectDragType";
     if (index < 0)
       [item appendChild:object];
     else {
-      [item insertChild:object atIndex:(srcIdx <= index) ? index -1 : index];
+      [item insertChild:object atIndex:(([object parent] == item) && (srcIdx <= index)) ? index -1 : index];
     }
     [object release];
   } else {
