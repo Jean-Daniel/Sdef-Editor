@@ -41,7 +41,7 @@
 }
 
 + (NSString *)defaultName {
-  return @"Direct-Parameter";
+  return NSLocalizedStringFromTable(@"Direct Parameter", @"SdefLibrary", @"Direct Parameter default name");
 }
 
 + (NSString *)defaultIconName {
@@ -148,7 +148,7 @@
 }
 
 + (NSString *)defaultName {
-  return @"parameter";
+  return NSLocalizedStringFromTable(@"parameter", @"SdefLibrary", @"Parameter default name");
 }
 
 + (NSString *)defaultIconName {
@@ -241,7 +241,7 @@
 }
 
 + (NSString *)defaultName {
-  return @"Result";
+  return NSLocalizedStringFromTable(@"Result", @"SdefLibrary", @"Result default name");
 }
 
 + (NSString *)defaultIconName {

@@ -36,7 +36,7 @@
 }
 
 + (NSString *)defaultName {
-  return @"Suite";
+  return NSLocalizedStringFromTable(@"Suite", @"SdefLibrary", @"Suite default name");
 }
 
 + (NSString *)defaultIconName {
@@ -46,22 +46,22 @@
 - (void)createContent {
   [self setDocumentation:[SdefDocumentation node]];
   
-  id child = [SdefCollection nodeWithName:@"Types"];
+  id child = [SdefCollection nodeWithName:NSLocalizedStringFromTable(@"Types", @"SdefLibrary", @"Types Collection default name")];
   [child setContentType:[SdefEnumeration class]];
   [child setElementName:@"types"];
   [self appendChild:child];
   
-  child = [SdefCollection nodeWithName:@"Classes"];
+  child = [SdefCollection nodeWithName:NSLocalizedStringFromTable(@"Classes", @"SdefLibrary", @"Classes Collection default name")];
   [child setContentType:[SdefClass class]];
   [child setElementName:@"classes"];
   [self appendChild:child];
   
-  child = [SdefCollection nodeWithName:@"Commands"];
+  child = [SdefCollection nodeWithName:NSLocalizedStringFromTable(@"Commands", @"SdefLibrary", @"Commands Collection default name")];
   [child setContentType:[SdefCommand class]];
   [child setElementName:@"commands"];
   [self appendChild:child];
   
-  child = [SdefCollection nodeWithName:@"Events"];
+  child = [SdefCollection nodeWithName:NSLocalizedStringFromTable(@"Events", @"SdefLibrary", @"Events Collection default name")];
   [child setContentType:[SdefEvent class]];
   [child setElementName:@"events"];
   [self appendChild:child];

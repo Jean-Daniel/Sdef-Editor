@@ -21,7 +21,7 @@
 - (NSString *)verbLabel {
   if (![self object])
     return @"Verb";
-  return [[self object] isKindOfClass:[SdefCommand class]] ? @"Command" : @"Event";
+  return [[self object] isKindOfClass:[SdefCommand class]] ? NSLocalizedString(@"Command", @"Verb Tab Label") : NSLocalizedString(@"Event", @"Verb Tab Label");
 }
 
 - (void)selectObject:(SdefObject*)anObject {

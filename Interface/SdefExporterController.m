@@ -43,8 +43,8 @@
 
 - (IBAction)export:(id)sender {
   NSOpenPanel *openPanel = [NSOpenPanel openPanel];
-  [openPanel setPrompt:@"Choose"];
-  [openPanel setMessage:@"Choose a destination folder"];
+  [openPanel setPrompt:NSLocalizedString(@"Choose", @"Choose an export folder Prompt.")];
+  [openPanel setMessage:NSLocalizedString(@"Choose a destination folder", @"Choose an export folder Message.")];
   [openPanel setCanChooseFiles:NO];
   [openPanel setCanCreateDirectories:YES];
   [openPanel setCanChooseDirectories:YES];
@@ -81,7 +81,9 @@
   
   NSString *result = [proc process];
   if (result) {
-    NSRunAlertPanel(@"Warning: Scripting Definition Processor says:", result, @"OK", nil, nil);
+    NSRunAlertPanel(NSLocalizedString(@"Warning: Scripting Definition Processor says:", @"sdp return a value: message title"),
+                    result,
+                    NSLocalizedString(@"OK", @"Default Button"), nil, nil);
   }
   
   if (rsrcFormat) {

@@ -16,7 +16,7 @@
 @implementation SdefDictionary
 #pragma mark Protocols Implementations
 - (id)copyWithZone:(NSZone *)aZone {
-  id document = sd_document;
+//  id document = sd_document;
 //  sd_document = nil; /* If document != nil => register some undo */
   SdefDictionary *copy = [super copyWithZone:aZone];
 //  sd_document = document;
@@ -49,7 +49,7 @@
 }
 
 + (NSString *)defaultName {
-  return @"Dictionary";
+  return NSLocalizedStringFromTable(@"Dictionary", @"SdefLibrary", @"Dictionary default name");
 }
 
 

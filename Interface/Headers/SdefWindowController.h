@@ -10,7 +10,7 @@
 
 extern NSString * const SdefDictionarySelectionDidChangeNotification;
 
-@class SdefObject, SdefDocumentationWindow;
+@class SdefObject;
 @interface SdefWindowController : NSWindowController {
   IBOutlet NSOutlineView *outline;
   IBOutlet NSTabView *inspector;

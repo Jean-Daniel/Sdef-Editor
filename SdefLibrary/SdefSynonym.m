@@ -31,7 +31,7 @@
 }
 
 + (NSString *)defaultName {
-  return @"synonym";
+  return NSLocalizedStringFromTable(@"synonym", @"SdefLibrary", @"Synonym default name");
 }
 
 + (NSString *)defaultIconName {

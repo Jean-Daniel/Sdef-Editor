@@ -17,6 +17,17 @@
 #import "SdefSynonym.h"
 #import "SdefImplementation.h"
 
+NSString * const SdefNewTreeNode = @"SdefNewTreeNode";
+NSString * const SdefRemovedTreeNode = @"SdefRemovedTreeNode";
+NSString * const SdefObjectDidAppendChildNotification = @"SdefObjectDidAppendChild";
+NSString * const SdefObjectWillRemoveChildNotification = @"SdefObjectWillRemoveChild";
+NSString * const SdefObjectDidRemoveChildNotification = @"SdefObjectDidRemoveChild";
+NSString * const SdefObjectWillRemoveAllChildrenNotification = @"SdefObjectWillRemoveAllChildren";
+NSString * const SdefObjectDidRemoveAllChildrenNotification = @"SdefObjectDidRemoveAllChildren";
+
+NSString * const SDTreeNodeWillChangeNameNotification = @"SDTreeNodeWillChangeName";
+NSString * const SDTreeNodeDidChangeNameNotification = @"SDTreeNodeDidChangeName";
+
 @implementation SdefObject
 #pragma mark Protocols Implementations
 - (id)copyWithZone:(NSZone *)aZone {
@@ -148,9 +159,9 @@
   [super appendChild:child];
   [(SdefObject *)child setEditable:[self isEditable]];
   [self didChange:NSKeyValueChangeInsertion valuesAtIndexes:[NSIndexSet indexSetWithIndex:[self childCount]] forKey:@"children"];
-  [[NSNotificationCenter defaultCenter] postNotificationName:@"SdefObjectDidAppendChild"
+  [[NSNotificationCenter defaultCenter] postNotificationName:SdefObjectDidAppendChildNotification
                                                       object:self
-                                                    userInfo:[NSDictionary dictionaryWithObject:child forKey:@"NewTreeNode"]];
+                                                    userInfo:[NSDictionary dictionaryWithObject:child forKey:SdefNewTreeNode]];
 }
 
 - (void)prependChild:(SKTreeNode *)child {
@@ -159,9 +170,9 @@
   [super prependChild:child];
   [(SdefObject *)child setEditable:[self isEditable]];
   [self didChange:NSKeyValueChangeInsertion valuesAtIndexes:[NSIndexSet indexSetWithIndex:0] forKey:@"children"];
-  [[NSNotificationCenter defaultCenter] postNotificationName:@"SdefObjectDidAppendChild"
+  [[NSNotificationCenter defaultCenter] postNotificationName:SdefObjectDidAppendChildNotification
                                                       object:self
-                                                    userInfo:[NSDictionary dictionaryWithObject:child forKey:@"NewTreeNode"]];
+                                                    userInfo:[NSDictionary dictionaryWithObject:child forKey:SdefNewTreeNode]];
 }
 
 - (void)insertChild:(id)child atIndex:(unsigned)idx {
@@ -173,22 +184,22 @@
   [[[self document] undoManager] registerUndoWithTarget:newSibling selector:@selector(remove) object:nil];
   [super insertSibling:newSibling];
   [(SdefObject *)newSibling setEditable:[self isEditable]];
-  [[NSNotificationCenter defaultCenter] postNotificationName:@"SdefObjectDidAppendChild"
+  [[NSNotificationCenter defaultCenter] postNotificationName:SdefObjectDidAppendChildNotification
                                                       object:[self parent]
-                                                    userInfo:[NSDictionary dictionaryWithObject:newSibling forKey:@"NewTreeNode"]];
+                                                    userInfo:[NSDictionary dictionaryWithObject:newSibling forKey:SdefNewTreeNode]];
 }
 
 - (void)remove {
   id parent = [self parent];
   unsigned idx = [parent indexOfChildren:self];
   [[[[self document] undoManager] prepareWithInvocationTarget:parent] insertChild:self atIndex:idx];
-  [[NSNotificationCenter defaultCenter] postNotificationName:@"SdefObjectWillRemoveChild"
+  [[NSNotificationCenter defaultCenter] postNotificationName:SdefObjectWillRemoveChildNotification
                                                       object:[self parent]
-                                                    userInfo:[NSDictionary dictionaryWithObject:self forKey:@"RemovedTreeNode"]];
+                                                    userInfo:[NSDictionary dictionaryWithObject:self forKey:SdefRemovedTreeNode]];
   [parent willChange:NSKeyValueChangeRemoval valuesAtIndexes:[NSIndexSet indexSetWithIndex:idx] forKey:@"children"];
   [super remove];
   [parent didChange:NSKeyValueChangeRemoval valuesAtIndexes:[NSIndexSet indexSetWithIndex:idx] forKey:@"children"];
-  [[NSNotificationCenter defaultCenter] postNotificationName:@"SdefObjectDidRemoveChild"
+  [[NSNotificationCenter defaultCenter] postNotificationName:SdefObjectDidRemoveChildNotification
                                                       object:parent];
 }
 
@@ -198,9 +209,9 @@
 }
 
 - (void)removeAllChildren {
-  [[NSNotificationCenter defaultCenter] postNotificationName:@"SdefObjectWillRemoveAllChildren" object:self];
+  [[NSNotificationCenter defaultCenter] postNotificationName:SdefObjectWillRemoveAllChildrenNotification object:self];
   [super removeAllChildren];
-  [[NSNotificationCenter defaultCenter] postNotificationName:@"SdefObjectDidRemoveAllChildren" object:self];
+  [[NSNotificationCenter defaultCenter] postNotificationName:SdefObjectDidRemoveAllChildrenNotification object:self];
 }
 
 #pragma mark -
@@ -217,7 +228,7 @@
 }
 
 - (void)createSynonyms {
-  id synonyms = [SdefCollection nodeWithName:@"Synonyms"];
+  id synonyms = [SdefCollection nodeWithName:NSLocalizedStringFromTable(@"Synonyms", @"SdefLibrary", @"Synonyms Collection name")];
   [synonyms setContentType:[SdefSynonym class]];
   [synonyms setElementName:@"synonyms"];
   [self setSynonyms:synonyms];
@@ -242,11 +253,11 @@
 
 - (void)setName:(NSString *)newName {
   if (sd_name != newName) {
-    [[NSNotificationCenter defaultCenter] postNotificationName:@"SDTreeNodeWillChangeNameNotification" object:self];
+    [[NSNotificationCenter defaultCenter] postNotificationName:SDTreeNodeWillChangeNameNotification object:self];
     [[[self document] undoManager] registerUndoWithTarget:self selector:_cmd object:sd_name];
     [sd_name release];
     sd_name = [newName copy];
-    [[NSNotificationCenter defaultCenter] postNotificationName:@"SDTreeNodeDidChangeNameNotification" object:self];
+    [[NSNotificationCenter defaultCenter] postNotificationName:SDTreeNodeDidChangeNameNotification object:self];
   }
 }
 

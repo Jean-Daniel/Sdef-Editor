@@ -42,9 +42,6 @@
   if (needsUpdate && [NSApp isActive]) {
     [self willChangeValueForKey:@"content"];
     [self didChangeValueForKey:@"content"];
-//    DLog(@"Comments: %@", [[sd_doc selection] comments]);
-//    DLog(@"Selection: %@", [[sd_doc selection] synonyms]);
-//    DLog(@"Documentation: %@", [[sd_doc selection] documentation]);
     needsUpdate = NO;
   }
 }

@@ -94,7 +94,7 @@ static unsigned SdefAccessorFlagFromString(NSString *str) {
 }
 
 + (NSString *)defaultName {
-  return @"class name";
+  return NSLocalizedStringFromTable(@"class name", @"SdefLibrary", @"Class default name");
 }
 
 + (NSString *)defaultIconName {
@@ -113,22 +113,22 @@ static unsigned SdefAccessorFlagFromString(NSString *str) {
   [self setDocumentation:[SdefDocumentation node]];
   [self setContents:[SdefContents node]];
   
-  id child = [SdefCollection nodeWithName:@"Elements"];
+  id child = [SdefCollection nodeWithName:NSLocalizedStringFromTable(@"Elements", @"SdefLibrary", @"Elements collection default name")];
   [child setContentType:[SdefElement class]];
   [child setElementName:@"elements"];
   [self appendChild:child];
   
-  child = [SdefCollection nodeWithName:@"Properties"];
+  child = [SdefCollection nodeWithName:NSLocalizedStringFromTable(@"Properties", @"SdefLibrary", @"Properties collection default name")];
   [child setContentType:[SdefProperty class]];
   [child setElementName:@"properties"];
   [self appendChild:child];
   
-  child = [SdefCollection nodeWithName:@"Responds to Commands"];
+  child = [SdefCollection nodeWithName:NSLocalizedStringFromTable(@"Resp. to Cmds", @"SdefLibrary", @"Responds to Commands collection default name")];
   [child setContentType:[SdefRespondsTo class]];
   [child setElementName:@"responds-to-commands"];
   [self appendChild:child];
   
-  child = [SdefCollection nodeWithName:@"Responds to Events"];
+  child = [SdefCollection nodeWithName:NSLocalizedStringFromTable(@"Resp. to Events", @"SdefLibrary", @"Responds to Events collection default name")];
   [child setContentType:[SdefRespondsTo class]];
   [child setElementName:@"responds-to-events"];
   [self appendChild:child];
@@ -289,7 +289,7 @@ static unsigned SdefAccessorFlagFromString(NSString *str) {
 }
 
 + (NSString *)defaultName {
-  return @"element";
+  return NSLocalizedStringFromTable(@"element", @"SdefLibrary", @"Element default name");
 }
 
 + (NSString *)defaultIconName {
@@ -512,7 +512,7 @@ static unsigned SdefAccessorFlagFromString(NSString *str) {
 }
 
 + (NSString *)defaultName {
-  return @"property";
+  return NSLocalizedStringFromTable(@"property", @"SdefLibrary", @"Property default name");
 }
 
 + (NSString *)defaultIconName {
@@ -626,7 +626,7 @@ static unsigned SdefAccessorFlagFromString(NSString *str) {
 }
 
 + (NSString *)defaultName {
-  return @"method";
+  return NSLocalizedStringFromTable(@"method", @"SdefLibrary", @"Respond-To default name");
 }
 + (NSString *)defaultIconName {
   return @"Member";

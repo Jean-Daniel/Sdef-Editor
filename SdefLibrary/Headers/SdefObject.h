@@ -35,6 +35,17 @@ typedef enum {
   kSDDocumentationType		= 'Docu'
 } SDObjectType;
 
+extern NSString * const SdefNewTreeNode;
+extern NSString * const SdefRemovedTreeNode;
+extern NSString * const SdefObjectDidAppendChildNotification;
+extern NSString * const SdefObjectWillRemoveChildNotification;
+extern NSString * const SdefObjectDidRemoveChildNotification;
+extern NSString * const SdefObjectWillRemoveAllChildrenNotification;
+extern NSString * const SdefObjectDidRemoveAllChildrenNotification;
+
+extern NSString * const SDTreeNodeWillChangeNameNotification;
+extern NSString * const SDTreeNodeDidChangeNameNotification;
+
 @class SdefXMLNode, SdefDocumentation, SdefCollection, SdefDocument;
 @interface SdefObject : SKTreeNode <NSCopying, NSCoding> {
 @protected

@@ -15,7 +15,6 @@
 #import "SdefObject.h"
 #import "SdefDocument.h"
 #import "SdefDictionary.h"
-#import "SdefDocumentationWindow.h"
 
 #define IsObjectOwner(item)		 		[item findRoot] == (id)[(SdefDocument *)[self document] dictionary]  \
 										/* || item == [[self document] imports] */
@@ -49,27 +48,27 @@ static inline BOOL SDEditorExistsForItem(SdefObject *item) {
     
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(didAppendNode:)
-                                                 name:@"SdefObjectDidAppendChild"
+                                                 name:SdefObjectDidAppendChildNotification
                                                object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(willRemoveNode:)
-                                                 name:@"SdefObjectWillRemoveChild"
+                                                 name:SdefObjectWillRemoveChildNotification
                                                object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(didRemoveNode:)
-                                                 name:@"SdefObjectDidRemoveChild"
+                                                 name:SdefObjectDidRemoveChildNotification
                                                object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(willRemoveAllNodes:)
-                                                 name:@"SdefObjectWillRemoveAllChildren"
+                                                 name:SdefObjectWillRemoveAllChildrenNotification
                                                object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(didRemoveNode:)
-                                                 name:@"SdefObjectDidRemoveAllChildren"
+                                                 name:SdefObjectDidRemoveAllChildrenNotification
                                                object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(didChangeNodeName:)
-                                                 name:@"SDTreeNodeDidChangeNameNotification"
+                                                 name:SDTreeNodeDidChangeNameNotification
                                                object:nil];    
   }
   return self;
@@ -87,7 +86,13 @@ static inline BOOL SDEditorExistsForItem(SdefObject *item) {
 }
 
 - (void)didChangeNodeName:(NSNotification *)aNotification {
-  [outline reloadItem:[aNotification object]];
+  id item = [aNotification object];
+  if (IsObjectOwner(item)) {
+    [outline reloadItem:[aNotification object]];
+    if (item == [(SdefDocument *)[self document] dictionary]) {
+      [self synchronizeWindowTitleWithDocumentName];
+    }
+  }
 }
 
 #pragma mark -
@@ -133,9 +138,9 @@ static inline BOOL SDEditorExistsForItem(SdefObject *item) {
   [[_viewControllers allValues] makeObjectsPerformSelector:@selector(documentWillClose:) withObject:[self document]];
 }
 
-//- (NSString *)windowTitleForDocumentDisplayName:(NSString *)displayName {
-//  return [NSString stringWithFormat:@"%@ : %@", displayName, [[(SdefDocument *)[self document] dictionary] name]];
-//}
+- (NSString *)windowTitleForDocumentDisplayName:(NSString *)displayName {
+  return [NSString stringWithFormat:@"%@ : %@", displayName, [[(SdefDocument *)[self document] dictionary] name]];
+}
 
 - (void)awakeFromNib {
   [outline setDataSource:[self document]];

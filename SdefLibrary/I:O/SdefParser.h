@@ -8,6 +8,8 @@
 
 #import <Cocoa/Cocoa.h>
 
+extern inline NSString *SdefEditorComment();
+
 @class SdefDictionary;
 @interface SdefParser : NSObject {
 @private

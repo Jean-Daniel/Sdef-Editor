@@ -34,11 +34,11 @@
 /*
     [[NSNotificationCenter defaultCenter] addObserver:_manager
                                              selector:@selector(didAddDictionary:)
-                                                 name:@"SdefObjectDidAppendChild"
+                                                 name:SdefObjectDidAppendChildNotification
                                                object:_imports];
     [[NSNotificationCenter defaultCenter] addObserver:_manager
                                              selector:@selector(willRemoveDictionary:)
-                                                 name:@"SdefObjectWillRemoveChild"
+                                                 name:SdefObjectWillRemoveChildNotification
                                                object:_imports];
  */
   }

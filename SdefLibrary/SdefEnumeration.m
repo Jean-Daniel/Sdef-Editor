@@ -31,7 +31,7 @@
 }
 
 + (NSString *)defaultName {
-  return @"enumeration";
+  return NSLocalizedStringFromTable(@"enumeration", @"SdefLibrary", @"Enumeration default name");
 }
 
 + (NSString *)defaultIconName {
@@ -94,7 +94,7 @@
 }
 
 + (NSString *)defaultName {
-  return @"enumerator";
+  return NSLocalizedStringFromTable(@"enumerator", @"SdefLibrary", @"Enumerator default name");
 }
 
 + (NSString *)defaultIconName {

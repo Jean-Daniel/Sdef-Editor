@@ -153,7 +153,7 @@
 
 #pragma mark -
 + (NSString *)defaultName {
-  return @"command";
+  return NSLocalizedStringFromTable(@"command", @"SdefLibrary", @"Command default name");
 }
 
 #pragma mark -
@@ -175,7 +175,7 @@
 
 #pragma mark -
 + (NSString *)defaultName {
-  return @"event";
+  return NSLocalizedStringFromTable(@"event", @"SdefLibrary", @"Event default name");
 }
 
 #pragma mark -

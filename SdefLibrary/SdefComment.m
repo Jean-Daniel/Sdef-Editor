@@ -34,7 +34,7 @@
 }
 
 - (id)init {
-  return [self initWithString:@" comment "];
+  return [self initWithString:NSLocalizedString(@" comment ", @"Default comment")];
 }
 
 - (id)initWithString:(NSString *)aString {
@@ -50,7 +50,7 @@
 }
 
 - (NSString *)name {
-  return @"comment";
+  return NSLocalizedString(@"comment", @"Comment item name");
 }
 - (NSImage *)icon {
   return [NSImage imageNamed:@"Misc"];
