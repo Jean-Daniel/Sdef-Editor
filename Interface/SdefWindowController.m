@@ -102,6 +102,10 @@ static inline BOOL SDEditorExistsForItem(SdefObject *item) {
     [outline reloadItem:item reloadChildren:[outline isItemExpanded:item]];
     if ([outline isExpandable:item]) {
       [outline expandItem:item];
+      id child = [[aNotification userInfo] objectForKey:SdefNewTreeNode];
+      int row = [outline rowForItem:child];
+      if (row > 0)
+        [outline selectRow:[outline rowForItem:child] byExtendingSelection:NO];
     }
   }
 }
