@@ -36,7 +36,7 @@ typedef enum {
 } SDObjectType;
 
 @class SdefXMLNode, SdefDocumentation, SdefCollection, SdefDocument;
-@interface SdefObject : SKTreeNode {
+@interface SdefObject : SKTreeNode <NSCopying, NSCoding> {
 @protected
   NSMutableArray *sd_childComments;
 @private
@@ -46,7 +46,7 @@ typedef enum {
   struct {
     unsigned int editable:1;
     unsigned int removable:1;
-    unsigned int reserved:6;
+    unsigned int :6;
   } sd_flags;
   NSMutableArray *sd_comments;
   SdefDocumentation *sd_documentation;
@@ -107,8 +107,8 @@ typedef enum {
 @end
 
 #pragma mark -
-@interface SdefCollection : SdefObject {
-  Class _contentType;
+@interface SdefCollection : SdefObject <NSCopying, NSCoding> {
+  Class sd_contentType;
   NSString *sd_elementName;
 }
 
@@ -121,7 +121,7 @@ typedef enum {
 
 #pragma mark -
 @class SdefImplementation;
-@interface SdefTerminologyElement : SdefObject {
+@interface SdefTerminologyElement : SdefObject <NSCopying, NSCoding> {
 @private
   BOOL sd_hidden;
   NSString *sd_code; 
@@ -144,7 +144,7 @@ typedef enum {
 @end
 
 #pragma mark -
-@interface SdefImports : SdefCollection {  
+@interface SdefImports : SdefCollection <NSCopying, NSCoding> {  
 }
 
 @end

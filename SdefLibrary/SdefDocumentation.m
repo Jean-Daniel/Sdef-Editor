@@ -10,7 +10,26 @@
 #import "SdefXMLGenerator.h"
 
 @implementation SdefDocumentation
+#pragma mark Protocols Implementations
+- (id)copyWithZone:(NSZone *)aZone {
+  SdefDocumentation *copy = [super copyWithZone:aZone];
+  copy->sd_content = [sd_content copyWithZone:aZone];
+  return copy;
+}
 
+- (void)encodeWithCoder:(NSCoder *)aCoder {
+  [super encodeWithCoder:aCoder];
+  [aCoder encodeObject:sd_content forKey:@"SDContent"];
+}
+
+- (id)initWithCoder:(NSCoder *)aCoder {
+  if (self = [super initWithCoder:aCoder]) {
+    sd_content = [[aCoder decodeObjectForKey:@"SDContent"] retain];
+  }
+  return self;
+}
+
+#pragma mark -
 + (SDObjectType)objectType {
   return kSDDocumentationType;
 }
@@ -37,18 +56,18 @@
 }
 
 - (void)dealloc {
-  [content release];
+  [sd_content release];
   [super dealloc];
 }
 
 - (NSString *)content {
-  return content;
+  return sd_content;
 }
 
 - (void)setContent:(NSString *)newContent {
-  if (content != newContent) {
-    [content release];
-    content = [newContent copy];
+  if (sd_content != newContent) {
+    [sd_content release];
+    sd_content = [newContent retain];
   }
 }
 
@@ -58,9 +77,9 @@
 
 - (SdefXMLNode *)xmlNode {
   id node = nil;
-  if (content != nil) {
+  if (sd_content != nil) {
     if (node = [super xmlNode]) {
-      [node setContent:content];
+      [node setContent:sd_content];
     }
   }
   return node;
@@ -76,10 +95,10 @@
 // This returns the string of the characters encountered thus far. You may not necessarily get the longest character run.
 // The parser reserves the right to hand these to the delegate as potentially many calls in a row to -parser:foundCharacters:
 - (void)parser:(NSXMLParser *)parser foundCharacters:(NSString *)string {
-  if (!content) {
-    content = [[NSMutableString alloc] init];
+  if (!sd_content) {
+    sd_content = [[NSMutableString alloc] init];
   }
-  [content appendString:[string stringByUnescapingEntities:nil]];
+  [sd_content appendString:[string stringByUnescapingEntities:nil]];
 }
 
 // sent when an end tag is encountered. The various parameters are supplied as above.

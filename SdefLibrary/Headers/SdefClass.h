@@ -89,7 +89,7 @@ extern unsigned SDAccessFlagFromString(NSString *str);
 
 /* class, property, and contents */
 @class SdefDocumentation, SdefContents;
-@interface SdefClass : SdefTerminologyElement {
+@interface SdefClass : SdefTerminologyElement <NSCopying, NSCoding> {
   SdefContents *sd_contents;
   /* Attributes */
   NSString *sd_plural; 
@@ -113,7 +113,7 @@ extern unsigned SDAccessFlagFromString(NSString *str);
 
 @end
 
-@interface SdefElement : SdefObject {
+@interface SdefElement : SdefObject <NSCopying, NSCoding> {
   SdefImplementation *sd_impl;
   unsigned int sd_accessors; /* index | name | id | range | relative | test */
   
@@ -140,7 +140,7 @@ extern unsigned SDAccessFlagFromString(NSString *str);
 
 @end
 
-@interface SdefProperty : SdefTerminologyElement {
+@interface SdefProperty : SdefTerminologyElement <NSCopying, NSCoding> {
   NSString *sd_type;
   unsigned sd_access;
   BOOL sd_notInProperties; 
@@ -157,7 +157,7 @@ extern unsigned SDAccessFlagFromString(NSString *str);
 
 @end
 
-@interface SdefRespondsTo : SdefObject {
+@interface SdefRespondsTo : SdefObject <NSCopying, NSCoding> {
   SdefImplementation *sd_impl;
   BOOL sd_hidden;
 }

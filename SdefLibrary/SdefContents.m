@@ -12,7 +12,29 @@
 #import "SdefDocument.h"
 
 @implementation SdefContents
+#pragma mark Protocols Implementations
+- (id)copyWithZone:(NSZone *)aZone {
+  SdefContents *copy = [super copyWithZone:aZone];
+  copy->sd_access = sd_access;
+  copy->sd_type = [sd_type copyWithZone:aZone];
+  return copy;
+}
 
+- (void)encodeWithCoder:(NSCoder *)aCoder {
+  [super encodeWithCoder:aCoder];
+  [aCoder encodeObject:sd_type forKey:@"SCType"];
+  [aCoder encodeInt:sd_access forKey:@"SCAccess"];
+}
+
+- (id)initWithCoder:(NSCoder *)aCoder {
+  if (self = [super initWithCoder:aCoder]) {
+    sd_access = [aCoder decodeIntForKey:@"SCAccess"];
+    sd_type = [[aCoder decodeObjectForKey:@"SCType"] retain];
+  }
+  return self;
+}
+
+#pragma mark -
 + (SDObjectType)objectType {
   return kSDContentsType;
 }

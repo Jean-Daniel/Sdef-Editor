@@ -17,9 +17,8 @@
 */
 
 @class SdefDocument;
-@interface SdefDictionary : SdefObject {
+@interface SdefDictionary : SdefObject <NSCopying, NSCoding> {
 @private
-  NSString *sd_title;
   SdefDocument *sd_document;
 }
 

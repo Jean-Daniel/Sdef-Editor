@@ -10,7 +10,29 @@
 #import "SdefArguments.h"
 
 @implementation SdefVerb
+#pragma mark Protocols Implementations
+- (id)copyWithZone:(NSZone *)aZone {
+  SdefVerb *copy = [super copyWithZone:aZone];
+  copy->sd_result = [sd_result copyWithZone:aZone];
+  copy->sd_direct = [sd_direct copyWithZone:aZone];
+  return copy;
+}
 
+- (void)encodeWithCoder:(NSCoder *)aCoder {
+  [super encodeWithCoder:aCoder];
+  [aCoder encodeObject:sd_result forKey:@"SVResult"];
+  [aCoder encodeObject:sd_direct forKey:@"SVDirectParameter"];
+}
+
+- (id)initWithCoder:(NSCoder *)aCoder {
+  if (self = [super initWithCoder:aCoder]) {
+    sd_result = [[aCoder decodeObjectForKey:@"SVResult"] retain];
+    sd_direct = [[aCoder decodeObjectForKey:@"SVDirectParameter"] retain];
+  }
+  return self;
+}
+
+#pragma mark -
 + (SDObjectType)objectType {
   return kSDVerbType;
 }
@@ -123,7 +145,13 @@
 
 #pragma mark -
 @implementation SdefCommand
+#pragma mark Protocols Implementations
+- (id)copyWithZone:(NSZone *)aZone {
+  SdefCommand *copy = [super copyWithZone:aZone];
+  return copy;
+}
 
+#pragma mark -
 + (NSString *)defaultName {
   return @"command";
 }
@@ -139,7 +167,13 @@
 
 #pragma mark -
 @implementation SdefEvent
+#pragma mark Protocols Implementations
+- (id)copyWithZone:(NSZone *)aZone {
+  SdefEvent *copy = [super copyWithZone:aZone];
+  return copy;
+}
 
+#pragma mark -
 + (NSString *)defaultName {
   return @"event";
 }

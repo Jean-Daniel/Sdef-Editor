@@ -10,7 +10,25 @@
 
 
 @implementation SdefComment
+#pragma mark Protocols Implementations
+- (id)copyWithZone:(NSZone *)aZone {
+  SdefComment *copy = NSCopyObject(self, 0, aZone);
+  copy->sd_value = [sd_value copyWithZone:aZone];
+  return copy;
+}
 
+- (void)encodeWithCoder:(NSCoder *)aCoder {
+  [aCoder encodeObject:sd_value forKey:@"SCValue"];
+}
+
+- (id)initWithCoder:(NSCoder *)aCoder {
+  if (self = [super init]) {
+    sd_value = [[aCoder decodeObjectForKey:@"SCValue"] retain];
+  }
+  return self;
+}
+
+#pragma mark -
 + (id)commentWithString:(NSString *)aString {
   return [[[self alloc] initWithString:aString] autorelease]; 
 }

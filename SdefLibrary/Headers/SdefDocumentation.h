@@ -12,8 +12,8 @@
  <!-- DOCUMENTATION ELEMENTS -->
  <!ELEMENT documentation (#PCDATA)>
 */
-@interface SdefDocumentation : SdefObject {
-  id content;
+@interface SdefDocumentation : SdefObject <NSCopying, NSCoding> {
+  id sd_content;
 }
 
 - (NSString *)content;

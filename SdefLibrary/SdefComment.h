@@ -8,7 +8,7 @@
 
 #import <Cocoa/Cocoa.h>
 
-@interface SdefComment : NSObject {
+@interface SdefComment : NSObject <NSCopying, NSCoding> {
   NSString *sd_value;
 }
 

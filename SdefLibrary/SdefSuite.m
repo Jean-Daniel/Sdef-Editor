@@ -14,7 +14,23 @@
 #import "SdefDocumentation.h"
 
 @implementation SdefSuite
+#pragma mark Protocols Implementations
+- (id)copyWithZone:(NSZone *)aZone {
+  SdefSuite *copy = [super copyWithZone:aZone];
+  return copy;
+}
 
+- (void)encodeWithCoder:(NSCoder *)aCoder {
+  [super encodeWithCoder:aCoder];
+}
+
+- (id)initWithCoder:(NSCoder *)aCoder {
+  if (self = [super initWithCoder:aCoder]) {
+  }
+  return self;
+}
+
+#pragma mark -
 + (SDObjectType)objectType {
   return kSDSuiteType;
 }

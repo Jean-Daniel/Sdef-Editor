@@ -29,7 +29,7 @@ extern NSString * const kSDCommandsCollection;
 extern NSString * const kSDEventsCollection;
 
 @class SdefDocumentation;
-@interface SdefSuite : SdefTerminologyElement {
+@interface SdefSuite : SdefTerminologyElement <NSCopying, NSCoding> {
 }
 
 - (SdefCollection *)types;

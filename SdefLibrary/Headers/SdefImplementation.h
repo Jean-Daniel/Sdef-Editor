@@ -20,7 +20,7 @@
  >
 */
 
-@interface SdefImplementation : SdefObject {
+@interface SdefImplementation : SdefObject <NSCopying, NSCoding> {
 @private
   NSString *sd_class;
   NSString *sd_key;

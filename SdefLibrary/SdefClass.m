@@ -63,7 +63,32 @@ static unsigned SdefAccessorFlagFromString(NSString *str) {
 
 
 @implementation SdefClass
+#pragma mark Protocols Implementations
+- (id)copyWithZone:(NSZone *)aZone {
+  SdefClass *copy = [super copyWithZone:aZone];
+  copy->sd_plural = [sd_plural copyWithZone:aZone];
+  copy->sd_inherits = [sd_inherits copyWithZone:aZone];
+  copy->sd_contents = [sd_contents copyWithZone:aZone];
+  return copy;
+}
 
+- (void)encodeWithCoder:(NSCoder *)aCoder {
+  [super encodeWithCoder:aCoder];
+  [aCoder encodeObject:sd_plural forKey:@"SCPlural"];
+  [aCoder encodeObject:sd_inherits forKey:@"SCInherits"];
+  [aCoder encodeObject:sd_contents forKey:@"SCContents"];
+}
+
+- (id)initWithCoder:(NSCoder *)aCoder {
+  if (self = [super initWithCoder:aCoder]) {
+    sd_plural = [[aCoder decodeObjectForKey:@"SCPlural"] retain];
+    sd_inherits = [[aCoder decodeObjectForKey:@"SCInherits"] retain];
+    sd_contents = [[aCoder decodeObjectForKey:@"SCContents"] retain];
+  }
+  return self;
+}
+
+#pragma mark -
 + (SDObjectType)objectType {
   return kSDClassType;
 }
@@ -125,6 +150,7 @@ static unsigned SdefAccessorFlagFromString(NSString *str) {
   if (sd_contents != contents) {
     [sd_contents release];
     sd_contents = [contents retain];
+    [sd_contents setEditable:[self isEditable]];
   }
 }
 
@@ -226,7 +252,38 @@ static unsigned SdefAccessorFlagFromString(NSString *str) {
 
 #pragma mark -
 @implementation SdefElement
+#pragma mark Protocols Implementations
+- (id)copyWithZone:(NSZone *)aZone {
+  SdefElement *copy = [super copyWithZone:aZone];
+  copy->sd_hidden = sd_hidden;
+  copy->sd_access = sd_access;
+  copy->sd_accessors = sd_accessors;
+  copy->sd_impl = [sd_impl copyWithZone:aZone];
+  copy->sd_desc = [sd_desc copyWithZone:aZone];
+  return copy;
+}
 
+- (void)encodeWithCoder:(NSCoder *)aCoder {
+  [super encodeWithCoder:aCoder];
+  [aCoder encodeInt:sd_access forKey:@"SEAccess"];
+  [aCoder encodeBool:sd_hidden forKey:@"SEHidden"];
+  [aCoder encodeInt:sd_accessors forKey:@"SEAccessors"];
+  [aCoder encodeObject:sd_desc forKey:@"SEDescription"];
+  [aCoder encodeObject:sd_impl forKey:@"SEImplementation"];
+}
+
+- (id)initWithCoder:(NSCoder *)aCoder {
+  if (self = [super initWithCoder:aCoder]) {
+    sd_access = [aCoder decodeIntForKey:@"SEAccess"];
+    sd_hidden = [aCoder decodeBoolForKey:@"SEHidden"];
+    sd_accessors = [aCoder decodeIntForKey:@"SEAccessors"];
+    sd_desc = [[aCoder decodeObjectForKey:@"SEDescription"] retain];
+    sd_impl = [[aCoder decodeObjectForKey:@"SEImplementation"] retain];
+  }
+  return self;
+}
+
+#pragma mark -
 + (SDObjectType)objectType {
   return kSDElementType;
 }
@@ -424,7 +481,32 @@ static unsigned SdefAccessorFlagFromString(NSString *str) {
 
 #pragma mark -
 @implementation SdefProperty
+#pragma mark Protocols Implementations
+- (id)copyWithZone:(NSZone *)aZone {
+  SdefProperty *copy = [super copyWithZone:aZone];
+  copy->sd_access = sd_access;
+  copy->sd_notInProperties = sd_notInProperties;
+  copy->sd_type = [sd_type copyWithZone:aZone];
+  return copy;
+}
 
+- (void)encodeWithCoder:(NSCoder *)aCoder {
+  [super encodeWithCoder:aCoder];
+  [aCoder encodeObject:sd_type forKey:@"SPType"];
+  [aCoder encodeInt:sd_access forKey:@"SPAccess"];
+  [aCoder encodeBool:sd_notInProperties forKey:@"SPNotInProperties"];
+}
+
+- (id)initWithCoder:(NSCoder *)aCoder {
+  if (self = [super initWithCoder:aCoder]) {
+    sd_access = [aCoder decodeIntForKey:@"SPAccess"];
+    sd_type = [[aCoder decodeObjectForKey:@"SPType"] retain];
+    sd_notInProperties = [aCoder decodeBoolForKey:@"SPNotInProperties"];
+  }
+  return self;
+}
+
+#pragma mark -
 + (SDObjectType)objectType {
   return kSDPropertyType;
 }
@@ -516,7 +598,29 @@ static unsigned SdefAccessorFlagFromString(NSString *str) {
 
 #pragma mark -
 @implementation SdefRespondsTo
+#pragma mark Protocols Implementations
+- (id)copyWithZone:(NSZone *)aZone {
+  SdefRespondsTo *copy = [super copyWithZone:aZone];
+  copy->sd_hidden = sd_hidden;
+  copy->sd_impl = [sd_impl copyWithZone:aZone];
+  return copy;
+}
 
+- (void)encodeWithCoder:(NSCoder *)aCoder {
+  [super encodeWithCoder:aCoder];
+  [aCoder encodeBool:sd_hidden forKey:@"SRHidden"];
+  [aCoder encodeObject:sd_impl forKey:@"SRImplementation"];
+}
+
+- (id)initWithCoder:(NSCoder *)aCoder {
+  if (self = [super initWithCoder:aCoder]) {
+    sd_hidden = [aCoder decodeBoolForKey:@"SRHidden"];
+    sd_impl = [[aCoder decodeObjectForKey:@"SRImplementation"] retain];
+  }
+  return self;
+}
+
+#pragma mark -
 + (SDObjectType)objectType {
   return kSDRespondsToType;
 }

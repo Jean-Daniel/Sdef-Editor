@@ -11,10 +11,35 @@
 #import "SdefDocument.h"
 
 @implementation SdefImplementation
+#pragma mark Protocols Implementations
+- (id)copyWithZone:(NSZone *)aZone {
+  SdefImplementation *copy = [super copyWithZone:aZone];
+  copy->sd_key = [sd_key copyWithZone:aZone];
+  copy->sd_class = [sd_class copyWithZone:aZone];
+  copy->sd_method = [sd_method copyWithZone:aZone];
+  return copy;
+}
 
+- (void)encodeWithCoder:(NSCoder *)aCoder {
+  [super encodeWithCoder:aCoder];
+  [aCoder encodeObject:sd_key forKey:@"SIKey"];
+  [aCoder encodeObject:sd_class forKey:@"SIClass"];
+  [aCoder encodeObject:sd_method forKey:@"SIMethod"];
+}
+
+- (id)initWithCoder:(NSCoder *)aCoder {
+  if (self = [super initWithCoder:aCoder]) {
+    sd_key = [[aCoder decodeObjectForKey:@"SIKey"] retain];
+    sd_class = [[aCoder decodeObjectForKey:@"SIClass"] retain];
+    sd_method = [[aCoder decodeObjectForKey:@"SIMethod"] retain];
+  }
+  return self;
+}
+
+#pragma mark -
 - (void)dealloc {
-  [sd_class release];
   [sd_key release];
+  [sd_class release];
   [sd_method release];
   [super dealloc];
 }

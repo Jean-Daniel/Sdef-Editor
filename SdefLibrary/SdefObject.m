@@ -18,7 +18,45 @@
 #import "SdefImplementation.h"
 
 @implementation SdefObject
+#pragma mark Protocols Implementations
+- (id)copyWithZone:(NSZone *)aZone {
+  SdefObject *copy = [super copyWithZone:aZone];
+  copy->sd_flags = sd_flags;  
+  copy->sd_name = [sd_name copyWithZone:aZone];
+  copy->sd_icon = [sd_icon copyWithZone:aZone];
+  copy->sd_comments = [sd_comments copyWithZone:aZone];
+  copy->sd_synonyms = [sd_synonyms copyWithZone:aZone];
+  copy->sd_documentation = [sd_documentation copyWithZone:aZone];
+  copy->sd_childComments = [sd_childComments copyWithZone:aZone];
+  return copy;
+}
 
+- (id)initWithCoder:(NSCoder *)aCoder {
+  if (self = [super initWithCoder:aCoder]) {
+    unsigned length;
+    const uint8_t*buffer = [aCoder decodeBytesForKey:@"SOFlags" returnedLength:&length];
+    memcpy(&sd_flags, buffer, length);
+
+    sd_name = [[aCoder decodeObjectForKey:@"SOName"] retain];
+    sd_icon = [[aCoder decodeObjectForKey:@"SOIcon"] retain];
+    sd_comments = [[aCoder decodeObjectForKey:@"SOComments"] retain];
+    sd_synonyms = [[aCoder decodeObjectForKey:@"SOSynonyms"] retain];
+    sd_documentation = [[aCoder decodeObjectForKey:@"SODocumentation"] retain];
+  }
+  return self;
+}
+
+- (void)encodeWithCoder:(NSCoder *)aCoder {
+  [super encodeWithCoder:aCoder];
+  [aCoder encodeBytes:(const void *)&sd_flags length:sizeof(sd_flags) forKey:@"SOFlags"];
+  [aCoder encodeObject:sd_name forKey:@"SOName"];
+  [aCoder encodeObject:sd_icon forKey:@"SOIcon"];
+  [aCoder encodeObject:sd_comments forKey:@"SOComments"];
+  [aCoder encodeObject:sd_synonyms forKey:@"SOSynonyms"];
+  [aCoder encodeObject:sd_documentation forKey:@"SODocumentation"];
+}
+
+#pragma mark -
 + (void)initialize {
   BOOL tooLate = NO;
   if (!tooLate) {
@@ -127,14 +165,8 @@
 }
 
 - (void)insertChild:(id)child atIndex:(unsigned)idx {
-  /* Super call prepend or insertsibling, so no need to notify. */
-//  [[[self document] undoManager] registerUndoWithTarget:child selector:@selector(remove) object:nil];
-//  [self willChange:NSKeyValueChangeInsertion valuesAtIndexes:[NSIndexSet indexSetWithIndex:idx] forKey:@"children"];
+  /* Super call prepend or insertsibling, so no need to undo & notify here. */
   [super insertChild:child atIndex:idx];
-//  [self didChange:NSKeyValueChangeInsertion valuesAtIndexes:[NSIndexSet indexSetWithIndex:idx] forKey:@"children"];
-//  [[NSNotificationCenter defaultCenter] postNotificationName:@"SdefObjectDidAppendChild"
-//                                                      object:self
-//                                                    userInfo:[NSDictionary dictionaryWithObject:child forKey:@"NewTreeNode"]];
 }
 
 - (void)insertSibling:(SKTreeNode *)newSibling {
@@ -161,17 +193,8 @@
 }
 
 - (void)removeChildAtIndex:(unsigned)idx {
-  /* Super call -remove, so no need to undo here */
-//  id child = [self childAtIndex:idx];
-//  [[[[self document] undoManager] prepareWithInvocationTarget:self] insertChild:child atIndex:idx];
-//  [[NSNotificationCenter defaultCenter] postNotificationName:@"SdefObjectWillRemoveChild"
-//                                                      object:self
-//                                                    userInfo:[NSDictionary dictionaryWithObject:child forKey:@"RemovedTreeNode"]];
-//  [self willChange:NSKeyValueChangeRemoval valuesAtIndexes:[NSIndexSet indexSetWithIndex:idx] forKey:@"children"];
+  /* Super call -remove, so no need to undo & notify here */
   [super removeChildAtIndex:idx];
-//  [self didChange:NSKeyValueChangeRemoval valuesAtIndexes:[NSIndexSet indexSetWithIndex:idx] forKey:@"children"];
-//  [[NSNotificationCenter defaultCenter] postNotificationName:@"SdefObjectDidRemoveChild"
-//                                                      object:self];
 }
 
 - (void)removeAllChildren {
@@ -248,7 +271,7 @@
 }
 
 - (BOOL)isRemovable {
-  return sd_flags.editable == 1 && sd_flags.removable == 1;
+  return sd_flags.removable == 1;
 }
 
 - (void)setRemovable:(BOOL)removable {
@@ -445,7 +468,29 @@
 
 #pragma mark -
 @implementation SdefCollection
+#pragma mark Protocols Implementations
+- (id)copyWithZone:(NSZone *)aZone {
+  SdefCollection *copy = [super copyWithZone:aZone];
+  copy->sd_contentType = sd_contentType;
+  copy->sd_elementName = [sd_elementName copyWithZone:aZone];
+  return copy;
+}
 
+- (void)encodeWithCoder:(NSCoder *)aCoder {
+  [super encodeWithCoder:aCoder];
+  [aCoder encodeObject:sd_elementName forKey:@"SCElementName"];
+  [aCoder encodeObject:NSStringFromClass(sd_contentType) forKey:@"SCContentType"];
+}
+
+- (id)initWithCoder:(NSCoder *)aCoder {
+  if (self = [super initWithCoder:aCoder]) {
+    sd_elementName = [[aCoder decodeObjectForKey:@"SCElementName"] retain];
+    sd_contentType = NSClassFromString([aCoder decodeObjectForKey:@"SCContentType"]);
+  }
+  return self;
+}
+
+#pragma mark -
 + (SDObjectType)objectType {
   return kSDCollectionType;
 }
@@ -462,12 +507,12 @@
 }
 
 - (Class)contentType {
-  return _contentType;
+  return sd_contentType;
 }
 
 - (void)setContentType:(Class)newContentType {
-  if (_contentType != newContentType) {
-    _contentType = newContentType;
+  if (sd_contentType != newContentType) {
+    sd_contentType = newContentType;
   }
 }
 
@@ -478,7 +523,7 @@
 - (void)setElementName:(NSString *)aName {
   if (sd_elementName != aName) {
     [sd_elementName release];
-    sd_elementName = [aName retain];
+    sd_elementName = [aName copy];
   }
 }
 
@@ -530,7 +575,35 @@
 
 #pragma mark -
 @implementation SdefTerminologyElement
+#pragma mark Protocols Implementation
+- (id)copyWithZone:(NSZone *)aZone {
+  SdefTerminologyElement *copy = [super copyWithZone:aZone];
+  copy->sd_hidden = sd_hidden;
+  copy->sd_code = [sd_code copyWithZone:aZone];
+  copy->sd_desc = [sd_desc copyWithZone:aZone];
+  copy->sd_impl = [sd_impl copyWithZone:aZone];
+  return copy;
+}
 
+- (void)encodeWithCoder:(NSCoder *)aCoder {
+  [super encodeWithCoder:aCoder];
+  [aCoder encodeBool:sd_hidden forKey:@"STHidden"];
+  [aCoder encodeObject:sd_code forKey:@"STCodeStr"];
+  [aCoder encodeObject:sd_desc forKey:@"STDescription"];
+  [aCoder encodeObject:sd_impl forKey:@"STImplementation"];
+}
+
+- (id)initWithCoder:(NSCoder *)aCoder {
+  if (self = [super initWithCoder:aCoder]) {
+    sd_hidden = [aCoder decodeBoolForKey:@"STHidden"];
+    sd_code = [[aCoder decodeObjectForKey:@"STCodeStr"] retain];
+    sd_desc = [[aCoder decodeObjectForKey:@"STDescription"] retain];
+    sd_impl = [[aCoder decodeObjectForKey:@"STImplementation"] retain];
+  }
+  return self;
+}
+
+#pragma mark -
 - (id)init {
   if (self = [super init]) {
     [self setImpl:[SdefImplementation node]];
@@ -653,7 +726,23 @@
 @end
 
 @implementation SdefImports  
+#pragma mark Protocols Implementation
+- (id)copyWithZone:(NSZone *)aZone {
+  SdefImports *copy = [super copyWithZone:aZone];
+  return copy;
+}
 
+- (void)encodeWithCoder:(NSCoder *)aCoder {
+  [super encodeWithCoder:aCoder];
+}
+
+- (id)initWithCoder:(NSCoder *)aCoder {
+  if (self = [super initWithCoder:aCoder]) {
+  }
+  return self;
+}
+
+#pragma mark -
 + (SDObjectType)objectType {
   return kSDImportsType;
 }

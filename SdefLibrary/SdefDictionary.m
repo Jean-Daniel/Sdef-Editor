@@ -7,12 +7,35 @@
 //
 
 #import "SdefDictionary.h"
+#import "ShadowMacros.h"
+
 #import "SdefSuite.h"
 #import "SdefXMLNode.h"
 #import "SdefDocumentation.h"
 
 @implementation SdefDictionary
+#pragma mark Protocols Implementations
+- (id)copyWithZone:(NSZone *)aZone {
+  id document = sd_document;
+//  sd_document = nil; /* If document != nil => register some undo */
+  SdefDictionary *copy = [super copyWithZone:aZone];
+//  sd_document = document;
+  copy->sd_document = nil;
+//  [copy setDocument:sd_document];
+  return copy;
+}
 
+- (void)encodeWithCoder:(NSCoder *)aCoder {
+  [super encodeWithCoder:aCoder];
+}
+
+- (id)initWithCoder:(NSCoder *)aCoder {
+  if (self = [super initWithCoder:aCoder]) {
+  }
+  return self;
+}
+
+#pragma mark -
 + (void)initialize {
   static BOOL tooLate = NO;
   if (!tooLate) {
@@ -35,7 +58,7 @@
 }
 
 - (void)dealloc {
-  [sd_title release];
+//  ShadowTrace();
   [super dealloc];
 }
 

@@ -27,12 +27,12 @@
 */
 
 @class SdefDocumentation, SdefImplementation;
-@interface SdefEnumeration : SdefTerminologyElement {
+@interface SdefEnumeration : SdefTerminologyElement <NSCopying, NSCoding> {
 }
 
 @end
 
-@interface SdefEnumerator : SdefTerminologyElement {
+@interface SdefEnumerator : SdefTerminologyElement <NSCopying, NSCoding> {
 }
 
 @end

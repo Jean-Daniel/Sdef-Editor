@@ -22,7 +22,7 @@
 
 extern NSString * const kSDSynonymsCollection;
 
-@interface SdefSynonym : SdefTerminologyElement {
+@interface SdefSynonym : SdefTerminologyElement <NSCopying, NSCoding> {
 }
 
 - (NSString *)desc;

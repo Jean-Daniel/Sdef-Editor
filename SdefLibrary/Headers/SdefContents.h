@@ -8,7 +8,7 @@
 
 #import "SdefObject.h"
 
-@interface SdefContents : SdefTerminologyElement {
+@interface SdefContents : SdefTerminologyElement <NSCopying, NSCoding> {
   NSString *sd_type;
   unsigned sd_access;
 }
