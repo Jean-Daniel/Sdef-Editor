@@ -148,6 +148,7 @@ static inline BOOL SdefEditorExistsForItem(SdefObject *item) {
 }
 
 - (void)windowDidLoad {
+  [outline registerForDraggedTypes:[NSArray arrayWithObject:SdefObjectDragType]];
   [super windowDidLoad];
 }
 
@@ -303,6 +304,15 @@ static inline BOOL SdefEditorExistsForItem(SdefObject *item) {
           str = @"events";
         }
         [pboard setString:str forType:SdefInfoPboardType];
+      } else if ([selection objectType] == kSdefVerbType) {
+        id str = nil;
+        SdefSuite *suite = [selection firstParentOfType:kSdefSuiteType];
+        if ([selection parent] == [suite commands] || selection == [suite commands]) {
+          str = @"commands";
+        } else if ([selection parent] == [suite events] || selection == [suite events]) {
+          str = @"events";
+        }
+        [pboard setString:str forType:SdefInfoPboardType];
       } else {
         [pboard setString:@"" forType:SdefInfoPboardType];
       }
@@ -346,11 +356,15 @@ static inline BOOL SdefEditorExistsForItem(SdefObject *item) {
       destination = [(SdefSuite *)[selection firstParentOfType:kSdefSuiteType] classes];
       break;
     case kSdefVerbType:
-      if ([tree isKindOfClass:[SdefCommand class]]) {
-        destination = [(SdefSuite *)[selection firstParentOfType:kSdefSuiteType] commands];
-      } else if ([tree isKindOfClass:[SdefEvent class]]) {
-        destination = [[selection firstParentOfType:kSdefSuiteType] events];
+    {
+      id str = [pboard stringForType:SdefInfoPboardType];
+      @try {
+        destination = [(SdefSuite *)[selection firstParentOfType:kSdefSuiteType] valueForKey:str];
+      } @catch (id exception) {
+        SKLogException(exception);
+        destination = nil;
       }
+    }
       break;
       /* 4 Class content type */
     case kSdefElementType:
@@ -384,9 +398,15 @@ static inline BOOL SdefEditorExistsForItem(SdefObject *item) {
       SdefClass *class = [selection firstParentOfType:kSdefClassType];
       if (type == [SdefEnumeration class]) destination = [suite types];
       else if (type == [SdefClass class]) destination = [suite classes];
-      else if (type == [SdefCommand class]) destination = [suite commands];
-      else if (type == [SdefEvent class]) destination = [suite events];
-      
+      else if (type == [SdefVerb class]) {
+        id str = [pboard stringForType:SdefInfoPboardType];
+        @try {
+          destination = [suite valueForKey:str];
+        } @catch (id exception) {
+          SKLogException(exception);
+          destination = nil;
+        }
+      }
       else if (type == [SdefElement class]) destination = [class elements];
       else if (type == [SdefProperty class]) destination = [class properties];
       else if (type == [SdefRespondsTo class]) {

@@ -129,8 +129,23 @@ extern unsigned SDAccessFlagFromString(NSString *str);
 - (unsigned)accessors;
 - (void)setAccessors:(unsigned)accessors;
 
+#pragma mark Accessors
+- (BOOL)accIndex;
+- (void)setAccIndex:(BOOL)flag;
+- (BOOL)accId;
+- (void)setAccId:(BOOL)flag;
+- (BOOL)accName;
+- (void)setAccName:(BOOL)flag;
+- (BOOL)accRange;
+- (void)setAccRange:(BOOL)flag;
+- (BOOL)accRelative;
+- (void)setAccRelative:(BOOL)flag;
+- (BOOL)accTest;
+- (void)setAccTest:(BOOL)flag;
+
 @end
 
+#pragma mark -
 @interface SdefProperty : SdefTerminologyElement <NSCopying, NSCoding> {
   NSString *sd_type;
   unsigned sd_access;

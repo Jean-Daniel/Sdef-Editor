@@ -64,11 +64,3 @@ description  %Text;        #IMPLIED
 - (void)setDirectParameter:(SdefDirectParameter *)aParameter;
 
 @end
-
-@interface SdefCommand : SdefVerb <NSCopying> {
-}
-@end
-
-@interface SdefEvent : SdefVerb <NSCopying> {
-}
-@end

@@ -58,12 +58,12 @@
   [self appendChild:child];
   
   child = [SdefCollection nodeWithName:NSLocalizedStringFromTable(@"Commands", @"SdefLibrary", @"Commands Collection default name")];
-  [child setContentType:[SdefCommand class]];
+  [child setContentType:[SdefVerb class]];
   [child setElementName:@"commands"];
   [self appendChild:child];
   
   child = [SdefCollection nodeWithName:NSLocalizedStringFromTable(@"Events", @"SdefLibrary", @"Events Collection default name")];
-  [child setContentType:[SdefEvent class]];
+  [child setContentType:[SdefVerb class]];
   [child setElementName:@"events"];
   [self appendChild:child];
 }

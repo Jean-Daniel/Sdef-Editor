@@ -43,6 +43,11 @@
   return @"Function";
 }
 
+#pragma mark -
++ (NSString *)defaultName {
+  return @"method";
+}
+
 - (void)dealloc {
   [sd_result setOwner:nil];
   [sd_result release];
@@ -89,24 +94,25 @@
   id node;
   if (node = [super xmlNode]) {
     id childNode;
+    unsigned idx = [node childCount] - [self childCount];
     childNode = [[self result] xmlNode];
     if (nil != childNode) {
-      if ([[[node firstChild] elementName] isEqualToString:@"cocoa"]) {
-        [[node firstChild] insertSibling:childNode];
-      } else {
-        [node prependChild:childNode];
-      }
+      [node insertChild:childNode atIndex:idx];
     }
     childNode = [[self directParameter] xmlNode];
     if (nil != childNode) {
-      if ([[[node firstChild] elementName] isEqualToString:@"cocoa"]) {
-        [[node firstChild] insertSibling:childNode];
-      } else {
-        [node prependChild:childNode];
-      }
+      [node insertChild:childNode atIndex:idx];
     }
   }
   return node;
+}
+
+- (NSString *)xmlElementName {
+  if ([[[self parent] xmlElementName] isEqualToString:@"commands"]) {
+    return @"command";
+  } else if ([[[self parent] xmlElementName] isEqualToString:@"events"])
+    return @"event"; 
+  return nil;
 }
 
 #pragma mark -
@@ -150,48 +156,4 @@
     [super parser:parser didEndElement:elementName namespaceURI:namespaceURI qualifiedName:qName];
   }
 }
-@end
-
-#pragma mark -
-@implementation SdefCommand
-#pragma mark Protocols Implementations
-- (id)copyWithZone:(NSZone *)aZone {
-  SdefCommand *copy = [super copyWithZone:aZone];
-  return copy;
-}
-
-#pragma mark -
-+ (NSString *)defaultName {
-  return NSLocalizedStringFromTable(@"command", @"SdefLibrary", @"Command default name");
-}
-
-#pragma mark -
-#pragma mark XML Generation
-
-- (NSString *)xmlElementName {
-  return @"command";
-}
-
-@end
-
-#pragma mark -
-@implementation SdefEvent
-#pragma mark Protocols Implementations
-- (id)copyWithZone:(NSZone *)aZone {
-  SdefEvent *copy = [super copyWithZone:aZone];
-  return copy;
-}
-
-#pragma mark -
-+ (NSString *)defaultName {
-  return NSLocalizedStringFromTable(@"event", @"SdefLibrary", @"Event default name");
-}
-
-#pragma mark -
-#pragma mark XML Generation
-
-- (NSString *)xmlElementName {
-  return @"event";
-}
-
 @end
