@@ -100,10 +100,11 @@
   if (sd_type && (node = [super xmlNode])) {
     id attr = [self type];
     if (nil != attr) [node setAttribute:attr forKey:@"type"];
+    if (![self name]) [node setAttribute:@"contents" forKey:@"name"];
     
-    if ([self access] == (kSDElementRead | kSDElementWrite)) attr = @"rw";
-    else if ([self access] == kSDElementRead) attr = @"r";
-    else if ([self access] == kSDElementWrite) attr = @"w";
+    if ([self access] == (kSdefAccessRead | kSdefAccessWrite)) attr = @"rw";
+    else if ([self access] == kSdefAccessRead) attr = @"r";
+    else if ([self access] == kSdefAccessWrite) attr = @"w";
     else attr = nil;
     attr = SDAccessStringFromFlag([self access]);
     if (nil != attr) [node setAttribute:attr forKey:@"access"];

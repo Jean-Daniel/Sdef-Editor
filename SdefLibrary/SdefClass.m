@@ -8,26 +8,25 @@
 
 #import "SdefClass.h"
 #import "SdefContents.h"
-#import "SdefDocumentation.h"
-#import "SdefImplementation.h"
-#import "SdefXMLNode.h"
 #import "SdefDocument.h"
+#import "SdefDocumentation.h"
+#import "SdefXMLNode.h"
 
 NSString *SDAccessStringFromFlag(unsigned flag) {
   id str = nil;
-  if (flag == (kSDElementRead | kSDElementWrite)) str = @"rw";
-  else if (flag == kSDElementRead) str = @"r";
-  else if (flag == kSDElementWrite) str = @"w";
+  if (flag == (kSdefAccessRead | kSdefAccessWrite)) str = @"rw";
+  else if (flag == kSdefAccessRead) str = @"r";
+  else if (flag == kSdefAccessWrite) str = @"w";
   return str;
 }
 
 unsigned SDAccessFlagFromString(NSString *str) {
   unsigned flag = 0;
   if (str && [str rangeOfString:@"r"].location != NSNotFound) {
-    flag |= kSDElementRead;
+    flag |= kSdefAccessRead;
   }
   if (str && [str rangeOfString:@"w"].location != NSNotFound) {
-    flag |= kSDElementWrite;
+    flag |= kSdefAccessWrite;
   }
   return flag;
 }
@@ -145,12 +144,14 @@ static unsigned SdefAccessorFlagFromString(NSString *str) {
 }
 
 #pragma mark -
+
 - (SdefContents *)contents {
   return sd_contents;
 }
 
 - (void)setContents:(SdefContents *)contents {
   if (sd_contents != contents) {
+    [sd_contents setOwner:nil];
     [sd_contents release];
     sd_contents = [contents retain];
     [sd_contents setOwner:self];
@@ -255,6 +256,11 @@ static unsigned SdefAccessorFlagFromString(NSString *str) {
 
 #pragma mark -
 @implementation SdefElement
+
++ (void)initialize {
+  [self setKeys:[NSArray arrayWithObject:@"name"] triggerChangeNotificationsForDependentKey:@"type"];
+}
+
 #pragma mark Protocols Implementations
 - (id)copyWithZone:(NSZone *)aZone {
   SdefElement *copy = [super copyWithZone:aZone];
@@ -292,6 +298,15 @@ static unsigned SdefAccessorFlagFromString(NSString *str) {
 
 - (void)dealloc {
   [super dealloc];
+}
+
+#pragma mark -
+- (NSString *)type {
+  return [self name];
+}
+
+- (void)setType:(NSString *)type {
+  [super setName:type];
 }
 
 - (unsigned)access {
@@ -375,9 +390,9 @@ static unsigned SdefAccessorFlagFromString(NSString *str) {
     id attr = [self name];
     if (nil != attr) [node setAttribute:attr forKey:@"type"];
     
-    if ([self access] == (kSDElementRead | kSDElementWrite)) attr = @"rw";
-    else if ([self access] == kSDElementRead) attr = @"r";
-    else if ([self access] == kSDElementWrite) attr = @"w";
+    if ([self access] == (kSdefAccessRead | kSdefAccessWrite)) attr = @"rw";
+    else if ([self access] == kSdefAccessRead) attr = @"r";
+    else if ([self access] == kSdefAccessWrite) attr = @"w";
     else attr = nil;
     attr = SDAccessStringFromFlag([self access]);
     if (nil != attr) [node setAttribute:attr forKey:@"access"];
@@ -515,9 +530,9 @@ static unsigned SdefAccessorFlagFromString(NSString *str) {
     id attr = [self type];
     if (nil != attr) [node setAttribute:attr forKey:@"type"];
     
-    if ([self access] == (kSDElementRead | kSDElementWrite)) attr = @"rw";
-    else if ([self access] == kSDElementRead) attr = @"r";
-    else if ([self access] == kSDElementWrite) attr = @"w";
+    if ([self access] == (kSdefAccessRead | kSdefAccessWrite)) attr = @"rw";
+    else if ([self access] == kSdefAccessRead) attr = @"r";
+    else if ([self access] == kSdefAccessWrite) attr = @"w";
     else attr = nil;
     attr = SDAccessStringFromFlag([self access]);
     if (nil != attr) [node setAttribute:attr forKey:@"access"];

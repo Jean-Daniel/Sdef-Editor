@@ -61,6 +61,7 @@
 
 - (void)setOptional:(BOOL)newOptional {
   if (sd_optional != newOptional) {
+    [[[[self document] undoManager] prepareWithInvocationTarget:self] setOptional:sd_optional];
     sd_optional = newOptional;
   }
 }

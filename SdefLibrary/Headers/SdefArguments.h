@@ -8,7 +8,21 @@
 
 #import "SdefObject.h"
 
-@interface SdefDirectParameter : SdefObject <NSCopying, NSCoding> {
+@interface SdefParameter : SdefTerminologyElement <NSCopying, NSCoding> {
+  BOOL sd_optional;
+  NSString *sd_type; 
+}
+
+- (BOOL)isOptional;
+- (void)setOptional:(BOOL)flag;
+
+- (NSString *)type;
+- (void)setType:(NSString *)aType;
+
+@end
+
+#pragma mark -
+@interface SdefDirectParameter : SdefOrphanObject <NSCopying, NSCoding> {
   BOOL sd_optional;
   NSString *sd_type; 
   NSString *sd_desc;
@@ -25,20 +39,8 @@
 
 @end
 
-@interface SdefParameter : SdefTerminologyElement <NSCopying, NSCoding> {
-  BOOL sd_optional;
-  NSString *sd_type; 
-}
-
-- (BOOL)isOptional;
-- (void)setOptional:(BOOL)flag;
-
-- (NSString *)type;
-- (void)setType:(NSString *)aType;
-
-@end
-
-@interface SdefResult : SdefObject <NSCopying, NSCoding> {
+#pragma mark -
+@interface SdefResult : SdefOrphanObject <NSCopying, NSCoding> {
   NSString *sd_type; 
   NSString *sd_desc;
 }

@@ -14,7 +14,9 @@
 - (id)copyWithZone:(NSZone *)aZone {
   SdefVerb *copy = [super copyWithZone:aZone];
   copy->sd_result = [sd_result copyWithZone:aZone];
+  [copy->sd_result setOwner:copy];
   copy->sd_direct = [sd_direct copyWithZone:aZone];
+  [copy->sd_direct setOwner:copy];
   return copy;
 }
 
@@ -42,7 +44,9 @@
 }
 
 - (void)dealloc {
+  [sd_result setOwner:nil];
   [sd_result release];
+  [sd_direct setOwner:nil];
   [sd_direct release];
   [super dealloc];
 }
@@ -60,8 +64,10 @@
 }
 - (void)setResult:(SdefResult *)aResult {
   if (sd_result != aResult) {
+    [sd_result setOwner:nil];
     [sd_result release];
     sd_result = [aResult retain];
+    [sd_result setOwner:self];
   }
 }
 
@@ -70,8 +76,10 @@
 }
 - (void)setDirectParameter:(SdefDirectParameter *)aParameter {
   if (sd_direct != aParameter) {
+    [sd_direct setOwner:nil];
     [sd_direct release];
     sd_direct = [aParameter retain];
+    [sd_direct setOwner:self];
   }
 }
 

@@ -12,7 +12,7 @@
  <!-- DOCUMENTATION ELEMENTS -->
  <!ELEMENT documentation (#PCDATA)>
 */
-@interface SdefDocumentation : SdefObject <NSCopying, NSCoding> {
+@interface SdefDocumentation : SdefOrphanObject <NSCopying, NSCoding> {
   id sd_content;
 }
 

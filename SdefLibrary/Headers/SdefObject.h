@@ -46,7 +46,10 @@ extern NSString * const SdefObjectDidRemoveAllChildrenNotification;
 extern NSString * const SDTreeNodeWillChangeNameNotification;
 extern NSString * const SDTreeNodeDidChangeNameNotification;
 
-@class SdefXMLNode, SdefDocumentation, SdefCollection, SdefDocument;
+extern NSString *SdefNameForCocoaName(NSString *cocoa);
+extern NSString *CocoaNameForSdefName(NSString *cocoa, BOOL isClass);
+
+@class SdefXMLNode, SdefSuite, SdefDocumentation, SdefCollection, SdefDocument;
 @interface SdefObject : SKTreeNode <NSCopying, NSCoding> {
 @protected
   NSMutableArray *sd_childComments;
@@ -78,9 +81,11 @@ extern NSString * const SDTreeNodeDidChangeNameNotification;
 - (SDObjectType)objectType;
 - (void)createContent;
 - (void)createSynonyms;
-- (SdefDocument *)document;
 
 #pragma mark -
+- (SdefSuite *)suite;
+- (SdefDocument *)document;
+
 - (NSImage *)icon;
 - (void)setIcon:(NSImage *)newIcon;
 
@@ -151,6 +156,22 @@ extern NSString * const SDTreeNodeDidChangeNameNotification;
 
 - (NSString *)desc;
 - (void)setDesc:(NSString *)newDesc;
+
+- (NSString *)cocoaKey;
+- (NSString *)cocoaName;
+- (NSString *)cocoaClass;
+- (NSString *)cocoaMethod;
+
+@end
+
+#pragma mark -
+@interface SdefOrphanObject : SdefObject <NSCopying, NSCoding> {
+@private
+  SdefObject *sd_owner;
+}
+
+- (id)owner;
+- (void)setOwner:(SdefObject *)anObject;
 
 @end
 

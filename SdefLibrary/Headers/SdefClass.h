@@ -71,8 +71,8 @@
 */
 
 enum {
-  kSDElementRead = 1 << 0,
-  kSDElementWrite = 1 << 1,
+  kSdefAccessRead = 1 << 0,
+  kSdefAccessWrite = 1 << 1,
 };
 
 enum {
@@ -117,8 +117,11 @@ extern unsigned SDAccessFlagFromString(NSString *str);
   unsigned int sd_accessors; /* index | name | id | range | relative | test */
   
   /* Attributs */
-  unsigned sd_access; /* ( kSDElementRead | kSDElementWrite ) */
+  unsigned sd_access; /* ( kSdefAccessRead | kSdefAccessWrite ) */
 }
+
+- (NSString *)type;
+- (void)setType:(NSString *)aType;
 
 - (unsigned)access;
 - (void)setAccess:(unsigned)newAccess;

@@ -8,6 +8,7 @@
 
 #import "SdefDocumentation.h"
 #import "SdefXMLGenerator.h"
+#import "SdefDocument.h"
 
 @implementation SdefDocumentation
 #pragma mark Protocols Implementations
@@ -66,6 +67,7 @@
 
 - (void)setContent:(NSString *)newContent {
   if (sd_content != newContent) {
+    //[[[self document] undoManager] registerUndoWithTarget:self selector:_cmd object:sd_content];
     [sd_content release];
     sd_content = [newContent retain];
   }

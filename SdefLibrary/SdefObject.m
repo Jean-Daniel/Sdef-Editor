@@ -38,6 +38,7 @@ NSString * const SDTreeNodeDidChangeNameNotification = @"SDTreeNodeDidChangeName
   copy->sd_comments = [sd_comments copyWithZone:aZone];
   copy->sd_synonyms = [sd_synonyms copyWithZone:aZone];
   copy->sd_documentation = [sd_documentation copyWithZone:aZone];
+  [copy->sd_documentation setOwner:copy];
   copy->sd_childComments = [sd_childComments copyWithZone:aZone];
   return copy;
 }
@@ -140,6 +141,7 @@ NSString * const SDTreeNodeDidChangeNameNotification = @"SDTreeNodeDidChangeName
   [sd_name release];
   [sd_synonyms release];
   [sd_comments release];
+  [sd_documentation setOwner:nil];
   [sd_documentation release];
   [sd_childComments release];
   [super dealloc];
@@ -215,6 +217,14 @@ NSString * const SDTreeNodeDidChangeNameNotification = @"SDTreeNodeDidChangeName
 }
 
 #pragma mark -
+- (SdefSuite *)suite {
+  id parent = self;
+  while (parent && ([parent objectType] != kSDSuiteType)) {
+    parent = [parent parent];
+  }
+  return parent;
+}
+
 - (SdefDocument *)document {
   id root = [self findRoot];
   return (root != self) ? [root document] : nil;
@@ -300,8 +310,10 @@ NSString * const SDTreeNodeDidChangeNameNotification = @"SDTreeNodeDidChangeName
 
 - (void)setDocumentation:(SdefDocumentation *)doc {
   if (sd_documentation != doc) {
+    [sd_documentation setOwner:nil];
     [sd_documentation release];
     sd_documentation = [doc retain];
+    [sd_documentation setOwner:self];
     [sd_documentation setEditable:[self isEditable]];
   }	
 }
@@ -629,6 +641,12 @@ NSString * const SDTreeNodeDidChangeNameNotification = @"SDTreeNodeDidChangeName
   [super dealloc];
 }
 
+- (NSString *)description {
+  return [NSString stringWithFormat:@"<%@ %p> {name:\"%@\" code:'%@' hidden:%@ \n\timpl:%@}",
+    NSStringFromClass([self class]), self,
+    [self name], [self codeStr], [self isHidden] ? @"YES" : @"NO", [self impl]];
+}
+
 #pragma mark -
 - (void)createContent {
   [self setImpl:[SdefImplementation node]];
@@ -647,6 +665,7 @@ NSString * const SDTreeNodeDidChangeNameNotification = @"SDTreeNodeDidChangeName
 
 - (void)setImpl:(SdefImplementation *)newImpl {
   if (sd_impl != newImpl) {
+    [sd_impl setOwner:nil];
     [sd_impl release];
     sd_impl = [newImpl retain];
     [sd_impl setOwner:self];
@@ -704,6 +723,22 @@ NSString * const SDTreeNodeDidChangeNameNotification = @"SDTreeNodeDidChangeName
 }
 
 #pragma mark -
+- (NSString *)cocoaKey {
+  return ([[self impl] key] != nil) ? [[self impl] key] : CocoaNameForSdefName([self name], NO);
+}
+- (NSString *)cocoaName {
+  return ([[self impl] name] != nil) ? [[self impl] name] : CocoaNameForSdefName([self name], YES);
+}
+
+- (NSString *)cocoaClass {
+  return ([[self impl] sdClass] != nil) ? [[self impl] sdClass] : CocoaNameForSdefName([self name], YES);
+}
+
+- (NSString *)cocoaMethod {
+  return ([[self impl] method] != nil) ? [[self impl] method] : CocoaNameForSdefName([self name], NO);
+}
+
+#pragma mark -
 #pragma mark XML Generation
 - (SdefXMLNode *)xmlNode {
   id node = [super xmlNode];
@@ -742,6 +777,43 @@ NSString * const SDTreeNodeDidChangeNameNotification = @"SDTreeNodeDidChangeName
 
 @end
 
+#pragma mark -
+@implementation SdefOrphanObject
+#pragma mark Protocols Implementations
+- (id)copyWithZone:(NSZone *)aZone {
+  SdefOrphanObject *copy = [super copyWithZone:aZone];
+  copy->sd_owner = nil;
+  return copy;
+}
+
+- (void)encodeWithCoder:(NSCoder *)aCoder {
+  [super encodeWithCoder:aCoder];
+  [aCoder encodeConditionalObject:sd_owner forKey:@"SOOwner"];
+}
+
+- (id)initWithCoder:(NSCoder *)aCoder {
+  if (self = [super initWithCoder:aCoder]) {
+    sd_owner = [aCoder decodeObjectForKey:@"SOOwner"];
+  }
+  return self;
+}
+
+#pragma mark -
+- (id)owner {
+  return sd_owner;
+}
+
+- (void)setOwner:(SdefObject *)anObject {
+  sd_owner = anObject;
+}
+
+- (SdefDocument *)document {
+  return [sd_owner document];
+}
+
+@end
+
+#pragma mark -
 @implementation SdefImports  
 #pragma mark Protocols Implementation
 - (id)copyWithZone:(NSZone *)aZone {
@@ -773,4 +845,53 @@ NSString * const SDTreeNodeDidChangeNameNotification = @"SDTreeNodeDidChangeName
 }
 
 @end
+#pragma mark -
+#pragma mark Publics Functions
+NSString *CocoaNameForSdefName(NSString *sdefName, BOOL isClass) {
+  static CFLocaleRef english = nil;
+  if (!english) english = CFLocaleCreate(kCFAllocatorDefault, CFSTR("English"));
+  if (!sdefName) return nil;
+  
+  NSMutableString *name = [NSMutableString stringWithString:sdefName];
+  CFStringCapitalize((CFMutableStringRef)name, english);
+  CFStringTrimWhitespace((CFMutableStringRef)name);
+  if (!isClass) {
+    NSString *first = [[name substringToIndex:1] lowercaseString];
+    [name replaceCharactersInRange:NSMakeRange(0, 1) withString:first];
+  }
+  
+  NSCharacterSet *white = [NSCharacterSet whitespaceAndNewlineCharacterSet];
+  NSRange range = NSMakeRange(0, [name length]);
+  NSRange space = [name rangeOfCharacterFromSet:white options:NSLiteralSearch range:range];
+  while (space.location != NSNotFound) {
+    [name deleteCharactersInRange:space];
+    range.location = space.location;
+    range.length = [name length] - range.location;
+    if (range.length <= 0)
+      break;
+    space = [name rangeOfCharacterFromSet:white options:NSLiteralSearch range:range];
+  }
+  
+  return name;
+}
 
+NSString *SdefNameForCocoaName(NSString *cocoa) {
+  static CFLocaleRef english = nil;
+  if (!cocoa) return nil;
+  
+  NSMutableString *sdef = [[NSMutableString alloc] initWithString:cocoa];
+  NSCharacterSet *upper = [NSCharacterSet uppercaseLetterCharacterSet];
+  NSRange range = NSMakeRange(0, [sdef length]);
+  NSRange character = [sdef rangeOfCharacterFromSet:upper options:NSLiteralSearch range:range];
+  while (character.location != NSNotFound) {
+    if (character.location) [sdef insertString:@" " atIndex:(character.location++)];
+    range.location = character.location + character.length;
+    range.length = [sdef length] - range.location;
+    if (!range.length)
+      break;
+    character = [sdef rangeOfCharacterFromSet:upper options:NSLiteralSearch range:range];
+  }
+  if (!english) english = CFLocaleCreate(kCFAllocatorDefault, CFSTR("English"));
+  CFStringLowercase((CFMutableStringRef)sdef, english);
+  return [sdef autorelease];
+}
