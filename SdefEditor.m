@@ -7,6 +7,7 @@
 //
 
 #import "SdefEditor.h"
+#import "SKFunctions.h"
 #import "ShadowMacros.h"
 #import "SdefObjectInspector.h"
 
@@ -20,5 +21,23 @@
   [[SdefObjectInspector sharedInspector] showWindow:sender];
 }
 
+- (IBAction)openSuite:(id)sender {
+  id suite = nil;
+  switch ([sender tag]) {
+    case 1:
+      suite = @"NSCoreSuite";
+      break;
+    case 2:
+      suite = @"NSTextSuite";
+      break;
+  }
+  NSString *suitePath = [[NSBundle mainBundle] pathForResource:suite ofType:@"sdef"];
+  if (suitePath) {
+    id doc = [[NSDocumentController sharedDocumentController] openDocumentWithContentsOfFile:suitePath
+                                                                                     display:NO];
+    [doc setFileName:nil];
+    [doc showWindows];
+  }
+}
 
 @end
