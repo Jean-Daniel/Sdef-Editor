@@ -123,11 +123,11 @@
 - (id)transformedValue:(id)value {
   unsigned access = [value unsignedIntValue];
   unsigned idx = 0;
-  if (!access || ((access & kSDElementRead) && (access & kSDElementWrite))) {
+  if (!access || ((access & kSdefAccessRead) && (access & kSdefAccessWrite))) {
     idx = 0;
-  } else if (access & kSDElementRead) {
+  } else if (access & kSdefAccessRead) {
     idx = 1;
-  } else if (access & kSDElementWrite) {
+  } else if (access & kSdefAccessWrite) {
     idx = 2;
   }
   return SKUInt(idx);
@@ -139,9 +139,9 @@
     case 0:
       return SKUInt(0);
     case 1:
-      return SKUInt(kSDElementRead);
+      return SKUInt(kSdefAccessRead);
     case 2:
-      return SKUInt(kSDElementWrite);
+      return SKUInt(kSdefAccessWrite);
     default:
       return SKUInt(0);
   }
@@ -184,9 +184,9 @@
 //    case 0:
 //      return SKUInt(0);
 //    case 1:
-//      return SKUInt(kSDElementRead);
+//      return SKUInt(kSdefAccessRead);
 //    case 2:
-//      return SKUInt(kSDElementWrite);
+//      return SKUInt(kSdefAccessWrite);
 //    default:
 //      return SKUInt(0);
 //  }
