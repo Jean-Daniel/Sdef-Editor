@@ -77,6 +77,7 @@
   [super dealloc];
 }
 
+#pragma mark -
 - (void)addSuite:(SdefSuite *)aSuite {
   NSParameterAssert(nil != aSuite);
   id classes = [[aSuite classes] children];
@@ -111,6 +112,66 @@
   while (suite = [suites nextObject]) {
     [self removeSuite:suite];
   }
+}
+
+#pragma mark -
+- (NSArray *)types {
+  id types = [NSMutableArray arrayWithArray:[[self class] baseTypes]];
+  id items = [sd_types objectEnumerator];
+  id item;
+  while (item = [items nextObject]) {
+    if ([item name])
+      [types addObject:[item name]];
+  }
+  return types;
+}
+
+- (NSArray *)classes {
+  return sd_classes;
+}
+
+- (NSArray *)commands {
+  return sd_commands;
+}
+
+- (NSArray *)events {
+  return sd_events;
+}
+
+#pragma mark -
+- (SdefClass *)classWithName:(NSString *)name {
+  id classes = [sd_classes objectEnumerator];
+  id class;
+  while (class = [classes nextObject]) {
+    if ([[class name] isEqualToString:name])
+      return class;
+  }
+  return nil;
+}
+
+- (NSArray *)subclassesOfClass:(SdefClass *)class {
+  id classes = [NSMutableArray array];
+  id items = [sd_classes objectEnumerator];
+  SdefClass *item;
+  while (item = [items nextObject]) {
+    if ([[item inherits] isEqualToString:[class name]])
+      [classes addObject:item];
+  }
+  return classes;
+}
+
+- (SdefClass *)superClassOfClass:(SdefClass *)aClass {
+  NSString *parent = [aClass inherits];
+  if (parent) {
+    id classes = [sd_classes objectEnumerator];
+    id class;
+    while (class = [classes nextObject]) {
+      if (class != aClass && [[class name] isEqualToString:parent]) {
+        return class;
+      }
+    }
+  }
+  return nil;
 }
 
 #pragma mark -
@@ -177,65 +238,6 @@
 
 - (void)willRemoveDictionary:(NSNotification *)aNotification {
   [self removeDictionary:[[aNotification userInfo] objectForKey:SdefRemovedTreeNode]];
-}
-
-#pragma mark -
-- (NSArray *)types {
-  id types = [NSMutableArray arrayWithArray:[[self class] baseTypes]];
-  id items = [sd_types objectEnumerator];
-  id item;
-  while (item = [items nextObject]) {
-    if ([item name])
-      [types addObject:[item name]];
-  }
-  return types;
-}
-
-- (NSArray *)classes {
-  return sd_classes;
-}
-
-- (NSArray *)commands {
-  return sd_commands;
-}
-
-- (NSArray *)events {
-  return sd_events;
-}
-
-- (SdefClass *)classWithName:(NSString *)name {
-  id classes = [sd_classes objectEnumerator];
-  id class;
-  while (class = [classes nextObject]) {
-    if ([[class name] isEqualToString:name])
-      return class;
-  }
-  return nil;
-}
-
-- (NSArray *)subclassesOfClass:(SdefClass *)class {
-  id classes = [NSMutableArray array];
-  id items = [sd_classes objectEnumerator];
-  SdefClass *item;
-  while (item = [items nextObject]) {
-    if ([[item inherits] isEqualToString:[class name]])
-      [classes addObject:item];
-  }
-  return classes;
-}
-
-- (SdefClass *)superClassOfClass:(SdefClass *)aClass {
-  NSString *parent = [aClass inherits];
-  if (parent) {
-    id classes = [sd_classes objectEnumerator];
-    id class;
-    while (class = [classes nextObject]) {
-      if (class != aClass && [[class name] isEqualToString:parent]) {
-        return class;
-      }
-    }
-  }
-  return nil;
 }
 
 #pragma mark -
@@ -349,6 +351,7 @@ typedef BOOL (*EqualIMP)(id, SEL, id);
     case typeObjectSpecifier:
       return @"object";
     case typeQDPoint:
+    case typeFixedPoint:
       return @"point";
     case typeInsertionLoc:
       return @"location";
