@@ -25,6 +25,6 @@ extern NSString * const SdefObjectDragType;
 - (SdefDictionary *)dictionary;
 - (void)setDictionary:(SdefDictionary *)dictionary;
 
-- (IBAction)export:(id)sender;
+- (IBAction)exportTerminology:(id)sender;
 
 @end

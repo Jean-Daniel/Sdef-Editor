@@ -45,7 +45,7 @@ NSString * const SdefObjectDragType = @"SdefObjectDragType";
 }
 
 #pragma mark -
-- (IBAction)export:(id)sender {
+- (IBAction)exportTerminology:(id)sender {
   SdefExporterController *exporter = [[SdefExporterController alloc] init];
   [exporter setSdefDocument:self];
   [NSApp beginSheet:[exporter window]
