@@ -58,8 +58,10 @@ extern NSString *CocoaNameForSdefName(NSString *cocoa, BOOL isClass);
     unsigned int optional:1;
     unsigned int editable:1;
     unsigned int removable:1;
+    unsigned int hasSynonyms:1;
     unsigned int notInProperties:1;
-    unsigned int :3;
+    unsigned int hasDocumentation:1;
+    unsigned int hasImplementation:1;
   } sd_flags;
 @private
   NSImage *sd_icon;
@@ -83,7 +85,6 @@ extern NSString *CocoaNameForSdefName(NSString *cocoa, BOOL isClass);
 
 - (SdefObjectType)objectType;
 - (void)createContent;
-- (void)createSynonyms;
 
 #pragma mark -
 

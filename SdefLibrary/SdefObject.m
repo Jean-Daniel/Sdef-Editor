@@ -7,14 +7,16 @@
 //
 
 #import "SdefObject.h"
-#import "SdefDocument.h"
-#import "SdefDocumentation.h"
-#import "SdefXMLGenerator.h"
+
 #import "ShadowMacros.h"
 #import "SKFunctions.h"
+#import "SKExtensions.h"
+
 #import "SdefComment.h"
 #import "SdefXMLNode.h"
 #import "SdefSynonym.h"
+#import "SdefDocument.h"
+#import "SdefDocumentation.h"
 #import "SdefImplementation.h"
 
 NSString * const SdefNewTreeNode = @"SdefNewTreeNode";
@@ -113,7 +115,6 @@ NSString * const SdefObjectDidChangeNameNotification = @"SdefObjectDidChangeName
 - (id)initEmpty {
   if (self = [super init]) {
     [self setIcon:[NSImage imageNamed:[[self class] defaultIconName]]];
-    sd_comments = [[NSMutableArray alloc] init];
     [self setRemovable:YES];
     [self setEditable:YES];
   }
@@ -240,13 +241,6 @@ NSString * const SdefObjectDidChangeNameNotification = @"SdefObjectDidChangeName
 - (void)createContent {
 }
 
-- (void)createSynonyms {
-  id synonyms = [SdefCollection nodeWithName:NSLocalizedStringFromTable(@"Synonyms", @"SdefLibrary", @"Synonyms Collection name")];
-  [synonyms setContentType:[SdefSynonym class]];
-  [synonyms setElementName:@"synonyms"];
-  [self setSynonyms:synonyms];
-}
-
 #pragma mark -
 #pragma mark Accessors
 - (NSImage *)icon {
@@ -284,8 +278,8 @@ NSString * const SdefObjectDidChangeNameNotification = @"SdefObjectDidChangeName
 - (void)setEditable:(BOOL)flag recursive:(BOOL)recu {
   sd_flags.editable = (flag) ? 1 : 0;
   if (recu) {
-    [[self documentation] setEditable:flag];
-    [[self synonyms] setEditable:flag recursive:recu];
+    [sd_documentation setEditable:flag];
+    [sd_synonyms setEditable:flag recursive:recu];
     id nodes = [self childEnumerator];
     id node;
     while (node = [nodes nextObject]) {
@@ -295,7 +289,7 @@ NSString * const SdefObjectDidChangeNameNotification = @"SdefObjectDidChangeName
 }
 
 - (BOOL)isRemovable {
-  return sd_flags.removable == 1;
+  return sd_flags.removable;
 }
 - (void)setRemovable:(BOOL)removable {
   sd_flags.removable = (removable) ? 1 : 0;
@@ -303,10 +297,13 @@ NSString * const SdefObjectDidChangeNameNotification = @"SdefObjectDidChangeName
 
 #pragma mark Optionals children
 - (BOOL)hasDocumentation {
-  return sd_documentation != nil;
+  return sd_flags.hasDocumentation;
 }
 
 - (SdefDocumentation *)documentation {
+  if (!sd_documentation && sd_flags.hasDocumentation) {
+    [self setDocumentation:[SdefDocumentation node]];
+  }
   return sd_documentation;
 }
 
@@ -321,10 +318,16 @@ NSString * const SdefObjectDidChangeNameNotification = @"SdefObjectDidChangeName
 }
 
 - (BOOL)hasSynonyms {
-  return sd_synonyms != nil;
+  return sd_flags.hasSynonyms;
 }
 
 - (SdefCollection *)synonyms {
+  if (!sd_synonyms && sd_flags.hasSynonyms) {
+    id synonyms = [SdefCollection nodeWithName:NSLocalizedStringFromTable(@"Synonyms", @"SdefLibrary", @"Synonyms Collection name")];
+    [synonyms setContentType:[SdefSynonym class]];
+    [synonyms setElementName:@"synonyms"];
+    [self setSynonyms:synonyms];
+  }
   return sd_synonyms;
 }
 
@@ -343,6 +346,9 @@ NSString * const SdefObjectDidChangeNameNotification = @"SdefObjectDidChangeName
 }
 
 - (NSArray *)comments {
+  if (!sd_comments) {
+    sd_comments = [[NSMutableArray alloc] init];
+  }
   return sd_comments;
 }
 
@@ -413,15 +419,19 @@ NSString * const SdefObjectDidChangeNameNotification = @"SdefObjectDidChangeName
   node = [SdefXMLNode nodeWithElementName:[self xmlElementName]];
   if (node) {
     NSAssert1([node elementName] != nil, @"%@ return an invalid node", self);
-    if ([self hasComments])
+    if (sd_comments)
       [node setComments:[self comments]];
-    id documentation = [[self documentation] xmlNode];
-    if (nil != documentation) {
-      [node prependChild:documentation];
+    if ([self hasDocumentation]) {
+      id documentation = [sd_documentation xmlNode];
+      if (nil != documentation) {
+        [node prependChild:documentation];
+      }
     }
-    id synonyms = [[self synonyms] xmlNode];
-    if (nil != synonyms) {
-      [node appendChild:synonyms];
+    if ([self hasSynonyms]) {
+      id synonyms = [sd_synonyms xmlNode];
+      if (nil != synonyms) {
+        [node appendChild:synonyms];
+      }
     }
     children = [self childEnumerator];
     while (child = [children nextObject]) {
@@ -648,7 +658,7 @@ NSString * const SdefObjectDidChangeNameNotification = @"SdefObjectDidChangeName
 
 #pragma mark -
 - (void)createContent {
-  [self setImpl:[SdefImplementation node]];
+  sd_flags.hasImplementation = 1;
 }
 
 - (void)setEditable:(BOOL)flag recursive:(BOOL)recu {
@@ -659,6 +669,9 @@ NSString * const SdefObjectDidChangeNameNotification = @"SdefObjectDidChangeName
 }
 
 - (SdefImplementation *)impl {
+  if (!sd_impl && sd_flags.hasImplementation) {
+    [self setImpl:[SdefImplementation node]];
+  }
   return sd_impl;
 }
 
@@ -752,8 +765,8 @@ NSString * const SdefObjectDidChangeNameNotification = @"SdefObjectDidChangeName
     [node setAttribute:@"hidden" forKey:@"hidden"];
   attr = [self desc];
   if (nil != attr)
-    [node setAttribute:attr forKey:@"description"];
-  id impl = [[self impl] xmlNode];
+    [node setAttribute:[attr stringByEscapingEntities:nil] forKey:@"description"];
+  id impl = (sd_impl) ? [[self impl] xmlNode] : nil;
   if (nil != impl) {
     if ([[[node firstChild] elementName] isEqualToString:@"documentation"]) {
       [node insertChild:impl atIndex:1];
@@ -771,7 +784,7 @@ NSString * const SdefObjectDidChangeNameNotification = @"SdefObjectDidChangeName
 - (void)setAttributes:(NSDictionary *)attrs {
   [super setAttributes:attrs];
   [self setCodeStr:[attrs objectForKey:@"code"]];
-  [self setDesc:[attrs objectForKey:@"description"]];
+  [self setDesc:[[attrs objectForKey:@"description"] stringByUnescapingEntities:nil]];
   [self setHidden:[attrs objectForKey:@"hidden"] != nil];
 }
 
