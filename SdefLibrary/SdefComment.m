@@ -45,7 +45,7 @@
 - (void)setValue:(NSString *)value {
   if (sd_value != value) {
     [sd_value release];
-    sd_value = [value copy];
+    sd_value = [value retain];
   }
 }
 
