@@ -7,6 +7,7 @@
 //
 
 #import "SdefClassManager.h"
+#import "SdefXMLObject.h"
 #import "SdefClass.h"
 #import "SdefSuite.h"
 #import "ShadowMacros.h"

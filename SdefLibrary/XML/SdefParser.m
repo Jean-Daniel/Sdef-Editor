@@ -8,22 +8,18 @@
 
 #import "SdefParser.h"
 #import "ShadowMacros.h"
+#import "SKExtensions.h"
+#import "SdefXMLObject.h"
 #import "SdefDictionary.h"
 
 @implementation SdefParser
-
-- (id)init {
-  if (self = [super init]) {
-    
-  }
-  return self;
-}
 
 - (void)dealloc {
   [sd_document release];
   [super dealloc];
 }
 
+#pragma mark -
 - (SdefDictionary *)document {
   return sd_document;
 }

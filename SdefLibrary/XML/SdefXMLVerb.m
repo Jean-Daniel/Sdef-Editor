@@ -8,6 +8,7 @@
 
 #import "SdefVerb.h"
 #import "SdefXMLNode.h"
+#import "SKExtensions.h"
 #import "SdefXMLObject.h"
 #import "SdefArguments.h"
 

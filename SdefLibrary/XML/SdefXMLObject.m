@@ -8,13 +8,12 @@
 
 #import "SdefXMLObject.h"
 #import "SdefXMLNode.h"
+#import "SKExtensions.h"
 
 #import "SdefComment.h"
 #import "SdefDocumentation.h"
+#import "SdefImplementation.h"
 
-#if !defined(DEBUG)
-__private_extern__
-#endif
 NSMutableArray *sd_childComments;
 
 @implementation SdefObject (SdefXMLManager)
@@ -36,7 +35,7 @@ NSMutableArray *sd_childComments;
   id child = nil;
   id children = nil;
   node = [SdefXMLNode nodeWithElementName:[self xmlElementName]];
-  if (node) {
+  if (node && [node elementName]) {
     NSAssert1([node elementName] != nil, @"%@ return an invalid node", self);
     if (sd_comments)
       [node setComments:[self comments]];

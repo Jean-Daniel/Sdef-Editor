@@ -6,8 +6,10 @@
 //  Copyright 2005 Shadow Lab. All rights reserved.
 //
 
+#import "SdefXMLNode.h"
 #import "SdefXMLObject.h"
 #import "SdefSynonym.h"
+#import "SKExtensions.h"
 #import "SdefDocumentation.h"
 #import "SdefImplementation.h"
 

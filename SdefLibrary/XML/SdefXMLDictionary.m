@@ -7,6 +7,7 @@
 //
 
 #import "SdefDictionary.h"
+#import "SdefSuite.h"
 #import "SdefXMLNode.h"
 #import "SdefXMLObject.h"
 
