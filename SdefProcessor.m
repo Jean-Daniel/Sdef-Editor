@@ -8,6 +8,7 @@
 
 #import "SdefProcessor.h"
 #import "ShadowMacros.h"
+#import "SdefEditor.h"
 
 @implementation SdefProcessor
 
@@ -123,7 +124,7 @@
   [task launch];
   
   if (input) {
-    id data = [sd_input dataRepresentationOfType:@"ScriptingDefinition"];
+    id data = [sd_input dataRepresentationOfType:ScriptingDefinitionFileType];
     [input writeData:data];
     [input closeFile];
   }

@@ -8,6 +8,7 @@
 
 #import <Cocoa/Cocoa.h>
 
+extern NSString * const ScriptingDefinitionFileType;
 
 @interface SdefEditor : NSObject {
 
