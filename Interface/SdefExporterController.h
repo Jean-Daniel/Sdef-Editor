@@ -17,6 +17,8 @@
   BOOL resourceFormat, cocoaFormat, rsrcFormat;
 }
 
+- (void)compileResourceFile:(NSString *)folder;
+
 - (SdefDocument *)sdefDocument;
 - (void)setSdefDocument:(SdefDocument *)adocument;
 

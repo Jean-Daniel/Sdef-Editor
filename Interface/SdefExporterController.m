@@ -80,9 +80,29 @@
   [proc setVersion:@"10.3"];
   
   NSString *result = [proc process];
-  DLog(@"result: %@", result);
+  if (result) {
+    NSRunAlertPanel(@"Warning: Scripting Definition Processor says:", result, @"OK", nil, nil);
+  }
   
+  if (rsrcFormat) {
+    [self compileResourceFile:[proc output]];
+    if (!resourceFormat) {
+      [[NSFileManager defaultManager] removeFileAtPath:[[proc output] stringByAppendingPathComponent:@"Scripting.r"] handler:nil];
+    }
+  }
+  [proc release];
   [self close:sender];
+}
+
+- (void)compileResourceFile:(NSString *)folder {
+  NSString *resource = [folder stringByAppendingPathComponent:@"Scripting.r"];
+  if (![[NSFileManager defaultManager] fileExistsAtPath:resource]) {
+    return;
+  }
+  NSString *dest = [folder stringByAppendingPathComponent:@"Scripting.rsrc"];
+  id rez = [NSTask launchedTaskWithLaunchPath:[[NSBundle mainBundle] pathForResource:@"Rez" ofType:@""]
+                                     arguments:[NSArray arrayWithObjects:resource, @"-o", dest, @"-useDF", nil]];
+  [rez waitUntilExit];
 }
 
 - (IBAction)include:(id)sender {
