@@ -7,7 +7,7 @@
             SUPERCLASS = NSObject; 
         }, 
         {
-            ACTIONS = {openInspector = id; openSuite = id; }; 
+            ACTIONS = {import = id; openInspector = id; openSuite = id; }; 
             CLASS = SdefEditor; 
             LANGUAGE = ObjC; 
             SUPERCLASS = NSObject; 
