@@ -45,6 +45,10 @@
   return types;
 }
 
++ (BOOL)isBaseType:(NSString *)type {
+  return [[self baseTypes] containsObject:type];
+}
+
 - (id)init {
   if (self = [super init]) {
     sd_types = [[NSMutableArray alloc] init];
@@ -128,6 +132,10 @@
   return types;
 }
 
+- (NSArray *)sdefTypes {
+  return sd_types;
+}
+
 - (NSArray *)classes {
   return sd_classes;
 }
@@ -141,6 +149,16 @@
 }
 
 #pragma mark -
+- (id)typeWithName:(NSString *)name {
+  id types = [sd_types objectEnumerator];
+  id type;
+  while (type = [types nextObject]) {
+    if ([[type name] isEqualToString:name])
+      return type;
+  }
+  return nil;  
+}
+
 - (SdefClass *)classWithName:(NSString *)name {
   id classes = [sd_classes objectEnumerator];
   id class;

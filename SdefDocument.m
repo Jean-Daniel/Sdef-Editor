@@ -13,6 +13,7 @@
 #import "SKFunctions.h"
 
 #import "SdefWindowController.h"
+#import "SdefSymbolBrowser.h"
 #import "SdefClassManager.h"
 #import "SdefDictionary.h"
 #import "SdefObject.h"
@@ -45,6 +46,35 @@ NSString * const SdefObjectDragType = @"SdefObjectDragType";
 }
 
 #pragma mark -
+- (id)windowControllerOfClass:(Class)class {
+  id windows = [[self windowControllers] objectEnumerator];
+  id window;
+  while (window = [windows nextObject]) {
+    if ([window isKindOfClass:class]) {
+      return window;
+    }
+  }
+  return nil;
+}
+
+- (SdefSymbolBrowser *)symbolBrowser {
+  return [self windowControllerOfClass:[SdefSymbolBrowser class]];
+}
+
+- (SdefWindowController *)documentWindow {
+  return [self windowControllerOfClass:[SdefWindowController class]];
+}
+
+- (IBAction)openSymbolBrowser:(id)sender {
+  id browser = [self symbolBrowser];
+  if (!browser) {
+    browser = [[SdefSymbolBrowser alloc] init];
+    [self addWindowController:browser];
+    [browser release];
+  }
+  [[browser window] makeKeyAndOrderFront:sender];
+}
+
 - (IBAction)exportTerminology:(id)sender {
   SdefExporterController *exporter = [[SdefExporterController alloc] init];
   [exporter setSdefDocument:self];
@@ -63,6 +93,7 @@ NSString * const SdefObjectDragType = @"SdefObjectDragType";
 #pragma mark NSDocument Methods
 - (void)makeWindowControllers {
   id controller = [[SdefWindowController alloc] initWithOwner:nil];
+  [controller setShouldCloseDocument:YES];
   [self addWindowController:controller];
   [controller release];
 }

@@ -16,6 +16,8 @@
   NSMutableArray *sd_classes, *sd_commands, *sd_events, *sd_types;
 }
 
++ (BOOL)isBaseType:(NSString *)type;
+
 - (id)initWithDocument:(SdefDocument *)aDocument;
 
 - (void)addDictionary:(SdefDictionary *)aDico;
@@ -24,12 +26,22 @@
 - (void)addSuite:(SdefSuite *)aSuite;
 - (void)removeSuite:(SdefSuite *)aSuite;
 
+/*!
+    @method     types
+    @result     Returns all types name including base types.
+*/
 - (NSArray *)types;
+/*!
+    @method     sdefTypes
+    @abstract   Returns all types whitout base types (ie. classes and enumeration).
+*/
+- (NSArray *)sdefTypes;
 - (NSArray *)classes;
 
 - (NSArray *)commands;
 - (NSArray *)events;
 
+- (id)typeWithName:(NSString *)name;
 - (SdefClass *)classWithName:(NSString *)name;
 - (SdefVerb *)eventWithName:(NSString *)name;
 - (SdefVerb *)commandWithName:(NSString *)name;

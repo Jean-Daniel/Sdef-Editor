@@ -11,6 +11,7 @@
 extern NSString * const SdefObjectDragType;
 
 @class SdefObject, SdefDictionary, SdefClassManager, SdefImports;
+@class SdefWindowController, SdefSymbolBrowser;
 @interface SdefDocument : NSDocument {
 @private
   SdefDictionary *_dictionary;
@@ -19,8 +20,9 @@ extern NSString * const SdefObjectDragType;
 }
 
 - (SdefObject *)selection;
+- (SdefSymbolBrowser *)symbolBrowser;
+- (SdefWindowController *)documentWindow;
 
-//- (SdefImports *)imports;
 - (SdefClassManager *)manager;
 - (SdefDictionary *)dictionary;
 - (void)setDictionary:(SdefDictionary *)dictionary;

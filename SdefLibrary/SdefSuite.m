@@ -61,6 +61,10 @@
   return @"Suite";
 }
 
+- (SdefSuite *)suite {
+  return self;
+}
+
 - (void)createContent {
   [super createContent];
   sd_flags.hasDocumentation = 1;

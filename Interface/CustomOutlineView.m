@@ -39,4 +39,14 @@
   }
 }
 
+- (NSMenu *)menuForEvent:(NSEvent *)theEvent {
+  int row;
+  if ( (row = [self rowAtPoint:[self convertPoint:[theEvent locationInWindow] fromView:nil]]) != -1) {
+    [self selectRow:row byExtendingSelection:NO];
+    [self displayIfNeeded];
+    return [super menuForEvent:theEvent];
+  }
+  return nil;
+}
+
 @end

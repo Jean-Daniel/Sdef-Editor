@@ -44,6 +44,7 @@ extern NSString * const SdefObjectWillRemoveChildNotification;
 extern NSString * const SdefObjectDidRemoveChildNotification;
 extern NSString * const SdefObjectWillRemoveAllChildrenNotification;
 extern NSString * const SdefObjectDidRemoveAllChildrenNotification;
+extern NSString * const SdefObjectDidSortChildrenNotification;
 
 extern NSString * const SdefObjectWillChangeNameNotification;
 extern NSString * const SdefObjectDidChangeNameNotification;
@@ -95,6 +96,9 @@ extern NSString *CocoaNameForSdefName(NSString *cocoa, BOOL isClass);
 
 - (SdefSuite *)suite;
 - (id)firstParentOfType:(SdefObjectType)aType;
+
+- (NSString *)location;
+- (NSString *)objectTypeName;
 
 #pragma mark -
 - (NSImage *)icon;

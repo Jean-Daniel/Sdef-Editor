@@ -76,7 +76,11 @@ static inline BOOL SdefEditorExistsForItem(SdefObject *item) {
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(didChangeNodeName:)
                                                  name:SdefObjectDidChangeNameNotification
-                                               object:nil];    
+                                               object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(didSortChildren:)
+                                                 name:SdefObjectDidSortChildrenNotification
+                                               object:nil];
   }
   return self;
 }
@@ -117,7 +121,8 @@ static inline BOOL SdefEditorExistsForItem(SdefObject *item) {
         if ([outline selectedRow] == row) {
           [[NSNotificationCenter defaultCenter] postNotificationName:NSOutlineViewSelectionDidChangeNotification object:outline];
         } else {
-          [outline selectRow:[outline rowForItem:anObject] byExtendingSelection:NO];
+          [outline selectRow:row byExtendingSelection:NO];
+          [outline scrollRowToVisible:row];
         }
       }
       if (SdefEditorExistsForItem(anObject))
@@ -136,6 +141,14 @@ static inline BOOL SdefEditorExistsForItem(SdefObject *item) {
 }
 
 #pragma mark -
+
+- (void)didSortChildren:(NSNotification *)aNotification {
+  id item = [aNotification object];
+  if (IsObjectOwner(item) && [outline isItemExpanded:item]) {
+    [outline reloadItem:item reloadChildren:YES];
+  }
+}
+
 - (void)didAppendNode:(NSNotification *)aNotification {
   SdefObject *item = [aNotification object];
   if (IsObjectOwner(item)) {
@@ -186,10 +199,22 @@ static inline BOOL SdefEditorExistsForItem(SdefObject *item) {
   return [NSString stringWithFormat:@"%@ : %@", displayName, [[(SdefDocument *)[self document] dictionary] name]];
 }
 
+#pragma mark -
 - (void)awakeFromNib {
   [outline setDataSource:[self document]];
   [outline setDoubleAction:@selector(openInspector:)];
   [outline setTarget:[NSApp delegate]];
+}
+
+- (IBAction)sortByName:(id)sender {
+  if ([outline selectedRow] != -1) {
+    SdefObject *item = [outline itemAtRow:[outline selectedRow]];
+    if ([item hasChildren] && [[item firstChild] isRemovable] && [item childCount] > 1) {
+      id desc = [[NSSortDescriptor alloc] initWithKey:@"name" ascending:YES selector:@selector(caseInsensitiveCompare:)];
+      [item sortUsingDescriptors:[NSArray arrayWithObject:desc]];
+      [desc release];
+    }
+  }
 }
 
 #pragma mark -

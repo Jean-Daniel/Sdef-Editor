@@ -39,6 +39,10 @@
   return kSdefVerbType;
 }
 
+- (NSString *)objectTypeName {
+  return [self isCommand] ? @"Command" : @"Event";
+}
+
 + (NSString *)defaultIconName {
   return @"Function";
 }

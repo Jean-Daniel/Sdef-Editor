@@ -80,11 +80,8 @@
 }
 
 - (void)revealObjectInTree:(SdefObject *)anObject {
-  id ctrls = [[self document] windowControllers];
-  if (anObject && [ctrls count] > 0) {
-    id ctrl = [ctrls objectAtIndex:0];
-    [ctrl setSelection:anObject];
-  }
+  id ctrl = [[self document] documentWindow];
+  [ctrl setSelection:anObject];
 }
 
 - (void)revealInTree:(id)sender {
