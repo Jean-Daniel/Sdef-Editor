@@ -76,4 +76,8 @@
   return @"Enum";
 }
 
+- (void)createContent {
+  sd_flags.hasSynonyms = 1;
+}
+
 @end
