@@ -15,6 +15,7 @@
 #pragma mark Protocols Implementations
 - (id)copyWithZone:(NSZone *)aZone {
   SdefContents *copy = [super copyWithZone:aZone];
+  copy->sd_owner = nil;
   copy->sd_access = sd_access;
   copy->sd_type = [sd_type copyWithZone:aZone];
   return copy;
@@ -24,12 +25,15 @@
   [super encodeWithCoder:aCoder];
   [aCoder encodeObject:sd_type forKey:@"SCType"];
   [aCoder encodeInt:sd_access forKey:@"SCAccess"];
+  [aCoder encodeConditionalObject:sd_owner forKey:@"SCOwner"];
+  
 }
 
 - (id)initWithCoder:(NSCoder *)aCoder {
   if (self = [super initWithCoder:aCoder]) {
     sd_access = [aCoder decodeIntForKey:@"SCAccess"];
     sd_type = [[aCoder decodeObjectForKey:@"SCType"] retain];
+    sd_owner = [aCoder decodeObjectForKey:@"SCOwner"];
   }
   return self;
 }
@@ -74,6 +78,18 @@
 - (void)setAccess:(unsigned)newAccess {
   [[[[self document] undoManager] prepareWithInvocationTarget:self] setAccess:sd_access];
   sd_access = newAccess;
+}
+
+- (id)owner {
+  return sd_owner;
+}
+
+- (void)setOwner:(SdefObject *)anObject {
+  sd_owner = anObject;
+}
+
+- (SdefDocument *)document {
+  return [sd_owner document];
 }
 
 #pragma mark -

@@ -11,6 +11,7 @@
 @interface SdefContents : SdefTerminologyElement <NSCopying, NSCoding> {
   NSString *sd_type;
   unsigned sd_access;
+  SdefObject *sd_owner;
 }
 
 - (NSString *)type;
@@ -18,5 +19,8 @@
 
 - (unsigned)access;
 - (void)setAccess:(unsigned)newAccess;
+
+- (id)owner;
+- (void)setOwner:(SdefObject *)anObject ;
 
 @end
