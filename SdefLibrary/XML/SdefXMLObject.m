@@ -116,12 +116,21 @@ NSMutableArray *sd_childComments;
 
 // ...and this reports a fatal error to the delegate. The parser will stop parsing.
 - (void)parser:(NSXMLParser *)parser parseErrorOccurred:(NSError *)parseError {
-  DLog(@"Error: %@, %@", parseError, [parseError userInfo]);
-}
-
-// If validation is on, this will report a fatal validation error to the delegate. The parser will stop parsing.
-- (void)parser:(NSXMLParser *)parser validationErrorOccurred:(NSError *)validationError {
-  DLog(@"Error: %@, %@", validationError, [validationError userInfo]);
+  id container = @"class";
+  id parent = [self firstParentOfType:kSdefClassType];
+  if (!parent) {
+    parent = [self suite];
+    container = @"suite";
+  }
+  NSAlert *alert = [NSAlert alertWithMessageText:@"The document could not be opened because it's not a valid sdef file."
+                                   defaultButton:@"OK"
+                                 alternateButton:nil
+                                     otherButton:nil
+                       informativeTextWithFormat:@"XMLParser encounter an error in element \"%@\" of %@ \"%@\".",
+    [self xmlElementName], container, [parent name]];
+  [parser setDelegate:nil];
+  [parser abortParsing];
+  [alert runModal];
 }
 
 @end
