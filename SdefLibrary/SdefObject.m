@@ -425,9 +425,14 @@ NSString * const SDTreeNodeDidChangeNameNotification = @"SDTreeNodeDidChangeName
   return nil;
 }
 
+- (SdefImplementation *)impl {
+  return nil;
+}
+- (void)setImpl:(SdefImplementation *)impl {
+}
+
 #pragma mark -
 #pragma mark XML Parsing
-
 - (void)setAttributes:(NSDictionary *)attrs {
   [self setName:[attrs objectForKey:@"name"]];
 }
@@ -445,11 +450,12 @@ NSString * const SDTreeNodeDidChangeNameNotification = @"SDTreeNodeDidChangeName
     [self appendChild:synonyms]; /* Append to parse, and remove after */
     [parser setDelegate:synonyms];
     [synonyms setComments:sd_childComments];
-  } else if ([elementName isEqualToString:@"cocoa"] && [self respondsToSelector:@selector(setImpl:)]) {
-    SdefImplementation *cocoa = [(SdefObject *)[SdefImplementation alloc] initWithAttributes:attributeDict];
-    [(id)self setImpl:cocoa];
-    [cocoa setComments:sd_childComments];
-    [cocoa release];
+  } else if ([elementName isEqualToString:@"cocoa"]) {
+    SdefImplementation *cocoa = [self impl];
+    if (cocoa) {
+      [cocoa setAttributes:attributeDict];
+      [cocoa setComments:sd_childComments];
+    }
   }
   [sd_childComments release];
   sd_childComments = nil;
@@ -593,6 +599,7 @@ NSString * const SDTreeNodeDidChangeNameNotification = @"SDTreeNodeDidChangeName
   copy->sd_code = [sd_code copyWithZone:aZone];
   copy->sd_desc = [sd_desc copyWithZone:aZone];
   copy->sd_impl = [sd_impl copyWithZone:aZone];
+  [copy->sd_impl setOwner:copy];
   return copy;
 }
 
@@ -614,19 +621,17 @@ NSString * const SDTreeNodeDidChangeNameNotification = @"SDTreeNodeDidChangeName
   return self;
 }
 
-#pragma mark -
-- (id)init {
-  if (self = [super init]) {
-    [self setImpl:[SdefImplementation node]];
-  }
-  return self;
-}
-
 - (void)dealloc {
+  [sd_impl setOwner:nil];
   [sd_impl release];
   [sd_code release];
   [sd_desc release];
   [super dealloc];
+}
+
+#pragma mark -
+- (void)createContent {
+  [self setImpl:[SdefImplementation node]];
 }
 
 - (void)setEditable:(BOOL)flag recursive:(BOOL)recu {
@@ -644,6 +649,7 @@ NSString * const SDTreeNodeDidChangeNameNotification = @"SDTreeNodeDidChangeName
   if (sd_impl != newImpl) {
     [sd_impl release];
     sd_impl = [newImpl retain];
+    [sd_impl setOwner:self];
     [sd_impl setEditable:[self isEditable]];
   }
 }

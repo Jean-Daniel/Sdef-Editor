@@ -14,6 +14,7 @@
 #pragma mark Protocols Implementations
 - (id)copyWithZone:(NSZone *)aZone {
   SdefImplementation *copy = [super copyWithZone:aZone];
+  copy->sd_owner = nil;
   copy->sd_key = [sd_key copyWithZone:aZone];
   copy->sd_class = [sd_class copyWithZone:aZone];
   copy->sd_method = [sd_method copyWithZone:aZone];
@@ -25,6 +26,7 @@
   [aCoder encodeObject:sd_key forKey:@"SIKey"];
   [aCoder encodeObject:sd_class forKey:@"SIClass"];
   [aCoder encodeObject:sd_method forKey:@"SIMethod"];
+  [aCoder encodeConditionalObject:sd_owner forKey:@"SIOwner"];
 }
 
 - (id)initWithCoder:(NSCoder *)aCoder {
@@ -32,6 +34,7 @@
     sd_key = [[aCoder decodeObjectForKey:@"SIKey"] retain];
     sd_class = [[aCoder decodeObjectForKey:@"SIClass"] retain];
     sd_method = [[aCoder decodeObjectForKey:@"SIMethod"] retain];
+    sd_owner = [aCoder decodeObjectForKey:@"SIOwner"];
   }
   return self;
 }
@@ -47,7 +50,6 @@
 - (NSString *)sdClass {
   return sd_class;
 }
-
 - (void)setSdClass:(NSString *)newSdClass {
   if (sd_class != newSdClass) {
     [[[self document] undoManager] registerUndoWithTarget:self selector:_cmd object:sd_class];
@@ -59,7 +61,6 @@
 - (NSString *)key {
   return sd_key;
 }
-
 - (void)setKey:(NSString *)newKey {
   if (sd_key != newKey) {
     [[[self document] undoManager] registerUndoWithTarget:self selector:_cmd object:sd_key];
@@ -71,13 +72,24 @@
 - (NSString *)method {
   return sd_method;
 }
-
 - (void)setMethod:(NSString *)newMethod {
   if (sd_method != newMethod) {
     [[[self document] undoManager] registerUndoWithTarget:self selector:_cmd object:sd_method];
     [sd_method release];
     sd_method = [newMethod copy];
   }
+}
+
+- (id)owner {
+  return sd_owner;
+}
+
+- (void)setOwner:(SdefObject *)anObject {
+  sd_owner = anObject;
+}
+
+- (SdefDocument *)document {
+  return [sd_owner document];
 }
 
 #pragma mark -
