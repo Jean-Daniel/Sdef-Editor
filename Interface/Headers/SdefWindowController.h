@@ -22,7 +22,11 @@ extern NSString * const SdefDictionarySelectionDidChangeNotification;
 }
 
 - (id)initWithOwner:(id)owner;
+
+- (void)displayObject:(SdefObject *)anObject;
+
 - (SdefObject *)selection;
+- (void)setSelection:(SdefObject *)anObject;
 
 @end
 

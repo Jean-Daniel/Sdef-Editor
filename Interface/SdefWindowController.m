@@ -92,6 +92,39 @@ static inline BOOL SdefEditorExistsForItem(SdefObject *item) {
   return [outline itemAtRow:[outline selectedRow]];
 }
 
+- (void)displayObject:(SdefObject *)anObject {
+  if (IsObjectOwner(anObject)) {
+    /* Expand all parents */
+    SdefObject *parent = [anObject parent];
+    id path = [NSMutableArray array];
+    do {
+      [path addObject:parent];
+      parent = [parent parent];
+    } while (parent);
+    id parents = [path reverseObjectEnumerator];
+    while (parent = [parents nextObject]) {
+      [outline expandItem:parent];
+    }
+  }
+}
+
+- (void)setSelection:(SdefObject *)anObject {
+  if (IsObjectOwner(anObject)) {
+    [self displayObject:anObject];
+    /* Select Row */
+      int row = [outline rowForItem:anObject];
+      if (row > 0) {
+        if ([outline selectedRow] == row) {
+          [[NSNotificationCenter defaultCenter] postNotificationName:NSOutlineViewSelectionDidChangeNotification object:outline];
+        } else {
+          [outline selectRow:[outline rowForItem:anObject] byExtendingSelection:NO];
+        }
+      }
+      if (SdefEditorExistsForItem(anObject))
+        [[self window] makeFirstResponder:outline];
+    }
+}
+
 - (void)didChangeNodeName:(NSNotification *)aNotification {
   id item = [aNotification object];
   if (IsObjectOwner(item)) {
@@ -106,25 +139,12 @@ static inline BOOL SdefEditorExistsForItem(SdefObject *item) {
 - (void)didAppendNode:(NSNotification *)aNotification {
   SdefObject *item = [aNotification object];
   if (IsObjectOwner(item)) {
-    SdefObject *parent = item;
-    id path = [NSMutableArray array];
-    do {
-      [path addObject:parent];
-      parent = [parent parent];
-    } while (parent);
     [outline reloadItem:item reloadChildren:YES];
-    id parents = [path reverseObjectEnumerator];
-    while (parent = [parents nextObject]) {
-      [outline expandItem:parent];
-    }
     id child = [[aNotification userInfo] objectForKey:SdefNewTreeNode];
-    int row = [outline rowForItem:child];
-    if (row > 0) {
-      if ([outline selectedRow] == row) {
-        [[NSNotificationCenter defaultCenter] postNotificationName:NSOutlineViewSelectionDidChangeNotification object:outline];
-      } else {
-        [outline selectRow:[outline rowForItem:child] byExtendingSelection:NO];
-      }
+    if ([[NSUserDefaults standardUserDefaults] boolForKey:@"SdefAutoSelectItem"]) {
+      [self setSelection:child];
+    } else {
+      [self displayObject:child];
     }
   }
 }
