@@ -1,0 +1,19 @@
+{
+    IBClasses = (
+        {CLASS = FirstResponder; LANGUAGE = ObjC; SUPERCLASS = NSObject; }, 
+        {CLASS = SKImageAndTextCell; LANGUAGE = ObjC; SUPERCLASS = NSTextFieldCell; }, 
+        {
+            ACTIONS = {addSuite = id; }; 
+            CLASS = SdefDictionaryView; 
+            LANGUAGE = ObjC; 
+            SUPERCLASS = SdefViewController; 
+        }, 
+        {
+            CLASS = SdefViewController; 
+            LANGUAGE = ObjC; 
+            OUTLETS = {sdefView = NSView; }; 
+            SUPERCLASS = NSObject; 
+        }
+    ); 
+    IBVersion = 1; 
+}

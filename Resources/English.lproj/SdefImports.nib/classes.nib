@@ -1,0 +1,20 @@
+{
+    IBClasses = (
+        {CLASS = FirstResponder; LANGUAGE = ObjC; SUPERCLASS = NSObject; }, 
+        {CLASS = SKImageAndTextCell; LANGUAGE = ObjC; SUPERCLASS = NSTextFieldCell; }, 
+        {
+            ACTIONS = {add = id; }; 
+            CLASS = SdefImportsView; 
+            LANGUAGE = ObjC; 
+            OUTLETS = {controller = NSArrayController; }; 
+            SUPERCLASS = SdefViewController; 
+        }, 
+        {
+            CLASS = SdefViewController; 
+            LANGUAGE = ObjC; 
+            OUTLETS = {sdefView = NSView; }; 
+            SUPERCLASS = NSObject; 
+        }
+    ); 
+    IBVersion = 1; 
+}
