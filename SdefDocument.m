@@ -52,6 +52,7 @@
   [super dealloc];
 }
 
+#pragma mark -
 - (IBAction)export:(id)sender {
   SdefExporterController *exporter = [[SdefExporterController alloc] init];
   [exporter setSdefDocument:self];
@@ -66,10 +67,7 @@
   [[aWindow windowController] autorelease];
 }
 
-- (void)canCloseDocumentWithDelegate:(id)delegate shouldCloseSelector:(SEL)shouldCloseSelector contextInfo:(void *)contextInfo {
-  [super canCloseDocumentWithDelegate:delegate shouldCloseSelector:shouldCloseSelector contextInfo:contextInfo];
-}
-
+#pragma mark -
 - (void)makeWindowControllers {
   id controller = [[SdefWindowController alloc] initWithOwner:nil];
   [self addWindowController:controller];
@@ -93,6 +91,16 @@
   return result;
 }
 
+#pragma mark -
+/*
+ - (SdefImports *)imports {
+   return _imports;
+ }
+ */
+- (SdefClassManager *)manager {
+  return _manager;
+}
+
 - (SdefObject *)selection {
   id controllers = [self windowControllers];
   return ([controllers count]) ? [[controllers objectAtIndex:0] selection] : nil;
@@ -108,14 +116,6 @@
     _dictionary = [newDictionary retain];
     [_dictionary setDocument:self];
   }
-}
-/*
-- (SdefImports *)imports {
-  return _imports;
-}
-*/
-- (SdefClassManager *)manager {
-  return _manager;
 }
 
 #pragma mark -
@@ -143,6 +143,10 @@
 }
 
 #pragma mark -
+//- (BOOL)prepareSavePanel:(NSSavePanel *)savePanel {
+//  return YES;
+//}
+
 - (NSDictionary *)fileAttributesToWriteToFile:(NSString *)fullDocumentPath
                                        ofType:(NSString *)documentTypeName
                                 saveOperation:(NSSaveOperationType)saveOperationType {
