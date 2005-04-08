@@ -21,10 +21,12 @@ typedef enum {
     unsigned int links:1;
     unsigned int:6;
   } xd_flags;
+  NSString *sd_links; /* Weak */
   SdefTemplate *sd_tpl;
   SdefTemplateFormat sd_format;
   NSMutableDictionary *sd_formats;
   NSMutableDictionary *sd_anchors;
+  NSMutableDictionary *sd_linksCache;
 }
 
 - (SdefTemplate *)template;

@@ -10,13 +10,14 @@
 
 enum {
   kSdefTemplateTOCNone		= 0,
-  kSdefTemplateTOCInline	= 1,
-  kSdefTemplateTOCExternal	= 2
+  kSdefTemplateTOCInline	= 1 << 0,
+  kSdefTemplateTOCExternal	= 1 << 1
 };
 
 enum {
-  kSdefTemplateCSSInline	= 0,
-  kSdefTemplateCSSNone		= 1
+  kSdefTemplateCSSNone		= 0,
+  kSdefTemplateCSSInline	= 1 << 0,
+  kSdefTemplateCSSExternal	= 1 << 1
 };
 
 extern NSString * const kSdefTemplateDidChangeNotification;
@@ -28,16 +29,12 @@ extern NSString * const kSdefTemplateDidChangeNotification;
   struct _tp_flags {
     unsigned int css:4;
     unsigned int toc:4;
-    unsigned int sort:1;
     unsigned int html:1;
-    unsigned int links:1;
-    unsigned int removeBlockLine:1;
-    unsigned int :2;
+    unsigned int :7;
   } tp_flags;
   NSArray *sd_styles;
-  NSMutableDictionary *sd_infos;
-  SKTemplate *sd_layout, *sd_toc;
-  NSDictionary *sd_selectedStyle;
+  NSDictionary *sd_selectedStyle; /* Weak */
+  NSMutableDictionary *sd_infos, *sd_tpls, *sd_def;
 }
 
 + (NSDictionary *)findAllTemplates;
@@ -45,29 +42,23 @@ extern NSString * const kSdefTemplateDidChangeNotification;
 - (NSString *)path;
 - (void)setPath:(NSString *)path;
 
-- (SKTemplate *)tocTemplate;
-- (SKTemplate *)layoutTemplate;
-
 - (NSString *)displayName;
 - (NSString *)extension;
 - (NSString *)menuName;
 
 - (NSDictionary *)formats;
+- (NSDictionary *)templates;
+- (NSDictionary *)definition;
 
 - (NSArray *)styles;
 - (NSDictionary *)selectedStyle;
 - (void)setSelectedStyle:(NSDictionary *)style;
 
-- (BOOL)html;
+- (BOOL)isHtml;
 
 - (unsigned)toc;
 - (void)setToc:(unsigned)toc;
 - (unsigned)css;
 - (void)setCss:(unsigned)css;
-
-- (BOOL)sort;
-- (void)setSort:(BOOL)flag;
-- (BOOL)links;
-- (void)setLinks:(BOOL)flag;
 
 @end

@@ -11,7 +11,8 @@
 
 #import "SdefTemplate.h"
 #import "SdefDocument.h"
-#import "SdtplExporter.h"
+#import "SdtplGenerator.h"
+#import "SKDisclosurePanel.h"
 
 @implementation SdtplWindow
 
@@ -39,8 +40,28 @@
   [super dealloc];
 }
 
+#pragma mark -
 - (void)awakeFromNib {
-  id tpls = [[SdefTemplate findAllTemplates] objectEnumerator];
+  /* Init Disclosure Panel */
+  SKDisclosurePanel *panel = (SKDisclosurePanel *)[self window];
+  [panel setTopPadding:37];
+  [panel setBottomPadding:37];
+  [panel addView:generalView withLabel:@"General"];
+  [panel addView:tocView withLabel:@"Table Of Content"];
+  [panel addView:htmlView withLabel:@"HTML Options"];
+  [panel toggleViewAtIndex:2];
+  
+  /* Init Templates Menu */
+  id tpls = [[SdefTemplate findAllTemplates] allValues];
+  id sort1 = [[NSSortDescriptor alloc] initWithKey:@"html" ascending:NO];
+  id sort2 = [[NSSortDescriptor alloc] initWithKey:@"displayName" ascending:YES];
+  NSArray *sorts = [[NSArray alloc] initWithObjects:sort1, sort2, nil];
+  [sort2 release];
+  [sort1 release];
+  
+  tpls = [[tpls sortedArrayUsingDescriptors:sorts] reverseObjectEnumerator];
+  [sorts release];
+  
   id tpl;
   while (tpl = [tpls nextObject]) {
     NSMenuItem *item = [[NSMenuItem alloc] initWithTitle:[tpl menuName] action:nil keyEquivalent:@""];
@@ -48,10 +69,12 @@
     [[templates menu] insertItem:item atIndex:0];
     [item release];
   }
+  
   [templates selectItemAtIndex:0];
   [self changeTemplate:templates];
 }
 
+#pragma mark -
 - (IBAction)export:(id)sender {
   NSSavePanel *panel = [NSSavePanel savePanel];
   [panel setCanSelectHiddenExtension:YES];
@@ -61,16 +84,21 @@
     return;
   }
   id file = [panel filename];
-  SdtplExporter *exporter = [[SdtplExporter alloc] init];
   @try {
-    [exporter setDictionary:[sd_document dictionary]];
-    [exporter setTemplate:sd_template];
-    [exporter writeToFile:file atomically:YES];
+    [generator writeDictionary:[sd_document dictionary] toFile:file];
   } @catch (id exception) {
     SKLogException(exception);
   }
-  [exporter release];
-  [self close];
+//  SdtplExporter *exporter = [[SdtplExporter alloc] init];
+//  @try {
+//    [exporter setDictionary:[sd_document dictionary]];
+//    [exporter setTemplate:sd_template];
+//    [exporter writeToFile:file atomically:YES];
+//  } @catch (id exception) {
+//    SKLogException(exception);
+//  }
+//  [exporter release];
+  [self close:sender];
 }
 
 - (IBAction)showPreview:(id)sender {
@@ -100,7 +128,7 @@
   }
   sd_template = aTemplate;
   [sd_preview setTemplate:sd_template];
-  [tplController setContent:sd_template];
+  [generator setTemplate:sd_template];
   if (sd_template) {
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(templateDidChange:)

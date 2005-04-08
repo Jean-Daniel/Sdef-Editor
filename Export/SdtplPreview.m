@@ -48,8 +48,11 @@
 - (void)refresh {
   if (sd_tpl && view) {
     unsigned css = [sd_tpl css];
-    
+    unsigned toc = [sd_tpl toc];
     [sd_tpl setCss:kSdefTemplateCSSInline];
+    if (kSdefTemplateTOCExternal == toc) {
+      [sd_tpl setToc:kSdefTemplateTOCNone];
+    }
     
     id exporter = [self exporter];
     [exporter setTemplate:sd_tpl];
@@ -59,6 +62,7 @@
       SKLogException(exception);
     }
     [sd_tpl setCss:css];
+    [sd_tpl setToc:toc];
     
     if (prflags.pathChanged) {
       [view takeStringURLFrom:self];

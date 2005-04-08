@@ -20,21 +20,16 @@ static NSArray *SdefTemplatePaths();
 static NSDictionary *SdefTemplatesAtPath(NSString *path);
 
 static NSString * const kSdtplVersion = @"Version"; /* Number */
-static NSString * const kSdtplPreviewFile = @"PreviewFile"; /* NSString */
 static NSString * const kSdtplDisplayName = @"DisplayName"; /* NSString */
 static NSString * const kSdtplTemplateFormat = @"TemplateFormat"; /* NSString */
 static NSString * const kSdtplRequireFileType = @"RequireFileType"; /* NSString */
-static NSString * const kSdtplRemoveBlockLine = @"RemoveBlockLine"; /* Boolean */
+static NSString * const kSdtplRemoveBlockLine = @"RemoveBlockLines"; /* Boolean */
 static NSString * const kSdtplTemplateStrings = @"TemplateStrings"; /* NSArray */
 
-static NSString * const kSdtplTocTemplate = @"TocTemplate"; /* NSString */
-static NSString * const kSdtplDictionaryTemplate = @"DictionaryTemplate"; /* NSString */
-
-static NSString * const kSdtplInlineToc = @"InlineToc"; /* Boolean */
-static NSString * const kSdtplSortEntries = @"SortEntries"; /* Boolean */
 static NSString * const kSdtplStyleSheets = @"HTMLStyleSheets"; /* NSDictionary */
-static NSString * const kSdtplCreateLinks = @"HTMLCreateLinks"; /* Boolean */
-static NSString * const kSdtplInlineStyleSheet = @"HTMLInlineStyle"; /* Boolean */
+
+static NSString * const kSdtplTocDefinition = @"Toc";
+static NSString * const kSdtplDictionaryDefinition = @"Dictionary";
 
 @implementation SdefTemplate
 
@@ -64,19 +59,21 @@ static NSString * const kSdtplInlineStyleSheet = @"HTMLInlineStyle"; /* Boolean 
 }
 
 - (void)dealloc {
-  [sd_toc release];
+  [sd_def release];
+  [sd_tpls release];
   [sd_path release];
   [sd_name release];
   [sd_infos release];
-  [sd_layout release];
   [sd_styles release];
   [super dealloc];
 }
 
 #pragma mark -
 - (void)reset {
-  [sd_toc release];
-  sd_toc = nil;
+  [sd_def release];
+  sd_def = nil;
+  [sd_tpls release];
+  sd_tpls = nil;
   [sd_path release];
   sd_path = nil;
   [sd_name release];
@@ -85,56 +82,34 @@ static NSString * const kSdtplInlineStyleSheet = @"HTMLInlineStyle"; /* Boolean 
   sd_infos = nil;
   [sd_styles release];
   sd_styles = nil;
-  [sd_layout release];
-  sd_layout = nil;
   sd_selectedStyle = nil;
   bzero(&tp_flags, sizeof(tp_flags));
 }
 
-- (NSString *)path {
-  return sd_path;
-}
-
-- (void)setPath:(NSString *)path {
-  [self reset];
-  NSFileWrapper *template = [[NSFileWrapper alloc] initWithPath:path];
-  if (template && [template isDirectory]) {
-    NSData *fileData = [[[template fileWrappers] objectForKey:@"Info.plist"] regularFileContents];
-    if (fileData) {
-      sd_infos = [NSPropertyListSerialization propertyListFromData:fileData
-                                                  mutabilityOption:NSPropertyListMutableContainers
-                                                            format:nil
-                                                  errorDescription:nil];
-    }
+- (void)loadInfo:(NSFileWrapper *)tpl {
+  NSData *fileData = [[[tpl fileWrappers] objectForKey:@"Info.plist"] regularFileContents];
+  if (fileData) {
+    sd_infos = [NSPropertyListSerialization propertyListFromData:fileData
+                                                mutabilityOption:NSPropertyListMutableContainers
+                                                          format:nil
+                                                errorDescription:nil];
   }
-  [template release];
   if (!sd_infos) {
-    [NSException raise:NSInvalidArgumentException format:@"%@ isn not a valid template file.", path];
-    return;
-  }
-  if (![sd_infos objectForKey:kSdtplDictionaryTemplate]) {
-    sd_infos = nil;
-    [NSException raise:@"SdefInvalidTemplateException" format:@"%@ does not contains a \"DictionaryTemplate\" file.", [path lastPathComponent]];
+    [NSException raise:NSInvalidArgumentException format:@"%@ isn not a valid template file.", sd_path];
     return;
   }
   [sd_infos retain];
-  sd_path = [path copy];
   
-  
+  /* Set format */
   if ([sd_infos objectForKey:kSdtplTemplateFormat]) {
     tp_flags.html = [[sd_infos objectForKey:kSdtplTemplateFormat] caseInsensitiveCompare:@"html"] == 0;
   }
-  tp_flags.sort = [[sd_infos objectForKey:kSdtplSortEntries] boolValue] ? 1 : 0;
-  tp_flags.links = [[sd_infos objectForKey:kSdtplCreateLinks] boolValue] ? 1 : 0;
-  tp_flags.removeBlockLine = [[sd_infos objectForKey:kSdtplRemoveBlockLine] boolValue] ? 1 : 0;
   
-  if ([(NSString *)[sd_infos objectForKey:kSdtplTocTemplate] length]) {
-    tp_flags.toc = [[sd_infos objectForKey:kSdtplInlineToc] boolValue] ? kSdefTemplateTOCInline : kSdefTemplateTOCExternal;
-  }
-  if (tp_flags.html && [[sd_infos objectForKey:kSdtplStyleSheets] count]) {
-    tp_flags.css = [[sd_infos objectForKey:kSdtplInlineStyleSheet] boolValue] ? kSdefTemplateCSSInline : kSdefTemplateCSSNone;
-    
-    NSDictionary *styles = [sd_infos objectForKey:kSdtplStyleSheets];
+  /* Check CSS */
+  NSDictionary *styles = [sd_infos objectForKey:kSdtplStyleSheets];
+  if (tp_flags.html && [styles count]) {
+    tp_flags.css = kSdefTemplateCSSInline | kSdefTemplateCSSExternal;
+    /* Load CSS */
     sd_styles = [[NSMutableArray alloc] initWithCapacity:[styles count]];
     id keys = [styles keyEnumerator];
     id key;
@@ -146,30 +121,64 @@ static NSString * const kSdtplInlineStyleSheet = @"HTMLInlineStyle"; /* Boolean 
       [(NSMutableArray *)sd_styles addObject:style];
     }
     [self setSelectedStyle:[sd_styles objectAtIndex:0]];
+  } else {
+    tp_flags.css = kSdefTemplateCSSNone;
   }
 }
 
-#pragma mark -
-- (SKTemplate *)tocTemplate {
-  id toc = [sd_infos objectForKey:kSdtplTocTemplate];
-  if (!sd_toc && toc) {
-    id tplClass = tp_flags.html ? [SKXMLTemplate class] : [SKTemplate class];
-    sd_toc = [[tplClass alloc] initWithContentsOfFile:[sd_path stringByAppendingPathComponent:toc]];
-    if (!sd_toc)
-      [NSException raise:@"SdefInvalidTemplateException" format:@"Invalid TOC Template File"];
-    [sd_toc setRemoveBlockLine:tp_flags.removeBlockLine];
+- (void)loadDefinition:(NSFileWrapper *)tpl {
+  NSData *fileData = [[[tpl fileWrappers] objectForKey:@"Definition.plist"] regularFileContents];
+  if (fileData) {
+    sd_def = [NSPropertyListSerialization propertyListFromData:fileData
+                                           mutabilityOption:NSPropertyListImmutable
+                                                     format:nil
+                                           errorDescription:nil];
   }
-  return sd_toc;  
+  
+  if (!sd_def || ![sd_def objectForKey:kSdtplDictionaryDefinition]) {
+    [NSException raise:@"SdefInvalidTemplateException" format:@"%@ does not contains a \"DictionaryTemplate\" file.", [sd_path lastPathComponent]];
+    return;
+  } else {
+    [sd_def retain];
+    Class tplClass = tp_flags.html ? [SKXMLTemplate class] : [SKTemplate class];
+    sd_tpls = [[NSMutableDictionary alloc] initWithCapacity:[sd_def count]];
+    id keys = [sd_def keyEnumerator];
+    NSString *key;
+    while (key = [keys nextObject]) {
+      NSDictionary *tplDef = [sd_def objectForKey:key];
+      SKTemplate *tpl = [[tplClass alloc] initWithContentsOfFile:
+        [sd_path stringByAppendingPathComponent:[tplDef objectForKey:@"File"]]];
+      [tpl setRemoveBlockLine:[[tplDef objectForKey:kSdtplRemoveBlockLine] boolValue]];
+      [sd_tpls setObject:tpl forKey:key];
+      [tpl release];
+//      SKTimeUnit start, end;
+//      SKTimeStart(&start);
+//      [tpl load];
+//      SKTimeEnd(&end);
+//      DLog(@"%@ loaded in %u ms", key, SKTimeDeltaMillis(&start, &end));
+    }
+  }
+  
+  id toc = [sd_tpls objectForKey:kSdtplTocDefinition];
+  tp_flags.toc = (toc != nil) ? kSdefTemplateTOCExternal : kSdefTemplateTOCNone;
+  if ([[sd_tpls objectForKey:kSdtplDictionaryDefinition] blockWithName:@"Table_Of_Content"]) {
+    tp_flags.toc |= kSdefTemplateTOCInline;  
+  }
 }
-- (SKTemplate *)layoutTemplate {
-  if (!sd_layout) {
-    id tplClass = tp_flags.html ? [SKXMLTemplate class] : [SKTemplate class];
-    sd_layout = [[tplClass alloc] initWithContentsOfFile:[sd_path stringByAppendingPathComponent:[sd_infos objectForKey:kSdtplDictionaryTemplate]]];
-    if (!sd_layout)
-      [NSException raise:@"SdefInvalidTemplateException" format:@"Invalid Layout Template File"];
-    [sd_layout setRemoveBlockLine:tp_flags.removeBlockLine];
+
+- (NSString *)path {
+  return sd_path;
+}
+
+- (void)setPath:(NSString *)path {
+  [self reset];
+  NSFileWrapper *template = [[NSFileWrapper alloc] initWithPath:path];
+  if (template && [template isDirectory]) {
+    sd_path = [path copy];
+    [self loadInfo:template];
+    [self loadDefinition:template];
   }
-  return sd_layout;
+  [template release];
 }
 
 #pragma mark -
@@ -184,7 +193,7 @@ static NSString * const kSdtplInlineStyleSheet = @"HTMLInlineStyle"; /* Boolean 
 - (NSString *)extension {
   id ext = [sd_infos objectForKey:kSdtplRequireFileType];
   if (!ext) {
-    ext = [[sd_infos objectForKey:kSdtplDictionaryTemplate] pathExtension];
+    ext = [[[sd_tpls objectForKey:kSdtplDictionaryDefinition] objectForKey:@"File"] pathExtension];
     [sd_infos setObject:(ext ? : @"") forKey:kSdtplRequireFileType];
   }
   return ext;
@@ -196,6 +205,14 @@ static NSString * const kSdtplInlineStyleSheet = @"HTMLInlineStyle"; /* Boolean 
 
 - (NSDictionary *)formats {
   return [sd_infos objectForKey:kSdtplTemplateStrings];
+}
+
+- (NSDictionary *)templates {
+  return sd_tpls;
+}
+
+- (NSDictionary *)definition {
+  return sd_def;
 }
 
 #pragma mark -
@@ -218,7 +235,7 @@ static NSString * const kSdtplInlineStyleSheet = @"HTMLInlineStyle"; /* Boolean 
 }
 
 #pragma mark -
-- (BOOL)html {
+- (BOOL)isHtml {
   return tp_flags.html;
 }
 
@@ -226,10 +243,10 @@ static NSString * const kSdtplInlineStyleSheet = @"HTMLInlineStyle"; /* Boolean 
   return tp_flags.toc;
 }
 - (void)setToc:(unsigned)toc {
-  if (toc != tp_flags.toc) {
+//  if (toc != tp_flags.toc) {
     tp_flags.toc = toc;
-    [self notifyChange];
-  }
+//    [self notifyChange];
+//  }
 }
 
 - (unsigned)css {
@@ -238,28 +255,6 @@ static NSString * const kSdtplInlineStyleSheet = @"HTMLInlineStyle"; /* Boolean 
 /* Don't notify css change. */
 - (void)setCss:(unsigned)css {
   tp_flags.css = css;
-}
-
-- (BOOL)sort {
-  return tp_flags.sort;
-}
-- (void)setSort:(BOOL)flag {
-  flag = flag ? 1 : 0;
-  if (tp_flags.sort != flag) {
-    tp_flags.sort = flag;
-    [self notifyChange];
-  }
-}
-
-- (BOOL)links {
-  return tp_flags.links;
-}
-- (void)setLinks:(BOOL)flag {
-  flag = flag ? 1 : 0;
-  if (tp_flags.links != flag) {
-    tp_flags.links = flag;
-    [self notifyChange];
-  }
 }
 
 @end
@@ -283,7 +278,7 @@ static NSDictionary *SdefTemplatesAtPath(NSString *path) {
       id tpl = nil;
       @try {
         tpl = [[SdefTemplate alloc] initWithPath:[path stringByAppendingPathComponent:name]];
-        [templates setObject:tpl forKey:name];
+        [templates setObject:tpl forKey:[tpl displayName]];
       } @catch (id exception) {
         SKCLogException(exception);
       }
