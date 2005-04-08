@@ -31,7 +31,7 @@
   if (list)
     *list = NO;
   
-  if ([type startsWithString:@"list of "]) {
+  if ([type hasPrefix:@"list of "]) {
     if (list)
       *list = YES;
     type = [type substringFromIndex:8];
@@ -59,7 +59,7 @@
   id manager = [self classManager];
   if (manager) {
     id enume = [manager enumerationWithName:type];
-    if (enume) {
+    if (enume && [enume hasChildren]) {
       id str = [NSMutableString string];
       id values = [enume childEnumerator];
       id value = [values nextObject];

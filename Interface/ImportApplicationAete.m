@@ -52,10 +52,6 @@
 }
 
 - (void)dealloc {
-  NSMenu *menu = [popup menu];
-  while ([menu numberOfItems] > 0) {
-    [menu removeItemAtIndex:0];
-  }
   [super dealloc];
 }
 

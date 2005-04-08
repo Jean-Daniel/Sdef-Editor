@@ -12,7 +12,7 @@
 				<string>sdtpl</string>
 			</array>
 			<key>CFBundleTypeIconFile</key>
-			<string>Templates</string>
+			<string>Template</string>
 			<key>CFBundleTypeName</key>
 			<string>SdefTemplateFile</string>
 			<key>CFBundleTypeRole</key>
@@ -56,7 +56,7 @@
 				<string>text/xml</string>
 			</array>
 			<key>CFBundleTypeName</key>
-			<string>CocoaScriptSuite</string>
+			<string>AppleScriptSuiteDefinition</string>
 			<key>CFBundleTypeOSTypes</key>
 			<array>
 				<string>ScSu</string>
@@ -76,7 +76,7 @@
 				<string>text/xml</string>
 			</array>
 			<key>CFBundleTypeName</key>
-			<string>CocoaTerminology</string>
+			<string>AppleScriptSuiteTerminology</string>
 			<key>CFBundleTypeOSTypes</key>
 			<array>
 				<string>ScTe</string>
@@ -100,7 +100,7 @@
 	<key>CFBundleSignature</key>
 	<string>SdEd</string>
 	<key>CFBundleVersion</key>
-	<string>1.1.1</string>
+	<string>1.2</string>
 	<key>NSAppleScriptEnabled</key>
 	<string>NO</string>
 	<key>NSMainNibFile</key>

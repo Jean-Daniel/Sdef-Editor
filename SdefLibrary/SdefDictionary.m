@@ -17,7 +17,7 @@
 #pragma mark Protocols Implementations
 - (id)copyWithZone:(NSZone *)aZone {
   SdefDictionary *copy = [super copyWithZone:aZone];
-  copy->sd_manager = nil;
+  copy->sd_manager = nil; /* Will be recreated (lazy) */
   copy->sd_document = nil;
   return copy;
 }
