@@ -7,11 +7,14 @@
 //
 
 #import "SdefTemplate.h"
+#import "ShadowMacros.h"
 #import "SKFSFunctions.h"
+
 #import "SKTemplate.h"
 #import "SKXMLTemplate.h"
 
-NSString * const kSdefTemplateDidChangeNotification = @"SdefTemplateDidChange";
+NSString * const SdefInvalidTemplateException = @"SdefInvalidTemplate";
+NSString * const SdefTemplateDidChangeNotification = @"SdefTemplateDidChange";
 
 static NSString * const kSdefTemplateExtension = @"sdtpl";
 static NSString * const kSdefTemplateFolder = @"Sdef Editor/Templates/";
@@ -28,8 +31,13 @@ static NSString * const kSdtplTemplateStrings = @"TemplateStrings"; /* NSArray *
 
 static NSString * const kSdtplStyleSheets = @"HTMLStyleSheets"; /* NSDictionary */
 
-static NSString * const kSdtplTocDefinition = @"Toc";
-static NSString * const kSdtplDictionaryDefinition = @"Dictionary";
+NSString * const SdtplTocDefinitionKey = @"Toc";
+NSString * const SdtplIndexDefinitionKey = @"Index";
+NSString * const SdtplDictionaryDefinitionKey = @"Dictionary";
+NSString * const SdtplSuitesDefinitionKey = @"Suites";
+NSString * const SdtplClassesDefinitionKey = @"Classes";
+NSString * const SdtplCommandsDefinitionKey = @"Commands";
+NSString * const SdtplEventsDefinitionKey = @"Events";
 
 @implementation SdefTemplate
 
@@ -95,7 +103,7 @@ static NSString * const kSdtplDictionaryDefinition = @"Dictionary";
                                                 errorDescription:nil];
   }
   if (!sd_infos) {
-    [NSException raise:NSInvalidArgumentException format:@"%@ isn not a valid template file.", sd_path];
+    [NSException raise:SdefInvalidTemplateException format:@"%@ doesn't contains a valid Info.plist file.", [sd_path lastPathComponent]];
     return;
   }
   [sd_infos retain];
@@ -122,6 +130,7 @@ static NSString * const kSdtplDictionaryDefinition = @"Dictionary";
     }
     [self setSelectedStyle:[sd_styles objectAtIndex:0]];
   } else {
+    [self setSelectedStyle:nil];
     tp_flags.css = kSdefTemplateCSSNone;
   }
 }
@@ -134,16 +143,19 @@ static NSString * const kSdtplDictionaryDefinition = @"Dictionary";
                                                      format:nil
                                            errorDescription:nil];
   }
-  
-  if (!sd_def || ![sd_def objectForKey:kSdtplDictionaryDefinition]) {
-    [NSException raise:@"SdefInvalidTemplateException" format:@"%@ does not contains a \"DictionaryTemplate\" file.", [sd_path lastPathComponent]];
+  if (!sd_def) {
+    [NSException raise:SdefInvalidTemplateException format:@"%@ doesn't contains a valid Definition.plist file.", [sd_path lastPathComponent]];
+    return;
+  }
+  if (![sd_def objectForKey:SdtplDictionaryDefinitionKey]) {
+    [NSException raise:SdefInvalidTemplateException format:@"%@ Definition does not contains a valid \"DictionaryTemplate\" key.", [sd_path lastPathComponent]];
     return;
   } else {
     [sd_def retain];
     Class tplClass = tp_flags.html ? [SKXMLTemplate class] : [SKTemplate class];
     sd_tpls = [[NSMutableDictionary alloc] initWithCapacity:[sd_def count]];
-    id keys = [sd_def keyEnumerator];
     NSString *key;
+    id keys = [sd_def keyEnumerator];
     while (key = [keys nextObject]) {
       NSDictionary *tplDef = [sd_def objectForKey:key];
       SKTemplate *tpl = [[tplClass alloc] initWithContentsOfFile:
@@ -151,18 +163,21 @@ static NSString * const kSdtplDictionaryDefinition = @"Dictionary";
       [tpl setRemoveBlockLine:[[tplDef objectForKey:kSdtplRemoveBlockLine] boolValue]];
       [sd_tpls setObject:tpl forKey:key];
       [tpl release];
-//      SKTimeUnit start, end;
-//      SKTimeStart(&start);
-//      [tpl load];
-//      SKTimeEnd(&end);
-//      DLog(@"%@ loaded in %u ms", key, SKTimeDeltaMillis(&start, &end));
     }
   }
   
-  id toc = [sd_tpls objectForKey:kSdtplTocDefinition];
-  tp_flags.toc = (toc != nil) ? kSdefTemplateTOCExternal : kSdefTemplateTOCNone;
-  if ([[sd_tpls objectForKey:kSdtplDictionaryDefinition] blockWithName:@"Table_Of_Content"]) {
-    tp_flags.toc |= kSdefTemplateTOCInline;  
+  tp_flags.toc = kSdefTemplateTOCNone;
+  NSDictionary *toc = [sd_def objectForKey:SdtplTocDefinitionKey];
+  if (toc) {
+    tp_flags.toc |= kSdefTemplateTOCExternal;
+    if ([[toc objectForKey:@"Required"] boolValue])
+      tp_flags.toc |= kSdefTemplateTOCRequired;
+  }
+  if ([[sd_tpls objectForKey:SdtplDictionaryDefinitionKey] blockWithName:@"Table_Of_Content"]) {
+    tp_flags.toc |= kSdefTemplateTOCDictionary;  
+  }
+  if ([[sd_tpls objectForKey:SdtplIndexDefinitionKey] blockWithName:@"Table_Of_Content"]) {
+    tp_flags.toc |= kSdefTemplateTOCIndex;  
   }
 }
 
@@ -193,7 +208,7 @@ static NSString * const kSdtplDictionaryDefinition = @"Dictionary";
 - (NSString *)extension {
   id ext = [sd_infos objectForKey:kSdtplRequireFileType];
   if (!ext) {
-    ext = [[[sd_tpls objectForKey:kSdtplDictionaryDefinition] objectForKey:@"File"] pathExtension];
+    ext = [[[sd_tpls objectForKey:SdtplDictionaryDefinitionKey] objectForKey:@"File"] pathExtension];
     [sd_infos setObject:(ext ? : @"") forKey:kSdtplRequireFileType];
   }
   return ext;
@@ -217,7 +232,7 @@ static NSString * const kSdtplDictionaryDefinition = @"Dictionary";
 
 #pragma mark -
 - (void)notifyChange {
-  [[NSNotificationCenter defaultCenter] postNotificationName:@"SdefTemplateDidChange" object:self];
+  [[NSNotificationCenter defaultCenter] postNotificationName:SdefTemplateDidChangeNotification object:self];
 }
 
 - (NSArray *)styles {
@@ -242,6 +257,20 @@ static NSString * const kSdtplDictionaryDefinition = @"Dictionary";
 - (unsigned)toc {
   return tp_flags.toc;
 }
+
+- (BOOL)indexToc {
+  return (tp_flags.toc & kSdefTemplateTOCIndex) != 0;
+}
+- (BOOL)dictionaryToc {
+  return (tp_flags.toc & kSdefTemplateTOCDictionary) != 0;
+}
+- (BOOL)externalToc {
+  return (tp_flags.toc & kSdefTemplateTOCExternal) != 0;
+}
+- (BOOL)requiredToc {
+  return (tp_flags.toc & kSdefTemplateTOCRequired) != 0;
+}
+
 - (void)setToc:(unsigned)toc {
 //  if (toc != tp_flags.toc) {
     tp_flags.toc = toc;

@@ -16,6 +16,12 @@
 
 @implementation SdtplWindow
 
++ (void)initialize {
+  [[NSUserDefaults standardUserDefaults] registerDefaults:[NSDictionary dictionaryWithObjectsAndKeys:
+    SKInt(0x03), @"SdtplDislosurePanel", /* 1 << 0 & 1 << 1 => the two first view are opened */
+    nil]];
+}
+
 + (NSString *)nibName {
   return @"SdtplExport";
 }
@@ -49,7 +55,13 @@
   [panel addView:generalView withLabel:@"General"];
   [panel addView:tocView withLabel:@"Table Of Content"];
   [panel addView:htmlView withLabel:@"HTML Options"];
-  [panel toggleViewAtIndex:2];
+  
+  unsigned idx;
+  NSArray *views = [panel disclosureViews];
+  UInt32 prefs = [[NSUserDefaults standardUserDefaults] integerForKey:@"SdtplDislosurePanel"];
+  for (idx = 0; idx < [views count]; idx++) {
+    [[views objectAtIndex:idx] setVisible:(prefs & (1 << idx))];
+  }
   
   /* Init Templates Menu */
   id tpls = [[SdefTemplate findAllTemplates] allValues];
@@ -75,6 +87,18 @@
 }
 
 #pragma mark -
+- (IBAction)close:(id)sender {
+  NSArray *views = [(SKDisclosurePanel *)[self window] disclosureViews];
+  unsigned idx;
+  SInt32 prefs = 0;
+  for (idx = 0; idx < [views count]; idx++) {
+    BOOL state = [[views objectAtIndex:idx] isVisible] ? 1 : 0;
+    prefs |= (state << idx);
+  }
+  [[NSUserDefaults standardUserDefaults] setInteger:prefs forKey:@"SdtplDislosurePanel"];
+  [super close:sender];
+}
+
 - (IBAction)export:(id)sender {
   NSSavePanel *panel = [NSSavePanel savePanel];
   [panel setCanSelectHiddenExtension:YES];
@@ -124,7 +148,7 @@
 
 - (void)setSelectedTemplate:(SdefTemplate *)aTemplate {
   if (sd_template) {
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:kSdefTemplateDidChangeNotification object:sd_template];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:SdefTemplateDidChangeNotification object:sd_template];
   }
   sd_template = aTemplate;
   [sd_preview setTemplate:sd_template];
@@ -132,7 +156,7 @@
   if (sd_template) {
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(templateDidChange:)
-                                                 name:kSdefTemplateDidChangeNotification
+                                                 name:SdefTemplateDidChangeNotification
                                                object:sd_template];
   }
   [self templateDidChange:nil];

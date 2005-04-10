@@ -23,7 +23,8 @@ enum {
 @class SdefTemplate, SdefClassManager;
 @interface SdtplGenerator : NSObject {
   struct sd_gnflags {
-    unsigned int toc:1;
+    unsigned int toc:4; /* OK */
+    unsigned int css:4; /* OK */
     unsigned int index:1;
     unsigned int suites:2;
     unsigned int classes:2;
@@ -39,7 +40,7 @@ enum {
     /* HTML Preferences */
     unsigned int links:1; /* OK */
     unsigned int format:2; /* OK */
-    unsigned int:5;
+    unsigned int:6;
   } gnflags;
   NSString *sd_path;
   NSString *sd_base;
@@ -47,12 +48,26 @@ enum {
   SdefTemplate *sd_tpl;
   /* Caches */
   NSString *sd_link; /* Weak */
+  NSString *sd_tocFile;
+  NSString *sd_cssFile;
   SdefClassManager *sd_manager; /* Weak */
   NSMutableDictionary *sd_formats;
   CFMutableDictionaryRef sd_links, sd_files, sd_anchors;
 }
 
 #pragma mark Accessors
+
+- (BOOL)indexToc;
+- (BOOL)externalToc;
+- (BOOL)dictionaryToc;
+
+- (unsigned)toc;
+- (void)setToc:(unsigned)toc;
+
+- (BOOL)externalCss;
+- (unsigned)css;
+- (void)setCss:(unsigned)css;
+
 - (BOOL)sortSuites;
 - (void)setSortSuites:(BOOL)sort;
 

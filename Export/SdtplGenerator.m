@@ -21,12 +21,21 @@
 #import "SdefClassManager.h"
 #import "ASDictionaryObject.h"
 
+
+#define SetVariable(tpl, name, value) \
+ { \
+   if (value && [tpl containsKey:name]) { \
+     id __varStr = [self formatString:value forVariable:name]; \
+     [tpl setVariable:__varStr forKey:name]; \
+   } \
+ }
+/* 
 #define SetVariable(tpl, name, value) \
 { \
   id __varStr = [self formatString:value forVariable:name]; \
     [tpl setVariable:__varStr forKey:name]; \
 }
-
+*/
 static __inline__ NSString *SdefEscapedString(NSString *value, unsigned int format) {
   return ((kSdefTemplateXMLFormat == format) ? [value stringByEscapingEntities:nil] : value);
 }
@@ -51,6 +60,16 @@ static NSString *SdtplSimplifieName(NSString *name);
 - (void)initCache;
 - (void)releaseCache;
 
+#pragma mark Generators
+- (BOOL)writeDictionary:(SdefDictionary *)aDico usingTemplate:(SKTemplate *)tpl;
+- (BOOL)writeSuite:(SdefSuite *)suite usingTemplate:(SKTemplate *)tpl;
+- (BOOL)writeClass:(SdefClass *)aClass usingTemplate:(SKTemplate *)tpl;
+- (BOOL)writeVerb:(SdefVerb *)verb usingTemplate:(SKTemplate *)tpl;
+- (void)writeToc:(SdefDictionary *)dictionary usingTemplate:(SKTemplate *)tpl;
+- (BOOL)writeIndex:(SdefDictionary *)theDico usingTemplate:(SKTemplate *)tpl;
+
+- (BOOL)writeTemplate:(SKTemplate *)tpl toFile:(NSString *)path representedObject:(SdefObject *)anObject;
+
 @end
 
 #pragma mark -
@@ -69,6 +88,11 @@ static NSString *SdtplSimplifieName(NSString *name);
       SKBool(NO), @"SdtplIgnoreEvents",
       SKBool(YES), @"SdtplIgnoreRespondsTo",
       nil]];
+    NSArray *tocKey = [NSArray arrayWithObject:@"toc"];
+    [self setKeys:tocKey triggerChangeNotificationsForDependentKey:@"indexToc"];
+    [self setKeys:tocKey triggerChangeNotificationsForDependentKey:@"externalToc"];
+    [self setKeys:tocKey triggerChangeNotificationsForDependentKey:@"dictionaryToc"];
+    [self setKeys:[NSArray arrayWithObject:@"css"] triggerChangeNotificationsForDependentKey:@"externalCss"];
     tooLate = YES;
   }
 }
@@ -108,11 +132,62 @@ static NSString *SdtplSimplifieName(NSString *name);
   [sd_tpl release];
   [sd_path release];
   [sd_base release];
+  [sd_tocFile release];
+  [sd_cssFile release];
   [self releaseCache];
   [super dealloc];
 }
 
 #pragma mark -
+#pragma mark KVC Accessors
+
+#pragma mark Toc & CSS
+- (unsigned)toc {
+  return gnflags.toc;
+}
+- (void)setToc:(unsigned)toc {
+  gnflags.toc = toc;
+}
+- (BOOL)indexToc {
+  return (gnflags.toc & kSdefTemplateTOCIndex) != 0;
+}
+- (BOOL)externalToc {
+  return (gnflags.toc & kSdefTemplateTOCExternal) != 0;
+}
+- (BOOL)dictionaryToc {
+  return (gnflags.toc & kSdefTemplateTOCDictionary) != 0;
+}
+
+- (unsigned)css {
+  return gnflags.css;
+}
+- (void)setCss:(unsigned)css {
+  gnflags.css = css;
+}
+- (BOOL)externalCss {
+  return (gnflags.css & kSdefTemplateCSSExternal) != 0;
+}
+
+- (NSString *)tocFile {
+  return sd_tocFile ? : (sd_tpl) ? [@"toc" stringByAppendingPathExtension:[sd_tpl extension]] : @"";
+}
+- (void)setTocFile:(NSString *)aFile {
+  if (sd_tocFile != aFile) {
+    [sd_tocFile release];
+    sd_tocFile = [aFile retain];
+  }
+}
+- (NSString *)cssFile {
+  return sd_cssFile ? sd_cssFile : @"style.css";
+}
+- (void)setCssFile:(NSString *)aFile {
+  if (sd_cssFile != aFile) {
+    [sd_cssFile release];
+    sd_cssFile = [aFile retain];
+  }
+}
+
+#pragma mark Others Parameters
 - (BOOL)sortSuites {
   return gnflags.sortSuites;
 }
@@ -176,29 +251,140 @@ static NSString *SdtplSimplifieName(NSString *name);
 
 - (void)setTemplate:(SdefTemplate *)aTemplate {
   if (aTemplate != sd_tpl) {
+    [self willChangeValueForKey:@"tocFile"];
     [sd_tpl release];
     sd_tpl = [aTemplate retain];
-    gnflags.format = [sd_tpl isHtml] ? kSdefTemplateXMLFormat : kSdefTemplateDefaultFormat;
+    [self didChangeValueForKey:@"tocFile"];
+    if (sd_tpl) {
+      gnflags.format = [sd_tpl isHtml] ? kSdefTemplateXMLFormat : kSdefTemplateDefaultFormat;
+      [self willChangeValueForKey:@"toc"];
+      /* Set default Toc value */
+      if ([sd_tpl requiredToc]) {
+        gnflags.toc |= kSdefTemplateTOCExternal;
+      } else if (![sd_tpl externalToc]) {
+        gnflags.toc &= ~kSdefTemplateTOCExternal;
+      }
+      if (![sd_tpl dictionaryToc]) {
+        gnflags.toc &= ~kSdefTemplateTOCDictionary;
+      }
+      if (![sd_tpl indexToc]) {
+        gnflags.toc &= ~kSdefTemplateTOCIndex;
+      }
+      [self didChangeValueForKey:@"toc"];
+      /* Set default CSS value */
+      if (gnflags.format != kSdefTemplateXMLFormat) {
+        [self setCss:kSdefTemplateCSSNone];
+      } else {
+        [self setCss:kSdefTemplateCSSInline];
+      }
+    }
   }
+}
+
+#pragma mark -
+#pragma mark API
+- (BOOL)writeDictionary:(SdefDictionary *)aDico toFile:(NSString *)aFile {
+  id pool = [[NSAutoreleasePool alloc] init];
+  SKTimeUnit start, end;
+  SKTimeStart(&start);
+  [self initCache];
+  
+  /* Init default formats */
+  if (![sd_formats objectForKey:@"Superclass_Description"]) {
+    [sd_formats setObject:@"inherits some of its properties from the %@ class" forKey:@"Superclass_Description"];
+  }
+  if (![sd_formats objectForKey:@"Style_Link"]) {
+    [sd_formats setObject:@"<link rel=\"stylesheet\" href=\"%@\" type=\"text/css\">" forKey:@"Style_Link"];
+  }
+  
+  sd_path = [aFile retain];
+  sd_base = [[aFile stringByDeletingLastPathComponent] retain];
+
+  SKTimeEnd(&end);
+  DLog(@"Init finished :%u ms", SKTimeDeltaMillis(&start, &end));
+  
+  id dictionary = nil;
+  if (gnflags.sortOthers || gnflags.sortSuites || (!gnflags.ignoreEvents && gnflags.groupEvents)) {
+    dictionary = [aDico copy];
+  } else {
+    dictionary = [aDico retain];
+  }
+  
+  sd_manager = [dictionary classManager];
+  
+  SKTimeEnd(&end);
+  DLog(@"Copy finished :%u ms", SKTimeDeltaMillis(&start, &end));
+  
+  SKTemplate *root = [[sd_tpl templates] objectForKey:SdtplDictionaryDefinitionKey];
+  BOOL write = [self writeDictionary:dictionary usingTemplate:root];
+  
+  SKTimeEnd(&end);
+  DLog(@"Main files created :%u ms", SKTimeDeltaMillis(&start, &end));
+  
+  root = [[sd_tpl templates] objectForKey:SdtplIndexDefinitionKey];
+  if (root) {
+    [self writeIndex:dictionary usingTemplate:root];
+  }
+  
+  SKTimeEnd(&end);
+  DLog(@"Index file created: %u ms", SKTimeDeltaMillis(&start, &end));
+  
+  /* Create css file if needed */
+  if (kSdefTemplateCSSExternal == gnflags.css) {
+    NSString *src = [[sd_tpl selectedStyle] objectForKey:@"path"];
+    NSString *dest = [sd_base stringByAppendingPathComponent:[self cssFile]];
+    if (src && dest) {
+      /* can check if exist */
+      [[NSFileManager defaultManager] copyPath:src toPath:dest handler:nil];
+    }
+  }
+  
+  SKTimeEnd(&end);
+  DLog(@"CSS File created: %u ms", SKTimeDeltaMillis(&start, &end));
+
+  /* TOC must be in last position because it may change sd_link and flush cache. */
+  if ([self externalToc]) {
+    root = [[sd_tpl templates] objectForKey:SdtplTocDefinitionKey];
+    if (root) {
+      NSString *link = [sd_formats objectForKey:@"Toc_Links"];
+      if (link && ![link isEqualToString:sd_link]) {
+        sd_link = link;
+        CFDictionaryRemoveAllValues(sd_links);
+      }
+      [self writeToc:dictionary usingTemplate:root];
+      NSString *file = [self tocFile];
+      [self writeTemplate:root toFile:file representedObject:dictionary];
+    }
+  }
+  
+  SKTimeEnd(&end);
+  DLog(@"Toc file created: %u ms", SKTimeDeltaMillis(&start, &end));
+  
+  /* Release resources */
+  [dictionary release];
+  sd_manager = nil;
+  [sd_path release];
+  sd_path = nil;
+  [sd_base release];
+  sd_base = nil;
+  [self releaseCache];
+  
+  SKTimeEnd(&end);
+  DLog(@"Template Over :%u ms", SKTimeDeltaMillis(&start, &end));
+  
+  [pool release];
+  return write;
 }
 
 #pragma mark -
 #pragma mark Cache management
-- (NSString *)formatString:(NSString *)str forVariable:(NSString *)variable {
-  id format = [sd_formats objectForKey:variable];
-  if (format) {
-    return ([format rangeOfString:@"%@"].location != NSNotFound) ? [NSString stringWithFormat:format, str] : format;
-  }
-  return str;
-}
-
-#pragma mark -
 - (void)initCache {
   if (sd_tpl) {
     sd_formats = [[sd_tpl formats] mutableCopy];
     sd_link = [sd_formats objectForKey:@"Links"];
     if (!sd_link) {
       sd_link = @"<a href=\"%@#%@\">%@</a>";
+      [sd_formats setObject:sd_link forKey:@"Links"];
     }
     /* Use retain instead of copy for key (faster) */
     sd_links = CFDictionaryCreateMutable(kCFAllocatorDefault, 0, &kSKDictionaryKeyCallBacks, &kSKDictionaryValueCallBacks);
@@ -206,27 +392,26 @@ static NSString *SdtplSimplifieName(NSString *name);
     sd_anchors = CFDictionaryCreateMutable(kCFAllocatorDefault, 0, &kSKDictionaryKeyCallBacks, &kSKDictionaryValueCallBacks);
     
     id defs = [sd_tpl definition];
-    /* Toc */
-    gnflags.toc = (nil != [defs objectForKey:@"Toc"]) ? 1 : 0;
+    
     /* Index */
-    gnflags.index = (nil != [defs objectForKey:@"Index"]) ? 1 : 0;
+    gnflags.index = (nil != [defs objectForKey:SdtplIndexDefinitionKey]) ? 1 : 0;
     /* Suite */
-    id def = [defs objectForKey:@"Suites"];
+    id def = [defs objectForKey:SdtplSuitesDefinitionKey];
     if (def) {
       gnflags.suites = [[def objectForKey:@"SingleFile"] boolValue] ? kSdtplSingleFile : kSdtplMultiFiles;
     } 
     /* Class */
-    def = [defs objectForKey:@"Classes"];
+    def = [defs objectForKey:SdtplClassesDefinitionKey];
     if (def) {
       gnflags.classes = [[def objectForKey:@"SingleFile"] boolValue] ? kSdtplSingleFile : kSdtplMultiFiles;
     }
     /* Events */
-    def = [defs objectForKey:@"Events"];
+    def = [defs objectForKey:SdtplEventsDefinitionKey];
     if (def) {
       gnflags.events = [[def objectForKey:@"SingleFile"] boolValue] ? kSdtplSingleFile : kSdtplMultiFiles;
     }
     /* Commands */
-    def = [defs objectForKey:@"Commands"];
+    def = [defs objectForKey:SdtplCommandsDefinitionKey];
     if (def) {
       gnflags.commands = [[def objectForKey:@"SingleFile"] boolValue] ? kSdtplSingleFile : kSdtplMultiFiles;
     }
@@ -248,7 +433,17 @@ static NSString *SdtplSimplifieName(NSString *name);
 }
 
 #pragma mark -
+- (NSString *)formatString:(NSString *)str forVariable:(NSString *)variable {
+  id format = [sd_formats objectForKey:variable];
+  if (format) {
+    return ([format rangeOfString:@"%@"].location != NSNotFound) ? [NSString stringWithFormat:format, str] : format;
+  }
+  return str;
+}
+
+#pragma mark -
 #pragma mark References Generator
+#pragma mark Files
 - (NSString *)fileForObject:(SdefObject *)anObject {
   id file = (id)CFDictionaryGetValue(sd_files, anObject);
   if (!file) {
@@ -319,6 +514,7 @@ static NSString *SdtplSimplifieName(NSString *name);
   return (file != _null) ? file : nil;
 }
 
+#pragma mark Anchors
 - (NSString *)anchorForObject:(SdefObject *)obj {
   id name = [self anchorNameForObject:obj];
   if (name) {
@@ -336,6 +532,9 @@ static NSString *SdtplSimplifieName(NSString *name);
   id anchor = (id)CFDictionaryGetValue(sd_anchors, anObject);
   if (!anchor) {
     switch ([anObject objectType]) {
+      case kSdefDictionaryType:
+        anchor = [NSString stringWithFormat:@"%@", SdtplSimplifieName([anObject name])];
+        break;
       case kSdefSuiteType:
         anchor = [NSString stringWithFormat:@"suite_%@", SdtplSimplifieName([anObject name])];
         break;
@@ -352,6 +551,7 @@ static NSString *SdtplSimplifieName(NSString *name);
   return (_null == anchor) ? nil : anchor;
 }
 
+#pragma mark Links
 - (NSString *)linkForType:(NSString *)aType withString:(NSString *)aString {
   id link = (id)CFDictionaryGetValue(sd_links, aType);
   if (!link) {
@@ -383,179 +583,315 @@ static NSString *SdtplSimplifieName(NSString *name);
 - (NSString *)linkForObject:(SdefObject *)anObject withString:(NSString *)aString {
   NSString *link = aString;
   if (anObject) {
-    id file = [self fileForObject:anObject];
+    NSString *file = [self fileForObject:anObject];
     link = [NSString stringWithFormat:sd_link, (file) ? : @"", [self anchorNameForObject:anObject], aString];
   }
   return link;
 }
 
+- (NSString *)linkForDictionary:(SdefDictionary *)dictionary withString:(NSString *)aString {
+  id link = (id)CFDictionaryGetValue(sd_links, dictionary);
+  if (!link) {
+    link = [self linkForObject:dictionary withString:aString];
+    //DLog(@"Cache Dictionary: %@ => %@", dictionary, link);
+    CFDictionarySetValue(sd_links, dictionary, link);
+  }
+  return link;
+}
+
 #pragma mark -
-
-- (void)writeDictionaryToc:(SdefDictionary *)dictionary usingTemplate:(SKTemplate *)tpl {
-//  SetVariable(tpl, @"Toc_Dictionary_Name", [dictionary name]);
-//  /* Suites */
-//  SKTemplate *stpl = [tpl blockWithName:@"Toc_Suite"];
-//  id suites = [dictionary childEnumerator];
-//  SdefSuite *suite;
-//  while (suite = [suites nextObject]) {
-//    if ([suite name]) {
-//      SetVariable(stpl, @"Toc_Suite_Name", [suite name]);
-//    }
-//    /* Classes */
-//    if ([[suite classes] hasChildren]) {
-//      SKTemplate *ctpl = [tpl blockWithName:@"Toc_Class"];
-//      id classes = [[suite classes] childEnumerator];
-//      SdefClass *class;
-//      while (class = [classes nextObject]) {
-//        NSString *name = [class name];
-//        if (name) {
-//          if (gnflags.links)
-//            name = [self linkForType:name withString:name];
-//          SetVariable(ctpl, @"Toc_Class_Name", name);
-//        }
-//        [ctpl dumpBlock];
-//      }
-//      [[tpl blockWithName:@"Toc_Classes"] dumpBlock];
-//    }
-//    
-//    /* Commands */
-//    if ([[suite commands] hasChildren] || [[suite events] hasChildren]) {
-//      id verb;
-//      id vtpl = [tpl blockWithName:@"Toc_Command"];
-//      id verbs = [[suite commands] childEnumerator];
-//      while (verb = [verbs nextObject]) {
-//        NSString *name = [verb name];
-//        if (name) {
-//          if (gnflags.links)
-//            name = [self linkForObject:verb withString:name];
-//          SetVariable(vtpl, @"Toc_Command_Name", name);
-//        }
-//        [vtpl dumpBlock];
-//      }
-//      verbs = [[suite events] childEnumerator];
-//      while (verb = [verbs nextObject]) {
-//        NSString *name = [verb name];
-//        if (name) {
-//          if (gnflags.links)
-//            name = [self linkForObject:verb withString:name];
-//          SetVariable(vtpl, @"Toc_Command_Name", name);
-//        }
-//        [vtpl dumpBlock];
-//      }
-//      /* require to generate classes block */
-//      [[tpl blockWithName:@"Toc_Commands"] dumpBlock];
-//    }
-//    [stpl dumpBlock];
-//  }
-}
-
-- (BOOL)writeToc:(NSString *)toc toFolder:(NSString *)aFolder {
-//  id path = [aFolder stringByAppendingPathComponent:[[sd_tpl tocFile] stringByAppendingPathExtension:[sd_tpl extension]]];
-//  if ([[NSFileManager defaultManager] fileExistsAtPath:path]) {
-//    NSAlert *alert = [NSAlert alertWithMessageText:@"File already exist"
-//                                     defaultButton:@"Replace"
-//                                   alternateButton:@"Ignore"
-//                                       otherButton:@"Cancel"
-//                         informativeTextWithFormat:@"Would you like replace"];
-//
-//    int result = [alert runModal];
-//    switch (result) {
-//      case NSAlertAlternateReturn:
-//        return;
-//      case NSAlertOtherReturn:
-//        [NSException raise:@"SdefUserCancelException" format:@"Replace TOC file"];
-//        return;
-//    }
-//  }
-//  [toc writeToFile:path atomically:YES];
-  return YES;
-}
-
-#pragma mark Verb
-- (void)writeParameter:(SdefParameter *)param usingTemplate:(SKTemplate *)tpl {
-  if ([param name])
-    SetVariable(tpl, @"Parameter_Name", [param name]);
-  if ([param desc])
-    SetVariable(tpl, SdefEscapedString(@"Parameter_Description", gnflags.format), [param desc]);
-  BOOL list;
-  id type = [param asDictionaryTypeForType:[param type] isList:&list];
-  if (list) {
-    SetVariable(tpl, @"Parameter_Type_List", @"a list of");
-  }
-  SetVariable(tpl, @"Parameter_Type", type);
-}
-
-- (BOOL)writeVerb:(SdefVerb *)verb usingTemplate:(SKTemplate *)tpl {
-  if ([verb name]) {
-    SetVariable(tpl, @"Command_Name", [verb name]);
-    if (gnflags.links)
-      SetVariable(tpl, @"Command_Anchor", [self anchorForObject:verb]);
-  }
-  if ([verb desc])
-    SetVariable(tpl, SdefEscapedString(@"Command_Description", gnflags.format), [verb desc]);
-  if (gnflags.sortOthers) {
-    [verb sortByName];
-  }
-  if ([[verb directParameter] type]) {
-    id block = [tpl blockWithName:@"Direct_Parameter"];
-    SdefDirectParameter *param = [verb directParameter];
-    BOOL list;
-    id type = [param asDictionaryTypeForType:[param type] isList:&list];
-    if (list) {
-      SetVariable(block, @"Direct_Parameter_List", @"a list of");
+#pragma mark Template Generators
+#pragma mark Common
+- (void)writeReferences:(SdefObject *)anObject usingTemplate:(SKTemplate *)tpl {
+  
+  /* Set Style */
+  if (kSdefTemplateXMLFormat == gnflags.format) {
+    if ((gnflags.css != kSdefTemplateCSSNone) && [sd_tpl selectedStyle]) {
+      if (kSdefTemplateCSSInline == gnflags.css && [tpl blockWithName:@"Style_Inline"]) {
+        id block = [tpl blockWithName:@"Style_Inline"];
+        if ([block containsKey:@"Style_Sheet"]) {
+          NSString *style = [[NSString alloc] initWithContentsOfFile:[[sd_tpl selectedStyle] objectForKey:@"path"]];
+          [block setVariable:style forKey:@"Style_Sheet"];
+          [style release];
+          [block dumpBlock];
+        }
+      } else if (kSdefTemplateCSSExternal == gnflags.css) {
+        SetVariable(tpl, @"Style_Link", [self cssFile]);
+      }
     }
-    SetVariable(block, @"Direct_Parameter", type);
-    if ([param desc])
-      SetVariable(block, SdefEscapedString(@"Direct_Parameter_Description", gnflags.format), [param desc]);
-    [block dumpBlock];
   }
-  if ([[verb result] type]) {
-    id block = [tpl blockWithName:@"Result"];
-    SdefResult *result = [verb result];
-    BOOL list;
-    id type = [result asDictionaryTypeForType:[result type] isList:&list];
-    if (list) {
-      SetVariable(block, @"Result_Type_List", @"a list of");
-    }
-    SetVariable(block, @"Result_Type", type);
-    if ([result desc])
-      SetVariable(block, SdefEscapedString(@"Result_Description", gnflags.format), [result desc]);
-    [block dumpBlock];
+
+  /* Set References */
+  if (gnflags.index) {
+    [tpl setVariable:[sd_path lastPathComponent] forKey:@"Index_File"];
   }
-  if ([verb hasChildren]) {
-    SdefParameter *param;
-    id params = [verb childEnumerator];
-    id block = [tpl blockWithName:@"Required_Parameter"];
-    /* Required parameters */
-    while (param = [params nextObject]) {
-      if (![param isOptional]) {
-        [self writeParameter:param usingTemplate:block];
-        [block dumpBlock];
+  if ([self externalToc]) {
+    /* Toc path */
+    [tpl setVariable:[self tocFile] forKey:@"Toc_File"];
+  }
+  /* Dictionary Links */
+  id obj = nil;
+  if (obj = [anObject dictionary]) {
+    SetVariable(tpl, @"Dictionary_Name", [obj name]);
+    [tpl setVariable:[self fileForObject:obj] forKey:@"Dictionary_File"];
+    if ([tpl containsKey:@"Dictionary_Link"])
+      [tpl setVariable:[self linkForDictionary:obj withString:[obj name]] forKey:@"Dictionary_Link"];
+  }
+  /* Suite Links */
+  if (obj = [anObject suite]) {
+    SetVariable(tpl, @"Suite_Name", [obj name]);
+    [tpl setVariable:[self fileForObject:obj] forKey:@"Suite_File"];
+    if ([tpl containsKey:@"Suite_Link"])
+      [tpl setVariable:[self linkForObject:obj withString:[obj name]] forKey:@"Suite_Link"];
+  }
+}
+
+- (BOOL)writeTemplate:(SKTemplate *)tpl toFile:(NSString *)path representedObject:(SdefObject *)anObject {
+  if (anObject) {
+    [self writeReferences:anObject usingTemplate:tpl];
+  }
+  if (![path isAbsolutePath]) {
+    path = [sd_base stringByAppendingPathComponent:path];
+  }
+  if ([path isEqualToString:sd_path]) {
+    [[NSFileManager defaultManager] removeFileAtPath:path handler:nil];
+  }
+  BOOL isDir;
+  if ([[NSFileManager defaultManager] fileExistsAtPath:path isDirectory:&isDir]) {
+    DLog(@"File exists: %@", path);
+    //    NSAlert *alert = [NSAlert alertWithMessageText:@"File already exist"
+    //                                     defaultButton:@"Replace"
+    //                                   alternateButton:@"Continue"
+    //                                       otherButton:@"Stop"
+    //                         informativeTextWithFormat:@"Would you like replace it, continue or cancel exportation?"];
+    //
+    //    int result = [alert runModal];
+    //    switch (result) {
+    //      case NSAlertAlternateReturn:
+    //        return;
+    //      case NSAlertOtherReturn:
+    //        [NSException raise:@"SdefUserCancelException" format:@"Replace TOC file"];
+    //        return;
+    //    }
+  }
+  return [tpl writeToFile:path atomically:YES andReset:YES];
+}
+
+#pragma mark Dictionary
+- (BOOL)writeDictionary:(SdefDictionary *)aDico usingTemplate:(SKTemplate *)tpl {
+  /* Generate Template */
+  SetVariable(tpl, @"Dictionary_Name", [aDico name]);
+  if (gnflags.links)
+    SetVariable(tpl, @"Dictionary_Anchor", [self anchorForObject:aDico]);
+  
+  if (gnflags.sortSuites) 
+    [aDico sortByName];
+  
+  if ([aDico hasChildren]) {
+    SdefSuite *suite;
+    NSEnumerator *suites = [aDico childEnumerator];
+    
+    SKTemplate *suiteTpl = nil;
+    SKTemplate *suiteBlock = [tpl blockWithName:@"Suite"];
+    if (kSdtplInline == gnflags.suites) {
+      suiteTpl = suiteBlock;
+    } else {
+      suiteTpl = [[sd_tpl templates] objectForKey:SdtplSuitesDefinitionKey];
+      if (kSdtplSingleFile == gnflags.suites) {
+        suiteTpl = [suiteTpl blockWithName:@"Suite"];
       }
     }
     
-    params = [verb childEnumerator];
-    block = [tpl blockWithName:@"Optional_Parameter"];
-    /* Optionals parameters */
-    while (param = [params nextObject]) {
-      if ([param isOptional]) {
-        [self writeParameter:param usingTemplate:block];
-        [block dumpBlock];
+    while (suite = [suites nextObject]) {
+      if (kSdtplInline != gnflags.suites) {
+        NSString *name = [suite name];
+        if (name && gnflags.links) 
+          name = [self linkForObject:suite withString:name];
+        [suiteBlock setVariable:name forKey:@"Suite_Name"];
+        if ([suite desc])
+          SetVariable(suiteBlock, @"Suite_Description", [suite desc]);
+      }
+      if (suiteTpl)
+        [self writeSuite:suite usingTemplate:suiteTpl];
+      [suiteBlock dumpBlock];
+    }
+    switch (gnflags.suites) {
+      case kSdtplSingleFile:
+        [self writeTemplate:[[sd_tpl templates] objectForKey:SdtplSuitesDefinitionKey]
+                     toFile:[self fileForObject:[aDico firstChild]]
+          representedObject:aDico];
+        break;
+    }
+  }
+  
+  if ([self dictionaryToc]) {
+    SKTemplate *toc = [tpl blockWithName:@"Table_Of_Content"];
+    if (toc) {
+      [self writeToc:aDico usingTemplate:toc];
+    }
+    [toc dumpBlock];
+  }
+  
+  NSString *file = nil;
+  if (gnflags.index) {
+    file = [self fileForObject:aDico];
+  } else {
+    file = sd_path;
+  }
+  return [self writeTemplate:tpl toFile:file representedObject:aDico];
+}
+
+#pragma mark Suites
+- (BOOL)writeSuite:(SdefSuite *)suite usingTemplate:(SKTemplate *)tpl {
+  if ([suite name]) {
+    SetVariable(tpl, @"Suite_Name", [suite name]);
+    if (gnflags.links)
+      SetVariable(tpl, @"Suite_Anchor", [self anchorForObject:suite]);
+  }
+  if ([suite desc])
+    SetVariable(tpl, @"Suite_Description", [suite desc]);
+  
+  if (gnflags.groupEvents && !gnflags.ignoreEvents) {
+    id cmds = [suite commands];
+    id events = [suite events];
+    id evnt;
+    while (evnt = [events firstChild]) {
+      [evnt retain];
+      [evnt remove];
+      [cmds appendChild:evnt];
+      [evnt release];
+    }
+  }
+
+  if (gnflags.sortOthers) {
+    [[suite classes] sortByName];
+    [[suite commands] sortByName];
+    [[suite events] sortByName];
+  }
+  
+  if ([[suite classes] hasChildren]) {
+    id class;
+    id classes = [[suite classes] childEnumerator];
+    
+    SKTemplate *classTpl = nil;
+    SKTemplate *classBlock = [tpl blockWithName:@"Class"];
+    if (kSdtplInline == gnflags.classes) {
+      classTpl = classBlock;
+    } else {
+      classTpl = [[sd_tpl templates] objectForKey:SdtplClassesDefinitionKey];
+      if (kSdtplSingleFile == gnflags.classes) {
+        classTpl = [classTpl blockWithName:@"Class"];
       }
     }
-    [[tpl blockWithName:@"Parameters"] dumpBlock];
+    
+    while (class = [classes nextObject]) {
+      if (kSdtplInline != gnflags.classes) {
+        NSString *name = [class name];
+        if (name && gnflags.links)
+          name = [self linkForObject:class withString:name];
+        [classBlock setVariable:name forKey:@"Class_Name"];
+        if ([class desc])
+          SetVariable(classBlock, @"Class_Description", [class desc]);
+      }
+      if (classTpl)
+        [self writeClass:class usingTemplate:classTpl];
+      [classBlock dumpBlock];
+    }
+    [[tpl blockWithName:@"Classes"] dumpBlock];
+    switch (gnflags.classes) {
+      case kSdtplSingleFile:
+        [self writeTemplate:[[sd_tpl templates] objectForKey:SdtplClassesDefinitionKey]
+                     toFile:[self fileForObject:[[suite classes] firstChild]]
+          representedObject:suite];
+        break;
+    }
+  }
+  
+  /* Commands */
+  if ([[suite commands] hasChildren]) {
+    id cmd;
+    id cmds = [[suite commands] childEnumerator];
+    
+    SKTemplate *cmdTpl = nil;
+    SKTemplate *cmdBlock = [tpl blockWithName:@"Command"];
+    if (kSdtplInline == gnflags.commands) {
+      cmdTpl = cmdBlock;
+    } else {
+      cmdTpl = [[sd_tpl templates] objectForKey:SdtplCommandsDefinitionKey];
+      if (kSdtplSingleFile == gnflags.commands) {
+        cmdTpl = [cmdTpl blockWithName:@"Command"];
+      }
+    }
+    
+    while (cmd = [cmds nextObject]) {
+      if (kSdtplInline != gnflags.commands) {
+        NSString *name = [cmd name];
+        if (name && gnflags.links)
+          name = [self linkForObject:cmd withString:name];
+        [cmdBlock setVariable:name forKey:@"Command_Name"];
+        if ([cmd desc])
+          SetVariable(cmdBlock, @"Command_Description", [cmd desc]);
+      }
+      if (cmdTpl)
+        [self writeVerb:cmd usingTemplate:cmdTpl];
+      [cmdBlock dumpBlock];
+    }
+    [[tpl blockWithName:@"Commands"] dumpBlock];
+    switch (gnflags.commands) {
+      case kSdtplSingleFile:
+        [self writeTemplate:[[sd_tpl templates] objectForKey:SdtplCommandsDefinitionKey]
+                     toFile:[self fileForObject:[[suite commands] firstChild]]
+          representedObject:suite];
+        break;
+    }
+  }
+  
+  /* Events */
+  if (!gnflags.ignoreEvents && [[suite events] hasChildren]) {
+    id evnt;
+    id evnts = [[suite events] childEnumerator];
+    
+    SKTemplate *evntTpl = nil;
+    SKTemplate *evntBlock = [tpl blockWithName:@"Event"];
+    if (kSdtplInline == gnflags.events) {
+      evntTpl = evntBlock;
+    } else {
+      evntTpl = [[sd_tpl templates] objectForKey:SdtplEventsDefinitionKey];
+      if (kSdtplSingleFile == gnflags.events) {
+        evntTpl = [evntTpl blockWithName:@"Event"];
+      }
+    }
+    
+    while (evnt = [evnts nextObject]) {
+      if (kSdtplInline != gnflags.events) {
+        NSString *name = [evnt name];
+        if (name && gnflags.links)
+          name = [self linkForObject:evnt withString:name];
+        [evntBlock setVariable:name forKey:@"Event_Name"];
+        if ([evnt desc])
+          SetVariable(evntBlock, @"Event_Description", [evnt desc]);
+      }
+      if (evntTpl)
+        [self writeVerb:evnt usingTemplate:evntTpl];
+      [evntBlock dumpBlock];
+    }
+    [[tpl blockWithName:@"Events"] dumpBlock];
+    switch (gnflags.events) {
+      case kSdtplSingleFile:
+        [self writeTemplate:[[sd_tpl templates] objectForKey:SdtplEventsDefinitionKey]
+                     toFile:[self fileForObject:[[suite events] firstChild]]
+          representedObject:suite];
+        break;
+    }
   }
   
   BOOL ok = YES;
-  NSString *path = nil;
-  int flag = [verb isCommand] ? gnflags.commands : gnflags.events;
-  switch (flag) {
+  switch (gnflags.suites) {
     case kSdtplSingleFile:
       [tpl dumpBlock];
       break;
     case kSdtplMultiFiles:
-      path = [sd_base stringByAppendingPathComponent:[self fileForObject:verb]];
-      ok = [tpl writeToFile:path atomically:YES reset:YES];
+      ok = [self writeTemplate:tpl toFile:[self fileForObject:suite] representedObject:suite];
       break;
   }
   return ok;
@@ -646,7 +982,7 @@ static NSString *SdtplSimplifieName(NSString *name);
   }
   
   /* Elements */
-  if ([[aClass elements] hasChildren]) {
+  if ([[aClass elements] hasChildren] && nil != [tpl blockWithName:@"Element"]) {
     id elements = [[aClass elements] childEnumerator];
     id elt;
     id eltBlock = [tpl blockWithName:@"Element"];
@@ -672,11 +1008,13 @@ static NSString *SdtplSimplifieName(NSString *name);
   BOOL inner = [[[[tpl blockWithName:@"Superclass"] parent] name] isEqualToString:@"Properties"];
   if ([[aClass properties] hasChildren] || ([aClass inherits] && inner)) {
     id propBlock = [tpl blockWithName:@"Property"];
-    id properties = [[aClass properties] childEnumerator];
-    id property;
-    while (property = [properties nextObject]) {
-      [self writeProperty:property usingTemplate:propBlock];
-      [propBlock dumpBlock];
+    if (propBlock != nil) {
+      id properties = [[aClass properties] childEnumerator];
+      id property;
+      while (property = [properties nextObject]) {
+        [self writeProperty:property usingTemplate:propBlock];
+        [propBlock dumpBlock];
+      }
     }
     /* require to generate block */
     [[tpl blockWithName:@"Properties"] dumpBlock];
@@ -718,249 +1056,183 @@ static NSString *SdtplSimplifieName(NSString *name);
   }
   
   BOOL ok = YES;
-  NSString *path = nil;
   switch (gnflags.classes) {
     case kSdtplSingleFile:
       [tpl dumpBlock];
       break;
     case kSdtplMultiFiles:
-      path = [sd_base stringByAppendingPathComponent:[self fileForObject:aClass]];
-      ok = [tpl writeToFile:path atomically:YES reset:YES];
+      ok = [self writeTemplate:tpl toFile:[self fileForObject:aClass] representedObject:aClass];
       break;
   }
   return ok;
 }
 
-#pragma mark Suites
-- (BOOL)writeSuite:(SdefSuite *)suite usingTemplate:(SKTemplate *)tpl {
-  if ([suite name]) {
-    SetVariable(tpl, @"Suite_Name", [suite name]);
-    if (gnflags.links)
-      SetVariable(tpl, @"Suite_Anchor", [self anchorForObject:suite]);
+#pragma mark Verb
+- (void)writeParameter:(SdefParameter *)param usingTemplate:(SKTemplate *)tpl {
+  if ([param name])
+    SetVariable(tpl, @"Parameter_Name", [param name]);
+  if ([param desc])
+    SetVariable(tpl, SdefEscapedString(@"Parameter_Description", gnflags.format), [param desc]);
+  BOOL list;
+  id type = [param asDictionaryTypeForType:[param type] isList:&list];
+  if (list) {
+    SetVariable(tpl, @"Parameter_Type_List", @"a list of");
   }
-  if ([suite desc])
-    SetVariable(tpl, @"Suite_Description", [suite desc]);
-  
-  if (gnflags.groupEvents && !gnflags.ignoreEvents) {
-    id cmds = [suite commands];
-    id events = [suite events];
-    id evnt;
-    while (evnt = [events firstChild]) {
-      [evnt retain];
-      [evnt remove];
-      [cmds appendChild:evnt];
-      [evnt release];
-    }
-  }
+  SetVariable(tpl, @"Parameter_Type", type);
+}
 
+- (BOOL)writeVerb:(SdefVerb *)verb usingTemplate:(SKTemplate *)tpl {
+  if ([verb name]) {
+    SetVariable(tpl, @"Command_Name", [verb name]);
+    if (gnflags.links)
+      SetVariable(tpl, @"Command_Anchor", [self anchorForObject:verb]);
+  }
+  if ([verb desc])
+    SetVariable(tpl, SdefEscapedString(@"Command_Description", gnflags.format), [verb desc]);
   if (gnflags.sortOthers) {
-    [[suite classes] sortByName];
-    [[suite commands] sortByName];
-    [[suite events] sortByName];
+    [verb sortByName];
   }
-  
-  if ([[suite classes] hasChildren]) {
-    id class;
-    id classes = [[suite classes] childEnumerator];
-    
-    SKTemplate *classTpl = nil;
-    SKTemplate *classBlock = [tpl blockWithName:@"Class"];
-    if (kSdtplInline == gnflags.classes) {
-      classTpl = classBlock;
-    } else {
-      classTpl = [[sd_tpl templates] objectForKey:@"Classes"];
+  if ([[verb directParameter] type]) {
+    id block = [tpl blockWithName:@"Direct_Parameter"];
+    SdefDirectParameter *param = [verb directParameter];
+    BOOL list;
+    id type = [param asDictionaryTypeForType:[param type] isList:&list];
+    if (list) {
+      SetVariable(block, @"Direct_Parameter_List", @"a list of");
     }
-    
-    while (class = [classes nextObject]) {
-      if (kSdtplInline == gnflags.classes) {
-        [classBlock setVariable:[self linkForObject:class withString:[class name]] forKey:@"Class_Name"];
-      }
-      [self writeClass:class usingTemplate:classTpl];
-      [classBlock dumpBlock];
-    }
-    switch (gnflags.classes) {
-      case kSdtplInline:
-        [[tpl blockWithName:@"Classes"] dumpBlock];
-        break;
-      case kSdtplSingleFile:
-        [classTpl writeToFile:[self fileForObject:[[suite classes] firstChild]] atomically:YES reset:YES];
-        break;
-    }
+    SetVariable(block, @"Direct_Parameter", type);
+    if ([param desc])
+      SetVariable(block, SdefEscapedString(@"Direct_Parameter_Description", gnflags.format), [param desc]);
+    [block dumpBlock];
   }
-  
-  /* Commands */
-  if ([[suite commands] hasChildren]) {
-    id cmd;
-    id cmds = [[suite commands] childEnumerator];
-    
-    SKTemplate *cmdTpl = nil;
-    SKTemplate *cmdBlock = [tpl blockWithName:@"Command"];
-    if (kSdtplInline == gnflags.commands) {
-      cmdTpl = cmdBlock;
-    } else {
-      cmdTpl = [[sd_tpl templates] objectForKey:@"Commands"];
+  if ([[verb result] type]) {
+    id block = [tpl blockWithName:@"Result"];
+    SdefResult *result = [verb result];
+    BOOL list;
+    id type = [result asDictionaryTypeForType:[result type] isList:&list];
+    if (list) {
+      SetVariable(block, @"Result_Type_List", @"a list of");
     }
-    
-    while (cmd = [cmds nextObject]) {
-      if (kSdtplInline == gnflags.commands) {
-        [cmdBlock setVariable:[self linkForObject:cmd withString:[cmd name]] forKey:@"Command_Name"];
-      }
-      [self writeVerb:cmd usingTemplate:cmdTpl];
-      [cmdBlock dumpBlock];
-    }
-    switch (gnflags.commands) {
-      case kSdtplInline:
-        [[tpl blockWithName:@"Commands"] dumpBlock];
-        break;
-      case kSdtplSingleFile:
-        [cmdTpl writeToFile:[self fileForObject:[[suite commands] firstChild]] atomically:YES reset:YES];
-        break;
-    }
+    SetVariable(block, @"Result_Type", type);
+    if ([result desc])
+      SetVariable(block, SdefEscapedString(@"Result_Description", gnflags.format), [result desc]);
+    [block dumpBlock];
   }
-  
-  if (!gnflags.ignoreEvents && [[suite events] hasChildren]) {
-    id evnt;
-    id evnts = [[suite events] childEnumerator];
-    
-    SKTemplate *evntTpl = nil;
-    SKTemplate *evntBlock = [tpl blockWithName:@"Event"];
-    if (kSdtplInline == gnflags.events) {
-      evntTpl = evntBlock;
-    } else {
-      evntTpl = [[sd_tpl templates] objectForKey:@"Events"];
-    }
-    
-    while (evnt = [evnts nextObject]) {
-      if (kSdtplInline == gnflags.commands) {
-        [evntBlock setVariable:[self linkForObject:evnt withString:[evnt name]] forKey:@"Event_Name"];
+  if ([verb hasChildren]) {
+    SdefParameter *param;
+    id params = [verb childEnumerator];
+    id block = [tpl blockWithName:@"Required_Parameter"];
+    /* Required parameters */
+    while (param = [params nextObject]) {
+      if (![param isOptional]) {
+        [self writeParameter:param usingTemplate:block];
+        [block dumpBlock];
       }
-      [self writeVerb:evnt usingTemplate:evntTpl];
-      [evntBlock dumpBlock];
     }
-    switch (gnflags.events) {
-      case kSdtplInline:
-        [[tpl blockWithName:@"Events"] dumpBlock];
-        break;
-      case kSdtplSingleFile:
-        [evntTpl writeToFile:[self fileForObject:[[suite events] firstChild]] atomically:YES reset:YES];
-        break;
+    
+    params = [verb childEnumerator];
+    block = [tpl blockWithName:@"Optional_Parameter"];
+    /* Optionals parameters */
+    while (param = [params nextObject]) {
+      if ([param isOptional]) {
+        [self writeParameter:param usingTemplate:block];
+        [block dumpBlock];
+      }
     }
+    [[tpl blockWithName:@"Parameters"] dumpBlock];
   }
   
   BOOL ok = YES;
-  NSString *path = nil;
-  switch (gnflags.suites) {
+  int flag = [verb isCommand] ? gnflags.commands : gnflags.events;
+  switch (flag) {
     case kSdtplSingleFile:
       [tpl dumpBlock];
       break;
     case kSdtplMultiFiles:
-      path = [sd_base stringByAppendingPathComponent:[self fileForObject:suite]];
-      ok = [tpl writeToFile:path atomically:YES reset:YES];
+      ok = [self writeTemplate:tpl toFile:[self fileForObject:verb] representedObject:verb];
       break;
   }
   return ok;
 }
 
-#pragma mark Dictionary
-- (BOOL)writeDictionary:(SdefDictionary *)aDico usingTemplate:(SKTemplate *)tpl {
-  NSString *file = nil;
-  if (gnflags.index) {
-    file = [sd_base stringByAppendingPathComponent:[self fileForObject:aDico]];
-  } else {
-    file = sd_path;
-  }
-
-  /* Generate Template */
-  if (gnflags.sortSuites) 
-    [aDico sortByName];
-  
+#pragma mark Toc
+- (void)writeToc:(SdefDictionary *)dictionary usingTemplate:(SKTemplate *)tpl {
+  SetVariable(tpl, @"Toc_Dictionary_Name", [dictionary name]);
+  /* Suites */
+  SKTemplate *stpl = [tpl blockWithName:@"Toc_Suite"];
   SdefSuite *suite;
-  NSEnumerator *suites = [aDico childEnumerator];
-  
-  SKTemplate *suiteTpl = nil;
-  SKTemplate *suiteBlock = [tpl blockWithName:@"Suite"];
-  if (kSdtplInline == gnflags.suites) {
-    suiteTpl = suiteBlock;
-  } else {
-    suiteTpl = [[sd_tpl templates] objectForKey:@"Suites"];
-  }
-  
+  NSEnumerator *suites = [dictionary childEnumerator];
   while (suite = [suites nextObject]) {
-    if (kSdtplInline == gnflags.suites) {
-      [suiteBlock setVariable:[self linkForObject:suite withString:[suite name]] forKey:@"Suite_Name"];
+    NSString *name = [suite name];
+    if (name) {
+      if (gnflags.links)
+        name = [self linkForObject:suite withString:name];
+      SetVariable(stpl, @"Toc_Suite_Name", name);
     }
-    [self writeSuite:suite usingTemplate:suiteTpl];
-    [suiteBlock dumpBlock];
+    /* Classes */
+    if ([[suite classes] hasChildren] && [stpl blockWithName:@"Toc_Class"]) {
+      SKTemplate *ctpl = [stpl blockWithName:@"Toc_Class"];
+      id classes = [[suite classes] childEnumerator];
+      SdefClass *class;
+      while (class = [classes nextObject]) {
+        NSString *name = [class name];
+        if (name) {
+          if (gnflags.links)
+            name = [self linkForType:name withString:name];
+          SetVariable(ctpl, @"Toc_Class_Name", name);
+        }
+        [ctpl dumpBlock];
+      }
+      [[stpl blockWithName:@"Toc_Classes"] dumpBlock];
+    }
+    
+    /* Commands */
+    if ([[suite commands] hasChildren] && [stpl blockWithName:@"Toc_Command"]) {
+      SKTemplate *vtpl = [stpl blockWithName:@"Toc_Command"];
+      SdefVerb *command;
+      NSEnumerator *commands = [[suite commands] childEnumerator];
+      while (command = [commands nextObject]) {
+        NSString *name = [command name];
+        if (name) {
+          if (gnflags.links)
+            name = [self linkForObject:command withString:name];
+          SetVariable(vtpl, @"Toc_Command_Name", name);
+        }
+        [vtpl dumpBlock];
+      }
+      [[stpl blockWithName:@"Toc_Commands"] dumpBlock];
+    }
+    if (!gnflags.ignoreEvents && [[suite events] hasChildren] && [stpl blockWithName:@"Toc_Event"]) {
+      SKTemplate *etpl = [stpl blockWithName:@"Toc_Event"];
+      SdefVerb *event;
+      NSEnumerator *events = [[suite events] childEnumerator];
+      while (event = [events nextObject]) {
+        NSString *name = [event name];
+        if (name) {
+          if (gnflags.links)
+            name = [self linkForObject:event withString:name];
+          SetVariable(etpl, @"Toc_Command_Name", name);
+        }
+        [etpl dumpBlock];
+      }
+      /* require to generate classes block */
+      [[stpl blockWithName:@"Toc_Events"] dumpBlock];
+    }
+    [stpl dumpBlock];
   }
-  
-  return [tpl writeToFile:file atomically:YES reset:YES];
 }
 
 #pragma mark Index
 - (BOOL)writeIndex:(SdefDictionary *)theDico usingTemplate:(SKTemplate *)tpl {
-  [self writeReferences:theDico usingTemplate:tpl];
-  return [tpl writeToFile:sd_path atomically:YES reset:YES];
-}
-
-#pragma mark Common
-- (void)writeReferences:(SdefDictionary *)theDico usingTemplate:(SKTemplate *)tpl {
-  
-  /* Set Style */
-  /***************/
-  
-  if (gnflags.index) {
-    [tpl setVariable:[sd_path lastPathComponent] forKey:@"Index_Link"];
-  }
-  if (gnflags.toc) {
-    /* Toc path */
-    //[tpl setVariable:<#(NSString *)aValue#> forKey:@"Toc_Link"];
-  }
-  [tpl setVariable:[self fileForObject:theDico] forKey:@"Dictionary_Link"];
-}
-
-#pragma mark -
-- (BOOL)writeDictionary:(SdefDictionary *)aDico toFile:(NSString *)aFile {
-  id pool = [[NSAutoreleasePool alloc] init];
-  [self initCache];
-  
-  if (![sd_formats objectForKey:@"Superclass_Description"]) {
-    [sd_formats setObject:@"inherits some of its properties from the %@ class" forKey:@"Superclass_Description"];
+  if ([self indexToc]) {
+    SKTemplate *toc = [tpl blockWithName:@"Table_Of_Content"];
+    if (toc) {
+      [self writeToc:theDico usingTemplate:toc];
+    }
+    [toc dumpBlock];
   }
   
-  sd_path = [aFile retain];
-  sd_base = [[aFile stringByDeletingLastPathComponent] retain];
-//  sd_manager = [aDico classManager];
-  id dictionary = nil;
-  if (gnflags.sortOthers || gnflags.sortSuites || gnflags.groupEvents) {
-    dictionary = [aDico copy];
-  } else {
-    dictionary = [aDico retain];
-  }
-  
-  sd_manager = [dictionary classManager];
-  
-  SKTemplate *root = [[sd_tpl templates] objectForKey:@"Dictionary"];
-  BOOL write = [self writeDictionary:dictionary usingTemplate:root];
-  
-  root = [[sd_tpl templates] objectForKey:@"Toc"];
-  if (root) {
-    [self writeDictionaryToc:dictionary usingTemplate:root];
-  }
-  
-  root = [[sd_tpl templates] objectForKey:@"Index"];
-  if (root) {
-    [self writeIndex:dictionary usingTemplate:root];
-  }
-  
-  [dictionary release];
-  sd_manager = nil;
-  [sd_path release];
-  sd_path = nil;
-  [sd_base release];
-  sd_base = nil;
-  [self releaseCache];
-  [pool release];
-  return write;
+  return [self writeTemplate:tpl toFile:sd_path representedObject:theDico];
 }
 
 @end

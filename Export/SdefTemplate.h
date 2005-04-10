@@ -9,9 +9,11 @@
 #import <Cocoa/Cocoa.h>
 
 enum {
-  kSdefTemplateTOCNone		= 0,
-  kSdefTemplateTOCInline	= 1 << 0,
-  kSdefTemplateTOCExternal	= 1 << 1
+  kSdefTemplateTOCNone			= 0,
+  kSdefTemplateTOCIndex			= 1 << 0,
+  kSdefTemplateTOCDictionary	= 1 << 1,
+  kSdefTemplateTOCExternal		= 1 << 2,
+  kSdefTemplateTOCRequired		= 1 << 3
 };
 
 enum {
@@ -20,7 +22,16 @@ enum {
   kSdefTemplateCSSExternal	= 1 << 1
 };
 
-extern NSString * const kSdefTemplateDidChangeNotification;
+extern NSString * const SdtplTocDefinitionKey;
+extern NSString * const SdtplIndexDefinitionKey;
+extern NSString * const SdtplDictionaryDefinitionKey;
+extern NSString * const SdtplSuitesDefinitionKey;
+extern NSString * const SdtplClassesDefinitionKey;
+extern NSString * const SdtplCommandsDefinitionKey;
+extern NSString * const SdtplEventsDefinitionKey;
+
+extern NSString * const SdefInvalidTemplateException;
+extern NSString * const SdefTemplateDidChangeNotification;
 
 @class SKTemplate;
 @interface SdefTemplate : NSObject {
@@ -56,8 +67,14 @@ extern NSString * const kSdefTemplateDidChangeNotification;
 
 - (BOOL)isHtml;
 
+- (BOOL)indexToc;
+- (BOOL)dictionaryToc;
+- (BOOL)externalToc;
+- (BOOL)requiredToc;
+
 - (unsigned)toc;
 - (void)setToc:(unsigned)toc;
+
 - (unsigned)css;
 - (void)setCss:(unsigned)css;
 
