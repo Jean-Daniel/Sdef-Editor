@@ -72,7 +72,7 @@
   if (sd_type != newType) {
     [[[self document] undoManager] registerUndoWithTarget:self selector:_cmd object:sd_type];
     [sd_type release];
-    sd_type = [newType copy];
+    sd_type = [newType copyWithZone:[self zone]];
   }
 }
 
@@ -84,7 +84,7 @@
   if (sd_desc != newDesc) {
     [[[self document] undoManager] registerUndoWithTarget:self selector:_cmd object:sd_desc];
     [sd_desc release];
-    sd_desc = [newDesc copy];
+    sd_desc = [newDesc copyWithZone:[self zone]];
   }
 }
 
@@ -149,7 +149,7 @@
   if (sd_type != newType) {
     [[[self document] undoManager] registerUndoWithTarget:self selector:_cmd object:sd_type];
     [sd_type release];
-    sd_type = [newType copy];
+    sd_type = [newType copyWithZone:[self zone]];
   }
 }
 
@@ -206,7 +206,7 @@
   if (sd_type != newType) {
     [[[self document] undoManager] registerUndoWithTarget:self selector:_cmd object:sd_type];
     [sd_type release];
-    sd_type = [newType copy];
+    sd_type = [newType copyWithZone:[self zone]];
   }
 }
 
@@ -218,7 +218,7 @@
   if (sd_desc != newDesc) {
     [[[self document] undoManager] registerUndoWithTarget:self selector:_cmd object:sd_desc];
     [sd_desc release];
-    sd_desc = [newDesc copy];
+    sd_desc = [newDesc copyWithZone:[self zone]];
   }
 }
 

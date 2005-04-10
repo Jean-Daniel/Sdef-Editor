@@ -75,7 +75,7 @@ NSMutableArray *sd_childComments;
 
 - (void)parser:(NSXMLParser *)parser didStartElement:(NSString *)elementName namespaceURI:(NSString *)namespaceURI qualifiedName:(NSString *)qName attributes:(NSDictionary *)attributeDict {
   if ([elementName isEqualToString:@"documentation"]) {
-    SdefDocumentation *documentation = [(SdefObject *)[SdefDocumentation alloc] initWithAttributes:attributeDict];
+    SdefDocumentation *documentation = [(SdefObject *)[SdefDocumentation allocWithZone:[self zone]] initWithAttributes:attributeDict];
     [self setDocumentation:documentation];
     [self appendChild:documentation]; /* Append to parse, and remove after */
     [parser setDelegate:documentation];
@@ -109,7 +109,7 @@ NSMutableArray *sd_childComments;
 // A comment (Text in a <!-- --> block) is reported to the delegate as a single string
 - (void)parser:(NSXMLParser *)parser foundComment:(NSString *)comment {
   if (nil == sd_childComments) {
-    sd_childComments = [[NSMutableArray alloc] init];
+    sd_childComments = [[NSMutableArray allocWithZone:[self zone]] init];
   }
   [sd_childComments addObject:[SdefComment commentWithString:[comment stringByUnescapingEntities:nil]]];
 }
@@ -158,7 +158,7 @@ NSMutableArray *sd_childComments;
 
 - (void)parser:(NSXMLParser *)parser didStartElement:(NSString *)elementName namespaceURI:(NSString *)namespaceURI qualifiedName:(NSString *)qName attributes:(NSDictionary *)attributeDict {
   /* If valid document, can only be collection content element */
-  SdefObject *element = [(SdefObject *)[[self contentType] alloc] initWithAttributes:attributeDict];
+  SdefObject *element = [(SdefObject *)[[self contentType] allocWithZone:[self zone]] initWithAttributes:attributeDict];
   [self appendChild:element];
   [parser setDelegate:element];
   [element release];

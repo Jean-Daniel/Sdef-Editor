@@ -63,28 +63,34 @@
   [super createContent];
   sd_flags.hasSynonyms = 1;
   sd_flags.hasDocumentation = 1;
-//  [self setDocumentation:[SdefDocumentation node]];
-  [self setContents:[SdefContents node]];
+
+  SdefContents *contents = [[SdefContents allocWithZone:[self zone]] init];
+  [self setContents:contents];
+  [contents release];
   
-  id child = [SdefCollection nodeWithName:NSLocalizedStringFromTable(@"Elements", @"SdefLibrary", @"Elements collection default name")];
+  id child = [[SdefCollection allocWithZone:[self zone]] initWithName:NSLocalizedStringFromTable(@"Elements", @"SdefLibrary", @"Elements collection default name")];
   [child setContentType:[SdefElement class]];
   [child setElementName:@"elements"];
   [self appendChild:child];
+  [child release];
   
-  child = [SdefCollection nodeWithName:NSLocalizedStringFromTable(@"Properties", @"SdefLibrary", @"Properties collection default name")];
+  child = [[SdefCollection allocWithZone:[self zone]] initWithName:NSLocalizedStringFromTable(@"Properties", @"SdefLibrary", @"Properties collection default name")];
   [child setContentType:[SdefProperty class]];
   [child setElementName:@"properties"];
   [self appendChild:child];
+  [child release];
   
-  child = [SdefCollection nodeWithName:NSLocalizedStringFromTable(@"Resp. to Cmds", @"SdefLibrary", @"Responds to Commands collection default name")];
+  child = [[SdefCollection allocWithZone:[self zone]] initWithName:NSLocalizedStringFromTable(@"Resp. to Cmds", @"SdefLibrary", @"Responds to Commands collection default name")];
   [child setContentType:[SdefRespondsTo class]];
   [child setElementName:@"responds-to-commands"];
   [self appendChild:child];
+  [child release];
   
-  child = [SdefCollection nodeWithName:NSLocalizedStringFromTable(@"Resp. to Events", @"SdefLibrary", @"Responds to Events collection default name")];
+  child = [[SdefCollection allocWithZone:[self zone]] initWithName:NSLocalizedStringFromTable(@"Resp. to Events", @"SdefLibrary", @"Responds to Events collection default name")];
   [child setContentType:[SdefRespondsTo class]];
   [child setElementName:@"responds-to-events"];
   [self appendChild:child];
+  [child release];
 }
 
 - (void)setEditable:(BOOL)flag recursive:(BOOL)recu {
@@ -118,7 +124,7 @@
   if (sd_plural != newPlural) {
     [[[self document] undoManager] registerUndoWithTarget:self selector:_cmd object:sd_plural];
     [sd_plural release];
-    sd_plural = [newPlural copy];
+    sd_plural = [newPlural copyWithZone:[self zone]];
   }
 }
 
@@ -130,7 +136,7 @@
   if (sd_inherits != newInherits) {
     [[[self document] undoManager] registerUndoWithTarget:self selector:_cmd object:sd_inherits];
     [sd_inherits release];
-    sd_inherits = [newInherits copy];
+    sd_inherits = [newInherits copyWithZone:[self zone]];
   }
 }
 
@@ -344,7 +350,7 @@
   if (sd_type != aType) {
     [[[self document] undoManager] registerUndoWithTarget:self selector:_cmd object:sd_type];
     [sd_type release];
-    sd_type = [aType copy];
+    sd_type = [aType copyWithZone:[self zone]];
   }
 }
 

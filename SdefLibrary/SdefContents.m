@@ -67,7 +67,7 @@
   if (sd_type != aType) {
     [[[self document] undoManager] registerUndoWithTarget:self selector:_cmd object:sd_type];
     [sd_type release];
-    sd_type = [aType copy];
+    sd_type = [aType copyWithZone:[self zone]];
   }
 }
 

@@ -25,7 +25,7 @@
 + (NSArray *)baseTypes {
   static NSArray *types;
   if (nil == types) {
-    types = [[NSArray alloc] initWithObjects:
+    types = [[NSArray allocWithZone:NSDefaultMallocZone()] initWithObjects:
       @"any",
       @"boolean",
       @"date",
@@ -51,10 +51,10 @@
 
 - (id)init {
   if (self = [super init]) {
-    sd_types = [[NSMutableArray alloc] init];
-    sd_events = [[NSMutableArray alloc] init];
-    sd_classes = [[NSMutableArray alloc] init];
-    sd_commands = [[NSMutableArray alloc] init];
+    sd_types = [[NSMutableArray allocWithZone:[self zone]] init];
+    sd_events = [[NSMutableArray allocWithZone:[self zone]] init];
+    sd_classes = [[NSMutableArray allocWithZone:[self zone]] init];
+    sd_commands = [[NSMutableArray allocWithZone:[self zone]] init];
   }
   return self;
 }

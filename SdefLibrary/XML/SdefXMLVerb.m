@@ -45,7 +45,7 @@
 #pragma mark Parsing
 - (void)parser:(NSXMLParser *)parser didStartElement:(NSString *)elementName namespaceURI:(NSString *)namespaceURI qualifiedName:(NSString *)qName attributes:(NSDictionary *)attributeDict {
   if ([elementName isEqualToString:@"parameter"]) {
-    SdefParameter *param = [(SdefObject *)[SdefParameter alloc] initWithAttributes:attributeDict];
+    SdefParameter *param = [(SdefObject *)[SdefParameter allocWithZone:[self zone]] initWithAttributes:attributeDict];
     [self appendChild:param];
     [parser setDelegate:param];
     [param release];

@@ -99,9 +99,10 @@
   if (*val > 0) {
     unsigned idx = 0;
     for (idx=0; idx<*val; idx++) {
-      SdefParameter *param = [SdefParameter node];
+      SdefParameter *param = [[SdefParameter allocWithZone:[self zone]] init];
       bytes += [param parseData:bytes];
       [self appendChild:param];
+      [param release];
     }
   }
 

@@ -40,7 +40,7 @@
     id keys = [argsTerm keyEnumerator];
     id key;
     while (key = [keys nextObject]) {
-      id param = [[SdefParameter alloc] initWithName:key
+      id param = [[SdefParameter allocWithZone:[self zone]] initWithName:key
                                                suite:[args objectForKey:key]
                                       andTerminology:[argsTerm objectForKey:key]];
       if (param) {

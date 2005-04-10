@@ -43,7 +43,7 @@
   } else if ([elementName isEqualToString:@"events"]) {
     [parser setDelegate:[self events]];
   } else if ([elementName isEqualToString:@"value"]) {
-    SdefValue *value = [(SdefObject *)[SdefValue alloc] initWithAttributes:attributeDict];
+    SdefValue *value = [(SdefObject *)[SdefValue allocWithZone:[self zone]] initWithAttributes:attributeDict];
     [[self values] appendChild:value];
     [parser setDelegate:value];
     [value release];

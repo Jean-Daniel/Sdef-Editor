@@ -265,7 +265,7 @@ NSString * const SdefObjectDidChangeNameNotification = @"SdefObjectDidChangeName
   static NSArray *sorts = nil;
   if (!sorts) {
     NSSortDescriptor *name = [[NSSortDescriptor alloc] initWithKey:@"name" ascending:YES selector:@selector(caseInsensitiveCompare:)];
-    sorts = [[NSArray alloc] initWithObjects:name, nil];
+    sorts = [[NSArray allocWithZone:NSDefaultMallocZone()] initWithObjects:name, nil];
     [name release];
   }
   [self sortUsingDescriptors:sorts];
@@ -359,7 +359,7 @@ NSString * const SdefObjectDidChangeNameNotification = @"SdefObjectDidChangeName
     //[[[self document] undoManager] setActionName:@"Rename"];
     [self willChangeValueForKey:@"name"];
     [sd_name release];
-    sd_name = [newName copy];
+    sd_name = [newName copyWithZone:[self zone]];
     [self didChangeValueForKey:@"name"];
     [[NSNotificationCenter defaultCenter] postNotificationName:SdefObjectDidChangeNameNotification object:self];
   }
@@ -399,7 +399,9 @@ NSString * const SdefObjectDidChangeNameNotification = @"SdefObjectDidChangeName
 
 - (SdefDocumentation *)documentation {
   if (!sd_documentation && sd_flags.hasDocumentation) {
-    [self setDocumentation:[SdefDocumentation node]];
+    SdefDocumentation *doc = [[SdefDocumentation allocWithZone:[self zone]] init];
+    [self setDocumentation:doc];
+    [doc release];
   }
   return sd_documentation;
 }
@@ -420,10 +422,11 @@ NSString * const SdefObjectDidChangeNameNotification = @"SdefObjectDidChangeName
 
 - (SdefCollection *)synonyms {
   if (!sd_synonyms && sd_flags.hasSynonyms) {
-    id synonyms = [SdefCollection nodeWithName:NSLocalizedStringFromTable(@"Synonyms", @"SdefLibrary", @"Synonyms Collection name")];
+    id synonyms = [[SdefCollection allocWithZone:[self zone]] initWithName:NSLocalizedStringFromTable(@"Synonyms", @"SdefLibrary", @"Synonyms Collection name")];
     [synonyms setContentType:[SdefSynonym class]];
     [synonyms setElementName:@"synonyms"];
     [self setSynonyms:synonyms];
+    [synonyms release];
   }
   return sd_synonyms;
 }
@@ -452,7 +455,7 @@ NSString * const SdefObjectDidChangeNameNotification = @"SdefObjectDidChangeName
 
 - (NSArray *)comments {
   if (!sd_comments) {
-    sd_comments = [[NSMutableArray alloc] init];
+    sd_comments = [[NSMutableArray allocWithZone:[self zone]] init];
   }
   return sd_comments;
 }
@@ -466,7 +469,7 @@ NSString * const SdefObjectDidChangeNameNotification = @"SdefObjectDidChangeName
 
 - (void)addComment:(NSString *)comment {
   if (!sd_comments) {
-    sd_comments = [[NSMutableArray alloc] init];
+    sd_comments = [[NSMutableArray allocWithZone:[self zone]] init];
   }
   id cmnt = [SdefComment commentWithString:comment];
   [sd_comments addObject:cmnt];
@@ -555,6 +558,12 @@ NSString * const SdefObjectDidChangeNameNotification = @"SdefObjectDidChangeName
   return self;
 }
 
+- (void)dealloc {
+  [sd_elementName release];
+  [super dealloc];
+}
+
+#pragma mark -
 - (Class)contentType {
   return sd_contentType;
 }
@@ -572,13 +581,8 @@ NSString * const SdefObjectDidChangeNameNotification = @"SdefObjectDidChangeName
 - (void)setElementName:(NSString *)aName {
   if (sd_elementName != aName) {
     [sd_elementName release];
-    sd_elementName = [aName copy];
+    sd_elementName = [aName copyWithZone:[self zone]];
   }
-}
-
-- (void)dealloc {
-  [sd_elementName release];
-  [super dealloc];
 }
 
 @end
@@ -639,7 +643,9 @@ NSString * const SdefObjectDidChangeNameNotification = @"SdefObjectDidChangeName
 
 - (SdefImplementation *)impl {
   if (!sd_impl && sd_flags.hasImplementation) {
-    [self setImpl:[SdefImplementation node]];
+    SdefImplementation *impl = [[SdefImplementation allocWithZone:[self zone]] init];
+    [self setImpl:impl];
+    [impl release];
   }
   return sd_impl;
 }
@@ -690,7 +696,7 @@ NSString * const SdefObjectDidChangeNameNotification = @"SdefObjectDidChangeName
     [[[self document] undoManager] registerUndoWithTarget:self selector:_cmd object:sd_code];
     //[[[self document] undoManager] setActionName:@"Code"];
     [sd_code release];
-    sd_code = [str copy];
+    sd_code = [str copyWithZone:[self zone]];
   }
 }
 
@@ -703,7 +709,7 @@ NSString * const SdefObjectDidChangeNameNotification = @"SdefObjectDidChangeName
     [[[self document] undoManager] registerUndoWithTarget:self selector:_cmd object:sd_desc];
     //[[[self document] undoManager] setActionName:@"Desc"];
     [sd_desc release];
-    sd_desc = [newDesc copy];
+    sd_desc = [newDesc copyWithZone:[self zone]];
   }
 }
 

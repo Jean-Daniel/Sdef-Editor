@@ -56,7 +56,7 @@
   if (sd_class != newSdClass) {
     [[[self document] undoManager] registerUndoWithTarget:self selector:_cmd object:sd_class];
     [sd_class release];
-    sd_class = [newSdClass copy];
+    sd_class = [newSdClass copyWithZone:[self zone]];
   }
 }
 
@@ -67,7 +67,7 @@
   if (sd_key != newKey) {
     [[[self document] undoManager] registerUndoWithTarget:self selector:_cmd object:sd_key];
     [sd_key release];
-    sd_key = [newKey copy];
+    sd_key = [newKey copyWithZone:[self zone]];
   }
 }
 
@@ -78,7 +78,7 @@
   if (sd_method != newMethod) {
     [[[self document] undoManager] registerUndoWithTarget:self selector:_cmd object:sd_method];
     [sd_method release];
-    sd_method = [newMethod copy];
+    sd_method = [newMethod copyWithZone:[self zone]];
   }
 }
 

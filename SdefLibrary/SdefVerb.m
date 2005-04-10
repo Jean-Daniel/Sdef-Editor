@@ -70,8 +70,13 @@
   [super createContent];
   sd_flags.hasSynonyms = 1;
   sd_flags.hasDocumentation = 1;
-  [self setResult:[SdefResult node]];
-  [self setDirectParameter:[SdefDirectParameter node]];
+  SdefResult *result = [[SdefResult allocWithZone:[self zone]] init];
+  [self setResult:result];
+  [result release];
+  
+  SdefDirectParameter *param = [[SdefDirectParameter allocWithZone:[self zone]] init];
+  [self setDirectParameter:param];
+  [param release];
 }
 
 - (SdefResult *)result {

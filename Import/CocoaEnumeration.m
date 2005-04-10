@@ -20,9 +20,9 @@
     id keys = [terminology keyEnumerator];
     id key;
     while (key = [keys nextObject]) {
-      SdefEnumerator *enumerator = [[SdefEnumerator alloc] initWithName:key
-                                                                  suite:codes
-                                                         andTerminology:[terminology objectForKey:key]];
+      SdefEnumerator *enumerator = [[SdefEnumerator allocWithZone:[self zone]] initWithName:key
+                                                                                      suite:codes
+                                                                             andTerminology:[terminology objectForKey:key]];
       [self appendChild:enumerator];
       [enumerator release];
     }

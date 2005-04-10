@@ -28,9 +28,9 @@
     id keys = [suiteItems keyEnumerator];
     id key;
     while (key = [keys nextObject]) {
-      SdefEnumeration *child = [[SdefEnumeration alloc] initWithName:key
-                                                               suite:[suiteItems objectForKey:key]
-                                                      andTerminology:[termItems objectForKey:key]];
+      SdefEnumeration *child = [[SdefEnumeration allocWithZone:[self zone]] initWithName:key
+                                                                                   suite:[suiteItems objectForKey:key]
+                                                                          andTerminology:[termItems objectForKey:key]];
       if (child) {
         [[self types] appendChild:child];
         [child release];
@@ -43,9 +43,9 @@
     
     keys = [suiteItems keyEnumerator];
     while (key = [keys nextObject]) {
-      SdefVerb *child = [[SdefVerb alloc] initWithName:key
-                                                 suite:[suiteItems objectForKey:key]
-                                        andTerminology:[termItems objectForKey:key]];
+      SdefVerb *child = [[SdefVerb allocWithZone:[self zone]] initWithName:key
+                                                                     suite:[suiteItems objectForKey:key]
+                                                            andTerminology:[termItems objectForKey:key]];
       if (child) {
         [[self commands] appendChild:child];
         [child release];
@@ -58,9 +58,9 @@
     
     keys = [suiteItems keyEnumerator];
     while (key = [keys nextObject]) {
-      SdefClass *child = [[SdefClass alloc] initWithName:key
-                                                   suite:[suiteItems objectForKey:key]
-                                          andTerminology:[termItems objectForKey:key]];
+      SdefClass *child = [[SdefClass allocWithZone:[self zone]] initWithName:key
+                                                                       suite:[suiteItems objectForKey:key]
+                                                              andTerminology:[termItems objectForKey:key]];
       if (child) {
         [[self classes] appendChild:child];
         [child release];

@@ -47,9 +47,10 @@
   if (*val > 0) {
     unsigned idx = 0;
     for (idx=0; idx<*val; idx++) {
-      id verb = [SdefVerb node];
+      id verb = [[SdefVerb allocWithZone:[self zone]] init];
       bytes += [verb parseData:bytes];
       [[self commands] appendChild:verb];
+      [verb release];
     }
   }
   
@@ -58,9 +59,10 @@
   if (*val > 0) {
     unsigned idx = 0;
     for (idx=0; idx<*val; idx++) {
-      id class = [SdefClass node];
+      id class = [[SdefClass allocWithZone:[self zone]] init];
       bytes += [class parseData:bytes];
       [[self classes] appendChild:class];
+      [class release];
     }
   }
   
@@ -97,9 +99,10 @@
   if (*val > 0) {
     unsigned idx = 0;
     for (idx=0; idx<*val; idx++) {
-      id enumeration = [SdefEnumeration node];
+      id enumeration = [[SdefEnumeration allocWithZone:[self zone]] init];
       bytes += [enumeration parseData:bytes];
       [[self types] appendChild:enumeration];
+      [enumeration release];
     }
   }
   

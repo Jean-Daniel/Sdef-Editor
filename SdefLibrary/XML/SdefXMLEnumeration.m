@@ -21,7 +21,7 @@
 
 - (void)parser:(NSXMLParser *)parser didStartElement:(NSString *)elementName namespaceURI:(NSString *)namespaceURI qualifiedName:(NSString *)qName attributes:(NSDictionary *)attributeDict {
   if ([elementName isEqualToString:@"enumerator"]) {
-    SdefEnumerator *enumerator = [(SdefObject *)[SdefEnumerator alloc] initWithAttributes:attributeDict];
+    SdefEnumerator *enumerator = [(SdefObject *)[SdefEnumerator allocWithZone:[self zone]] initWithAttributes:attributeDict];
     [self appendChild:enumerator];
     [parser setDelegate:enumerator];
     [enumerator release];

@@ -45,7 +45,7 @@
 // The parser reserves the right to hand these to the delegate as potentially many calls in a row to -parser:foundCharacters:
 - (void)parser:(NSXMLParser *)parser foundCharacters:(NSString *)string {
   if (!sd_content) {
-    sd_content = [[NSMutableString alloc] init];
+    sd_content = [[NSMutableString allocWithZone:[self zone]] init];
   }
   [sd_content appendString:[string stringByUnescapingEntities:nil]];
 }

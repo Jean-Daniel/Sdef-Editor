@@ -172,9 +172,10 @@ typedef struct AeteHeader AeteHeader;
       offset += sizeof(AeteHeader);
       unsigned idx = 0;
       for (idx=0; idx<header->suiteCount; idx++) {
-        SdefSuite *suite = [SdefSuite node];
+        SdefSuite *suite = [[SdefSuite allocWithZone:[self zone]] init];
         bytes += [suite parseData:bytes];
         [suites addObject:suite];
+        [suite release];
       }
     } @catch (id exception) {
       SKLogException(exception);

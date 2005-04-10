@@ -27,9 +27,10 @@
   if (*val > 0) {
     unsigned idx = 0;
     for (idx=0; idx<*val; idx++) {
-      SdefEnumerator *enumerator = [SdefEnumerator node];
+      SdefEnumerator *enumerator = [[SdefEnumerator allocWithZone:[self zone]] init];
       bytes += [enumerator parseData:bytes];
       [self appendChild:enumerator];
+      [enumerator release];
     }
   }
   

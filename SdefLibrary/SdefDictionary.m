@@ -74,7 +74,7 @@
 
 - (SdefClassManager *)classManager {
   if (!sd_manager) {
-    sd_manager = [(SdefClassManager *)[SdefClassManager alloc] initWithDictionary:self];
+    sd_manager = [(SdefClassManager *)[SdefClassManager allocWithZone:[self zone]] initWithDictionary:self];
   }
   return sd_manager;
 }

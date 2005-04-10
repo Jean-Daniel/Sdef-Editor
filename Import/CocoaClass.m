@@ -34,15 +34,15 @@
     id key, keys = [suiteItems keyEnumerator];
     while (key = [keys nextObject]) {
       if (content && [key isEqualToString:content]) {
-        id contents = [[SdefContents alloc] initWithName:key
-                                                   suite:[suiteItems objectForKey:key]
-                                          andTerminology:[termItems objectForKey:key]];
+        id contents = [[SdefContents allocWithZone:[self zone]] initWithName:key
+                                                                       suite:[suiteItems objectForKey:key]
+                                                              andTerminology:[termItems objectForKey:key]];
         [self setContents:contents];
         [contents release];
       } else {
-        id property = [[SdefProperty alloc] initWithName:key
-                                                   suite:[suiteItems objectForKey:key]
-                                          andTerminology:[termItems objectForKey:key]];
+        id property = [[SdefProperty allocWithZone:[self zone]] initWithName:key
+                                                                       suite:[suiteItems objectForKey:key]
+                                                              andTerminology:[termItems objectForKey:key]];
         [[self properties] appendChild:property];
         [property release];
       }
@@ -54,9 +54,9 @@
     suiteItems = [suite objectForKey:@"ToManyRelationships"];
     keys = [suiteItems keyEnumerator];
     while (key = [keys nextObject]) {
-      SdefElement *element = [[SdefElement alloc] initWithName:key
-                                                         suite:[suiteItems objectForKey:key]
-                                                andTerminology:nil];
+      SdefElement *element = [[SdefElement allocWithZone:[self zone]] initWithName:key
+                                                                             suite:[suiteItems objectForKey:key]
+                                                                    andTerminology:nil];
       if (element) {
         [[self elements] appendChild:element];
         [element release];
@@ -66,7 +66,7 @@
     suiteItems = [suite objectForKey:@"SupportedCommands"];
     keys = [suiteItems keyEnumerator];
     while (key = [keys nextObject]) {
-      SdefRespondsTo *cmd = [[SdefRespondsTo alloc] initWithName:key
+      SdefRespondsTo *cmd = [[SdefRespondsTo allocWithZone:[self zone]] initWithName:key
                                                            suite:suiteItems
                                                   andTerminology:nil];
       if (cmd) {

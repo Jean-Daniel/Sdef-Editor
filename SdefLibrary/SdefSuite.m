@@ -19,7 +19,7 @@
 - (id)copyWithZone:(NSZone *)aZone {
   SdefSuite *copy = [super copyWithZone:aZone];
 #if !defined(TIGER_SDEF)
-  copy->sd_values = [self->sd_values copy];
+  copy->sd_values = [self->sd_values copyWithZone:aZone];
 #endif
   return copy;
 }
@@ -69,27 +69,31 @@
   [super createContent];
   sd_flags.hasDocumentation = 1;
   
-  id child = [SdefCollection nodeWithName:NSLocalizedStringFromTable(@"Types", @"SdefLibrary", @"Types Collection default name")];
+  id child = [[SdefCollection allocWithZone:[self zone]] initWithName:NSLocalizedStringFromTable(@"Types", @"SdefLibrary", @"Types Collection default name")];
   [child setContentType:[SdefEnumeration class]];
   [child setElementName:@"types"];
   [self appendChild:child];
+  [child release];
   
-  child = [SdefCollection nodeWithName:NSLocalizedStringFromTable(@"Classes", @"SdefLibrary", @"Classes Collection default name")];
+  child = [[SdefCollection allocWithZone:[self zone]] initWithName:NSLocalizedStringFromTable(@"Classes", @"SdefLibrary", @"Classes Collection default name")];
   [child setContentType:[SdefClass class]];
   [child setElementName:@"classes"];
   [self appendChild:child];
+  [child release];
   
-  child = [SdefCollection nodeWithName:NSLocalizedStringFromTable(@"Commands", @"SdefLibrary", @"Commands Collection default name")];
+  child = [[SdefCollection allocWithZone:[self zone]] initWithName:NSLocalizedStringFromTable(@"Commands", @"SdefLibrary", @"Commands Collection default name")];
   [child setContentType:[SdefVerb class]];
   [child setElementName:@"commands"];
   [self appendChild:child];
+  [child release];
   
-  child = [SdefCollection nodeWithName:NSLocalizedStringFromTable(@"Events", @"SdefLibrary", @"Events Collection default name")];
+  child = [[SdefCollection allocWithZone:[self zone]] initWithName:NSLocalizedStringFromTable(@"Events", @"SdefLibrary", @"Events Collection default name")];
   [child setContentType:[SdefVerb class]];
   [child setElementName:@"events"];
   [self appendChild:child];
+  [child release];
 
-  child = [SdefCollection nodeWithName:NSLocalizedStringFromTable(@"Values", @"SdefLibrary", @"Values Collection default name")];
+  child = [[SdefCollection allocWithZone:[self zone]] initWithName:NSLocalizedStringFromTable(@"Values", @"SdefLibrary", @"Values Collection default name")];
   [child setContentType:[SdefValue class]];
   [child setElementName:nil];
 #if defined(TIGER_SDEF)
@@ -97,6 +101,7 @@
 #else
   sd_values = [child retain];
 #endif
+  [child release];
 }
 
 - (SdefCollection *)types {

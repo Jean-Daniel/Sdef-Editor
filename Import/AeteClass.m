@@ -47,9 +47,10 @@
   if (*val > 0) {
     unsigned idx = 0;
     for (idx=0; idx<*val; idx++) {
-      SdefProperty *prop = [SdefProperty node];
+      SdefProperty *prop = [[SdefProperty allocWithZone:[self zone]] init];
       bytes += [prop parseData:bytes];
       [[self properties] appendChild:prop];
+      [prop release];
     }
   }
   
@@ -58,9 +59,10 @@
   if (*val > 0) {
     unsigned idx = 0;
     for (idx=0; idx<*val; idx++) {
-      SdefElement *elt = [SdefElement node];
+      SdefElement *elt = [[SdefElement allocWithZone:[self zone]] init];
       bytes += [elt parseData:bytes];
       [[self elements] appendChild:elt];
+      [elt release];
     }
   }
   
