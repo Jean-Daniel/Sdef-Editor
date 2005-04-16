@@ -14,8 +14,8 @@
 
 #import "SdefWindowController.h"
 #import "SdefSymbolBrowser.h"
-//#import "SdefClassManager.h"
 #import "SdefDictionary.h"
+#import "SdtplWindow.h"
 #import "SdefObject.h"
 #import "SdefSuite.h"
 
@@ -119,7 +119,19 @@ NSString * const SdefObjectDragType = @"SdefObjectDragType";
                         nil, nil, nil, nil, @"An unknow error prevent creation.");
     }
   }
-                             
+}
+
+- (IBAction)exportUsingTemplate:(id)sender {
+  SdtplWindow *exporter = [[SdtplWindow alloc] initWithDocument:self];
+  [exporter setReleaseWhenClose:YES];
+  id win = [[self documentWindow] window];
+  if (win) {
+    [NSApp beginSheet:[exporter window]
+       modalForWindow:win
+        modalDelegate:nil 
+       didEndSelector:nil
+          contextInfo:nil];
+  }
 }
 
 #pragma mark -

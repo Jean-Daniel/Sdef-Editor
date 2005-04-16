@@ -13,6 +13,12 @@
 #import "SKTemplate.h"
 #import "SKXMLTemplate.h"
 
+/* Specials Keys */
+NSString * const StdplVariableLinks = @"Links";
+NSString * const StdplVariableStyleLink = @"Style-Link";
+NSString * const StdplVariableAnchorFormat = @"AnchorFormat";
+
+/* Misc */
 NSString * const SdefInvalidTemplateException = @"SdefInvalidTemplate";
 NSString * const SdefTemplateDidChangeNotification = @"SdefTemplateDidChange";
 
@@ -24,20 +30,23 @@ static NSDictionary *SdefTemplatesAtPath(NSString *path);
 
 static NSString * const kSdtplVersion = @"Version"; /* Number */
 static NSString * const kSdtplDisplayName = @"DisplayName"; /* NSString */
+static NSString * const kSdtplStyleSheets = @"HTMLStyleSheets"; /* NSDictionary */
 static NSString * const kSdtplTemplateFormat = @"TemplateFormat"; /* NSString */
 static NSString * const kSdtplRequireFileType = @"RequireFileType"; /* NSString */
-static NSString * const kSdtplRemoveBlockLine = @"RemoveBlockLines"; /* Boolean */
 static NSString * const kSdtplTemplateStrings = @"TemplateStrings"; /* NSArray */
 
-static NSString * const kSdtplStyleSheets = @"HTMLStyleSheets"; /* NSDictionary */
+/* Definition Keys */
+NSString * const SdtplDefinitionFileKey = @"File";
+NSString * const SdtplDefinitionSingleFileKey = @"SingleFile";
+NSString * const SdtplDefinitionRemoveBlockLine = @"RemoveBlockLines"; /* Boolean */
 
-NSString * const SdtplTocDefinitionKey = @"Toc";
-NSString * const SdtplIndexDefinitionKey = @"Index";
-NSString * const SdtplDictionaryDefinitionKey = @"Dictionary";
-NSString * const SdtplSuitesDefinitionKey = @"Suites";
-NSString * const SdtplClassesDefinitionKey = @"Classes";
-NSString * const SdtplCommandsDefinitionKey = @"Commands";
-NSString * const SdtplEventsDefinitionKey = @"Events";
+NSString * const SdtplDefinitionTocKey = @"Toc";
+NSString * const SdtplDefinitionIndexKey = @"Index";
+NSString * const SdtplDefinitionDictionaryKey = @"Dictionary";
+NSString * const SdtplDefinitionSuitesKey = @"Suites";
+NSString * const SdtplDefinitionClassesKey = @"Classes";
+NSString * const SdtplDefinitionCommandsKey = @"Commands";
+NSString * const SdtplDefinitionEventsKey = @"Events";
 
 @implementation SdefTemplate
 
@@ -113,6 +122,18 @@ NSString * const SdtplEventsDefinitionKey = @"Events";
     tp_flags.html = [[sd_infos objectForKey:kSdtplTemplateFormat] caseInsensitiveCompare:@"html"] == 0;
   }
   
+  /* Set Defaults Strings: AddValue set value if key does not exist, else do nothing */
+  CFMutableDictionaryRef formats = (CFMutableDictionaryRef)[sd_infos objectForKey:kSdtplTemplateStrings];
+  if (!formats) {
+    formats = (CFMutableDictionaryRef)[[NSMutableDictionary alloc] init];
+    [sd_infos setObject:(id)formats forKey:kSdtplTemplateStrings];
+    [(id)formats release];
+  }
+  CFDictionaryAddValue(formats, StdplVariableLinks, @"<a href=\"%@#%@\">%@</a>");  
+  CFDictionaryAddValue(formats, StdplVariableAnchorFormat, @"<a name=\"%@\" />");
+  CFDictionaryAddValue(formats, StdplVariableStyleLink, @"<link rel=\"stylesheet\" type=\"text/css\" href=\"%@\" />");
+//  CFDictionaryAddValue(formats, @"Superclass.Description", @"inherits some of its properties from the %@ class");
+  
   /* Check CSS */
   NSDictionary *styles = [sd_infos objectForKey:kSdtplStyleSheets];
   if (tp_flags.html && [styles count]) {
@@ -147,7 +168,7 @@ NSString * const SdtplEventsDefinitionKey = @"Events";
     [NSException raise:SdefInvalidTemplateException format:@"%@ doesn't contains a valid Definition.plist file.", [sd_path lastPathComponent]];
     return;
   }
-  if (![sd_def objectForKey:SdtplDictionaryDefinitionKey]) {
+  if (![sd_def objectForKey:SdtplDefinitionDictionaryKey]) {
     [NSException raise:SdefInvalidTemplateException format:@"%@ Definition does not contains a valid \"DictionaryTemplate\" key.", [sd_path lastPathComponent]];
     return;
   } else {
@@ -159,24 +180,24 @@ NSString * const SdtplEventsDefinitionKey = @"Events";
     while (key = [keys nextObject]) {
       NSDictionary *tplDef = [sd_def objectForKey:key];
       SKTemplate *tpl = [[tplClass alloc] initWithContentsOfFile:
-        [sd_path stringByAppendingPathComponent:[tplDef objectForKey:@"File"]]];
-      [tpl setRemoveBlockLine:[[tplDef objectForKey:kSdtplRemoveBlockLine] boolValue]];
+        [sd_path stringByAppendingPathComponent:[tplDef objectForKey:SdtplDefinitionFileKey]]];
+      [tpl setRemoveBlockLine:[[tplDef objectForKey:SdtplDefinitionRemoveBlockLine] boolValue]];
       [sd_tpls setObject:tpl forKey:key];
       [tpl release];
     }
   }
   
   tp_flags.toc = kSdefTemplateTOCNone;
-  NSDictionary *toc = [sd_def objectForKey:SdtplTocDefinitionKey];
+  NSDictionary *toc = [sd_def objectForKey:SdtplDefinitionTocKey];
   if (toc) {
     tp_flags.toc |= kSdefTemplateTOCExternal;
     if ([[toc objectForKey:@"Required"] boolValue])
       tp_flags.toc |= kSdefTemplateTOCRequired;
   }
-  if ([[sd_tpls objectForKey:SdtplDictionaryDefinitionKey] blockWithName:@"Table_Of_Content"]) {
+  if ([[sd_tpls objectForKey:SdtplDefinitionDictionaryKey] blockWithName:@"Table_Of_Content"]) {
     tp_flags.toc |= kSdefTemplateTOCDictionary;  
   }
-  if ([[sd_tpls objectForKey:SdtplIndexDefinitionKey] blockWithName:@"Table_Of_Content"]) {
+  if ([[sd_tpls objectForKey:SdtplDefinitionIndexKey] blockWithName:@"Table_Of_Content"]) {
     tp_flags.toc |= kSdefTemplateTOCIndex;  
   }
 }
@@ -208,7 +229,7 @@ NSString * const SdtplEventsDefinitionKey = @"Events";
 - (NSString *)extension {
   id ext = [sd_infos objectForKey:kSdtplRequireFileType];
   if (!ext) {
-    ext = [[[sd_tpls objectForKey:SdtplDictionaryDefinitionKey] objectForKey:@"File"] pathExtension];
+    ext = [[[sd_tpls objectForKey:SdtplDefinitionDictionaryKey] objectForKey:SdtplDefinitionFileKey] pathExtension];
     [sd_infos setObject:(ext ? : @"") forKey:kSdtplRequireFileType];
   }
   return ext;

@@ -22,14 +22,26 @@ enum {
   kSdefTemplateCSSExternal	= 1 << 1
 };
 
-extern NSString * const SdtplTocDefinitionKey;
-extern NSString * const SdtplIndexDefinitionKey;
-extern NSString * const SdtplDictionaryDefinitionKey;
-extern NSString * const SdtplSuitesDefinitionKey;
-extern NSString * const SdtplClassesDefinitionKey;
-extern NSString * const SdtplCommandsDefinitionKey;
-extern NSString * const SdtplEventsDefinitionKey;
+/* Definition */
+extern NSString * const SdtplDefinitionTocKey;
+extern NSString * const SdtplDefinitionIndexKey;
+extern NSString * const SdtplDefinitionDictionaryKey;
+extern NSString * const SdtplDefinitionSuitesKey;
+extern NSString * const SdtplDefinitionClassesKey;
+extern NSString * const SdtplDefinitionCommandsKey;
+extern NSString * const SdtplDefinitionEventsKey;
 
+/* Definition Options */
+extern NSString * const SdtplDefinitionFileKey;
+extern NSString * const SdtplDefinitionSingleFileKey;
+extern NSString * const SdtplDefinitionRemoveBlockLine;
+
+/* Variables */
+extern NSString * const StdplVariableLinks;
+extern NSString * const StdplVariableStyleLink;
+extern NSString * const StdplVariableAnchorFormat;
+
+/* Misc */
 extern NSString * const SdefInvalidTemplateException;
 extern NSString * const SdefTemplateDidChangeNotification;
 

@@ -13,6 +13,7 @@
 #import "SdefDocument.h"
 #import "SdtplGenerator.h"
 #import "SKDisclosurePanel.h"
+#import "SdefWindowController.h"
 
 @implementation SdtplWindow
 
@@ -38,6 +39,7 @@
 }
 
 - (void)dealloc {
+  ShadowTrace();
   [sd_document release];
   if (sd_preview) {
     [sd_preview close];
@@ -100,29 +102,32 @@
 }
 
 - (IBAction)export:(id)sender {
+  [self retain];
+  [NSApp endSheet:[self window]];
+  [[self window] close];
   NSSavePanel *panel = [NSSavePanel savePanel];
   [panel setCanSelectHiddenExtension:YES];
   [panel setTitle:@"Create Dictionary"];
   [panel setRequiredFileType:[sd_template extension]];
-  if (NSOKButton != [panel runModalForDirectory:nil file:[[sd_document displayName] stringByDeletingPathExtension]]) {
-    return;
+  [panel beginSheetForDirectory:nil
+                           file:[[sd_document displayName] stringByDeletingPathExtension]
+                 modalForWindow:[[sd_document documentWindow] window]
+                  modalDelegate:self
+                 didEndSelector:@selector(exportPanelDidEnd:result:context:)
+                    contextInfo:nil];
+}
+
+- (void)exportPanelDidEnd:(NSSavePanel *)aPanel result:(unsigned)code context:(void *)ctxt {
+  if (NSOKButton == code) {
+    NSString *file = [aPanel filename];
+    @try {
+      [generator writeDictionary:[sd_document dictionary] toFile:file];
+    } @catch (id exception) {
+      SKLogException(exception);
+    }
   }
-  id file = [panel filename];
-  @try {
-    [generator writeDictionary:[sd_document dictionary] toFile:file];
-  } @catch (id exception) {
-    SKLogException(exception);
-  }
-//  SdtplExporter *exporter = [[SdtplExporter alloc] init];
-//  @try {
-//    [exporter setDictionary:[sd_document dictionary]];
-//    [exporter setTemplate:sd_template];
-//    [exporter writeToFile:file atomically:YES];
-//  } @catch (id exception) {
-//    SKLogException(exception);
-//  }
-//  [exporter release];
-  [self close:sender];
+  [self close:nil];
+  [self autorelease];
 }
 
 - (IBAction)showPreview:(id)sender {
