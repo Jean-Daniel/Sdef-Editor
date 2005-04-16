@@ -7,9 +7,9 @@
 //
 
 #import "SdefExporterController.h"
-#import "ShadowMacros.h"
-#import "SdefDocument.h"
+#import "SdefWindowController.h"
 #import "SdefProcessor.h"
+#import "SdefDocument.h"
 #import "SdefEditor.h"
 
 static NSString *SystemMajorVersion() {
@@ -65,6 +65,83 @@ static NSString *SystemMajorVersion() {
 - (IBAction)close:(id)sender {
   if ([[self window] isSheet]) {
     [NSApp endSheet:[self window]];
+  }
+  [self close];
+}
+
+- (IBAction)next:(id)sender {
+  [NSApp endSheet:[self window]];
+  [[self window] close];
+  NSOpenPanel *openPanel = [NSOpenPanel openPanel];
+  [openPanel setPrompt:NSLocalizedString(@"Choose", @"Choose an export folder Prompt.")];
+  [openPanel setMessage:NSLocalizedString(@"Choose a destination folder", @"Choose an export folder Message.")];
+  [openPanel setCanChooseFiles:NO];
+  [openPanel setCanCreateDirectories:YES];
+  [openPanel setCanChooseDirectories:YES];
+  [openPanel setAllowsMultipleSelection:NO];
+  [openPanel setTreatsFilePackagesAsDirectories:YES];
+  [openPanel beginSheetForDirectory:nil
+                               file:nil
+                              types:nil
+                     modalForWindow:[[sd_document documentWindow] window]
+                      modalDelegate:self 
+                     didEndSelector:@selector(openPanelDidEnd:resultCode:context:)
+                        contextInfo:nil];
+}
+
+- (void)close {
+  [controller setContent:nil];
+  [super close];
+}
+
+- (void)openPanelDidEnd:(NSOpenPanel *)openPanel resultCode:(unsigned)code context:(id)ctxt {
+  if ((code == NSOKButton) && ([[openPanel filenames] count] > 0)) {    
+    SdefProcessor *proc = [[SdefProcessor alloc] initWithSdefDocument:[self sdefDocument]];
+    [proc setOutput:[[openPanel filenames] objectAtIndex:0]];
+    
+    id defs = [[NSMutableArray alloc] init];
+    if ([[includes arrangedObjects] count]) {
+      id items = [[includes arrangedObjects] objectEnumerator];
+      id item;
+      while (item = [items nextObject]) {
+        [defs addObject:[item valueForKey:@"path"]];
+      }
+    }
+    if (includeCore) [defs addObject:[[NSBundle mainBundle] pathForResource:@"NSCoreSuite" ofType:@"sdef"]];
+    if (includeText) [defs addObject:[[NSBundle mainBundle] pathForResource:@"NSTextSuite" ofType:@"sdef"]];
+    
+    if ([defs count])
+      [proc setIncludes:defs];
+    [defs release];
+    
+    SdefProcessorFormat format = 0;
+    if (resourceFormat || rsrcFormat) format |= kSdefResourceFormat;
+    if (cocoaFormat) format |= (kSdefScriptSuiteFormat | kSdefScriptTerminologyFormat);
+    [proc setFormat:format];
+    
+    [proc setVersion:sd_version ? : SystemMajorVersion()];
+    @try {
+      NSString *result = [proc process];
+      if (result) {
+        NSRunAlertPanel(NSLocalizedString(@"Warning: Scripting Definition Processor says:", @"sdp return a value: message title"),
+                        result,
+                        NSLocalizedString(@"OK", @"Default Button"), nil, nil);
+      }
+      if (rsrcFormat) {
+        [self compileResourceFile:[proc output]];
+        if (!resourceFormat) {
+          [[NSFileManager defaultManager] removeFileAtPath:[[proc output] stringByAppendingPathComponent:@"Scripting.r"] handler:nil];
+        }
+      }
+    } @catch (id exception) {
+      [proc release];
+      proc = nil;
+      SKLogException(exception);
+      NSRunAlertPanel(NSLocalizedString(@"Undefined error while exporting", @"sdp exception"),
+                      NSLocalizedString(@"An Undefined error prevent exportation: %@", @"sdp exception"),
+                      NSLocalizedString(@"OK", @"Default Button"), nil, nil, exception);  
+    }
+    [proc release];
   }
   [self close];
 }

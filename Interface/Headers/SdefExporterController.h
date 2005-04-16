@@ -11,6 +11,7 @@
 @class SdefDocument;
 @interface SdefExporterController : NSWindowController {
   IBOutlet NSArrayController *includes;
+  IBOutlet NSObjectController *controller;
   SdefDocument *sd_document;
   
   NSString *sd_version;
