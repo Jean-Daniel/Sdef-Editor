@@ -371,7 +371,6 @@ static NSString * const SdtplBlockTableOfContent = @"Table-Of-Content";
 #pragma mark API
 - (BOOL)writeDictionary:(SdefDictionary *)aDico toFile:(NSString *)aFile {
   NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-  BOOL cancel = NO;
   [self initCache];
   
   sd_path = [aFile retain];
@@ -386,30 +385,24 @@ static NSString * const SdtplBlockTableOfContent = @"Table-Of-Content";
   SKTemplate *root = [[sd_tpl templates] objectForKey:SdtplDefinitionDictionaryKey];
   @try {
     write = [self writeDictionary:dictionary usingTemplate:root];
-  } @catch (NSString *aString) {
-    cancel = YES;
-    DLog(aString);
   } @catch (id exception) {
     write = NO;
     SKLogException(exception);
   }
   
   if (write) {
-    if (!cancel) {
+    if (!gnflags.cancel) {
       root = [[sd_tpl templates] objectForKey:SdtplDefinitionIndexKey];
       if (root) {
         @try {
           [self writeIndex:dictionary usingTemplate:root];
-        } @catch (NSString *aString) {
-          cancel = YES;
-          DLog(aString);
         } @catch (id exception) {
           SKLogException(exception);
         }
       }
     }
     
-    if (!cancel) {
+    if (!gnflags.cancel) {
       /* Create css file if needed */
       if (kSdefTemplateCSSExternal == gnflags.css) {
         NSString *src = [[sd_tpl selectedStyle] objectForKey:@"path"];
@@ -421,7 +414,7 @@ static NSString * const SdtplBlockTableOfContent = @"Table-Of-Content";
       }
     }
     
-    if (!cancel) {
+    if (!gnflags.cancel) {
       /* TOC must be in last position because it may change sd_link and flush cache. */
       if ([self externalToc]) {
         root = [[sd_tpl templates] objectForKey:SdtplDefinitionTocKey];
@@ -435,9 +428,6 @@ static NSString * const SdtplBlockTableOfContent = @"Table-Of-Content";
             [self writeToc:dictionary usingTemplate:root];
             NSString *file = [self tocFile];
             [self writeTemplate:root toFile:file representedObject:dictionary];
-          } @catch (NSString *aString) {
-            cancel = YES;
-            DLog(aString);
           } @catch (id exception) {
             SKLogException(exception);
           }
@@ -446,10 +436,17 @@ static NSString * const SdtplBlockTableOfContent = @"Table-Of-Content";
     }
   }
   
-  /* Release resources */
-  if (cancel) {
-    /* Delete generated files */
+  /* Delete generated files */
+  if (gnflags.cancel) {
+    NSString *file;
+    NSFileManager *manager = [NSFileManager defaultManager];
+    NSEnumerator *files = [sd_cancel objectEnumerator];
+    while (file = [files nextObject]) {
+      [manager removeFileAtPath:file handler:nil];
+    }
   }
+  
+  /* Release resources */
   [dictionary release];
   sd_manager = nil;
   [sd_path release];
@@ -495,6 +492,8 @@ static NSString * const SdtplBlockTableOfContent = @"Table-Of-Content";
     sd_files = CFDictionaryCreateMutable(kCFAllocatorDefault, 0, &kSKDictionaryKeyCallBacks, &kSKDictionaryValueCallBacks);
     sd_anchors = CFDictionaryCreateMutable(kCFAllocatorDefault, 0, &kSKDictionaryKeyCallBacks, &kSKDictionaryValueCallBacks);
     
+    sd_cancel = [[NSMutableSet alloc] init];
+      
     NSDictionary *defs = [sd_tpl definition];
     
     /* Index */
@@ -520,6 +519,7 @@ static NSString * const SdtplBlockTableOfContent = @"Table-Of-Content";
       gnflags.commands = [[def objectForKey:SdtplDefinitionSingleFileKey] boolValue] ? kSdtplSingleFile : kSdtplMultiFiles;
     }
     /* Other reset */
+    gnflags.cancel = 0;
     gnflags.existingFile = kSdefTemplateFileAsk;
   }
 }
@@ -531,6 +531,9 @@ static NSString * const SdtplBlockTableOfContent = @"Table-Of-Content";
   if (sd_links) { CFRelease(sd_links); sd_links = nil; }
   if (sd_files) { CFRelease(sd_files); sd_files = nil; }
   if (sd_anchors) { CFRelease(sd_anchors); sd_anchors = nil; }
+  
+  [sd_cancel release];
+  sd_cancel = nil;
   
   gnflags.suites = kSdtplInline;
   gnflags.classes = kSdtplInline;
@@ -743,11 +746,12 @@ static NSString * const SdtplBlockTableOfContent = @"Table-Of-Content";
 
   /* Set References */
   if (gnflags.index) {
-    [tpl setVariable:[sd_path lastPathComponent] forKey:SdtplVariableIndexFile];
+    /* Index path */
+    SetVariable(tpl, nil, SdtplVariableIndexFile, [sd_path lastPathComponent]);
   }
   if ([self externalToc]) {
     /* Toc path */
-    [tpl setVariable:[self tocFile] forKey:SdtplVariableTocFile];
+    SetVariable(tpl, nil, SdtplVariableTocFile, [self tocFile]);
   }
   /* Dictionary Links */
   SdefObject *obj = nil;
@@ -792,28 +796,34 @@ static NSString * const SdtplBlockTableOfContent = @"Table-Of-Content";
       DLog(@"Skip File %@", path);
       return NO;
     } else if (kSdefTemplateFileAsk == gnflags.existingFile) {
-      //    NSAlert *alert = [NSAlert alertWithMessageText:@"File already exist"
-      //                                     defaultButton:@"Replace"
-      //                                   alternateButton:@"Skip"
-      //                                       otherButton:@"Cancel"
-      //                         informativeTextWithFormat:@"Would you like replace it, continue or cancel exportation?"];
-      //    NSButton *all = [alert addUserDefaultCheckBoxWithTitle:@"Apply to all" andKey:nil];
-      //    switch ([alert runModal]) {
-      //      case NSAlertAlternateReturn:
-      //		if ([all state] == NSOnState) {
-      //			gnflags.existingFile = kSdefTemplateFileSkip;
-      //		}
-      //        return NO;
-      //      case NSAlertOtherReturn:
-      //        @throw @"Cancel";
-      //        return NO;
-      //    }
-      //    if ([all state] == NSOnState) {
-      //		gnflags.existingFile = kSdefTemplateFileReplace;
-      //	}
+      NSAlert *alert = [NSAlert alertWithMessageText:@"File already exist"
+                                       defaultButton:@"Replace"
+                                     alternateButton:@"Skip"
+                                         otherButton:@"Cancel"
+                           informativeTextWithFormat:@"Would you like replace it, continue or cancel exportation?"];
+      NSButton *all = [alert addUserDefaultCheckBoxWithTitle:@"Apply to all" andKey:nil];
+      [all setFrameOrigin:NSMakePoint(12, 20)];
+      switch ([alert runModal]) {
+        case NSAlertAlternateReturn:
+          if ([all state] == NSOnState) {
+			gnflags.existingFile = kSdefTemplateFileSkip;
+          }
+          return NO;
+        case NSAlertOtherReturn:
+          gnflags.cancel = 1;
+          return NO;
+      }
+      if ([all state] == NSOnState) {
+		gnflags.existingFile = kSdefTemplateFileReplace;
+      }
     }
   }
-  return [tpl writeToFile:path atomically:YES andReset:YES];
+  if ([tpl writeToFile:path atomically:YES andReset:YES]) {
+    [sd_cancel addObject:path];
+    return YES;
+  } else {
+    return NO;
+  }
 }
 
 #pragma mark Dictionary
@@ -847,9 +857,8 @@ static NSString * const SdtplBlockTableOfContent = @"Table-Of-Content";
       }
     }
     /* Dump Suite block */
-    while (suite = [suites nextObject]) {
+    while ((suite = [suites nextObject]) && !gnflags.cancel) {
       if (kSdtplInline != gnflags.suites) {
-        /* If Inline, this step is done in -writeSuite:usingTemplate: */
         NSString *name = [suite name];
         if (name && gnflags.links) 
           name = [self linkForObject:suite withString:name];
@@ -861,19 +870,21 @@ static NSString * const SdtplBlockTableOfContent = @"Table-Of-Content";
         [self writeSuite:suite usingTemplate:suiteTpl];
       [suiteBlock dumpBlock];
     }
-    /* Create Suite file if needed */
-    switch (gnflags.suites) {
-      case kSdtplSingleFile:
-        [self writeTemplate:[[sd_tpl templates] objectForKey:SdtplDefinitionSuitesKey]
-                     toFile:[self fileForObject:[aDico firstChild]]
-          representedObject:aDico];
-        break;
+    if (!gnflags.cancel) {
+      /* Create Suite file if needed */
+      switch (gnflags.suites) {
+        case kSdtplSingleFile:
+          [self writeTemplate:[[sd_tpl templates] objectForKey:SdtplDefinitionSuitesKey]
+                       toFile:[self fileForObject:[aDico firstChild]]
+            representedObject:aDico];
+          break;
+      }
     }
     [objects release];
   }
   
   /* Create table fo Content if needed */
-  if ([self dictionaryToc]) {
+  if ([self dictionaryToc] && !gnflags.cancel) {
     SKTemplate *toc = [tpl blockWithName:SdtplBlockTableOfContent];
     if (toc) {
       [self writeToc:aDico usingTemplate:toc];
@@ -887,7 +898,7 @@ static NSString * const SdtplBlockTableOfContent = @"Table-Of-Content";
   } else {
     file = sd_path;
   }
-  return [self writeTemplate:tpl toFile:file representedObject:aDico];
+  return (!gnflags.cancel) ? [self writeTemplate:tpl toFile:file representedObject:aDico] : NO;
 }
 
 #pragma mark Suites
@@ -923,7 +934,7 @@ static NSString * const SdtplBlockTableOfContent = @"Table-Of-Content";
       }
     }
     
-    while (class = [classes nextObject]) {
+    while ((class = [classes nextObject]) && !gnflags.cancel) {
       if (kSdtplInline != gnflags.classes) {
         NSString *name = [class name];
         if (name && gnflags.links)
@@ -936,16 +947,19 @@ static NSString * const SdtplBlockTableOfContent = @"Table-Of-Content";
         [self writeClass:class usingTemplate:classTpl];
       [classBlock dumpBlock];
     }
-    [[tpl blockWithName:SdtplBlockClasses] dumpBlock];
-    switch (gnflags.classes) {
-      case kSdtplSingleFile:
-        [self writeTemplate:[[sd_tpl templates] objectForKey:SdtplDefinitionClassesKey]
-                     toFile:[self fileForObject:[[suite classes] firstChild]]
-          representedObject:suite];
-        break;
+    if (!gnflags.cancel) {
+      [[tpl blockWithName:SdtplBlockClasses] dumpBlock];
+      switch (gnflags.classes) {
+        case kSdtplSingleFile:
+          [self writeTemplate:[[sd_tpl templates] objectForKey:SdtplDefinitionClassesKey]
+                       toFile:[self fileForObject:[[suite classes] firstChild]]
+            representedObject:suite];
+          break;
+      }
     }
     [objects release];
   }
+  if (gnflags.cancel) return NO;
   
   /* Commands */
   if ([[suite commands] hasChildren] ||
@@ -983,7 +997,7 @@ static NSString * const SdtplBlockTableOfContent = @"Table-Of-Content";
       }
     }
     
-    while (cmd = [cmds nextObject]) {
+    while ((cmd = [cmds nextObject]) && !gnflags.cancel) {
       if (kSdtplInline != gnflags.commands) {
         NSString *name = [cmd name];
         if (name && gnflags.links)
@@ -996,16 +1010,19 @@ static NSString * const SdtplBlockTableOfContent = @"Table-Of-Content";
         [self writeVerb:cmd usingTemplate:cmdTpl];
       [cmdBlock dumpBlock];
     }
-    [[tpl blockWithName:SdtplBlockCommands] dumpBlock];
-    switch (gnflags.commands) {
-      case kSdtplSingleFile:
-        [self writeTemplate:[[sd_tpl templates] objectForKey:SdtplDefinitionCommandsKey]
-                     toFile:[self fileForObject:[[suite commands] firstChild]]
-          representedObject:suite];
-        break;
+    if (!gnflags.cancel) {
+      [[tpl blockWithName:SdtplBlockCommands] dumpBlock];
+      switch (gnflags.commands) {
+        case kSdtplSingleFile:
+          [self writeTemplate:[[sd_tpl templates] objectForKey:SdtplDefinitionCommandsKey]
+                       toFile:[self fileForObject:[[suite commands] firstChild]]
+            representedObject:suite];
+          break;
+      }
     }
     [objects release];
   }
+  if (gnflags.cancel) return NO;
   
   /* Events */
   if (!gnflags.groupEvents && !gnflags.ignoreEvents && [[suite events] hasChildren]) {
@@ -1031,7 +1048,7 @@ static NSString * const SdtplBlockTableOfContent = @"Table-Of-Content";
       }
     }
     
-    while (evnt = [evnts nextObject]) {
+    while ((evnt = [evnts nextObject]) && !gnflags.cancel) {
       if (kSdtplInline != gnflags.events) {
         NSString *name = [evnt name];
         if (name && gnflags.links)
@@ -1044,25 +1061,31 @@ static NSString * const SdtplBlockTableOfContent = @"Table-Of-Content";
         [self writeVerb:evnt usingTemplate:evntTpl];
       [evntBlock dumpBlock];
     }
-    [[tpl blockWithName:SdtplBlockEvents] dumpBlock];
-    switch (gnflags.events) {
-      case kSdtplSingleFile:
-        [self writeTemplate:[[sd_tpl templates] objectForKey:SdtplDefinitionEventsKey]
-                     toFile:[self fileForObject:[[suite events] firstChild]]
-          representedObject:suite];
-        break;
+    if (!gnflags.cancel) {
+      [[tpl blockWithName:SdtplBlockEvents] dumpBlock];
+      switch (gnflags.events) {
+        case kSdtplSingleFile:
+          [self writeTemplate:[[sd_tpl templates] objectForKey:SdtplDefinitionEventsKey]
+                       toFile:[self fileForObject:[[suite events] firstChild]]
+            representedObject:suite];
+          break;
+      }
     }
     [objects release];
   }
   
   BOOL ok = YES;
-  switch (gnflags.suites) {
-    case kSdtplSingleFile:
-      [tpl dumpBlock];
-      break;
-    case kSdtplMultiFiles:
-      ok = [self writeTemplate:tpl toFile:[self fileForObject:suite] representedObject:suite];
-      break;
+  if (!gnflags.cancel) {
+    switch (gnflags.suites) {
+      case kSdtplSingleFile:
+        [tpl dumpBlock];
+        break;
+      case kSdtplMultiFiles:
+        ok = [self writeTemplate:tpl toFile:[self fileForObject:suite] representedObject:suite];
+        break;
+    }
+  } else {
+    ok = NO;
   }
   return ok;
 }
@@ -1244,7 +1267,7 @@ static NSString * const SdtplBlockTableOfContent = @"Table-Of-Content";
       ok = [self writeTemplate:tpl toFile:[self fileForObject:aClass] representedObject:aClass];
       break;
   }
-  return ok;
+  return !gnflags.cancel ? ok : NO;
 }
 
 #pragma mark Verb
@@ -1373,7 +1396,7 @@ static NSString * const SdtplBlockTableOfContent = @"Table-Of-Content";
       ok = [self writeTemplate:tpl toFile:[self fileForObject:verb] representedObject:verb];
       break;
   }
-  return ok;
+  return !gnflags.cancel ? ok : NO;
 }
 
 #pragma mark Toc

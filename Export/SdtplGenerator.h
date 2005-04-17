@@ -41,9 +41,10 @@ enum {
     unsigned int links:1; /* OK */
     unsigned int format:2; /* OK */
     /* Internal use */
+    unsigned int cancel:1;
     unsigned int existingFile:2;
     unsigned int useBlockFormat:1;
-    unsigned int:3;
+    unsigned int:2;
   } gnflags;
   NSString *sd_path;
   NSString *sd_base;
@@ -53,6 +54,7 @@ enum {
   NSString *sd_link; /* Weak */
   NSString *sd_tocFile;
   NSString *sd_cssFile;
+  NSMutableSet *sd_cancel;
   SdefClassManager *sd_manager; /* Weak */
   CFMutableDictionaryRef sd_formats;
   CFMutableDictionaryRef sd_links, sd_files, sd_anchors;
