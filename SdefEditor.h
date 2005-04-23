@@ -11,8 +11,8 @@
 extern NSString * const ScriptingDefinitionFileType;
 extern const OSType kScriptingDefinitionHFSType;
 
-extern NSString * const CocoaScriptSuiteFileType;
-extern const OSType kCocoaScriptSuiteHFSType;
+extern NSString * const CocoaSuiteDefinitionFileType;
+extern const OSType kCocoaSuiteDefinitionHFSType;
 
 @class SdefImporter;
 @interface SdefEditor : NSObject {

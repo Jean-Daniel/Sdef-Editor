@@ -8,7 +8,9 @@
 
 #import "SdefEditor.h"
 #import "SKFunctions.h"
+#import "SKExtensions.h"
 #import "ShadowMacros.h"
+#import "SKApplication.h"
 
 #import "SdefSuite.h"
 #import "Preferences.h"
@@ -18,10 +20,8 @@
 #import "ImporterWarning.h"
 #import "CocoaSuiteImporter.h"
 #import "SdefObjectInspector.h"
+#import "SdefWindowController.h"
 #import "ImportApplicationAete.h"
-
-#import "SKApplication.h"
-#import "SdtplExporter.h"
 
 #if defined (DEBUG)
 #import <Foundation/NSDebug.h>
@@ -37,8 +37,8 @@ int main(int argc, char *argv[]) {
 
 NSString * const ScriptingDefinitionFileType = @"ScriptingDefinition";
 const OSType kScriptingDefinitionHFSType = 'Sdef';
-NSString * const CocoaScriptSuiteFileType = @"CocoaScriptSuite";
-const OSType kCocoaScriptSuiteHFSType = 'ScSu';
+NSString * const CocoaSuiteDefinitionFileType = @"AppleScriptSuiteDefinition";
+const OSType kCocoaSuiteDefinitionHFSType = 'ScSu';
 
 #if defined (DEBUG)
 @interface SdefEditor (DebugFacility)
@@ -64,6 +64,15 @@ const OSType kCocoaScriptSuiteHFSType = 'ScSu';
       @"/Developer/Tools/Rez", @"SdefRezToolPath",
       nil]];
     [NSApp setDelegate:self];
+#if defined (DEBUG)
+    [[NSUserDefaults standardUserDefaults] registerDefaults:[NSDictionary dictionaryWithObjectsAndKeys:
+      //@"YES", @"NSShowNonLocalizedStrings",
+      @"NO", @"NSShowAllViews",
+      //@"6", @"NSDragManagerLogLevel",
+      //@"YES", @"NSShowNonLocalizableStrings",
+      //    @"1", @"NSScriptingDebugLogLevel",
+      nil]];
+#endif
   }
   return self;
 }
@@ -95,6 +104,9 @@ const OSType kCocoaScriptSuiteHFSType = 'ScSu';
     case 2:
       suite = @"NSTextSuite";
       break;
+    case 3:
+      suite = @"ASKDictionary";
+      break;        
   }
   NSString *suitePath = [[NSBundle mainBundle] pathForResource:suite ofType:@"sdef"];
   if (suitePath) {
@@ -241,7 +253,7 @@ const OSType kCocoaScriptSuiteHFSType = 'ScSu';
 - (BOOL)application:(NSApplication *)theApplication openFile:(NSString *)filename {
   id type = [[NSDocumentController sharedDocumentController] typeFromFileExtension:[filename pathExtension]];
   if ([type isEqualToString:ScriptingDefinitionFileType]) return NO;
-  else if ([type isEqualToString:CocoaScriptSuiteFileType]) {
+  else if ([type isEqualToString:CocoaSuiteDefinitionFileType]) {
     [self importCocoaScriptFile:filename];
     return YES;
   }
@@ -256,28 +268,13 @@ const OSType kCocoaScriptSuiteHFSType = 'ScSu';
 #pragma mark Debug Menu
 #if defined (DEBUG)
 - (void)createDebugMenu {
-  id debugMenu = [[NSMenuItem alloc] initWithTitle:@"" action:nil keyEquivalent:@""];
-  id menu = [[NSMenu alloc] initWithTitle:@"Debug"];
-  [menu addItemWithTitle:@"Import Application 'aete'" action:@selector(importApplicationAete:) keyEquivalent:@""];
-  [menu addItemWithTitle:@"Create dictionary" action:@selector(asDictionary:) keyEquivalent:@""];
-  [menu addItemWithTitle:@"Create XHTML dictionary" action:@selector(SdtplExporter:) keyEquivalent:@""];
-  [debugMenu setSubmenu:menu];
-  [menu release];
-  [[NSApp mainMenu] insertItem:debugMenu atIndex:[[NSApp mainMenu] numberOfItems] -1];
-  [debugMenu release];
-}
-
-- (void)asDictionary:(id)sender {
-  id dico = AppleScriptDictionaryFromSdefDictionary([[[NSApp orderedDocuments] objectAtIndex:0] dictionary]);
-  [NSArchiver archiveRootObject:dico toFile:[@"~/Desktop/TestDico.asdictionary" stringByExpandingTildeInPath]];
-}
-
-- (void)SdtplExporter:(id)sender {
-  id exporter = [[SdtplExporter alloc] initWithTemplate:[@"~/Desktop/AppleRTFDictionary.sdtpl" stringByExpandingTildeInPath]];
-  [exporter setDictionary:[[[NSApp orderedDocuments] objectAtIndex:0] dictionary]];
-  id file = [@"~/Desktop/Dictionary.html" stringByExpandingTildeInPath];
-  [exporter writeToFile:file atomically:YES];
-  [exporter release];
+//  id debugMenu = [[NSMenuItem alloc] initWithTitle:@"" action:nil keyEquivalent:@""];
+//  id menu = [[NSMenu alloc] initWithTitle:@"Debug"];
+//  [menu addItemWithTitle:@"Create XHTML dictionary" action:@selector(SdtplExporter:) keyEquivalent:@""];
+//  [debugMenu setSubmenu:menu];
+//  [menu release];
+//  [[NSApp mainMenu] insertItem:debugMenu atIndex:[[NSApp mainMenu] numberOfItems] -1];
+//  [debugMenu release];
 }
 
 #endif
@@ -288,8 +285,7 @@ const OSType kCocoaScriptSuiteHFSType = 'ScSu';
 
 - (void)noteNewRecentDocument:(NSDocument *)aDocument {
   id path = [aDocument fileName];
-  if (![[[NSBundle mainBundle] pathForResource:@"NSCoreSuite" ofType:@"sdef"] isEqualToString:path] &&
-      ![[[NSBundle mainBundle] pathForResource:@"NSTextSuite" ofType:@"sdef"] isEqualToString:path]) {
+  if (![path hasPrefix:[[NSBundle mainBundle] bundlePath]]) {
     [super noteNewRecentDocument:aDocument];
   }
 }
