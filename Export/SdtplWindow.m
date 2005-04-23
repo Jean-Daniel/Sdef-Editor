@@ -41,10 +41,10 @@
 - (void)dealloc {
   ShadowTrace();
   [sd_document release];
-  if (sd_preview) {
-    [sd_preview close];
-    [sd_preview release];
-  }
+//  if (sd_preview) {
+//    [sd_preview close];
+//    [sd_preview release];
+//  }
   [super dealloc];
 }
 
@@ -57,6 +57,7 @@
   [panel addView:generalView withLabel:@"General"];
   [panel addView:tocView withLabel:@"Table Of Content"];
   [panel addView:htmlView withLabel:@"HTML Options"];
+  [panel addView:infoView withLabel:@"Description"];
   
   unsigned idx;
   NSArray *views = [panel disclosureViews];
@@ -131,40 +132,40 @@
 }
 
 - (IBAction)showPreview:(id)sender {
-  if (!sd_preview) {
-    sd_preview = [[SdtplPreview alloc] init];
-    [sd_preview setTemplate:[self selectedTemplate]];
-  }
-  if (![[sd_preview window] isVisible]) {
-    [sd_preview refresh];
-  }
-  [sd_preview showWindow:sender];
+//  if (!sd_preview) {
+//    sd_preview = [[SdtplPreview alloc] init];
+//    [sd_preview setTemplate:[self selectedTemplate]];
+//  }
+//  if (![[sd_preview window] isVisible]) {
+//    [sd_preview refresh];
+//  }
+//  [sd_preview showWindow:sender];
 }
 
-- (void)templateDidChange:(NSNotification *)aNotification {
-  if (sd_preview && [[sd_preview window] isVisible]) {
-    [sd_preview refresh];
-  }  
-}
+//- (void)templateDidChange:(NSNotification *)aNotification {
+//  if (sd_preview && [[sd_preview window] isVisible]) {
+//    [sd_preview refresh];
+//  }  
+//}
 
 - (SdefTemplate *)selectedTemplate {
   return sd_template;
 }
 
 - (void)setSelectedTemplate:(SdefTemplate *)aTemplate {
-  if (sd_template) {
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:SdefTemplateDidChangeNotification object:sd_template];
-  }
+//  if (sd_template) {
+//    [[NSNotificationCenter defaultCenter] removeObserver:self name:SdefTemplateDidChangeNotification object:sd_template];
+//  }
   sd_template = aTemplate;
-  [sd_preview setTemplate:sd_template];
+//  [sd_preview setTemplate:sd_template];
   [generator setTemplate:sd_template];
-  if (sd_template) {
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(templateDidChange:)
-                                                 name:SdefTemplateDidChangeNotification
-                                               object:sd_template];
-  }
-  [self templateDidChange:nil];
+//  if (sd_template) {
+//    [[NSNotificationCenter defaultCenter] addObserver:self
+//                                             selector:@selector(templateDidChange:)
+//                                                 name:SdefTemplateDidChangeNotification
+//                                               object:sd_template];
+//  }
+//  [self templateDidChange:nil];
 }
 
 - (IBAction)changeTemplate:(id)sender {
