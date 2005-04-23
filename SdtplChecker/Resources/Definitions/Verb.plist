@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>Direct-Parameter</key>
+	<array>
+		<string>Type-List</string>
+		<string>Type</string>
+		<string>Description</string>
+	</array>
+	<key>Parameter</key>
+	<array>
+		<string>Type-List</string>
+		<string>Type</string>
+		<string>Name</string>
+		<string>Description</string>
+	</array>
+	<key>Parameters</key>
+	<array>
+		<array>
+			<string>Required-Parameter</string>
+			<string>Optional-Parameter</string>
+		</array>
+	</array>
+	<key>Result</key>
+	<array>
+		<string>Type-List</string>
+		<string>Type</string>
+		<string>Description</string>
+	</array>
+	<key>Verb</key>
+	<array>
+		<string>Name</string>
+		<string>Anchor</string>
+		<string>Description</string>
+		<array>
+			<string>Parameters</string>
+			<string>Direct-Parameter</string>
+			<string>Result</string>
+		</array>
+	</array>
+</dict>
+</plist>

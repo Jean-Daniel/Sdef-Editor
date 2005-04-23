@@ -1,0 +1,18 @@
+{
+    IBClasses = (
+        {CLASS = FirstResponder; LANGUAGE = ObjC; SUPERCLASS = NSObject; }, 
+        {CLASS = SKImageAndTextCell; LANGUAGE = ObjC; SUPERCLASS = NSTextFieldCell; }, 
+        {
+            ACTIONS = {open = id; }; 
+            CLASS = SdtplChecker; 
+            LANGUAGE = ObjC; 
+            OUTLETS = {
+                errors = NSArrayController; 
+                templatesTree = NSOutlineView; 
+                warnings = NSWindow; 
+            }; 
+            SUPERCLASS = NSObject; 
+        }
+    ); 
+    IBVersion = 1; 
+}

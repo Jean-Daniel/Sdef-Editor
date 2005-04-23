@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>Toc</key>
+	<array>
+		<string>Name</string>
+		<array>
+			<string>Toc-Suite</string>
+		</array>
+	</array>
+	<key>Toc-Class</key>
+	<array>
+		<string>Name</string>
+		<string>Description</string>
+	</array>
+	<key>Toc-Classes</key>
+	<array>
+		<array>
+			<string>Toc-Class</string>
+		</array>
+	</array>
+	<key>Toc-Command</key>
+	<array>
+		<string>Name</string>
+		<string>Description</string>
+	</array>
+	<key>Toc-Commands</key>
+	<array>
+		<array>
+			<string>Toc-Command</string>
+		</array>
+	</array>
+	<key>Toc-Event</key>
+	<array>
+		<string>Name</string>
+		<string>Description</string>
+	</array>
+	<key>Toc-Events</key>
+	<array>
+		<array>
+			<string>Toc-Event</string>
+		</array>
+	</array>
+	<key>Toc-Suite</key>
+	<array>
+		<string>Name</string>
+		<string>Description</string>
+		<array>
+			<string>Toc-Classes</string>
+			<string>Toc-Commands</string>
+			<string>Toc-Events</string>
+		</array>
+	</array>
+</dict>
+</plist>
