@@ -22,7 +22,7 @@ enum {
 @class SdefObject, SdefDictionary;
 @class SdefTemplate, SdefClassManager;
 @interface SdtplGenerator : NSObject {
-  struct sd_gnflags {
+  struct _sd_gnFlags {
     unsigned int toc:4; /* OK */
     unsigned int css:4; /* OK */
     unsigned int index:1;
@@ -45,7 +45,7 @@ enum {
     unsigned int existingFile:2;
     unsigned int useBlockFormat:1;
     unsigned int:2;
-  } gnflags;
+  } sd_gnFlags;
   NSString *sd_path;
   NSString *sd_base;
   /* Template Bundle */
@@ -72,6 +72,12 @@ enum {
 - (BOOL)externalCss;
 - (unsigned)css;
 - (void)setCss:(unsigned)css;
+
+- (NSString *)tocFile;
+- (void)setTocFile:(NSString *)aFile;
+
+- (NSString *)cssFile;
+- (void)setCssFile:(NSString *)aFile;
 
 - (BOOL)sortSuites;
 - (void)setSortSuites:(BOOL)sort;
