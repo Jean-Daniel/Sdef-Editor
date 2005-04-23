@@ -30,6 +30,7 @@ static NSDictionary *SdefTemplatesAtPath(NSString *path);
 
 static NSString * const kSdtplVersion = @"Version"; /* Number */
 static NSString * const kSdtplDisplayName = @"DisplayName"; /* NSString */
+static NSString * const kSdtplDescriptionFile = @"Description";
 static NSString * const kSdtplStyleSheets = @"HTMLStyleSheets"; /* NSDictionary */
 static NSString * const kSdtplTemplateFormat = @"TemplateFormat"; /* NSString */
 static NSString * const kSdtplRequireFileType = @"RequireFileType"; /* NSString */
@@ -82,6 +83,7 @@ NSString * const SdtplDefinitionEventsKey = @"Events";
   [sd_name release];
   [sd_infos release];
   [sd_styles release];
+  [sd_information release];
   [super dealloc];
 }
 
@@ -99,8 +101,10 @@ NSString * const SdtplDefinitionEventsKey = @"Events";
   sd_infos = nil;
   [sd_styles release];
   sd_styles = nil;
+  [sd_information release];
+  sd_information = nil;
   sd_selectedStyle = nil;
-  bzero(&tp_flags, sizeof(tp_flags));
+  bzero(&sd_tpFlags, sizeof(sd_tpFlags));
 }
 
 - (void)loadInfo:(NSFileWrapper *)tpl {
@@ -119,7 +123,7 @@ NSString * const SdtplDefinitionEventsKey = @"Events";
   
   /* Set format */
   if ([sd_infos objectForKey:kSdtplTemplateFormat]) {
-    tp_flags.html = [[sd_infos objectForKey:kSdtplTemplateFormat] caseInsensitiveCompare:@"html"] == 0;
+    sd_tpFlags.html = [[sd_infos objectForKey:kSdtplTemplateFormat] caseInsensitiveCompare:@"html"] == 0;
   }
   
   /* Set Defaults Strings: AddValue set value if key does not exist, else do nothing */
@@ -136,8 +140,8 @@ NSString * const SdtplDefinitionEventsKey = @"Events";
   
   /* Check CSS */
   NSDictionary *styles = [sd_infos objectForKey:kSdtplStyleSheets];
-  if (tp_flags.html && [styles count]) {
-    tp_flags.css = kSdefTemplateCSSInline | kSdefTemplateCSSExternal;
+  if (sd_tpFlags.html && [styles count]) {
+    sd_tpFlags.css = kSdefTemplateCSSInline | kSdefTemplateCSSExternal;
     /* Load CSS */
     sd_styles = [[NSMutableArray alloc] initWithCapacity:[styles count]];
     id keys = [styles keyEnumerator];
@@ -152,7 +156,7 @@ NSString * const SdtplDefinitionEventsKey = @"Events";
     [self setSelectedStyle:[sd_styles objectAtIndex:0]];
   } else {
     [self setSelectedStyle:nil];
-    tp_flags.css = kSdefTemplateCSSNone;
+    sd_tpFlags.css = kSdefTemplateCSSNone;
   }
 }
 
@@ -173,7 +177,7 @@ NSString * const SdtplDefinitionEventsKey = @"Events";
     return;
   } else {
     [sd_def retain];
-    Class tplClass = tp_flags.html ? [SKXMLTemplate class] : [SKTemplate class];
+    Class tplClass = sd_tpFlags.html ? [SKXMLTemplate class] : [SKTemplate class];
     sd_tpls = [[NSMutableDictionary alloc] initWithCapacity:[sd_def count]];
     NSString *key;
     id keys = [sd_def keyEnumerator];
@@ -187,18 +191,18 @@ NSString * const SdtplDefinitionEventsKey = @"Events";
     }
   }
   
-  tp_flags.toc = kSdefTemplateTOCNone;
+  sd_tpFlags.toc = kSdefTemplateTOCNone;
   NSDictionary *toc = [sd_def objectForKey:SdtplDefinitionTocKey];
   if (toc) {
-    tp_flags.toc |= kSdefTemplateTOCExternal;
+    sd_tpFlags.toc |= kSdefTemplateTOCExternal;
     if ([[toc objectForKey:@"Required"] boolValue])
-      tp_flags.toc |= kSdefTemplateTOCRequired;
+      sd_tpFlags.toc |= kSdefTemplateTOCRequired;
   }
   if ([[sd_tpls objectForKey:SdtplDefinitionDictionaryKey] blockWithName:@"Table_Of_Content"]) {
-    tp_flags.toc |= kSdefTemplateTOCDictionary;  
+    sd_tpFlags.toc |= kSdefTemplateTOCDictionary;  
   }
   if ([[sd_tpls objectForKey:SdtplDefinitionIndexKey] blockWithName:@"Table_Of_Content"]) {
-    tp_flags.toc |= kSdefTemplateTOCIndex;  
+    sd_tpFlags.toc |= kSdefTemplateTOCIndex;  
   }
 }
 
@@ -218,6 +222,14 @@ NSString * const SdtplDefinitionEventsKey = @"Events";
 }
 
 #pragma mark -
+- (NSString *)information {
+  if (!sd_information) {
+    NSString *file = [sd_infos objectForKey:kSdtplDescriptionFile];
+    sd_information = file ? [[sd_path stringByAppendingPathComponent:file] copy]: nil;
+  }
+  return sd_information;
+}
+
 - (NSString *)displayName {
   if (!sd_name) {
     sd_name = [[sd_infos objectForKey:kSdtplDisplayName] retain];
@@ -272,39 +284,39 @@ NSString * const SdtplDefinitionEventsKey = @"Events";
 
 #pragma mark -
 - (BOOL)isHtml {
-  return tp_flags.html;
+  return sd_tpFlags.html;
 }
 
 - (unsigned)toc {
-  return tp_flags.toc;
+  return sd_tpFlags.toc;
 }
 
 - (BOOL)indexToc {
-  return (tp_flags.toc & kSdefTemplateTOCIndex) != 0;
+  return (sd_tpFlags.toc & kSdefTemplateTOCIndex) != 0;
 }
 - (BOOL)dictionaryToc {
-  return (tp_flags.toc & kSdefTemplateTOCDictionary) != 0;
+  return (sd_tpFlags.toc & kSdefTemplateTOCDictionary) != 0;
 }
 - (BOOL)externalToc {
-  return (tp_flags.toc & kSdefTemplateTOCExternal) != 0;
+  return (sd_tpFlags.toc & kSdefTemplateTOCExternal) != 0;
 }
 - (BOOL)requiredToc {
-  return (tp_flags.toc & kSdefTemplateTOCRequired) != 0;
+  return (sd_tpFlags.toc & kSdefTemplateTOCRequired) != 0;
 }
 
 - (void)setToc:(unsigned)toc {
-//  if (toc != tp_flags.toc) {
-    tp_flags.toc = toc;
+//  if (toc != sd_tpFlags.toc) {
+    sd_tpFlags.toc = toc;
 //    [self notifyChange];
 //  }
 }
 
 - (unsigned)css {
-  return tp_flags.css;
+  return sd_tpFlags.css;
 }
 /* Don't notify css change. */
 - (void)setCss:(unsigned)css {
-  tp_flags.css = css;
+  sd_tpFlags.css = css;
 }
 
 @end
@@ -328,7 +340,7 @@ static NSDictionary *SdefTemplatesAtPath(NSString *path) {
       id tpl = nil;
       @try {
         tpl = [[SdefTemplate alloc] initWithPath:[path stringByAppendingPathComponent:name]];
-        [templates setObject:tpl forKey:[tpl displayName]];
+        [templates setObject:tpl forKey:[tpl menuName]];
       } @catch (id exception) {
         SKCLogException(exception);
       }

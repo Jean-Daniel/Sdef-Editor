@@ -49,13 +49,14 @@ extern NSString * const SdefTemplateDidChangeNotification;
 @interface SdefTemplate : NSObject {
   NSString *sd_path;
   NSString *sd_name;
-  struct _tp_flags {
+  struct _sd_tpFlags {
     unsigned int css:4;
     unsigned int toc:4;
     unsigned int html:1;
     unsigned int :7;
-  } tp_flags;
+  } sd_tpFlags;
   NSArray *sd_styles;
+  NSString *sd_information;
   NSDictionary *sd_selectedStyle; /* Weak */
   NSMutableDictionary *sd_infos, *sd_tpls, *sd_def;
 }
@@ -65,6 +66,7 @@ extern NSString * const SdefTemplateDidChangeNotification;
 - (NSString *)path;
 - (void)setPath:(NSString *)path;
 
+- (NSString *)information;
 - (NSString *)displayName;
 - (NSString *)extension;
 - (NSString *)menuName;
