@@ -1,7 +1,12 @@
 {
     IBClasses = (
         {
-            ACTIONS = {exportASDictionary = id; exportTerminology = id; openSymbolBrowser = id; }; 
+            ACTIONS = {
+                exportASDictionary = id; 
+                exportTerminology = id; 
+                exportUsingTemplate = id; 
+                openSymbolBrowser = id; 
+            }; 
             CLASS = FirstResponder; 
             LANGUAGE = ObjC; 
             SUPERCLASS = NSObject; 

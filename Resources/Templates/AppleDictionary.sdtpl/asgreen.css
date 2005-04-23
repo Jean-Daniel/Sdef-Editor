@@ -19,4 +19,6 @@ dd { margin-bottom: 1em; }
 .lang_word {font-family: "Verdana", sans; color: green; font-size: 12px; }
 .description {font-family: "Verdana", sans; color: #555555; font-style: italic; font-size: 12px; }
 
+.links { font-family: "Verdana", sans; color: green; }
+
 .result { }

@@ -12,7 +12,7 @@
 				<string>sdtpl</string>
 			</array>
 			<key>CFBundleTypeIconFile</key>
-			<string>Template</string>
+			<string>SdtplBundle</string>
 			<key>CFBundleTypeName</key>
 			<string>SdefTemplateFile</string>
 			<key>CFBundleTypeRole</key>
@@ -63,6 +63,20 @@
 			</array>
 			<key>CFBundleTypeRole</key>
 			<string>Viewer</string>
+			<key>LSTypeIsPackage</key>
+			<false/>
+		</dict>
+		<dict>
+			<key>CFBundleTypeExtensions</key>
+			<array>
+				<string>asdictionary</string>
+			</array>
+			<key>CFBundleTypeIconFile</key>
+			<string>Dictionary</string>
+			<key>CFBundleTypeName</key>
+			<string>AppleScriptDictionary</string>
+			<key>CFBundleTypeRole</key>
+			<string>None</string>
 			<key>LSTypeIsPackage</key>
 			<false/>
 		</dict>

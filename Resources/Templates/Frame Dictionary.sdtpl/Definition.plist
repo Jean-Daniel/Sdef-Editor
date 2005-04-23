@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>Dictionary</key>
+	<dict>
+		<key>File</key>
+		<string>dictionary.tpl</string>
+		<key>RemoveBlockLines</key>
+		<false/>
+		<key>SingleFile</key>
+		<false/>
+	</dict>
+	<key>Index</key>
+	<dict>
+		<key>File</key>
+		<string>index.tpl</string>
+	</dict>
+	<key>Toc</key>
+	<dict>
+		<key>File</key>
+		<string>toc.tpl</string>
+		<key>Required</key>
+		<true/>
+	</dict>
+</dict>
+</plist>

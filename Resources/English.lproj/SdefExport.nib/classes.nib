@@ -2,10 +2,10 @@
     IBClasses = (
         {CLASS = FirstResponder; LANGUAGE = ObjC; SUPERCLASS = NSObject; }, 
         {
-            ACTIONS = {close = id; export = id; include = id; }; 
+            ACTIONS = {close = id; include = id; next = id; }; 
             CLASS = SdefExporterController; 
             LANGUAGE = ObjC; 
-            OUTLETS = {includes = NSArrayController; }; 
+            OUTLETS = {controller = NSObjectController; includes = NSArrayController; }; 
             SUPERCLASS = NSWindowController; 
         }
     ); 

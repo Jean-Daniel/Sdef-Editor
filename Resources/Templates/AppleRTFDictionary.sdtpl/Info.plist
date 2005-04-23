@@ -4,25 +4,17 @@
 <dict>
 	<key>DisplayName</key>
 	<string>Apple Dictionary RTF</string>
-	<key>InlineToc</key>
-	<false/>
-	<key>DictionaryTemplate</key>
-	<string>Template.rtf</string>
-	<key>PreviewFile</key>
-	<string></string>
-	<key>RemoveBlockLine</key>
-	<true/>
-	<key>Templates</key>
+	<key>RequireFileType</key>
+	<string>rtf</string>
+	<key>TemplateStrings</key>
 	<dict>
-		<key>Direct_Parameter_Description</key>
+		<key>Direct-Parameter.Description</key>
 		<string>-- %@</string>
-		<key>Parameter_Description</key>
+		<key>Parameter.Description</key>
 		<string>-- %@</string>
-		<key>Property_Description</key>
+		<key>Property.Description</key>
 		<string>-- %@</string>
-		<key>ReadOnly</key>
-		<string>[r/o]</string>
-		<key>Result_Description</key>
+		<key>Result.Description</key>
 		<string>-- %@</string>
 	</dict>
 	<key>Version</key>
