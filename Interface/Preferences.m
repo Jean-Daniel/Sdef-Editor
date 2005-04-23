@@ -28,17 +28,17 @@
 }
 
 - (BOOL)buildInSdp {
-  return sd_prflags.sdp;
+  return sd_prFlags.sdp;
 }
 - (void)setBuildInSdp:(BOOL)flag {
-  sd_prflags.sdp = (flag) ? 1 : 0;
+  sd_prFlags.sdp = (flag) ? 1 : 0;
 }
 
 - (BOOL)buildInRez {
-  return sd_prflags.rez;
+  return sd_prFlags.rez;
 }
 - (void)setBuildInRez:(BOOL)flag {
-  sd_prflags.rez = (flag) ? 1 : 0;
+  sd_prFlags.rez = (flag) ? 1 : 0;
 }
 
 - (NSString *)sdp {

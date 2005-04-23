@@ -67,7 +67,7 @@
 
 - (void)createContent {
   [super createContent];
-  sd_flags.hasDocumentation = 1;
+  sd_soFlags.hasDocumentation = 1;
   
   id child = [[SdefCollection allocWithZone:[self zone]] initWithName:NSLocalizedStringFromTable(@"Types", @"SdefLibrary", @"Types Collection default name")];
   [child setContentType:[SdefEnumeration class]];

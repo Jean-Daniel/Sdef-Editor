@@ -36,18 +36,18 @@
 - (id)initWithNibName:(NSString *)name {
   if (self = [super init]) {
     id nib = [[NSNib alloc] initWithNibNamed:name bundle:nil];
-    [nib instantiateNibWithOwner:self topLevelObjects:&_nibTopLevelObjects];
-    [_nibTopLevelObjects retain];
-    [_nibTopLevelObjects makeObjectsPerformSelector:@selector(release)];
+    [nib instantiateNibWithOwner:self topLevelObjects:&sd_nibTopLevelObjects];
+    [sd_nibTopLevelObjects retain];
+    [sd_nibTopLevelObjects makeObjectsPerformSelector:@selector(release)];
     [nib release];
   }
   return self;
 }
 
 - (void)dealloc {
-  [_types release];
-  [_object release];
-  [_nibTopLevelObjects release];
+  [sd_types release];
+  [sd_object release];
+  [sd_nibTopLevelObjects release];
   [super dealloc];
 }
 
@@ -62,18 +62,18 @@
 }
 
 - (SdefObject *)object {
-  return _object;
+  return sd_object;
 }
 
 - (void)setObject:(SdefObject *)newObject {
-  if (_object != newObject) {
+  if (sd_object != newObject) {
     [self willChangeValueForKey:@"object"];
-    [_object release];
-    _object = [newObject retain];
+    [sd_object release];
+    sd_object = [newObject retain];
     [self didChangeValueForKey:@"object"];
   }
-  [_types release];
-  _types = nil;
+  [sd_types release];
+  sd_types = nil;
 }
 
 - (void)selectObject:(SdefObject*)object {
@@ -102,11 +102,11 @@
 }
 
 - (NSArray *)types {
-  if (!_types) {
-    _types = [[self classManager] types];
-    [_types retain];
+  if (!sd_types) {
+    sd_types = [[self classManager] types];
+    [sd_types retain];
   }
-  return _types;
+  return sd_types;
 }
 
 - (NSArray *)classes {

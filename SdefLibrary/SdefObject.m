@@ -36,7 +36,7 @@ NSString * const SdefObjectDidChangeNameNotification = @"SdefObjectDidChangeName
 #pragma mark Protocols Implementations
 - (id)copyWithZone:(NSZone *)aZone {
   SdefObject *copy = [super copyWithZone:aZone];
-  copy->sd_flags = sd_flags;  
+  copy->sd_soFlags = sd_soFlags;  
   copy->sd_name = [sd_name copyWithZone:aZone];
   copy->sd_icon = [sd_icon copyWithZone:aZone];
   copy->sd_comments = [sd_comments copyWithZone:aZone];
@@ -50,7 +50,7 @@ NSString * const SdefObjectDidChangeNameNotification = @"SdefObjectDidChangeName
   if (self = [super initWithCoder:aCoder]) {
     unsigned length;
     const uint8_t*buffer = [aCoder decodeBytesForKey:@"SOFlags" returnedLength:&length];
-    memcpy(&sd_flags, buffer, length);
+    memcpy(&sd_soFlags, buffer, length);
 
     sd_name = [[aCoder decodeObjectForKey:@"SOName"] retain];
     sd_icon = [[aCoder decodeObjectForKey:@"SOIcon"] retain];
@@ -63,7 +63,7 @@ NSString * const SdefObjectDidChangeNameNotification = @"SdefObjectDidChangeName
 
 - (void)encodeWithCoder:(NSCoder *)aCoder {
   [super encodeWithCoder:aCoder];
-  [aCoder encodeBytes:(const void *)&sd_flags length:sizeof(sd_flags) forKey:@"SOFlags"];
+  [aCoder encodeBytes:(const void *)&sd_soFlags length:sizeof(sd_soFlags) forKey:@"SOFlags"];
   [aCoder encodeObject:sd_name forKey:@"SOName"];
   [aCoder encodeObject:sd_icon forKey:@"SOIcon"];
   [aCoder encodeObject:sd_comments forKey:@"SOComments"];
@@ -366,14 +366,14 @@ NSString * const SdefObjectDidChangeNameNotification = @"SdefObjectDidChangeName
 }
 
 - (BOOL)isEditable {
-  return sd_flags.editable == 1;
+  return sd_soFlags.editable == 1;
 }
 - (void)setEditable:(BOOL)flag {
   [self setEditable:flag recursive:NO];
 }
 
 - (void)setEditable:(BOOL)flag recursive:(BOOL)recu {
-  sd_flags.editable = (flag) ? 1 : 0;
+  sd_soFlags.editable = (flag) ? 1 : 0;
   if (recu) {
     [sd_documentation setEditable:flag];
     [sd_synonyms setEditable:flag recursive:recu];
@@ -386,19 +386,19 @@ NSString * const SdefObjectDidChangeNameNotification = @"SdefObjectDidChangeName
 }
 
 - (BOOL)isRemovable {
-  return sd_flags.removable;
+  return sd_soFlags.removable;
 }
 - (void)setRemovable:(BOOL)removable {
-  sd_flags.removable = (removable) ? 1 : 0;
+  sd_soFlags.removable = (removable) ? 1 : 0;
 }
 
 #pragma mark Optionals children
 - (BOOL)hasDocumentation {
-  return sd_flags.hasDocumentation;
+  return sd_soFlags.hasDocumentation;
 }
 
 - (SdefDocumentation *)documentation {
-  if (!sd_documentation && sd_flags.hasDocumentation) {
+  if (!sd_documentation && sd_soFlags.hasDocumentation) {
     SdefDocumentation *doc = [[SdefDocumentation allocWithZone:[self zone]] init];
     [self setDocumentation:doc];
     [doc release];
@@ -417,11 +417,11 @@ NSString * const SdefObjectDidChangeNameNotification = @"SdefObjectDidChangeName
 }
 
 - (BOOL)hasSynonyms {
-  return sd_flags.hasSynonyms;
+  return sd_soFlags.hasSynonyms;
 }
 
 - (SdefCollection *)synonyms {
-  if (!sd_synonyms && sd_flags.hasSynonyms) {
+  if (!sd_synonyms && sd_soFlags.hasSynonyms) {
     id synonyms = [[SdefCollection allocWithZone:[self zone]] initWithName:NSLocalizedStringFromTable(@"Synonyms", @"SdefLibrary", @"Synonyms Collection name")];
     [synonyms setContentType:[SdefSynonym class]];
     [synonyms setElementName:@"synonyms"];
@@ -440,7 +440,7 @@ NSString * const SdefObjectDidChangeNameNotification = @"SdefObjectDidChangeName
 }
 
 - (BOOL)hasImplementation {
-  return sd_flags.hasImplementation;
+  return sd_soFlags.hasImplementation;
 }
 - (SdefImplementation *)impl {
   return nil;
@@ -631,7 +631,7 @@ NSString * const SdefObjectDidChangeNameNotification = @"SdefObjectDidChangeName
 
 #pragma mark -
 - (void)createContent {
-  sd_flags.hasImplementation = 1;
+  sd_soFlags.hasImplementation = 1;
 }
 
 - (void)setEditable:(BOOL)flag recursive:(BOOL)recu {
@@ -642,7 +642,7 @@ NSString * const SdefObjectDidChangeNameNotification = @"SdefObjectDidChangeName
 }
 
 - (SdefImplementation *)impl {
-  if (!sd_impl && sd_flags.hasImplementation) {
+  if (!sd_impl && sd_soFlags.hasImplementation) {
     SdefImplementation *impl = [[SdefImplementation allocWithZone:[self zone]] init];
     [self setImpl:impl];
     [impl release];
@@ -661,15 +661,15 @@ NSString * const SdefObjectDidChangeNameNotification = @"SdefObjectDidChangeName
 }
 
 - (BOOL)isHidden {
-  return sd_flags.hidden;
+  return sd_soFlags.hidden;
 }
 
 - (void)setHidden:(BOOL)flag {
   flag = flag ? 1 : 0;
-  if (sd_flags.hidden != flag) {
-    [[[[self document] undoManager] prepareWithInvocationTarget:self] setHidden:sd_flags.hidden];
+  if (sd_soFlags.hidden != flag) {
+    [[[[self document] undoManager] prepareWithInvocationTarget:self] setHidden:sd_soFlags.hidden];
     //[[[self document] undoManager] setActionName:@"Hidden"];
-    sd_flags.hidden = flag;
+    sd_soFlags.hidden = flag;
   }
 }
 

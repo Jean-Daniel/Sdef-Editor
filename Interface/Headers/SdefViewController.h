@@ -14,9 +14,9 @@
   IBOutlet NSObjectController *ownerController;
   IBOutlet NSObjectController *objectController;
 @private
-  NSArray *_types;
-  SdefObject *_object;
-  NSArray *_nibTopLevelObjects;
+  NSArray *sd_types;
+  SdefObject *sd_object;
+  NSArray *sd_nibTopLevelObjects;
 }
 
 - (id)initWithNibName:(NSString *)name;

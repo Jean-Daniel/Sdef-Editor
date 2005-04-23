@@ -53,14 +53,14 @@
 
 #pragma mark -
 - (BOOL)isOptional {
-  return sd_flags.optional;
+  return sd_soFlags.optional;
 }
 
 - (void)setOptional:(BOOL)newOptional {
   newOptional = newOptional ? 1 : 0;
-  if (sd_flags.optional != newOptional) {
-    [[[[self document] undoManager] prepareWithInvocationTarget:self] setOptional:sd_flags.optional];
-    sd_flags.optional = newOptional;
+  if (sd_soFlags.optional != newOptional) {
+    [[[[self document] undoManager] prepareWithInvocationTarget:self] setOptional:sd_soFlags.optional];
+    sd_soFlags.optional = newOptional;
   }
 }
 
@@ -130,14 +130,14 @@
 
 #pragma mark -
 - (BOOL)isOptional {
-  return sd_flags.optional;
+  return sd_soFlags.optional;
 }
 
 - (void)setOptional:(BOOL)newOptional {
   newOptional = newOptional ? 1 : 0;
-  if (sd_flags.optional != newOptional) {
-    [[[[self document] undoManager] prepareWithInvocationTarget:self] setOptional:sd_flags.optional];
-    sd_flags.optional = newOptional;
+  if (sd_soFlags.optional != newOptional) {
+    [[[[self document] undoManager] prepareWithInvocationTarget:self] setOptional:sd_soFlags.optional];
+    sd_soFlags.optional = newOptional;
   }
 }
 

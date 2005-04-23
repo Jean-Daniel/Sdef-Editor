@@ -60,7 +60,7 @@ extern NSString *CocoaNameForSdefName(NSString *cocoa, BOOL isClass);
 @class SdefDictionary, SdefSuite, SdefCollection;
 @interface SdefObject : SKTreeNode <NSCopying, NSCoding> {
 @protected
-  struct sd_flags {
+  struct _sd_soFlags {
     unsigned int hidden:1;
     unsigned int optional:1;
     unsigned int editable:1;
@@ -69,7 +69,7 @@ extern NSString *CocoaNameForSdefName(NSString *cocoa, BOOL isClass);
     unsigned int notInProperties:1;
     unsigned int hasDocumentation:1;
     unsigned int hasImplementation:1;
-  } sd_flags;
+  } sd_soFlags;
 @private
   NSImage *sd_icon;
   NSString *sd_name;

@@ -51,7 +51,7 @@ static inline BOOL SdefEditorExistsForItem(SdefObject *item) {
 
 - (id)initWithOwner:(id)owner {
   if (self = [super initWithWindowNibName:@"SdefDocument" owner:(owner) ? : self]) {
-    _viewControllers = [[NSMutableDictionary alloc] initWithCapacity:16];
+    sd_viewControllers = [[NSMutableDictionary alloc] initWithCapacity:16];
     
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(didAppendNode:)
@@ -87,7 +87,7 @@ static inline BOOL SdefEditorExistsForItem(SdefObject *item) {
 
 - (void)dealloc {
   [[NSNotificationCenter defaultCenter] removeObserver:self];
-  [_viewControllers release];
+  [sd_viewControllers release];
   [super dealloc];
 }
 
@@ -195,8 +195,8 @@ static inline BOOL SdefEditorExistsForItem(SdefObject *item) {
 }
 
 - (void)windowWillClose:(NSNotification *)notification {
-  [[_viewControllers allValues] makeObjectsPerformSelector:@selector(setObject:) withObject:nil];
-  [[_viewControllers allValues] makeObjectsPerformSelector:@selector(documentWillClose:) withObject:[self document]];
+  [[sd_viewControllers allValues] makeObjectsPerformSelector:@selector(setObject:) withObject:nil];
+  [[sd_viewControllers allValues] makeObjectsPerformSelector:@selector(documentWillClose:) withObject:[self document]];
 }
 
 - (NSString *)windowTitleForDocumentDisplayName:(NSString *)displayName {
@@ -233,7 +233,7 @@ static inline BOOL SdefEditorExistsForItem(SdefObject *item) {
     unsigned idx = [inspector indexOfTabViewItemWithIdentifier:str];
     NSAssert1(idx != NSNotFound, @"Unable to find tab item for identifier \"%@\"", str);
     [inspector selectTabViewItemAtIndex:idx];
-    SdefViewController *ctrl = [_viewControllers objectForKey:str];
+    SdefViewController *ctrl = [sd_viewControllers objectForKey:str];
     [ctrl setObject:item];
     [ctrl selectObject:selection];
   }
@@ -264,7 +264,7 @@ static inline BOOL SdefEditorExistsForItem(SdefObject *item) {
 
 - (void)tabView:(NSTabView *)tabView willSelectTabViewItem:(NSTabViewItem *)tabViewItem {
   id key = [tabViewItem identifier];
-  if (![_viewControllers objectForKey:key]) {
+  if (![sd_viewControllers objectForKey:key]) {
     id ctrl;
     id class = nil;
     id nibName = nil;
@@ -298,7 +298,7 @@ static inline BOOL SdefEditorExistsForItem(SdefObject *item) {
       ctrl = [[NSClassFromString(class) alloc] initWithNibName:nibName];
       NSAssert1(ctrl != nil, @"Unable to instanciate controller: %@", class);
       if (ctrl) {
-        [_viewControllers setObject:ctrl forKey:key];
+        [sd_viewControllers setObject:ctrl forKey:key];
         [ctrl release];
         [tabViewItem setView:[ctrl sdefView]];
       }

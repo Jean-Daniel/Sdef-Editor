@@ -18,7 +18,7 @@ extern NSString * const SdefDictionarySelectionDidChangeNotification;
   IBOutlet NSOutlineView *outline;
   IBOutlet NSTabView *inspector;
   
-  NSMutableDictionary *_viewControllers;
+  NSMutableDictionary *sd_viewControllers;
 }
 
 - (id)initWithOwner:(id)owner;

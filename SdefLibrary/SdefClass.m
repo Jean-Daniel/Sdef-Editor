@@ -61,8 +61,8 @@
 
 - (void)createContent {
   [super createContent];
-  sd_flags.hasSynonyms = 1;
-  sd_flags.hasDocumentation = 1;
+  sd_soFlags.hasSynonyms = 1;
+  sd_soFlags.hasDocumentation = 1;
 
   SdefContents *contents = [[SdefContents allocWithZone:[self zone]] init];
   [self setContents:contents];
@@ -338,7 +338,7 @@
 
 - (void)createContent {
   [super createContent];
-  sd_flags.hasSynonyms = 1;
+  sd_soFlags.hasSynonyms = 1;
 }
 
 #pragma mark -
@@ -363,13 +363,13 @@
 }
 
 - (BOOL)isNotInProperties {
-  return sd_flags.notInProperties;
+  return sd_soFlags.notInProperties;
 }
 - (void)setNotInProperties:(BOOL)flag {
   flag = flag ? 1 : 0;
-  if (flag != sd_flags.notInProperties) {
-    [[[[self document] undoManager] prepareWithInvocationTarget:self] setNotInProperties:sd_flags.notInProperties];
-    sd_flags.notInProperties = flag;
+  if (flag != sd_soFlags.notInProperties) {
+    [[[[self document] undoManager] prepareWithInvocationTarget:self] setNotInProperties:sd_soFlags.notInProperties];
+    sd_soFlags.notInProperties = flag;
   }
 }
 

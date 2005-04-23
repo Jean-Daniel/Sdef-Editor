@@ -40,8 +40,8 @@
 
 - (void)createContent {
   [super createContent];
-  sd_flags.hasSynonyms = 1;
-  sd_flags.hasDocumentation = 1;
+  sd_soFlags.hasSynonyms = 1;
+  sd_soFlags.hasDocumentation = 1;
 }
 
 @end
@@ -77,7 +77,7 @@
 }
 
 - (void)createContent {
-  sd_flags.hasSynonyms = 1;
+  sd_soFlags.hasSynonyms = 1;
 }
 
 @end

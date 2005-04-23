@@ -12,11 +12,11 @@
   NSString *sdp;
   NSString *rez;
   
-  struct _sd_prflags {
+  struct _sd_prFlags {
     unsigned int sdp:1;
     unsigned int rez:1;
     unsigned int:6;
-  } sd_prflags;
+  } sd_prFlags;
 }
 
 - (BOOL)buildInSdp;

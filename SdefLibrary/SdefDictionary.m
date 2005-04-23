@@ -52,7 +52,7 @@
 }
 
 - (void)createContent {
-  sd_flags.hasDocumentation = 1;
+  sd_soFlags.hasDocumentation = 1;
 }
 
 - (NSString *)title {
