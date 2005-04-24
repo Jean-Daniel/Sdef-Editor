@@ -220,7 +220,6 @@
 				98298DCA07AE822E00F09708,
 				98A57DA007EF6F4E00F061C5,
 				984EE82407F0A01F00828BC0,
-				980C435907FE092400B6F91A,
 			);
 			isa = PBXGroup;
 			path = Resources;
@@ -305,7 +304,7 @@
 				GCC_ENABLE_FIX_AND_CONTINUE = NO;
 				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
 				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
-				GCC_OPTIMIZATION_LEVEL = s;
+				GCC_OPTIMIZATION_LEVEL = 2;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREPROCESSOR_DEFINITIONS = "NS_BLOCK_ASSERTIONS DEBUG_ASSERT_PRODUCTION_CODE";
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
@@ -586,40 +585,6 @@
 			isa = PBXBuildFile;
 			settings = {
 			};
-		};
-		980C435007FE08D700B6F91A = {
-			fileEncoding = 4;
-			isa = PBXFileReference;
-			lastKnownFileType = sourcecode.c.h;
-			path = SdtplPreview.h;
-			refType = 4;
-			sourceTree = "<group>";
-		};
-		980C435107FE08D700B6F91A = {
-			fileEncoding = 4;
-			isa = PBXFileReference;
-			lastKnownFileType = sourcecode.c.objc;
-			path = SdtplPreview.m;
-			refType = 4;
-			sourceTree = "<group>";
-		};
-		980C435907FE092400B6F91A = {
-			children = (
-				980C435A07FE092400B6F91A,
-			);
-			isa = PBXVariantGroup;
-			name = SdtplPreview.nib;
-			path = "";
-			refType = 4;
-			sourceTree = "<group>";
-		};
-		980C435A07FE092400B6F91A = {
-			isa = PBXFileReference;
-			lastKnownFileType = wrapper.nib;
-			name = English;
-			path = English.lproj/SdtplPreview.nib;
-			refType = 4;
-			sourceTree = "<group>";
 		};
 		980D7FE607F4C66E00E130B0 = {
 			children = (
@@ -2938,8 +2903,6 @@
 		};
 		98C77F8C07D9C8BF006D9CC1 = {
 			children = (
-				980C435007FE08D700B6F91A,
-				980C435107FE08D700B6F91A,
 				9825DDC807F4AC16006D5F5C,
 				9825DDC907F4AC16006D5F5C,
 				984B7D9407F8B3B7004C5C60,
