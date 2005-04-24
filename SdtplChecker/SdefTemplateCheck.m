@@ -8,6 +8,7 @@
 
 #import "SdefTemplateCheck.h"
 #import "SKTemplateParser.h"
+#import "ShadowMacros.h"
 #import "SdefTemplate.h"
 #import "SKTemplate.h"
 
@@ -229,7 +230,9 @@ static const unsigned SdefDefinitionRequiredKeysCount = 1;
   NSString *key;
   while (key = [keys nextObject]) {
     if (![stdKeys containsObject:key]) {
-      [self addWarning:@"Definition.plist: Unknown key \"%@\"", key];
+      [self addError:@"Definition.plist: Unknown key \"%@\"", key];
+      [plist removeObjectForKey:key];
+      result = NO;
     }
   }
   [stdKeys release];
@@ -254,6 +257,7 @@ static const unsigned SdefDefinitionRequiredKeysCount = 1;
       }
     } else {
       [self addError:@"Definition.plist: \"%@\" key must be a Dictionary", key];
+      [plist removeObjectForKey:key];
       result = NO;
     }
   }
@@ -337,7 +341,12 @@ static const unsigned SdefDefinitionRequiredKeysCount = 1;
   }
   
   if (result) {
-    sd_tpl = [[SdefTemplate alloc] initWithPath:sd_path];
+    @try {
+      sd_tpl = [[SdefTemplate alloc] initWithPath:sd_path];
+    } @catch (id exception) {
+      result = NO;
+      SKLogException(exception);
+    }
   }
   return result;
 }

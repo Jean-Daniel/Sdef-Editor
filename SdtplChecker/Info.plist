@@ -22,7 +22,7 @@
 		</dict>
 	</array>
 	<key>CFBundleExecutable</key>
-	<string>SdtplChecker</string>
+	<string>Sdtpl Checker</string>
 	<key>CFBundleIconFile</key>
 	<string>SdtplChecker</string>
 	<key>CFBundleIdentifier</key>

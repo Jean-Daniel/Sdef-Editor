@@ -20,7 +20,20 @@
 		014CEA500018CE4811CA2923 = {
 			buildSettings = {
 				COPY_PHASE_STRIP = YES;
+				DEAD_CODE_STRIPPING = YES;
+				DEPLOYMENT_POSTPROCESSING = YES;
+				GCC_DYNAMIC_NO_PIC = YES;
 				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
+				GCC_OPTIMIZATION_LEVEL = 2;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREPROCESSOR_DEFINITIONS = "NS_BLOCK_ASSERTIONS DEBUG_ASSERT_PRODUCTION_CODE";
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_VALUE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.3;
+				PRESERVE_DEAD_CODE_INITS_AND_TERMS = YES;
+				WARNING_CFLAGS = "-Wmost -Wno-four-char-constants -Wno-unknown-pragmas";
 				ZERO_LINK = NO;
 			};
 			isa = PBXBuildStyle;
@@ -93,20 +106,11 @@
 		08FB779DFE84155DC02AAC07 = {
 			children = (
 				984AB571080969C90032214D,
-				08FB779EFE84155DC02AAC07,
 			);
 			isa = PBXGroup;
-			name = "External Frameworks and Libraries";
+			name = "External Frameworks";
 			refType = 4;
 			sourceTree = "<group>";
-		};
-		08FB779EFE84155DC02AAC07 = {
-			isa = PBXFileReference;
-			lastKnownFileType = wrapper.framework;
-			name = Foundation.framework;
-			path = /System/Library/Frameworks/Foundation.framework;
-			refType = 0;
-			sourceTree = "<absolute>";
 		};
 //080
 //081
@@ -184,16 +188,9 @@
 		8DD76F9B0486AA7600D96B5E = {
 			buildActionMask = 2147483647;
 			files = (
-				8DD76F9C0486AA7600D96B5E,
 			);
 			isa = PBXFrameworksBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
-		};
-		8DD76F9C0486AA7600D96B5E = {
-			fileRef = 08FB779EFE84155DC02AAC07;
-			isa = PBXBuildFile;
-			settings = {
-			};
 		};
 		8DD76F9E0486AA7600D96B5E = {
 			buildActionMask = 8;
@@ -358,8 +355,7 @@
 				INFOPLIST_FILE = Info.plist;
 				INSTALL_PATH = "$(USER_APPS_DIR)";
 				OTHER_CFLAGS = "";
-				OTHER_LDFLAGS = "-framework Foundation -framework AppKit";
-				PRODUCT_NAME = SdtplChecker;
+				PRODUCT_NAME = "Sdtpl Checker";
 				SECTORDER_FLAGS = "";
 				WARNING_CFLAGS = "-Wmost -Wno-four-char-constants -Wno-unknown-pragmas";
 			};
@@ -400,7 +396,7 @@
 			explicitFileType = wrapper.application;
 			includeInIndex = 0;
 			isa = PBXFileReference;
-			path = SdtplChecker.app;
+			path = "Sdtpl Checker.app";
 			refType = 3;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
