@@ -11,7 +11,7 @@
         }, 
         {CLASS = SdtplGenerator; LANGUAGE = ObjC; SUPERCLASS = NSObject; }, 
         {
-            ACTIONS = {changeTemplate = id; export = id; showPreview = id; }; 
+            ACTIONS = {changeTemplate = id; export = id; }; 
             CLASS = SdtplWindow; 
             LANGUAGE = ObjC; 
             OUTLETS = {
