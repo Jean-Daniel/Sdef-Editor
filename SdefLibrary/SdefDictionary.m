@@ -39,6 +39,19 @@
   [self setKeys:[NSArray arrayWithObject:@"name"] triggerChangeNotificationsForDependentKey:@"title"];
 }
 
+/* Remove class manager call -[ClassManager removeDictionary:] which call [SdefDictionary retain].
+Retain must not be call in a dealloc block, so we did it before deallocation */
+- (void)release {
+  if (1 == [self retainCount]) {
+    [self setClassManager:nil];
+  }
+  [super release];
+}
+
+- (void)dealloc {
+  [super dealloc];
+}
+
 + (SdefObjectType)objectType {
   return kSdefDictionaryType;
 }

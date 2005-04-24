@@ -80,17 +80,16 @@
   [sd_events release];
   [sd_classes release];
   [sd_commands release];
-  [sd_dictionary release];
   [super dealloc];
 }
 
+/* Warning - Weak ref */
 - (void)setDictionary:(SdefDictionary *)aDico {
   if (sd_dictionary != aDico) {
     if (sd_dictionary) {
       [self removeDictionary:sd_dictionary];
-      [sd_dictionary release];
     }
-    sd_dictionary = [aDico retain];
+    sd_dictionary = aDico;
     if (sd_dictionary) {
       [self addDictionary:sd_dictionary];
     }
