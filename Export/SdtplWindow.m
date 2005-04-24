@@ -7,7 +7,6 @@
 //
 
 #import "SdtplWindow.h"
-#import "SdtplPreview.h"
 
 #import "SdefTemplate.h"
 #import "SdefDocument.h"
@@ -41,10 +40,6 @@
 - (void)dealloc {
   ShadowTrace();
   [sd_document release];
-//  if (sd_preview) {
-//    [sd_preview close];
-//    [sd_preview release];
-//  }
   [super dealloc];
 }
 
@@ -131,41 +126,13 @@
   [self autorelease];
 }
 
-- (IBAction)showPreview:(id)sender {
-//  if (!sd_preview) {
-//    sd_preview = [[SdtplPreview alloc] init];
-//    [sd_preview setTemplate:[self selectedTemplate]];
-//  }
-//  if (![[sd_preview window] isVisible]) {
-//    [sd_preview refresh];
-//  }
-//  [sd_preview showWindow:sender];
-}
-
-//- (void)templateDidChange:(NSNotification *)aNotification {
-//  if (sd_preview && [[sd_preview window] isVisible]) {
-//    [sd_preview refresh];
-//  }  
-//}
-
 - (SdefTemplate *)selectedTemplate {
   return sd_template;
 }
 
 - (void)setSelectedTemplate:(SdefTemplate *)aTemplate {
-//  if (sd_template) {
-//    [[NSNotificationCenter defaultCenter] removeObserver:self name:SdefTemplateDidChangeNotification object:sd_template];
-//  }
   sd_template = aTemplate;
-//  [sd_preview setTemplate:sd_template];
   [generator setTemplate:sd_template];
-//  if (sd_template) {
-//    [[NSNotificationCenter defaultCenter] addObserver:self
-//                                             selector:@selector(templateDidChange:)
-//                                                 name:SdefTemplateDidChangeNotification
-//                                               object:sd_template];
-//  }
-//  [self templateDidChange:nil];
 }
 
 - (IBAction)changeTemplate:(id)sender {

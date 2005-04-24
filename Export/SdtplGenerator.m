@@ -22,34 +22,18 @@
 #import "SdefClassManager.h"
 #import "ASDictionaryObject.h"
 
-
-#define SetVariable(tpl, block, name, value) \
- { \
-   if (value && [tpl containsKey:name]) { \
-     NSString *__varStr = [self formatString:value forVariable:name inBlock:block]; \
-     [tpl setVariable:__varStr forKey:name]; \
-   } \
- }
-
-static __inline__ BOOL SdtplShouldCreateLinks(struct _sd_gnFlags flags) {
-  return (kSdefTemplateXMLFormat == flags.format && flags.links != 0);
-}
-
 enum {
   kSdefTemplateFileAsk		= 0,
   kSdefTemplateFileSkip		= 1,
   kSdefTemplateFileReplace	= 2,
 };
 
-static __inline__ NSString *SdefEscapedString(NSString *value, unsigned int format) {
-  return ((kSdefTemplateXMLFormat == format) ? [value stringByEscapingEntities:nil] : value);
-}
-
 static NSNull *_null;
 
 static NSString *SdtplSimplifieName(NSString *name);
 static void SdtplSortArrayByName(NSMutableArray *array);
 static unsigned SdtplDumpSimpleBlock(SdtplGenerator *self, NSEnumerator *enume, SKTemplate *tpl, SEL description);
+static NSString *SdtplCopyFormatedString(SdtplGenerator *self, NSString *str, NSString *aVariable, NSString *aBlock);
 
 #pragma mark Variables
 /* Defaults */
@@ -76,6 +60,9 @@ static NSString * const SdtplVariableTocFile = @"Toc-File";
 static NSString * const SdtplVariableIndexFile = @"Index-File";
 static NSString * const SdtplVariableSuiteFile = @"Suite-File";
 static NSString * const SdtplVariableDictionaryFile = @"Dictionary-File";
+/* Anchor */
+static NSString * const SdtplVariableSuiteAnchor = @"Suite-Anchor";
+static NSString * const SdtplVariableDictionaryAnchor = @"Dictionary-Anchor";
 /* Content Links */
 static NSString * const SdtplVariableSuiteLink = @"Suite-Link";
 static NSString * const SdtplVariableDictionaryLink = @"Dictionary-Link";
@@ -153,6 +140,25 @@ static NSString * const SdtplBlockTableOfContent = @"Toc";
 - (BOOL)writeTemplate:(SKTemplate *)tpl toFile:(NSString *)path representedObject:(SdefObject *)anObject;
 
 @end
+
+#pragma mark -
+/* Must use a macro else "value" is eval before test to know if needed */
+#define SdtplSetVariable(tpl, block, name, value)  ({ \
+  NSString *__value; \
+  if ([tpl containsKey:name] && (__value = value)) { \
+    NSString *__varStr = SdtplCopyFormatedString(self, __value, name, block); \
+    [tpl setVariable:__varStr forKey:name]; \
+    [__varStr release]; \
+  } \
+}) 
+
+static __inline__ BOOL SdtplShouldCreateLinks(struct _sd_gnFlags flags) {
+  return (kSdefTemplateXMLFormat == flags.format && flags.links != 0);
+}
+
+static __inline__ NSString *SdefEscapedString(NSString *value, unsigned int format) {
+  return ((kSdefTemplateXMLFormat == format) ? [value stringByEscapingEntities:nil] : value);
+}
 
 #pragma mark -
 @implementation SdtplGenerator
@@ -374,10 +380,6 @@ static NSString * const SdtplBlockTableOfContent = @"Toc";
         sd_gnFlags.toc &= ~kSdefTemplateTOCIndex;
       }
       [self didChangeValueForKey:@"toc"];
-      /* Set default CSS value */
-      if (sd_gnFlags.format != kSdefTemplateXMLFormat) {
-        [self setCss:kSdefTemplateCSSNone];
-      }
     }
   }
 }
@@ -419,7 +421,7 @@ static NSString * const SdtplBlockTableOfContent = @"Toc";
     
     if (!sd_gnFlags.cancel) {
       /* Create css file if needed */
-      if (kSdefTemplateCSSExternal == sd_gnFlags.css) {
+      if (kSdefTemplateXMLFormat == sd_gnFlags.format && kSdefTemplateCSSExternal == sd_gnFlags.css) {
         NSString *src = [[sd_tpl selectedStyle] objectForKey:@"path"];
         NSString *dest = [sd_base stringByAppendingPathComponent:[self cssFile]];
         if (src && dest) {
@@ -436,7 +438,7 @@ static NSString * const SdtplBlockTableOfContent = @"Toc";
       if ([self externalToc]) {
         root = [[sd_tpl templates] objectForKey:SdtplDefinitionTocKey];
         if (root) {
-          NSString *link = (id)CFDictionaryGetValue(sd_formats, @"Toc_Links");
+          NSString *link = (id)CFDictionaryGetValue(sd_formats, @"Toc-Links");
           if (link && ![link isEqualToString:sd_link]) {
             sd_link = link;
             CFDictionaryRemoveAllValues(sd_links);
@@ -654,7 +656,6 @@ static NSString * const SdtplBlockTableOfContent = @"Toc";
       default:
         file = _null;
     }
-    //DLog(@"Cache File: <%@ %p> => %@", NSStringFromClass([anObject class]), anObject, file);
     CFDictionarySetValue(sd_files, anObject, file);
   }
   return (file != _null) ? file : nil;
@@ -687,7 +688,6 @@ static NSString * const SdtplBlockTableOfContent = @"Toc";
       default:
         anchor = _null;
     }
-    //DLog(@"Cache Anchor: <%@ %p> => %@", NSStringFromClass([anObject class]), anObject, anchor);
     CFDictionarySetValue(sd_anchors, anObject, anchor);
   }
   return (_null == anchor) ? nil : anchor;
@@ -702,7 +702,6 @@ static NSString * const SdtplBlockTableOfContent = @"Toc";
       SdefClass *class = [sd_manager classWithName:aType];
       link = [self linkForObject:class withString:aString];
     }
-    //DLog(@"Cache Type: %@ => %@", aType, link);
     CFDictionarySetValue(sd_links, aType, link);
   }
   return link;
@@ -716,7 +715,6 @@ static NSString * const SdtplBlockTableOfContent = @"Toc";
       object = [sd_manager eventWithName:aVerb];
     }
     link = [self linkForObject:object withString:aString];
-    //DLog(@"Cache Verb: <%@ %p> => %@", NSStringFromClass([aVerb class]), aVerb, link);
     CFDictionarySetValue(sd_links, aVerb, link);
   }
   return link;
@@ -739,7 +737,6 @@ static NSString * const SdtplBlockTableOfContent = @"Toc";
   NSString *link = (id)CFDictionaryGetValue(sd_links, dictionary);
   if (!link) {
     link = [self linkForObject:dictionary withString:aString];
-    //DLog(@"Cache Dictionary: %@ => %@", dictionary, link);
     CFDictionarySetValue(sd_links, dictionary, link);
   }
   return link;
@@ -763,8 +760,8 @@ static NSString * const SdtplBlockTableOfContent = @"Toc";
       } else if (kSdefTemplateCSSExternal == sd_gnFlags.css) {
         NSString *file = [self cssFile];
         if (file) {
-          SetVariable(tpl, nil, SdtplVariableStyleFile, file);
-          SetVariable(tpl, nil, SdtplVariableStyleLink, file);
+          SdtplSetVariable(tpl, nil, SdtplVariableStyleFile, file);
+          SdtplSetVariable(tpl, nil, SdtplVariableStyleLink, file);
         }
       }
     }
@@ -773,34 +770,34 @@ static NSString * const SdtplBlockTableOfContent = @"Toc";
   /* Set References */
   if (sd_gnFlags.index) {
     /* Index path */
-    SetVariable(tpl, nil, SdtplVariableIndexFile, [sd_path lastPathComponent]);
+    SdtplSetVariable(tpl, nil, SdtplVariableIndexFile, [sd_path lastPathComponent]);
   }
   if ([self externalToc]) {
     /* Toc path */
-    SetVariable(tpl, nil, SdtplVariableTocFile, [self tocFile]);
+    SdtplSetVariable(tpl, nil, SdtplVariableTocFile, [self tocFile]);
   }
   /* Dictionary Links */
   SdefObject *obj = nil;
   if (obj = [anObject dictionary]) {
-    SetVariable(tpl, nil, SdtplVariableDictionaryFile, [self fileForObject:obj]);
+    SdtplSetVariable(tpl, nil, SdtplVariableDictionaryFile, [self fileForObject:obj]);
     NSString *name = [obj name];
     if (name) {
-      SetVariable(tpl, nil, SdtplVariableDictionaryName, name);
-      if ([tpl containsKey:SdtplVariableDictionaryLink]) {
-        NSString *link = SdtplShouldCreateLinks(sd_gnFlags) ? [self linkForDictionary:(SdefDictionary *)obj withString:name] : name;
-        [tpl setVariable:link forKey:SdtplVariableDictionaryLink];
+      SdtplSetVariable(tpl, nil, SdtplVariableDictionaryName, name);
+      if (SdtplShouldCreateLinks(sd_gnFlags)) {
+        SdtplSetVariable(tpl, nil, SdtplVariableDictionaryAnchor, [self anchorNameForObject:obj]);
+        SdtplSetVariable(tpl, nil, SdtplVariableDictionaryLink, [self linkForDictionary:(SdefDictionary *)obj withString:name]);
       }
     }
   }
   /* Suite Links */
   if (obj = [anObject suite]) {
-    SetVariable(tpl, nil, SdtplVariableSuiteFile, [self fileForObject:obj]);
+    SdtplSetVariable(tpl, nil, SdtplVariableSuiteFile, [self fileForObject:obj]);
     NSString *name = [obj name];
     if (name) {
-      SetVariable(tpl, nil, SdtplVariableSuiteName, name);
-      if ([tpl containsKey:SdtplVariableSuiteLink]) {
-        NSString *link = SdtplShouldCreateLinks(sd_gnFlags) ? [self linkForObject:obj withString:name] : name;
-        [tpl setVariable:link forKey:SdtplVariableSuiteLink];
+      SdtplSetVariable(tpl, nil, SdtplVariableSuiteName, name);
+      if (SdtplShouldCreateLinks(sd_gnFlags)) {
+        SdtplSetVariable(tpl, nil, SdtplVariableSuiteAnchor, [self anchorNameForObject:obj]);
+        SdtplSetVariable(tpl, nil, SdtplVariableSuiteLink, [self linkForObject:obj withString:name]);
       }
     }
   }
@@ -860,9 +857,9 @@ static NSString * const SdtplBlockTableOfContent = @"Toc";
 #pragma mark Dictionary
 - (BOOL)writeDictionary:(SdefDictionary *)aDico usingTemplate:(SKTemplate *)tpl {
   /* Generate Template */
-  SetVariable(tpl, @"Dictionary", SdtplVariableName, [aDico name]);
+  SdtplSetVariable(tpl, @"Dictionary", SdtplVariableName, [aDico name]);
   if (SdtplShouldCreateLinks(sd_gnFlags))
-    SetVariable(tpl, @"Dictionary", SdtplVariableAnchor, [self anchorForObject:aDico]);
+    SdtplSetVariable(tpl, @"Dictionary", SdtplVariableAnchor, [self anchorForObject:aDico]);
   
   if ([aDico hasChildren]) {
     SdefSuite *suite;
@@ -893,9 +890,9 @@ static NSString * const SdtplBlockTableOfContent = @"Toc";
         NSString *name = [suite name];
         if (name && SdtplShouldCreateLinks(sd_gnFlags)) 
           name = [self linkForObject:suite withString:name];
-        SetVariable(suiteBlock, [suiteBlock name], SdtplVariableName, name);
+        SdtplSetVariable(suiteBlock, [suiteBlock name], SdtplVariableName, name);
         if ([suite desc])
-          SetVariable(suiteBlock, [suiteBlock name], SdtplVariableDescription, SdefEscapedString([suite desc], sd_gnFlags.format));
+          SdtplSetVariable(suiteBlock, [suiteBlock name], SdtplVariableDescription, SdefEscapedString([suite desc], sd_gnFlags.format));
       }
       if (suiteTpl)
         [self writeSuite:suite usingTemplate:suiteTpl];
@@ -935,12 +932,12 @@ static NSString * const SdtplBlockTableOfContent = @"Toc";
 #pragma mark Suites
 - (BOOL)writeSuite:(SdefSuite *)suite usingTemplate:(SKTemplate *)tpl {
   if ([suite name]) {
-    SetVariable(tpl, SdtplBlockSuite, SdtplVariableName, [suite name]);
+    SdtplSetVariable(tpl, SdtplBlockSuite, SdtplVariableName, [suite name]);
     if (SdtplShouldCreateLinks(sd_gnFlags))
-      SetVariable(tpl, SdtplBlockSuite, SdtplVariableAnchor, [self anchorForObject:suite]);
+      SdtplSetVariable(tpl, SdtplBlockSuite, SdtplVariableAnchor, [self anchorForObject:suite]);
   }
   if ([suite desc])
-    SetVariable(tpl, SdtplBlockSuite, SdtplVariableDescription, SdefEscapedString([suite desc], sd_gnFlags.format));
+    SdtplSetVariable(tpl, SdtplBlockSuite, SdtplVariableDescription, SdefEscapedString([suite desc], sd_gnFlags.format));
   
   if ([[suite classes] hasChildren]) {
     SdefClass *class;    
@@ -970,9 +967,9 @@ static NSString * const SdtplBlockTableOfContent = @"Toc";
         NSString *name = [class name];
         if (name && SdtplShouldCreateLinks(sd_gnFlags))
           name = [self linkForObject:class withString:name];
-        SetVariable(classBlock, [classBlock name], SdtplVariableName, name);
+        SdtplSetVariable(classBlock, [classBlock name], SdtplVariableName, name);
         if ([class desc])
-          SetVariable(classBlock, [classBlock name], SdtplVariableDescription, SdefEscapedString([class desc], sd_gnFlags.format));
+          SdtplSetVariable(classBlock, [classBlock name], SdtplVariableDescription, SdefEscapedString([class desc], sd_gnFlags.format));
       }
       if (classTpl)
         [self writeClass:class usingTemplate:classTpl];
@@ -1033,9 +1030,9 @@ static NSString * const SdtplBlockTableOfContent = @"Toc";
         NSString *name = [cmd name];
         if (name && SdtplShouldCreateLinks(sd_gnFlags))
           name = [self linkForObject:cmd withString:name];
-        SetVariable(cmdBlock, [cmdBlock name], SdtplVariableName, name);
+        SdtplSetVariable(cmdBlock, [cmdBlock name], SdtplVariableName, name);
         if ([cmd desc])
-          SetVariable(cmdBlock, [cmdBlock name], SdtplVariableDescription, SdefEscapedString([cmd desc], sd_gnFlags.format));
+          SdtplSetVariable(cmdBlock, [cmdBlock name], SdtplVariableDescription, SdefEscapedString([cmd desc], sd_gnFlags.format));
       }
       if (cmdTpl)
         [self writeVerb:cmd usingTemplate:cmdTpl];
@@ -1084,9 +1081,9 @@ static NSString * const SdtplBlockTableOfContent = @"Toc";
         NSString *name = [evnt name];
         if (name && SdtplShouldCreateLinks(sd_gnFlags))
           name = [self linkForObject:evnt withString:name];
-        SetVariable(evntBlock, [evntBlock name], SdtplVariableName, name);
+        SdtplSetVariable(evntBlock, [evntBlock name], SdtplVariableName, name);
         if ([evnt desc])
-          SetVariable(evntBlock, [evntBlock name], SdtplVariableDescription, SdefEscapedString([evnt desc], sd_gnFlags.format));
+          SdtplSetVariable(evntBlock, [evntBlock name], SdtplVariableDescription, SdefEscapedString([evnt desc], sd_gnFlags.format));
       }
       if (evntTpl)
         [self writeVerb:evnt usingTemplate:evntTpl];
@@ -1127,43 +1124,43 @@ static NSString * const SdtplBlockTableOfContent = @"Toc";
     NSString *name = [elt name];
     if (SdtplShouldCreateLinks(sd_gnFlags))
       name = [self linkForType:name withString:name];
-    SetVariable(tpl, [tpl name], SdtplVariableType, name);
+    SdtplSetVariable(tpl, [tpl name], SdtplVariableType, name);
   }
   NSAssert1([elt respondsToSelector:@selector(writeAccessorsStringToStream:)],
             @"Element %@ does not responds to writeAccessorsStringToStream:", elt);
   NSMutableString *access = [[NSMutableString alloc] init];
   [elt performSelector:@selector(writeAccessorsStringToStream:) withObject:access];
-  SetVariable(tpl, [tpl name], SdtplVariableAccessors, access);
+  SdtplSetVariable(tpl, [tpl name], SdtplVariableAccessors, access);
   [access release];
 }
 
 - (void)writeProperty:(SdefProperty *)prop usingTemplate:(SKTemplate *)tpl {
   if ([prop name])
-    SetVariable(tpl, [tpl name], SdtplVariableName, [prop name]);
+    SdtplSetVariable(tpl, [tpl name], SdtplVariableName, [prop name]);
   if ([prop type]) {
     NSString *type = [prop asDictionaryTypeForType:[prop type] isList:nil];
     if (SdtplShouldCreateLinks(sd_gnFlags))
       type = [self linkForType:[prop type] withString:type];
-    SetVariable(tpl, [tpl name], SdtplVariableType, type);
+    SdtplSetVariable(tpl, [tpl name], SdtplVariableType, type);
   }
   if (([prop access] & kSdefAccessWrite) == 0)
-    SetVariable(tpl, [tpl name], SdtplVariableReadOnly, SdtplVariableDefaultReadOnly);
+    SdtplSetVariable(tpl, [tpl name], SdtplVariableReadOnly, SdtplVariableDefaultReadOnly);
   if ([prop desc])
-    SetVariable(tpl, [tpl name], SdtplVariableDescription, SdefEscapedString([prop desc], sd_gnFlags.format));
+    SdtplSetVariable(tpl, [tpl name], SdtplVariableDescription, SdefEscapedString([prop desc], sd_gnFlags.format));
 }
 
 - (BOOL)writeClass:(SdefClass *)aClass usingTemplate:(SKTemplate *)tpl {
   if ([aClass name]) {
-    SetVariable(tpl, SdtplBlockClass, SdtplVariableName, [aClass name]);
+    SdtplSetVariable(tpl, SdtplBlockClass, SdtplVariableName, [aClass name]);
     if (SdtplShouldCreateLinks(sd_gnFlags))
-      SetVariable(tpl, SdtplBlockClass, SdtplVariableAnchor, [self anchorForObject:aClass]);
+      SdtplSetVariable(tpl, SdtplBlockClass, SdtplVariableAnchor, [self anchorForObject:aClass]);
   }
   if ([aClass desc])
-    SetVariable(tpl, SdtplBlockClass, SdtplVariableDescription, SdefEscapedString([aClass desc], sd_gnFlags.format));
+    SdtplSetVariable(tpl, SdtplBlockClass, SdtplVariableDescription, SdefEscapedString([aClass desc], sd_gnFlags.format));
   /* Plural */
   if ([aClass plural]) {
     SKTemplate *plural = [tpl blockWithName:SdtplBlockPlural];
-    SetVariable(plural, [plural name], SdtplVariableName, [aClass plural]);
+    SdtplSetVariable(plural, [plural name], SdtplVariableName, [aClass plural]);
     [plural dumpBlock];
   }
   /* Subclasses */
@@ -1203,10 +1200,10 @@ static NSString * const SdtplBlockTableOfContent = @"Toc";
   if ([aClass inherits] && [tpl blockWithName:SdtplBlockSuperclass]) {
     NSString *inherits = [aClass inherits];
     SKTemplate *superclass = [tpl blockWithName:SdtplBlockSuperclass];
-    SetVariable(superclass, [superclass name], SdtplVariableDescription, inherits);
+    SdtplSetVariable(superclass, [superclass name], SdtplVariableDescription, inherits);
     if (SdtplShouldCreateLinks(sd_gnFlags))
       inherits = [self linkForType:inherits withString:inherits];
-    SetVariable(superclass, [superclass name], SdtplVariableName, inherits);
+    SdtplSetVariable(superclass, [superclass name], SdtplVariableName, inherits);
     [superclass dumpBlock];
   }
   /* Properties */
@@ -1304,32 +1301,32 @@ static NSString * const SdtplBlockTableOfContent = @"Toc";
 #pragma mark Verb
 - (void)writeParameter:(SdefParameter *)param usingTemplate:(SKTemplate *)tpl {
   if ([param name])
-    SetVariable(tpl, [tpl name], SdtplVariableName, [param name]);
+    SdtplSetVariable(tpl, [tpl name], SdtplVariableName, [param name]);
   if ([param desc])
-    SetVariable(tpl, [tpl name], SdtplVariableDescription, SdefEscapedString([param desc], sd_gnFlags.format));
+    SdtplSetVariable(tpl, [tpl name], SdtplVariableDescription, SdefEscapedString([param desc], sd_gnFlags.format));
   if ([param type]) {
     BOOL list;
     NSString *type = [param asDictionaryTypeForType:[param type] isList:&list];
     if (list) {
-      SetVariable(tpl, [tpl name], SdtplVariableTypeList, SdtplVariableDefaultTypeList);
+      SdtplSetVariable(tpl, [tpl name], SdtplVariableTypeList, SdtplVariableDefaultTypeList);
       if (SdtplShouldCreateLinks(sd_gnFlags))
         type = [self linkForType:[[param type] substringFromIndex:8] withString:type];
     } else if (SdtplShouldCreateLinks(sd_gnFlags)) {
       type = [self linkForType:[param type] withString:type];
     }
-    SetVariable(tpl, [tpl name], SdtplVariableType, type);
+    SdtplSetVariable(tpl, [tpl name], SdtplVariableType, type);
   }
 }
 
 - (BOOL)writeVerb:(SdefVerb *)verb usingTemplate:(SKTemplate *)tpl {
   NSString *blockName = [verb isCommand] ? SdtplBlockCommand : SdtplBlockEvent;
   if ([verb name]) {
-      SetVariable(tpl, blockName, SdtplVariableName, [verb name]);
+      SdtplSetVariable(tpl, blockName, SdtplVariableName, [verb name]);
     if (SdtplShouldCreateLinks(sd_gnFlags))
-      SetVariable(tpl, blockName, SdtplVariableAnchor, [self anchorForObject:verb]);
+      SdtplSetVariable(tpl, blockName, SdtplVariableAnchor, [self anchorForObject:verb]);
   }
   if ([verb desc])
-    SetVariable(tpl, blockName, SdtplVariableDescription, SdefEscapedString([verb desc], sd_gnFlags.format));
+    SdtplSetVariable(tpl, blockName, SdtplVariableDescription, SdefEscapedString([verb desc], sd_gnFlags.format));
 
   /* Direct Parameter */
   if ([[verb directParameter] type]) {
@@ -1340,17 +1337,17 @@ static NSString * const SdtplBlockTableOfContent = @"Toc";
         BOOL list;
         NSString *type = [param asDictionaryTypeForType:[param type] isList:&list];
         if (list) {
-          SetVariable(block, [block name], SdtplVariableTypeList, SdtplVariableDefaultTypeList);
+          SdtplSetVariable(block, [block name], SdtplVariableTypeList, SdtplVariableDefaultTypeList);
           if (SdtplShouldCreateLinks(sd_gnFlags))
             type = [self linkForType:[[param type] substringFromIndex:8] withString:type];
         } else if (SdtplShouldCreateLinks(sd_gnFlags)) {
           type = [self linkForType:[param type] withString:type];
         }
-        SetVariable(block, [block name], SdtplVariableType, type);
+        SdtplSetVariable(block, [block name], SdtplVariableType, type);
       }
       /* Description */
       if ([param desc])
-        SetVariable(block, [block name], SdtplVariableDescription, SdefEscapedString([param desc], sd_gnFlags.format));
+        SdtplSetVariable(block, [block name], SdtplVariableDescription, SdefEscapedString([param desc], sd_gnFlags.format));
       [block dumpBlock];
     }
   }
@@ -1363,17 +1360,17 @@ static NSString * const SdtplBlockTableOfContent = @"Toc";
         BOOL list;
         NSString *type = [result asDictionaryTypeForType:[result type] isList:&list];
         if (list) {
-          SetVariable(block, [block name], SdtplVariableTypeList, SdtplVariableDefaultTypeList);
+          SdtplSetVariable(block, [block name], SdtplVariableTypeList, SdtplVariableDefaultTypeList);
           if (SdtplShouldCreateLinks(sd_gnFlags))
             type = [self linkForType:[[result type] substringFromIndex:8] withString:type];
         } else if (SdtplShouldCreateLinks(sd_gnFlags)) {
           type = [self linkForType:[result type] withString:type];
         }
-        SetVariable(block, [block name], SdtplVariableType, type);
+        SdtplSetVariable(block, [block name], SdtplVariableType, type);
       }
       /* Description */
       if ([result desc])
-        SetVariable(block, [block name], SdtplVariableDescription, SdefEscapedString([result desc], sd_gnFlags.format));
+        SdtplSetVariable(block, [block name], SdtplVariableDescription, SdefEscapedString([result desc], sd_gnFlags.format));
       [block dumpBlock];
     }
   }
@@ -1432,7 +1429,7 @@ static NSString * const SdtplBlockTableOfContent = @"Toc";
 
 #pragma mark Toc
 - (void)writeToc:(SdefDictionary *)dictionary usingTemplate:(SKTemplate *)tpl {
-  SetVariable(tpl, SdtplBlockTableOfContent, SdtplVariableName, [dictionary name]);
+  SdtplSetVariable(tpl, SdtplBlockTableOfContent, SdtplVariableName, [dictionary name]);
 
   /* Suites */
   SdefSuite *suite;
@@ -1452,9 +1449,9 @@ static NSString * const SdtplBlockTableOfContent = @"Toc";
     if (name) {
       if (SdtplShouldCreateLinks(sd_gnFlags))
         name = [self linkForObject:suite withString:name];
-      SetVariable(stpl, [stpl name], SdtplVariableName, name);
+      SdtplSetVariable(stpl, [stpl name], SdtplVariableName, name);
       if ([suite desc])
-        SetVariable(stpl, [stpl name], SdtplVariableDescription, [suite desc]);
+        SdtplSetVariable(stpl, [stpl name], SdtplVariableDescription, [suite desc]);
     }
     /* Classes */
     NSMutableArray *objects = nil;
@@ -1549,17 +1546,36 @@ static unsigned SdtplDumpSimpleBlock(SdtplGenerator *self, NSEnumerator *enume, 
     if (name) {
       if (SdtplShouldCreateLinks(self->sd_gnFlags))
         name = [self linkForObject:object withString:name];
-      SetVariable(tpl, [tpl name], SdtplVariableName, name);
+      SdtplSetVariable(tpl, [tpl name], SdtplVariableName, name);
       if (description) {
         NSString *desc = [object performSelector:description];
         if (desc)
-          SetVariable(tpl, [tpl name], SdtplVariableDescription, desc);
+          SdtplSetVariable(tpl, [tpl name], SdtplVariableDescription, desc);
       }
       [tpl dumpBlock];
       dumped++;
     }
   }
   return dumped;
+}
+
+static NSString *SdtplCopyFormatedString(SdtplGenerator *self, NSString *str, NSString *aVariable, NSString *aBlock) {
+  NSString *format = nil;
+  if (self->sd_gnFlags.useBlockFormat && (aBlock != nil)) {
+    NSDictionary *block = (id)CFDictionaryGetValue(self->sd_formats, aBlock);
+    /* Search var in block */
+    if (block) {
+      format = [block objectForKey:aVariable];
+    }
+  }
+  /* If var not found in Block */
+  if (!format) {
+    format = (id)CFDictionaryGetValue(self->sd_formats, aVariable);
+  }
+  if (format) {
+    return ([format rangeOfString:@"%@"].location != NSNotFound) ? [[NSString alloc] initWithFormat:format, str] : [format retain];
+  }
+  return [str retain];
 }
 
 @end
@@ -1583,3 +1599,4 @@ static NSString *SdtplSimplifieName(NSString *name) {
   [simple replaceOccurrencesOfString:@" " withString:@"_" options:NSLiteralSearch range:NSMakeRange(0, [simple length])];  
   return [simple autorelease];
 }
+

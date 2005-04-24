@@ -21,7 +21,6 @@
 - (id)initWithDocument:(SdefDocument *)aDoc;
 
 - (IBAction)export:(id)sender;
-- (IBAction)showPreview:(id)sender;
 - (IBAction)changeTemplate:(id)sender;
 
 - (BOOL)importTemplate;
