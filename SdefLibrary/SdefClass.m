@@ -63,30 +63,30 @@
   [super createContent];
   sd_soFlags.hasSynonyms = 1;
   sd_soFlags.hasDocumentation = 1;
-
-  SdefContents *contents = [[SdefContents allocWithZone:[self zone]] init];
+  NSZone *zone = [self zone];
+  SdefContents *contents = [[SdefContents allocWithZone:zone] init];
   [self setContents:contents];
   [contents release];
   
-  id child = [[SdefCollection allocWithZone:[self zone]] initWithName:NSLocalizedStringFromTable(@"Elements", @"SdefLibrary", @"Elements collection default name")];
+  id child = [[SdefCollection allocWithZone:zone] initWithName:NSLocalizedStringFromTable(@"Elements", @"SdefLibrary", @"Elements collection default name")];
   [child setContentType:[SdefElement class]];
   [child setElementName:@"elements"];
   [self appendChild:child];
   [child release];
   
-  child = [[SdefCollection allocWithZone:[self zone]] initWithName:NSLocalizedStringFromTable(@"Properties", @"SdefLibrary", @"Properties collection default name")];
+  child = [[SdefCollection allocWithZone:zone] initWithName:NSLocalizedStringFromTable(@"Properties", @"SdefLibrary", @"Properties collection default name")];
   [child setContentType:[SdefProperty class]];
   [child setElementName:@"properties"];
   [self appendChild:child];
   [child release];
   
-  child = [[SdefCollection allocWithZone:[self zone]] initWithName:NSLocalizedStringFromTable(@"Resp. to Cmds", @"SdefLibrary", @"Responds to Commands collection default name")];
+  child = [[SdefCollection allocWithZone:zone] initWithName:NSLocalizedStringFromTable(@"Resp. to Cmds", @"SdefLibrary", @"Responds to Commands collection default name")];
   [child setContentType:[SdefRespondsTo class]];
   [child setElementName:@"responds-to-commands"];
   [self appendChild:child];
   [child release];
   
-  child = [[SdefCollection allocWithZone:[self zone]] initWithName:NSLocalizedStringFromTable(@"Resp. to Events", @"SdefLibrary", @"Responds to Events collection default name")];
+  child = [[SdefCollection allocWithZone:zone] initWithName:NSLocalizedStringFromTable(@"Resp. to Events", @"SdefLibrary", @"Responds to Events collection default name")];
   [child setContentType:[SdefRespondsTo class]];
   [child setElementName:@"responds-to-events"];
   [self appendChild:child];
