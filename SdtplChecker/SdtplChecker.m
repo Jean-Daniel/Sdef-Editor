@@ -13,6 +13,8 @@
 #import "ShadowMacros.h"
 #import "SdefTemplateCheck.h"
 
+NSString *const SdtplBlockTableOfContent = @"Toc";
+
 int main(int argc, const char **argv) {
   return NSApplicationMain(argc, argv);
 }
