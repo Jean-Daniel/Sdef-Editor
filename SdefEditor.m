@@ -95,6 +95,10 @@ const OSType kCocoaSuiteDefinitionHFSType = 'ScSu';
   [preferences showWindow:sender];
 }
 
+- (IBAction)releaseNotes:(id)sender {
+  [[NSHelpManager sharedHelpManager] openHelpAnchor:@"SdefReleaseNotes" inBook:@"Sdef Editor Help"];
+}
+
 - (IBAction)openSuite:(id)sender {
   id suite = nil;
   switch ([sender tag]) {

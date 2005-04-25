@@ -19,6 +19,7 @@
                 openInspector = id; 
                 openSuite = id; 
                 preferences = id; 
+                releaseNotes = id; 
             }; 
             CLASS = SdefEditor; 
             LANGUAGE = ObjC; 
