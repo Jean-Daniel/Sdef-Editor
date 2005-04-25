@@ -38,7 +38,6 @@
 }
 
 - (void)dealloc {
-  ShadowTrace();
   [sd_document release];
   [super dealloc];
 }
@@ -63,11 +62,9 @@
   
   /* Init Templates Menu */
   id tpls = [[SdefTemplate findAllTemplates] allValues];
-  id sort1 = [[NSSortDescriptor alloc] initWithKey:@"html" ascending:NO];
-  id sort2 = [[NSSortDescriptor alloc] initWithKey:@"displayName" ascending:YES];
-  NSArray *sorts = [[NSArray alloc] initWithObjects:sort1, sort2, nil];
-  [sort2 release];
-  [sort1 release];
+  id sort = [[NSSortDescriptor alloc] initWithKey:@"displayName" ascending:YES selector:@selector(caseInsensitiveCompare:)];
+  NSArray *sorts = [[NSArray alloc] initWithObjects:sort, nil];
+  [sort release];
   
   tpls = [[tpls sortedArrayUsingDescriptors:sorts] reverseObjectEnumerator];
   [sorts release];
