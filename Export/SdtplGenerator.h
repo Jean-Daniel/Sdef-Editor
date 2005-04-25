@@ -19,6 +19,8 @@ enum {
   kSdefTemplateXMLFormat,
 };
 
+extern NSString * const SdtplBlockTableOfContent;
+
 @class SdefObject, SdefDictionary;
 @class SdefTemplate, SdefClassManager;
 @interface SdtplGenerator : NSObject {

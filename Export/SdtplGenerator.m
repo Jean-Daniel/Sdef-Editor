@@ -108,8 +108,8 @@ static NSString * const SdtplBlockDirectParameter = @"Direct-Parameter";
 static NSString * const SdtplBlockRequiredParameter = @"Required-Parameter";
 static NSString * const SdtplBlockOptionalParameter = @"Optional-Parameter";
 
-/* Toc */
-static NSString * const SdtplBlockTableOfContent = @"Toc";
+/* Toc (extern) */
+NSString * const SdtplBlockTableOfContent = @"Toc";
 
 #pragma mark -
 @interface SdtplGenerator (Private)

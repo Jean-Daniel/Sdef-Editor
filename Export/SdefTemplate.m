@@ -13,6 +13,8 @@
 #import "SKTemplate.h"
 #import "SKXMLTemplate.h"
 
+extern NSString *const SdtplBlockTableOfContent;
+
 /* Specials Keys */
 NSString * const StdplVariableLinks = @"Links";
 NSString * const StdplVariableStyleLink = @"Style-Link";
@@ -198,10 +200,10 @@ NSString * const SdtplDefinitionEventsKey = @"Events";
     if ([[toc objectForKey:@"Required"] boolValue])
       sd_tpFlags.toc |= kSdefTemplateTOCRequired;
   }
-  if ([[sd_tpls objectForKey:SdtplDefinitionDictionaryKey] blockWithName:@"Table_Of_Content"]) {
+  if ([[sd_tpls objectForKey:SdtplDefinitionDictionaryKey] blockWithName:SdtplBlockTableOfContent]) {
     sd_tpFlags.toc |= kSdefTemplateTOCDictionary;  
   }
-  if ([[sd_tpls objectForKey:SdtplDefinitionIndexKey] blockWithName:@"Table_Of_Content"]) {
+  if ([[sd_tpls objectForKey:SdtplDefinitionIndexKey] blockWithName:SdtplBlockTableOfContent]) {
     sd_tpFlags.toc |= kSdefTemplateTOCIndex;  
   }
 }
