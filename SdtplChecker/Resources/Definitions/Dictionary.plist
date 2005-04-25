@@ -34,9 +34,11 @@
 	<key>Root</key>
 	<array>
 		<string>Dictionary-File</string>
+		<string>Dictionary-Anchor</string>
 		<string>Dictionary-Link</string>
 		<string>Dictionary-Name</string>
 		<string>Suite-File</string>
+		<string>Suite-Anchor</string>
 		<string>Suite-Link</string>
 		<string>Suite-Name</string>
 		<string>Index-File</string>
