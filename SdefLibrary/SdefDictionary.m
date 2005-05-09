@@ -52,6 +52,7 @@ Retain must not be call in a dealloc block, so we did it before deallocation */
   [super dealloc];
 }
 
+#pragma mark -
 + (SdefObjectType)objectType {
   return kSdefDictionaryType;
 }
@@ -64,10 +65,7 @@ Retain must not be call in a dealloc block, so we did it before deallocation */
   return @"Dictionary";
 }
 
-- (void)createContent {
-  sd_soFlags.hasDocumentation = 1;
-}
-
+#pragma mark -
 - (NSString *)title {
   return [self name];
 }

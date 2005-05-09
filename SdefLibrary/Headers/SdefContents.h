@@ -6,16 +6,12 @@
 //  Copyright 2005 Shadow Lab. All rights reserved.
 //
 
-#import "SdefObject.h"
+#import "SdefObjects.h"
 
-@interface SdefContents : SdefTerminologyElement <NSCopying, NSCoding> {
-  NSString *sd_type;
+@interface SdefContents : SdefTypedObject <NSCopying, NSCoding> {
   unsigned sd_access;
   SdefObject *sd_owner;
 }
-
-- (NSString *)type;
-- (void)setType:(NSString *)aType;
 
 - (unsigned)access;
 - (void)setAccess:(unsigned)newAccess;

@@ -6,7 +6,7 @@
 //  Copyright 2005 Shadow Lab. All rights reserved.
 //
 
-#import "SdefObject.h"
+#import "SdefObjects.h"
 
 /*
  <!-- DICTIONARY (ROOT ELEMENT) -->
@@ -17,7 +17,7 @@
 */
 
 @class SdefDocument, SdefClassManager;
-@interface SdefDictionary : SdefObject <NSCopying, NSCoding> {
+@interface SdefDictionary : SdefDocumentedObject <NSCopying, NSCoding> {
 @private
   SdefDocument *sd_document;
   SdefClassManager *sd_manager;

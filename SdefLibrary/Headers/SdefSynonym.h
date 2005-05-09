@@ -6,7 +6,7 @@
 //  Copyright 2005 Shadow Lab. All rights reserved.
 //
 
-#import "SdefObject.h"
+#import "SdefBase.h"
 
 /*
  <!-- SYNONYMS -->
@@ -20,10 +20,7 @@
  <!-- at least one of "name" and "code" is required. -->
  */
 
-@interface SdefSynonym : SdefTerminologyElement <NSCopying, NSCoding> {
+@interface SdefSynonym : SdefObject <NSCopying, NSCoding> {
 }
-
-- (NSString *)desc;
-- (void)setDesc:(NSString *)description;
 
 @end

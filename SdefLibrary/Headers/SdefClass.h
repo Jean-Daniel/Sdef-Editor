@@ -6,7 +6,7 @@
 //  Copyright 2005 Shadow Lab. All rights reserved.
 //
 
-#import "SdefObject.h"
+#import "SdefObjects.h"
 
 /*
  <!-- CLASS DEFINITION -->
@@ -86,7 +86,7 @@ enum {
 
 /* class, property, and contents */
 @class SdefDocumentation, SdefContents;
-@interface SdefClass : SdefTerminologyElement <NSCopying, NSCoding> {
+@interface SdefClass : SdefTerminologyObject <NSCopying, NSCoding> {
   SdefContents *sd_contents;
   /* Attributes */
   NSString *sd_plural; 
@@ -110,7 +110,7 @@ enum {
 
 @end
 
-@interface SdefElement : SdefTerminologyElement <NSCopying, NSCoding> {
+@interface SdefElement : SdefTerminologyObject <NSCopying, NSCoding> {
   unsigned int sd_accessors; /* index | name | id | range | relative | test */
   
   /* Attributs */
@@ -143,13 +143,9 @@ enum {
 @end
 
 #pragma mark -
-@interface SdefProperty : SdefTerminologyElement <NSCopying, NSCoding> {
-  NSString *sd_type;
+@interface SdefProperty : SdefTypedObject <NSCopying, NSCoding> {
   unsigned sd_access;
 }
-
-- (NSString *)type;
-- (void)setType:(NSString *)aType;
 
 - (unsigned)access;
 - (void)setAccess:(unsigned)newAccess;
@@ -159,7 +155,7 @@ enum {
 
 @end
 
-@interface SdefRespondsTo : SdefTerminologyElement <NSCopying, NSCoding> {
+@interface SdefRespondsTo : SdefImplementedObject <NSCopying, NSCoding> {
 }
 
 @end

@@ -6,7 +6,7 @@
 //  Copyright 2005 Shadow Lab. All rights reserved.
 //
 
-#import "SdefObject.h"
+#import "SdefBase.h"
 
 /*
  <!-- IMPLEMENTATION ELEMENTS -->
@@ -23,8 +23,8 @@
 @class SdefDocument;
 @interface SdefImplementation : SdefOrphanObject <NSCopying, NSCoding> {
 @private
-  NSString *sd_class;
   NSString *sd_key;
+  NSString *sd_class;
   NSString *sd_method;
 }
 

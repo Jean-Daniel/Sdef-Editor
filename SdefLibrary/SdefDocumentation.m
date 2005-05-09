@@ -44,11 +44,9 @@
   return @"Bookmarks";
 }
 
-- (id)initEmpty {
-  if (self = [super initEmpty]) {
-    [self setRemovable:NO];
-  }
-  return self;
+- (void)sdefInit {
+  [super sdefInit];
+  [self setRemovable:NO];
 }
 
 - (id)initWithAttributes:(NSDictionary *)attrs {

@@ -66,10 +66,9 @@
   return [self parent] == [suite commands];
 }
   
-- (void)createContent {
-  [super createContent];
-  sd_soFlags.hasSynonyms = 1;
-  sd_soFlags.hasDocumentation = 1;
+- (void)sdefInit {
+  [super sdefInit];
+
   SdefResult *result = [[SdefResult allocWithZone:[self zone]] init];
   [self setResult:result];
   [result release];

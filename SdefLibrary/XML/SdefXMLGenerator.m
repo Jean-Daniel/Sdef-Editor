@@ -9,8 +9,8 @@
 #import "SdefXMLGenerator.h"
 #import "SdefXMLNode.h"
 #import "SdefComment.h"
+#import "SdefXMLBase.h"
 #import "SKExtensions.h"
-#import "SdefXMLObject.h"
 
 inline NSString *SdefEditorComment() {
   return NSLocalizedStringFromTable(@" Sdef Editor ", @"SdefLibrary", @"XML Document comment");
@@ -190,13 +190,13 @@ inline NSString *SdefEditorComment() {
   }
 }
 
-- (NSData *)xmlData {
+- (NSData *)xmlDataForVersion:(SdefVersion)version {
   if (!sd_root)
     return nil;
   [self createDocument];
   if (!sd_doc)
     return nil;
-  [self appendXMLNode:[sd_root xmlNode]];
+  [self appendXMLNode:[sd_root xmlNodeForVersion:version]];
   CFDataRef xml = CFXMLTreeCreateXMLData(kCFAllocatorDefault, sd_doc);
   return [(id)xml autorelease];
 }

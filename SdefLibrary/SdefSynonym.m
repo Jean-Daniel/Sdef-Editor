@@ -42,12 +42,4 @@
   [super dealloc];
 }
 
-- (NSString *)desc {
-  return nil;
-}
-
-- (void)setDesc:(NSString *)description {
-}
-
-
 @end

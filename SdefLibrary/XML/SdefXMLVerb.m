@@ -9,22 +9,22 @@
 #import "SdefVerb.h"
 #import "SdefSuite.h"
 #import "SdefXMLNode.h"
+#import "SdefXMLBase.h"
 #import "SKExtensions.h"
-#import "SdefXMLObject.h"
 #import "SdefArguments.h"
 
 @implementation SdefVerb (SdefXMLManager)
 #pragma mark XML Generation
-- (SdefXMLNode *)xmlNode {
+- (SdefXMLNode *)xmlNodeForVersion:(SdefVersion)version {
   id node;
-  if (node = [super xmlNode]) {
+  if (node = [super xmlNodeForVersion:version]) {
     id childNode;
     unsigned idx = [node childCount] - [self childCount];
-    childNode = [[self result] xmlNode];
+    childNode = [[self result] xmlNodeForVersion:version];
     if (nil != childNode) {
       [node insertChild:childNode atIndex:idx];
     }
-    childNode = [[self directParameter] xmlNode];
+    childNode = [[self directParameter] xmlNodeForVersion:version];
     if (nil != childNode) {
       [node insertChild:childNode atIndex:idx];
     }
@@ -43,56 +43,63 @@
 
 #pragma mark -
 #pragma mark Parsing
-- (void)parser:(NSXMLParser *)parser didStartElement:(NSString *)elementName namespaceURI:(NSString *)namespaceURI qualifiedName:(NSString *)qName attributes:(NSDictionary *)attributeDict {
-  if ([elementName isEqualToString:@"parameter"]) {
-    SdefParameter *param = [(SdefObject *)[SdefParameter allocWithZone:[self zone]] initWithAttributes:attributeDict];
-    [self appendChild:param];
-    [parser setDelegate:param];
-    [param release];
-  } else if ([elementName isEqualToString:@"direct-parameter"]) {
-    SdefDirectParameter *param = [self directParameter];
-    [param setAttributes:attributeDict];
-    if (sd_childComments) {
-      [param setComments:sd_childComments];
-      [sd_childComments release];
-      sd_childComments = nil;
-    }
-  } else if ([elementName isEqualToString:@"result"]) {
-    SdefResult *result = [self result];
-    [result setAttributes:attributeDict];
-    if (sd_childComments) {
-      [result setComments:sd_childComments];
-      [sd_childComments release];
-      sd_childComments = nil;
-    }
-  } else {
-    [super parser:parser didStartElement:elementName namespaceURI:namespaceURI qualifiedName:qName attributes:attributeDict];
-  }
-  if (sd_childComments && [[parser delegate] parent] == self) {
-    [[parser delegate] setComments:sd_childComments];
-    [sd_childComments release];
-    sd_childComments = nil;
-  }
+- (int)acceptXMLElement:(NSString *)element {
+  return kSdefParserBothVersion;
 }
 
-// sent when an end tag is encountered. The various parameters are supplied as above.
-- (void)parser:(NSXMLParser *)parser didEndElement:(NSString *)elementName namespaceURI:(NSString *)namespaceURI qualifiedName:(NSString *)qName {
-  if (![elementName isEqualToString:@"direct-parameter"] && ![elementName isEqualToString:@"result"]) {
-    [super parser:parser didEndElement:elementName namespaceURI:namespaceURI qualifiedName:qName];
-  }
-}
+//- (void)parser:(NSXMLParser *)parser didStartElement:(NSString *)elementName namespaceURI:(NSString *)namespaceURI qualifiedName:(NSString *)qName attributes:(NSDictionary *)attributeDict {
+//  if ([elementName isEqualToString:@"parameter"]) {
+//    SdefParameter *param = [(SdefObject *)[SdefParameter allocWithZone:[self zone]] initWithAttributes:attributeDict];
+//    [self appendChild:param];
+//    [parser setDelegate:param];
+//    [param release];
+//  } else if ([elementName isEqualToString:@"direct-parameter"]) {
+//    SdefDirectParameter *param = [self directParameter];
+//    [param setAttributes:attributeDict];
+//    if (sd_childComments) {
+//      [param setComments:sd_childComments];
+//      [sd_childComments release];
+//      sd_childComments = nil;
+//    }
+//  } else if ([elementName isEqualToString:@"result"]) {
+//    SdefResult *result = [self result];
+//    [result setAttributes:attributeDict];
+//    if (sd_childComments) {
+//      [result setComments:sd_childComments];
+//      [sd_childComments release];
+//      sd_childComments = nil;
+//    }
+//  } else {
+//    [super parser:parser didStartElement:elementName namespaceURI:namespaceURI qualifiedName:qName attributes:attributeDict];
+//  }
+//  if (sd_childComments && [[parser delegate] parent] == self) {
+//    [[parser delegate] setComments:sd_childComments];
+//    [sd_childComments release];
+//    sd_childComments = nil;
+//  }
+//}
+//
+//// sent when an end tag is encountered. The various parameters are supplied as above.
+//- (void)parser:(NSXMLParser *)parser didEndElement:(NSString *)elementName namespaceURI:(NSString *)namespaceURI qualifiedName:(NSString *)qName {
+//  if (![elementName isEqualToString:@"direct-parameter"] && ![elementName isEqualToString:@"result"]) {
+//    [super parser:parser didEndElement:elementName namespaceURI:namespaceURI qualifiedName:qName];
+//  }
+//}
 
 @end
 
 @implementation SdefDirectParameter (SdefXMLManager)
 #pragma mark XML Generation
-- (SdefXMLNode *)xmlNode {
+- (SdefXMLNode *)xmlNodeForVersion:(SdefVersion)version {
   id node = nil;
-  if ([self type] && (node = [super xmlNode])) {
-    id attr;
-    if (attr = [self type]) [node setAttribute:attr forKey:@"type"];
-    if (attr = [self desc]) [node setAttribute:[attr stringByEscapingEntities:nil] forKey:@"description"];
-    if ([self isOptional]) [node setAttribute:@"optional" forKey:@"optional"];
+  if ([self hasType] && (node = [super xmlNodeForVersion:version])) {
+    if ([self isOptional]) {
+      if (kSdefTigerVersion == version) {
+        [node setAttribute:@"yes" forKey:@"optional"];
+      } else {
+        [node setAttribute:@"optional" forKey:@"optional"];
+      }
+    }
     [node setEmpty:YES];
   }
   return node;
@@ -105,22 +112,31 @@
 #pragma mark -
 #pragma mark Parsing
 - (void)setAttributes:(NSDictionary *)attrs {
-  [self setType:[attrs objectForKey:@"type"]];
-  [self setDesc:[[attrs objectForKey:@"description"] stringByUnescapingEntities:nil]];
-  [self setOptional:[attrs objectForKey:@"optional"] != nil];
+  [super setAttributes:attrs];
+  NSString *optional = [attrs objectForKey:@"optional"];
+  if (optional && ![optional isEqualToString:@"no"]) {
+    [self setOptional:YES];
+  }
 }
 
+- (int)acceptXMLElement:(NSString *)element {
+  return kSdefParserBothVersion;
+}
 
 @end
 
 @implementation SdefParameter (SdefXMLManager)
 #pragma mark XML Generation
-- (SdefXMLNode *)xmlNode {
+- (SdefXMLNode *)xmlNodeForVersion:(SdefVersion)version {
   id node;
-  if (node = [super xmlNode]) {
-    id attr;
-    if (attr = [self type]) [node setAttribute:attr forKey:@"type"];
-    if ([self isOptional]) [node setAttribute:@"optional" forKey:@"optional"];
+  if (node = [super xmlNodeForVersion:version]) {
+    if ([self isOptional]) {
+      if (kSdefTigerVersion == version) {
+        [node setAttribute:@"yes" forKey:@"optional"];
+      } else {
+        [node setAttribute:@"optional" forKey:@"optional"];
+      }
+    }
   }
   return node;
 }
@@ -134,19 +150,19 @@
 - (void)setAttributes:(NSDictionary *)attrs {
   [super setAttributes:attrs];
   [self setType:[attrs objectForKey:@"type"]];
-  [self setOptional:[attrs objectForKey:@"optional"] != nil];
+  NSString *optional = [attrs objectForKey:@"optional"];
+  if (optional && ![optional isEqualToString:@"no"]) {
+    [self setOptional:YES];
+  }
 }
 
 @end
 
 @implementation SdefResult (SdefXMLManager)
 #pragma mark XML Generation
-- (SdefXMLNode *)xmlNode {
+- (SdefXMLNode *)xmlNodeForVersion:(SdefVersion)version {
   id node = nil;
-  if ([self type] && (node = [super xmlNode])) {
-    id attr;
-    if (attr = [self type]) [node setAttribute:attr forKey:@"type"];
-    if (attr = [self desc]) [node setAttribute:[attr stringByEscapingEntities:nil] forKey:@"description"];
+  if ([self hasType] && (node = [super xmlNodeForVersion:version])) {
     [node setEmpty:YES];
   }
   return node;
@@ -159,8 +175,11 @@
 #pragma mark -
 #pragma mark Parsing
 - (void)setAttributes:(NSDictionary *)attrs {
-  [self setType:[attrs objectForKey:@"type"]];
-  [self setDesc:[[attrs objectForKey:@"description"] stringByUnescapingEntities:nil]];
+  [super setAttributes:attrs];
+}
+
+- (int)acceptXMLElement:(NSString *)element {
+  return kSdefParserBothVersion;
 }
 
 @end

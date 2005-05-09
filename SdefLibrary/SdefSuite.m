@@ -10,43 +10,30 @@
 
 #import "SdefVerb.h"
 #import "SdefClass.h"
-#import "SdefValue.h"
-#import "SdefEnumeration.h"
+#import "SdefTypedef.h"
 #import "SdefDocumentation.h"
 
 @implementation SdefSuite
 #pragma mark Protocols Implementations
 - (id)copyWithZone:(NSZone *)aZone {
   SdefSuite *copy = [super copyWithZone:aZone];
-#if !defined(TIGER_SDEF)
-  copy->sd_values = [self->sd_values copyWithZone:aZone];
-#endif
   return copy;
 }
 
 - (void)encodeWithCoder:(NSCoder *)aCoder {
   [super encodeWithCoder:aCoder];
-#if !defined(TIGER_SDEF)
-  [aCoder encodeObject:sd_values forKey:@"SSValues"];
-#endif
 }
 
 - (id)initWithCoder:(NSCoder *)aCoder {
   if (self = [super initWithCoder:aCoder]) {
-#if !defined(TIGER_SDEF)
-    sd_values = [[aCoder decodeObjectForKey:@"SSValues"] retain];
-#endif
   }
   return self;
 }
 
-#if !defined (TIGER_SDEF)
 #pragma mark -
 - (void)dealloc {
-  [sd_values release];
   [super dealloc];
 }
-#endif
 
 #pragma mark -
 + (SdefObjectType)objectType {
@@ -65,11 +52,13 @@
   return self;
 }
 
-- (void)createContent {
-  [super createContent];
-  sd_soFlags.hasDocumentation = 1;
+- (void)sdefInit {
+  [super sdefInit];
+  sd_soFlags.hasSynonyms = 0;
   NSZone *zone = [self zone];
-  id child = [[SdefCollection allocWithZone:zone] initWithName:NSLocalizedStringFromTable(@"Types", @"SdefLibrary", @"Types Collection default name")];
+  id child;
+  
+  child = [[SdefTypeCollection allocWithZone:zone] initWithName:NSLocalizedStringFromTable(@"Types", @"SdefLibrary", @"Types Collection default name")];
   [child setContentType:[SdefEnumeration class]];
   [child setElementName:@"types"];
   [self appendChild:child];
@@ -92,19 +81,9 @@
   [child setElementName:@"events"];
   [self appendChild:child];
   [child release];
-
-  child = [[SdefCollection allocWithZone:zone] initWithName:NSLocalizedStringFromTable(@"Values", @"SdefLibrary", @"Values Collection default name")];
-  [child setContentType:[SdefValue class]];
-  [child setElementName:nil];
-#if defined(TIGER_SDEF)
-  [self appendChild:child];
-#else
-  sd_values = [child retain];
-#endif
-  [child release];
 }
 
-- (SdefCollection *)types {
+- (SdefTypeCollection *)types {
   return [self childAtIndex:0];
 }
 
@@ -120,12 +99,32 @@
   return [self childAtIndex:3];
 }
 
-- (SdefCollection *)values {
-#if defined(TIGER_SDEF)
-  return [self childAtIndex:4];
-#else
-  return sd_values;
-#endif
+
+@end
+
+@implementation SdefTypeCollection 
+#pragma mark Protocols Implementations
+- (id)copyWithZone:(NSZone *)aZone {
+  SdefTypeCollection *copy = [super copyWithZone:aZone];
+  return copy;
+}
+
+- (void)encodeWithCoder:(NSCoder *)aCoder {
+  [super encodeWithCoder:aCoder];
+}
+
+- (id)initWithCoder:(NSCoder *)aCoder {
+  if (self = [super initWithCoder:aCoder]) {
+  }
+  return self;
+}
+
+#pragma mark -
+- (BOOL)acceptsObjectType:(SdefObjectType)aType {
+  if (![self contentType])
+    return NO;
+  SdefObjectType type = [[self contentType] objectType];
+  return (type == kSdefValueType) || (type == kSdefRecordType) || (type == kSdefEnumerationType);
 }
 
 @end

@@ -6,7 +6,7 @@
 //  Copyright 2005 Shadow Lab. All rights reserved.
 //
 
-#import "SdefObject.h"
+#import "SdefObjects.h"
 
 /*
 <!-- VERB (COMMAND OR EVENT) DEFINITION -->
@@ -51,7 +51,7 @@ description  %Text;        #IMPLIED
 */
 
 @class SdefDocumentation, SdefDirectParameter, SdefResult;
-@interface SdefVerb : SdefTerminologyElement <NSCopying, NSCoding> {
+@interface SdefVerb : SdefTerminologyObject <NSCopying, NSCoding> {
   SdefResult *sd_result;
   SdefDirectParameter *sd_direct;
   // Code into verb are split into class & ID that are two concat four char codes (i.e. eavtquit).

@@ -6,47 +6,29 @@
 //  Copyright 2005 Shadow Lab. All rights reserved.
 //
 
-#import "SdefObject.h"
+#import "SdefObjects.h"
 
-@interface SdefParameter : SdefTerminologyElement <NSCopying, NSCoding> {
-  NSString *sd_type; 
+@interface SdefParameter : SdefTypedObject <NSCopying, NSCoding> {
 }
 
 - (BOOL)isOptional;
 - (void)setOptional:(BOOL)flag;
 
-- (NSString *)type;
-- (void)setType:(NSString *)aType;
-
 @end
 
 #pragma mark -
-@interface SdefDirectParameter : SdefOrphanObject <NSCopying, NSCoding> {
-  NSString *sd_type; 
-  NSString *sd_desc;
+@interface SdefDirectParameter : SdefTypedOrphanObject <NSCopying, NSCoding> {
+
 }
 
 - (BOOL)isOptional;
 - (void)setOptional:(BOOL)flag;
 
-- (NSString *)type;
-- (void)setType:(NSString *)aType;
-
-- (NSString *)desc;
-- (void)setDesc:(NSString *)aDesc;
-
 @end
 
 #pragma mark -
-@interface SdefResult : SdefOrphanObject <NSCopying, NSCoding> {
-  NSString *sd_type; 
-  NSString *sd_desc;
+@interface SdefResult : SdefTypedOrphanObject <NSCopying, NSCoding> {
+
 }
-
-- (NSString *)type;
-- (void)setType:(NSString *)aType;
-
-- (NSString *)desc;
-- (void)setDesc:(NSString *)aDesc;
 
 @end

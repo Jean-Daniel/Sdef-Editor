@@ -1,8 +1,8 @@
 //
-//  SdefObject.h
-//  SDef Editor
+//  SdefBase.h
+//  Sdef Editor
 //
-//  Created by Grayfox on 02/01/05.
+//  Created by Grayfox on 09/05/05.
 //  Copyright 2005 Shadow Lab. All rights reserved.
 //
 
@@ -13,7 +13,6 @@ typedef enum {
   kSdefDictionaryType 		= 'Dico',
   kSdefSuiteType			= 'Suit',
   kSdefCollectionType		= 'Cole',
-  kSdefImportsType			= 'Impo',
   /* Class */
   kSdefClassType			= 'Clas',
   kSdefContentsType			= 'Cont',
@@ -30,12 +29,17 @@ typedef enum {
   kSdefEnumeratorType		= 'Enor',
   /* Value */
   kSdefValueType			= 'Valu',
+  kSdefRecordType			= 'Reco',
   /* Misc */
   kSdefCocoaType			= 'Coco',
   kSdefSynonymType			= 'Syno',
   kSdefDocumentationType	= 'Docu'
 } SdefObjectType;
 
+typedef enum {
+  kSdefPantherVersion,
+  kSdefTigerVersion,
+} SdefVersion;
 
 extern NSString * const SdefNewTreeNode;
 extern NSString * const SdefRemovedTreeNode;
@@ -51,14 +55,14 @@ extern NSString * const SdefObjectDidChangeNameNotification;
 
 #pragma mark -
 #pragma mark Publics Functions Declaration
-extern NSString *SdefNameForCocoaName(NSString *cocoa);
+extern NSString *SdefNameCreateWithCocoaName(NSString *cocoa);
 extern NSString *CocoaNameForSdefName(NSString *cocoa, BOOL isClass);
 
-#pragma mark -
-@class SdefClassManager, SdefDocument;
+@class SdefDocument;
+@class SdefClassManager;
 @class SdefImplementation, SdefDocumentation;
 @class SdefDictionary, SdefSuite, SdefCollection;
-@interface SdefObject : SKTreeNode <NSCopying, NSCoding> {
+@interface SdefObject : SKTreeNode {
 @protected
   struct _sd_soFlags {
     unsigned int hidden:1;
@@ -73,45 +77,47 @@ extern NSString *CocoaNameForSdefName(NSString *cocoa, BOOL isClass);
 @private
   NSImage *sd_icon;
   NSString *sd_name;
-  SdefCollection *sd_synonyms;
   NSMutableArray *sd_comments;
-  SdefDocumentation *sd_documentation;
 }
 
++ (id)nodeWithName:(NSString *)newName;
+- (id)initWithName:(NSString *)newName;
+
+#pragma mark API
+- (void)sdefInit;
+
 + (SdefObjectType)objectType;
+- (SdefObjectType)objectType;
 
 + (NSString *)defaultName;
 + (NSString *)defaultIconName;
 
-+ (id)emptyNode;
-+ (id)nodeWithName:(NSString *)newName;
-
-- (id)initEmpty;
-- (id)initWithName:(NSString *)newName;
-
-- (SdefObjectType)objectType;
-- (void)createContent;
-
-#pragma mark -
+#pragma mark Parents
 - (SdefDocument *)document;
+- (NSUndoManager *)undoManager;
 - (SdefClassManager *)classManager;
 
 - (SdefSuite *)suite;
 - (SdefDictionary *)dictionary;
 - (id)firstParentOfType:(SdefObjectType)aType;
 
+#pragma mark Strings Representations
 - (NSString *)location;
 - (NSString *)objectTypeName;
 
 - (void)sortByName;
 
-#pragma mark -
+#pragma mark Accessors
 - (NSImage *)icon;
 - (void)setIcon:(NSImage *)newIcon;
 
 - (NSString *)name;
 - (void)setName:(NSString *)newName;
 
+- (BOOL)isHidden;
+- (void)setHidden:(BOOL)isHidden;
+
+#pragma mark Flags
 - (BOOL)isEditable;
 - (void)setEditable:(BOOL)flag;
 - (void)setEditable:(BOOL)flag recursive:(BOOL)recu;
@@ -119,19 +125,22 @@ extern NSString *CocoaNameForSdefName(NSString *cocoa, BOOL isClass);
 - (BOOL)isRemovable;
 - (void)setRemovable:(BOOL)removable;
 
+#pragma mark Documentation
 - (BOOL)hasDocumentation;
 - (SdefDocumentation *)documentation;
 - (void)setDocumentation:(SdefDocumentation *)doc;
 
+#pragma mark Synonyms
 - (BOOL)hasSynonyms;
 - (SdefCollection *)synonyms;
 - (void)setSynonyms:(SdefCollection *)newSynonyms;
 
+#pragma mark Implementation
 - (BOOL)hasImplementation;
 - (SdefImplementation *)impl;
 - (void)setImpl:(SdefImplementation *)newImpl;
 
-#pragma mark -
+#pragma mark Comments
 - (NSArray *)comments;
 - (void)setComments:(NSArray *)comments;
 - (void)addComment:(NSString *)comment;
@@ -141,6 +150,7 @@ extern NSString *CocoaNameForSdefName(NSString *cocoa, BOOL isClass);
 
 #pragma mark -
 @interface SdefCollection : SdefObject <NSCopying, NSCoding> {
+@private
   Class sd_contentType;
   NSString *sd_elementName;
 }
@@ -150,35 +160,13 @@ extern NSString *CocoaNameForSdefName(NSString *cocoa, BOOL isClass);
 
 - (NSString *)elementName;
 - (void)setElementName:(NSString *)aName;
-@end
 
-#pragma mark -
-@interface SdefTerminologyElement : SdefObject <NSCopying, NSCoding> {
-@private
-  NSString *sd_code; 
-  NSString *sd_desc;
-  SdefImplementation *sd_impl;
-}
-
-- (BOOL)isHidden;
-- (void)setHidden:(BOOL)isHidden;
-
-- (NSString *)codeStr;
-- (void)setCodeStr:(NSString *)str;
-
-- (NSString *)desc;
-- (void)setDesc:(NSString *)newDesc;
-
-- (NSString *)cocoaKey;
-- (NSString *)cocoaName;
-- (NSString *)cocoaClass;
-- (NSString *)cocoaMethod;
-
+- (BOOL)acceptsObjectType:(SdefObjectType)aType;
 @end
 
 #pragma mark -
 @interface SdefOrphanObject : SdefObject <NSCopying, NSCoding> {
-@private
+  @private
   SdefObject *sd_owner;
 }
 
@@ -186,11 +174,3 @@ extern NSString *CocoaNameForSdefName(NSString *cocoa, BOOL isClass);
 - (void)setOwner:(SdefObject *)anObject;
 
 @end
-
-/*
-#pragma mark -
-@interface SdefImports : SdefCollection <NSCopying, NSCoding> {  
-}
-
-@end
-*/

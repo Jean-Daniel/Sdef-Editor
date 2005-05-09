@@ -7,15 +7,14 @@
 //
 
 #import "SdefClassManager.h"
-#import "SdefXMLObject.h"
 #import "SdefClass.h"
 #import "SdefSuite.h"
 #import "ShadowBase.h"
 #import "SKFunctions.h"
 
 #import "SdefImplementation.h"
-#import "SdefEnumeration.h"
 #import "SdefDictionary.h"
+#import "SdefTypedef.h"
 #import "SdefSuite.h"
 #import "SdefVerb.h"
 
@@ -31,14 +30,14 @@
       @"date",
       @"file",
       @"integer",
-      @"location",
+      @"location specifier",
       @"number",
-      @"object",
+      @"specifier",
       @"point",
       @"real",
       @"record",
       @"rectangle",
-      @"string",
+      @"text",
       @"type",
       nil];
   }

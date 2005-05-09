@@ -59,10 +59,9 @@
   [super dealloc];
 }
 
-- (void)createContent {
-  [super createContent];
-  sd_soFlags.hasSynonyms = 1;
-  sd_soFlags.hasDocumentation = 1;
+- (void)sdefInit {
+  [super sdefInit];
+
   NSZone *zone = [self zone];
   SdefContents *contents = [[SdefContents allocWithZone:zone] init];
   [self setContents:contents];
@@ -122,7 +121,7 @@
 
 - (void)setPlural:(NSString *)newPlural {
   if (sd_plural != newPlural) {
-    [[[self document] undoManager] registerUndoWithTarget:self selector:_cmd object:sd_plural];
+    [[self undoManager] registerUndoWithTarget:self selector:_cmd object:sd_plural];
     [sd_plural release];
     sd_plural = [newPlural copyWithZone:[self zone]];
   }
@@ -134,7 +133,7 @@
 
 - (void)setInherits:(NSString *)newInherits {
   if (sd_inherits != newInherits) {
-    [[[self document] undoManager] registerUndoWithTarget:self selector:_cmd object:sd_inherits];
+    [[self undoManager] registerUndoWithTarget:self selector:_cmd object:sd_inherits];
     [sd_inherits release];
     sd_inherits = [newInherits copyWithZone:[self zone]];
   }
@@ -226,7 +225,7 @@
 
 - (void)setAccess:(unsigned)newAccess {
   if (sd_access != newAccess) {
-    [[[[self document] undoManager] prepareWithInvocationTarget:self] setAccess:sd_access];
+    [[[self undoManager] prepareWithInvocationTarget:self] setAccess:sd_access];
     sd_access = newAccess;
   }
 }
@@ -237,7 +236,7 @@
 
 - (void)setAccessors:(unsigned)accessors {
   if (sd_accessors != accessors) {
-    [[[[self document] undoManager] prepareWithInvocationTarget:self] setAccessors:sd_accessors];
+    [[[self undoManager] prepareWithInvocationTarget:self] setAccessors:sd_accessors];
     sd_accessors = accessors;
   }
 }
@@ -300,20 +299,17 @@
 - (id)copyWithZone:(NSZone *)aZone {
   SdefProperty *copy = [super copyWithZone:aZone];
   copy->sd_access = sd_access;
-  copy->sd_type = [sd_type copyWithZone:aZone];
   return copy;
 }
 
 - (void)encodeWithCoder:(NSCoder *)aCoder {
   [super encodeWithCoder:aCoder];
-  [aCoder encodeObject:sd_type forKey:@"SPType"];
   [aCoder encodeInt:sd_access forKey:@"SPAccess"];
 }
 
 - (id)initWithCoder:(NSCoder *)aCoder {
   if (self = [super initWithCoder:aCoder]) {
     sd_access = [aCoder decodeIntForKey:@"SPAccess"];
-    sd_type = [[aCoder decodeObjectForKey:@"SPType"] retain];
   }
   return self;
 }
@@ -332,33 +328,15 @@
 }
 
 - (void)dealloc {
-  [sd_type release];
   [super dealloc];
 }
 
-- (void)createContent {
-  [super createContent];
-  sd_soFlags.hasSynonyms = 1;
-}
-
 #pragma mark -
-- (NSString *)type {
-  return sd_type;
-}
-
-- (void)setType:(NSString *)aType {
-  if (sd_type != aType) {
-    [[[self document] undoManager] registerUndoWithTarget:self selector:_cmd object:sd_type];
-    [sd_type release];
-    sd_type = [aType copyWithZone:[self zone]];
-  }
-}
-
 - (unsigned)access {
   return sd_access;
 }
 - (void)setAccess:(unsigned)newAccess {
-  [[[[self document] undoManager] prepareWithInvocationTarget:self] setAccess:sd_access];
+  [[[self undoManager] prepareWithInvocationTarget:self] setAccess:sd_access];
   sd_access = newAccess;
 }
 
@@ -368,7 +346,7 @@
 - (void)setNotInProperties:(BOOL)flag {
   flag = flag ? 1 : 0;
   if (flag != sd_soFlags.notInProperties) {
-    [[[[self document] undoManager] prepareWithInvocationTarget:self] setNotInProperties:sd_soFlags.notInProperties];
+    [[[self undoManager] prepareWithInvocationTarget:self] setNotInProperties:sd_soFlags.notInProperties];
     sd_soFlags.notInProperties = flag;
   }
 }
@@ -403,6 +381,11 @@
 }
 + (NSString *)defaultIconName {
   return @"Member";
+}
+
+- (void)sdefInit {
+  [super sdefInit];
+  sd_soFlags.hasDocumentation = 0;
 }
 
 @end

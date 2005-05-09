@@ -54,7 +54,7 @@
 }
 - (void)setSdClass:(NSString *)newSdClass {
   if (sd_class != newSdClass) {
-    [[[self document] undoManager] registerUndoWithTarget:self selector:_cmd object:sd_class];
+    [[self undoManager] registerUndoWithTarget:self selector:_cmd object:sd_class];
     [sd_class release];
     sd_class = [newSdClass copyWithZone:[self zone]];
   }
@@ -65,7 +65,7 @@
 }
 - (void)setKey:(NSString *)newKey {
   if (sd_key != newKey) {
-    [[[self document] undoManager] registerUndoWithTarget:self selector:_cmd object:sd_key];
+    [[self undoManager] registerUndoWithTarget:self selector:_cmd object:sd_key];
     [sd_key release];
     sd_key = [newKey copyWithZone:[self zone]];
   }
@@ -76,7 +76,7 @@
 }
 - (void)setMethod:(NSString *)newMethod {
   if (sd_method != newMethod) {
-    [[[self document] undoManager] registerUndoWithTarget:self selector:_cmd object:sd_method];
+    [[self undoManager] registerUndoWithTarget:self selector:_cmd object:sd_method];
     [sd_method release];
     sd_method = [newMethod copyWithZone:[self zone]];
   }

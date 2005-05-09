@@ -6,22 +6,22 @@
 //  Copyright 2005 Shadow Lab. All rights reserved.
 //
 
-#import "SdefObject.h"
-
-extern NSMutableArray *sd_childComments;
-
-extern NSString *SDAccessStringFromFlag(unsigned flag);
-extern unsigned SDAccessFlagFromString(NSString *str);
+#import "SdefBase.h"
+#import "SdefXMLParser.h"
 
 @class SdefXMLNode;
 @interface SdefObject (SdefXMLManager)
 
-- (id)initWithAttributes:(NSDictionary *)attributes;
-
 #pragma mark -
+#pragma mark Parser
+- (id)initWithAttributes:(NSDictionary *)attributes;
 - (void)setAttributes:(NSDictionary *)attrs;
 
-- (SdefXMLNode *)xmlNode;
+- (int)acceptXMLElement:(NSString *)element;
+
+#pragma mark -
+#pragma mark Generator
 - (NSString *)xmlElementName;
+- (SdefXMLNode *)xmlNodeForVersion:(SdefVersion)version;
 
 @end

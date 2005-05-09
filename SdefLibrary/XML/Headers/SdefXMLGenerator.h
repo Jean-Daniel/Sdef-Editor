@@ -6,7 +6,7 @@
 //  Copyright 2005 Shadow Lab. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
+#import "SdefBase.h"
 
 @class SdefObject;
 @interface SdefXMLGenerator : NSObject {
@@ -17,7 +17,7 @@
 }
 
 - (id)initWithRoot:(SdefObject *)dictionary;
-- (NSData *)xmlData;
+- (NSData *)xmlDataForVersion:(SdefVersion)version;
 
 - (SdefObject *)root;
 - (void)setRoot:(SdefObject *)anObject;

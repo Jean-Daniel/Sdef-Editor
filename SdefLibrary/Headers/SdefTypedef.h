@@ -6,7 +6,7 @@
 //  Copyright 2005 Shadow Lab. All rights reserved.
 //
 
-#import "SdefObject.h"
+#import "SdefObjects.h"
 
 /*
  <!-- ENUMERATIONS -->
@@ -26,13 +26,23 @@
  >
 */
 
-@class SdefDocumentation, SdefImplementation;
-@interface SdefEnumeration : SdefTerminologyElement <NSCopying, NSCoding> {
+@interface SdefEnumeration : SdefTerminologyObject <NSCopying, NSCoding> {
 }
 
 @end
 
-@interface SdefEnumerator : SdefTerminologyElement <NSCopying, NSCoding> {
+@interface SdefEnumerator : SdefTerminologyObject <NSCopying, NSCoding> {
 }
 
 @end
+
+@interface SdefValue  : SdefTerminologyObject <NSCopying, NSCoding> {
+}
+
+@end
+
+@interface SdefRecord : SdefTerminologyObject <NSCopying, NSCoding> {  
+}
+
+@end
+
