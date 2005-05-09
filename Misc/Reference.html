@@ -19,6 +19,7 @@
   hr.separator { margin: auto;}
   h4 { margin-bottom: 0px; font-size: 18px; text-decoration: none;}
   h4 a { font-style: normal; font-size: 18px; color: green}
+  .optional { font-style: italic; }
   #content .attributes a, #content .definition a { color: green; font-style: italic; } 
   .implementation, .attributes { margin-left: 1em; margin-top: 12px; }
   .implementation dd, .attributes dd { margin-left: 2em; margin-bottom: 4px }
@@ -47,20 +48,20 @@
  <div id="tree" style="margin-left: 4px; margin-top: 4px">
     <dl>
      <dt><img class="middle" src="Images/Dictionary.png" alt="" />
-      <a href="#Dictionary" >Dictionary</a>
+      <a href="#Dictionary">Dictionary</a>
      </dt>
      <dd>
       <dl>
        <dt><img class="middle" src="Images/Suite.png" alt="" />
-        <a href="#Suite" >Suite</a>
+        <a href="#Suite">Suite</a>
        </dt>
        <dd>
         <dl>
          <dt><img class="middle" src="Images/Enum.png" alt="" />
-          <a href="#Enumeration" >Enumeration</a>
+          <a href="#Enumeration">Enumeration</a>
          </dt>
          <dd><img class="middle" src="Images/Enum.png" alt="" />
-          <a href="#Enumerator" >Enumerator</a>
+          <a href="#Enumerator">Enumerator</a>
          </dd>
         </dl>
        </dd>
@@ -70,52 +71,69 @@
           <a href="#Class" >Class</a>
          </dt>
          <dd><img class="middle" src="Images/Contents.png" alt="" />
-          <a href="#Contents" >Contents</a>
+          <a href="#Contents">Contents</a>
          </dd>
          <dd><img class="middle" src="Images/Variable.png" alt="" />
-          <a href="#Element" >Element</a>
+          <a href="#Element">Element</a>
          </dd>
          <dd><img class="middle" src="Images/Variable.png" alt="" />
-          <a href="#Property" >Property</a>
+          <a href="#Property">Property</a>
          </dd>
          <dd><img class="middle" src="Images/Member.png" alt="" />
-          <a href="#RespondsToCommands" >Resp. to Cmds</a>
+          <a href="#RespondsToCommands">Resp. to Cmds</a>
          </dd>
          <dd><img class="middle" src="Images/Member.png" alt="" />
-          <a href="#RespondsToEvents" >Resp. to Events</a>
+          <a href="#RespondsToEvents">Resp. to Events</a>
          </dd>
         </dl>
        </dd>
        <dd>
         <dl>
          <dt><img class="middle" src="Images/Function.png" alt="" />
-          <a href="#Command" >Command</a>
+          <a href="#Command">Command</a>
          </dt>
          <dd><img class="middle" src="Images/Contents.png" alt="" />
-          <a href="#DirectParameter" >Direct Parameter</a>
+          <a href="#DirectParameter">Direct Parameter</a>
          </dd>
          <dd><img class="middle" src="Images/Param.png" alt="" />
-          <a href="#Parameter" >Parameter</a>
+          <a href="#Parameter">Parameter</a>
          </dd>
          <dd><img class="middle" src="Images/Misc.png" alt="" />
-          <a href="#Result" >Result</a>
+          <a href="#Result">Result</a>
          </dd>
         </dl>
        </dd>
        <dd>
         <dl>
          <dt><img class="middle" src="Images/Function.png" alt="" />
-          <a href="#Event" >Event</a>
+          <a href="#Event">Event</a>
          </dt>
          <dd><img class="middle" src="Images/Contents.png" alt="" />
-          <a href="#DirectParameter" >Direct Parameter</a>
+          <a href="#DirectParameter">Direct Parameter</a>
          </dd>
          <dd><img class="middle" src="Images/Param.png" alt="" />
-          <a href="#Parameter" >Parameter</a>
+          <a href="#Parameter">Parameter</a>
          </dd>
          <dd><img class="middle" src="Images/Misc.png" alt="" />
-          <a href="#Result" >Result</a>
+          <a href="#Result">Result</a>
          </dd>
+        </dl>
+       </dd>
+       <dd>
+        <dl>
+         <dt><img class="middle" src="Images/Struct.png" alt="" />
+          <a href="#RecordType">Record Type</a>
+         </dt>
+         <dd><img class="middle" src="Images/Variable.png" alt="" />
+          <a href="#Property">Property</a>
+         </dd>
+        </dl>
+       </dd>
+       <dd>
+        <dl>
+         <dt><img class="middle" src="Images/Type.png" alt="" />
+          <a href="#ValueType">Value Type</a>
+         </dt>
         </dl>
        </dd>
       </dl>
@@ -127,25 +145,24 @@
  <hr />
  
  <div class="element">
-   <a name="Class"></a>
-   <h3>Class</h3>
+   <h3 id="Class">Class</h3>
    <p class="definition">
     An abstract object definition that lists the <a href="#Property">properties</a>, <a href="#Element">elements</a>,
     and supported <a href="#Command">verbs</a> for instances of that class. Class instances are called "objects".
    </p>
    <h4>Attributes</h4>
    <dl class="attributes">
-    <dt class="require">Name</dt>
+    <dt class="require">name</dt>
     <dd>See <a href="#Attributes">Commons Attributes</a>.</dd>
-    <dt class="require">Code</dt>
+    <dt class="require">code</dt>
     <dd>See <a href="#Attributes">Commons Attributes</a>.</dd>
-    <dt class="optional">Description</dt>
+    <dt class="optional">description</dt>
     <dd>See <a href="#Attributes">Commons Attributes</a>.</dd>
-    <dt class="optional">Hidden</dt>
+    <dt class="optional">hidden</dt>
     <dd>See <a href="#Attributes">Commons Attributes</a>.</dd>
-    <dt class="optional">Plural</dt>
+    <dt class="optional">plural</dt>
     <dd>The plural name of the class. If omitted, defaults to the name with "s" appended.</dd>
-    <dt class="optional">Inherits</dt>
+    <dt class="optional">inherits</dt>
     <dd>The class, if any, that this one descends from. For Cocoa Script Terminology, all objects descends from <code>item</code> by default.</dd>
    </dl>
    <h4><a href="#Cocoa">Implementation</a></h4>
@@ -157,8 +174,7 @@
   <hr class="separator"/>
   
   <div class="element">
-   <a name="Command"></a>
-   <h3>Command</h3>
+   <h3 id="Command">Command</h3>
    <p class="definition">
     <em>Commands</em> (aka method, member function.) and <em>events</em>, collectively called "verbs",
     are messages that may be sent to an object.
@@ -167,16 +183,18 @@
    <p class="definition">
 				Unlike most object-oriented languages, verbs are defined independently of any particular <a href="#Class">class</a>.
 				A <a href="#Class">class</a> may then list the verbs that it responds to.
-				To Java and Objective-C programmers, Scripting Definitions verbs therefore resemble protocols more than member functions.</p>
+				To Java and Objective-C programmers, Scripting Definitions verbs therefore resemble protocols more than member functions.
+				You may specify the same command more than once with different parameters, such as to define a polymorphic "open" command 
+				that has different parameters depending on whether it is applied to a document or a database.</p>
    <h4>Attributes</h4>
    <dl class="attributes">
-    <dt>Name</dt>
+    <dt>name</dt>
     <dd>See <a href="#Attributes">Commons Attributes</a>.</dd>
-    <dt>Code</dt>
+    <dt>code</dt>
     <dd>See <a href="#Attributes">Commons Attributes</a>.</dd>
-    <dt>Description</dt>
+    <dt>description</dt>
     <dd>See <a href="#Attributes">Commons Attributes</a>.</dd>
-    <dt>Hidden</dt>
+    <dt>hidden</dt>
     <dd>See <a href="#Attributes">Commons Attributes</a>.</dd>
    </dl>
    <h4><a href="#Cocoa">Implementation</a></h4>
@@ -190,8 +208,7 @@
   <hr class="separator"/>
   
   <div class="element">
-   <a name="Contents"></a>
-   <h3>Contents</h3>
+   <h3 id="Contents">Contents</h3>
    <p class="definition">
    	Similar to a <a href="#Property">property</a>, but its <em>name</em> and <em>code</em> are optional.	If omitted, they default to <em>"contents"</em> and <em>'pcnt'</em>, respectively.</p>
    <p class="definition">
@@ -201,17 +218,17 @@
 				but because <code>"text"</code> is an implied container, a script can also say <code>"word 1 of document 1"</code>.</p>
    <h4>Attributes</h4>
    <dl class="attributes">
-    <dt>Name</dt>
+    <dt>name</dt>
     <dd>See <a href="#Attributes">Commons Attributes</a>.</dd>
-    <dt>Code</dt>
+    <dt>code</dt>
     <dd>See <a href="#Attributes">Commons Attributes</a>.</dd>
-    <dt>Type</dt>
+    <dt>type</dt>
     <dd>See <a href="#Attributes">Commons Attributes</a>.</dd>
-    <dt>Description</dt>
+    <dt>description</dt>
     <dd>See <a href="#Attributes">Commons Attributes</a>.</dd>
-    <dt>Hidden</dt>
+    <dt>hidden</dt>
     <dd>See <a href="#Attributes">Commons Attributes</a>.</dd>
-    <dt>Access</dt>
+    <dt>access</dt>
     <dd>The allowed access for the element class: <em>Read-only</em>, <em>Write-only</em> or <em>Read &amp; Write</em>.<br />
     	Default is <em>Read &amp; Write</em>.</dd>
    </dl>
@@ -224,8 +241,7 @@
   <hr class="separator"/>
   
   <div class="element">
-   <a name="Dictionary"></a>
-   <h3>Dictionary</h3>
+   <h3 id="Dictionary">Dictionary</h3>
    <p class="definition">The root element of a Scripting Definition.</p>
    <h4>Attributes</h4>
    <dl class="attributes">
@@ -236,8 +252,7 @@
   <hr class="separator"/>
   
   <div class="element">
-   <a name="DirectParameter"></a>
-   <h3>Direct Parameter</h3>
+   <h3 id="DirectParameter">Direct Parameter</h3>
    <p class="definition">
 				The direct parameter of a <a href="#Command">verb</a> is a value that appears immediately after the verb and specifies its target.
 				The type of the direct parameter is usually an application <a href="#Class">class</a>. For example, in the command <code>"close window 1"</code>,
@@ -248,35 +263,66 @@
 				object with the direct	parameter's value as a normal <a href="#Parameter">parameter</a>.</p>
    <h4>Attributes</h4>
    <dl class="attributes">
-    <dt>Type</dt>
+    <dt>type</dt>
     <dd>See <a href="#Attributes">Commons Attributes</a>.</dd>
-    <dt>Description</dt>
+    <dt>description</dt>
     <dd>See <a href="#Attributes">Commons Attributes</a>.</dd>
-    <dt class="optional">Optional</dt>
-    <dd>Indicates that the parameter is optional. Otherwise, the parameter is required.</dd>
+    <dt class="optional">optional</dt>
+    <dd>Indicates that the parameter is optional. Otherwise, the parameter is required.
+    The value may be <code>"yes"</code> (optional) or <code>"no"</code> (required)</dd>
    </dl>
   </div> 
   <hr class="separator"/>
   
   <div class="element">
-   <a name="Element"></a>
-   <h3>Element</h3>
+   <h3 id="Documentation">Documentation</h3>
+   <p class="definition">
+   When an element needs more exposition than a simple <a href="#Attributes">description</a> attribute can provide,
+   use a <em>documentation</em> element. Script Editor's dictionary viewer will display additional XHTML markup included
+   inside an html element, for example:</p>
+<pre style="text-align:left;color:#000000; padding:0.5em 1em 0.5em 1em;"><span style="color:#881280;">&lt;property </span><span style="color:#994500;">name=</span><span style="color:#1a1aa6;">"link"</span><span style="color:#881280;"> </span><span style="color:#994500;">type=</span><span style="color:#1a1aa6;">"text"</span><span style="color:#881280;">&gt;</span>
+ <span style="color:#881280;">&lt;documentation&gt;</span>
+  <span style="color:#881280;">&lt;html&gt;</span>
+   Goes <span style="color:#881280;">&lt;a </span><span style="color:#994500;">href=</span><span style="color:#1a1aa6;">"http://www.apple.com/applescript"</span><span style="color:#881280;">&gt;</span>here<span style="color:#881280;">&lt;/a&gt;</span> by default.
+  <span style="color:#881280;">&lt;/html&gt;</span>
+ <span style="color:#881280;">&lt;/documentation&gt;</span>
+<span style="color:#881280;">&lt;/property&gt;</span>
+</pre>
+   <p class="definition">Because the contents of an html element are still parsed as
+    XML, they must be well-formed XML, which means they must be XHTML, not HTML. In particular:</p>
+    <ul>
+     <li style="margin-bottom: 1em">All tags must be balanced, including ones HTML would let you leave open.<br />
+     (Use <span style="color:#881280;">&lt;p&gt;</span>this<span style="color:#881280;">&lt;/p&gt;</span>
+          <span style="color:#881280;">&lt;p&gt;</span>that<span style="color:#881280;">&lt;/p&gt;</span>,
+      not <span style="color:#881280;">&lt;p&gt;</span>this <span style="color:#881280;">&lt;p&gt;</span>that.)
+     </li>
+     <li>Empty tags must use XML notation. (Use <span style="color:#881280;">&lt;br/&gt;</span>, not <span style="color:#881280;">&lt;br&gt;</span>.)</li>
+    </ul>
+    <p class="definition">
+     The contents are an XHTML fragment, not a complete XHTML document.
+     You may include any other XML elements you wish inside a documentation element,
+     sdp(1) will simply ignore them.</p>
+  </div>
+  <hr class="separator"/>
+
+  <div class="element">
+   <h3 id="Element">Element</h3>
    <p class="definition">
    	An object contained in another one (aka to-many relation). An object may have any number of <em>elements</em> of a given <a href="#Class">class</a>,
    	including none at all, and may have any number of <em>element</em> classes. For example, the <code>documents</code> of an <code>application</code>
    	are <em>elements</em>.</p>
    <h4>Attributes</h4>
    <dl class="attributes">
-    <dt>Type</dt>
+    <dt>type</dt>
     <dd>See <a href="#Attributes">Commons Attributes</a>.</dd>
-    <dt>Description</dt>
+    <dt>description</dt>
     <dd>See <a href="#Attributes">Commons Attributes</a>.</dd>
-    <dt>Hidden</dt>
+    <dt>hidden</dt>
     <dd>See <a href="#Attributes">Commons Attributes</a>.</dd>
-    <dt>Access</dt>
+    <dt>access</dt>
     <dd>The allowed access for the element class: <em>Read-only</em>, <em>Write-only</em> or <em>Read &amp; Write</em>.<br />
     	Default is <em>Read &amp; Write</em>.</dd>
-    	<dt>Accessors</dt>
+    	<dt>accessors</dt>
     	<dd>Accessors define which access forms an element supports. There are six forms:<br />
     <ul style="list-style-type: none">
      <li>- <strong>index</strong>: numeric index (<code>window 1</code>).</li>
@@ -293,29 +339,50 @@
    </dl>
    <h4><a href="#Cocoa">Implementation</a></h4>
    <dl class="implementation">
-    <dt>Cocoa Method</dt>
-    <dd>An ObjC method name (Property accessor).</dd>
+    <dt>Cocoa Key</dt>
+    <dd>A Key-Value-Coding key name.</dd>
    </dl>
   </div> 
   <hr class="separator"/>
   
   <div class="element">
-   <a name="Enumeration"></a>
-   <h3>Enumeration</h3>
+   <h3 id="Enumeration">Enumeration</h3>
    <p class="definition">
    		A list of symbolic constants (<a href="#Enumerator">enumerators</a>).
    		For example, the type of the <code>saving</code> parameter for <code>close</code> is the enumeration <code>yes/no/ask</code>.
    </p>
    <h4>Attributes</h4>
    <dl class="attributes">
-    <dt>Name</dt>
+    <dt>name</dt>
     <dd>See <a href="#Attributes">Commons Attributes</a>.</dd>
-    <dt>Code</dt>
+    <dt>code</dt>
     <dd>See <a href="#Attributes">Commons Attributes</a>.</dd>
-    <dt>Description</dt>
+    <dt>description</dt>
     <dd>See <a href="#Attributes">Commons Attributes</a>.</dd>
-    <dt>Hidden</dt>
+    <dt>hidden</dt>
     <dd>See <a href="#Attributes">Commons Attributes</a>.</dd>
+    <dt class="optional">inline</dt>
+    <dd>Controls how many enumerators are displayed in-line. By default (with no attribute),
+    all enumerators are displayed in-line. For example:
+    <dl>
+     <dt><u>sdef:</u></dt>
+     <dd><pre><span style="color:#881280;">&lt;enumeration </span><span style="color:#994500;">name=</span><span style="color:#1a1aa6;">"save options"</span><span style="color:#881280;">&gt;</span>
+    <span style="color:#881280;">&lt;enumerator </span><span style="color:#994500;">name=</span><span style="color:#1a1aa6;">"yes"</span><span style="color:#881280;">/&gt;</span>
+    <span style="color:#881280;">&lt;enumerator </span><span style="color:#994500;">name=</span><span style="color:#1a1aa6;">"no"</span><span style="color:#881280;">/&gt;</span>
+    <span style="color:#881280;">&lt;enumerator </span><span style="color:#994500;">name=</span><span style="color:#1a1aa6;">"ask"</span><span style="color:#881280;">/&gt;</span>
+<span style="color:#881280;">&lt;/enumeration&gt;</span>
+<span style="color:#881280;">&lt;parameter </span><span style="color:#994500;">name=</span><span style="color:#1a1aa6;">"saving"</span><span style="color:#881280;"> </span><span style="color:#994500;">type=</span><span style="color:#1a1aa6;">"save options"</span><span style="color:#881280;">/&gt;</span></pre></dd>
+    <dt><u>display:</u></dt>
+    <dd><strong>saving</strong> yes/no/ask</dd>
+    </dl>
+    
+    By specifying a number, that number of enumerators will be listed in-line, with a link to
+    the complete definition.  To show only the enumeration name, use <code>inline="0"</code>.
+    For example:<ul><li> inline="2": <strong>saving</strong> yes/no/more…</li>
+    <li>inline="0": <strong>saving</strong> <u>save</u> <u>options</u></li>
+    </ul>
+    This attribute only affects the display, it has no semantic meaning.
+    </dd>
    </dl>
    <h4><a href="#Cocoa">Implementation</a></h4>
    <dl class="implementation">
@@ -326,18 +393,17 @@
   <hr class="separator"/>
  
   <div class="element">
-   <a name="Enumerator"></a>
-   <h3>Enumerator</h3>
+   <h3 id="Enumerator">Enumerator</h3>
    <p class="definition">A symbolic constant.</p>
    <h4>Attributes</h4>
    <dl class="attributes">
-    <dt>Name</dt>
+    <dt>name</dt>
     <dd>See <a href="#Attributes">Commons Attributes</a>.</dd>
-    <dt>Code</dt>
+    <dt>code</dt>
     <dd>See <a href="#Attributes">Commons Attributes</a>.</dd>
-    <dt>Description</dt>
+    <dt>description</dt>
     <dd>See <a href="#Attributes">Commons Attributes</a>.</dd>
-    <dt>Hidden</dt>
+    <dt>hidden</dt>
     <dd>See <a href="#Attributes">Commons Attributes</a>.</dd>
    </dl>
    <h4><a href="#Cocoa">Implementation</a></h4>
@@ -349,31 +415,30 @@
   <hr class="separator"/>
   
   <div class="element">
-   <a name="Event"></a>
-   <h3>Event</h3>
+   <h3 id="Event">Event</h3>
    <p class="definition">See <a href="#Command">Command</a>.</p>
   </div> 
   <hr class="separator"/>
   
   <div class="element">
-   <a name="Parameter"></a>
-   <h3>Parameter</h3>
+   <h3 id="Parameter">Parameter</h3>
    <p class="definition">
    	A named value included with a verb. <em>Parameter</em> names are often prepositions: <code>"with"</code>, <code>"by"</code>, etc.</p>
    <h4>Attributes</h4>
    <dl class="attributes">
-    <dt>Name</dt>
+    <dt>name</dt>
     <dd>See <a href="#Attributes">Commons Attributes</a>.</dd>
-    <dt>Code</dt>
+    <dt>code</dt>
     <dd>See <a href="#Attributes">Commons Attributes</a>.</dd>
-    <dt>Type</dt>
+    <dt>type</dt>
     <dd>See <a href="#Attributes">Commons Attributes</a>.</dd>
-    <dt>Description</dt>
+    <dt>description</dt>
     <dd>See <a href="#Attributes">Commons Attributes</a>.</dd>
-    <dt>Hidden</dt>
+    <dt>hidden</dt>
     <dd>See <a href="#Attributes">Commons Attributes</a>.</dd>
-    <dt class="optional">Optional</dt>
-    <dd>Indicates that the parameter is optional. Otherwise, the parameter is required.</dd>
+    <dt class="optional">optional</dt>
+    <dd>Indicates that the parameter is optional. Otherwise, the parameter is required.
+    The value may be <code>"yes"</code> (optional) or <code>"no"</code> (required).</dd>
    </dl>
    <h4><a href="#Cocoa">Implementation</a></h4>
    <dl class="implementation">
@@ -384,67 +449,69 @@
   <hr class="separator"/>
   
   <div class="element">
-   <a name="Property"></a>
-   <h3>Property</h3>
+   <h3 id="Property">Property</h3>
    <p class="definition">
    	A unique data member of an object (aka field, instance variable, to-one relation).
    	<em>Properties</em> always have a <em>name</em>, and there is always exactly one of them with a given <em>name</em> in an object.
    	For example, the <code>name</code> of a <code>document</code> is a <em>property</em>.</p>
    <h4>Attributes</h4>
    <dl class="attributes">
-    <dt>Name</dt>
+    <dt>name</dt>
     <dd>See <a href="#Attributes">Commons Attributes</a>.</dd>
-    <dt>Code</dt>
+    <dt>code</dt>
     <dd>See <a href="#Attributes">Commons Attributes</a>.</dd>
-    <dt>Type</dt>
+    <dt>type</dt>
     <dd>See <a href="#Attributes">Commons Attributes</a>.</dd>
-    <dt>Description</dt>
+    <dt>description</dt>
     <dd>See <a href="#Attributes">Commons Attributes</a>.</dd>
-    <dt>Hidden</dt>
+    <dt>hidden</dt>
     <dd>See <a href="#Attributes">Commons Attributes</a>.</dd>
-    <dt>Access</dt>
-    <dd>The allowed access for the element class: <em>Read-only</em>, <em>Write-only</em> or <em>Read &amp; Write</em>.<br />
+    <dt>access</dt>
+    <dd>The allowed access for the element class: <em>Read-only</em> (<code>"r"</code>), <em>Write-only</em> (<code>"w"</code>) or <em>Read &amp; Write</em> (<code>"rw"</code>).<br />
     	Default is <em>Read &amp; Write</em></dd>
-    <dt>Not in Properties</dt>
-    <dd>For frameworks that provide automatic support for a <code>"properties"</code> <em>property</em>, indicates that this <em>property</em> should not be included</dd>
+    <dt>in-properties</dt>
+    <dd>For frameworks that provide automatic support for a <code>"properties"</code> <em>property</em>, indicates that this <em>property</em> should not be included.
+    The value may be <code>"yes"</code> (the default) or <code>"no"</code>.</dd>
    </dl>
    <h4><a href="#Cocoa">Implementation</a></h4>
    <dl class="implementation">
-    <dt>Cocoa Method</dt>
-    <dd>An ObjC method name (Property accessor).</dd>
+    <dt>Cocoa Key</dt>
+    <dd>A Key-Value-Coding key name.</dd>
    </dl>
   </div> 
   <hr class="separator"/>
   
   <div class="element">
-   <a name="Result"></a>
-   <h3>Result</h3>
-   <p class="definition">
-   	The <em>type</em> of value generated when a <a href="#Command">verb</a> is executed. If there is no result, omit this element.
-   	<em>result</em> is a special case of <a href="#Parameter">parameter</a>, it has only <em>type</em> and <em>description</em>
-   	attributes and may not be <em>hidden</em> or <em>optional</em>.</p>
+  <h3 id="RecordType">Record Type</h3>
+   <p class="definition">A simple structure, as opposed to a class. (In C terms, a "POD" or "plain old data" type.)
+    Points, rectangles, and print settings are all record-types.</p>
    <h4>Attributes</h4>
    <dl class="attributes">
-    <dt>Type</dt>
+    <dt>name</dt>
     <dd>See <a href="#Attributes">Commons Attributes</a>.</dd>
-    <dt>Description</dt>
+    <dt>code</dt>
+    <dd>See <a href="#Attributes">Commons Attributes</a>.</dd>
+    <dt>type</dt>
+    <dd>See <a href="#Attributes">Commons Attributes</a>.</dd>
+    <dt>description</dt>
+    <dd>See <a href="#Attributes">Commons Attributes</a>.</dd>
+    <dt>hidden</dt>
     <dd>See <a href="#Attributes">Commons Attributes</a>.</dd>
    </dl>
-  </div> 
+  </div>
   <hr class="separator"/>
   
   <div class="element">
-   <a name="RespondsToCommands"></a>
-   <h3>Responds to Commands</h3>
+   <h3 id="RespondsToCommands">Responds to Commands</h3>
    <p class="definition">
    	Defines a verb that a class responds to.
    	Cocoa Scripting only requires these in order to define a custom method for handling a verb (see <a href="#Cocoa">Cocoa</a>).
    	They are otherwise purely for documentation.</p>
    <h4>Attributes</h4>
    <dl class="attributes">
-    <dt>Name</dt>
-    <dd>See <a href="#Attributes">Commons Attributes</a>.</dd>
-    <dt>Hidden</dt>
+    <dt>name</dt>
+    <dd>The name of the <a href="#Command">verb</a>.</dd>
+    <dt>hidden</dt>
     <dd>See <a href="#Attributes">Commons Attributes</a>.</dd>
    </dl>
    <h4><a href="#Cocoa">Implementation</a></h4>
@@ -456,30 +523,44 @@
   <hr class="separator"/>
   
   <div class="element">
-   <a name="RespondsToEvents"></a>
-   <h3>Responds to Events</h3>
+   <h3 id="RespondsToEvents">Responds to Events</h3>
    <p class="definition">See <a href="#RespondsToCommands">Responds to Commands</a>.</p>
   </div> 
   <hr class="separator"/>
   
   <div class="element">
-   <a name="Suite"></a>
-   <h3>Suite</h3>
+   <h3 id="Result">Result</h3>
+   <p class="definition">
+   	The <em>type</em> of value generated when a <a href="#Command">verb</a> is executed. If there is no result, omit this element.
+   	<em>result</em> is a special case of <a href="#Parameter">parameter</a>, it has only <em>type</em> and <em>description</em>
+   	attributes and may not be <em>hidden</em> or <em>optional</em>.</p>
+   <h4>Attributes</h4>
+   <dl class="attributes">
+    <dt>type</dt>
+    <dd>See <a href="#Attributes">Commons Attributes</a>.</dd>
+    <dt>description</dt>
+    <dd>See <a href="#Attributes">Commons Attributes</a>.</dd>
+   </dl>
+  </div> 
+  <hr class="separator"/>
+  
+  <div class="element">
+   <h3 id="Suite">Suite</h3>
    <p class="definition">
    	A collection of related terms.
    	Suites are purely an organizational aid to the user, they have no impact on scripts.
    	There is no technical limit on how many items a suite can contain,
-   	but 10 to 15 items is considered a comfortable size.
+   	but 10 to 15 items is considered a confortable size.
    </p>
    <h4>Attributes</h4>
    <dl class="attributes">
-    <dt>Name</dt>
+    <dt>name</dt>
     <dd>The suite's name to be shown in the dictionary. This is not a term that may appear in scripts.</dd>
-    <dt>Code</dt>
+    <dt>code</dt>
     <dd>See <a href="#Attributes">Commons Attributes</a>.</dd>
-    <dt>Description</dt>
+    <dt>description</dt>
     <dd>See <a href="#Attributes">Commons Attributes</a>.</dd>
-    <dt>Hidden</dt>
+    <dt>hidden</dt>
     <dd>See <a href="#Attributes">Commons Attributes</a>.</dd>
    </dl>
    <h4><a href="#Cocoa">Implementation</a></h4>
@@ -490,9 +571,71 @@
   </div> 
   <hr class="separator"/>
   
+  <div class="element">
+   <h3 id="Type">Type</h3>
+   <p class="definition">
+    Any element that has a <em>type</em> attribute may instead have one or more type elements.
+    (Using both in the same element is an error.)
+    Using more than one type element indicates that any of the types are allowed.<br />
+    Using the <code>"list"</code> attribute indicates a list of the specified type.<br />
+    Using type elements inside type elements, such as to express <code>"list of list of integer"</code>, is not currently supported.</p>
+   <h4>Attributes</h4>
+   <dl class="attributes">
+    <dt>type</dt>
+    <dd>See <a href="#Attributes">Commons Attributes</a>.</dd>
+    <dt class="optional">list</dt>
+    <dd>Indicates that the full type is a list of the type specified by the <em>type</em> attribute.
+    May be <code>"yes"</code> or <code>"no"</code>(the default).</dd>
+   </dl>
+   <h4>Examples</h4>
+   <dl style="margin-left: 1em">
+    <dt><strong>tabs</strong> (list of integer):</dt>
+    <dd>
+<pre><span style="color:#881280;">&lt;property </span><span style="color:#994500;">name=</span><span style="color:#1a1aa6;">"tabs"</span><span style="color:#881280;">&gt;</span>
+    <span style="color:#881280;">&lt;type </span><span style="color:#994500;">type=</span><span style="color:#1a1aa6;">"integer"</span><span style="color:#881280;"> </span><span style="color:#994500;">list=</span><span style="color:#1a1aa6;">"yes"</span><span style="color:#881280;">/&gt;</span>
+<span style="color:#881280;">&lt;/property&gt;</span></pre></dd>
+   <dt><strong>frequency</strong> (number or text):</dt>
+   <dd><pre><span style="color:#881280;">&lt;property </span><span style="color:#994500;">name=</span><span style="color:#1a1aa6;">"frequency"</span><span style="color:#881280;">&gt;</span>
+    <span style="color:#881280;">&lt;type </span><span style="color:#994500;">type=</span><span style="color:#1a1aa6;">"number"</span><span style="color:#881280;">/&gt;</span>
+    <span style="color:#881280;">&lt;type </span><span style="color:#994500;">type=</span><span style="color:#1a1aa6;">"text"</span><span style="color:#881280;">/&gt;</span>
+ <span style="color:#881280;">&lt;/property&gt;</span></pre></dd>
+ </dl>
+  </div> 
+  <hr class="separator"/>
+  <div class="element">
+   <h3 id="ValueType">Value Type</h3>
+   <p class="definition">A simple type definition. A value-type has no properties and no elements accessible by your scripting,
+    it is useful for defining new basic types, such as an image.</p>
+  <h4>Attributes</h4>
+   <dl class="attributes">
+    <dt>name</dt>
+    <dd>See <a href="#Attributes">Commons Attributes</a>.</dd>
+    <dt>code</dt>
+    <dd>See <a href="#Attributes">Commons Attributes</a>.</dd>
+    <dt>description</dt>
+    <dd>See <a href="#Attributes">Commons Attributes</a>.</dd>
+    <dt>hidden</dt>
+    <dd>See <a href="#Attributes">Commons Attributes</a>.</dd>
+   </dl>
+   <h4><a href="#Cocoa">Implementation</a></h4>
+   <p class="definition">cocoa elements for values should declare the backing Cocoa class (typically NSData) using the <em>class</em> attribute,
+    and may also declare the qualifier name using the <em>name</em> attribute, but this is only used inside the scriptSuite file.
+    For example, an <code>"image"</code> type might be declared like this:</p>
+<pre><span style="color:#881280;">&lt;value </span><span style="color:#994500;">name=</span><span style="color:#1a1aa6;">"image"</span><span style="color:#881280;"> </span><span style="color:#994500;">code</span><span style="color:#881280;">=</span><span style="color:#1a1aa6;">"PICT"</span><span style="color:#881280;">&gt;</span>
+    <span style="color:#881280;">&lt;cocoa </span><span style="color:#994500;">class=</span><span style="color:#1a1aa6;">"NSData"</span><span style="color:#881280;"> </span><span style="color:#994500;">name</span><span style="color:#881280;">=</span><span style="color:#1a1aa6;">"Image"</span><span style="color:#881280;">/&gt;</span>
+<span style="color:#881280;">&lt;/value&gt;</span>
+</pre>
+   <dl class="implementation">
+    <dt>Cocoa Class</dt>
+    <dd>The backing Cocoa class.</dd>
+    <dt>Cocoa Name</dt>
+    <dd>The qualifier name.</dd>
+   </dl>
+  </div> 
+ <hr class="separator"/>
+  
  <div class="cocoa">
-  <a name="Cocoa"></a>
-  <div style="text-align: center"><h3>Implementation : Cocoa</h3></div>
+  <div style="text-align: center"><h3 id="Cocoa">Implementation : Cocoa</h3></div>
   <p class="definition">
   	Holds implementation information for Cocoa Scripting.
   	Use the appropriate attribute for the containing element to describe the relevant bit of Cocoa implementation.</p>
@@ -512,11 +655,11 @@
     <dt>Class</dt>
     <dd>An ObjC class name.</dd>
     <dt>Key</dt>
-    <dd>A string key for an NSDictionary (use for <a href="#Parameter">parameters</a>).</dd>
+    <dd>A string key for an NSDictionary of <a href="#Parameter">parameters</a>,
+        or a KVC key name for a <a href="#Property">property</a> or <a href="#Element">element</a>.</dd>
     <dt>Method</dt>
-    <dd>An ObjC method name (use for <a href="#RespondsToCommands">responds to.</a> methods and
-        <a href="#Property">property</a> and <a href="#Element">element</a> accessors).</dd>
-    <dt>Name</dt>
+    <dd>An ObjC method name (use for <a href="#RespondsToCommands">responds to.</a> methods).</dd>
+    <dt>name</dt>
     <dd>A name used internally by Cocoa Scripting (use for <a href="#Suite">suites</a>, <a href="#Command">command</a> and
     			<a href="#Event">event</a> key names,	<a href="#Enumeration">enumerations</a>, and <a href="#Enumerator">enumerators</a>).</dd>
    </dl>
@@ -524,25 +667,25 @@
   <hr class="separator"/>
   
   <div class="commons_attributes">
-  <a name="Attributes"></a>
-  <div style="text-align: center"><h3>Commons Attributes</h3></div>
+  <div style="text-align: center"><h3 id="Attributes">Commons Attributes</h3></div>
    <dl class="attributes">
-    <dt>Name</dt>
+    <dt>name</dt>
     <dd>For terminology elements, the scripting term for the element.
     				Names must be one or more C identifiers (i.e., [A-Za-z_][A-Za-z0-9_]*) separated by a space.</dd>
-    <dt>Code</dt>
+    <dt>code</dt>
     <dd>The four-character code (eight-character for verbs) for the element.
     				AppleScript and the Apple Event Manager use these codes to handle dispatching.
     				A code may be specified as a hex constant, e.g., <code>"0x1234abcd"</code>, if some of the characters are unprintable.</dd>
-    <dt>Type</dt>
+    <dt>type</dt>
     <dd>The type of an <a href="#Element"><em>element</em></a>, <a href="#Property"><em>property</em></a>, or <a href="#Parameter"><em>parameter</em></a>.
-    				The value must be one of the primitive types <code>"any"</code>, <code>"string"</code>, <code>"integer"</code>, <code>"real"</code>, <code>"boolean"</code>,
-    				<code>"object"</code>, <code>"location"</code>, <code>"record"</code>, <code>"file"</code>, <code>"date"</code>, <code>"point"</code>, <code>"rectangle"</code>, or <code>"type"</code>,
-    				the name of a type or class defined elsewhere in the Scripting Definition, <code>"list of"</code> followed by a type (e.g., <code>"list of integer</code>),
-    				or a list of alternative types separated by vertical bars (e.g., <code>"integer | string"</code>).</dd>
-    <dt class="optional">Description</dt>
+    				The value must be one of the primitive types <code>"any"</code>, <code>"text"</code>, <code>"integer"</code>, <code>"real"</code>, <code>"number"</code>, <code>"boolean"</code>,
+    				<code>"specifier"</code>, <code>"location specifier"</code>, <code>"record"</code>, <code>"date"</code>, <code>"file"</code>, <code>"point"</code>, <code>"rectangle"</code>, or <code>"type"</code>,
+    				or the name of a <a href="#Class">class</a>, <a href="#Enumeration">enumeration</a>, <a href="#RecordType">record-type</a> or <a href="#ValueType">value-type</a> defined elsewhere in the Scripting Definition.
+    				To specify a complex type such as <code>"list of integer"</code> or <code>"number or text"</code>,
+    				use a <a href="#Type">type</a> element.</dd>
+    <dt class="optional">description</dt>
     <dd>A short description of the element.</dd>
-    <dt class="optional">Hidden</dt>
+    <dt class="optional">hidden</dt>
     <dd>If an element is marked hidden, it is not shown in the dictionary, though it is still implemented.
     	This is useful for obsolete or not-ready-for-prime-time scripting features.
     	Cocoa scriptTerminology files do not support hidden terms, for best results, build an 'aete' into your application as well.</dd>
