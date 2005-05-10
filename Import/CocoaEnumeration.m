@@ -6,14 +6,15 @@
 //  Copyright 2005 Shadow Lab. All rights reserved.
 //
 
-#import "SdefEnumeration.h"
+#import "SdefTypedef.h"
 #import "CocoaObject.h"
 #import "SdefImplementation.h"
 
 @implementation SdefEnumeration (CocoaTerminology)
 
 - (id)initWithName:(NSString *)name suite:(NSDictionary *)suite andTerminology:(NSDictionary *)terminology {
-  if (self = [super initWithName:SdefNameForCocoaName(name)]) {
+  NSString *sdefName = SdefNameCreateWithCocoaName(name);
+  if (self = [super initWithName:sdefName]) {
     [[self impl] setName:name];
     [self setCodeStr:[suite objectForKey:@"AppleEventCode"]];
     id codes = [suite objectForKey:@"Enumerators"];
@@ -27,6 +28,7 @@
       [enumerator release];
     }
   }
+  [sdefName release];
   return self;
 }
 

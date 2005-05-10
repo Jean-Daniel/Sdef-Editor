@@ -16,15 +16,13 @@
 #import "SdefVerb.h"
 #import "SdefSuite.h"
 #import "SdefClass.h"
-#import "SdefObject.h"
+#import "SdefTypedef.h"
 #import "SdefDocument.h"
 #import "SdefContents.h"
 #import "SdefArguments.h"
 #import "SdefDictionary.h"
-#import "SdefEnumeration.h"
 #import "SdefImplementation.h"
 
-#import "SdefParser.h"
 #import "SdefClassManager.h"
 
 

@@ -7,8 +7,7 @@
 //
 
 #import "SdefEnumerationView.h"
-#import "SdefEnumeration.h"
-#import "SdefObject.h"
+#import "SdefTypedef.h"
 
 @implementation SdefEnumerationView
 

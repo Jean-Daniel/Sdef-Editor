@@ -15,13 +15,12 @@
 #import "SdefVerb.h"
 #import "SdefClass.h"
 #import "SdefSuite.h"
-#import "SdefObject.h"
+#import "SdefObjects.h"
+#import "SdefTypedef.h"
 #import "SdefDocument.h"
 #import "SdefDictionary.h"
-#import "SdefEnumeration.h"
 
-#define IsObjectOwner(item)		 		[item findRoot] == (id)[(SdefDocument *)[self document] dictionary]  \
-										/* || item == [[self document] imports] */
+#define IsObjectOwner(item)		 		[item findRoot] == (id)[(SdefDocument *)[self document] dictionary]
 
 NSString * const SdefTreePboardType = @"SdefTreeType";
 NSString * const SdefInfoPboardType = @"SdefInfoType";
@@ -32,7 +31,6 @@ static inline BOOL SdefEditorExistsForItem(SdefObject *item) {
   switch ([item objectType]) {
     case kSdefDictionaryType:
     case kSdefSuiteType:
-    case kSdefImportsType:
       /* Class */
     case kSdefClassType:
       /* Verbs */
@@ -345,7 +343,7 @@ static inline BOOL SdefEditorExistsForItem(SdefObject *item) {
     default:
       [pboard declareTypes:[NSArray arrayWithObjects:SdefTreePboardType, SdefInfoPboardType, NSStringPboardType, nil] owner:nil];
       if ([selection objectType] == kSdefRespondsToType || 
-          ([selection objectType] == kSdefCollectionType && [[selection contentType] objectType] == kSdefRespondsToType)) {
+          ([selection objectType] == kSdefCollectionType && [selection acceptsObjectType:kSdefRespondsToType])) {
         id str = nil;
         SdefClass *class = [selection firstParentOfType:kSdefClassType];
         if ([selection parent] == [class commands] || selection == [class commands]) {
@@ -355,7 +353,7 @@ static inline BOOL SdefEditorExistsForItem(SdefObject *item) {
         }
         [pboard setString:str forType:SdefInfoPboardType];
       } else if ([selection objectType] == kSdefVerbType || 
-                 ([selection objectType] == kSdefCollectionType && [[selection contentType] objectType] == kSdefVerbType)) {
+                 ([selection objectType] == kSdefCollectionType && [selection acceptsObjectType:kSdefVerbType])) {
         id str = nil;
         SdefSuite *suite = [selection firstParentOfType:kSdefSuiteType];
         if ([selection parent] == [suite commands] || selection == [suite commands]) {
@@ -400,6 +398,8 @@ static inline BOOL SdefEditorExistsForItem(SdefObject *item) {
       destination = [selection firstParentOfType:kSdefDictionaryType];
       break;
       /* 4 main types */
+    case kSdefValueType:
+    case kSdefRecordType:
     case kSdefEnumerationType:
       destination = [(SdefSuite *)[selection firstParentOfType:kSdefSuiteType] types];
       break;
@@ -444,12 +444,13 @@ static inline BOOL SdefEditorExistsForItem(SdefObject *item) {
       break;
     case kSdefCollectionType:
     {
-      id type = [(SdefCollection *)tree contentType];
       SdefSuite *suite = [selection firstParentOfType:kSdefSuiteType];
       SdefClass *class = [selection firstParentOfType:kSdefClassType];
-      if (type == [SdefEnumeration class]) destination = [suite types];
-      else if (type == [SdefClass class]) destination = [suite classes];
-      else if (type == [SdefVerb class]) {
+      SdefObjectType type = [[(SdefCollection *)tree contentType] objectType];
+      if ([[suite types] acceptsObjectType:type]) destination = [suite types];
+      else if ([[suite classes] acceptsObjectType:type]) destination = [suite classes];
+      else if ([[suite commands] acceptsObjectType:type] ||
+               [[suite events] acceptsObjectType:type]) {
         id str = [pboard stringForType:SdefInfoPboardType];
         @try {
           destination = [suite valueForKey:str];
@@ -458,9 +459,10 @@ static inline BOOL SdefEditorExistsForItem(SdefObject *item) {
           destination = nil;
         }
       }
-      else if (type == [SdefElement class]) destination = [class elements];
-      else if (type == [SdefProperty class]) destination = [class properties];
-      else if (type == [SdefRespondsTo class]) {
+      else if ([[class elements] acceptsObjectType:type]) destination = [class elements];
+      else if ([[class properties] acceptsObjectType:type]) destination = [class properties];
+      else if ([[class commands] acceptsObjectType:type] || 
+               [[class events] acceptsObjectType:type]) {
         id str = [pboard stringForType:SdefInfoPboardType];
         @try {
           destination = [class valueForKey:str];

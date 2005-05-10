@@ -13,7 +13,7 @@
 
 #import "SdefSuite.h"
 #import "SdefClass.h"
-#import "SdefEnumeration.h"
+#import "SdefTypedef.h"
 #import "SdefClassManager.h"
 
 #import "AeteObject.h"

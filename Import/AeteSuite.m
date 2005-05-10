@@ -9,7 +9,7 @@
 #import "SdefSuite.h"
 #import "SdefVerb.h"
 #import "SdefClass.h"
-#import "SdefEnumeration.h"
+#import "SdefTypedef.h"
 
 #import "SKFunctions.h"
 

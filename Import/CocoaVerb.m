@@ -17,9 +17,10 @@
   if (self = [super initWithName:[terminology objectForKey:@"Name"]]) {
     [self setDesc:[terminology objectForKey:@"Description"]];
     [self setCodeStr:[[suite objectForKey:@"AppleEventClassCode"] stringByAppendingString:[suite objectForKey:@"AppleEventCode"]]];    
-    
-    if (![SdefNameForCocoaName(name) isEqualToString:[self name]])
+    NSString *sdefName = SdefNameCreateWithCocoaName(name);
+    if (![sdefName isEqualToString:[self name]])
       [[self impl] setName:name];
+    [sdefName release];
     [[self impl] setSdClass:[suite objectForKey:@"CommandClass"]];
     
     /* Result */

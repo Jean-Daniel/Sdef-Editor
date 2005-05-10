@@ -8,7 +8,7 @@
 
 #import "AeteObject.h"
 #import "SKFunctions.h"
-#import "SdefEnumeration.h"
+#import "SdefTypedef.h"
 
 @implementation SdefEnumeration (AeteResource)
 

@@ -234,8 +234,8 @@ static ASDictionaryStyle stdStyles[4];
 #pragma mark Private Functions Implementation
 static void ASGetStyleForASPreferences(CFStringRef str, ASDictionaryStyle *style) {
   CFArrayRef values = str ? CFStringCreateArrayBySeparatingStrings(kCFAllocatorDefault, str, CFSTR(";")) : NULL;
-  if (!values || CFArrayGetCount(values) < 4) {
-    if (values) CFRelease(values);
+  if (values && CFArrayGetCount(values) < 4) {
+    CFRelease(values);
     values = NULL;
   }
   

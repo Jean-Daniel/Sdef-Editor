@@ -11,9 +11,9 @@
 #import "SdefVerb.h"
 #import "SdefSuite.h"
 #import "SdefClass.h"
+#import "SdefTypedef.h"
 #import "SdefContents.h"
 #import "SdefArguments.h"
-#import "SdefEnumeration.h"
 #import "SdefClassManager.h"
 
 @implementation SdefImporter

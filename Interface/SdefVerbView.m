@@ -10,7 +10,6 @@
 #import "SdefVerb.h"
 #import "SdefArguments.h"
 #import "ShadowMacros.h"
-#import "SdefXMLObject.h"
 
 @implementation SdefVerbView
 
@@ -22,7 +21,7 @@
 - (NSString *)verbLabel {
   if (![self object])
     return @"Verb";
-  return [[[self object] xmlElementName] capitalizedString];
+  return [[self object] isCommand] ? @"Command" : @"Event";
 }
 
 - (void)selectObject:(SdefObject*)anObject {

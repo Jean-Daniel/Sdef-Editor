@@ -14,6 +14,8 @@
   IBOutlet id classTable;
   IBOutlet id commandTable;
   IBOutlet id eventTable;
+@private
+  NSMenu *sd_typeMenu;
 }
 
 @end

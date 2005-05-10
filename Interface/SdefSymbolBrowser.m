@@ -14,7 +14,7 @@
 #import "SdefWindowController.h"
 #import "SdefDictionary.h"
 #import "SdefDocument.h"
-#import "SdefObject.h"
+#import "SdefObjects.h"
 #import "SdefSuite.h"
 #import "SdefClass.h"
 #import "SdefVerb.h"

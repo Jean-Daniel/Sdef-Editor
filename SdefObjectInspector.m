@@ -10,7 +10,7 @@
 
 #import "ShadowMacros.h"
 
-#import "SdefObject.h"
+#import "SdefObjects.h"
 #import "SdefDocument.h"
 #import "SdefWindowController.h"
 

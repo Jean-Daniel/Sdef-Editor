@@ -9,8 +9,8 @@
 #import "SdefSuite.h"
 #import "SdefVerb.h"
 #import "SdefClass.h"
+#import "SdefTypedef.h"
 #import "CocoaObject.h"
-#import "SdefEnumeration.h"
 #import "SdefImplementation.h"
 
 @implementation SdefSuite (CocoaTerminology)
