@@ -604,6 +604,10 @@ static __inline__ NSString *SdefEscapedString(NSString *value, unsigned int form
         } else {
           file = [NSString stringWithFormat:@"%@.%@", 
             SdtplSimplifieName([anObject name]), [sd_tpl extension]];
+          if ([file isEqualToString:[sd_path lastPathComponent]]) {
+            file = [NSString stringWithFormat:@"%@_Dictionary.%@", 
+              SdtplSimplifieName([anObject name]), [sd_tpl extension]];
+          }
         }
         break;
       case kSdefSuiteType:
