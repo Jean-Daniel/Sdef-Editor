@@ -16,8 +16,27 @@
 
 @implementation SdefSynonym (SdefXMLManager)
 #pragma mark XML Generation
+- (SdefXMLNode *)xmlNodeForVersion:(SdefVersion)version {
+  SdefXMLNode *node;
+  if (node = [super xmlNodeForVersion:version]) {
+    id attr = [self code];
+    if (attr) [node setAttribute:attr forKey:@"code"];
+    
+    attr = [self name];
+    if (attr) [node setAttribute:attr forKey:@"name"];
+  }
+  [node setEmpty:YES];
+  return [node attributeCount] > 0 ? node : nil;
+}
+
 - (NSString *)xmlElementName {
   return @"synonym";
+}
+
+#pragma mark Parsing
+- (void)setAttributes:(NSDictionary *)attrs {
+  [super setAttributes:attrs];
+  [self setCode:[attrs objectForKey:@"code"]];
 }
 
 @end
@@ -25,7 +44,6 @@
 #pragma mark -
 @implementation SdefDocumentation (SdefXMLManager)
 #pragma mark XML Generation
-
 - (SdefXMLNode *)xmlNodeForVersion:(SdefVersion)version {
   id node = nil;
   if (sd_content != nil) {
@@ -45,31 +63,13 @@
   return [element isEqualToString:@"html"] ? kSdefParserTigerVersion : kSdefParserBothVersion;
 }
 
-// This returns the string of the characters encountered thus far. You may not necessarily get the longest character run.
-// The parser reserves the right to hand these to the delegate as potentially many calls in a row to -parser:foundCharacters:
-//- (void)parser:(NSXMLParser *)parser foundCharacters:(NSString *)string {
-//  if (!sd_content) {
-//    sd_content = [[NSMutableString allocWithZone:[self zone]] init];
-//  }
-//  [sd_content appendString:[string stringByUnescapingEntities:nil]];
-//}
-
-// sent when an end tag is encountered. The various parameters are supplied as above.
-//- (void)parser:(NSXMLParser *)parser didEndElement:(NSString *)elementName namespaceURI:(NSString *)namespaceURI qualifiedName:(NSString *)qName {
-//  [super parser:parser didEndElement:elementName namespaceURI:namespaceURI qualifiedName:qName];
-//  if ([elementName isEqualToString:[self xmlElementName]]) {
-//    [self remove];
-//  }
-//}
-
 @end
 
 #pragma mark -
 @implementation SdefImplementation (SdefXMLManager)
 #pragma mark XML Generation
-
 - (SdefXMLNode *)xmlNodeForVersion:(SdefVersion)version {
-  id node = [super xmlNodeForVersion:(SdefVersion)version];
+  id node = [super xmlNodeForVersion:version];
   id attr = [self name];
   if (nil != attr)
     [node setAttribute:attr forKey:@"name"];
@@ -93,7 +93,6 @@
 - (NSString *)xmlElementName {
   return @"cocoa";
 }
-
 
 #pragma mark Parsing
 - (void)setAttributes:(NSDictionary *)attrs {

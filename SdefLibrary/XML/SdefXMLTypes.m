@@ -18,6 +18,9 @@
 }
 
 #pragma mark Parsing
+- (int)acceptXMLElement:(NSString *)element {
+  return kSdefParserBothVersion;
+}
 
 //- (void)parser:(NSXMLParser *)parser didStartElement:(NSString *)elementName namespaceURI:(NSString *)namespaceURI qualifiedName:(NSString *)qName attributes:(NSDictionary *)attributeDict {
 //  if ([elementName isEqualToString:@"enumerator"]) {
@@ -44,6 +47,11 @@
   return @"enumerator";
 }
 
+#pragma mark Parsing
+- (int)acceptXMLElement:(NSString *)element {
+  return kSdefParserBothVersion;
+}
+
 @end
 
 #pragma mark -
@@ -57,6 +65,11 @@
   return @"value-type";
 }
 
+#pragma mark Parsing
+- (int)acceptXMLElement:(NSString *)element {
+  return kSdefParserBothVersion;
+}
+
 @end
 
 #pragma mark -
@@ -68,6 +81,11 @@
 
 - (NSString *)xmlElementName {
   return @"record-type";
+}
+
+#pragma mark Parsing
+- (int)acceptXMLElement:(NSString *)element {
+  return kSdefParserBothVersion;
 }
 
 @end

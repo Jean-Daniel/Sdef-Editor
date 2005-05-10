@@ -21,6 +21,10 @@
  */
 
 @interface SdefSynonym : SdefObject <NSCopying, NSCoding> {
+  NSString *sd_code;
 }
+
+- (NSString *)code;
+- (void)setCode:(NSString *)code;
 
 @end

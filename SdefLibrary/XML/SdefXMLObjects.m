@@ -14,7 +14,7 @@
 #import "SdefImplementation.h"
 
 @implementation SdefDocumentedObject (SdefXMLManager)
-
+#pragma mark XML Generation
 - (SdefXMLNode *)xmlNodeForVersion:(SdefVersion)version {
   id node = nil;
   if (node = [super xmlNodeForVersion:version]) {
@@ -29,11 +29,16 @@
   return node;
 }
 
+#pragma mark XML Parsing
+- (void)setAttributes:(NSDictionary *)attrs {
+  [super setAttributes:attrs];
+}
+
 @end
 
 #pragma mark -
 @implementation SdefImplementedObject (SdefXMLManager)
-
+#pragma mark XML Generation
 - (SdefXMLNode *)xmlNodeForVersion:(SdefVersion)version {
   id node = nil;
   if (node = [super xmlNodeForVersion:version]) {
@@ -65,13 +70,15 @@
   return node;
 }
 
+#pragma mark XML Parsing
+- (void)setAttributes:(NSDictionary *)attrs {
+  [super setAttributes:attrs];
+}
+
 @end
 
 #pragma mark -
-#pragma mark -
 @implementation SdefTerminologyObject (SdefXMLManager)
-
-#pragma mark -
 #pragma mark XML Generation
 - (SdefXMLNode *)xmlNodeForVersion:(SdefVersion)version {
   id node = nil;
@@ -82,12 +89,7 @@
     attr = [self codeStr];
     if (nil != attr)
       [node setAttribute:attr forKey:@"code"];
-    if ([self isHidden]) {
-      if (kSdefTigerVersion == version)
-        [node setAttribute:@"yes" forKey:@"hidden"];
-      else
-        [node setAttribute:@"hidden" forKey:@"hidden"];
-    }
+    
     attr = [self desc];
     if (nil != attr)
       [node setAttribute:[attr stringByEscapingEntities:nil] forKey:@"description"];
@@ -95,7 +97,7 @@
     if ([self hasSynonyms]) {
       id synonyms = [sd_synonyms xmlNodeForVersion:version];
       if (nil != synonyms) {
-        [node appendBranch:synonyms];
+        [node appendChild:synonyms];
       }
     }
     [node setEmpty:![node hasChildren]];
@@ -103,25 +105,18 @@
   return node;
 }
 
-#pragma mark -
 #pragma mark XML Parsing
-
 - (void)setAttributes:(NSDictionary *)attrs {
   [super setAttributes:attrs];
   [self setCodeStr:[attrs objectForKey:@"code"]];
   [self setDesc:[[attrs objectForKey:@"description"] stringByUnescapingEntities:nil]];
-  /* Hidden should be yes, no or hidden */
-  NSString *hidden = [attrs objectForKey:@"hidden"];
-  if (hidden && ![hidden isEqualToString:@"no"]) {
-    [self setHidden:YES];
-  }
 }
 
 @end
 
 #pragma mark -
 @implementation SdefTypedObject (SdefXMLManager)
-
+#pragma mark XML Generation
 - (int)acceptXMLElement:(NSString *)element {
   if ([element isEqualToString:@"type"])
     return kSdefParserTigerVersion;
@@ -138,6 +133,12 @@
     }
   }
   return node;
+}
+
+#pragma mark XML Parsing
+- (void)setAttributes:(NSDictionary *)attrs {
+  [super setAttributes:attrs];
+  [self setType:[attrs objectForKey:@"type"]];
 }
 
 @end

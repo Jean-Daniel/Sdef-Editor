@@ -39,7 +39,19 @@
 }
 
 - (void)dealloc {
+  [sd_code release];
   [super dealloc];
+}
+
+- (NSString *)code {
+  return sd_code;
+}
+
+- (void)setCode:(NSString *)code {
+  if (code != sd_code) {
+    [sd_code release];
+    sd_code = [code copy];
+  }
 }
 
 @end

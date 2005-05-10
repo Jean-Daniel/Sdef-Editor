@@ -52,8 +52,8 @@
 }
 
 - (BOOL)hasType;
-- (id)type;
-- (void)setType:(id)aType;
+- (NSString *)type;
+- (void)setType:(NSString *)aType;
 
 @end
 

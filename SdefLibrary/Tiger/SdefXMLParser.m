@@ -12,11 +12,16 @@
 #import "SdefXMLBase.h"
 #import "SdefXMLParser.h"
 
-#import "SdefDictionary.h"
-#import "SdefTypedef.h"
-#import "SdefSuite.h"
-#import "SdefClass.h"
 #import "SdefVerb.h"
+#import "SdefClass.h"
+#import "SdefSuite.h"
+#import "SdefSynonym.h"
+#import "SdefTypedef.h"
+#import "SdefContents.h"
+#import "SdefArguments.h"
+#import "SdefDictionary.h"
+#import "SdefDocumentation.h"
+#import "SdefImplementation.h"
 
 #import "SdefTigerParser.h"
 #import "SdefPantherParser.h"
@@ -73,104 +78,174 @@
   if (sd_dictionary) {
     [sd_dictionary release];
   }
-  sd_dictionary = [(SdefObject *)[SdefDictionary alloc] initWithAttributes:attributes];
+  sd_dictionary = [(SdefObject *)[SdefDictionary allocWithZone:[self zone]] initWithAttributes:attributes];
+  sd_node = sd_dictionary;
   sd_parent = sd_dictionary;
 }
 
 - (void)parser:(NSXMLParser *)parser didStartCocoa:(NSDictionary *)attributes {
-  ShadowTrace();
+  [[sd_node impl] setAttributes:attributes];
 }
 
 - (void)parser:(NSXMLParser *)parser didStartDocumentation:(NSDictionary *)attributes {
+  id doc = [sd_node documentation];
+  // doc parser set doc and parser
+  // parser set delegate
+  // doc parser receive "end documentation" and rechange delegate
   ShadowTrace();
 }
 
 - (void)parser:(NSXMLParser *)parser didStartSynonym:(NSDictionary *)attributes {
-  ShadowTrace();
+  if (sd_node) {
+    SdefSynonym *synonym = [(SdefObject *)[SdefSynonym allocWithZone:[self zone]] initWithAttributes:attributes];
+    [[sd_node synonyms] appendChild:synonym];
+    [synonym release];
+  }
 }
 
 #pragma mark -
 #pragma mark Suite
 - (void)parser:(NSXMLParser *)parser didStartSuite:(NSDictionary *)attributes {
-  SdefSuite *suite = [(SdefObject *)[SdefSuite allocWithZone:[self zone]] initWithAttributes:attributes];
-  [sd_parent appendChild:suite];
-  [suite release];
-  sd_node = suite;
-  sd_parent = suite;
+  NSAssert([sd_node isKindOfClass:[SdefDictionary class]], @"sd_node should be a dictionary");
+  if (sd_node) {
+    SdefSuite *suite = [(SdefObject *)[SdefSuite allocWithZone:[self zone]] initWithAttributes:attributes];
+    [sd_node appendChild:suite];
+    [suite release];
+    sd_node = suite;
+    sd_parent = suite;
+  }
 }
 
 #pragma mark Enumeration
 - (void)parser:(NSXMLParser *)parser didStartEnumeration:(NSDictionary *)attributes {
-  SdefEnumeration *enumeration = [(SdefObject *)[SdefEnumeration allocWithZone:[self zone]] initWithAttributes:attributes];
-  [sd_node appendChild:enumeration];
-  [enumeration release];
-  sd_node = enumeration;
+  NSAssert([sd_parent isKindOfClass:[SdefSuite class]], @"sd_parent should be a suite");
+  if (sd_parent) {
+    SdefEnumeration *enumeration = [(SdefObject *)[SdefEnumeration allocWithZone:[self zone]] initWithAttributes:attributes];
+    [[(SdefSuite *)sd_parent types] appendChild:enumeration];
+    [enumeration release];
+    sd_node = enumeration;
+  }
 }
 
 - (void)parser:(NSXMLParser *)parser didStartEnumerator:(NSDictionary *)attributes {
-  SdefEnumerator *enumerator = [(SdefObject *)[SdefEnumerator allocWithZone:[self zone]] initWithAttributes:attributes];
-  [sd_node appendChild:enumerator];
-  [enumerator release];
-  sd_node = enumerator;
+  NSAssert([sd_node isKindOfClass:[SdefEnumeration class]], @"sd_node should be an enumeration");
+  if (sd_node) {
+    SdefEnumerator *enumerator = [(SdefObject *)[SdefEnumerator allocWithZone:[self zone]] initWithAttributes:attributes];
+    [sd_node appendChild:enumerator];
+    [enumerator release];
+    sd_node = enumerator;
+  }
 }
 
 #pragma mark Class
 - (void)parser:(NSXMLParser *)parser didStartClass:(NSDictionary *)attributes {
-  SdefClass *class = [(SdefObject *)[SdefClass allocWithZone:[self zone]] initWithAttributes:attributes];
-  [[sd_parent classes] appendChild:class];
-  [class release];
-  sd_node = class;
-  sd_parent = class;
+  NSAssert([sd_parent isKindOfClass:[SdefSuite class]], @"sd_parent should be a suite");
+  if (sd_parent) {
+    SdefClass *class = [(SdefObject *)[SdefClass allocWithZone:[self zone]] initWithAttributes:attributes];
+    [[sd_parent classes] appendChild:class];
+    [class release];
+    sd_node = class;
+    sd_parent = class;
+  }
 }
 
 - (void)parser:(NSXMLParser *)parser didStartContents:(NSDictionary *)attributes {
-  ShadowTrace();
+  NSAssert([sd_node isKindOfClass:[SdefClass class]], @"sd_node should be a class");
+  if (sd_node) {
+    SdefContents *contents = [sd_node contents];
+    [contents setAttributes:attributes];
+    sd_node = contents;
+  }
 }
 
 - (void)parser:(NSXMLParser *)parser didStartElement:(NSDictionary *)attributes {
-  ShadowTrace();
+  NSAssert([sd_parent isKindOfClass:[SdefClass class]], @"sd_parent should be a class");
+  if (sd_parent) {
+    SdefElement *element = [(SdefObject *)[SdefElement allocWithZone:[self zone]] initWithAttributes:attributes];
+    [[sd_parent elements] appendChild:element];
+    [element release];
+    sd_node = element;
+  }
 }
 
 - (void)parser:(NSXMLParser *)parser didStartAccessor:(NSDictionary *)attributes {
-  ShadowTrace();
+  NSAssert([sd_node isKindOfClass:[SdefElement class]], @"sd_node should be an element");
+  NSString *accessor = [attributes objectForKey:@"style"];
+  if (accessor) {
+    [sd_node setAccessors:[sd_node accessors] | SdefXMLAccessorFlagFromString(accessor)];
+  }
 }
 
 - (void)parser:(NSXMLParser *)parser didStartProperty:(NSDictionary *)attributes {
-  ShadowTrace();
+  NSAssert([sd_parent isKindOfClass:[SdefClass class]] || [sd_node isKindOfClass:[SdefRecord class]], @"sd_parent should be a class or sd_node a record");
+  if (sd_parent) {
+    SdefProperty *property = [(SdefObject *)[SdefProperty allocWithZone:[self zone]] initWithAttributes:attributes];
+    [[(SdefClass *)sd_parent properties] appendChild:property];
+    [property release];
+    sd_node = property;
+  }
 }
 
 - (void)parser:(NSXMLParser *)parser didStartRespondsTo:(NSDictionary *)attributes {
-  ShadowTrace();
+  NSAssert([sd_parent isKindOfClass:[SdefClass class]], @"sd_parent should be a class");
+  if (sd_parent) {
+    SdefRespondsTo *respondsTo = [(SdefObject *)[SdefRespondsTo allocWithZone:[self zone]] initWithAttributes:attributes];
+    [[(SdefClass *)sd_parent commands] appendChild:respondsTo];
+    [respondsTo release];
+    sd_node = respondsTo;
+  }
 }
 
 
 #pragma mark Verb
 - (void)parser:(NSXMLParser *)parser didStartCommand:(NSDictionary *)attributes {
-  SdefVerb *command = [(SdefObject *)[SdefVerb allocWithZone:[self zone]] initWithAttributes:attributes];
-  [[(SdefSuite *)sd_parent commands] appendChild:command];
-  [command release];
-  sd_node = command;
-  sd_parent = command;
+  NSAssert([sd_parent isKindOfClass:[SdefSuite class]], @"sd_parent should be a suite");
+  if (sd_node) {
+    SdefVerb *command = [(SdefObject *)[SdefVerb allocWithZone:[self zone]] initWithAttributes:attributes];
+    [[(SdefSuite *)sd_parent commands] appendChild:command];
+    [command release];
+    sd_node = command;
+    sd_parent = command;
+  }
 }
 
 - (void)parser:(NSXMLParser *)parser didStartEvent:(NSDictionary *)attributes {
-  SdefVerb *event = [(SdefObject *)[SdefVerb allocWithZone:[self zone]] initWithAttributes:attributes];
-  [[(SdefSuite *)sd_parent events] appendChild:event];
-  [event release];
-  sd_node = event;
-  sd_parent = event;
+  NSAssert([sd_parent isKindOfClass:[SdefSuite class]], @"sd_parent should be a suite");
+  if (sd_node) {
+    SdefVerb *event = [(SdefObject *)[SdefVerb allocWithZone:[self zone]] initWithAttributes:attributes];
+    [[(SdefSuite *)sd_parent events] appendChild:event];
+    [event release];
+    sd_node = event;
+    sd_parent = event;
+  }
 }
 
 - (void)parser:(NSXMLParser *)parser didStartDirectParameter:(NSDictionary *)attributes {
-  ShadowTrace();
+  NSAssert([sd_node isKindOfClass:[SdefVerb class]], @"sd_node should be a verb");
+  if (sd_node) {
+    SdefDirectParameter *param = [sd_node directParameter];
+    [param setAttributes:attributes];
+    sd_node = param;
+  }
 }
 
 - (void)parser:(NSXMLParser *)parser didStartParameter:(NSDictionary *)attributes {
-  ShadowTrace();
+  NSAssert([sd_node isKindOfClass:[SdefVerb class]], @"sd_node should be a verb");
+  if (sd_node) {
+    SdefParameter *param = [(SdefObject *)[SdefParameter allocWithZone:[self zone]] initWithAttributes:attributes];
+    [sd_node appendChild:param];
+    [param release];
+    sd_node = param;
+  }
 }
 
 - (void)parser:(NSXMLParser *)parser didStartResult:(NSDictionary *)attributes {
-  ShadowTrace();
+  NSAssert([sd_node isKindOfClass:[SdefVerb class]], @"sd_node should be a verb");
+  if (sd_node) {
+    SdefResult *result = [sd_node result];
+    [result setAttributes:attributes];
+    sd_node = result;
+  }
 }
 
 #pragma mark Misc
@@ -194,7 +269,21 @@
              isEqual(element, cmd, @"event")) {
     sd_parent = [sd_parent suite];
   }
-//  sd_node = [sd_node parent];
+  
+  /* Orphan implemented : direct-parameter, result, contents */
+  if (isEqual(element, cmd, @"result") ||
+      isEqual(element, cmd, @"contents") ||
+      isEqual(element, cmd, @"direct-parameter")) {
+    sd_node = [sd_node owner];
+  }
+  /* Empty elements and orphan objects */ 
+  else if (!isEqual(element, cmd, @"accessor") &&
+      !isEqual(element, cmd, @"cocoa") &&
+      !isEqual(element, cmd, @"documentation") &&
+      !isEqual(element, cmd, @"synonym") &&
+      !isEqual(element, cmd, @"type")) {
+    sd_node = [sd_node parent];
+  }
 }
 
 #pragma mark -

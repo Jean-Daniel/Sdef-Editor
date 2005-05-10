@@ -18,8 +18,7 @@
 
 - (void)parser:(NSXMLParser *)parser didStartCollection:(NSString *)collection withAttributes:(NSDictionary *)attributes {
   SEL key = nil;
-  if ([collection isEqualToString:@"types"]) key = @selector(enumerations);
-  else if ([collection isEqualToString:@"responds-to-commands"]) key = @selector(commands);
+  if ([collection isEqualToString:@"responds-to-commands"]) key = @selector(commands);
   else if ([collection isEqualToString:@"responds-to-events"]) key = @selector(events);
   else key = NSSelectorFromString(collection);
   NSAssert2([sd_parent respondsToSelector:key], @"%@ should responds to %@", NSStringFromClass([sd_parent class]), NSStringFromSelector(key));

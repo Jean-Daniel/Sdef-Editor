@@ -47,45 +47,6 @@
   return kSdefParserBothVersion;
 }
 
-//- (void)parser:(NSXMLParser *)parser didStartElement:(NSString *)elementName namespaceURI:(NSString *)namespaceURI qualifiedName:(NSString *)qName attributes:(NSDictionary *)attributeDict {
-//  if ([elementName isEqualToString:@"parameter"]) {
-//    SdefParameter *param = [(SdefObject *)[SdefParameter allocWithZone:[self zone]] initWithAttributes:attributeDict];
-//    [self appendChild:param];
-//    [parser setDelegate:param];
-//    [param release];
-//  } else if ([elementName isEqualToString:@"direct-parameter"]) {
-//    SdefDirectParameter *param = [self directParameter];
-//    [param setAttributes:attributeDict];
-//    if (sd_childComments) {
-//      [param setComments:sd_childComments];
-//      [sd_childComments release];
-//      sd_childComments = nil;
-//    }
-//  } else if ([elementName isEqualToString:@"result"]) {
-//    SdefResult *result = [self result];
-//    [result setAttributes:attributeDict];
-//    if (sd_childComments) {
-//      [result setComments:sd_childComments];
-//      [sd_childComments release];
-//      sd_childComments = nil;
-//    }
-//  } else {
-//    [super parser:parser didStartElement:elementName namespaceURI:namespaceURI qualifiedName:qName attributes:attributeDict];
-//  }
-//  if (sd_childComments && [[parser delegate] parent] == self) {
-//    [[parser delegate] setComments:sd_childComments];
-//    [sd_childComments release];
-//    sd_childComments = nil;
-//  }
-//}
-//
-//// sent when an end tag is encountered. The various parameters are supplied as above.
-//- (void)parser:(NSXMLParser *)parser didEndElement:(NSString *)elementName namespaceURI:(NSString *)namespaceURI qualifiedName:(NSString *)qName {
-//  if (![elementName isEqualToString:@"direct-parameter"] && ![elementName isEqualToString:@"result"]) {
-//    [super parser:parser didEndElement:elementName namespaceURI:namespaceURI qualifiedName:qName];
-//  }
-//}
-
 @end
 
 @implementation SdefDirectParameter (SdefXMLManager)
@@ -149,7 +110,7 @@
 #pragma mark Parsing
 - (void)setAttributes:(NSDictionary *)attrs {
   [super setAttributes:attrs];
-  [self setType:[attrs objectForKey:@"type"]];
+
   NSString *optional = [attrs objectForKey:@"optional"];
   if (optional && ![optional isEqualToString:@"no"]) {
     [self setOptional:YES];

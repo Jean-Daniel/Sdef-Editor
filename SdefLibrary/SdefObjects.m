@@ -199,9 +199,9 @@
 }
 
 - (NSString *)description {
-  return [NSString stringWithFormat:@"<%@ %p> {name:\"%@\" code:'%@' hidden:%@ \n\timpl:%@}",
+  return [NSString stringWithFormat:@"<%@ %p> {name:\"%@\" code:'%@' hidden:%@}",
     NSStringFromClass([self class]), self,
-    [self name], [self codeStr], [self isHidden] ? @"YES" : @"NO", [self impl]];
+    [self name], [self codeStr], [self isHidden] ? @"YES" : @"NO"];
 }
 
 #pragma mark -
@@ -311,10 +311,10 @@
   return sd_types != nil;
 }
 
-- (id)type {
+- (NSString *)type {
   return sd_types;
 }
-- (void)setType:(id)aType {
+- (void)setType:(NSString *)aType {
   if (sd_types != aType) {
     [[self undoManager] registerUndoWithTarget:self selector:_cmd object:sd_types];
     [sd_types release];

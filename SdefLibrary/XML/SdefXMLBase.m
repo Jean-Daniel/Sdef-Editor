@@ -12,12 +12,8 @@
 
 #import "SdefComment.h"
 
-
 @implementation SdefObject (SdefXMLManager)
-
-#pragma mark -
 #pragma mark XML Generation
-
 - (SdefXMLNode *)xmlNodeForVersion:(SdefVersion)version {
   id node = nil;
   id child = nil;
@@ -25,15 +21,23 @@
   node = [SdefXMLNode nodeWithElementName:[self xmlElementName]];
   NSAssert1(!node || ([node elementName] != nil), @"%@ return an invalid node", self);
   if (node && [node elementName]) {
+    /* Comments */
     if (sd_comments)
       [node setComments:[self comments]];
-
+    /* Hidden */
+    if ([self isHidden]) {
+      if (kSdefTigerVersion == version)
+        [node setAttribute:@"yes" forKey:@"hidden"];
+      else
+        [node setAttribute:@"hidden" forKey:@"hidden"];
+    }
+    /* Children */
     children = [self childEnumerator];
     while (child = [children nextObject]) {
       id childNode = [child xmlNodeForVersion:version];
       if (childNode) {
         NSAssert1([childNode elementName] != nil, @"%@ return an invalid node", child);
-        [node appendBranch:childNode];
+        [node appendChild:childNode];
       }
     }
   }
@@ -44,7 +48,6 @@
   return nil;
 }
 
-#pragma mark -
 #pragma mark XML Parsing
 - (id)initWithAttributes:(NSDictionary *)attributes {
   if (self = [self initWithName:nil]) {
@@ -56,80 +59,22 @@
 
 - (void)setAttributes:(NSDictionary *)attrs {
   [self setName:[attrs objectForKey:@"name"]];
+  
+  NSString *hidden = [attrs objectForKey:@"hidden"];
+  if (hidden && ![hidden isEqualToString:@"no"]) {
+    [self setHidden:YES];
+  }
 }
 
 - (int)acceptXMLElement:(NSString *)element {
   return kSdefParserUnknownVersion;
 }
 
-//- (void)parser:(NSXMLParser *)parser didStartElement:(NSString *)elementName namespaceURI:(NSString *)namespaceURI qualifiedName:(NSString *)qName attributes:(NSDictionary *)attributeDict {
-//  if ([elementName isEqualToString:@"documentation"]) {
-//    SdefDocumentation *documentation = [(SdefObject *)[SdefDocumentation allocWithZone:[self zone]] initWithAttributes:attributeDict];
-//    [self setDocumentation:documentation];
-//    [self appendChild:documentation]; /* Append to parse, and remove after */
-//    [parser setDelegate:documentation];
-//    [documentation setComments:sd_childComments];
-//    [documentation release];
-//  } else if ([elementName isEqualToString:@"synonyms"]) {
-//    SdefCollection *synonyms = [self synonyms];
-//    if (synonyms) {
-//      [self appendChild:synonyms]; /* Append to parse, and remove after */
-//      [parser setDelegate:synonyms];
-//      [synonyms setComments:sd_childComments];
-//    }
-//  } else if ([elementName isEqualToString:@"cocoa"]) {
-//    SdefImplementation *cocoa = [self impl];
-//    if (cocoa) {
-//      [cocoa setAttributes:attributeDict];
-//      [cocoa setComments:sd_childComments];
-//    }
-//  }
-//  [sd_childComments release];
-//  sd_childComments = nil;
-//}
-
-// sent when an end tag is encountered. The various parameters are supplied as above.
-//- (void)parser:(NSXMLParser *)parser didEndElement:(NSString *)elementName namespaceURI:(NSString *)namespaceURI qualifiedName:(NSString *)qName {
-//  if (![elementName isEqualToString:@"cocoa"]) { /* cocoa isn't handle as a child node, but as an ivar */
-//    [parser setDelegate:[self parent]];
-//  }
-//}
-
-// A comment (Text in a <!-- --> block) is reported to the delegate as a single string
-//- (void)parser:(NSXMLParser *)parser foundComment:(NSString *)comment {
-//  if (nil == sd_childComments) {
-//    sd_childComments = [[NSMutableArray allocWithZone:[self zone]] init];
-//  }
-//  [sd_childComments addObject:[SdefComment commentWithString:[comment stringByUnescapingEntities:nil]]];
-//}
-
-// ...and this reports a fatal error to the delegate. The parser will stop parsing.
-//- (void)parser:(NSXMLParser *)parser parseErrorOccurred:(NSError *)parseError {
-//  id container = @"class";
-//  id parent = [self firstParentOfType:kSdefClassType];
-//  if (!parent) {
-//    parent = [self suite];
-//    container = @"suite";
-//  }
-//  NSAlert *alert = [NSAlert alertWithMessageText:@"The document could not be opened because it's not a valid sdef file."
-//                                   defaultButton:@"OK"
-//                                 alternateButton:nil
-//                                     otherButton:nil
-//                       informativeTextWithFormat:@"XMLParser encounter an error in element \"%@\" of %@ \"%@\".",
-//    [self xmlElementName], container, [parent name]];
-//  [parser setDelegate:nil];
-//  [parser abortParsing];
-//  [alert runModal];
-//}
-
 @end
 
 #pragma mark -
 @implementation SdefCollection (SdefXMLManager)
-
-#pragma mark -
 #pragma mark XML Generation
-
 - (SdefXMLNode *)xmlNodeForVersion:(SdefVersion)version {
   if (![self hasChildren])
     return nil;
@@ -159,9 +104,7 @@
   return [self elementName];
 }
 
-#pragma mark -
 #pragma mark XML Parsing
-
 - (void)setAttributes:(NSDictionary *)attrs {
   /* Do nothing */
 }
@@ -169,26 +112,5 @@
 - (int)acceptXMLElement:(NSString *)element {
   return kSdefParserPantherVersion;
 }
-
-//- (void)parser:(NSXMLParser *)parser didStartElement:(NSString *)elementName namespaceURI:(NSString *)namespaceURI qualifiedName:(NSString *)qName attributes:(NSDictionary *)attributeDict {
-//  /* If valid document, can only be collection content element */
-//  SdefObject *element = [(SdefObject *)[[self contentType] allocWithZone:[self zone]] initWithAttributes:attributeDict];
-//  [self appendChild:element];
-//  [parser setDelegate:element];
-//  [element release];
-//  if (sd_childComments) {
-//    [element setComments:sd_childComments];
-//    [sd_childComments release];
-//    sd_childComments = nil;
-//  }
-//}
-//
-//// sent when an end tag is encountered. The various parameters are supplied as above.
-//- (void)parser:(NSXMLParser *)parser didEndElement:(NSString *)elementName namespaceURI:(NSString *)namespaceURI qualifiedName:(NSString *)qName {
-//  [super parser:parser didEndElement:elementName namespaceURI:namespaceURI qualifiedName:qName];
-//  if ([elementName isEqualToString:@"synonyms"]) {
-//    [self remove];
-//  }
-//}
 
 @end

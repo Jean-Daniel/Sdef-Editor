@@ -13,7 +13,7 @@
 #import "SdefXMLNode.h"
 #import "SdefClass.h"
 
-static NSArray *SdefXMLAccessorStringsFromFlag(unsigned flag) {
+NSArray *SdefXMLAccessorStringsFromFlag(unsigned flag) {
   NSMutableArray *strings = [NSMutableArray array];
   if (flag & kSdefAccessorIndex) [strings addObject:@"index"];
   if (flag & kSdefAccessorID) [strings addObject:@"id"];
@@ -24,7 +24,7 @@ static NSArray *SdefXMLAccessorStringsFromFlag(unsigned flag) {
   return strings;
 }
 
-static unsigned SdefXMLAccessorFlagFromString(NSString *str) {
+unsigned SdefXMLAccessorFlagFromString(NSString *str) {
   unsigned flag = 0;
   if (str && [str rangeOfString:@"index"].location != NSNotFound) {
     flag |= kSdefAccessorIndex;
@@ -45,7 +45,6 @@ static unsigned SdefXMLAccessorFlagFromString(NSString *str) {
 #pragma mark -
 @implementation SdefClass (SdefXMLManager)
 #pragma mark XML Generation
-
 - (SdefXMLNode *)xmlNodeForVersion:(SdefVersion)version {
   id node;
   if (node = [super xmlNodeForVersion:version]) {
@@ -53,7 +52,11 @@ static unsigned SdefXMLAccessorFlagFromString(NSString *str) {
     if ([self inherits]) [node setAttribute:[self inherits] forKey:@"inherits"];
     id contents = [[self contents] xmlNodeForVersion:version];
     if (nil != contents) {
-      [node prependChild:contents];
+      if ([[[node firstChild] elementName] isEqualToString:@"documentation"]) {
+        [node insertChild:contents atIndex:1];
+      } else {
+        [node prependChild:contents];
+      }
     }
   }
   return node;
@@ -63,9 +66,7 @@ static unsigned SdefXMLAccessorFlagFromString(NSString *str) {
   return @"class";
 }
 
-#pragma mark -
 #pragma mark Parsing
-
 - (void)setAttributes:(NSDictionary *)attrs {
   [super setAttributes:attrs];
   [self setPlural:[attrs objectForKey:@"plural"]];
@@ -92,36 +93,11 @@ static unsigned SdefXMLAccessorFlagFromString(NSString *str) {
   return kSdefParserBothVersion;
 }
 
-//- (void)parser:(NSXMLParser *)parser didStartElement:(NSString *)elementName namespaceURI:(NSString *)namespaceURI qualifiedName:(NSString *)qName attributes:(NSDictionary *)attributeDict {
-//  if ([elementName isEqualToString:@"properties"]) {
-//    [parser setDelegate:[self properties]];
-//  } else if ([elementName isEqualToString:@"elements"]) {
-//    [parser setDelegate:[self elements]];
-//  } else if ([elementName isEqualToString:@"responds-to-commands"]) {
-//    [parser setDelegate:[self commands]];
-//  } else if ([elementName isEqualToString:@"responds-to-events"]) {
-//    [parser setDelegate:[self events]];
-//  } else if ([elementName isEqualToString:@"contents"]) {
-//    SdefContents *contents = [self contents];
-//    [contents setAttributes:attributeDict];
-//    [self appendChild:contents]; /* will be removed when finish parsing */
-//    [parser setDelegate:contents];
-//  } else {
-//    [super parser:parser didStartElement:elementName namespaceURI:namespaceURI qualifiedName:qName attributes:attributeDict];
-//  }
-//  if (sd_childComments && [[parser delegate] parent] == self) {
-//    [[parser delegate] setComments:sd_childComments];
-//    [sd_childComments release];
-//    sd_childComments = nil;
-//  }
-//}
-
 @end
 
 #pragma mark -
 @implementation SdefContents (SdefXMLManager)
 #pragma mark XML Generation
-
 - (SdefXMLNode *)xmlNodeForVersion:(SdefVersion)version {
   id node = nil;
   if ([self hasType] && (node = [super xmlNodeForVersion:version])) {
@@ -137,23 +113,16 @@ static unsigned SdefXMLAccessorFlagFromString(NSString *str) {
   return @"contents";
 }
 
-#pragma mark -
 #pragma mark Parsing
-
 - (void)setAttributes:(NSDictionary *)attrs {
   [super setAttributes:attrs];
   
-  [self setType:[attrs objectForKey:@"type"]];
   [self setAccess:SdefXMLAccessFlagFromString([attrs objectForKey:@"access"])];
 }
 
-// sent when an end tag is encountered. The various parameters are supplied as above.
-//- (void)parser:(NSXMLParser *)parser didEndElement:(NSString *)elementName namespaceURI:(NSString *)namespaceURI qualifiedName:(NSString *)qName {
-//  [super parser:parser didEndElement:elementName namespaceURI:namespaceURI qualifiedName:qName];
-//  if ([elementName isEqualToString:@"contents"]) {
-//    [self remove];
-//  }
-//}
+- (int)acceptXMLElement:(NSString *)element {
+  return kSdefParserBothVersion;
+}
 
 @end
 
@@ -186,9 +155,7 @@ static unsigned SdefXMLAccessorFlagFromString(NSString *str) {
   return @"element";
 }
 
-#pragma mark -
 #pragma mark Parsing
-
 - (void)setAttributes:(NSDictionary *)attrs {
   [super setAttributes:attrs];
   
@@ -196,22 +163,9 @@ static unsigned SdefXMLAccessorFlagFromString(NSString *str) {
   [self setAccess:SdefXMLAccessFlagFromString([attrs objectForKey:@"access"])];
 }
 
-//- (void)parser:(NSXMLParser *)parser didStartElement:(NSString *)elementName namespaceURI:(NSString *)namespaceURI qualifiedName:(NSString *)qName attributes:(NSDictionary *)attributeDict {
-//  if ([elementName isEqualToString:@"accessor"]) {
-//    id str = [attributeDict objectForKey:@"style"];
-//    if (str)
-//      [self setAccessors:[self accessors] | SdefAccessorFlagFromString(str)];
-//  } else {
-//    [super parser:parser didStartElement:elementName namespaceURI:namespaceURI qualifiedName:qName attributes:attributeDict];
-//  }
-//}
-
-// sent when an end tag is encountered. The various parameters are supplied as above.
-//- (void)parser:(NSXMLParser *)parser didEndElement:(NSString *)elementName namespaceURI:(NSString *)namespaceURI qualifiedName:(NSString *)qName {
-//  if (![elementName isEqualToString:@"accessor"]) {
-//    [super parser:parser didEndElement:elementName namespaceURI:namespaceURI qualifiedName:qName];
-//  }
-//}
+- (int)acceptXMLElement:(NSString *)element {
+  return kSdefParserBothVersion;
+}
 
 @end
 
@@ -239,17 +193,19 @@ static unsigned SdefXMLAccessorFlagFromString(NSString *str) {
   return @"property";
 }
 
-#pragma mark -
 #pragma mark Parsing
 - (void)setAttributes:(NSDictionary *)attrs {
   [super setAttributes:attrs];
   
-  [self setType:[attrs objectForKey:@"type"]];
   [self setAccess:SdefXMLAccessFlagFromString([attrs objectForKey:@"access"])];
   if ([[attrs objectForKey:@"in-properties"] isEqualToString:@"no"] ||
       (nil != [attrs objectForKey:@"not-in-properties"])) {
     [self setNotInProperties:YES];
   }
+}
+
+- (int)acceptXMLElement:(NSString *)element {
+  return kSdefParserBothVersion;
 }
 
 @end
@@ -268,6 +224,11 @@ static unsigned SdefXMLAccessorFlagFromString(NSString *str) {
 
 - (NSString *)xmlElementName {
   return @"responds-to";
+}
+
+#pragma mark Parsing
+- (int)acceptXMLElement:(NSString *)element {
+  return kSdefParserBothVersion;
 }
 
 @end

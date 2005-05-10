@@ -18,6 +18,9 @@ enum {
 extern NSString *SdefXMLAccessStringFromFlag(unsigned flag);
 extern unsigned SdefXMLAccessFlagFromString(NSString *str);
 
+extern unsigned SdefXMLAccessorFlagFromString(NSString *str);
+extern NSArray *SdefXMLAccessorStringsFromFlag(unsigned flag);
+
 @class SdefObject, SdefDictionary;
 @interface SdefXMLParser : NSObject {
   id sd_node;
@@ -27,5 +30,8 @@ extern unsigned SdefXMLAccessFlagFromString(NSString *str);
 
 - (SdefDictionary *)document;
 - (BOOL)parseData:(NSData *)document;
+
+- (void)parser:(NSXMLParser *)parser didStartElement:(NSString *)element withAttributes:(NSDictionary *)attributes;
+- (void)parser:(NSXMLParser *)parser didEndElement:(NSString *)element;
 
 @end
