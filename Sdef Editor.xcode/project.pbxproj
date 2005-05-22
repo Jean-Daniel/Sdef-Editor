@@ -146,7 +146,6 @@
 		};
 		2A37F4AFFDCFA73011CA2CEA = {
 			children = (
-				98D3710707B62C3700E18D29,
 				32DBCF750370BD2300C91783,
 			);
 			isa = PBXGroup;
@@ -208,7 +207,6 @@
 				98168E0007A29025002B893D,
 				98168E0407A29036002B893D,
 				98E3176D0840B5B0003EC9D5,
-				98287DB107F6471D00319FD2,
 				98F940B407F889560014708A,
 				98EA0B8B078C883E00ECCB4B,
 				2A37F4B6FDCFA73011CA2CEA,
@@ -1008,14 +1006,6 @@
 			isa = PBXBuildFile;
 			settings = {
 			};
-		};
-		98287DB107F6471D00319FD2 = {
-			fileEncoding = 4;
-			isa = PBXFileReference;
-			lastKnownFileType = text.xml;
-			path = ASKDictionary.sdef;
-			refType = 4;
-			sourceTree = "<group>";
 		};
 		98298DA407AE7E7200F09708 = {
 			fileEncoding = 30;
@@ -3511,14 +3501,6 @@
 			isa = PBXBuildFile;
 			settings = {
 			};
-		};
-		98D3710707B62C3700E18D29 = {
-			fileEncoding = 4;
-			isa = PBXFileReference;
-			lastKnownFileType = sourcecode.applescript;
-			path = Test.applescript;
-			refType = 4;
-			sourceTree = "<group>";
 		};
 		98D3A17107D1D67100AC085D = {
 			fileEncoding = 4;
