@@ -16,7 +16,7 @@
   NSString *sdefName = SdefNameCreateWithCocoaName(name);
   if (self = [super initWithName:sdefName]) {
     [[self impl] setName:name];
-    [self setCodeStr:[suite objectForKey:@"AppleEventCode"]];
+    [self setCode:[suite objectForKey:@"AppleEventCode"]];
     id codes = [suite objectForKey:@"Enumerators"];
     id keys = [terminology keyEnumerator];
     id key;
@@ -39,7 +39,7 @@
 - (id)initWithName:(NSString *)name suite:(NSDictionary *)suite andTerminology:(NSDictionary *)terminology {
   if (self = [super initWithName:[terminology objectForKey:@"Name"]]) {
     [self setDesc:[terminology objectForKey:@"Description"]];
-    [self setCodeStr:[suite objectForKey:name]];
+    [self setCode:[suite objectForKey:name]];
     [[self impl] setName:name];
   }
   return self;

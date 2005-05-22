@@ -8,6 +8,7 @@
 
 #import <Cocoa/Cocoa.h>
 
+@class SdefDictionary;
 @class SdefClassManager, SdefObject, SdefEnumeration;
 @class SdefVerb, SdefDirectParameter, SdefParameter, SdefResult;
 @class SdefClass, SdefContents, SdefElement, SdefProperty, SdefRespondsTo;
@@ -30,6 +31,7 @@
 - (NSArray *)warnings;
 - (unsigned)suiteCount;
 - (NSArray *)sdefSuites;
+- (SdefDictionary *)sdefDictionary;
 
 #pragma mark -
 - (void)addWarning:(NSString *)warning forValue:(NSString *)value;

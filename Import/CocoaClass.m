@@ -20,7 +20,7 @@
     if (![[[self name] stringByAppendingString:@"s"] isEqualToString:plural]) {
       [self setPlural:plural];
     }
-    [self setCodeStr:[suite objectForKey:@"AppleEventCode"]];
+    [self setCode:[suite objectForKey:@"AppleEventCode"]];
     [self setInherits:[suite objectForKey:@"Superclass"]];
     
     [[self impl] setSdClass:name];
@@ -90,10 +90,10 @@
     }
     value = [suite objectForKey:@"AppleEventCode"];
     if (![value isEqualToString:@"pcnt"]) {
-      [self setCodeStr:value];
+      [self setCode:value];
     }
     
-    [self setCodeStr:[suite objectForKey:@"AppleEventCode"]];
+    [self setCode:[suite objectForKey:@"AppleEventCode"]];
     [self setType:[suite objectForKey:@"Type"]];
     [self setDesc:[terminology objectForKey:@"Description"]];
     
@@ -117,7 +117,7 @@
 
 - (id)initWithName:(NSString *)name suite:(NSDictionary *)suite andTerminology:(NSDictionary *)terminology {
   if (self = [super initWithName:[terminology objectForKey:@"Name"]]) {
-    [self setCodeStr:[suite objectForKey:@"AppleEventCode"]];
+    [self setCode:[suite objectForKey:@"AppleEventCode"]];
     [self setType:[suite objectForKey:@"Type"]];
     [self setDesc:[terminology objectForKey:@"Description"]];
     
@@ -141,7 +141,7 @@
 
 - (id)initWithName:(NSString *)name suite:(NSDictionary *)suite andTerminology:(NSDictionary *)terminology {
   if (self = [super initWithName:[suite objectForKey:@"Type"]]) {
-    [self setCodeStr:[suite objectForKey:@"AppleEventCode"]];
+    [self setCode:[suite objectForKey:@"AppleEventCode"]];
     
     /* Access */
     unsigned access = kSdefAccessRead | kSdefAccessWrite;

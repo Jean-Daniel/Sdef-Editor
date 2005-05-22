@@ -10,6 +10,6 @@
 
 @interface SdefObject (AeteResource)
 
-- (UInt32)parseData:(char *)bytes;
+- (UInt32)parseData:(Byte *)bytes;
 
 @end

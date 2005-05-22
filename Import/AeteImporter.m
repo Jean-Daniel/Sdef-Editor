@@ -182,7 +182,6 @@ bail:
 
 #pragma mark -
 #pragma mark Parsing
-
 - (BOOL)import {
   id aetes = [sd_aetes objectEnumerator];
   NSData *aete;
@@ -232,7 +231,7 @@ bail:
 - (void)postProcessClass:(SdefClass *)aClass {
   if ([[aClass properties] childCount]) {
     SdefProperty *info = [[aClass properties] firstChild];
-    if (SKHFSTypeCodeFromFileType([info codeStr]) == pInherits) {
+    if (SKHFSTypeCodeFromFileType([info code]) == pInherits) {
       id superclass = [manager sdefClassWithCode:[info type] inSuite:nil];
       if (superclass) {
         [aClass setInherits:[superclass name]];
@@ -241,10 +240,10 @@ bail:
                 forValue:[aClass name]];
       }
       [info remove];
-    } else if (SKHFSTypeCodeFromFileType([info codeStr]) == kAESpecialClassProperties) {
+    } else if (SKHFSTypeCodeFromFileType([info code]) == kAESpecialClassProperties) {
       if ([[info name] isEqualToString:@"<Plural>"]) {
         unsigned idx = [aClass index];
-        [[[aClass parent] childAtIndex:idx-1] setPlural:[aClass name]];
+        [(SdefClass *)[[aClass parent] childAtIndex:idx-1] setPlural:[aClass name]];
         [aClass remove];
       } else {
         [self addWarning:@"Unable to import Special Properties" forValue:[aClass name]];

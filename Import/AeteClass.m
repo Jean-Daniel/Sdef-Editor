@@ -12,7 +12,7 @@
 
 @implementation SdefClass (AeteResource)
 
-- (UInt32)parseData:(char *)data {
+- (UInt32)parseData:(Byte *)data {
   unsigned length;
   BytePtr bytes = data;
   
@@ -28,7 +28,7 @@
   
   /* Identifier */
   OSType *ID = (OSType *)bytes;
-  [self setCodeStr:SKFileTypeForHFSTypeCode(*ID)];
+  [self setCode:SKFileTypeForHFSTypeCode(*ID)];
   bytes += 4;
   
   pStr = (StringPtr)bytes;
@@ -76,7 +76,7 @@
 #pragma mark -
 @implementation SdefProperty (AeteResource)
 
-- (UInt32)parseData:(char *)data {
+- (UInt32)parseData:(Byte *)data {
   unsigned length;
   BytePtr bytes = data;
   
@@ -92,7 +92,7 @@
   
   /* Identifier */
   OSType *ID = (OSType *)bytes;
-  [self setCodeStr:SKFileTypeForHFSTypeCode(*ID)];
+  [self setCode:SKFileTypeForHFSTypeCode(*ID)];
   bytes += 4;
   
   /* Type */
@@ -136,7 +136,7 @@
 #pragma mark -
 @implementation SdefElement (AeteResource)
 
-- (UInt32)parseData:(char *)data {
+- (UInt32)parseData:(Byte *)data {
   BytePtr bytes = data;
   
   /* Type */

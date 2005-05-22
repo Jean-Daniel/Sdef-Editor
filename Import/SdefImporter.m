@@ -73,15 +73,22 @@
         [manager addSuite:suite];
       }
       [self postProcess];
+      [manager release];
+      manager = nil;
     }
-    [manager release];
-    manager = nil;
     if ([sd_warnings count] == 0) {
       [sd_warnings release];
       sd_warnings = nil;
     }
   }
   return suites;
+}
+
+- (SdefDictionary *)sdefDictionary {
+  if (!suites) {
+    [self sdefSuites];
+  }
+  return nil;
 }
 
 - (void)addWarning:(NSString *)warning forValue:(NSString *)value {

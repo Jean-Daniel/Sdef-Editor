@@ -12,13 +12,13 @@
 
 @implementation SdefEnumeration (AeteResource)
 
-- (UInt32)parseData:(char *)data {
+- (UInt32)parseData:(Byte *)data {
   BytePtr bytes = data;
   
   /* Identifier */
   OSType *ID = (OSType *)bytes;
-  [self setCodeStr:SKFileTypeForHFSTypeCode(*ID)];
-  [self setName:[self codeStr]];
+  [self setCode:SKFileTypeForHFSTypeCode(*ID)];
+  [self setName:[self code]];
   bytes += 4;
   
   /* Enumerators */
@@ -43,7 +43,7 @@
 
 @implementation SdefEnumerator (AeteResource)
 
-- (UInt32)parseData:(char *)data {
+- (UInt32)parseData:(Byte *)data {
   unsigned length;
   BytePtr bytes = data;
   
@@ -59,7 +59,7 @@
   
   /* Identifier */
   OSType *ID = (OSType *)bytes;
-  [self setCodeStr:SKFileTypeForHFSTypeCode(*ID)];
+  [self setCode:SKFileTypeForHFSTypeCode(*ID)];
   bytes += 4;
   
   /* Description */

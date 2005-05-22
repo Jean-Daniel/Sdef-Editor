@@ -16,7 +16,7 @@
 - (id)initWithName:(NSString *)name suite:(NSDictionary *)suite andTerminology:(NSDictionary *)terminology {
   if (self = [super initWithName:[terminology objectForKey:@"Name"]]) {
     [self setDesc:[terminology objectForKey:@"Description"]];
-    [self setCodeStr:[[suite objectForKey:@"AppleEventClassCode"] stringByAppendingString:[suite objectForKey:@"AppleEventCode"]]];    
+    [self setCode:[[suite objectForKey:@"AppleEventClassCode"] stringByAppendingString:[suite objectForKey:@"AppleEventCode"]]];    
     NSString *sdefName = SdefNameCreateWithCocoaName(name);
     if (![sdefName isEqualToString:[self name]])
       [[self impl] setName:name];
@@ -61,7 +61,7 @@
   if (self = [super initWithName:[terminology objectForKey:@"Name"]]) {
     [self setDesc:[terminology objectForKey:@"Description"]];
     [self setType:[suite objectForKey:@"Type"]];
-    [self setCodeStr:[suite objectForKey:@"AppleEventCode"]];
+    [self setCode:[suite objectForKey:@"AppleEventCode"]];
     [self setOptional:[[suite objectForKey:@"Optional"] isEqualToString:@"YES"]];
     [[self impl] setKey:name];
   }

@@ -15,7 +15,7 @@
 
 @implementation SdefSuite (AeteResource)
 
-- (UInt32)parseData:(char *)data {
+- (UInt32)parseData:(Byte *)data {
   unsigned length;
   BytePtr bytes = data;
   StringPtr pStr = (StringPtr)bytes;
@@ -36,7 +36,7 @@
   bytes += (long)bytes % 2;
   
   OSType *ID = (UInt32 *)bytes;
-  [self setCodeStr:SKFileTypeForHFSTypeCode(*ID)];
+  [self setCode:SKFileTypeForHFSTypeCode(*ID)];
   bytes += 4;
   
   /* skip level and version */

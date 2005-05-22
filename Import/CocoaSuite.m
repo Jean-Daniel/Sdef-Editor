@@ -18,7 +18,7 @@
 - (id)initWithName:(NSString *)name suite:(NSDictionary *)suite andTerminology:(NSDictionary *)terminology {
   if (self = [super initWithName:[terminology objectForKey:@"Name"]]) {
     [self setDesc:[terminology objectForKey:@"Description"]];
-    [self setCodeStr:[suite objectForKey:@"AppleEventCode"]];
+    [self setCode:[suite objectForKey:@"AppleEventCode"]];
     [[self impl] setName:[suite objectForKey:@"Name"]];
     
     /* Enumerations */
