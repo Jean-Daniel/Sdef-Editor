@@ -48,7 +48,14 @@
   id node = nil;
   if (sd_content != nil) {
     if (node = [super xmlNodeForVersion:version]) {
-      [node setContent:sd_content];
+      if (kSdefTigerVersion == version && [self isHtml]) {
+        SdefXMLNode *html = [[SdefXMLNode alloc] initWithElementName:@"html"];
+        [html setContent:sd_content];
+        [node appendChild:html];
+        [html release];
+      } else {
+        [node setContent:[sd_content stringByEscapingEntities:nil]];
+      }
     }
   }
   return node;

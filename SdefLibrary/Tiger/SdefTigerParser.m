@@ -12,7 +12,10 @@
 #import "SdefXMLBase.h"
 #import "SdefType.h"
 #import "SdefSuite.h"
+#import "SdefClass.h"
 #import "SdefTypedef.h"
+#import "SdefDictionary.h"
+#import "SdefClassManager.h"
 
 @implementation SdefTigerParser
 
@@ -20,30 +23,75 @@
   return kSdefParserTigerVersion;
 }
 
+#pragma mark Collections
+- (void)parser:(CFXMLParserRef)parser didStartEnumeration:(NSDictionary *)attributes {
+  sd_node = [(SdefSuite *)sd_node types];
+  [super parser:parser didStartEnumeration:attributes];
+}
+
+- (void)parser:(CFXMLParserRef)parser didStartClass:(NSDictionary *)attributes {
+  sd_node = [sd_node classes];
+  [super parser:parser didStartClass:attributes];
+}
+
+- (void)parser:(CFXMLParserRef)parser didStartCommand:(NSDictionary *)attributes {
+  sd_node = [(SdefSuite *)sd_node commands];
+  [super parser:parser didStartCommand:attributes];
+}
+
+- (void)parser:(CFXMLParserRef)parser didStartEvent:(NSDictionary *)attributes {
+  sd_node = [sd_node events];
+  [super parser:parser didStartEvent:attributes];
+}
+
+- (void)parser:(CFXMLParserRef)parser didStartElement:(NSDictionary *)attributes {
+  sd_node = [(SdefClass *)sd_node elements];
+  [super parser:parser didStartElement:attributes];
+}
+
+- (void)parser:(CFXMLParserRef)parser didStartProperty:(NSDictionary *)attributes {
+  if ([sd_node respondsToSelector:@selector(properties)]) 
+    sd_node = [(SdefClass *)sd_node properties];
+  [super parser:parser didStartProperty:attributes];
+}
+
+- (void)parser:(CFXMLParserRef)parser didStartRespondsTo:(NSDictionary *)attributes {
+  sd_node = [(SdefClass *)sd_node commands];
+  [super parser:parser didStartRespondsTo:attributes];
+}
+
 #pragma mark Typedef
-- (void)parser:(NSXMLParser *)parser didStartValueType:(NSDictionary *)attributes {
+- (void)parser:(CFXMLParserRef)parser didStartValueType:(NSDictionary *)attributes {
   SdefValue *value = [(SdefObject *)[SdefValue allocWithZone:[self zone]] initWithAttributes:attributes];
-  [[(SdefSuite *)sd_parent types] appendChild:value];
+  [[(SdefSuite *)sd_node types] appendChild:value];
   [value release];
   sd_node = value;
 }
 
-- (void)parser:(NSXMLParser *)parser didStartRecordType:(NSDictionary *)attributes {
+- (void)parser:(CFXMLParserRef)parser didStartRecordType:(NSDictionary *)attributes {
   SdefRecord *record = [(SdefObject *)[SdefRecord allocWithZone:[self zone]] initWithAttributes:attributes];
-  [[(SdefSuite *)sd_parent types] appendChild:record];
+  [[(SdefSuite *)sd_node types] appendChild:record];
   [record release];
   sd_node = record;
 }
 
-- (void)parser:(NSXMLParser *)parser didStartType:(NSDictionary *)attributes {
-  ShadowTrace();
+- (void)parser:(CFXMLParserRef)parser didStartType:(NSDictionary *)attributes {
   SdefType *type = [[SdefType allocWithZone:[self zone]] init];
-  /* parse Attributes */ 
+  /* parse Attributes */
+  NSString *attr = [attributes objectForKey:@"list"];
+  if (attr && ![attr isEqualToString:@"no"]) {
+    [type setList:YES];
+  }
+  attr = [attributes objectForKey:@"type"];
+  if (attr) {
+    [type setName:attr];
+    [sd_node addType:type];
+  } 
   [type release];
 }
 
 #pragma mark Misc
-- (void)parser:(NSXMLParser *)parser didStartElement:(NSString *)element withAttributes:(NSDictionary *)attributes {
+- (void)parser:(CFXMLParserRef)parser didStartElement:(NSString *)element withAttributes:(NSDictionary *)attributes {
   SEL cmd = @selector(isEqualToString:);
   EqualIMP isEqual = (EqualIMP)[element methodForSelector:cmd];
   NSAssert(isEqual, @"Missing isEqualToStringMethod");
@@ -59,10 +107,31 @@
   }
 }
 
-- (void)parser:(NSXMLParser *)parser didEndElement:(NSString *)element {
+- (void)parser:(CFXMLParserRef)parser didEndElement:(NSString *)element {
   [super parser:parser didEndElement:element];
-  while ([sd_node isKindOfClass:[SdefCollection class]]) {
+  if ([sd_node isKindOfClass:[SdefCollection class]]) {
     sd_node = [sd_node parent];
+  }
+}
+
+- (void)parserDidEndDocument:(CFXMLParserRef)parser {
+  SdefSuite *suite;
+  NSEnumerator *suites = [[self document] childEnumerator];
+  while (suite = [suites nextObject]) {
+    SdefClass *class;
+    NSEnumerator *classes = [[suite classes] childEnumerator];
+    while (class = [classes nextObject]) {
+      SdefRespondsTo *cmd;
+      NSEnumerator *cmds = [[class commands] childEnumerator];
+      while (cmd = [cmds nextObject]) {
+        if ([[cmd classManager] eventWithName:[cmd name]] != nil) {
+          [cmd retain];
+          [cmd remove];
+          [[class events] appendChild:cmd];
+          [cmd release];
+        }
+      }
+    }
   }
 }
 

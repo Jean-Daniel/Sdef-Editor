@@ -19,14 +19,15 @@
   id node;
   if (node = [super xmlNodeForVersion:version]) {
     id childNode;
+    /* Insert before parameters */
     unsigned idx = [node childCount] - [self childCount];
-    childNode = [[self result] xmlNodeForVersion:version];
-    if (nil != childNode) {
-      [node insertChild:childNode atIndex:idx];
-    }
     childNode = [[self directParameter] xmlNodeForVersion:version];
     if (nil != childNode) {
       [node insertChild:childNode atIndex:idx];
+    }
+    childNode = [[self result] xmlNodeForVersion:version];
+    if (nil != childNode) {
+      [node appendChild:childNode];
     }
   }
   return node;

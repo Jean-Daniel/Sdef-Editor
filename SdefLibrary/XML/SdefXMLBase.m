@@ -83,6 +83,7 @@
     return [super xmlNodeForVersion:version];
   } else if (kSdefTigerVersion == version) {
     SdefXMLNode *children = nil;
+    SdefXMLNode *lastChild = nil;
     SdefObject *child;
     NSEnumerator *enume = [self childEnumerator];
     while (child = [enume nextObject]) {
@@ -90,9 +91,10 @@
       if (node) {
         if (!children) {
           children = node;
-        } else {
-          [children insertSibling:node];
-        }
+        } 
+        /* Use last Child to keep object ordered */
+        [lastChild insertSibling:node];
+        lastChild = node;
       }
     }
     return children;

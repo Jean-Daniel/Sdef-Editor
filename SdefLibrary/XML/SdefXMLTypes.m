@@ -17,26 +17,30 @@
   return @"enumeration";
 }
 
+- (SdefXMLNode *)xmlNodeForVersion:(SdefVersion)aVersion {
+  SdefXMLNode *node;
+  if (node = [super xmlNodeForVersion:aVersion]) {
+    if ([self inlineValue] != kSdefInlineAll)
+      [node setAttribute:[NSString stringWithFormat:@"%i", [self inlineValue]] forKey:@"inline"];
+  }
+  return node;
+}
+
+
 #pragma mark Parsing
+- (void)setAttributes:(NSDictionary *)attrs {
+  [super setAttributes:attrs];
+  NSString *value = [attrs objectForKey:@"inline"];
+  if (value) {
+    [self setInlineValue:[value intValue]];
+  } else {
+    [self setInlineValue:kSdefInlineAll];
+  }
+}
+
 - (int)acceptXMLElement:(NSString *)element {
   return kSdefParserBothVersion;
 }
-
-//- (void)parser:(NSXMLParser *)parser didStartElement:(NSString *)elementName namespaceURI:(NSString *)namespaceURI qualifiedName:(NSString *)qName attributes:(NSDictionary *)attributeDict {
-//  if ([elementName isEqualToString:@"enumerator"]) {
-//    SdefEnumerator *enumerator = [(SdefObject *)[SdefEnumerator allocWithZone:[self zone]] initWithAttributes:attributeDict];
-//    [self appendChild:enumerator];
-//    [parser setDelegate:enumerator];
-//    [enumerator release];
-//    if (sd_childComments) {
-//      [enumerator setComments:sd_childComments];
-//      [sd_childComments release];
-//      sd_childComments = nil;
-//    }
-//  } else {
-//    [super parser:parser didStartElement:elementName namespaceURI:namespaceURI qualifiedName:qName attributes:attributeDict];
-//  }
-//}
 
 @end
 

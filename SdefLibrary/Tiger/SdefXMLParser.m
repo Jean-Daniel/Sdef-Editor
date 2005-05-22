@@ -8,6 +8,7 @@
 
 #import "ShadowBase.h"
 #import "SKFunctions.h"
+#import "ShadowCFContext.h"
 
 #import "SdefXMLBase.h"
 #import "SdefXMLParser.h"
@@ -26,15 +27,40 @@
 #import "SdefTigerParser.h"
 #import "SdefPantherParser.h"
 
+
+static void *SdefParserCreateStructure(CFXMLParserRef parser, CFXMLNodeRef node, void *info);
+static void SdefParserAddChild(CFXMLParserRef parser, void *parent, void *child, void *info);
+static void SdefParserEndStructure(CFXMLParserRef parser, void *xmlType, void *info);
+static CFDataRef SdefParserResolveEntity(CFXMLParserRef parser, CFXMLExternalID *extID, void *info);
+static Boolean SdefParserHandleError(CFXMLParserRef parser, CFXMLParserStatusCode error, void *info);
+
+static CFXMLParserCallBacks SdefParserCallBacks = {
+  0,
+  SdefParserCreateStructure,
+  SdefParserAddChild,
+  SdefParserEndStructure,
+  SdefParserResolveEntity,
+  SdefParserHandleError
+};
+
 @implementation SdefXMLParser
 
+- (id)init {
+  if (self = [super init]) {
+    sd_comments = [[NSMutableArray alloc] init];
+  }
+  return self;
+}
+
 - (void)dealloc {
+  [sd_error release];
+  [sd_comments release];
+  [sd_delegate release];
   [sd_dictionary release];
   [super dealloc];
 }
 
 #pragma mark -
-
 - (int)parserVersion {
   return kSdefParserBothVersion;
 }
@@ -44,14 +70,18 @@
     case kSdefParserBothVersion:
       break;
     case kSdefParserTigerVersion:
-      DLog(@"Switch to Tiger type");
+      DLog(@"Transformation to Tiger Parser");
       SKSwizzleIsaPointer(self, [SdefTigerParser class]);
       break;
     case kSdefParserPantherVersion:
-      DLog(@"Switch to Panther type");
+      DLog(@"Transformation to Panther Parser");
       SKSwizzleIsaPointer(self, [SdefPantherParser class]);
       break;
   }
+}
+
+- (NSString *)error {
+  return sd_error;
 }
 
 - (SdefDictionary *)document {
@@ -59,43 +89,51 @@
 }
 
 - (BOOL)parseData:(NSData *)document {
+  if (sd_error) {
+    [sd_error release];
+    sd_error = nil;
+  }
   if (sd_dictionary) {
     [sd_dictionary release];
     sd_dictionary = nil;
   }
   if (!document) return NO;
-  NSXMLParser *parser = [[NSXMLParser alloc] initWithData:document];
-  [parser setShouldResolveExternalEntities:YES];
-  [parser setDelegate:self];
-  BOOL result = [parser parse];
-  [parser release];
+  [sd_comments removeAllObjects];
+  
+  CFXMLParserContext ctxt = { 0, self, nil, nil, ShadowCFCopyDescription};
+  sd_parser = CFXMLParserCreate(kCFAllocatorDefault, (CFDataRef)document, NULL,
+                                kCFXMLParserNoOptions, kCFXMLNodeCurrentVersion,
+                                &SdefParserCallBacks, &ctxt);
+  BOOL result = CFXMLParserParse(sd_parser);
+  CFRelease(sd_parser);
+  sd_parser = nil;
   return result;
 }
 
 #pragma mark -
 #pragma mark Sdef Parsing
-- (void)parser:(NSXMLParser *)parser didStartDictionary:(NSDictionary *)attributes {
+- (void)parser:(CFXMLParserRef)parser didStartDictionary:(NSDictionary *)attributes {
   if (sd_dictionary) {
     [sd_dictionary release];
   }
   sd_dictionary = [(SdefObject *)[SdefDictionary allocWithZone:[self zone]] initWithAttributes:attributes];
   sd_node = sd_dictionary;
-  sd_parent = sd_dictionary;
 }
 
-- (void)parser:(NSXMLParser *)parser didStartCocoa:(NSDictionary *)attributes {
+- (void)parser:(CFXMLParserRef)parser didStartCocoa:(NSDictionary *)attributes {
   [[sd_node impl] setAttributes:attributes];
 }
 
-- (void)parser:(NSXMLParser *)parser didStartDocumentation:(NSDictionary *)attributes {
-  id doc = [sd_node documentation];
-  // doc parser set doc and parser
-  // parser set delegate
-  // doc parser receive "end documentation" and rechange delegate
-  ShadowTrace();
+- (void)parser:(CFXMLParserRef)parser didStartDocumentation:(NSDictionary *)attributes {
+  sd_delegate = [[SdefDocumentationParser alloc] initWithDocumentation:[sd_node documentation] parent:self];
 }
 
-- (void)parser:(NSXMLParser *)parser didStartSynonym:(NSDictionary *)attributes {
+- (void)parserDidEndDocumentation:(SdefDocumentationParser *)parser {
+  [sd_delegate release]; /* sd_delegate == parser */
+  sd_delegate = nil;
+}
+
+- (void)parser:(CFXMLParserRef)parser didStartSynonym:(NSDictionary *)attributes {
   if (sd_node) {
     SdefSynonym *synonym = [(SdefObject *)[SdefSynonym allocWithZone:[self zone]] initWithAttributes:attributes];
     [[sd_node synonyms] appendChild:synonym];
@@ -105,29 +143,28 @@
 
 #pragma mark -
 #pragma mark Suite
-- (void)parser:(NSXMLParser *)parser didStartSuite:(NSDictionary *)attributes {
+- (void)parser:(CFXMLParserRef)parser didStartSuite:(NSDictionary *)attributes {
   NSAssert([sd_node isKindOfClass:[SdefDictionary class]], @"sd_node should be a dictionary");
   if (sd_node) {
     SdefSuite *suite = [(SdefObject *)[SdefSuite allocWithZone:[self zone]] initWithAttributes:attributes];
     [sd_node appendChild:suite];
     [suite release];
     sd_node = suite;
-    sd_parent = suite;
   }
 }
 
 #pragma mark Enumeration
-- (void)parser:(NSXMLParser *)parser didStartEnumeration:(NSDictionary *)attributes {
-  NSAssert([sd_parent isKindOfClass:[SdefSuite class]], @"sd_parent should be a suite");
-  if (sd_parent) {
+- (void)parser:(CFXMLParserRef)parser didStartEnumeration:(NSDictionary *)attributes {
+  NSAssert([[sd_node parent] isKindOfClass:[SdefSuite class]], @"sd_node should be a suite");
+  if (sd_node) {
     SdefEnumeration *enumeration = [(SdefObject *)[SdefEnumeration allocWithZone:[self zone]] initWithAttributes:attributes];
-    [[(SdefSuite *)sd_parent types] appendChild:enumeration];
+    [sd_node appendChild:enumeration];
     [enumeration release];
     sd_node = enumeration;
   }
 }
 
-- (void)parser:(NSXMLParser *)parser didStartEnumerator:(NSDictionary *)attributes {
+- (void)parser:(CFXMLParserRef)parser didStartEnumerator:(NSDictionary *)attributes {
   NSAssert([sd_node isKindOfClass:[SdefEnumeration class]], @"sd_node should be an enumeration");
   if (sd_node) {
     SdefEnumerator *enumerator = [(SdefObject *)[SdefEnumerator allocWithZone:[self zone]] initWithAttributes:attributes];
@@ -138,18 +175,17 @@
 }
 
 #pragma mark Class
-- (void)parser:(NSXMLParser *)parser didStartClass:(NSDictionary *)attributes {
-  NSAssert([sd_parent isKindOfClass:[SdefSuite class]], @"sd_parent should be a suite");
-  if (sd_parent) {
+- (void)parser:(CFXMLParserRef)parser didStartClass:(NSDictionary *)attributes {
+  NSAssert([[sd_node parent] isKindOfClass:[SdefSuite class]], @"sd_node should be a suite");
+  if (sd_node) {
     SdefClass *class = [(SdefObject *)[SdefClass allocWithZone:[self zone]] initWithAttributes:attributes];
-    [[sd_parent classes] appendChild:class];
+    [sd_node appendChild:class];
     [class release];
     sd_node = class;
-    sd_parent = class;
   }
 }
 
-- (void)parser:(NSXMLParser *)parser didStartContents:(NSDictionary *)attributes {
+- (void)parser:(CFXMLParserRef)parser didStartContents:(NSDictionary *)attributes {
   NSAssert([sd_node isKindOfClass:[SdefClass class]], @"sd_node should be a class");
   if (sd_node) {
     SdefContents *contents = [sd_node contents];
@@ -158,17 +194,17 @@
   }
 }
 
-- (void)parser:(NSXMLParser *)parser didStartElement:(NSDictionary *)attributes {
-  NSAssert([sd_parent isKindOfClass:[SdefClass class]], @"sd_parent should be a class");
-  if (sd_parent) {
+- (void)parser:(CFXMLParserRef)parser didStartElement:(NSDictionary *)attributes {
+  NSAssert([[sd_node parent] isKindOfClass:[SdefClass class]], @"sd_node should be a class");
+  if (sd_node) {
     SdefElement *element = [(SdefObject *)[SdefElement allocWithZone:[self zone]] initWithAttributes:attributes];
-    [[sd_parent elements] appendChild:element];
+    [sd_node appendChild:element];
     [element release];
     sd_node = element;
   }
 }
 
-- (void)parser:(NSXMLParser *)parser didStartAccessor:(NSDictionary *)attributes {
+- (void)parser:(CFXMLParserRef)parser didStartAccessor:(NSDictionary *)attributes {
   NSAssert([sd_node isKindOfClass:[SdefElement class]], @"sd_node should be an element");
   NSString *accessor = [attributes objectForKey:@"style"];
   if (accessor) {
@@ -176,21 +212,21 @@
   }
 }
 
-- (void)parser:(NSXMLParser *)parser didStartProperty:(NSDictionary *)attributes {
-  NSAssert([sd_parent isKindOfClass:[SdefClass class]] || [sd_node isKindOfClass:[SdefRecord class]], @"sd_parent should be a class or sd_node a record");
-  if (sd_parent) {
+- (void)parser:(CFXMLParserRef)parser didStartProperty:(NSDictionary *)attributes {
+  NSAssert([[sd_node parent] isKindOfClass:[SdefClass class]] || [sd_node isKindOfClass:[SdefRecord class]], @"sd_node should be a class or sd_node a record");
+  if (sd_node) {
     SdefProperty *property = [(SdefObject *)[SdefProperty allocWithZone:[self zone]] initWithAttributes:attributes];
-    [[(SdefClass *)sd_parent properties] appendChild:property];
+    [sd_node appendChild:property];
     [property release];
     sd_node = property;
   }
 }
 
-- (void)parser:(NSXMLParser *)parser didStartRespondsTo:(NSDictionary *)attributes {
-  NSAssert([sd_parent isKindOfClass:[SdefClass class]], @"sd_parent should be a class");
-  if (sd_parent) {
+- (void)parser:(CFXMLParserRef)parser didStartRespondsTo:(NSDictionary *)attributes {
+  NSAssert([[sd_node parent] isKindOfClass:[SdefClass class]], @"sd_node should be a class");
+  if (sd_node) {
     SdefRespondsTo *respondsTo = [(SdefObject *)[SdefRespondsTo allocWithZone:[self zone]] initWithAttributes:attributes];
-    [[(SdefClass *)sd_parent commands] appendChild:respondsTo];
+    [sd_node appendChild:respondsTo];
     [respondsTo release];
     sd_node = respondsTo;
   }
@@ -198,29 +234,27 @@
 
 
 #pragma mark Verb
-- (void)parser:(NSXMLParser *)parser didStartCommand:(NSDictionary *)attributes {
-  NSAssert([sd_parent isKindOfClass:[SdefSuite class]], @"sd_parent should be a suite");
+- (void)parser:(CFXMLParserRef)parser didStartCommand:(NSDictionary *)attributes {
+  NSAssert([[sd_node parent] isKindOfClass:[SdefSuite class]], @"sd_node should be a suite");
   if (sd_node) {
     SdefVerb *command = [(SdefObject *)[SdefVerb allocWithZone:[self zone]] initWithAttributes:attributes];
-    [[(SdefSuite *)sd_parent commands] appendChild:command];
+    [sd_node appendChild:command];
     [command release];
     sd_node = command;
-    sd_parent = command;
   }
 }
 
-- (void)parser:(NSXMLParser *)parser didStartEvent:(NSDictionary *)attributes {
-  NSAssert([sd_parent isKindOfClass:[SdefSuite class]], @"sd_parent should be a suite");
+- (void)parser:(CFXMLParserRef)parser didStartEvent:(NSDictionary *)attributes {
+  NSAssert([[sd_node parent] isKindOfClass:[SdefSuite class]], @"sd_node should be a suite");
   if (sd_node) {
     SdefVerb *event = [(SdefObject *)[SdefVerb allocWithZone:[self zone]] initWithAttributes:attributes];
-    [[(SdefSuite *)sd_parent events] appendChild:event];
+    [sd_node appendChild:event];
     [event release];
     sd_node = event;
-    sd_parent = event;
   }
 }
 
-- (void)parser:(NSXMLParser *)parser didStartDirectParameter:(NSDictionary *)attributes {
+- (void)parser:(CFXMLParserRef)parser didStartDirectParameter:(NSDictionary *)attributes {
   NSAssert([sd_node isKindOfClass:[SdefVerb class]], @"sd_node should be a verb");
   if (sd_node) {
     SdefDirectParameter *param = [sd_node directParameter];
@@ -229,7 +263,7 @@
   }
 }
 
-- (void)parser:(NSXMLParser *)parser didStartParameter:(NSDictionary *)attributes {
+- (void)parser:(CFXMLParserRef)parser didStartParameter:(NSDictionary *)attributes {
   NSAssert([sd_node isKindOfClass:[SdefVerb class]], @"sd_node should be a verb");
   if (sd_node) {
     SdefParameter *param = [(SdefObject *)[SdefParameter allocWithZone:[self zone]] initWithAttributes:attributes];
@@ -239,7 +273,7 @@
   }
 }
 
-- (void)parser:(NSXMLParser *)parser didStartResult:(NSDictionary *)attributes {
+- (void)parser:(CFXMLParserRef)parser didStartResult:(NSDictionary *)attributes {
   NSAssert([sd_node isKindOfClass:[SdefVerb class]], @"sd_node should be a verb");
   if (sd_node) {
     SdefResult *result = [sd_node result];
@@ -249,34 +283,33 @@
 }
 
 #pragma mark Misc
-- (void)parser:(NSXMLParser *)parser didStartElement:(NSString *)element withAttributes:(NSDictionary *)attributes {
-  [NSException raise:@"SdefParserException" format:@"Unknow element %@", element];
+- (void)parser:(CFXMLParserRef)parser foundComment:(NSString *)comment {
+  id value = [comment copy];
+  [sd_comments addObject:value];
+  [value release];
+}
+
+- (void)parser:(CFXMLParserRef)parser didStartElement:(NSString *)element withAttributes:(NSDictionary *)attributes {
+  CFStringRef str = CFStringCreateWithFormat(kCFAllocatorDefault, nil, CFSTR("Line %i: Unknow element %@"),
+                                             CFXMLParserGetLineNumber(parser), element);
+  CFXMLParserAbort(parser, kCFXMLErrorMalformedDocument, str);
+  CFRelease(str);
 }
 
 #pragma mark -
 #pragma mark End Element
-- (void)parser:(NSXMLParser *)parser didEndElement:(NSString *)element {
+- (void)parser:(CFXMLParserRef)parser didEndElement:(NSString *)element {
   SEL cmd = @selector(isEqualToString:);
   EqualIMP isEqual = (EqualIMP)[element methodForSelector:cmd];
   NSAssert(isEqual, @"Missing isEqualToStringMethod");
-  /* Parent Elements */
-  if (isEqual(element, cmd, @"dictionary")) {
-    sd_parent = nil;
-  } else if (isEqual(element, cmd, @"suite")) {
-    sd_parent = [(SdefObject *)sd_parent dictionary];
-  } else if (isEqual(element, cmd, @"class") ||
-             isEqual(element, cmd, @"command") ||
-             isEqual(element, cmd, @"event")) {
-    sd_parent = [sd_parent suite];
-  }
-  
+
   /* Orphan implemented : direct-parameter, result, contents */
   if (isEqual(element, cmd, @"result") ||
       isEqual(element, cmd, @"contents") ||
       isEqual(element, cmd, @"direct-parameter")) {
     sd_node = [sd_node owner];
   }
-  /* Empty elements and orphan objects */ 
+  /* Empty elements */ 
   else if (!isEqual(element, cmd, @"accessor") &&
       !isEqual(element, cmd, @"cocoa") &&
       !isEqual(element, cmd, @"documentation") &&
@@ -286,56 +319,22 @@
   }
 }
 
+- (void)parserDidEndDocument:(CFXMLParserRef)parser {
+/* Post processing */
+}
+
 #pragma mark -
-/*
-#pragma mark Document Handling
-// sent when the parser begins parsing of the document.
-- (void)parserDidStartDocument:(NSXMLParser *)parser {
-}
-
-// sent when the parser has completed parsing. If this is encountered, the parse was successful.
-- (void)parserDidEndDocument:(NSXMLParser *)parser {
-}
-
-#pragma mark DTD Handling
- // DTD handling methods for various declarations.
-- (void)parser:(NSXMLParser *)parser foundNotationDeclarationWithName:(NSString *)name publicID:(NSString *)publicID systemID:(NSString *)systemID {
-  ShadowTrace();
-}
- 
-- (void)parser:(NSXMLParser *)parser foundUnparsedEntityDeclarationWithName:(NSString *)name publicID:(NSString *)publicID systemID:(NSString *)systemID notationName:(NSString *)notationName {
-  ShadowTrace();
-}
- 
-- (void)parser:(NSXMLParser *)parser foundAttributeDeclarationWithName:(NSString *)attributeName forElement:(NSString *)elementName type:(NSString *)type defaultValue:(NSString *)defaultValue {
-  ShadowTrace();
-}
- 
-- (void)parser:(NSXMLParser *)parser foundElementDeclarationWithName:(NSString *)elementName model:(NSString *)model {
-  ShadowTrace();
-}
- 
-- (void)parser:(NSXMLParser *)parser foundInternalEntityDeclarationWithName:(NSString *)name value:(NSString *)value {
-  ShadowTrace();
-}
- 
-- (void)parser:(NSXMLParser *)parser foundExternalEntityDeclarationWithName:(NSString *)name publicID:(NSString *)publicID systemID:(NSString *)systemID {
-  ShadowTrace();
-}
-*/
-
 #pragma mark Element Handling
-
-- (void)parser:(NSXMLParser *)parser didStartElement:(NSString *)elementName namespaceURI:(NSString *)namespaceURI qualifiedName:(NSString *)qName attributes:(NSDictionary *)attributeDict {
+- (void)parser:(CFXMLParserRef)parser didStartElement:(NSString *)elementName infos:(CFXMLElementInfo *)infos {
   if (sd_node) {
     int version = [sd_node acceptXMLElement:elementName];
     if ([self parserVersion] & version) {
       if ([self parserVersion] != version) [self setVersion:version];
     } else {
-      [NSException raise:@"SdefParserException" format:@"Invalid element %@ in %@ for %@ version", elementName,
+      NSString *msg = [NSString stringWithFormat:@"Invalid element %@ in %@ for %@ version",  elementName,
         [sd_node xmlElementName], 
         ([self parserVersion] == kSdefParserTigerVersion) ? @"Tiger" : ([self parserVersion] == kSdefParserPantherVersion) ? @"Panther" : @"Both"];
-      [parser abortParsing];
+      CFXMLParserAbort(parser, kCFXMLErrorMalformedDocument, (CFStringRef)msg);
     }
   }
   
@@ -343,121 +342,155 @@
   EqualIMP isEqual = (EqualIMP)[elementName methodForSelector:cmd];
   NSAssert(isEqual, @"Missing isEqualToStringMethod");
   
+  NSDictionary *attributes = (id)infos->attributes;
   if (isEqual(elementName, cmd, @"dictionary")) {
-    [self parser:parser didStartDictionary:attributeDict];
+    [self parser:parser didStartDictionary:attributes];
   } else if (isEqual(elementName, cmd, @"suite")) {
-    [self parser:parser didStartSuite:attributeDict];
+    [self parser:parser didStartSuite:attributes];
   } else if (isEqual(elementName, cmd, @"cocoa")) {
-    [self parser:parser didStartCocoa:attributeDict];
+    [self parser:parser didStartCocoa:attributes];
   } else if (isEqual(elementName, cmd, @"documentation")) {
-    [self parser:parser didStartDocumentation:attributeDict];
+    [self parser:parser didStartDocumentation:attributes];
   } else if (isEqual(elementName, cmd, @"synonym")) {
-    [self parser:parser didStartSynonym:attributeDict];
+    [self parser:parser didStartSynonym:attributes];
   }
   /* Types */
   else if (isEqual(elementName, cmd, @"enumeration")) {
-    [self parser:parser didStartEnumeration:attributeDict];
+    [self parser:parser didStartEnumeration:attributes];
   } else if (isEqual(elementName, cmd, @"enumerator")) {
-    [self parser:parser didStartEnumerator:attributeDict];
+    [self parser:parser didStartEnumerator:attributes];
   }
   /* Class */
   else if (isEqual(elementName, cmd, @"class")) {
-    [self parser:parser didStartClass:attributeDict];
+    [self parser:parser didStartClass:attributes];
   } else if (isEqual(elementName, cmd, @"contents")) {
-    [self parser:parser didStartContents:attributeDict];
+    [self parser:parser didStartContents:attributes];
   } else if (isEqual(elementName, cmd, @"element")) {
-    [self parser:parser didStartElement:attributeDict];
+    [self parser:parser didStartElement:attributes];
   } else if (isEqual(elementName, cmd, @"accessor")) {
-    [self parser:parser didStartAccessor:attributeDict];
+    [self parser:parser didStartAccessor:attributes];
   } else if (isEqual(elementName, cmd, @"property")) {
-    [self parser:parser didStartProperty:attributeDict];
+    [self parser:parser didStartProperty:attributes];
   } else if (isEqual(elementName, cmd, @"responds-to")) {
-    [self parser:parser didStartRespondsTo:attributeDict];
+    [self parser:parser didStartRespondsTo:attributes];
   } 
   /* Verb */
   else if (isEqual(elementName, cmd, @"command")) {
-    [self parser:parser didStartCommand:attributeDict];
+    [self parser:parser didStartCommand:attributes];
   } else if (isEqual(elementName, cmd, @"event")) {
-    [self parser:parser didStartEvent:attributeDict];
+    [self parser:parser didStartEvent:attributes];
   } else if (isEqual(elementName, cmd, @"direct-parameter")) {
-    [self parser:parser didStartDirectParameter:attributeDict];
+    [self parser:parser didStartDirectParameter:attributes];
   } else if (isEqual(elementName, cmd, @"parameter")) {
-    [self parser:parser didStartParameter:attributeDict];
+    [self parser:parser didStartParameter:attributes];
   } else if (isEqual(elementName, cmd, @"result")) {
-    [self parser:parser didStartResult:attributeDict];
+    [self parser:parser didStartResult:attributes];
   } else {
-    [self parser:parser didStartElement:elementName withAttributes:attributeDict];
+    [self parser:parser didStartElement:elementName withAttributes:attributes];
+  }
+  if ([sd_comments count]) {
+    [sd_node setComments:sd_comments];
+    [sd_comments removeAllObjects];
   }
 }
 
-
-// sent when an end tag is encountered. The various parameters are supplied as above.
-- (void)parser:(NSXMLParser *)parser didEndElement:(NSString *)elementName namespaceURI:(NSString *)namespaceURI qualifiedName:(NSString *)qName {
-  [self parser:parser didEndElement:elementName];
-}
-
-/*
-#pragma mark Mapping Handling
- // sent when the parser first sees a namespace attribute.
- // In the case of the cvslog tag, before the didStartElement:, you'd get one of these with prefix == @"" and namespaceURI == @"http://xml.apple.com/cvslog" (i.e. the default namespace)
- // In the case of the radar:radar tag, before the didStartElement: you'd get one of these with prefix == @"radar" and namespaceURI == @"http://xml.apple.com/radar"
- - (void)parser:(NSXMLParser *)parser didStartMappingPrefix:(NSString *)prefix toURI:(NSString *)namespaceURI {
-   ShadowTrace();
- }
- 
- // sent when the namespace prefix in question goes out of scope.
- - (void)parser:(NSXMLParser *)parser didEndMappingPrefix:(NSString *)prefix {
-   ShadowTrace();
- }
- */
-/*
-#pragma mark Other Objects Handling
- // This returns the string of the characters encountered thus far. You may not necessarily get the longest character run.
- // The parser reserves the right to hand these to the delegate as potentially many calls in a row to -parser:foundCharacters:
- - (void)parser:(NSXMLParser *)parser foundCharacters:(NSString *)string {
-   ShadowTrace();
- }
- 
- // The parser reports ignorable whitespace in the same way as characters it's found.
- - (void)parser:(NSXMLParser *)parser foundIgnorableWhitespace:(NSString *)whitespaceString {
-   ShadowTrace();
- }
- 
- // The parser reports a processing instruction to you using this method.
- // In the case above, target == @"xml-stylesheet" and data == @"type='text/css' href='cvslog.css'"
- - (void)parser:(NSXMLParser *)parser foundProcessingInstructionWithTarget:(NSString *)target data:(NSString *)data {
-   ShadowTrace();
- }
- */
-
-/*
-// A comment (Text in a <!-- --> block) is reported to the delegate as a single string
-- (void)parser:(NSXMLParser *)parser foundComment:(NSString *)comment {
-    ShadowTrace();
-}
-
- // this reports a CDATA block to the delegate as an NSData.
- - (void)parser:(NSXMLParser *)parser foundCDATA:(NSData *)CDATABlock {
-   ShadowTrace();
- }
- 
- // this gives the delegate an opportunity to resolve an external entity itself and reply with the resulting data.
- - (NSData *)parser:(NSXMLParser *)parser resolveExternalEntityName:(NSString *)name systemID:(NSString *)systemID {
-   ShadowTrace();
- }
- */
 // ...and this reports a fatal error to the delegate. The parser will stop parsing.
-- (void)parser:(NSXMLParser *)parser parseErrorOccurred:(NSError *)parseError {
-  DLog(@"Error: %@, %@", parseError, [parseError userInfo]);
+- (BOOL)parser:(CFXMLParserRef)parser parseErrorOccurred:(NSError *)parseError {
+  sd_error = [[[parseError userInfo] objectForKey:@"SdefParserError"] copy];
+  return NO;
 }
 
-// If validation is on, this will report a fatal validation error to the delegate. The parser will stop parsing.
-- (void)parser:(NSXMLParser *)parser validationErrorOccurred:(NSError *)validationError {
-  DLog(@"Error: %@, %@", validationError, [validationError userInfo]);
+#pragma mark -
+#pragma mark Low Level Parsing
+- (id)parser:(CFXMLParserRef)parser didStartXMLNode:(CFXMLNodeRef)aNode {
+  if (sd_delegate) {
+    return [sd_delegate parser:parser didStartXMLNode:aNode];
+  }
+  
+  id object = nil;
+  switch (CFXMLNodeGetTypeCode(aNode)) {
+    case kCFXMLNodeTypeElement:
+      [self parser:parser didStartElement:(id)CFXMLNodeGetString(aNode) infos:(CFXMLElementInfo *)CFXMLNodeGetInfoPtr(aNode)];
+      object = (void *)CFXMLNodeGetString(aNode);
+      break;
+    case kCFXMLNodeTypeDocument:
+      /* Can find comment before first element */
+      object = [NSNull null];
+      break;
+    case kCFXMLNodeTypeProcessingInstruction:
+      DLog(@"Data Type ID: kCFXMLNodeTypeProcessingInstruction (%@)", CFXMLNodeGetString(aNode));
+      break;
+    case kCFXMLNodeTypeComment:
+      [self parser:parser foundComment:(id)CFXMLNodeGetString(aNode)];
+      break;
+    case kCFXMLNodeTypeText:
+      DLog(@"Data Type ID: kCFXMLNodeTypeText (%@)", CFXMLNodeGetString(aNode));
+      break;
+    case kCFXMLNodeTypeCDATASection:
+      DLog(@"Data Type ID: kCFXMLDataTypeCDATASection (%@)", CFXMLNodeGetString(aNode));
+      break;
+    case kCFXMLNodeTypeEntityReference:
+      DLog(@"Data Type ID: kCFXMLNodeTypeEntityReference (%@)", CFXMLNodeGetString(aNode));
+      break;
+    case kCFXMLNodeTypeDocumentType:
+      DLog(@"Data Type ID: kCFXMLNodeTypeDocumentType (%@)", CFXMLNodeGetString(aNode));
+      break;
+    case kCFXMLNodeTypeWhitespace:
+      /* Ignore white space */
+      break;
+    default:
+      DLog(@"Unknown Data Type ID: %i (%@)", CFXMLNodeGetTypeCode(aNode), CFXMLNodeGetString(aNode));
+      break;
+  }
+  return object;
+}
+
+- (void)parser:(CFXMLParserRef)parser didEndXMLNode:(id)aNode {
+  if (sd_delegate) {
+    [sd_delegate parser:parser didEndXMLNode:aNode];
+    return;
+  }
+
+  if ([aNode isKindOfClass:[NSString class]]) {
+    [self parser:parser didEndElement:aNode];
+    if ([aNode isEqualToString:@"dictionary"]) {
+      [self parserDidEndDocument:parser];
+    }
+  }
+}
+
+#pragma mark Core Foundation Parser
+void *SdefParserCreateStructure(CFXMLParserRef parser, CFXMLNodeRef node, void *info) {
+  SdefXMLParser *delegate = info;
+  return [delegate parser:parser didStartXMLNode:node];
+}
+
+void SdefParserAddChild(CFXMLParserRef parser, void *parent, void *child, void *info) {}
+
+void SdefParserEndStructure(CFXMLParserRef parser, void *node, void *info) {
+  SdefXMLParser *delegate = info;
+  [delegate parser:parser didEndXMLNode:node];
+}
+
+CFDataRef SdefParserResolveEntity(CFXMLParserRef parser, CFXMLExternalID *extID, void *info) {
+  return NULL;
+}
+
+Boolean SdefParserHandleError(CFXMLParserRef parser, CFXMLParserStatusCode error, void *info) {
+  SdefXMLParser *delegate = info;
+  // Get the error description string from the Parser.
+  CFStringRef description = CFXMLParserCopyErrorDescription(parser);
+  NSDictionary *infos = description ? [NSDictionary dictionaryWithObject:(id)description forKey:@"SdefParserError"] : nil;
+  NSError *reason = [NSError errorWithDomain:NSXMLParserErrorDomain code:error userInfo:infos];
+  Boolean result = [delegate parser:parser parseErrorOccurred:reason];
+  if (description)
+    CFRelease(description);
+  return result;
 }
 
 @end
 
+#pragma mark -
 NSString *SdefXMLAccessStringFromFlag(unsigned flag) {
   id str = nil;
   if (flag == (kSdefAccessRead | kSdefAccessWrite)) str = @"rw";

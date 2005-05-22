@@ -96,7 +96,7 @@ inline NSString *SdefEditorComment() {
   NSMutableString *comment = [str mutableCopy]; 
   if (nil != comment) CFStringTrimWhitespace((CFMutableStringRef)comment);
   if ([comment length]) {
-    CFXMLNodeRef node = CFXMLNodeCreate(kCFAllocatorDefault, kCFXMLNodeTypeComment, (CFStringRef)[str stringByEscapingEntities:nil], NULL, kCFXMLNodeCurrentVersion);
+    CFXMLNodeRef node = CFXMLNodeCreate(kCFAllocatorDefault, kCFXMLNodeTypeComment, (CFStringRef)str, NULL, kCFXMLNodeCurrentVersion);
     tree  = [self appendNode:node];
     CFRelease(node);
   }
@@ -178,7 +178,7 @@ inline NSString *SdefEditorComment() {
                   isEmpty:[node isEmpty]];
   id content = [node content];
   if (nil != content) {
-    [self insertTextNode:[content stringByEscapingEntities:nil]];
+    [self insertTextNode:content];
   }
   id children = [node childEnumerator];
   id child;

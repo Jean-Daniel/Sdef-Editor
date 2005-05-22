@@ -21,17 +21,44 @@ extern unsigned SdefXMLAccessFlagFromString(NSString *str);
 extern unsigned SdefXMLAccessorFlagFromString(NSString *str);
 extern NSArray *SdefXMLAccessorStringsFromFlag(unsigned flag);
 
+@class SdefDocumentationParser;
 @class SdefObject, SdefDictionary;
 @interface SdefXMLParser : NSObject {
   id sd_node;
-  id sd_parent;
+  id sd_delegate;
+  NSString *sd_error;
+  CFXMLParserRef sd_parser;
+  NSMutableArray *sd_comments;
   SdefDictionary *sd_dictionary;
 }
 
+- (NSString *)error;
 - (SdefDictionary *)document;
 - (BOOL)parseData:(NSData *)document;
 
-- (void)parser:(NSXMLParser *)parser didStartElement:(NSString *)element withAttributes:(NSDictionary *)attributes;
-- (void)parser:(NSXMLParser *)parser didEndElement:(NSString *)element;
+- (void)parser:(CFXMLParserRef)parser didStartClass:(NSDictionary *)attributes;
+- (void)parser:(CFXMLParserRef)parser didStartEvent:(NSDictionary *)attributes;
+- (void)parser:(CFXMLParserRef)parser didStartElement:(NSDictionary *)attributes;
+- (void)parser:(CFXMLParserRef)parser didStartCommand:(NSDictionary *)attributes;
+- (void)parser:(CFXMLParserRef)parser didStartProperty:(NSDictionary *)attributes;
+- (void)parser:(CFXMLParserRef)parser didStartRespondsTo:(NSDictionary *)attributes;
+- (void)parser:(CFXMLParserRef)parser didStartEnumeration:(NSDictionary *)attributes;
+
+- (void)parser:(CFXMLParserRef)parser didStartElement:(NSString *)element withAttributes:(NSDictionary *)attributes;
+- (void)parser:(CFXMLParserRef)parser didEndElement:(NSString *)element;
+
+- (void)parserDidEndDocumentation:(SdefDocumentationParser *)parser;
+@end
+
+@class SdefDocumentation;
+@interface SdefDocumentationParser : NSObject {
+  unsigned short sd_html;
+  SdefXMLParser *sd_parent;
+  SdefDocumentation *sd_doc;
+  NSMutableString *sd_content;
+}
+
+- (id)initWithDocumentation:(SdefDocumentation *)doc parent:(id)theParent;
 
 @end
+
