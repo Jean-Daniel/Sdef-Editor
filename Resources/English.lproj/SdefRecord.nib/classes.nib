@@ -4,17 +4,9 @@
         {CLASS = SKImageAndTextCell; LANGUAGE = ObjC; SUPERCLASS = NSTextFieldCell; }, 
         {
             ACTIONS = {editType = id; }; 
-            CLASS = SdefClassView; 
+            CLASS = SdefEnumerationView; 
             LANGUAGE = ObjC; 
-            OUTLETS = {
-                commandTable = NSTableView; 
-                commands = NSArrayController; 
-                elements = NSArrayController; 
-                eventTable = NSTableView; 
-                events = NSArrayController; 
-                properties = NSArrayController; 
-                tab = NSTabView; 
-            }; 
+            OUTLETS = {properties = NSArrayController; tab = id; }; 
             SUPERCLASS = SdefViewController; 
         }, 
         {

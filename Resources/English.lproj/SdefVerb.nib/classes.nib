@@ -3,6 +3,13 @@
         {CLASS = FirstResponder; LANGUAGE = ObjC; SUPERCLASS = NSObject; }, 
         {CLASS = SKImageAndTextCell; LANGUAGE = ObjC; SUPERCLASS = NSTextFieldCell; }, 
         {
+            CLASS = SdefTypeButton; 
+            LANGUAGE = ObjC; 
+            OUTLETS = {typeField = NSTextField; }; 
+            SUPERCLASS = NSButton; 
+        }, 
+        {
+            ACTIONS = {editType = id; }; 
             CLASS = SdefVerbView; 
             LANGUAGE = ObjC; 
             OUTLETS = {parameters = NSArrayController; tab = NSTabView; }; 

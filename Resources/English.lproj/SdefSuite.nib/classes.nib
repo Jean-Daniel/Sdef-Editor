@@ -12,6 +12,7 @@
                 eventTable = NSTableView; 
                 tab = NSTabView; 
                 typeTable = NSTableView; 
+                types = NSArrayController; 
             }; 
             SUPERCLASS = SdefViewController; 
         }, 

@@ -4,6 +4,7 @@
             ACTIONS = {
                 exportASDictionary = id; 
                 exportTerminology = id; 
+                exportUsingPantherFormat = id; 
                 exportUsingTemplate = id; 
                 openSymbolBrowser = id; 
             }; 
@@ -16,6 +17,7 @@
                 importAete = id; 
                 importApplicationAete = id; 
                 importCocoaTerminology = id; 
+                openApplicationTerminology = id; 
                 openInspector = id; 
                 openSuite = id; 
                 preferences = id; 
