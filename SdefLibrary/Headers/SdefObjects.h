@@ -36,8 +36,8 @@
   SdefCollection *sd_synonyms;
 }
 
-- (NSString *)codeStr;
-- (void)setCodeStr:(NSString *)str;
+- (NSString *)code;
+- (void)setCode:(NSString *)str;
 
 - (NSString *)desc;
 - (void)setDesc:(NSString *)newDesc;
@@ -48,14 +48,30 @@
 @class SdefType;
 @interface SdefTypedObject : SdefTerminologyObject <NSCopying, NSCoding> {
 @private
-  id sd_types;
+  NSMutableArray *sd_types;
 }
 
+/* Simple Type */
 - (BOOL)hasType;
 - (NSString *)type;
 - (void)setType:(NSString *)aType;
 
+/* Complex Type */
+- (BOOL)hasCustomType;
+
+- (NSArray *)types;
+- (unsigned)countOfTypes;
+- (void)addType:(SdefType *)aType;
+- (void)setTypes:(NSArray *)objects;
+- (id)objectInTypesAtIndex:(unsigned)index;
+- (void)removeObjectFromTypesAtIndex:(unsigned)index;
+- (void)insertObject:(id)object inTypesAtIndex:(unsigned)index;
+- (void)replaceObjectInTypesAtIndex:(unsigned)index withObject:(id)object;
+
 @end
+
+extern NSArray *SdefTypesForTypeString(NSString *type);
+extern NSString *SdefTypeStringForTypes(NSArray *types);
 
 #pragma mark -
 @interface SdefTypedOrphanObject : SdefTypedObject <NSCopying, NSCoding> {

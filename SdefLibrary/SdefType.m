@@ -51,15 +51,33 @@
   [super dealloc];
 }
 
+- (NSString *)description {
+  return [NSString stringWithFormat:@"<%@ %p> {name=%@ list=%@}", 
+    NSStringFromClass([self class]), self,
+ sd_name, sd_stFlags.list ? @"YES" : @"NO"];
+}
+
 #pragma mark -
+- (NSImage *)icon {
+  return [NSImage imageNamed:@"Type"];
+}
+
 - (NSString *)name {
   return sd_name;
 }
 
 - (void)setName:(NSString *)newName {
   if (sd_name != newName) {
+    NSUndoManager *undo = [sd_owner undoManager];
+    if (undo) {
+      [undo registerUndoWithTarget:self selector:_cmd object:sd_name];
+      [undo setActionName:@"Change Type"];
+    }
+    [sd_owner willChangeValueForKey:@"type"];
     [sd_name release];
-    sd_name = [newName copy];
+    sd_name = [newName stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+    [sd_name retain];
+    [sd_owner didChangeValueForKey:@"type"];
   }
 }
 
@@ -70,7 +88,14 @@
 - (void)setList:(BOOL)list {
   list = list ? 1 : 0;
   if (list != sd_stFlags.list) {
+    [sd_owner willChangeValueForKey:@"type"];
+    NSUndoManager *undo = [sd_owner undoManager];
+    if (undo) {
+      [[undo prepareWithInvocationTarget:self] setList:sd_stFlags.list];
+      [undo setActionName:@"Change Type"];
+    }
     sd_stFlags.list = list;
+    [sd_owner didChangeValueForKey:@"type"];
   }
 }
 

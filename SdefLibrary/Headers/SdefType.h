@@ -8,6 +8,15 @@
 
 #import <Cocoa/Cocoa.h>
 
+/*
+ <!-- TYPES -->
+ <!ELEMENT type EMPTY>
+ <!ATTLIST type
+ type       %Typename;      #REQUIRED 
+ list       %yorn;          #IMPLIED
+ >
+ */
+
 @class SdefTypedObject;
 @interface SdefType : NSObject <NSCopying, NSCoding> {
 @private
@@ -21,6 +30,8 @@
 
 - (id)init;
 - (id)initWithName:(NSString *)name;
+
+- (NSImage *)icon;
 
 - (NSString *)name;
 - (void)setName:(NSString *)newName;

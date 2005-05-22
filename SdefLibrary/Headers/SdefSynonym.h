@@ -10,12 +10,11 @@
 
 /*
  <!-- SYNONYMS -->
- <!ELEMENT synonyms (synonym+)>
- <!ELEMENT synonym (%implementation;?)>
+ <!ELEMENT synonym ((%implementation;)?)>
  <!ATTLIST synonym
  name       %Term;          #IMPLIED
  code       %OSType;		 #IMPLIED
- hidden     (hidden)        #IMPLIED 
+ hidden     %yorn;          #IMPLIED 
  >
  <!-- at least one of "name" and "code" is required. -->
  */

@@ -10,7 +10,7 @@
 
 /*
  <!-- DICTIONARY (ROOT ELEMENT) -->
- <!ELEMENT dictionary (documentation?, suite+)>
+ <!ELEMENT dictionary (documentation*, suite+)>
  <!ATTLIST dictionary
  title      CDATA           #IMPLIED 
  >

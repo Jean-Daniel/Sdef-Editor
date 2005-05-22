@@ -60,6 +60,18 @@
   [super dealloc];
 }
 
+- (BOOL)isHtml {
+  return sd_soFlags.reserved;
+}
+
+- (void)setHtml:(BOOL)flag {
+  flag = flag ? 1 : 0;
+  if (flag != sd_soFlags.reserved) {
+    /* Undo */
+    sd_soFlags.reserved = flag;
+  }
+}
+
 - (NSString *)content {
   return sd_content;
 }

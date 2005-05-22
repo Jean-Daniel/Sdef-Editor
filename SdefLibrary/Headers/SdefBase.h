@@ -68,9 +68,9 @@ extern NSString *CocoaNameForSdefName(NSString *cocoa, BOOL isClass);
     unsigned int hidden:1;
     unsigned int optional:1;
     unsigned int editable:1;
+    unsigned int reserved:1;
     unsigned int removable:1;
     unsigned int hasSynonyms:1;
-    unsigned int notInProperties:1;
     unsigned int hasDocumentation:1;
     unsigned int hasImplementation:1;
   } sd_soFlags;
@@ -141,7 +141,7 @@ extern NSString *CocoaNameForSdefName(NSString *cocoa, BOOL isClass);
 - (void)setImpl:(SdefImplementation *)newImpl;
 
 #pragma mark Comments
-- (NSArray *)comments;
+- (NSMutableArray *)comments;
 - (void)setComments:(NSArray *)comments;
 - (void)addComment:(NSString *)comment;
 - (void)removeCommentAtIndex:(unsigned)index;

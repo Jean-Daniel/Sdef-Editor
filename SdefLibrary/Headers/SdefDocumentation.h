@@ -10,11 +10,15 @@
 
 /*
  <!-- DOCUMENTATION ELEMENTS -->
- <!ELEMENT documentation (#PCDATA)>
+ <!ELEMENT documentation (ANY | html)>
+ <!ELEMENT html ANY>
 */
 @interface SdefDocumentation : SdefOrphanObject <NSCopying, NSCoding> {
   id sd_content;
 }
+
+- (BOOL)isHtml;
+- (void)setHtml:(BOOL)html;
 
 - (NSString *)content;
 - (void)setContent:(NSString *)newContent;

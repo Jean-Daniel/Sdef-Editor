@@ -9,65 +9,61 @@
 #import "SdefObjects.h"
 
 /*
- <!-- CLASS DEFINITION -->
- <!ELEMENT class (documentation?, %implementation;?, synonyms?, contents?, elements?, properties?, responds-to-commands?, responds-to-events?)>
- <!ATTLIST class
- name       %Classname;     #REQUIRED
- code       %OSType;        #IMPLIED 
- hidden     (hidden)        #IMPLIED 
- plural     %Classname;     #IMPLIED 
- inherits   %Classname;     #IMPLIED 
- description  %Text;        #IMPLIED 
- >
+<!-- CLASSES -->
+<!ENTITY % class-contents "(contents | documentation | element | property | responds-to | synonym)">
+<!ELEMENT class ((%implementation;)?, (%class-contents;)*)>
+  <!-- not quite accurate; there can be at most one contents element. -->
+<!ATTLIST class
+name       %Classname;     #REQUIRED
+code       %OSType;        #REQUIRED 
+hidden     %yorn;          #IMPLIED 
+plural     %Classname;     #IMPLIED 
+inherits   %Classname;     #IMPLIED 
+description  %Text;        #IMPLIED 
+>
+
+<!-- element access -->
+<!ELEMENT element ((%implementation;)?, accessor*)>
+<!ATTLIST element
+type       %Classname;     #REQUIRED
+access     (r | w | rw)    "rw"     
+hidden     %yorn;          #IMPLIED 
+description  %Text;        #IMPLIED 
+>
+
+<!ENTITY % accessor-type "(index | name | id | range | relative | test)">
+<!ELEMENT accessor EMPTY>
+<!ATTLIST accessor
+style      %accessor-type;  #REQUIRED
+>
+
+<!-- properties -->
+<!ELEMENT property ((%implementation;)?, (type | synonym | documentation)*)>
+<!ATTLIST property
+name       %Term;          #REQUIRED
+code       %OSType;        #REQUIRED 
+hidden     %yorn;          #IMPLIED 
+type       %Typename;      #IMPLIED 
+access     (r | w | rw)    "rw"     
+in-properties  %yorn;      #IMPLIED 
+description  %Text;        #IMPLIED 
+>
+
+<!-- supported verbs -->
+<!ELEMENT responds-to ((%implementation;)?)>
+<!ATTLIST responds-to
+name       %Verbname;      #REQUIRED
+hidden     %yorn;          #IMPLIED 
+>
+
+<!-- class extensions -->
+<!ELEMENT class-extension ((%implementation;)?, (%class-contents;)*)>
+<!ATTLIST class-extension
+extends    %Classname;     #REQUIRED
+hidden     %yorn;          #IMPLIED 
+description  %Text;        #IMPLIED 
+>
  
- <!-- contents -->
- <!ELEMENT contents (%implementation;?)>
- <!ATTLIST contents
- name       %Classname;     #IMPLIED
- code       %OSType;        #IMPLIED 
- type       %Classname;     #REQUIRED
- access     (r | w | rw)    "rw"     
- hidden     (hidden)        #IMPLIED 
- description  %Text;        #IMPLIED 
- >
- 
- <!-- element access -->
- <!ELEMENT elements (element+)>
- <!ELEMENT element (%implementation;?, accessor*)>
- <!ATTLIST element
- type       %Classname;     #REQUIRED
- access     (r | w | rw)    "rw"     
- hidden     (hidden)        #IMPLIED 
- description  %Text;        #IMPLIED 
- >
- 
- <!ENTITY % accessor-type "(index | name | id | range | relative | test)">
- <!ELEMENT accessor EMPTY>
- <!ATTLIST accessor
- style      %accessor-type;  #REQUIRED
- >
- 
- <!-- properties -->
- <!ELEMENT properties (property+)>
- <!ELEMENT property (documentation?, %implementation;?, synonyms?)>
- <!ATTLIST property
- name       %Term;          #REQUIRED
- code       %OSType;        #IMPLIED 
- hidden     (hidden)        #IMPLIED 
- type       %Typename;      #REQUIRED 
- access     (r | w | rw)    "rw"     
- not-in-properties  (not-in-properties)  #IMPLIED 
- description  %Text;        #IMPLIED 
- >
- 
- <!-- supported verbs -->
- <!ELEMENT responds-to-commands (responds-to+)>
- <!ELEMENT responds-to-events (responds-to+)>
- <!ELEMENT responds-to (%implementation;?)>
- <!ATTLIST responds-to
- name       %Verbname;      #REQUIRED
- hidden     (hidden)        #IMPLIED 
- >
 */
 
 enum {

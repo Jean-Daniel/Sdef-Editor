@@ -9,14 +9,14 @@
 #import "SdefObjects.h"
 
 /*
- <!-- SUITE DEFINITION -->
- <!ELEMENT suite (documentation?, %implementation;?, enumeration*, class*, command*, event*, value-type*, record-type*)>
+ <!-- SUITES -->
+ <!ELEMENT suite ((%implementation;)?, (class | class-extension | command | documentation | enumeration | event | record-type | value-type)+)>
  <!ATTLIST suite
  name       CDATA           #IMPLIED 
  code       %OSType;        #IMPLIED 
  description  %Text;        #IMPLIED
- hidden     (hidden)        #IMPLIED 
- >
+ hidden     %yorn;          #IMPLIED 
+ > 
 */
 
 @interface SdefTypeCollection : SdefCollection <NSCopying, NSCoding> {

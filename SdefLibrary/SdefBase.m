@@ -237,7 +237,7 @@ NSString * const SdefObjectDidChangeNameNotification = @"SdefObjectDidChangeName
   if (sd_name != newName) {
     [[NSNotificationCenter defaultCenter] postNotificationName:SdefObjectWillChangeNameNotification object:self];
     [[self undoManager] registerUndoWithTarget:self selector:_cmd object:sd_name];
-    //[[self undoManager] setActionName:@"Rename"];
+    [[self undoManager] setActionName:@"Change Name"];
     [self willChangeValueForKey:@"name"];
     [sd_name release];
     sd_name = [newName copyWithZone:[self zone]];
@@ -254,7 +254,7 @@ NSString * const SdefObjectDidChangeNameNotification = @"SdefObjectDidChangeName
   flag = flag ? 1 : 0;
   if (sd_soFlags.hidden != flag) {
     [[[self undoManager] prepareWithInvocationTarget:self] setHidden:sd_soFlags.hidden];
-    //[[self undoManager] setActionName:@"Hidden"];
+    [[self undoManager] setActionName:@"Change Hidden"];
     sd_soFlags.hidden = flag;
   }
 }
@@ -314,7 +314,7 @@ NSString * const SdefObjectDidChangeNameNotification = @"SdefObjectDidChangeName
   return [sd_comments count] > 0;
 }
 
-- (NSArray *)comments {
+- (NSMutableArray *)comments {
   if (!sd_comments) {
     sd_comments = [[NSMutableArray allocWithZone:[self zone]] init];
   }
@@ -323,17 +323,20 @@ NSString * const SdefObjectDidChangeNameNotification = @"SdefObjectDidChangeName
 
 - (void)setComments:(NSArray *)comments {
   if (sd_comments != comments) {
-    [sd_comments release];
-    sd_comments = [comments mutableCopy];
+    [sd_comments removeAllObjects];
+    int idx;
+    for (idx=0; idx<[comments count]; idx++) {
+      [self addComment:[comments objectAtIndex:idx]];
+    }
   }
 }
 
 - (void)addComment:(NSString *)comment {
-  if (!sd_comments) {
-    sd_comments = [[NSMutableArray allocWithZone:[self zone]] init];
+  if (comment) {
+    SdefComment *cmnt = [[SdefComment allocWithZone:[self zone]] initWithString:comment];
+    [[self comments] addObject:cmnt];
+    [cmnt release];
   }
-  id cmnt = [SdefComment commentWithString:comment];
-  [sd_comments addObject:cmnt];
 }
 
 - (void)removeCommentAtIndex:(unsigned)index {
@@ -344,7 +347,7 @@ NSString * const SdefObjectDidChangeNameNotification = @"SdefObjectDidChangeName
 #pragma mark Notifications
 - (void)appendChild:(SKTreeNode *)child {
   [[self undoManager] registerUndoWithTarget:child selector:@selector(remove) object:nil];
-  //[[self undoManager] setActionName:@"Add Object"];
+//  [[self undoManager] setActionName:@"Add Object"];
   NSIndexSet *idxSet = [NSIndexSet indexSetWithIndex:[self childCount]];
   [self willChange:NSKeyValueChangeInsertion valuesAtIndexes:idxSet forKey:@"children"];
   [super appendChild:child];
@@ -357,7 +360,7 @@ NSString * const SdefObjectDidChangeNameNotification = @"SdefObjectDidChangeName
 
 - (void)prependChild:(SKTreeNode *)child {
   [[self undoManager] registerUndoWithTarget:child selector:@selector(remove) object:nil];
-  //[[self undoManager] setActionName:@"Add Object"];
+//  [[self undoManager] setActionName:@"Add Object"];
   [self willChange:NSKeyValueChangeInsertion valuesAtIndexes:[NSIndexSet indexSetWithIndex:0] forKey:@"children"];
   [super prependChild:child];
   [(SdefObject *)child setEditable:[self isEditable]];
@@ -370,12 +373,12 @@ NSString * const SdefObjectDidChangeNameNotification = @"SdefObjectDidChangeName
 - (void)insertChild:(id)child atIndex:(unsigned)idx {
   /* Super call prepend or insertSibling, so no need to undo & notify here. */
   [super insertChild:child atIndex:idx];
-  //[[self undoManager] setActionName:@"Insert Object"];
+//  [[self undoManager] setActionName:@"Insert Object"];
 }
 
 - (void)insertSibling:(SKTreeNode *)newSibling {
   [[self undoManager] registerUndoWithTarget:newSibling selector:@selector(remove) object:nil];
-  //[[self undoManager] setActionName:@"Insert Object"];
+//  [[self undoManager] setActionName:@"Insert Object"];
   id parent = [self parent];
   id idx = [NSIndexSet indexSetWithIndex:[parent indexOfChild:self] + 1];
   [parent willChange:NSKeyValueChangeInsertion valuesAtIndexes:idx forKey:@"children"];
@@ -390,8 +393,8 @@ NSString * const SdefObjectDidChangeNameNotification = @"SdefObjectDidChangeName
 - (void)remove {
   id parent = [self parent];
   unsigned idx = [parent indexOfChild:self];
-  [[[self undoManager] prepareWithInvocationTarget:parent] insertChild:self atIndex:idx];
-  //[[self undoManager] setActionName:@"Remove Object"];
+  [(SKTreeNode *)[[self undoManager] prepareWithInvocationTarget:parent] insertChild:self atIndex:idx];
+//  [[self undoManager] setActionName:@"Delete Object"];
   [[NSNotificationCenter defaultCenter] postNotificationName:SdefObjectWillRemoveChildNotification
                                                       object:[self parent]
                                                     userInfo:[NSDictionary dictionaryWithObject:self forKey:SdefRemovedTreeNode]];

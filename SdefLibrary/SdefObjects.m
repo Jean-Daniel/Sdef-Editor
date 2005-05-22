@@ -10,6 +10,7 @@
 
 #import "ShadowMacros.h"
 
+#import "SdefType.h"
 #import "SdefSynonym.h"
 #import "SdefDocument.h"
 #import "SdefDocumentation.h"
@@ -64,7 +65,6 @@
 }
 
 #pragma mark Optionals children
-
 - (SdefDocumentation *)documentation {
   if (!sd_documentation && sd_soFlags.hasDocumentation) {
     SdefDocumentation *doc = [[SdefDocumentation allocWithZone:[self zone]] init];
@@ -201,7 +201,7 @@
 - (NSString *)description {
   return [NSString stringWithFormat:@"<%@ %p> {name:\"%@\" code:'%@' hidden:%@}",
     NSStringFromClass([self class]), self,
-    [self name], [self codeStr], [self isHidden] ? @"YES" : @"NO"];
+    [self name], [self code], [self isHidden] ? @"YES" : @"NO"];
 }
 
 #pragma mark -
@@ -217,28 +217,14 @@
   [super setEditable:flag recursive:recu];
 }
 
-//- (BOOL)validateCodeStr:(id *)ioValue error:(NSError **)error {
-//  NSString *str = *ioValue;
-//  if ([str length] < 4) {
-//    *ioValue = @"****";
-//  } else if ([str length] > 4) {
-//    str = [str stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
-//    if ([str length] > 4)
-//      *ioValue = [str substringToIndex:4];
-//    else 
-//      *ioValue = str;
-//  }
-//  return YES;
-//}
-
-- (NSString *)codeStr {
+- (NSString *)code {
   return sd_code;
 }
 
-- (void)setCodeStr:(NSString *)str {
+- (void)setCode:(NSString *)str {
   if (sd_code != str) {
     [[self undoManager] registerUndoWithTarget:self selector:_cmd object:sd_code];
-    //[[self undoManager] setActionName:@"Code"];
+    [[self undoManager] setActionName:@"Change Code"];
     [sd_code release];
     sd_code = [str copyWithZone:[self zone]];
   }
@@ -248,12 +234,12 @@
   return sd_desc;
 }
 
-- (void)setDesc:(NSString *)newDesc {
-  if (sd_desc != newDesc) {
+- (void)setDesc:(NSString *)aDescription {
+  if (sd_desc != aDescription) {
     [[self undoManager] registerUndoWithTarget:self selector:_cmd object:sd_desc];
-    //[[self undoManager] setActionName:@"Desc"];
+    [[self undoManager] setActionName:@"Change Description"];
     [sd_desc release];
-    sd_desc = [newDesc copyWithZone:[self zone]];
+    sd_desc = [aDescription copyWithZone:[self zone]];
   }
 }
 
@@ -301,6 +287,13 @@
 }
 
 #pragma mark -
+- (id)initWithName:(NSString *)name {
+  if (self = [super initWithName:name]) {
+    sd_types = [[NSMutableArray alloc] init];
+  }
+  return self;
+}
+
 - (void)dealloc {
   [sd_types release];
   [super dealloc];
@@ -308,18 +301,101 @@
 
 #pragma mark -
 - (BOOL)hasType {
-  return sd_types != nil;
+  unsigned idx;
+  for (idx=0; idx<[sd_types count]; idx++) {
+    if ([[sd_types objectAtIndex:idx] name] != nil) {
+      return YES;
+    }
+  }
+  return NO;
+}
+
+- (BOOL)hasCustomType {
+  unsigned count = [sd_types count];
+  return count > 1 || (count > 0 && [[sd_types objectAtIndex:0] isList]);
 }
 
 - (NSString *)type {
-  return sd_types;
+  if ([self hasCustomType]) {
+    return SdefTypeStringForTypes(sd_types);
+  } else if ([self hasType]) {
+    return [[sd_types objectAtIndex:0] name];
+  } else return nil;
 }
 - (void)setType:(NSString *)aType {
-  if (sd_types != aType) {
-    [[self undoManager] registerUndoWithTarget:self selector:_cmd object:sd_types];
+  [self setTypes:SdefTypesForTypeString(aType)];
+}
+
+- (void)addType:(SdefType *)aType {
+  [self insertObject:aType inTypesAtIndex:[self countOfTypes]];
+}
+
+#pragma mark -
+#pragma mark Types KVC compliance
+- (NSArray *)types {
+  return sd_types;
+}
+
+- (void)setTypes:(NSArray *)objects {
+  if (sd_types != objects) {
+    NSUndoManager *undo = [self undoManager];
+    if (undo) {
+      [undo registerUndoWithTarget:self selector:_cmd object:sd_types];
+      [undo setActionName:@"Change Types"];
+    }
+    [self willChangeValueForKey:@"type"];
     [sd_types release];
-    sd_types = [aType copyWithZone:[self zone]];
+    sd_types = [objects mutableCopy];
+    [self didChangeValueForKey:@"type"];
+    [sd_types makeObjectsPerformSelector:@selector(setOwner:) withObject:self];
   }
+}
+
+- (unsigned)countOfTypes {
+  return [sd_types count];
+}
+
+- (id)objectInTypesAtIndex:(unsigned)index {
+  return [sd_types objectAtIndex:index];
+}
+
+- (void)insertObject:(id)object inTypesAtIndex:(unsigned)index {
+  NSUndoManager *undo = [self undoManager];
+  if (undo) {
+    [[undo prepareWithInvocationTarget:self] removeObjectFromTypesAtIndex:index];
+    [undo setActionName:@"Add Type"];
+  }
+  [self willChangeValueForKey:@"type"];
+  [sd_types insertObject:object atIndex:index];
+  [self didChangeValueForKey:@"type"];
+  [object setOwner:self];
+}
+
+- (void)removeObjectFromTypesAtIndex:(unsigned)index {
+  SdefType *type = [sd_types objectAtIndex:index];
+  NSUndoManager *undo = [self undoManager];
+  if (undo) {
+    [[undo prepareWithInvocationTarget:self] insertObject:type inTypesAtIndex:index];
+    [undo setActionName:@"Remove Type"];
+  }
+  [type setOwner:nil];
+  [self willChangeValueForKey:@"type"];
+  [sd_types removeObjectAtIndex:index];
+  [self didChangeValueForKey:@"type"];
+}
+
+- (void)replaceObjectInTypesAtIndex:(unsigned)index withObject:(id)object {
+  SdefType *type = [sd_types objectAtIndex:index];
+  NSUndoManager *undo = [self undoManager];
+  if (undo) {
+    [[undo prepareWithInvocationTarget:self] replaceObjectAtIndex:index withObject:type];
+    [undo setActionName:@"Change Type"];
+  }
+  [type setOwner:nil];
+  [self willChangeValueForKey:@"type"];
+  [sd_types replaceObjectAtIndex:index withObject:object];
+  [self didChangeValueForKey:@"type"];
+  [object setOwner:self];
 }
 
 @end
@@ -395,3 +471,42 @@
 }
 
 @end
+
+
+#pragma mark -
+NSString *SdefTypeStringForTypes(NSArray *types) {
+  NSMutableString *str = [[NSMutableString alloc] init];
+  SdefType *type;
+  NSEnumerator *items = [types objectEnumerator];
+  while (type = [items nextObject]) {
+    if ([type name]) {
+      if ([str length] > 0) {
+        [str appendString:@" | "];
+      }
+      if ([type isList]) {
+        [str appendString:@"list of "];
+      }
+      [str appendString:[type name]];
+    }
+  }
+  return [str autorelease];
+}
+
+NSArray *SdefTypesForTypeString(NSString *type) {
+  NSString *str;
+  NSMutableArray *types = [[NSMutableArray alloc] init];
+  NSEnumerator *strings = [[type componentsSeparatedByString:@" | "] objectEnumerator];
+  while (str = [strings nextObject]) {
+    unsigned location;
+    SdefType *type = nil;
+    if ((location = [str rangeOfString:@"list of"].location) != NSNotFound) {
+      type = [[SdefType alloc] initWithName:[str substringFromIndex:location + 8]];
+      [type setList:YES];
+    } else {
+      type = [[SdefType alloc] initWithName:str];
+    }
+    [types addObject:type];
+    [type release];
+  }
+  return [types autorelease];
+}

@@ -12,15 +12,18 @@
 #pragma mark Protocols Implementations
 - (id)copyWithZone:(NSZone *)aZone {
   SdefEnumeration *copy = [super copyWithZone:aZone];
+  copy->sd_inline = sd_inline;
   return copy;
 }
 
 - (void)encodeWithCoder:(NSCoder *)aCoder {
   [super encodeWithCoder:aCoder];
+  [aCoder encodeInt:sd_inline forKey:@"SEInline"];
 }
 
 - (id)initWithCoder:(NSCoder *)aCoder {
   if (self = [super initWithCoder:aCoder]) {
+    sd_inline = [aCoder decodeIntForKey:@"SEInline"];  
   }
   return self;
 }
@@ -36,6 +39,24 @@
 
 + (NSString *)defaultIconName {
   return @"Enum";
+}
+
+- (void)sdefInit {
+  [super sdefInit];
+  sd_inline = kSdefInlineAll;
+}
+
+#pragma mark Inline
+- (int)inlineValue {
+  return sd_inline;
+}
+
+- (void)setInlineValue:(int)value {
+  if (value != sd_inline) {
+    [[[self undoManager] prepareWithInvocationTarget:self] setInlineValue:sd_inline];
+    [[self undoManager] setActionName:@"Change Inline"];
+    sd_inline = value;
+  }
 }
 
 @end
@@ -106,7 +127,7 @@
 }
 
 + (NSString *)defaultIconName {
-  return @"Type";
+  return @"Value";
 }
 
 @end
@@ -139,7 +160,7 @@
 }
 
 + (NSString *)defaultIconName {
-  return @"Struct";
+  return @"Record";
 }
 
 @end

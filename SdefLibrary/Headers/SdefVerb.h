@@ -9,46 +9,46 @@
 #import "SdefObjects.h"
 
 /*
-<!-- VERB (COMMAND OR EVENT) DEFINITION -->
-<!ELEMENT command (documentation?, %implementation;?, synonyms?, direct-parameter?, result?, parameter*)>
+<!-- VERBS (COMMANDS OR EVENTS) -->
+<!ELEMENT command ((%implementation;)?, synonym*, direct-parameter?, parameter*, result?, documentation*)>
 <!ATTLIST command
 name       %Verbname;      #REQUIRED
-code       %EventCode;     #IMPLIED 
+code       %EventCode;     #REQUIRED 
 description  %Text;        #IMPLIED
-hidden     (hidden)        #IMPLIED 
+hidden     %yorn;          #IMPLIED 
 >
 
-<!ELEMENT event (documentation?, %implementation;?, synonyms?, direct-parameter?, result?, parameter*)>
+<!ELEMENT event ((%implementation;)?, synonym*, documentation*, direct-parameter?, (documentation | parameter)*, result?, documentation*)>
 <!ATTLIST event
 name       %Verbname;      #REQUIRED
-code       %EventCode;     #IMPLIED 
+code       %EventCode;     #REQUIRED 
 description  %Text;        #IMPLIED
-hidden     (hidden)        #IMPLIED 
+hidden     %yorn;          #IMPLIED 
 >
 
-<!ELEMENT direct-parameter EMPTY>
+<!ELEMENT direct-parameter (type*)>
 <!ATTLIST direct-parameter
-type       %Typename;      #REQUIRED 
-optional   (optional)      #IMPLIED 
+type       %Typename;      #IMPLIED 
+optional   %yorn;          #IMPLIED 
 description  %Text;        #IMPLIED 
 >
 
-<!ELEMENT result EMPTY>
+<!ELEMENT result (type*)>
 <!ATTLIST result
-type       %Typename;      #REQUIRED 
+type       %Typename;      #IMPLIED 
 description  %Text;        #IMPLIED 
 >
 
-<!ELEMENT parameter (%implementation;?)>
+<!ELEMENT parameter ((%implementation;)?, (type*))>
 <!ATTLIST parameter
 name       %Term;          #REQUIRED
-code       %OSType;        #IMPLIED 
-hidden     (hidden)        #IMPLIED 
-type       %Typename;      #REQUIRED 
-optional   (optional)      #IMPLIED 
+code       %OSType;        #REQUIRED 
+hidden     %yorn;          #IMPLIED 
+type       %Typename;      #IMPLIED 
+optional   %yorn;          #IMPLIED 
 description  %Text;        #IMPLIED 
 >
-*/
+ */
 
 @class SdefDocumentation, SdefDirectParameter, SdefResult;
 @interface SdefVerb : SdefTerminologyObject <NSCopying, NSCoding> {

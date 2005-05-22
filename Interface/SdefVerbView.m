@@ -10,6 +10,7 @@
 #import "SdefVerb.h"
 #import "SdefArguments.h"
 #import "ShadowMacros.h"
+#import "SKAppKitExtensions.h"
 
 @implementation SdefVerbView
 
@@ -34,6 +35,18 @@
   }
   if (idx >= 0)
     [tab selectTabViewItemAtIndex:idx];
+}
+
+- (id)editedObject:(id)sender {
+  switch ([sender tag]) {
+    case 0:
+      return [parameters selectedObject];
+    case 1:
+      return [[self object] directParameter];
+    case 2:
+      return [[self object] result]; 
+  }
+  return nil;
 }
 
 //- (void)tableViewSelectionDidChange:(NSNotification *)aNotification {

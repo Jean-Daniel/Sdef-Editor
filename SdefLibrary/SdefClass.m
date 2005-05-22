@@ -341,13 +341,13 @@
 }
 
 - (BOOL)isNotInProperties {
-  return sd_soFlags.notInProperties;
+  return sd_soFlags.reserved;
 }
 - (void)setNotInProperties:(BOOL)flag {
   flag = flag ? 1 : 0;
-  if (flag != sd_soFlags.notInProperties) {
-    [[[self undoManager] prepareWithInvocationTarget:self] setNotInProperties:sd_soFlags.notInProperties];
-    sd_soFlags.notInProperties = flag;
+  if (flag != sd_soFlags.reserved) {
+    [[[self undoManager] prepareWithInvocationTarget:self] setNotInProperties:sd_soFlags.reserved];
+    sd_soFlags.reserved = flag;
   }
 }
 

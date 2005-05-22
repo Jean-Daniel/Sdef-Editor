@@ -8,6 +8,19 @@
 
 #import "SdefObjects.h"
 
+/*
+<!-- contents -->
+<!ELEMENT contents ((%implementation;)?, (type*))>
+<!ATTLIST contents
+name       %Classname;     #IMPLIED
+code       %OSType;        #IMPLIED 
+type       %Typename;      #IMPLIED
+access     (r | w | rw)    "rw"     
+hidden     %yorn;          #IMPLIED 
+description  %Text;        #IMPLIED 
+>
+*/
+
 @interface SdefContents : SdefTypedObject <NSCopying, NSCoding> {
   unsigned sd_access;
   SdefObject *sd_owner;
