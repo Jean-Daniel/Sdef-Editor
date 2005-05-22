@@ -55,6 +55,23 @@
        <dt><img class="middle" src="Images/Suite.png" alt="" />
         <a href="#Suite">Suite</a>
        </dt>
+        <dd>
+        <dl>
+         <dt><img class="middle" src="Images/Type.png" alt="" />
+          <a href="#ValueType">Value Type</a>
+         </dt>
+        </dl>
+       </dd>
+       <dd>
+        <dl>
+         <dt><img class="middle" src="Images/Struct.png" alt="" />
+          <a href="#RecordType">Record Type</a>
+         </dt>
+         <dd><img class="middle" src="Images/Variable.png" alt="" />
+          <a href="#Property">Property</a>
+         </dd>
+        </dl>
+       </dd>
        <dd>
         <dl>
          <dt><img class="middle" src="Images/Enum.png" alt="" />
@@ -73,7 +90,7 @@
          <dd><img class="middle" src="Images/Contents.png" alt="" />
           <a href="#Contents">Contents</a>
          </dd>
-         <dd><img class="middle" src="Images/Variable.png" alt="" />
+         <dd><img class="middle" src="Images/Element.png" alt="" />
           <a href="#Element">Element</a>
          </dd>
          <dd><img class="middle" src="Images/Variable.png" alt="" />
@@ -117,23 +134,6 @@
          <dd><img class="middle" src="Images/Misc.png" alt="" />
           <a href="#Result">Result</a>
          </dd>
-        </dl>
-       </dd>
-       <dd>
-        <dl>
-         <dt><img class="middle" src="Images/Struct.png" alt="" />
-          <a href="#RecordType">Record Type</a>
-         </dt>
-         <dd><img class="middle" src="Images/Variable.png" alt="" />
-          <a href="#Property">Property</a>
-         </dd>
-        </dl>
-       </dd>
-       <dd>
-        <dl>
-         <dt><img class="middle" src="Images/Type.png" alt="" />
-          <a href="#ValueType">Value Type</a>
-         </dt>
         </dl>
        </dd>
       </dl>
@@ -544,6 +544,7 @@
   </div> 
   <hr class="separator"/>
   
+  <!-- Suite -->
   <div class="element">
    <h3 id="Suite">Suite</h3>
    <p class="definition">
@@ -571,6 +572,57 @@
   </div> 
   <hr class="separator"/>
   
+  <!-- Synonym -->
+  <div class="element">
+   <h3 id="Suite">Synonym</h3>
+   <p class="definition">Defines an alternate term or code for the main element.</p>
+   <p class="definition">At least one of <em>name</em> or <em>code</em> is required. Depending on which attributes are present, the dictionary will have different effects:</p>
+   <dl>
+    <dt><strong><u>Name only</u></strong></dt>
+    <dd style="margin-left: 1.5em">Use these to define an alternate term that may be used at compile time. It will decompile as the main term.
+        For example, AppleScript uses <code>"app"</code> as a name-only synonym for <code>"application"</code>.<br />
+        Cocoa scriptTerminology files do not support these, generate an <strong>aete</strong> resource for your application as well.
+    </dd>
+    <dt style="margin-top: 1em"><strong><u>Code only</u></strong></dt>
+    <dd style="margin-left: 1.5em;">Use these when migrating from one code to another.
+      (Typically, this happens when correcting an older version of the dictionary which used a non-standard code.)
+      Compiled scripts that use the synonym code will decompile using the main term.
+      Code-only synonyms are implicitly hidden. Because of how Cocoa scriptSuite files work,
+      they must contain a cocoa element with a <em>method</em> or <em>key</em> attribute in order to generate a correct scriptSuite file.
+     </dd>
+     <dt style="margin-top: 1em"><strong><u>Name and Code</u></strong></dt>
+     <dd style="margin-left: 1.5em">Use these to define an alternate term that is preserved across compilation.
+     Effectively, this is a separate term that happens to act the same as the main one.
+     As with code-only synonyms, they must contain a cocoa element to generate a correct scriptSuite file.
+     </dd>
+    </dl>
+    <p class="definition">Sdef synonym elements have nothing to do with "Synonyms" sections in Cocoa's suite definition files.
+    Those are a trick to allow two different classes in the dictionary to share the same implementation class,
+    this is necessary because suite definition files use the implementation class name as a key.
+    If you have two classes that happen to share the same implementation, declare them separately, and point
+    their implementation elements at the same class. 
+    sdp(1) will do the right thing and generate a "Synonyms" section for you.
+   </p>
+   <h4>Attributes</h4>
+   <dl class="attributes">
+    <dt>name</dt>
+    <dd>See above.</dd>
+    <dt>code</dt>
+    <dd>See above.</dd>
+    <dt>hidden</dt>
+    <dd>See <a href="#Attributes">Commons Attributes</a>.</dd>
+   </dl>
+   <h4><a href="#Cocoa">Implementation</a></h4>
+   <dl class="implementation">
+    <dt>Cocoa Key</dt>
+    <dd>A string key.</dd>
+    <dt>Cocoa Method</dt>
+    <dd>An ObjC method name.</dd>
+   </dl>
+  </div> 
+  <hr class="separator"/>
+  
+  <!-- Type -->
   <div class="element">
    <h3 id="Type">Type</h3>
    <p class="definition">
