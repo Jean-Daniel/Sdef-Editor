@@ -34,7 +34,7 @@
 }
 
 - (id)init {
-  return [self initWithString:NSLocalizedString(@" comment ", @"Default comment")];
+  return [self initWithString:NSLocalizedStringFromTable(@" comment ", @"SdefLibrary", @"Default comment")];
 }
 
 - (id)initWithString:(NSString *)aString {
@@ -50,7 +50,7 @@
 }
 
 - (NSString *)name {
-  return NSLocalizedString(@"comment", @"Comment item name");
+  return NSLocalizedStringFromTable(@"comment", @"SdefLibrary", @"Comment item name");
 }
 - (NSImage *)icon {
   return [NSImage imageNamed:@"Misc"];

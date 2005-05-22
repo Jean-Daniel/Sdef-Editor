@@ -58,7 +58,7 @@ Retain must not be call in a dealloc block, so we did it before deallocation */
 }
 
 + (NSString *)defaultName {
-  return NSLocalizedStringFromTable(@"Dictionary", @"SdefLibrary", @"Dictionary default name");
+  return NSLocalizedStringFromTable(@"Dictionary", @"SdefLibrary", @"Object Type Name.");
 }
 
 + (NSString *)defaultIconName {

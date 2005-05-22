@@ -31,6 +31,7 @@ extern NSArray *SdefXMLAccessorStringsFromFlag(unsigned flag);
   NSMutableArray *sd_comments;
   SdefDictionary *sd_dictionary;
 }
+- (int)parserVersion;
 
 - (NSString *)error;
 - (SdefDictionary *)document;

@@ -41,7 +41,7 @@
 }
 
 + (NSString *)defaultName {
-  return NSLocalizedStringFromTable(@"Suite", @"SdefLibrary", @"Suite default name");
+  return NSLocalizedStringFromTable(@"Suite", @"SdefLibrary", @"Object Type Name.");
 }
 
 + (NSString *)defaultIconName {

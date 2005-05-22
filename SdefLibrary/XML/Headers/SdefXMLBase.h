@@ -7,21 +7,29 @@
 //
 
 #import "SdefBase.h"
+#import "SdefSynonym.h"
 #import "SdefXMLParser.h"
 
 @class SdefXMLNode;
 @interface SdefObject (SdefXMLManager)
-
-#pragma mark -
 #pragma mark Parser
 - (id)initWithAttributes:(NSDictionary *)attributes;
 - (void)setAttributes:(NSDictionary *)attrs;
 
 - (int)acceptXMLElement:(NSString *)element;
 
-#pragma mark -
 #pragma mark Generator
 - (NSString *)xmlElementName;
 - (SdefXMLNode *)xmlNodeForVersion:(SdefVersion)version;
 
+@end
+
+#pragma mark -
+@interface SdefSynonym (SdefXMLManager)
+#pragma mark Parser
+- (void)setAttributes:(NSDictionary *)attrs;
+- (int)acceptXMLElement:(NSString *)element;
+
+#pragma mark Generator
+- (SdefXMLNode *)xmlNodeForVersion:(SdefVersion)version;
 @end

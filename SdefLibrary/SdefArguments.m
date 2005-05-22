@@ -32,11 +32,11 @@
 }
 
 + (NSString *)defaultName {
-  return NSLocalizedStringFromTable(@"Direct Parameter", @"SdefLibrary", @"Direct Parameter default name");
+  return NSLocalizedStringFromTable(@"direct parameter", @"SdefLibrary", @"Direct Parameter default name");
 }
 
 + (NSString *)defaultIconName {
-  return @"Variable";
+  return @"Param";
 }
 
 - (void)dealloc {
@@ -130,7 +130,7 @@
 }
 
 + (NSString *)defaultName {
-  return NSLocalizedStringFromTable(@"Result", @"SdefLibrary", @"Result default name");
+  return NSLocalizedStringFromTable(@"result", @"SdefLibrary", @"Result default name");
 }
 
 + (NSString *)defaultIconName {

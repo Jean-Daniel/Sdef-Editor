@@ -93,10 +93,14 @@
     if (nil != attr)
       [node setAttribute:[attr stringByEscapingEntities:nil] forKey:@"description"];
     
-    if ([self hasSynonyms]) {
-      id synonyms = [sd_synonyms xmlNodeForVersion:version];
-      if (nil != synonyms) {
-        [node appendChild:synonyms];
+    if ([self hasSynonyms] && sd_synonyms) {
+      id synonym;
+      NSEnumerator *items = [sd_synonyms objectEnumerator];
+      while (synonym = [items nextObject]) {
+        SdefXMLNode *synNode = [synonym xmlNodeForVersion:version];
+        if (synNode) {
+          [node appendChild:synNode];
+        }
       }
     }
     [node setEmpty:![node hasChildren]];

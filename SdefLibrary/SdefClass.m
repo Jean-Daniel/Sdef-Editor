@@ -203,7 +203,7 @@
 }
 
 + (NSString *)defaultIconName {
-  return @"Variable";
+  return @"Element";
 }
 
 - (void)dealloc {
@@ -324,7 +324,7 @@
 }
 
 + (NSString *)defaultIconName {
-  return @"Variable";
+  return @"Property";
 }
 
 - (void)dealloc {
@@ -377,7 +377,7 @@
 }
 
 + (NSString *)defaultName {
-  return NSLocalizedStringFromTable(@"method", @"SdefLibrary", @"Respond-To default name");
+  return NSLocalizedStringFromTable(@"method", @"SdefLibrary", @"Verb & Responds To default name.");
 }
 + (NSString *)defaultIconName {
   return @"Member";

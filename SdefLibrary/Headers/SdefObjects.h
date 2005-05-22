@@ -29,11 +29,12 @@
 @end
 
 #pragma mark -
+@class SdefSynonym;
 @interface SdefTerminologyObject : SdefImplementedObject <NSCopying, NSCoding> {
 @private
   NSString *sd_code; 
   NSString *sd_desc;
-  SdefCollection *sd_synonyms;
+  NSMutableArray *sd_synonyms;
 }
 
 - (NSString *)code;
@@ -41,6 +42,16 @@
 
 - (NSString *)desc;
 - (void)setDesc:(NSString *)newDesc;
+
+#pragma mark Synonyms KVC
+- (unsigned)countOfSynonyms;
+- (NSArray *)synonyms;
+- (void)setSynonyms:(NSArray *)synonyms;
+- (void)addSynonym:(SdefSynonym *)aSynonym;
+- (id)objectInSynonymsAtIndex:(unsigned)index;
+- (void)insertObject:(id)object inSynonymsAtIndex:(unsigned)index;
+- (void)removeObjectFromSynonymsAtIndex:(unsigned)index;
+- (void)replaceObjectInSynonymsAtIndex:(unsigned)index withObject:(id)object;
 
 @end
 

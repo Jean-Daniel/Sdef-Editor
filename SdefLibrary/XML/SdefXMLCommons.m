@@ -18,25 +18,45 @@
 #pragma mark XML Generation
 - (SdefXMLNode *)xmlNodeForVersion:(SdefVersion)version {
   SdefXMLNode *node;
-  if (node = [super xmlNodeForVersion:version]) {
-    id attr = [self code];
+  if (node = [[SdefXMLNode alloc] initWithElementName:@"synonym"]) {
+    /* Code */
+    NSString *attr = [self code];
     if (attr) [node setAttribute:attr forKey:@"code"];
-    
+    /* Name */
     attr = [self name];
     if (attr) [node setAttribute:attr forKey:@"name"];
+    /* Hidden */
+    if ([self isHidden]) {
+      if (kSdefTigerVersion == version)
+        [node setAttribute:@"yes" forKey:@"hidden"];
+      else
+        [node setAttribute:@"hidden" forKey:@"hidden"];
+    }
+    /* Implementation */
+    if (sd_impl) {
+      SdefXMLNode *implNode = [sd_impl xmlNodeForVersion:version];
+      if (implNode) {
+        [node prependChild:implNode];
+      }
+    }
+    [node autorelease];
+    [node setEmpty:![node hasChildren]];
   }
-  [node setEmpty:YES];
   return [node attributeCount] > 0 ? node : nil;
 }
 
-- (NSString *)xmlElementName {
-  return @"synonym";
+#pragma mark Parsing
+- (int)acceptXMLElement:(NSString *)element {
+  return kSdefParserBothVersion;
 }
 
-#pragma mark Parsing
 - (void)setAttributes:(NSDictionary *)attrs {
-  [super setAttributes:attrs];
+  [self setName:[attrs objectForKey:@"name"]];
   [self setCode:[attrs objectForKey:@"code"]];
+  NSString *hidden = [attrs objectForKey:@"hidden"];
+  if (hidden && ![hidden isEqualToString:@"no"]) {
+    [self setHidden:YES];
+  }
 }
 
 @end

@@ -135,9 +135,11 @@ static CFXMLParserCallBacks SdefParserCallBacks = {
 
 - (void)parser:(CFXMLParserRef)parser didStartSynonym:(NSDictionary *)attributes {
   if (sd_node) {
-    SdefSynonym *synonym = [(SdefObject *)[SdefSynonym allocWithZone:[self zone]] initWithAttributes:attributes];
-    [[sd_node synonyms] appendChild:synonym];
+    SdefSynonym *synonym = [[SdefSynonym allocWithZone:[self zone]] init];
+    [synonym setAttributes:attributes];
+    [sd_node addSynonym:synonym];
     [synonym release];
+    sd_node = synonym;
   }
 }
 
@@ -305,6 +307,7 @@ static CFXMLParserCallBacks SdefParserCallBacks = {
 
   /* Orphan implemented : direct-parameter, result, contents */
   if (isEqual(element, cmd, @"result") ||
+      isEqual(element, cmd, @"synonym") || 
       isEqual(element, cmd, @"contents") ||
       isEqual(element, cmd, @"direct-parameter")) {
     sd_node = [sd_node owner];
@@ -313,7 +316,6 @@ static CFXMLParserCallBacks SdefParserCallBacks = {
   else if (!isEqual(element, cmd, @"accessor") &&
       !isEqual(element, cmd, @"cocoa") &&
       !isEqual(element, cmd, @"documentation") &&
-      !isEqual(element, cmd, @"synonym") &&
       !isEqual(element, cmd, @"type")) {
     sd_node = [sd_node parent];
   }

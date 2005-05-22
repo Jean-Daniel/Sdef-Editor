@@ -37,7 +37,7 @@
 }
 
 + (NSString *)defaultName {
-  return NSLocalizedStringFromTable(@"Documentation", @"SdefLibrary", @"Documentation default name");
+  return NSLocalizedStringFromTable(@"documentation", @"SdefLibrary", @"Documentation default name");
 }
 
 + (NSString *)defaultIconName {

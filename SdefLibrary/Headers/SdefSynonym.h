@@ -6,7 +6,7 @@
 //  Copyright 2005 Shadow Lab. All rights reserved.
 //
 
-#import "SdefBase.h"
+#import "SdefLeave.h"
 
 /*
  <!-- SYNONYMS -->
@@ -19,11 +19,21 @@
  <!-- at least one of "name" and "code" is required. -->
  */
 
-@interface SdefSynonym : SdefObject <NSCopying, NSCoding> {
+@class SdefImplementation;
+@interface SdefSynonym : SdefLeave <NSCopying, NSCoding> {
   NSString *sd_code;
+  SdefImplementation *sd_impl; 
 }
+
+- (NSImage *)icon;
+
+- (BOOL)isHidden;
+- (void)setHidden:(BOOL)flag;
 
 - (NSString *)code;
 - (void)setCode:(NSString *)code;
+
+- (SdefImplementation *)impl;
+- (void)setImpl:(SdefImplementation *)anImpl;
 
 @end

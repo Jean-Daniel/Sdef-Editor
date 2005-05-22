@@ -212,7 +212,11 @@
 
 - (void)setEditable:(BOOL)flag recursive:(BOOL)recu {
   if (recu) {
-    [sd_synonyms setEditable:flag recursive:recu];
+    id item;
+    NSEnumerator *items = [sd_synonyms objectEnumerator];
+    while (item = [items nextObject]) {
+      [item setEditable:flag recursive:recu];
+    }
   }
   [super setEditable:flag recursive:recu];
 }
@@ -224,7 +228,7 @@
 - (void)setCode:(NSString *)str {
   if (sd_code != str) {
     [[self undoManager] registerUndoWithTarget:self selector:_cmd object:sd_code];
-    [[self undoManager] setActionName:@"Change Code"];
+    [[self undoManager] setActionName:NSLocalizedStringFromTable(@"Change Code", @"SdefLibrary", @"Undo Action: Change code.")];
     [sd_code release];
     sd_code = [str copyWithZone:[self zone]];
   }
@@ -237,30 +241,76 @@
 - (void)setDesc:(NSString *)aDescription {
   if (sd_desc != aDescription) {
     [[self undoManager] registerUndoWithTarget:self selector:_cmd object:sd_desc];
-    [[self undoManager] setActionName:@"Change Description"];
+    [[self undoManager] setActionName:NSLocalizedStringFromTable(@"Change Description", @"SdefLibrary", @"Undo Action: Change description.")];
     [sd_desc release];
     sd_desc = [aDescription copyWithZone:[self zone]];
   }
 }
 
-#pragma mark Synonyms
-- (SdefCollection *)synonyms {
+#pragma mark Synonyms KVC
+- (NSArray *)synonyms {
   if (!sd_synonyms && sd_soFlags.hasSynonyms) {
-    id synonyms = [[SdefCollection allocWithZone:[self zone]] initWithName:NSLocalizedStringFromTable(@"Synonyms", @"SdefLibrary", @"Synonyms Collection name")];
-    [synonyms setContentType:[SdefSynonym class]];
-    [synonyms setElementName:@"synonyms"];
-    [self setSynonyms:synonyms];
-    [synonyms release];
+    sd_synonyms = [[NSMutableArray allocWithZone:[self zone]] init];
   }
   return sd_synonyms;
 }
 
-- (void)setSynonyms:(SdefCollection *)synonyms {
+- (void)setSynonyms:(NSArray *)synonyms {
   if (sd_synonyms != synonyms) {
+    NSUndoManager *undo = [self undoManager];
+    if (undo) {
+      [undo registerUndoWithTarget:self selector:_cmd object:sd_synonyms];
+    }
     [sd_synonyms release];
-    sd_synonyms = [synonyms retain];
-    [sd_synonyms setEditable:[self isEditable]];
+    sd_synonyms = [synonyms mutableCopy];
+    [sd_synonyms makeObjectsPerformSelector:@selector(setOwner:) withObject:self];
   }
+}
+
+- (unsigned)countOfSynonyms {
+  return [sd_synonyms count];
+}
+
+- (id)objectInSynonymsAtIndex:(unsigned)index {
+  return [sd_synonyms objectAtIndex:index];
+}
+
+- (void)addSynonym:(SdefSynonym *)aSynonym {
+  [self synonyms];
+  [self insertObject:aSynonym inSynonymsAtIndex:[self countOfSynonyms]];
+}
+
+- (void)insertObject:(id)object inSynonymsAtIndex:(unsigned)index {
+  NSUndoManager *undo = [self undoManager];
+  if (undo) {
+    [[undo prepareWithInvocationTarget:self] removeObjectFromSynonymsAtIndex:index];
+    [undo setActionName:NSLocalizedStringFromTable(@"Add/Remove Synonym", @"SdefLibrary", @"Undo Action: Add/Remove synonym.")];
+  }
+  [sd_synonyms insertObject:object atIndex:index];
+  [object setOwner:self];
+}
+
+- (void)removeObjectFromSynonymsAtIndex:(unsigned)index {
+  SdefSynonym *synonym = [sd_synonyms objectAtIndex:index];
+  NSUndoManager *undo = [self undoManager];
+  if (undo) {
+    [[undo prepareWithInvocationTarget:self] insertObject:synonym inSynonymsAtIndex:index];
+    [undo setActionName:NSLocalizedStringFromTable(@"Add/Remove Synonym", @"SdefLibrary", @"Undo Action: Add/Remove synonym.")];
+  }
+  [synonym setOwner:nil];
+  [sd_synonyms removeObjectAtIndex:index];
+}
+
+- (void)replaceObjectInSynonymsAtIndex:(unsigned)index withObject:(id)object {
+  SdefSynonym *synonym = [sd_synonyms objectAtIndex:index];
+  NSUndoManager *undo = [self undoManager];
+  if (undo) {
+    [[undo prepareWithInvocationTarget:self] replaceObjectAtIndex:index withObject:synonym];
+    [undo setActionName:NSLocalizedStringFromTable(@"Add/Remove Synonym", @"SdefLibrary", @"Undo Action: Add/Remove synonym.")];
+  }
+  [synonym setOwner:nil];
+  [sd_synonyms replaceObjectAtIndex:index withObject:object];
+  [object setOwner:self];
 }
 
 @end
@@ -341,7 +391,7 @@
     NSUndoManager *undo = [self undoManager];
     if (undo) {
       [undo registerUndoWithTarget:self selector:_cmd object:sd_types];
-      [undo setActionName:@"Change Types"];
+      [undo setActionName:NSLocalizedStringFromTable(@"Change Types", @"SdefLibrary", @"Undo Action: Change type.")];
     }
     [self willChangeValueForKey:@"type"];
     [sd_types release];
@@ -363,7 +413,7 @@
   NSUndoManager *undo = [self undoManager];
   if (undo) {
     [[undo prepareWithInvocationTarget:self] removeObjectFromTypesAtIndex:index];
-    [undo setActionName:@"Add Type"];
+    [undo setActionName:NSLocalizedStringFromTable(@"Add/Remove Type", @"SdefLibrary", @"Undo Action: Add/Remove type.")];
   }
   [self willChangeValueForKey:@"type"];
   [sd_types insertObject:object atIndex:index];
@@ -376,7 +426,7 @@
   NSUndoManager *undo = [self undoManager];
   if (undo) {
     [[undo prepareWithInvocationTarget:self] insertObject:type inTypesAtIndex:index];
-    [undo setActionName:@"Remove Type"];
+    [undo setActionName:NSLocalizedStringFromTable(@"Add/Remove Type", @"SdefLibrary", @"Undo Action: Add/Remove type.")];
   }
   [type setOwner:nil];
   [self willChangeValueForKey:@"type"];
@@ -389,7 +439,7 @@
   NSUndoManager *undo = [self undoManager];
   if (undo) {
     [[undo prepareWithInvocationTarget:self] replaceObjectAtIndex:index withObject:type];
-    [undo setActionName:@"Change Type"];
+    [undo setActionName:NSLocalizedStringFromTable(@"Add/Remove Type", @"SdefLibrary", @"Undo Action: Add/Remove type.")];
   }
   [type setOwner:nil];
   [self willChangeValueForKey:@"type"];
@@ -431,7 +481,7 @@
 }
 
 - (id)firstParentOfType:(SdefObjectType)aType {
-  return [[self owner] firstParentOfType:aType];
+  return [sd_owner firstParentOfType:aType];
 }
 
 @end
@@ -467,7 +517,7 @@
 }
 
 - (id)firstParentOfType:(SdefObjectType)aType {
-  return [[self owner] firstParentOfType:aType];
+  return [sd_owner firstParentOfType:aType];
 }
 
 @end
@@ -495,7 +545,7 @@ NSString *SdefTypeStringForTypes(NSArray *types) {
 NSArray *SdefTypesForTypeString(NSString *type) {
   NSString *str;
   NSMutableArray *types = [[NSMutableArray alloc] init];
-  NSEnumerator *strings = [[type componentsSeparatedByString:@" | "] objectEnumerator];
+  NSEnumerator *strings = [[type componentsSeparatedByString:@"|"] objectEnumerator];
   while (str = [strings nextObject]) {
     unsigned location;
     SdefType *type = nil;

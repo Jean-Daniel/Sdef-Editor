@@ -169,50 +169,48 @@ NSString * const SdefObjectDidChangeNameNotification = @"SdefObjectDidChangeName
 - (NSString *)objectTypeName {
   switch ([self objectType]) {
     case kSdefUndefinedType:
-      return @"Undefined";
+      return NSLocalizedStringFromTable(@"Undefined", @"SdefLibrary", @"Object Type Name.");
     case kSdefDictionaryType:
-      return @"Dictionary";
+      return NSLocalizedStringFromTable(@"Dictionary", @"SdefLibrary", @"Object Type Name.");
     case kSdefSuiteType:
-      return @"Suite";
+      return NSLocalizedStringFromTable(@"Suite", @"SdefLibrary", @"Object Type Name.");
     case kSdefCollectionType:
-      return @"Collection";
+      return NSLocalizedStringFromTable(@"Collection", @"SdefLibrary", @"Object Type Name.");
       /* Class */
     case kSdefClassType:
-      return @"Class";
+      return NSLocalizedStringFromTable(@"Class", @"SdefLibrary", @"Object Type Name.");
     case kSdefContentsType:
-      return @"Contents";
+      return NSLocalizedStringFromTable(@"Contents", @"SdefLibrary", @"Object Type Name.");
     case kSdefPropertyType:
-      return @"Property";
+      return NSLocalizedStringFromTable(@"Property", @"SdefLibrary", @"Object Type Name.");
     case kSdefElementType:
-      return @"Element";
+      return NSLocalizedStringFromTable(@"Element", @"SdefLibrary", @"Object Type Name.");
     case kSdefRespondsToType:
-      return @"Responds To";
+      return NSLocalizedStringFromTable(@"Responds To", @"SdefLibrary", @"Object Type Name.");
       /* Verbs */
     case kSdefVerbType:
-      return @"Verb";
+      return NSLocalizedStringFromTable(@"Verb", @"SdefLibrary", @"Object Type Name.");
     case kSdefParameterType:
-      return @"Parameter";
+      return NSLocalizedStringFromTable(@"Parameter", @"SdefLibrary", @"Object Type Name.");
     case kSdefDirectParameterType:
-      return @"Direct Parameter";
+      return NSLocalizedStringFromTable(@"Direct Parameter", @"SdefLibrary", @"Object Type Name.");
     case kSdefResultType:
-      return @"Result";
+      return NSLocalizedStringFromTable(@"Result", @"SdefLibrary", @"Object Type Name.");
       /* Enumeration */
     case kSdefEnumerationType:
-      return @"Enumeration";
+      return NSLocalizedStringFromTable(@"Enumeration", @"SdefLibrary", @"Object Type Name.");
     case kSdefEnumeratorType:
-      return @"Enumerator";
+      return NSLocalizedStringFromTable(@"Enumerator", @"SdefLibrary", @"Object Type Name.");
       /* Value */
     case kSdefValueType:
-      return @"Value";
+      return NSLocalizedStringFromTable(@"Value", @"SdefLibrary", @"Object Type Name.");
     case kSdefRecordType:
-      return @"Record";
+      return NSLocalizedStringFromTable(@"Record", @"SdefLibrary", @"Object Type Name.");
       /* Misc */
     case kSdefCocoaType:
-      return @"Cocoa";
-    case kSdefSynonymType:
-      return @"Synonym";
+      return NSLocalizedStringFromTable(@"Cocoa", @"SdefLibrary", @"Object Type Name.");
     case kSdefDocumentationType:
-      return @"Documentation";
+      return NSLocalizedStringFromTable(@"Documentation", @"SdefLibrary", @"Object Type Name.");
   }
   return nil;
 }
@@ -237,7 +235,7 @@ NSString * const SdefObjectDidChangeNameNotification = @"SdefObjectDidChangeName
   if (sd_name != newName) {
     [[NSNotificationCenter defaultCenter] postNotificationName:SdefObjectWillChangeNameNotification object:self];
     [[self undoManager] registerUndoWithTarget:self selector:_cmd object:sd_name];
-    [[self undoManager] setActionName:@"Change Name"];
+    [[self undoManager] setActionName:NSLocalizedStringFromTable(@"Change Name", @"SdefLibrary", @"Undo Action: change name.")];
     [self willChangeValueForKey:@"name"];
     [sd_name release];
     sd_name = [newName copyWithZone:[self zone]];
@@ -254,7 +252,7 @@ NSString * const SdefObjectDidChangeNameNotification = @"SdefObjectDidChangeName
   flag = flag ? 1 : 0;
   if (sd_soFlags.hidden != flag) {
     [[[self undoManager] prepareWithInvocationTarget:self] setHidden:sd_soFlags.hidden];
-    [[self undoManager] setActionName:@"Change Hidden"];
+    [[self undoManager] setActionName:NSLocalizedStringFromTable(@"Hide/Unhide", @"SdefLibrary", @"Undo Action: change Hidden.")];
     sd_soFlags.hidden = flag;
   }
 }
@@ -296,10 +294,10 @@ NSString * const SdefObjectDidChangeNameNotification = @"SdefObjectDidChangeName
 - (BOOL)hasSynonyms {
   return sd_soFlags.hasSynonyms;
 }
-- (SdefCollection *)synonyms {
+- (NSMutableArray *)synonyms {
   return nil;
 }
-- (void)setSynonyms:(SdefCollection *)synonyms {}
+- (void)setSynonyms:(NSArray *)synonyms {}
 
 - (BOOL)hasImplementation {
   return sd_soFlags.hasImplementation;

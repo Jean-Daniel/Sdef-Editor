@@ -40,7 +40,8 @@
 }
 
 - (NSString *)objectTypeName {
-  return [self isCommand] ? @"Command" : @"Event";
+  return [self isCommand] ? NSLocalizedStringFromTable(@"Command", @"SdefLibrary", @"Object Type Name.")
+  : NSLocalizedStringFromTable(@"Event", @"SdefLibrary", @"Object Type Name.");
 }
 
 + (NSString *)defaultIconName {
@@ -49,7 +50,7 @@
 
 #pragma mark -
 + (NSString *)defaultName {
-  return @"method";
+  return NSLocalizedStringFromTable(@"method", @"SdefLibrary", @"Verb & Responds To default name.");
 }
 
 - (void)dealloc {

@@ -32,7 +32,6 @@ typedef enum {
   kSdefRecordType			= 'Reco',
   /* Misc */
   kSdefCocoaType			= 'Coco',
-  kSdefSynonymType			= 'Syno',
   kSdefDocumentationType	= 'Docu'
 } SdefObjectType;
 
@@ -132,8 +131,8 @@ extern NSString *CocoaNameForSdefName(NSString *cocoa, BOOL isClass);
 
 #pragma mark Synonyms
 - (BOOL)hasSynonyms;
-- (SdefCollection *)synonyms;
-- (void)setSynonyms:(SdefCollection *)newSynonyms;
+- (NSMutableArray *)synonyms;
+- (void)setSynonyms:(NSArray *)newSynonyms;
 
 #pragma mark Implementation
 - (BOOL)hasImplementation;
