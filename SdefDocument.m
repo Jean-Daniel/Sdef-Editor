@@ -16,10 +16,10 @@
 #import "SdefSymbolBrowser.h"
 #import "SdefDictionary.h"
 #import "SdtplWindow.h"
-#import "SdefObject.h"
+#import "SdefObjects.h"
 #import "SdefSuite.h"
 
-#import "SdefParser.h"
+#import "SdefXMLParser.h"
 #import "SdefXMLGenerator.h"
 #import "SdefExporterController.h"
 
@@ -35,14 +35,12 @@ NSString * const SdefObjectDragType = @"SdefObjectDragType";
     [dictionary appendChild:[SdefSuite node]];
     [self setDictionary:dictionary];
     [dictionary release];
-//    _manager = [[SdefClassManager alloc] initWithDocument:self];
   }
   return self;
 }
 
 - (void)dealloc {
   [sd_dictionary release];
-//  [_manager release];
   [super dealloc];
 }
 
@@ -76,6 +74,7 @@ NSString * const SdefObjectDragType = @"SdefObjectDragType";
   [browser showWindow:sender];
 }
 
+#pragma mark Export Definition
 - (IBAction)exportTerminology:(id)sender {
   SdefExporterController *exporter = [[SdefExporterController alloc] init];
   [exporter setSdefDocument:self];
@@ -85,9 +84,45 @@ NSString * const SdefObjectDragType = @"SdefObjectDragType";
      didEndSelector:@selector(exportSheetDidEnd:returnCode:context:)
         contextInfo:nil];
 }
-
 - (void)exportSheetDidEnd:(NSWindow *)aWindow returnCode:(int)resut context:(id)ctxt {
   [[aWindow windowController] autorelease];
+}
+
+- (IBAction)exportUsingPantherFormat:(id)sender {
+  NSSavePanel *panel = [NSSavePanel savePanel];
+  [panel setCanCreateDirectories:YES];
+  [panel setCanSelectHiddenExtension:YES];
+  [panel setTreatsFilePackagesAsDirectories:YES];
+  [panel beginSheetForDirectory:nil
+                           file:[self lastComponentOfFileName]
+                 modalForWindow:[[self documentWindow] window]
+                  modalDelegate:self
+                 didEndSelector:@selector(exportAsPantherDidEnd:result:context:)
+                    contextInfo:nil];
+}
+- (void)exportAsPantherDidEnd:(NSSavePanel *)aPanel result:(int)result context:(id)context {
+  NSString *file;
+  if ((result == NSOKButton) && (file = [aPanel filename])) {
+    NSData *data = nil;
+    SdefXMLGenerator *gen = [[SdefXMLGenerator alloc] initWithRoot:[self dictionary]];
+    @try {
+      data = [gen xmlDataForVersion:kSdefPantherVersion];
+    } @catch (id exception) {
+      NSBeep();
+      SKLogException(exception);
+      NSRunAlertPanel(@"An Unknow error prevent file exportation", @"%@", @"OK", nil, nil, [exception reason]);
+    }
+    [gen release];
+    if (data) {
+      [data writeToFile:file atomically:YES];
+      id attributes = [self fileAttributesToWriteToFile:file
+                                                 ofType:ScriptingDefinitionFileType
+                                          saveOperation:NSSaveAsOperation];
+      if (attributes) {
+        [[NSFileManager defaultManager] changeFileAttributes:attributes atPath:file];
+      }
+    }
+  }
 }
 
 - (IBAction)exportASDictionary:(id)sender {
@@ -147,7 +182,12 @@ NSString * const SdefObjectDragType = @"SdefObjectDragType";
   id data = nil;
   if ([type isEqualToString:ScriptingDefinitionFileType]) {
     SdefXMLGenerator *gen = [[SdefXMLGenerator alloc] initWithRoot:[self dictionary]];
-    data = [gen xmlData];
+    @try {
+      data = [gen xmlDataForVersion:kSdefTigerVersion];
+    } @catch (id exception) {
+      NSBeep();
+      SKLogException(exception);
+    }
     [gen release];
   }
   return data;
@@ -162,7 +202,6 @@ NSString * const SdefObjectDragType = @"SdefObjectDragType";
 
 #pragma mark -
 #pragma mark SdefDocument Specific
-
 - (SdefObject *)selection {
   id controllers = [self windowControllers];
   return ([controllers count]) ? [[controllers objectAtIndex:0] selection] : nil;
@@ -194,7 +233,7 @@ NSString * const SdefObjectDragType = @"SdefObjectDragType";
   return (nil == item) ? 1 : [item childCount];
 }
 
-- (id)outlineView:(NSOutlineView *)outlineView child:(int)index ofItem:(id)item {
+- (id)outlineView:(NSOutlineView *)outlineView child:(int)index ofItem:(SdefObject *)item {
   return (nil == item) ? [self dictionary] : [item childAtIndex:index];
 }
 
@@ -232,18 +271,25 @@ NSString * const SdefObjectDragType = @"SdefObjectDragType";
   SdefObject *object = addr[0];
   
   SdefObjectType srcType = [[object parent] objectType];  
-  if (srcType != [item objectType]) {
-    return NSDragOperationNone;
-  }
   
-  if (srcType == kSdefCollectionType && [item contentType] != [[object parent] contentType]) {
-    return NSDragOperationNone;
+  if ([object objectType] == kSdefPropertyType) {
+    /* refuse if not record and not a collection that accept it */
+    if ([item objectType] != kSdefRecordType && 
+        ([item objectType] != kSdefCollectionType || ![item acceptsObjectType:kSdefPropertyType]))
+      return NSDragOperationNone;
+  } else {    
+    if (srcType != [item objectType]) {
+      return NSDragOperationNone;
+    }
+    if (srcType == kSdefCollectionType && ![item acceptsObjectType:[object objectType]]) {
+      return NSDragOperationNone;
+    }
   }
 
   return ([object findRoot] != [self dictionary]) ? NSDragOperationCopy : NSDragOperationMove;
 }
 
-- (BOOL)outlineView:(NSOutlineView *)outlineView acceptDrop:(id <NSDraggingInfo>)info item:(id)item childIndex:(int)index {
+- (BOOL)outlineView:(NSOutlineView *)outlineView acceptDrop:(id <NSDraggingInfo>)info item:(SdefObject *)item childIndex:(int)index {
   NSPasteboard *pboard = [info draggingPasteboard];
   if (![[pboard types] containsObject:SdefObjectDragType]) {
     return NO;
@@ -360,9 +406,11 @@ SdefDictionary *SdefLoadDictionary(NSString *filename) {
 SdefDictionary *SdefLoadDictionaryData(NSData *data) {
   SdefDictionary *result = nil;
   if (data) {
-    id parser = [[SdefParser alloc] init];
+    SdefXMLParser *parser = [[SdefXMLParser alloc] init];
     if ([parser parseData:data]) {
       result = [[parser document] retain];
+    } else {
+      NSRunAlertPanel(@"An error occured when loading file!", [parser error], @"OK", nil, nil);
     }
     [parser release];
   }

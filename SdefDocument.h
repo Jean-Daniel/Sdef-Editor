@@ -19,7 +19,6 @@ extern SdefDictionary *SdefLoadDictionaryData(NSData *data);
 @interface SdefDocument : NSDocument {
 @private
   SdefDictionary *sd_dictionary;
-//  SdefImports *sd_imports;
 }
 
 - (SdefObject *)selection;

@@ -8,9 +8,10 @@
 
 #import "SdefEditor.h"
 #import "SKFunctions.h"
-#import "SKExtensions.h"
 #import "ShadowMacros.h"
 #import "SKApplication.h"
+
+#include <Carbon/Carbon.h>
 
 #import "SdefSuite.h"
 #import "Preferences.h"
@@ -18,6 +19,7 @@
 #import "AeteImporter.h"
 #import "SdefDictionary.h"
 #import "ImporterWarning.h"
+#import "OSASdefImporter.h"
 #import "CocoaSuiteImporter.h"
 #import "SdefObjectInspector.h"
 #import "SdefWindowController.h"
@@ -73,7 +75,7 @@ const OSType kCocoaSuiteDefinitionHFSType = 'ScSu';
       //    @"1", @"NSScriptingDebugLogLevel",
       nil]];
 #endif
-  }
+  } 
   return self;
 }
 
@@ -81,6 +83,11 @@ const OSType kCocoaSuiteDefinitionHFSType = 'ScSu';
 #if defined (DEBUG)
   [self createDebugMenu];
 #endif
+  // If Panther, remove open application sdef menu
+  if (!OSACopyScriptingDefinition) {
+    NSMenu *file = [[[NSApp mainMenu] itemWithTag:1] submenu];
+    [file removeItem:[file itemWithTag:1]];
+  }
 }
 
 - (IBAction)openInspector:(id)sender {
@@ -123,21 +130,46 @@ const OSType kCocoaSuiteDefinitionHFSType = 'ScSu';
 
 #pragma mark -
 #pragma mark Importation
+- (IBAction)openApplicationTerminology:(id)sender {
+  if (!OSACopyScriptingDefinition) {
+    NSBeep();
+    return;
+  }
+  
+  ImportApplicationAete *panel = [[ImportApplicationAete alloc] init];
+  [panel showWindow:sender];
+  [NSApp runModalForWindow:[panel window]];
+  SKApplication *appli = [panel selection];
+  NSString *path = [appli path];
+  
+  SdefImporter *importer = [[OSASdefImporter alloc] initWithFile:path];
+  [self importWithImporter:importer];
+  [importer release];
+  
+  [panel release];
+}
+
 - (void)importWithImporter:(SdefImporter *)importer {
   @try {
-    id suites = [importer sdefSuites];
-    if ([suites count]) {
+    NSArray *suites = [importer sdefSuites];
+    SdefDictionary *dico = [importer sdefDictionary];
+    if ([dico hasChildren] || [suites count]) {
       SdefDocument *doc = [[NSDocumentController sharedDocumentController] openUntitledDocumentOfType:ScriptingDefinitionFileType display:NO];
-      [[doc dictionary] removeAllChildren];
       
-      suites = [suites objectEnumerator];
-      SdefSuite *suite;
-      while (suite = [suites nextObject]) {
-        [[doc dictionary] appendChild:suite];
+      if (dico) {
+        [doc setDictionary:dico];
+      } else if ([suites count]) {
+        [[doc dictionary] removeAllChildren];
+        
+        SdefSuite *suite;
+        NSEnumerator *items = [suites objectEnumerator];
+        while (suite = [items nextObject]) {
+          [[doc dictionary] appendChild:suite];
+        }
+        [[doc undoManager] removeAllActions];
+        [doc updateChangeCount:NSChangeCleared];
       }
-
-      [[doc undoManager] removeAllActions];
-      [doc updateChangeCount:NSChangeCleared];
+      
       [doc showWindows];
       
       if ([importer warnings]) {

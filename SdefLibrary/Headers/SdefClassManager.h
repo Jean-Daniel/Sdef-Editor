@@ -9,7 +9,8 @@
 #import <Foundation/Foundation.h>
 #import "SKTreeNode.h"
 
-@class SdefSuite, SdefObject, SdefEnumeration, SdefClass, SdefVerb, SdefDocument, SdefDictionary;
+@class SdefValue, SdefRecord, SdefEnumeration;
+@class SdefSuite, SdefObject, SdefClass, SdefVerb, SdefDocument, SdefDictionary;
 @interface SdefClassManager : NSObject {
 @private
   SdefDocument *sd_document;
@@ -49,6 +50,8 @@
 - (SdefClass *)classWithName:(NSString *)name;
 - (SdefVerb *)eventWithName:(NSString *)name;
 - (SdefVerb *)commandWithName:(NSString *)name;
+- (SdefValue *)valueWithName:(NSString *)name;
+- (SdefRecord *)recordWithName:(NSString *)name;
 - (SdefEnumeration *)enumerationWithName:(NSString *)name;
 
 - (NSArray *)subclassesOfClass:(SdefClass *)aClass;

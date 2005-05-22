@@ -186,14 +186,26 @@
   return nil;
 }
 
-- (SdefEnumeration *)enumerationWithName:(NSString *)name {
+- (id)typeWithName:(NSString *)name class:(Class)class {
   id types = [sd_types objectEnumerator];
   id enumeration;
   while (enumeration = [types nextObject]) {
-    if ([enumeration isMemberOfClass:[SdefEnumeration class]] && [[enumeration name] isEqualToString:name])
+    if ([enumeration isMemberOfClass:class] && [[enumeration name] isEqualToString:name])
       return enumeration;
   }
   return nil;
+}
+
+- (SdefValue *)valueWithName:(NSString *)name {
+  return [self typeWithName:name class:[SdefValue class]];
+}
+
+- (SdefRecord *)recordWithName:(NSString *)name {
+  return [self typeWithName:name class:[SdefRecord class]];
+}
+
+- (SdefEnumeration *)enumerationWithName:(NSString *)name {
+  return [self typeWithName:name class:[SdefEnumeration class]];
 }
 
 - (SdefVerb *)commandWithName:(NSString *)name {
@@ -319,18 +331,19 @@
   isEqual = (EqualIMP)[cocoaType methodForSelector:cmd];
   
   if (isEqual(cocoaType, cmd, @"NSNumber<Bool>")) 			return @"boolean";
-  if (isEqual(cocoaType, cmd, @"NSString"))  				return @"string";
+  if (isEqual(cocoaType, cmd, @"NSString"))  				return @"text";
   if (isEqual(cocoaType, cmd, @"NSNumber<Int>")) 			return @"integer";
   if (isEqual(cocoaType, cmd, @"NSNumber")) 				return @"number";
   if (isEqual(cocoaType, cmd, @"NSObject")) 				return @"any";
   if (isEqual(cocoaType, cmd, @"NSString<FilePath>"))  		return @"file";
+  if (isEqual(cocoaType, cmd, @"NSNumber<Float>")) 			return @"real";
   if (isEqual(cocoaType, cmd, @"NSNumber<Double>")) 		return @"real";
   if (isEqual(cocoaType, cmd, @"NSDate"))					return @"date";
   if (isEqual(cocoaType, cmd, @"NSNumber<TypeCode>"))		return @"type";
   if (isEqual(cocoaType, cmd, @"NSDictionary"))				return @"record";
-  if (isEqual(cocoaType, cmd, @"NSScriptObjectSpecifier")) 	return @"object";
+  if (isEqual(cocoaType, cmd, @"NSScriptObjectSpecifier")) 	return @"specifier";
   if (isEqual(cocoaType, cmd, @"NSData<QDPoint>"))			return @"point";
-  if (isEqual(cocoaType, cmd, @"NSPositionalSpecifier")) 	return @"location";
+  if (isEqual(cocoaType, cmd, @"NSPositionalSpecifier")) 	return @"location specifier";
   if (isEqual(cocoaType, cmd, @"NSData<QDRect>"))			return @"rectangle";
   if (isEqual(cocoaType, cmd, @"NSArray"))					return @"list of any";
   
@@ -391,7 +404,7 @@
     case typeUTF8Text:
     case typeCString:
     case typeText:
-      return @"string";
+      return @"text";
     case 'nmbr':
       return @"number";
     case typeSInt16:
@@ -417,12 +430,12 @@
     case typeEventRecord:
       return @"record";
     case typeObjectSpecifier:
-      return @"object";
+      return @"specifier";
     case typeQDPoint:
     case typeFixedPoint:
       return @"point";
     case typeInsertionLoc:
-      return @"location";
+      return @"location specifier";
     case typeQDRectangle:
       return @"rectangle";
     case typeLongDateTime:
@@ -435,8 +448,8 @@
   id verbs = [[[self events] arrayByAddingObjectsFromArray:[self commands]] objectEnumerator];
   SdefVerb *verb;
   while (verb = [verbs nextObject]) {
-    if ([aCode isEqualToString:[verb codeStr]]) {
-      if (!suiteCode || [suiteCode isEqualToString:[[verb suite] codeStr]]) {
+    if ([aCode isEqualToString:[verb code]]) {
+      if (!suiteCode || [suiteCode isEqualToString:[[verb suite] code]]) {
         return verb;
       }
     }
@@ -448,8 +461,8 @@
   id classes = [[self classes] objectEnumerator];
   SdefClass *class;
   while (class = [classes nextObject]) {
-    if ([aCode isEqualToString:[class codeStr]]) {
-      if (!suiteCode || [suiteCode isEqualToString:[[class suite] codeStr]]) {
+    if ([aCode isEqualToString:[class code]]) {
+      if (!suiteCode || [suiteCode isEqualToString:[[class suite] code]]) {
         return class;
       }
     }
@@ -461,8 +474,8 @@
   id enums = [sd_types objectEnumerator];
   SdefEnumeration *enume;
   while (enume = [enums nextObject]) {
-    if ([aCode isEqualToString:[enume codeStr]]) {
-      if (!suiteCode || [suiteCode isEqualToString:[[enume suite] codeStr]]) {
+    if ([aCode isEqualToString:[enume code]]) {
+      if (!suiteCode || [suiteCode isEqualToString:[[enume suite] code]]) {
         return enume;
       }
     }
