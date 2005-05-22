@@ -13,10 +13,10 @@
 #import "SdefEditor.h"
 
 static NSString *SystemMajorVersion() {
-  SInt32 macVersion;
-  if (Gestalt(gestaltSystemVersion, &macVersion) == noErr) {
-    return [NSString stringWithFormat:@"%x.%x", (macVersion >> 8) & 0xff, (macVersion >> 4) & 0xf];
-  }
+//  SInt32 macVersion;
+//  if (Gestalt(gestaltSystemVersion, &macVersion) == noErr) {
+//    return [NSString stringWithFormat:@"%x.%x", (macVersion >> 8) & 0xff, (macVersion >> 4) & 0xf];
+//  }
   return @"10.3";
 }
 
@@ -219,7 +219,7 @@ static NSString *SystemMajorVersion() {
   id rezTool = nil;
   // The path to the binary is the first argument that was passed in
   if ([[NSUserDefaults standardUserDefaults] boolForKey:@"SdefBuildInRez"])
-    rezTool = [[NSBundle mainBundle] pathForResource:@"sdp" ofType:@""];
+    rezTool = [[NSBundle mainBundle] pathForResource:@"Rez" ofType:@""];
   else {
     rezTool = [[NSUserDefaults standardUserDefaults] stringForKey:@"SdefRezToolPath"];
   }

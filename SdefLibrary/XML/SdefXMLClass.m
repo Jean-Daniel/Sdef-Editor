@@ -215,7 +215,7 @@ unsigned SdefXMLAccessorFlagFromString(NSString *str) {
 
 #pragma mark XML Generation
 - (SdefXMLNode *)xmlNodeForVersion:(SdefVersion)version {
-  id node;
+  id node = nil;
   if ([self name] && (node = [super xmlNodeForVersion:version])) {
     [node setAttribute:[self name] forKey:@"name"];
   }

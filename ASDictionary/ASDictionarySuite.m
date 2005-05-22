@@ -16,7 +16,7 @@
 @implementation SdefSuite (ASDictionary)
 
 - (NSDictionary *)asdictionary {
-  if (SKHFSTypeCodeFromFileType([self codeStr]) == kASTypeNamesSuite) /* Hidden terms */
+  if (SKHFSTypeCodeFromFileType([self code]) == kASTypeNamesSuite) /* Hidden terms */
     return nil;
   
   id dict = [NSMutableDictionary dictionary];

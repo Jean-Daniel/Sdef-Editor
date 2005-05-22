@@ -1,51 +1,45 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE dictionary SYSTEM "file://localhost/System/Library/DTDs/sdef.dtd">
 
-<!--
-	This is AppKit's NSTextSuite terminology recast as an sdef.
--->
-
 <dictionary title="Text Terminology">
 	<suite name="Text Suite" code="????" description="A set of basic classes for text processing.">
-		<cocoa name="NSTextSuite"/>
 		<classes>
 			<class name="text" plural="text" code="ctxt" description="Rich (styled) text">
 				<cocoa class="NSTextStorage"/>
 				<elements>
 					<element type="paragraph">
-						<cocoa method="paragraphs"/>
+						<cocoa key="paragraphs"/>
 					</element>
 					<element type="word">
-						<cocoa method="words"/>
+						<cocoa key="words"/>
 					</element>
 					<element type="character">
-						<cocoa method="characters"/>
+						<cocoa key="characters"/>
 					</element>
 					<element type="attribute run">
-						<cocoa method="attributeRuns"/>
+						<cocoa key="attributeRuns"/>
 					</element>
 					<element type="attachment">
-						<cocoa method="attachments"/>
+						<cocoa key="attachments"/>
 					</element>
 				</elements>
 				<properties>
 					<property name="color" code="colr" type="color" description="The color of the first character.">
-						<cocoa method="foregroundColor"/>
+						<cocoa key="foregroundColor"/>
 					</property>
 					<property name="font" code="font" type="string" description="The name of the font of the first character.">
-						<cocoa method="fontName"/>
+						<cocoa key="fontName"/>
 					</property>
-					<property name="size" code="ptsz" type="number" description="The size in points of the first character.">
-						<cocoa method="fontSize"/>
+					<property name="size" code="ptsz" type="real" description="The size in points of the first character.">
+						<cocoa key="fontSize"/>
 					</property>
 				</properties>
 			</class>
-			<class name="attachment" code="atts" inherits="text" description="Represents an inline text attachment.  This class is used mainly for make commands.">
+			<class name="attachment" code="atts" inherits="text" description="Represents an inline text attachment.">
 				<cocoa class="NSAttachmentTextStorage"/>
 				<properties>
-					<property name="file name" code="atfn" type="string" description="The path to the file for the attachment">
-						<!-- This property should be deprecated like all the other path-centric properties, and replaced with a type="file" property. -->
-						<cocoa method="filename"/>
+					<property name="file" code="file" type="file" description="The attached file.">
+						<cocoa key="url"/>
 					</property>
 				</properties>
 			</class>

@@ -121,7 +121,7 @@ static NSArray *ASKStandardsSuites() {
     if ([suite isEqualToString:@"NSCoreSuite"] || [suite isEqualToString:@"NSTextSuite"]) {
       suitePath = [[NSBundle mainBundle] pathForResource:suite ofType:@"sdef"];
     } else if ([ASKStandardsSuites() containsObject:suite]) {
-      suitePath = [[NSBundle mainBundle] pathForResource:@"ASKDictionary" ofType:@"sdef"];
+      suitePath = [[NSBundle mainBundle] pathForResource:@"AppleScriptKit" ofType:@"sdef"];
     } else {
       NSOpenPanel *openPanel = nil;
       NSString *title = [[NSString alloc] initWithFormat:@"Where is the Suite \"%@\"?", suite];

@@ -56,13 +56,18 @@ const OSType kCocoaSuiteDefinitionHFSType = 'ScSu';
 
 - (id)init {
   if (self = [super init]) {
+    SInt32 SystemVersion;
+    NSString *sdp = @"/usr/bin/sdp";
+    if (Gestalt(gestaltSystemVersion, &SystemVersion) == noErr && SystemVersion < 0x1040) {
+      sdp = @"/Developer/Tools/sdp";
+    }
     [[SdefDocumentController alloc] init];
     [[NSUserDefaults standardUserDefaults] registerDefaults:[NSDictionary dictionaryWithObjectsAndKeys:
       SKBool(YES), @"SdefOpenAtStartup",
       SKBool(YES), @"SdefBuildInSdp",
       SKBool(YES), @"SdefBuildInRez",
       SKBool(YES), @"SdefAutoSelectItem",
-      @"/Developer/Tools/sdp", @"SdefSdpToolPath",
+      sdp, @"SdefSdpToolPath",
       @"/Developer/Tools/Rez", @"SdefRezToolPath",
       nil]];
     [NSApp setDelegate:self];
@@ -116,7 +121,7 @@ const OSType kCocoaSuiteDefinitionHFSType = 'ScSu';
       suite = @"NSTextSuite";
       break;
     case 3:
-      suite = @"ASKDictionary";
+      suite = @"AppleScriptKit";
       break;        
   }
   NSString *suitePath = [[NSBundle mainBundle] pathForResource:suite ofType:@"sdef"];
@@ -136,16 +141,17 @@ const OSType kCocoaSuiteDefinitionHFSType = 'ScSu';
     return;
   }
   
-  ImportApplicationAete *panel = [[ImportApplicationAete alloc] init];
+  ImportApplicationAete *panel = [[ImportApplicationAete alloc] initWithWindowNibName:@"ImportApplicationSdef"];
   [panel showWindow:sender];
   [NSApp runModalForWindow:[panel window]];
   SKApplication *appli = [panel selection];
-  NSString *path = [appli path];
-  
-  SdefImporter *importer = [[OSASdefImporter alloc] initWithFile:path];
-  [self importWithImporter:importer];
-  [importer release];
-  
+  if (appli) {
+    NSString *path = [appli path];
+    
+    SdefImporter *importer = [[OSASdefImporter alloc] initWithFile:path];
+    [self importWithImporter:importer];
+    [importer release];
+  }
   [panel release];
 }
 
