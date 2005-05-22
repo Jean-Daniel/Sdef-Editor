@@ -148,7 +148,7 @@ static NSArray *ASKStandardsSuites() {
       [title release];
     }
     if (suitePath) {
-      SdefDictionary *dico = SdefLoadDictionary(suitePath);
+      SdefDictionary *dico = SdefLoadDictionary(suitePath, nil);
       if (dico) {
         unsigned idx;
         for (idx=0; idx<[dico childCount]; idx++) {
@@ -184,21 +184,21 @@ static NSArray *ASKStandardsSuites() {
   }
 }
 
-#pragma mark -
+
 - (void)postProcessClass:(SdefClass *)aClass {
-  id suite = nil;
-  id superclass = [aClass inherits];
-  if (superclass) {
-    superclass = DecomposeCocoaName(superclass, &suite);
+  NSString *suite = nil;
+  NSString *inherits = [aClass inherits];
+  if (inherits != nil) {
+    inherits = DecomposeCocoaName(inherits, &suite);
     if (suite)
       [self loadSuite:suite];
-    SdefClass *parent = [manager sdefClassWithCocoaClass:superclass inSuite:suite];
+    SdefClass *parent = [manager sdefClassWithCocoaClass:inherits inSuite:suite];
     if (parent) {
       [aClass setInherits:[parent name]];
     } else {
       [self addWarning:[NSString stringWithFormat:@"Unable to resolve super class name: %@", [aClass inherits]]
               forValue:[aClass name]];
-    }
+	}
   }
   [super postProcessClass:aClass];
 }

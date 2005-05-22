@@ -54,7 +54,7 @@
   if (sd_path && [sd_path getFSRef:&file]) {
     CFDataRef sdef = nil;
     if (noErr == OSACopyScriptingDefinition(&file, 0, &sdef) && sdef) {
-      sd_dico = [SdefLoadDictionaryData((id)sdef) retain];
+      sd_dico = [SdefLoadDictionaryData((id)sdef, nil) retain];
       CFRelease(sdef);
     }
   }

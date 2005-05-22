@@ -222,8 +222,8 @@ const OSType kCocoaSuiteDefinitionHFSType = 'ScSu';
 
 - (IBAction)importCocoaTerminology:(id)sender {
   NSOpenPanel *openPanel = [NSOpenPanel openPanel];
-  [openPanel setPrompt:NSLocalizedString(@"Import", @"Import a Cocoa Terminology.")];
-  [openPanel setMessage:NSLocalizedString(@"Choose a Cocoa .scriptSuite File", @"Choose Cocoa File Import Message.")];
+  [openPanel setPrompt:@"Import"];
+  [openPanel setMessage:@"Choose a Cocoa .scriptSuite File"];
   [openPanel setCanChooseFiles:YES];
   [openPanel setCanCreateDirectories:NO];
   [openPanel setCanChooseDirectories:NO];
@@ -241,8 +241,8 @@ const OSType kCocoaSuiteDefinitionHFSType = 'ScSu';
 
 - (IBAction)importAete:(id)sender {
   NSOpenPanel *openPanel = [NSOpenPanel openPanel];
-  [openPanel setPrompt:NSLocalizedString(@"Import", @"Import default button.")];
-  [openPanel setMessage:NSLocalizedString(@"Choose an aete Rsrc File", @"Choose aete File Import Message.")];
+  [openPanel setPrompt:@"Import"];
+  [openPanel setMessage:@"Choose an aete Rsrc File"];
   [openPanel setCanChooseFiles:YES];
   [openPanel setCanCreateDirectories:NO];
   [openPanel setCanChooseDirectories:NO];
@@ -294,6 +294,7 @@ const OSType kCocoaSuiteDefinitionHFSType = 'ScSu';
 #pragma mark Application Delegate
 - (BOOL)application:(NSApplication *)theApplication openFile:(NSString *)filename {
   id type = [[NSDocumentController sharedDocumentController] typeFromFileExtension:[filename pathExtension]];
+  /* If sdef, let document manager handle it */
   if ([type isEqualToString:ScriptingDefinitionFileType]) return NO;
   else if ([type isEqualToString:CocoaSuiteDefinitionFileType]) {
     [self importCocoaScriptFile:filename];

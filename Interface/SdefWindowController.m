@@ -38,8 +38,6 @@ static inline BOOL SdefEditorExistsForItem(SdefObject *item) {
       /* Enumeration */
     case kSdefRecordType:
     case kSdefEnumerationType:  
-      /* Misc */
-    case kSdefSynonymType:
       return YES;
     default:
       return NO;

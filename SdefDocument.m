@@ -195,7 +195,14 @@ NSString * const SdefObjectDragType = @"SdefObjectDragType";
 
 - (BOOL)loadDataRepresentation:(NSData *)data ofType:(NSString *)type {
   if ([type isEqualToString:ScriptingDefinitionFileType]) {
-    [self setDictionary:SdefLoadDictionaryData(data)];
+    int version;
+    [self setDictionary:SdefLoadDictionaryData(data, &version)];
+    if (version == kSdefPantherVersion) {
+      NSRunInformationalAlertPanel(@"You have opened a Panther Scripting Definition file",
+                                   @"This file will be saved using Tiger format. If you want to save it using the Panther format, choose \"Export Using old Format\" in the File menu",
+                                   @"OK", nil, nil);
+      [self updateChangeCount:NSChangeDone];
+    }
   }
   return [self dictionary] != nil;
 }
@@ -396,19 +403,26 @@ NSString * const SdefObjectDragType = @"SdefObjectDragType";
 
 @end
 #pragma mark -
-SdefDictionary *SdefLoadDictionary(NSString *filename) {
+SdefDictionary *SdefLoadDictionary(NSString *filename, int *version) {
   NSData *data = [[NSData alloc] initWithContentsOfFile:filename];
-  SdefDictionary *dictionary = SdefLoadDictionaryData(data);
+  SdefDictionary *dictionary = SdefLoadDictionaryData(data, version);
   [data release];
   return dictionary;
 }
 
-SdefDictionary *SdefLoadDictionaryData(NSData *data) {
+SdefDictionary *SdefLoadDictionaryData(NSData *data, int *version) {
   SdefDictionary *result = nil;
   if (data) {
     SdefXMLParser *parser = [[SdefXMLParser alloc] init];
     if ([parser parseData:data]) {
       result = [[parser document] retain];
+      if (version) {
+        if ([parser parserVersion] == kSdefParserPantherVersion) {
+          *version = kSdefPantherVersion;
+        } else {
+          *version = kSdefTigerVersion;
+        }
+      }
     } else {
       NSRunAlertPanel(@"An error occured when loading file!", [parser error], @"OK", nil, nil);
     }

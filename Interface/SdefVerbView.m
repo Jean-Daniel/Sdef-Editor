@@ -22,7 +22,7 @@
 - (NSString *)verbLabel {
   if (![self object])
     return @"Verb";
-  return [[self object] isCommand] ? @"Command" : @"Event";
+  return [[self object] isCommand] ? NSLocalizedString(@"Command", @"Verb Tab Label") : NSLocalizedString(@"Event", @"Verb Tab Label");
 }
 
 - (void)selectObject:(SdefObject*)anObject {
