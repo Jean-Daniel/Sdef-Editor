@@ -1,0 +1,24 @@
+
+h1 { font-family: "Times", Serif; text-align: center; font-size: 24pt; }
+
+* { font-size: 12px; font-family: "Times", Serif; }
+.suite_name { font-size: 18px; font-weight: bold}
+.suite_description { font-size: 18px; font-style: italic; font-weight: bold}
+
+.class_block, .command_block { margin-top: 12px; }
+.class_title , .command_title,
+.class_title *, .command_title * { text-decoration: underline; font-size: 14px; }
+
+dd { margin-bottom: 1em; }
+.class_block dd { margin-left: 0px; }
+.command_block dd { margin-left: 2em; }
+
+.subclasses, .elements, .properties, .parameters {list-style: none; margin: 0px; padding-left: 2em; }
+
+.app_word { font-family: "Verdana", sans; color: green; font-weight: bold; font-size: 12px; }
+.lang_word {font-family: "Verdana", sans; color: green; font-size: 12px; }
+.description {font-family: "Verdana", sans; color: #555555; font-style: italic; font-size: 12px; }
+
+.links, .toc_link { font-family: "Verdana", sans; color: green; }
+
+.result { }
