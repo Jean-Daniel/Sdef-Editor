@@ -14,6 +14,7 @@
   IBOutlet id classTable;
   IBOutlet id commandTable;
   IBOutlet id eventTable;
+  IBOutlet NSArrayController *types;
 @private
   NSMenu *sd_typeMenu;
 }

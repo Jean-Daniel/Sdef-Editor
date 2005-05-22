@@ -24,6 +24,7 @@
 - (NSView *)sdefView;
 
 - (id)object;
+- (id)editedObject:(id)sender;
 - (void)setObject:(SdefObject *)newObject;
 
 - (void)selectObject:(SdefObject*)object;
@@ -35,16 +36,23 @@
 
 @end
 
+@interface SdefTypeButton : NSButton {
+  IBOutlet NSTextField *typeField; 
+}
+- (NSView *)typeField;
+@end
+
+@interface SdefTypeColorTransformer : NSValueTransformer {
+}
++ (id)transformer;
+@end
+
 @interface SdefAccessTransformer : NSValueTransformer {
 }
-
 + (id)transformer;
-
 @end
 
 @interface SdefObjectNameTransformer : NSValueTransformer {
 }
-
 + (id)transformer;
-
 @end

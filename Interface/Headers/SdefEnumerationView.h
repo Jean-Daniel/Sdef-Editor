@@ -14,3 +14,10 @@
 }
 
 @end
+
+@interface SdefRecordView : SdefViewController {
+  IBOutlet id tab;
+  IBOutlet NSArrayController *properties;
+}
+
+@end

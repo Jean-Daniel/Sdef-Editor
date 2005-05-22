@@ -149,7 +149,7 @@ BOOL SdefSearchFilter(NSString *search, SdefObject *object, void *ctxt) {
   switch (field) {
     case kSdefSearchAll:
       return NSStringContains([object name], search) ||
-      NSStringContains([(id)object codeStr], search) ||
+      NSStringContains([(SdefTerminologyObject *)object code], search) ||
       NSStringContains([object objectTypeName], search) ||
       NSStringContains([object location], search);
     case kSdefSearchSymbol:
@@ -159,7 +159,7 @@ BOOL SdefSearchFilter(NSString *search, SdefObject *object, void *ctxt) {
       str = [object objectTypeName];
       break;
     case kSdefSearchCode:
-      str = [(id)object codeStr];
+      str = [(SdefTerminologyObject *)object code];
       break;
     case kSdefSearchSuite:
       str = [object location];
@@ -205,8 +205,12 @@ BOOL SdefSearchFilter(NSString *search, SdefObject *object, void *ctxt) {
   id items = [[aSuite types] childEnumerator];
   SdefObject *item;
   while (item = [items nextObject]) {
-//    [symbols addObject:item];
-    [symbols addObjects:[item children]];
+    if (kSdefValueType == [item objectType] ||
+        kSdefRecordType == [item objectType]) {
+      [symbols addObject:item];
+    } else {
+      [symbols addObjects:[item children]];
+    }
   }
   /* Classes/Property */
   items = [[aSuite classes] childEnumerator];
@@ -236,8 +240,12 @@ BOOL SdefSearchFilter(NSString *search, SdefObject *object, void *ctxt) {
   id items = [[aSuite types] childEnumerator];
   SdefObject *item;
   while (item = [items nextObject]) {
-//    [symbols removeObject:item];
-    [symbols removeObjects:[item children]];
+    if (kSdefValueType == [item objectType] ||
+        kSdefRecordType == [item objectType]) {
+      [symbols removeObject:item];
+    } else {
+      [symbols removeObjects:[item children]];
+    }
   }
   /* Classes/Property */
   items = [[aSuite classes] childEnumerator];

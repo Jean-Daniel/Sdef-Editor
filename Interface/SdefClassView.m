@@ -6,6 +6,8 @@
 //  Copyright 2005 Shadow Lab. All rights reserved.
 //
 
+#import "SdefWindowController.h"
+#import "SKAppKitExtensions.h"
 #import "SdefClassView.h"
 #import "SdefClassManager.h"
 #import "SdefContents.h"
@@ -63,9 +65,21 @@
   if (idx >= 0)
     [tab selectTabViewItemAtIndex:idx];
   if (controller) {
-    [controller setSelectedObjects:[NSArray arrayWithObject:anObject]];
+    [controller setSelectedObject:anObject];
   }
 }
 
+- (id)editedObject:(id)sender {
+  SdefClass *class = [self object];
+  switch ([tab indexOfSelectedTabViewItem]) {
+    case 1:
+      return [class contents];
+    case 2:
+      return [properties selectedObject];
+    case 3:
+      return [elements selectedObject];
+  }
+  return nil;
+}
 
 @end

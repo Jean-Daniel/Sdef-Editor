@@ -36,6 +36,7 @@ static inline BOOL SdefEditorExistsForItem(SdefObject *item) {
       /* Verbs */
     case kSdefVerbType:
       /* Enumeration */
+    case kSdefRecordType:
     case kSdefEnumerationType:  
       /* Misc */
     case kSdefSynonymType:
@@ -132,6 +133,18 @@ static inline BOOL SdefEditorExistsForItem(SdefObject *item) {
   [self setSelection:anObject display:YES];
 }
 
+- (SdefViewController *)currentController {
+  SdefObject *selection = [outline itemAtRow:[outline selectedRow]];
+  SdefObject *item = selection;
+  while (item && !SdefEditorExistsForItem(item)) {
+    item = [item parent];
+  }
+  if (item && ([item objectType] != kSdefUndefinedType)) {
+    return [sd_viewControllers objectForKey:SKFileTypeForHFSTypeCode([item objectType])];
+  }
+  return nil;
+}
+
 - (void)didChangeNodeName:(NSNotification *)aNotification {
   id item = [aNotification object];
   if (IsObjectOwner(item)) {
@@ -143,7 +156,6 @@ static inline BOOL SdefEditorExistsForItem(SdefObject *item) {
 }
 
 #pragma mark -
-
 - (void)didSortChildren:(NSNotification *)aNotification {
   id item = [aNotification object];
   if (IsObjectOwner(item) && [outline isItemExpanded:item]) {
@@ -197,6 +209,21 @@ static inline BOOL SdefEditorExistsForItem(SdefObject *item) {
   [[sd_viewControllers allValues] makeObjectsPerformSelector:@selector(documentWillClose:) withObject:[self document]];
 }
 
+- (NSRect)window:(NSWindow *)window willPositionSheet:(NSWindow *)sheet usingRect:(NSRect)rect {
+  id ctrl = [sheet windowController];
+  if (ctrl && [ctrl respondsToSelector:@selector(field)]) {
+    NSView *type = [ctrl performSelector:@selector(field)];
+    if ([type superview]) {
+      NSRect typeRect = [[type superview] convertRect:[type frame] toView:nil];
+      rect.origin.x = NSMinX(typeRect);
+      rect.origin.y = NSMaxY(typeRect) - 2;
+      rect.size.width = NSWidth(typeRect);
+      rect.size.height = 0;
+    }
+  }
+  return rect;
+}
+
 - (NSString *)windowTitleForDocumentDisplayName:(NSString *)displayName {
   return [NSString stringWithFormat:@"%@ : %@", displayName, [[(SdefDocument *)[self document] dictionary] name]];
 }
@@ -226,7 +253,7 @@ static inline BOOL SdefEditorExistsForItem(SdefObject *item) {
   while (item && !SdefEditorExistsForItem(item)) {
     item = [item parent];
   }
-  if ([item objectType] != kSdefUndefinedType) {
+  if (item && ([item objectType] != kSdefUndefinedType)) {
     id str = SKFileTypeForHFSTypeCode([item objectType]);
     unsigned idx = [inspector indexOfTabViewItemWithIdentifier:str];
     NSAssert1(idx != NSNotFound, @"Unable to find tab item for identifier \"%@\"", str);
@@ -249,9 +276,9 @@ static inline BOOL SdefEditorExistsForItem(SdefObject *item) {
  }
  */
 - (void)deleteSelectionInOutlineView:(NSOutlineView *)outlineView {
-  id item = [outlineView itemAtRow:[outlineView selectedRow]];
+  SdefObject *item = [outlineView itemAtRow:[outlineView selectedRow]];
   if (item != [(SdefDocument *)[self document] dictionary] && [item isEditable] && [item isRemovable]) {
-    id parent = [item parent];
+    SdefObject *parent = [item parent];
     unsigned idx = [parent indexOfChild:item];
     [item remove];
     [self setSelection:((idx > 0) ? [parent childAtIndex:idx-1] : parent) display:NO];
@@ -271,10 +298,6 @@ static inline BOOL SdefEditorExistsForItem(SdefObject *item) {
         class = @"SdefDictionaryView";
         nibName = @"SdefDictionary";
         break;
-//      case kSdefImportsType:
-//        class = @"SdefImportsView";
-//        nibName = @"SdefImports";
-//        break;
       case kSdefClassType:
         class = @"SdefClassView";
         nibName = @"SdefClass";
@@ -282,6 +305,10 @@ static inline BOOL SdefEditorExistsForItem(SdefObject *item) {
       case kSdefSuiteType:
         class = @"SdefSuiteView";
         nibName = @"SdefSuite";
+        break;
+      case kSdefRecordType:
+        class = @"SdefRecordView";
+        nibName = @"SdefRecord";
         break;
       case kSdefEnumerationType:
         class = @"SdefEnumerationView";
@@ -333,7 +360,7 @@ static inline BOOL SdefEditorExistsForItem(SdefObject *item) {
 }
 
 - (IBAction)copy:(id)sender {
-  id selection = [self selection];
+  SdefObject *selection = [self selection];
   NSPasteboard *pboard = [NSPasteboard generalPasteboard];
   switch ([selection objectType]) {
     case kSdefUndefinedType:
@@ -343,7 +370,7 @@ static inline BOOL SdefEditorExistsForItem(SdefObject *item) {
     default:
       [pboard declareTypes:[NSArray arrayWithObjects:SdefTreePboardType, SdefInfoPboardType, NSStringPboardType, nil] owner:nil];
       if ([selection objectType] == kSdefRespondsToType || 
-          ([selection objectType] == kSdefCollectionType && [selection acceptsObjectType:kSdefRespondsToType])) {
+          ([selection objectType] == kSdefCollectionType && [(SdefCollection *)selection acceptsObjectType:kSdefRespondsToType])) {
         id str = nil;
         SdefClass *class = [selection firstParentOfType:kSdefClassType];
         if ([selection parent] == [class commands] || selection == [class commands]) {
@@ -353,7 +380,7 @@ static inline BOOL SdefEditorExistsForItem(SdefObject *item) {
         }
         [pboard setString:str forType:SdefInfoPboardType];
       } else if ([selection objectType] == kSdefVerbType || 
-                 ([selection objectType] == kSdefCollectionType && [selection acceptsObjectType:kSdefVerbType])) {
+                 ([selection objectType] == kSdefCollectionType && [(SdefCollection *)selection acceptsObjectType:kSdefVerbType])) {
         id str = nil;
         SdefSuite *suite = [selection firstParentOfType:kSdefSuiteType];
         if ([selection parent] == [suite commands] || selection == [suite commands]) {
@@ -423,6 +450,9 @@ static inline BOOL SdefEditorExistsForItem(SdefObject *item) {
       break;
     case kSdefPropertyType:
       destination = [(SdefClass *)[selection firstParentOfType:kSdefClassType] properties];
+      if (!destination) {
+        destination = [selection firstParentOfType:kSdefRecordType];
+      }
       break;
     case kSdefRespondsToType:
     {

@@ -10,6 +10,7 @@
 #import "SdefClass.h"
 #import "SdefDocument.h"
 #import "ShadowMacros.h"
+#import "SdefTypesEditor.h"
 #import "SdefClassManager.h"
 #import "SdefWindowController.h"
 
@@ -19,6 +20,7 @@
   static BOOL tooLate = NO;
   if (!tooLate) {
     tooLate = YES;
+    [NSValueTransformer setValueTransformer:[SdefTypeColorTransformer transformer] forName:@"SdefTypeColor"];
     [NSValueTransformer setValueTransformer:[SdefAccessTransformer transformer] forName:@"SdefAccessTransformer"];
     [NSValueTransformer setValueTransformer:[SdefObjectNameTransformer transformer] forName:@"SdefObjectNameTransformer"];
   }
@@ -61,7 +63,7 @@
   return sdefView;
 }
 
-- (SdefObject *)object {
+- (id)object {
   return sd_object;
 }
 
@@ -87,7 +89,26 @@
 - (void)revealInTree:(id)sender {
   int row = [sender clickedRow];
   if (row >= 0 && row < [[self object] childCount]) {
-    [self revealObjectInTree:[[self object] childAtIndex:row]];
+    [self revealObjectInTree:[(SdefObject *)[self object] childAtIndex:row]];
+  }
+}
+
+#pragma mark -
+- (id)editedObject:(id)sender {
+  return nil;
+}
+
+- (IBAction)editType:(id)sender {
+  if ([sender respondsToSelector:@selector(typeField)]) {
+    SdefTypesEditor *editor = [[SdefTypesEditor alloc] init];
+    [editor setField:[sender typeField]];
+    [editor setObject:[self editedObject:sender]];
+    [editor setReleaseWhenClose:YES];
+    [NSApp beginSheet:[editor window]
+       modalForWindow:[sender window]
+        modalDelegate:nil
+       didEndSelector:nil
+          contextInfo:nil];
   }
 }
 
@@ -119,6 +140,50 @@
 
 - (NSArray *)events {
   return [[self classManager] events];
+}
+
+@end
+
+#pragma mark -
+@implementation SdefTypeButton
+
+- (NSView *)typeField {
+  return typeField;
+}
+
+@end
+
+#pragma mark -
+#pragma mark Transformers
+@implementation SdefTypeColorTransformer
+
++ (id)transformer {
+  return [[[self alloc] init] autorelease];
+}
+
+// information that can be used to analyze available transformer instances (especially used inside Interface Builder)
+// class of the "output" objects, as returned by transformedValue:
++ (Class)transformedValueClass {
+  return [NSColor class];
+}
+
+// flag indicating whether transformation is read-only or not
++ (BOOL)allowsReverseTransformation {
+  return NO;
+}
+
+/* Returns menu idx */
+- (id)transformedValue:(id)value {
+  static NSColor *color = nil;
+  if (!color) {
+    color = [[NSColor colorWithCalibratedRed:.5 green:.5 blue:.75 alpha:1] retain];
+  }
+  return ([value respondsToSelector:@selector(hasCutomType:)] && [value hasCustomType]) ? color : [NSColor blackColor];
+}
+
+/* Returns access value */
+- (id)reverseTransformedValue:(id)value {
+  return nil;
 }
 
 @end

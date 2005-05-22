@@ -6,6 +6,7 @@
 //  Copyright 2005 Shadow Lab. All rights reserved.
 //
 
+#import "SKAppKitExtensions.h"
 #import "SdefSuiteView.h"
 #import "SdefTypedef.h"
 #import "SdefSuite.h"
@@ -94,13 +95,13 @@
     return;
   }
   id item = [[class alloc] init];
-  [[(SdefSuite *)[self object] types] appendChild:item];
+  [types addObject:item];
   [item release];
 }
 
 - (void)revealType:(id)sender {
   int row = [sender clickedRow];
-  id objs = [(SdefSuite *)[self object] types];
+  SdefObject *objs = [(SdefSuite *)[self object] types];
   if (row >= 0 && row < [objs childCount]) {
     [self revealObjectInTree:[objs childAtIndex:row]];
   }
@@ -108,7 +109,7 @@
 
 - (void)revealClass:(id)sender {
   int row = [sender clickedRow];
-  id objs = [[self object] classes];
+  SdefObject *objs = [[self object] classes];
   if (row >= 0 && row < [objs childCount]) {
     [self revealObjectInTree:[objs childAtIndex:row]];
   }
@@ -116,7 +117,7 @@
 
 - (void)revealCommand:(id)sender {
   int row = [sender clickedRow];
-  id objs = [(SdefSuite *)[self object] commands];
+  SdefObject *objs = [(SdefSuite *)[self object] commands];
   if (row >= 0 && row < [objs childCount]) {
     [self revealObjectInTree:[objs childAtIndex:row]];
   }
@@ -124,7 +125,7 @@
 
 - (void)revealEvent:(id)sender {
   int row = [sender clickedRow];
-  id objs = [[self object] events];
+  SdefObject *objs = [[self object] events];
   if (row >= 0 && row < [objs childCount]) {
     [self revealObjectInTree:[objs childAtIndex:row]];
   }
@@ -141,6 +142,11 @@
   }
   if (idx >= 0)
     [tab selectTabViewItemAtIndex:idx];
+  /* Value specific behaviour */
+  if ([anObject objectType] == kSdefValueType) {
+    [types setSelectedObject:anObject];
+    [tab selectTabViewItemAtIndex:1];
+  }
 }
 
 @end
@@ -164,7 +170,8 @@
 
 /* Transform */
 - (id)transformedValue:(id)value {
-  return SKBool([value intValue] == kSdefValueType);
+  /* Negation because use with hidden */
+  return SKBool([value intValue] != kSdefValueType);
 }
 
 /* Returns access value */
