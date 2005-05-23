@@ -45,7 +45,7 @@
 			<string>Editor</string>
 			<key>LSItemContentTypes</key>
 			<array>
-				<string>public.xml</string>
+				<string>com.apple.scripting-definition</string>
 			</array>
 			<key>LSTypeIsPackage</key>
 			<false/>
@@ -71,10 +71,6 @@
 			</array>
 			<key>CFBundleTypeRole</key>
 			<string>Viewer</string>
-			<key>LSItemContentTypes</key>
-			<array>
-				<string>public.xml</string>
-			</array>
 			<key>LSTypeIsPackage</key>
 			<false/>
 		</dict>
@@ -109,10 +105,6 @@
 			</array>
 			<key>CFBundleTypeRole</key>
 			<string>None</string>
-			<key>LSItemContentTypes</key>
-			<array>
-				<string>public.xml</string>
-			</array>
 			<key>LSTypeIsPackage</key>
 			<false/>
 		</dict>
@@ -156,6 +148,32 @@
 				<array>
 					<string>sdtpl</string>
 				</array>
+			</dict>
+		</dict>
+	</array>
+	<key>UTImportedTypeDeclarations</key>
+	<array>
+		<dict>
+			<key>UTTypeConformsTo</key>
+			<array>
+				<string>public.xml</string>
+			</array>
+			<key>UTTypeDescription</key>
+			<string>Scripting Definition File</string>
+			<key>UTTypeIconFile</key>
+			<string>SdefFile</string>
+			<key>UTTypeIdentifier</key>
+			<string>com.apple.scripting-definition</string>
+			<key>UTTypeReferenceURL</key>
+			<string>http://shadowlab.free.fr/Creation/SdefEditor/SdefReference.html</string>
+			<key>UTTypeTagSpecification</key>
+			<dict>
+				<key>com.apple.ostype</key>
+				<string>Sdef</string>
+				<key>public.filename-extension</key>
+				<string>sdef</string>
+				<key>public.mime-type</key>
+				<string>text/xml</string>
 			</dict>
 		</dict>
 	</array>
