@@ -29,7 +29,3 @@ extern NSString * const SdefDictionarySelectionDidChangeNotification;
 - (void)setSelection:(SdefObject *)anObject;
 
 @end
-
-@interface NSTabView (Extension)
-- (int)indexOfSelectedTabViewItem;
-@end

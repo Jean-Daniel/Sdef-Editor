@@ -248,6 +248,12 @@ NSString * const SdefObjectDragType = @"SdefObjectDragType";
   return item;
 }
 
+- (void)outlineView:(NSOutlineView *)outlineView setObjectValue:(id)object forTableColumn:(NSTableColumn *)tableColumn byItem:(SdefObject *)item {
+  if (![[item name] isEqualToString:object]) {
+    [item setName:object];
+  }
+}
+
 #pragma mark -
 #pragma mark Drag & Drop
 - (BOOL)outlineView:(NSOutlineView *)outlineView writeItems:(NSArray *)items toPasteboard:(NSPasteboard *)pboard {

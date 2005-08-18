@@ -9,8 +9,8 @@
 #import "SdefWindowController.h"
 #import "SdefViewController.h"
 
-#import "ShadowMacros.h"
 #import "SKFunctions.h"
+#import "SKAppKitExtensions.h"
 
 #import "SdefVerb.h"
 #import "SdefClass.h"
@@ -285,6 +285,10 @@ static inline BOOL SdefEditorExistsForItem(SdefObject *item) {
   }
 }
 
+- (BOOL)outlineView:(NSOutlineView *)outlineView shouldEditItem:(id)anItem tableColumn:(NSTableColumn *)tableColumn {
+  return [anItem isEditable] && [anItem objectType] != kSdefCollectionType;
+}
+
 - (void)tabView:(NSTabView *)tabView willSelectTabViewItem:(NSTabViewItem *)tabViewItem {
   id key = [tabViewItem identifier];
   if (![sd_viewControllers objectForKey:key]) {
@@ -522,12 +526,4 @@ static inline BOOL SdefEditorExistsForItem(SdefObject *item) {
     NSBeep();
 }
 
-@end
-
-#pragma mark -
-#pragma mark Missing Method
-@implementation NSTabView (Extension)
-- (int)indexOfSelectedTabViewItem {
-  return [self indexOfTabViewItem:[self selectedTabViewItem]]; 
-}
 @end
