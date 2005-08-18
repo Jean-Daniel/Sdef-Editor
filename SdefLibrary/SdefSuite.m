@@ -121,10 +121,7 @@
 
 #pragma mark -
 - (BOOL)acceptsObjectType:(SdefObjectType)aType {
-  if (![self contentType])
-    return NO;
-  SdefObjectType type = [[self contentType] objectType];
-  return (type == kSdefValueType) || (type == kSdefRecordType) || (type == kSdefEnumerationType);
+  return (aType == kSdefValueType) || (aType == kSdefRecordType) || (aType == kSdefEnumerationType);
 }
 
 @end

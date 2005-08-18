@@ -34,6 +34,7 @@ int main(int argc, char *argv[]) {
   NSDebugEnabled = YES;
   NSHangOnUncaughtException = YES;
 #endif
+  SKPreferencesUpdateName(CFSTR("fr.shadowlab.SdefEditor"));
   return NSApplicationMain(argc, (const char **) argv);
 }
 
@@ -295,6 +296,7 @@ const OSType kCocoaSuiteDefinitionHFSType = 'ScSu';
 
 #pragma mark -
 #pragma mark Application Delegate
+
 - (BOOL)application:(NSApplication *)theApplication openFile:(NSString *)filename {
   id type = [[NSDocumentController sharedDocumentController] typeFromFileExtension:[filename pathExtension]];
   /* If sdef, let document manager handle it */

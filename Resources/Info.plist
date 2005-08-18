@@ -19,7 +19,7 @@
 			<string>None</string>
 			<key>LSItemContentTypes</key>
 			<array>
-				<string>fr.shadowlab.sdef.template</string>
+				<string>org.shadowlab.sdef.template</string>
 			</array>
 			<key>LSTypeIsPackage</key>
 			<true/>
@@ -114,7 +114,7 @@
 	<key>CFBundleIconFile</key>
 	<string>SdefEditor</string>
 	<key>CFBundleIdentifier</key>
-	<string>fr.shadowlab.SdefEditor</string>
+	<string>org.shadowlab.SdefEditor</string>
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundlePackageType</key>
@@ -122,7 +122,7 @@
 	<key>CFBundleSignature</key>
 	<string>SdEd</string>
 	<key>CFBundleVersion</key>
-	<string>1.3</string>
+	<string>1.3.1</string>
 	<key>NSAppleScriptEnabled</key>
 	<string>NO</string>
 	<key>NSMainNibFile</key>
@@ -141,7 +141,7 @@
 			<key>UTTypeIconName</key>
 			<string>SdtplBundle</string>
 			<key>UTTypeIdentifier</key>
-			<string>fr.shadowlab.sdef.template</string>
+			<string>org.shadowlab.sdef.template</string>
 			<key>UTTypeTagSpecification</key>
 			<dict>
 				<key>public.filename-extension</key>
