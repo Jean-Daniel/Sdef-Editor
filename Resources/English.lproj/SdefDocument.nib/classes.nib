@@ -1,6 +1,5 @@
 {
     IBClasses = (
-        {CLASS = CustomOutlineView; LANGUAGE = ObjC; SUPERCLASS = NSOutlineView; }, 
         {
             ACTIONS = {sortByName = id; }; 
             CLASS = FirstResponder; 
@@ -8,6 +7,7 @@
             SUPERCLASS = NSObject; 
         }, 
         {CLASS = SKImageAndTextCell; LANGUAGE = ObjC; SUPERCLASS = NSTextFieldCell; }, 
+        {CLASS = SKOutlineView; LANGUAGE = ObjC; SUPERCLASS = NSOutlineView; }, 
         {
             CLASS = SdefDocument; 
             LANGUAGE = ObjC; 

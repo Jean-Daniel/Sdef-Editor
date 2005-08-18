@@ -147,9 +147,11 @@
  <div class="element">
    <h3 id="Class">Class</h3>
    <p class="definition">
-    An abstract object definition that lists the <a href="#Property">properties</a>, <a href="#Element">elements</a>,
-    and supported <a href="#Command">verbs</a> for instances of that class. Class instances are called "objects".
-   </p>
+    A class element is an abstract object definition that lists the <a href="#Property">properties</a>, <a href="#Element">elements</a>,
+    and supported <a href="#Command">verbs</a> for instances of that scriptable class. Class instances are called "objects".</p>
+    <p class="definition">Every class should have a human-readable <em>name</em> and <em>description</em> and a four-character code to identify it.
+    A class also typically specifies its <a href="#Property">properties</a> (or attributes and to-one relationships) and <a href="#Element">elements</a> (to-many relationships).
+    A class element also lists the commands it responds to, using the <a href="#RespondsToCommands">responds-to element.</a></p>
    <h4>Attributes</h4>
    <dl class="attributes">
     <dt class="require">name</dt>
@@ -191,7 +193,7 @@
     <dt>name</dt>
     <dd>See <a href="#Attributes">Commons Attributes</a>.</dd>
     <dt>code</dt>
-    <dd>See <a href="#Attributes">Commons Attributes</a>.</dd>
+    <dd>The code for a command is eight characters in length. See <a href="#Attributes">Commons Attributes</a>.</dd>
     <dt>description</dt>
     <dd>See <a href="#Attributes">Commons Attributes</a>.</dd>
     <dt>hidden</dt>
@@ -242,7 +244,12 @@
   
   <div class="element">
    <h3 id="Dictionary">Dictionary</h3>
-   <p class="definition">The root element of a Scripting Definition.</p>
+   <p class="definition">The root XML element in an sdef file is a dictionary element.
+   A dictionary defines all the scriptability information for one application.
+   Every sdef file you create should contain one dictionary definition.
+   You typically name the dictionary after the application.</p>
+   <p class="definition">A dictionary element contains one or more <a href="#Suite">suite</a> elements.
+   Most Cocoa applications include Cocoa’s default suites, as well as one or more suites of their own scriptability information.</p>
    <h4>Attributes</h4>
    <dl class="attributes">
     <dt>Title</dt>
@@ -348,7 +355,7 @@
   <div class="element">
    <h3 id="Enumeration">Enumeration</h3>
    <p class="definition">
-   		A list of symbolic constants (<a href="#Enumerator">enumerators</a>).
+   		An enumeration element is a collection of symbolic constants, referred to as <a href="#Enumerator">enumerators</a>.
    		For example, the type of the <code>saving</code> parameter for <code>close</code> is the enumeration <code>yes/no/ask</code>.
    </p>
    <h4>Attributes</h4>
@@ -451,7 +458,7 @@
   <div class="element">
    <h3 id="Property">Property</h3>
    <p class="definition">
-   	A unique data member of an object (aka field, instance variable, to-one relation).
+   	A property is a unique data member of an object (aka field, instance variable, to-one relation).
    	<em>Properties</em> always have a <em>name</em>, and there is always exactly one of them with a given <em>name</em> in an object.
    	For example, the <code>name</code> of a <code>document</code> is a <em>property</em>.</p>
    <h4>Attributes</h4>
@@ -483,8 +490,8 @@
   
   <div class="element">
   <h3 id="RecordType">Record Type</h3>
-   <p class="definition">A simple structure, as opposed to a class. (In C terms, a "POD" or "plain old data" type.)
-    Points, rectangles, and print settings are all record-types.</p>
+   <p class="definition">A record-type element defines a simple structure, rather than a <a href="#Class">class</a>. (In C terms, a "POD" or "plain old data" type.)
+    For example, items such as points, rectangles, and print settings are all record-types.</p>
    <h4>Attributes</h4>
    <dl class="attributes">
     <dt>name</dt>
@@ -547,12 +554,13 @@
   <!-- Suite -->
   <div class="element">
    <h3 id="Suite">Suite</h3>
-   <p class="definition">
-   	A collection of related terms.
-   	Suites are purely an organizational aid to the user, they have no impact on scripts.
-   	There is no technical limit on how many items a suite can contain,
-   	but 10 to 15 items is considered a confortable size.
-   </p>
+   <p class="definition">A <em>suite</em> is a collection of related scriptability information.
+   	For example, the <code>Standard suite</code> contains default AppleScript <a href="#Command">commands</a>, <a href="#Enumeration">enumerations</a>,
+   	and other information,	along with the Cocoa scriptability information used to implement support for the specified features.
+   	Cocoa also supplies a Text suite,	and your application supplies its own scriptability information in one or more suites.</p>
+   	<p class="definition">You can start adding suites to your sdef by cutting and pasting the Standard and Text suites, then deleting the <a href="#Command">commands</a>, <a href="#Class">classes</a>, and other information not supported by your application.
+   	Except for sdef elements that are marked <em>hidden</em>, the terminology information is visible when a user views the dictionary for your application.
+   	So deleting the information you don’t support will ensure that users see only information they can actually use with your application.</p>
    <h4>Attributes</h4>
    <dl class="attributes">
     <dt>name</dt>
@@ -656,8 +664,8 @@
   <hr class="separator"/>
   <div class="element">
    <h3 id="ValueType">Value Type</h3>
-   <p class="definition">A simple type definition. A value-type has no properties and no elements accessible by your scripting,
-    it is useful for defining new basic types, such as an image.</p>
+   <p class="definition">A value-type element defines a simple type that has no properties or elements accessible through scripting.
+    It is useful for defining new basic types, such as an image.</p>
   <h4>Attributes</h4>
    <dl class="attributes">
     <dt>name</dt>
@@ -704,13 +712,15 @@
 			the default is always NSScriptCommand. An explicit cocoa element is only necessary if you want to override these defaults.</p>
 			<h4>Attributes</h4>
    <dl class="attributes">
-    <dt>Class</dt>
-    <dd>An ObjC class name.</dd>
-    <dt>Key</dt>
-    <dd>A string key for an NSDictionary of <a href="#Parameter">parameters</a>,
-        or a KVC key name for a <a href="#Property">property</a> or <a href="#Element">element</a>.</dd>
-    <dt>Method</dt>
-    <dd>An ObjC method name (use for <a href="#RespondsToCommands">responds to.</a> methods).</dd>
+    <dt>class</dt>
+    <dd>Specifies an Objective-C class name.
+    Used to specify the Objective-C class for <a href="#Class">class</a> elements
+    and to specify the command class for <a href="#Command">command</a> elements.</dd>
+    <dt>key</dt>
+    <dd>Specifies a string key for an NSDictionary of command <a href="#Parameter">parameters</a>,
+        or a key to be used y Cocoa scripting to access a <a href="#Property">property</a> or <a href="#Element">element</a> through key-value coding.</dd>
+    <dt>method</dt>
+    <dd>Specifies an Objective-C method name. Used to specify <a href="#RespondsToCommands">responds to</a> methods for <a href="#Class">class</a> element.</dd>
     <dt>name</dt>
     <dd>A name used internally by Cocoa Scripting (use for <a href="#Suite">suites</a>, <a href="#Command">command</a> and
     			<a href="#Event">event</a> key names,	<a href="#Enumeration">enumerations</a>, and <a href="#Enumerator">enumerators</a>).</dd>

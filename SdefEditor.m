@@ -122,7 +122,10 @@ const OSType kCocoaSuiteDefinitionHFSType = 'ScSu';
       break;
     case 3:
       suite = @"AppleScriptKit";
-      break;        
+      break;
+    case 4:
+      suite = @"Skeleton";
+      break;
   }
   NSString *suitePath = [[NSBundle mainBundle] pathForResource:suite ofType:@"sdef"];
   if (suitePath) {
