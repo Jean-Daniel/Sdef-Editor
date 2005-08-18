@@ -1743,6 +1743,29 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
+		9849B8A108B548BD0036A437 /* Deployment Intel */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				GCC_DYNAMIC_NO_PIC = YES;
+				INFOPLIST_FILE = Resources/Info.plist;
+				INSTALL_PATH = "$(HOME)/Applications";
+				PRODUCT_NAME = "Sdef Editor";
+				WRAPPER_EXTENSION = app;
+			};
+			name = "Deployment Intel";
+		};
+		9849B8A208B548BD0036A437 /* Deployment Intel */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 98D0CCDB085CD0F800ECCE22 /* ShadowRelease.xcconfig */;
+			buildSettings = {
+				ARCHS = i386;
+				GCC_FAST_OBJC_DISPATCH = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.4;
+				PREBINDING = NO;
+				SDKROOT = /Developer/SDKs/MacOSX10.4u.sdk;
+			};
+			name = "Deployment Intel";
+		};
 		98A7CBE70855010F000D862B /* Development */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -1795,7 +1818,6 @@
 			baseConfigurationReference = 98D0CCDB085CD0F800ECCE22 /* ShadowRelease.xcconfig */;
 			buildSettings = {
 				GCC_FAST_OBJC_DISPATCH = YES;
-				MACOSX_DEPLOYMENT_TARGET = 10.4;
 				OTHER_CFLAGS = "-mcpu=7450";
 			};
 			name = "Deployment Tiger";
@@ -1808,6 +1830,7 @@
 			buildConfigurations = (
 				98A7CBE70855010F000D862B /* Development */,
 				98A7CBE80855010F000D862B /* Deployment */,
+				9849B8A108B548BD0036A437 /* Deployment Intel */,
 				98D0CD8B085CD2B200ECCE22 /* Deployment Tiger */,
 			);
 			defaultConfigurationIsVisible = 0;
@@ -1818,6 +1841,7 @@
 			buildConfigurations = (
 				98A7CBED0855010F000D862B /* Development */,
 				98A7CBEE0855010F000D862B /* Deployment */,
+				9849B8A208B548BD0036A437 /* Deployment Intel */,
 				98D0CD8C085CD2B200ECCE22 /* Deployment Tiger */,
 			);
 			defaultConfigurationIsVisible = 0;
