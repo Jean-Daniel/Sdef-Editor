@@ -405,46 +405,51 @@ static CFXMLParserCallBacks SdefParserCallBacks = {
 #pragma mark -
 #pragma mark Low Level Parsing
 - (id)parser:(CFXMLParserRef)parser didStartXMLNode:(CFXMLNodeRef)aNode {
-  if (sd_delegate) {
-    return [sd_delegate parser:parser didStartXMLNode:aNode];
+  id result = nil;
+  @try {
+    if (sd_delegate) {
+      result = [sd_delegate parser:parser didStartXMLNode:aNode];
+    } else {
+      switch (CFXMLNodeGetTypeCode(aNode)) {
+        case kCFXMLNodeTypeElement:
+          [self parser:parser didStartElement:(id)CFXMLNodeGetString(aNode) infos:(CFXMLElementInfo *)CFXMLNodeGetInfoPtr(aNode)];
+          result = (void *)CFXMLNodeGetString(aNode);
+          break;
+        case kCFXMLNodeTypeDocument:
+          /* Can find comment before first element */
+          result = [NSNull null];
+          break;
+        case kCFXMLNodeTypeProcessingInstruction:
+          DLog(@"Data Type ID: kCFXMLNodeTypeProcessingInstruction (%@)", CFXMLNodeGetString(aNode));
+          break;
+        case kCFXMLNodeTypeComment:
+          [self parser:parser foundComment:(id)CFXMLNodeGetString(aNode)];
+          break;
+        case kCFXMLNodeTypeText:
+          DLog(@"Data Type ID: kCFXMLNodeTypeText (%@)", CFXMLNodeGetString(aNode));
+          break;
+        case kCFXMLNodeTypeCDATASection:
+          DLog(@"Data Type ID: kCFXMLDataTypeCDATASection (%@)", CFXMLNodeGetString(aNode));
+          break;
+        case kCFXMLNodeTypeEntityReference:
+          DLog(@"Data Type ID: kCFXMLNodeTypeEntityReference (%@)", CFXMLNodeGetString(aNode));
+          break;
+        case kCFXMLNodeTypeDocumentType:
+          DLog(@"Data Type ID: kCFXMLNodeTypeDocumentType (%@)", CFXMLNodeGetString(aNode));
+          break;
+        case kCFXMLNodeTypeWhitespace:
+          /* Ignore white space */
+          break;
+        default:
+          DLog(@"Unknown Data Type ID: %i (%@)", CFXMLNodeGetTypeCode(aNode), CFXMLNodeGetString(aNode));
+          break;
+      }
+    }
+  } @catch (id exception) {
+    SKLogException(exception);
+    CFXMLParserAbort(parser, kCFXMLErrorMalformedDocument, (CFStringRef)[exception reason]);
   }
-  
-  id object = nil;
-  switch (CFXMLNodeGetTypeCode(aNode)) {
-    case kCFXMLNodeTypeElement:
-      [self parser:parser didStartElement:(id)CFXMLNodeGetString(aNode) infos:(CFXMLElementInfo *)CFXMLNodeGetInfoPtr(aNode)];
-      object = (void *)CFXMLNodeGetString(aNode);
-      break;
-    case kCFXMLNodeTypeDocument:
-      /* Can find comment before first element */
-      object = [NSNull null];
-      break;
-    case kCFXMLNodeTypeProcessingInstruction:
-      DLog(@"Data Type ID: kCFXMLNodeTypeProcessingInstruction (%@)", CFXMLNodeGetString(aNode));
-      break;
-    case kCFXMLNodeTypeComment:
-      [self parser:parser foundComment:(id)CFXMLNodeGetString(aNode)];
-      break;
-    case kCFXMLNodeTypeText:
-      DLog(@"Data Type ID: kCFXMLNodeTypeText (%@)", CFXMLNodeGetString(aNode));
-      break;
-    case kCFXMLNodeTypeCDATASection:
-      DLog(@"Data Type ID: kCFXMLDataTypeCDATASection (%@)", CFXMLNodeGetString(aNode));
-      break;
-    case kCFXMLNodeTypeEntityReference:
-      DLog(@"Data Type ID: kCFXMLNodeTypeEntityReference (%@)", CFXMLNodeGetString(aNode));
-      break;
-    case kCFXMLNodeTypeDocumentType:
-      DLog(@"Data Type ID: kCFXMLNodeTypeDocumentType (%@)", CFXMLNodeGetString(aNode));
-      break;
-    case kCFXMLNodeTypeWhitespace:
-      /* Ignore white space */
-      break;
-    default:
-      DLog(@"Unknown Data Type ID: %i (%@)", CFXMLNodeGetTypeCode(aNode), CFXMLNodeGetString(aNode));
-      break;
-  }
-  return object;
+  return result;
 }
 
 - (void)parser:(CFXMLParserRef)parser didEndXMLNode:(id)aNode {

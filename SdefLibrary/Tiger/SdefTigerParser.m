@@ -69,25 +69,39 @@
 }
 
 - (void)parser:(CFXMLParserRef)parser didStartRecordType:(NSDictionary *)attributes {
-  SdefRecord *record = [(SdefObject *)[SdefRecord allocWithZone:[self zone]] initWithAttributes:attributes];
-  [[(SdefSuite *)sd_node types] appendChild:record];
-  [record release];
-  sd_node = record;
+  if (![sd_node respondsToSelector:@selector(types)]) {
+    CFStringRef str = CFStringCreateWithFormat(kCFAllocatorDefault, nil, CFSTR("Unexpected \"record\" element found at line %i"),
+                                               CFXMLParserGetLineNumber(parser));
+    CFXMLParserAbort(parser, kCFXMLErrorMalformedDocument, str);
+    CFRelease(str);
+  } else {
+    SdefRecord *record = [(SdefObject *)[SdefRecord allocWithZone:[self zone]] initWithAttributes:attributes];
+    [[(SdefSuite *)sd_node types] appendChild:record];
+    [record release];
+    sd_node = record;
+  }
 }
 
 - (void)parser:(CFXMLParserRef)parser didStartType:(NSDictionary *)attributes {
-  SdefType *type = [[SdefType allocWithZone:[self zone]] init];
-  /* parse Attributes */
-  NSString *attr = [attributes objectForKey:@"list"];
-  if (attr && ![attr isEqualToString:@"no"]) {
-    [type setList:YES];
+  if (![sd_node respondsToSelector:@selector(addType:)]) {
+    CFStringRef str = CFStringCreateWithFormat(kCFAllocatorDefault, nil, CFSTR("Unexpected \"type\" element found at line %i"),
+                                               CFXMLParserGetLineNumber(parser));
+    CFXMLParserAbort(parser, kCFXMLErrorMalformedDocument, str);
+    CFRelease(str);
+  } else {
+    SdefType *type = [[SdefType allocWithZone:[self zone]] init];
+    /* parse Attributes */
+    NSString *attr = [attributes objectForKey:@"list"];
+    if (attr && ![attr isEqualToString:@"no"]) {
+      [type setList:YES];
+    }
+    attr = [attributes objectForKey:@"type"];
+    if (attr) {
+      [type setName:attr];
+      [sd_node addType:type];
+    } 
+    [type release];
   }
-  attr = [attributes objectForKey:@"type"];
-  if (attr) {
-    [type setName:attr];
-    [sd_node addType:type];
-  } 
-  [type release];
 }
 
 #pragma mark Misc
