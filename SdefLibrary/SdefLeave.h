@@ -24,6 +24,8 @@
 - (id)init;
 - (id)initWithName:(NSString *)name;
 
+- (NSString *)objectTypeName;
+
 - (NSImage *)icon;
 
 - (NSString *)name;

@@ -37,6 +37,9 @@
 - (NSImage *)icon {
   return [NSImage imageNamed:@"Type"];
 }
+- (NSString *)objectTypeName {
+  return @"type";
+}
 
 - (void)setName:(NSString *)aName {
   [[self owner] willChangeValueForKey:@"type"];

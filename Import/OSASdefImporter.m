@@ -18,9 +18,12 @@
 @implementation OSASdefImporter
 
 + (id)allocWithZone:(NSZone *)aZone {
+  // Don't check weak ref in Tiger
+#if MAC_OS_X_VERSION_MIN_REQUIRED < MAC_OS_X_VERSION_10_4
   if (!OSACopyScriptingDefinition) {
     return nil;
   }
+#endif
   return [super allocWithZone:aZone];
 }
 
@@ -54,7 +57,7 @@
   if (sd_path && [sd_path getFSRef:&file]) {
     CFDataRef sdef = nil;
     if (noErr == OSACopyScriptingDefinition(&file, 0, &sdef) && sdef) {
-      sd_dico = [SdefLoadDictionaryData((id)sdef, nil) retain];
+      sd_dico = [SdefLoadDictionaryData((id)sdef, nil, self) retain];
       CFRelease(sdef);
     }
   }

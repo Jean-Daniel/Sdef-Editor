@@ -89,11 +89,13 @@ const OSType kCocoaSuiteDefinitionHFSType = 'ScSu';
 #if defined (DEBUG)
   [self createDebugMenu];
 #endif
+#if MAC_OS_X_VERSION_MIN_REQUIRED < MAC_OS_X_VERSION_10_4
   // If Panther, remove open application sdef menu
   if (!OSACopyScriptingDefinition) {
     NSMenu *file = [[[NSApp mainMenu] itemWithTag:1] submenu];
     [file removeItem:[file itemWithTag:1]];
   }
+#endif
 }
 
 - (IBAction)openInspector:(id)sender {
@@ -140,10 +142,13 @@ const OSType kCocoaSuiteDefinitionHFSType = 'ScSu';
 #pragma mark -
 #pragma mark Importation
 - (IBAction)openApplicationTerminology:(id)sender {
+// Don't check weak ref in Tiger
+#if MAC_OS_X_VERSION_MIN_REQUIRED < MAC_OS_X_VERSION_10_4
   if (!OSACopyScriptingDefinition) {
     NSBeep();
     return;
   }
+#endif
   
   ImportApplicationAete *panel = [[ImportApplicationAete alloc] initWithWindowNibName:@"ImportApplicationSdef"];
   [panel showWindow:sender];

@@ -78,6 +78,10 @@
   }
 }
 
+- (NSString *)objectTypeName {
+  return nil;
+}
+
 #pragma mark Owner
 - (SdefObject *)owner {
   return sd_owner;

@@ -148,7 +148,7 @@ static NSArray *ASKStandardsSuites() {
       [title release];
     }
     if (suitePath) {
-      SdefDictionary *dico = SdefLoadDictionary(suitePath, nil);
+      SdefDictionary *dico = SdefLoadDictionary(suitePath, nil, nil);
       if (dico) {
         unsigned idx;
         for (idx=0; idx<[dico childCount]; idx++) {

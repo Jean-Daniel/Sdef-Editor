@@ -163,14 +163,9 @@
         SdefType *type;
         NSEnumerator *types = [[self types] objectEnumerator];
         while (type = [types nextObject]) {
-          if ([type name]) {
-            SdefXMLNode *typeNode = [[SdefXMLNode alloc] initWithElementName:@"type"];
-            [typeNode setAttribute:[type name] forKey:@"type"];
-            if ([type isList])
-              [typeNode setAttribute:@"yes" forKey:@"list"];
-            [typeNode setEmpty:YES];
+          SdefXMLNode *typeNode = [type xmlNodeForVersion:version];
+          if (typeNode) {
             [node appendChild:typeNode];
-            [typeNode release];
           }
         }
       } else if ([self hasType]) {

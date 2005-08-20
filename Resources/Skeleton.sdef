@@ -170,11 +170,13 @@ SUCH DAMAGE.
 			<property name="closeable" code="hclb" description="Whether the window has a close box." type="boolean" access="r">
 				<cocoa key="hasCloseBox"/>
 			</property>
-			<property name="miniaturizable" code="ismn" description="Whether the window can be minimized." type="boolean" access="r">
+			<property name="minimizable" code="ismn" description="Whether the window can be minimized." type="boolean" access="r">
 				<cocoa key="isMiniaturizable"/>
+				<synonym name="miniaturizable"/>
 			</property>
-			<property name="miniaturized" code="pmnd" description="Whether the window is currently minimized." type="boolean">
+			<property name="minimized" code="pmnd" description="Whether the window is currently minimized." type="boolean">
 				<cocoa key="isMiniaturized"/>
+				<synonym name="miniaturized"/>
 			</property>
 			<property name="resizable" code="prsz" description="Whether the window can be resized." type="boolean" access="r">
 				<cocoa key="isResizable"/>
@@ -256,12 +258,13 @@ SUCH DAMAGE.
 		<command name="duplicate" code="coreclon" description="Copy object(s) and put the copies at a new location.">
 			<cocoa class="NSCloneCommand"/>
 			<direct-parameter description="the object(s) to duplicate" type="specifier"/>
-			<parameter name="to" code="insh" description="The location for the new object(s)." type="location specifier">
+			<parameter name="to" code="insh" description="The location for the new object(s)." type="location specifier" optional="yes">
 				<cocoa key="ToLocation"/>
 			</parameter>
 			<parameter name="with properties" code="prdt" description="Properties to be set in the new duplicated object(s)." type="record" optional="yes">
 				<cocoa key="WithProperties"/>
 			</parameter>
+			<result name="result" description="to the duplicated object(s)" type="specifier"/>
 		</command>
 		<command name="exists" code="coredoex" description="Verify if an object exists.">
 			<cocoa class="NSExistsCommand"/>
@@ -276,8 +279,9 @@ SUCH DAMAGE.
 			<parameter name="at" code="insh" description="The location at which to insert the object." type="location specifier" optional="yes">
 				<cocoa key="Location"/>
 			</parameter>
-			<parameter name="with data" code="data" description="The initial contents of the object." type="any" optional="yes">
+			<parameter name="with contents" code="data" description="The initial contents of the object." type="any" optional="yes">
 				<cocoa key="ObjectData"/>
+				<synonym name="with data"/>
 			</parameter>
 			<parameter name="with properties" code="prdt" description="The initial values for properties of the object." type="record" optional="yes">
 				<cocoa key="KeyDictionary"/>
@@ -290,6 +294,7 @@ SUCH DAMAGE.
 			<parameter name="to" code="insh" description="The new location for the object(s)." type="location specifier">
 				<cocoa key="ToLocation"/>
 			</parameter>
+			<result name="result" description="to the moved object(s)" type="specifier"/>
 		</command>
 	</suite>
 	<!--
@@ -312,11 +317,11 @@ SUCH DAMAGE.
 			<property name="font" code="font" description="The name of the font of the first character." type="text">
 				<cocoa key="fontName"/>
 			</property>
-			<property name="size" code="ptsz" description="The size in points of the first character." type="integer">
+			<property name="size" code="ptsz" description="The size in points of the first character." type="real">
 				<cocoa key="fontSize"/>
 			</property>
 		</class>
-		<class name="character" code="cha " description="This subdivides the text into characters." inherits="rich text">
+		<class name="character" code="cha " description="This subdivides the text into characters.">
 			<cocoa class="NSTextStorage"/>
 			<element type="character"/>
 			<element type="paragraph"/>
@@ -333,7 +338,7 @@ SUCH DAMAGE.
 				<cocoa key="fontSize"/>
 			</property>
 		</class>
-		<class name="paragraph" code="cpar" description="This subdivides the text into paragraphs." inherits="rich text">
+		<class name="paragraph" code="cpar" description="This subdivides the text into paragraphs.">
 			<cocoa class="NSTextStorage"/>
 			<element type="character"/>
 			<element type="paragraph"/>
@@ -350,7 +355,7 @@ SUCH DAMAGE.
 				<cocoa key="fontSize"/>
 			</property>
 		</class>
-		<class name="word" code="cwor" description="This subdivides the text into words." inherits="rich text">
+		<class name="word" code="cwor" description="This subdivides the text into words.">
 			<cocoa class="NSTextStorage"/>
 			<element type="character"/>
 			<element type="paragraph"/>
@@ -367,7 +372,7 @@ SUCH DAMAGE.
 				<cocoa key="fontSize"/>
 			</property>
 		</class>
-		<class name="attribute run" code="catr" description="This subdivides the text into chunks that all have the same attributes." inherits="rich text">
+		<class name="attribute run" code="catr" description="This subdivides the text into chunks that all have the same attributes.">
 			<cocoa class="NSTextStorage"/>
 			<element type="character"/>
 			<element type="paragraph"/>
@@ -386,8 +391,9 @@ SUCH DAMAGE.
 		</class>
 		<class name="attachment" code="atts" description="Represents an inline text attachment. This class is used mainly for make commands." inherits="rich text">
 			<cocoa class="NSAttachmentTextStorage"/>
-			<property name="file name" code="atfn" description="The path to the file for the attachment" type="text">
+			<property name="file" code="atfn" description="The path to the file for the attachment" type="file" access="r">
 				<cocoa key="filename"/>
+				<synonym name="file name"/>
 			</property>
 		</class>
 	</suite>

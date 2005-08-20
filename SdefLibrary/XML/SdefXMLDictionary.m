@@ -36,20 +36,5 @@
   return kSdefParserBothVersion;
 }
 
-//- (void)parser:(NSXMLParser *)parser didStartElement:(NSString *)elementName namespaceURI:(NSString *)namespaceURI qualifiedName:(NSString *)qName attributes:(NSDictionary *)attributeDict {
-//  if ([elementName isEqualToString:@"suite"]) {
-//    SdefSuite *suite = [(SdefObject *)[SdefSuite allocWithZone:[self zone]] initWithAttributes:attributeDict];
-//    [self appendChild:suite];
-//    [parser setDelegate:suite];
-//    [suite release];
-//    if (sd_childComments) {
-//      [suite setComments:sd_childComments];
-//      [sd_childComments release];
-//      sd_childComments = nil;
-//    }
-//  } else {
-//    [super parser:parser didStartElement:elementName namespaceURI:namespaceURI qualifiedName:qName attributes:attributeDict];
-//  }
-//}
 
 @end

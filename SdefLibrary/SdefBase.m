@@ -309,7 +309,7 @@ NSString * const SdefObjectDidChangeNameNotification = @"SdefObjectDidChangeName
 
 #pragma mark Comments
 - (BOOL)hasComments {
-  return [sd_comments count] > 0;
+  return sd_comments && [sd_comments count] > 0;
 }
 
 - (NSMutableArray *)comments {
@@ -324,7 +324,7 @@ NSString * const SdefObjectDidChangeNameNotification = @"SdefObjectDidChangeName
     [sd_comments removeAllObjects];
     int idx;
     for (idx=0; idx<[comments count]; idx++) {
-      [self addComment:[comments objectAtIndex:idx]];
+      [[self comments] addObject:[comments objectAtIndex:idx]];
     }
   }
 }
@@ -339,6 +339,30 @@ NSString * const SdefObjectDidChangeNameNotification = @"SdefObjectDidChangeName
 
 - (void)removeCommentAtIndex:(unsigned)index {
   [sd_comments removeObjectAtIndex:index];
+}
+
+#pragma mark Ignore
+- (BOOL)hasIgnore {
+  return sd_ignore && [sd_ignore count] > 0;
+}
+
+- (NSMutableArray *)ignores {
+  if (!sd_ignore) {
+    sd_ignore = [[NSMutableArray allocWithZone:[self zone]] init];
+  }
+  return sd_ignore;
+}
+- (void)addIgnore:(id)anObject {
+  [[self ignores] addObject:anObject];
+}
+- (void)setIgnores:(NSArray *)anArray {
+  if (sd_ignore != anArray) {
+    [sd_ignore removeAllObjects];
+    [[self ignores] addObjectsFromArray:anArray];
+  }
+}
+- (void)removeIgnoreAtIndex:(unsigned)index {
+  [sd_ignore removeObjectAtIndex:index];
 }
 
 #pragma mark -

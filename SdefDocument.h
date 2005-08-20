@@ -13,8 +13,8 @@ extern NSString * const SdefObjectDragType;
 @class SdefObject, SdefDictionary, SdefClassManager, SdefImports;
 @class SdefWindowController, SdefSymbolBrowser;
 
-extern SdefDictionary *SdefLoadDictionary(NSString *filename, int *version);
-extern SdefDictionary *SdefLoadDictionaryData(NSData *data, int *version);
+extern SdefDictionary *SdefLoadDictionary(NSString *filename, int *version, id delegate);
+extern SdefDictionary *SdefLoadDictionaryData(NSData *data, int *version, id delegate);
 
 @interface SdefDocument : NSDocument {
 @private

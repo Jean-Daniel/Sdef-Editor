@@ -9,7 +9,6 @@
 #import "SdefXMLNode.h"
 #import "SdefXMLBase.h"
 
-#import "SdefSynonym.h"
 #import "SKExtensions.h"
 #import "SdefDocumentation.h"
 #import "SdefImplementation.h"
@@ -57,6 +56,26 @@
   if (hidden && ![hidden isEqualToString:@"no"]) {
     [self setHidden:YES];
   }
+}
+
+@end
+
+#pragma mark -
+@implementation SdefType (SdefXMLManager)
+
+#pragma mark XML Generation
+- (SdefXMLNode *)xmlNodeForVersion:(SdefVersion)version {
+  if (kSdefTigerVersion == version) {
+    if ([self name]) {
+      SdefXMLNode *typeNode = [[SdefXMLNode alloc] initWithElementName:@"type"];
+      [typeNode setAttribute:[self name] forKey:@"type"];
+      if ([self isList])
+        [typeNode setAttribute:@"yes" forKey:@"list"];
+      [typeNode setEmpty:YES];
+      return [typeNode autorelease];
+    }
+  }
+  return nil;
 }
 
 @end

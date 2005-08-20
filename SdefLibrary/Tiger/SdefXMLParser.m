@@ -55,7 +55,7 @@ static CFXMLParserCallBacks SdefParserCallBacks = {
 - (void)dealloc {
   [sd_error release];
   [sd_comments release];
-  [sd_delegate release];
+  [sd_subParser release];
   [sd_dictionary release];
   [super dealloc];
 }
@@ -80,12 +80,23 @@ static CFXMLParserCallBacks SdefParserCallBacks = {
   }
 }
 
+- (int)line {
+  return CFXMLParserGetLineNumber(sd_parser);
+}
+
 - (NSString *)error {
   return sd_error;
 }
 
 - (SdefDictionary *)document {
   return sd_dictionary;
+}
+
+- (id)delegate {
+  return sd_delegate;
+}
+- (void)setDelegate:(id)delegate {
+  sd_delegate = delegate;
 }
 
 - (BOOL)parseData:(NSData *)document {
@@ -125,12 +136,12 @@ static CFXMLParserCallBacks SdefParserCallBacks = {
 }
 
 - (void)parser:(CFXMLParserRef)parser didStartDocumentation:(NSDictionary *)attributes {
-  sd_delegate = [[SdefDocumentationParser alloc] initWithDocumentation:[sd_node documentation] parent:self];
+  sd_subParser = [[SdefDocumentationParser alloc] initWithDocumentation:[sd_node documentation] parent:self];
 }
 
 - (void)parserDidEndDocumentation:(SdefDocumentationParser *)parser {
-  [sd_delegate release]; /* sd_delegate == parser */
-  sd_delegate = nil;
+  [sd_subParser release]; /* sd_subParser == parser */
+  sd_subParser = nil;
 }
 
 - (void)parser:(CFXMLParserRef)parser didStartSynonym:(NSDictionary *)attributes {
@@ -325,6 +336,13 @@ static CFXMLParserCallBacks SdefParserCallBacks = {
 /* Post processing */
 }
 
+- (SdefParserOperation)shouldAddInvalidObject:(id)anObject inNode:(SdefObject *)aNode {
+  if (sd_delegate && [sd_delegate respondsToSelector:@selector(sdefParser:shouldAddInvalidObject:inNode:)]) {
+    return [sd_delegate sdefParser:self shouldAddInvalidObject:anObject inNode:aNode];
+  }
+  return kSdefParserAbort;
+}
+
 #pragma mark -
 #pragma mark Element Handling
 - (void)parser:(CFXMLParserRef)parser didStartElement:(NSString *)elementName infos:(CFXMLElementInfo *)infos {
@@ -334,7 +352,7 @@ static CFXMLParserCallBacks SdefParserCallBacks = {
       if ([self parserVersion] != version) [self setVersion:version];
     } else {
       NSString *msg = [NSString stringWithFormat:@"Invalid element %@ in %@ for %@ version",  elementName,
-        [sd_node xmlElementName], 
+        [sd_node xmlElementName],
         ([self parserVersion] == kSdefParserTigerVersion) ? @"Tiger" : ([self parserVersion] == kSdefParserPantherVersion) ? @"Panther" : @"Both"];
       CFXMLParserAbort(parser, kCFXMLErrorMalformedDocument, (CFStringRef)msg);
     }
@@ -391,7 +409,10 @@ static CFXMLParserCallBacks SdefParserCallBacks = {
     [self parser:parser didStartElement:elementName withAttributes:attributes];
   }
   if ([sd_comments count]) {
-    [sd_node setComments:sd_comments];
+    unsigned i;
+    for (i=0; i<[sd_comments count]; i++) {
+      [sd_node addComment:[sd_comments objectAtIndex:i]];
+    }
     [sd_comments removeAllObjects];
   }
 }
@@ -399,7 +420,7 @@ static CFXMLParserCallBacks SdefParserCallBacks = {
 // ...and this reports a fatal error to the delegate. The parser will stop parsing.
 - (BOOL)parser:(CFXMLParserRef)parser parseErrorOccurred:(NSError *)parseError {
   sd_error = [[[parseError userInfo] objectForKey:@"SdefParserError"] copy];
-  return NO;
+  return YES;
 }
 
 #pragma mark -
@@ -407,8 +428,8 @@ static CFXMLParserCallBacks SdefParserCallBacks = {
 - (id)parser:(CFXMLParserRef)parser didStartXMLNode:(CFXMLNodeRef)aNode {
   id result = nil;
   @try {
-    if (sd_delegate) {
-      result = [sd_delegate parser:parser didStartXMLNode:aNode];
+    if (sd_subParser) {
+      result = [sd_subParser parser:parser didStartXMLNode:aNode];
     } else {
       switch (CFXMLNodeGetTypeCode(aNode)) {
         case kCFXMLNodeTypeElement:
@@ -453,8 +474,8 @@ static CFXMLParserCallBacks SdefParserCallBacks = {
 }
 
 - (void)parser:(CFXMLParserRef)parser didEndXMLNode:(id)aNode {
-  if (sd_delegate) {
-    [sd_delegate parser:parser didEndXMLNode:aNode];
+  if (sd_subParser) {
+    [sd_subParser parser:parser didEndXMLNode:aNode];
     return;
   }
 

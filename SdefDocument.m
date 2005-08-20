@@ -196,7 +196,7 @@ NSString * const SdefObjectDragType = @"SdefObjectDragType";
 - (BOOL)loadDataRepresentation:(NSData *)data ofType:(NSString *)type {
   if ([type isEqualToString:ScriptingDefinitionFileType]) {
     int version;
-    [self setDictionary:SdefLoadDictionaryData(data, &version)];
+    [self setDictionary:SdefLoadDictionaryData(data, &version, self)];
     if (version == kSdefPantherVersion) {
       NSRunInformationalAlertPanel(@"You have opened a Panther Scripting Definition file",
                                    @"This file will be saved using Tiger format. If you want to save it using the Panther format, choose \"Export Using old Format\" in the File menu",
@@ -205,6 +205,21 @@ NSString * const SdefObjectDragType = @"SdefObjectDragType";
     }
   }
   return [self dictionary] != nil;
+}
+
+- (SdefParserOperation)sdefParser:(SdefXMLParser *)parser shouldAddInvalidObject:(id)anObject inNode:(SdefObject *)node {
+  switch (NSRunAlertPanel(@"Found an invalid node in Sdef file",
+                          @"Found element \"%@\" in %@ element \"%@\" at line %i. Would you like to preserve this element, delete this element, or abort parsing.",
+                          @"Preserve", @"Abort", @"Delete",
+                          [anObject objectTypeName], [node objectTypeName], [node name], [parser line])) {
+    case NSAlertDefaultReturn:
+      return kSdefParserAddNode;
+    case NSAlertAlternateReturn:
+      return kSdefParserAbort;
+    case NSAlertOtherReturn:
+      return kSdefParserDeleteNode;
+  }
+  return NO;
 }
 
 #pragma mark -
@@ -409,17 +424,18 @@ NSString * const SdefObjectDragType = @"SdefObjectDragType";
 
 @end
 #pragma mark -
-SdefDictionary *SdefLoadDictionary(NSString *filename, int *version) {
+SdefDictionary *SdefLoadDictionary(NSString *filename, int *version, id delegate) {
   NSData *data = [[NSData alloc] initWithContentsOfFile:filename];
-  SdefDictionary *dictionary = SdefLoadDictionaryData(data, version);
+  SdefDictionary *dictionary = SdefLoadDictionaryData(data, version, delegate);
   [data release];
   return dictionary;
 }
 
-SdefDictionary *SdefLoadDictionaryData(NSData *data, int *version) {
+SdefDictionary *SdefLoadDictionaryData(NSData *data, int *version, id delegate) {
   SdefDictionary *result = nil;
   if (data) {
     SdefXMLParser *parser = [[SdefXMLParser alloc] init];
+    [parser setDelegate:delegate];
     if ([parser parseData:data]) {
       result = [[parser document] retain];
       if (version) {

@@ -47,6 +47,10 @@
 }
 
 #pragma mark -
+- (NSString *)objectTypeName {
+  return @"synonym";
+}
+
 - (NSImage *)icon {
   return [NSImage imageNamed:@"Misc"];
 }

@@ -83,27 +83,39 @@
 }
 
 - (void)parser:(CFXMLParserRef)parser didStartType:(NSDictionary *)attributes {
-  if (![sd_node respondsToSelector:@selector(addType:)]) {
-    CFStringRef str = CFStringCreateWithFormat(kCFAllocatorDefault, nil, CFSTR("Unexpected \"type\" element found at line %i"),
-                                               CFXMLParserGetLineNumber(parser));
-    CFXMLParserAbort(parser, kCFXMLErrorMalformedDocument, str);
-    CFRelease(str);
-  } else {
-    SdefType *type = [[SdefType allocWithZone:[self zone]] init];
-    /* parse Attributes */
-    NSString *attr = [attributes objectForKey:@"list"];
-    if (attr && ![attr isEqualToString:@"no"]) {
-      [type setList:YES];
-    }
-    attr = [attributes objectForKey:@"type"];
-    if (attr) {
-      [type setName:attr];
-      [sd_node addType:type];
-    } 
-    [type release];
+  SdefType *type = [[SdefType allocWithZone:[self zone]] init];
+  /* parse Attributes */
+  NSString *attr = [attributes objectForKey:@"list"];
+  if (attr && ![attr isEqualToString:@"no"]) {
+    [type setList:YES];
   }
+  attr = [attributes objectForKey:@"type"];
+  if (attr) {
+    [type setName:attr];
+    
+    if ([sd_node respondsToSelector:@selector(addType:)]) {
+      [sd_node addType:type];
+    } else {
+      switch ([self shouldAddInvalidObject:type inNode:sd_node]) {
+        case kSdefParserAbort: {
+          CFStringRef str = CFStringCreateWithFormat(kCFAllocatorDefault, nil, CFSTR("Unexpected \"type\" element found at line %i"),
+                                                     CFXMLParserGetLineNumber(parser));
+          CFXMLParserAbort(parser, kCFXMLErrorMalformedDocument, str);
+          CFRelease(str);
+          break;
+        }
+        case kSdefParserAddNode:
+          [sd_node addIgnore:type];
+          break;
+        case kSdefParserDeleteNode:
+        default:
+          break;
+      }
+    }
+  } 
+  [type release];
 }
-
+  
 #pragma mark Misc
 - (void)parser:(CFXMLParserRef)parser didStartElement:(NSString *)element withAttributes:(NSDictionary *)attributes {
   SEL cmd = @selector(isEqualToString:);

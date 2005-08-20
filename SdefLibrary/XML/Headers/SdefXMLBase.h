@@ -7,6 +7,7 @@
 //
 
 #import "SdefBase.h"
+#import "SdefType.h"
 #import "SdefSynonym.h"
 #import "SdefXMLParser.h"
 
@@ -22,6 +23,11 @@
 - (NSString *)xmlElementName;
 - (SdefXMLNode *)xmlNodeForVersion:(SdefVersion)version;
 
+@end
+
+@interface SdefType (SdefXMLManager)
+#pragma mark XML Generation
+- (SdefXMLNode *)xmlNodeForVersion:(SdefVersion)version;
 @end
 
 #pragma mark -

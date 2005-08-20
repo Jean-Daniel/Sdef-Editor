@@ -76,6 +76,7 @@ extern NSString *CocoaNameForSdefName(NSString *cocoa, BOOL isClass);
 @private
   NSImage *sd_icon;
   NSString *sd_name;
+  NSMutableArray *sd_ignore;
   NSMutableArray *sd_comments;
 }
 
@@ -144,6 +145,13 @@ extern NSString *CocoaNameForSdefName(NSString *cocoa, BOOL isClass);
 - (void)setComments:(NSArray *)comments;
 - (void)addComment:(NSString *)comment;
 - (void)removeCommentAtIndex:(unsigned)index;
+
+#pragma mark Ignore
+- (BOOL)hasIgnore;
+- (NSMutableArray *)ignores;
+- (void)addIgnore:(id)anObject;
+- (void)setIgnores:(NSArray *)anArray;
+- (void)removeIgnoreAtIndex:(unsigned)index;
 
 @end
 

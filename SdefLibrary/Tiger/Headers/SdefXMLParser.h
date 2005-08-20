@@ -15,6 +15,12 @@ enum {
   kSdefParserBothVersion		= kSdefParserPantherVersion | kSdefParserTigerVersion,
 };
 
+typedef enum {
+  kSdefParserAbort,
+  kSdefParserAddNode,
+  kSdefParserDeleteNode,
+} SdefParserOperation;
+
 extern NSString *SdefXMLAccessStringFromFlag(unsigned flag);
 extern unsigned SdefXMLAccessFlagFromString(NSString *str);
 
@@ -26,6 +32,7 @@ extern NSArray *SdefXMLAccessorStringsFromFlag(unsigned flag);
 @interface SdefXMLParser : NSObject {
   id sd_node;
   id sd_delegate;
+  id sd_subParser;
   NSString *sd_error;
   CFXMLParserRef sd_parser;
   NSMutableArray *sd_comments;
@@ -33,9 +40,15 @@ extern NSArray *SdefXMLAccessorStringsFromFlag(unsigned flag);
 }
 - (int)parserVersion;
 
+- (id)delegate;
+- (void)setDelegate:(id)delegate;
+
+- (int)line;
 - (NSString *)error;
 - (SdefDictionary *)document;
 - (BOOL)parseData:(NSData *)document;
+
+- (SdefParserOperation)shouldAddInvalidObject:(id)anObject inNode:(SdefObject *)aNode;
 
 - (void)parser:(CFXMLParserRef)parser didStartClass:(NSDictionary *)attributes;
 - (void)parser:(CFXMLParserRef)parser didStartEvent:(NSDictionary *)attributes;
@@ -49,6 +62,11 @@ extern NSArray *SdefXMLAccessorStringsFromFlag(unsigned flag);
 - (void)parser:(CFXMLParserRef)parser didEndElement:(NSString *)element;
 
 - (void)parserDidEndDocumentation:(SdefDocumentationParser *)parser;
+
+@end
+
+@interface NSObject (SdefXMLParserDelegate)
+- (SdefParserOperation)sdefParser:(SdefXMLParser *)parser shouldAddInvalidObject:(id)anObject inNode:(SdefObject *)node;
 @end
 
 @class SdefDocumentation;

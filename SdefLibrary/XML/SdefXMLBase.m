@@ -40,6 +40,16 @@
         [node appendChild:childNode];
       }
     }
+    if ([self hasIgnore]) {
+      children = [[self ignores] reverseObjectEnumerator];
+      while (child = [children nextObject]) {
+        id childNode = [child xmlNodeForVersion:version];
+        if (childNode) {
+          NSAssert1([childNode elementName] != nil, @"%@ return an invalid node", child);
+          [node prependChild:childNode];
+        }
+      }
+    }
   }
   return node;
 }
