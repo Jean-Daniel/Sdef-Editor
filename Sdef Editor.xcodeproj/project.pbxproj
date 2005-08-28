@@ -552,9 +552,6 @@
 		98DDD04407F232A200541DFA /* SKTableDataSource.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; name = SKTableDataSource.m; path = /Volumes/Stock/Users/fox/Projets/Exploitables/ShadowKit/ShadowKit/AppKit/SKTableDataSource.m; sourceTree = "<absolute>"; };
 		98DDD04707F232AD00541DFA /* SKTableDataSource.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = SKTableDataSource.h; sourceTree = "<group>"; };
 		98DDF4AC07DC405000EF07E2 /* SdtplBundle.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = SdtplBundle.icns; sourceTree = "<group>"; };
-		98DE66E907B5783800B6CF43 /* Scripting.r */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.rez; name = Scripting.r; path = Resources/Scripting.r; sourceTree = "<group>"; };
-		98DE66EA07B5783800B6CF43 /* SdefSuite.scriptTerminology */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text.xml; name = SdefSuite.scriptTerminology; path = Resources/SdefSuite.scriptTerminology; sourceTree = "<group>"; };
-		98DE66EB07B5783800B6CF43 /* SdefSuite.scriptSuite */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text.xml; name = SdefSuite.scriptSuite; path = Resources/SdefSuite.scriptSuite; sourceTree = "<group>"; };
 		98DF608C084074FF00CBE83B /* OSASdefImporter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OSASdefImporter.h; sourceTree = "<group>"; };
 		98DF608D084074FF00CBE83B /* OSASdefImporter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OSASdefImporter.m; sourceTree = "<group>"; };
 		98E316670840961F003EC9D5 /* EditType.tif */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = EditType.tif; sourceTree = "<group>"; };
@@ -752,9 +749,6 @@
 			children = (
 				98CCA93A082FF723002A37E2 /* Scripting */,
 				9817594F07B6961F00CEB9BC /* SdefDocumentScripting.m */,
-				98DE66E907B5783800B6CF43 /* Scripting.r */,
-				98DE66EB07B5783800B6CF43 /* SdefSuite.scriptSuite */,
-				98DE66EA07B5783800B6CF43 /* SdefSuite.scriptTerminology */,
 			);
 			name = Scripting;
 			sourceTree = "<group>";
