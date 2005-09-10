@@ -264,7 +264,7 @@ SUCH DAMAGE.
 			<parameter name="with properties" code="prdt" description="Properties to be set in the new duplicated object(s)." type="record" optional="yes">
 				<cocoa key="WithProperties"/>
 			</parameter>
-			<result name="result" description="to the duplicated object(s)" type="specifier"/>
+			<result description="to the duplicated object(s)" type="specifier"/>
 		</command>
 		<command name="exists" code="coredoex" description="Verify if an object exists.">
 			<cocoa class="NSExistsCommand"/>
@@ -294,7 +294,7 @@ SUCH DAMAGE.
 			<parameter name="to" code="insh" description="The new location for the object(s)." type="location specifier">
 				<cocoa key="ToLocation"/>
 			</parameter>
-			<result name="result" description="to the moved object(s)" type="specifier"/>
+			<result description="to the moved object(s)" type="specifier"/>
 		</command>
 	</suite>
 	<!--

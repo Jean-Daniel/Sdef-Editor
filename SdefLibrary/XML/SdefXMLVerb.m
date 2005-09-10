@@ -55,6 +55,7 @@
 - (SdefXMLNode *)xmlNodeForVersion:(SdefVersion)version {
   id node = nil;
   if ([self hasType] && (node = [super xmlNodeForVersion:version])) {
+    [node removeAttributeForKey:@"name"];
     if ([self isOptional]) {
       if (kSdefTigerVersion == version) {
         [node setAttribute:@"yes" forKey:@"optional"];
@@ -125,6 +126,7 @@
 - (SdefXMLNode *)xmlNodeForVersion:(SdefVersion)version {
   id node = nil;
   if ([self hasType] && (node = [super xmlNodeForVersion:version])) {
+    [node removeAttributeForKey:@"name"];
     [node setEmpty:YES];
   }
   return node;

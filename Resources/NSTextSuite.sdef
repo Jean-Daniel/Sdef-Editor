@@ -1,4 +1,4 @@
-<?xml version="1.0"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE dictionary SYSTEM "file://localhost/System/Library/DTDs/sdef.dtd">
 <!--
 	This is AppKit's NSTextSuite terminology recast as an sdef.
@@ -6,7 +6,7 @@
 <dictionary title="Text Terminology">
 	<suite name="Text Suite" code="????" description="A set of basic classes for text processing.">
 		<cocoa name="NSTextSuite"/>
-		<class name="text" plural="text" code="ctxt" description="Rich (styled) text">
+		<class name="text" code="ctxt" description="Rich (styled) text" plural="text">
 			<cocoa class="NSTextStorage"/>
 			<element type="paragraph">
 				<cocoa key="paragraphs"/>
@@ -23,33 +23,33 @@
 			<element type="attachment">
 				<cocoa key="attachments"/>
 			</element>
-			<property name="color" code="colr" type="color" description="The color of the first character.">
+			<property name="color" code="colr" description="The color of the first character." type="color">
 				<cocoa key="foregroundColor"/>
 			</property>
-			<property name="font" code="font" type="text" description="The name of the font of the first character.">
+			<property name="font" code="font" description="The name of the font of the first character." type="text">
 				<cocoa key="fontName"/>
 			</property>
-			<property name="size" code="ptsz" type="number" description="The size in points of the first character.">
+			<property name="size" code="ptsz" description="The size in points of the first character." type="number">
 				<cocoa key="fontSize"/>
 			</property>
 		</class>
-		<class name="attachment" code="atts" inherits="text" description="Represents an inline text attachment.  This class is used mainly for make commands.">
+		<class name="attachment" code="atts" description="Represents an inline text attachment.  This class is used mainly for make commands." inherits="text">
 			<cocoa class="NSAttachmentTextStorage"/>
-			<property name="file name" code="atfn" type="text" description="The path to the file for the attachment">
-<!-- This property should be deprecated like all the other path-centric properties, and replaced with a type="file" property. -->
+			<!-- This property should be deprecated like all the other path-centric properties, and replaced with a type="file" property. -->
+			<property name="file name" code="atfn" description="The path to the file for the attachment" type="text">
 				<cocoa key="filename"/>
 			</property>
 		</class>
-		<class name="paragraph" code="cpar" inherits="text" description="This subdivides the text into paragraphs.">
+		<class name="paragraph" code="cpar" description="This subdivides the text into paragraphs." inherits="text">
 			<cocoa class="NSTextStorage"/>
 		</class>
-		<class name="word" code="cwor" inherits="text" description="This subdivides the text into words.">
+		<class name="word" code="cwor" description="This subdivides the text into words." inherits="text">
 			<cocoa class="NSTextStorage"/>
 		</class>
-		<class name="character" code="cha " inherits="text" description="This subdivides the text into characters.">
+		<class name="character" code="cha " description="This subdivides the text into characters." inherits="text">
 			<cocoa class="NSTextStorage"/>
 		</class>
-		<class name="attribute run" code="catr" inherits="text" description="This subdivides the text into chunks that all have the same attributes.">
+		<class name="attribute run" code="catr" description="This subdivides the text into chunks that all have the same attributes." inherits="text">
 			<cocoa class="NSTextStorage"/>
 		</class>
 	</suite>

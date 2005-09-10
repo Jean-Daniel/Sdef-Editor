@@ -559,7 +559,7 @@
 		98E317A60840B814003EC9D5 /* English */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = English; path = English.lproj/ImportApplicationSdef.nib; sourceTree = "<group>"; };
 		98E84E8B07FE9358008BB0AB /* WebKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebKit.framework; path = /System/Library/Frameworks/WebKit.framework; sourceTree = "<absolute>"; };
 		98E98CE30840D96F0093BA77 /* Element.tif */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = Element.tif; sourceTree = "<group>"; };
-		98E98D5D0840DFBA0093BA77 /* SdefLeave.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SdefLeave.h; sourceTree = "<group>"; };
+		98E98D5D0840DFBA0093BA77 /* SdefLeave.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SdefLeave.h; path = Headers/SdefLeave.h; sourceTree = "<group>"; };
 		98E98D5E0840DFBA0093BA77 /* SdefLeave.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SdefLeave.m; sourceTree = "<group>"; };
 		98EA0B89078C883900ECCB4B /* English */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = English; path = English.lproj/SdefDictionary.nib; sourceTree = "<group>"; };
 		98EA0B96078C886300ECCB4B /* SdefDictionaryView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SdefDictionaryView.h; sourceTree = "<group>"; };
@@ -575,7 +575,7 @@
 		98ECBD2C07AD7336008DE854 /* SdefImporter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SdefImporter.m; sourceTree = "<group>"; };
 		98EF19B6078B182F0073D736 /* SdefWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SdefWindowController.h; sourceTree = "<group>"; };
 		98EF19B7078B182F0073D736 /* SdefWindowController.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = SdefWindowController.m; sourceTree = "<group>"; };
-		98EF19C9078B206B0073D736 /* SdefViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SdefViewController.h; path = Headers/SdefViewController.h; sourceTree = "<group>"; };
+		98EF19C9078B206B0073D736 /* SdefViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SdefViewController.h; sourceTree = "<group>"; };
 		98EF19CA078B206B0073D736 /* SdefViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SdefViewController.m; sourceTree = "<group>"; };
 		98F11E1007D3B07F002C874A /* ASDictionaryStream.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ASDictionaryStream.m; sourceTree = "<group>"; };
 		98F15DE307A42653007A93DA /* English */ = {isa = PBXFileReference; fileEncoding = 10; lastKnownFileType = text.plist.strings; name = English; path = English.lproj/Localizable.strings; sourceTree = "<group>"; };
@@ -1208,6 +1208,8 @@
 		98EA0C56078C92D800ECCB4B /* Headers */ = {
 			isa = PBXGroup;
 			children = (
+				984572BE083FD0FE00EACD98 /* SdefTypesEditor.h */,
+				98EF19C9078B206B0073D736 /* SdefViewController.h */,
 				98D3AE60079DD08600DDB6CE /* SdefVerbView.h */,
 				98F3F21C0795197B00D8BFAE /* SdefClassView.h */,
 				98EA0C52078C92C600ECCB4B /* SdefSuiteView.h */,
@@ -1221,9 +1223,7 @@
 		98EF19CD078B20720073D736 /* Sdef Views */ = {
 			isa = PBXGroup;
 			children = (
-				984572BE083FD0FE00EACD98 /* SdefTypesEditor.h */,
 				984572BF083FD0FE00EACD98 /* SdefTypesEditor.m */,
-				98EF19C9078B206B0073D736 /* SdefViewController.h */,
 				98EF19CA078B206B0073D736 /* SdefViewController.m */,
 				98EA0C56078C92D800ECCB4B /* Headers */,
 				98D3AE61079DD08600DDB6CE /* SdefVerbView.m */,
