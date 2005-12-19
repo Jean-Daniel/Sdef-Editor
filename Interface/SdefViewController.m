@@ -9,7 +9,6 @@
 #import "SdefViewController.h"
 #import "SdefClass.h"
 #import "SdefDocument.h"
-#import "ShadowMacros.h"
 #import "SdefTypesEditor.h"
 #import "SdefClassManager.h"
 #import "SdefWindowController.h"

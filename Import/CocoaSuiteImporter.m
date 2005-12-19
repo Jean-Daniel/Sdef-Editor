@@ -9,7 +9,6 @@
 #import "CocoaSuiteImporter.h"
 #import "SdefEditor.h"
 
-#import "ShadowMacros.h"
 
 #import "CocoaObject.h"
 

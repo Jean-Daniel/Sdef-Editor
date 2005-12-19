@@ -7,7 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "SKTreeNode.h"
+#import <ShadowKit/SKTreeNode.h>
 
 @class SdefValue, SdefRecord, SdefEnumeration;
 @class SdefSuite, SdefObject, SdefClass, SdefVerb, SdefDocument, SdefDictionary;

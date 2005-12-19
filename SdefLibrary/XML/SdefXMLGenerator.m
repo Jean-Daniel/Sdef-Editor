@@ -10,7 +10,7 @@
 #import "SdefXMLNode.h"
 #import "SdefComment.h"
 #import "SdefXMLBase.h"
-#import "SKExtensions.h"
+#import <ShadowKit/SKExtensions.h>
 
 inline NSString *SdefEditorComment() {
   return NSLocalizedStringFromTable(@" Sdef Editor ", @"SdefLibrary", @"XML Document comment");

@@ -10,7 +10,7 @@
 #import "ASDictionaryStream.h"
 #import "SdefVerb.h"
 #import "SdefArguments.h"
-#import "SKExtensions.h"
+#import <ShadowKit/SKExtensions.h>
 
 @interface SdefDirectParameter (ASDictionary)
 - (void)appendStringToStream:(ASDictionaryStream *)stream;

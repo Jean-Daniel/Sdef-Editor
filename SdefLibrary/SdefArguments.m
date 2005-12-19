@@ -8,7 +8,7 @@
 
 #import "SdefArguments.h"
 #import "SdefDocument.h"
-#import "SKExtensions.h"
+#import <ShadowKit/SKExtensions.h>
 
 @implementation SdefDirectParameter
 - (id)copyWithZone:(NSZone *)aZone {

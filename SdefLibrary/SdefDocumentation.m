@@ -7,7 +7,7 @@
 //
 
 #import "SdefDocumentation.h"
-#import "SKExtensions.h"
+#import <ShadowKit/SKExtensions.h>
 
 #import "SdefDocument.h"
 

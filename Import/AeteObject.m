@@ -7,7 +7,6 @@
 //
 
 #import "AeteObject.h"
-#import "ShadowMacros.h"
 
 @implementation SdefObject (AeteResource)
 

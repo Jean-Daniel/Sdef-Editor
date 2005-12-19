@@ -20,9 +20,6 @@
 		9815F1C107E0F7E000D3C6CD /* SKTemplate.m in Sources */ = {isa = PBXBuildFile; fileRef = 9815F1BB07E0F7E000D3C6CD /* SKTemplate.m */; };
 		9815F1C307E0F7E000D3C6CD /* SKTemplateParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 9815F1BD07E0F7E000D3C6CD /* SKTemplateParser.m */; };
 		9815F1C507E0F7E000D3C6CD /* SKXMLTemplate.m in Sources */ = {isa = PBXBuildFile; fileRef = 9815F1BF07E0F7E000D3C6CD /* SKXMLTemplate.m */; };
-		9815F1CC07E0F80200D3C6CD /* SKTemplate.h in Headers */ = {isa = PBXBuildFile; fileRef = 9815F1C907E0F80200D3C6CD /* SKTemplate.h */; };
-		9815F1CD07E0F80200D3C6CD /* SKTemplateParser.h in Headers */ = {isa = PBXBuildFile; fileRef = 9815F1CA07E0F80200D3C6CD /* SKTemplateParser.h */; };
-		9815F1CE07E0F80200D3C6CD /* SKXMLTemplate.h in Headers */ = {isa = PBXBuildFile; fileRef = 9815F1CB07E0F80200D3C6CD /* SKXMLTemplate.h */; };
 		98168DBC07A26C9C002B893D /* SdefExporterController.m in Sources */ = {isa = PBXBuildFile; fileRef = 98168DBA07A26C9C002B893D /* SdefExporterController.m */; };
 		98168DD607A27735002B893D /* SdefProcessor.m in Sources */ = {isa = PBXBuildFile; fileRef = 98168DD407A27735002B893D /* SdefProcessor.m */; };
 		98168DDC07A27782002B893D /* sdp in Resources */ = {isa = PBXBuildFile; fileRef = 98168DDB07A27782002B893D /* sdp */; };
@@ -49,38 +46,25 @@
 		984A4C6608301C3200D062BB /* SdefXMLParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 98BDA84A082740440055FC80 /* SdefXMLParser.m */; };
 		984A4C6708301C3300D062BB /* SdefXMLParser.h in Headers */ = {isa = PBXBuildFile; fileRef = 98BDA848082740360055FC80 /* SdefXMLParser.h */; };
 		984A8C9B07DB2A3200591F7A /* SdefVerb.h in Headers */ = {isa = PBXBuildFile; fileRef = 9875801A078863FA0038C05B /* SdefVerb.h */; };
-		984A8C9C07DB2A3200591F7A /* SKFSFunctions.h in Headers */ = {isa = PBXBuildFile; fileRef = 98C77FE107D9DECA006D9CC1 /* SKFSFunctions.h */; };
-		984A8C9D07DB2A3200591F7A /* SKImageUtils.h in Headers */ = {isa = PBXBuildFile; fileRef = 98BF08DD078A08080035ECA2 /* SKImageUtils.h */; };
 		984A8CA107DB2A3200591F7A /* ImporterWarning.h in Headers */ = {isa = PBXBuildFile; fileRef = 986B93D507AB0AE400AB131C /* ImporterWarning.h */; };
 		984A8CA207DB2A3200591F7A /* SdefObjectInspector.h in Headers */ = {isa = PBXBuildFile; fileRef = 98D3A8AF079EBEF60049A8FC /* SdefObjectInspector.h */; };
 		984A8CA307DB2A3200591F7A /* SdefClassView.h in Headers */ = {isa = PBXBuildFile; fileRef = 98F3F21C0795197B00D8BFAE /* SdefClassView.h */; };
-		984A8CA407DB2A3200591F7A /* SKProcessFunctions.h in Headers */ = {isa = PBXBuildFile; fileRef = 98C783C607D9E4C5006D9CC1 /* SKProcessFunctions.h */; };
 		984A8CA507DB2A3200591F7A /* SdefSynonym.h in Headers */ = {isa = PBXBuildFile; fileRef = 9875801F078864330038C05B /* SdefSynonym.h */; };
 		984A8CA607DB2A3200591F7A /* SdefEditor.h in Headers */ = {isa = PBXBuildFile; fileRef = 98D3A8C4079EC8670049A8FC /* SdefEditor.h */; };
-		984A8CA707DB2A3200591F7A /* SKTreeNode.h in Headers */ = {isa = PBXBuildFile; fileRef = 98757FDB078855D80038C05B /* SKTreeNode.h */; };
-		984A8CA907DB2A3200591F7A /* ShadowMacros.h in Headers */ = {isa = PBXBuildFile; fileRef = 98757FE0078855DD0038C05B /* ShadowMacros.h */; };
 		984A8CAB07DB2A3200591F7A /* SdefArguments.h in Headers */ = {isa = PBXBuildFile; fileRef = 98D5AA43078C662300DD07B7 /* SdefArguments.h */; };
-		984A8CAC07DB2A3200591F7A /* SKLSFunctions.h in Headers */ = {isa = PBXBuildFile; fileRef = 98C783B507D9E2A3006D9CC1 /* SKLSFunctions.h */; };
 		984A8CAD07DB2A3200591F7A /* SdefImportsView.h in Headers */ = {isa = PBXBuildFile; fileRef = 98F711AA079C5D170059078F /* SdefImportsView.h */; };
 		984A8CAE07DB2A3200591F7A /* SdefDictionaryView.h in Headers */ = {isa = PBXBuildFile; fileRef = 98EA0B96078C886300ECCB4B /* SdefDictionaryView.h */; };
 		984A8CB107DB2A3200591F7A /* SdefProcessor.h in Headers */ = {isa = PBXBuildFile; fileRef = 98168DD307A27735002B893D /* SdefProcessor.h */; };
-		984A8CB207DB2A3200591F7A /* SKImageAndTextCell.h in Headers */ = {isa = PBXBuildFile; fileRef = 98BF08D3078A06B30035ECA2 /* SKImageAndTextCell.h */; };
-		984A8CB407DB2A3200591F7A /* ShadowBase.h in Headers */ = {isa = PBXBuildFile; fileRef = 98D3E3A607B4D75C001F1318 /* ShadowBase.h */; };
-		984A8CB507DB2A3200591F7A /* ShadowAEUtils.h in Headers */ = {isa = PBXBuildFile; fileRef = 98A05ABE07AD2850008D897D /* ShadowAEUtils.h */; };
 		984A8CB607DB2A3200591F7A /* SdefObjects.h in Headers */ = {isa = PBXBuildFile; fileRef = 98757FF007885F280038C05B /* SdefObjects.h */; };
 		984A8CB707DB2A3200591F7A /* SdefExporterController.h in Headers */ = {isa = PBXBuildFile; fileRef = 98168DB907A26C9C002B893D /* SdefExporterController.h */; };
 		984A8CB807DB2A3200591F7A /* SdefEnumerationView.h in Headers */ = {isa = PBXBuildFile; fileRef = 98EA0CF9078C9D2100ECCB4B /* SdefEnumerationView.h */; };
 		984A8CB907DB2A3200591F7A /* SdefWindowController.h in Headers */ = {isa = PBXBuildFile; fileRef = 98EF19B6078B182F0073D736 /* SdefWindowController.h */; };
 		984A8CBA07DB2A3200591F7A /* SdefTypedef.h in Headers */ = {isa = PBXBuildFile; fileRef = 98757FEC07885F1A0038C05B /* SdefTypedef.h */; };
 		984A8CBB07DB2A3200591F7A /* SdefImplementation.h in Headers */ = {isa = PBXBuildFile; fileRef = 9875802E078864F40038C05B /* SdefImplementation.h */; };
-		984A8CBC07DB2A3200591F7A /* SKFunctions.h in Headers */ = {isa = PBXBuildFile; fileRef = 98757FDA078855D80038C05B /* SKFunctions.h */; };
-		984A8CBD07DB2A3200591F7A /* SKApplication.h in Headers */ = {isa = PBXBuildFile; fileRef = 98298DDF07AE864500F09708 /* SKApplication.h */; };
 		984A8CBE07DB2A3200591F7A /* SdefDictionary.h in Headers */ = {isa = PBXBuildFile; fileRef = 98757FE5078856590038C05B /* SdefDictionary.h */; };
 		984A8CBF07DB2A3200591F7A /* SdefComment.h in Headers */ = {isa = PBXBuildFile; fileRef = 98D3A9DB079EF4B50049A8FC /* SdefComment.h */; };
 		984A8CC007DB2A3200591F7A /* SdefSuiteView.h in Headers */ = {isa = PBXBuildFile; fileRef = 98EA0C52078C92C600ECCB4B /* SdefSuiteView.h */; };
 		984A8CC207DB2A3200591F7A /* SdefClass.h in Headers */ = {isa = PBXBuildFile; fileRef = 98758014078863820038C05B /* SdefClass.h */; };
-		984A8CC407DB2A3200591F7A /* SKExtensions.h in Headers */ = {isa = PBXBuildFile; fileRef = 98757FDC078855D80038C05B /* SKExtensions.h */; };
-		984A8CC507DB2A3200591F7A /* SKWindowController.h in Headers */ = {isa = PBXBuildFile; fileRef = 98298DA707AE7E7D00F09708 /* SKWindowController.h */; };
 		984A8CC607DB2A3200591F7A /* SdefContents.h in Headers */ = {isa = PBXBuildFile; fileRef = 98D363B6078A7FDD00669D72 /* SdefContents.h */; };
 		984A8CC707DB2A3200591F7A /* Preferences.h in Headers */ = {isa = PBXBuildFile; fileRef = 98F2D33307B2D43100F2EEC2 /* Preferences.h */; };
 		984A8CCA07DB2A3200591F7A /* SdefVerbView.h in Headers */ = {isa = PBXBuildFile; fileRef = 98D3AE60079DD08600DDB6CE /* SdefVerbView.h */; };
@@ -92,7 +76,6 @@
 		984B7D9607F8B3B7004C5C60 /* SdefTemplate.h in Headers */ = {isa = PBXBuildFile; fileRef = 984B7D9407F8B3B7004C5C60 /* SdefTemplate.h */; };
 		984B7D9707F8B3B7004C5C60 /* SdefTemplate.m in Sources */ = {isa = PBXBuildFile; fileRef = 984B7D9507F8B3B7004C5C60 /* SdefTemplate.m */; };
 		984BB6EE07EA200B00E69BDA /* ShadowCFContext.m in Sources */ = {isa = PBXBuildFile; fileRef = 984BB6ED07EA200B00E69BDA /* ShadowCFContext.m */; };
-		984BB6F107EA201600E69BDA /* ShadowCFContext.h in Headers */ = {isa = PBXBuildFile; fileRef = 984BB6F007EA201600E69BDA /* ShadowCFContext.h */; };
 		984EE81807F09E6A00828BC0 /* SdefSymbolBrowser.m in Sources */ = {isa = PBXBuildFile; fileRef = 984EE81707F09E6A00828BC0 /* SdefSymbolBrowser.m */; };
 		984EE81A07F09E7400828BC0 /* SdefSymbolBrowser.h in Headers */ = {isa = PBXBuildFile; fileRef = 984EE81907F09E7400828BC0 /* SdefSymbolBrowser.h */; };
 		984EE82607F0A01F00828BC0 /* SdefSymbolBrowser.nib in Resources */ = {isa = PBXBuildFile; fileRef = 984EE82407F0A01F00828BC0 /* SdefSymbolBrowser.nib */; };
@@ -138,8 +121,28 @@
 		98758035078865170038C05B /* SdefDocumentation.m in Sources */ = {isa = PBXBuildFile; fileRef = 98758033078865170038C05B /* SdefDocumentation.m */; };
 		9875806007886E6F0038C05B /* SdefDocument.m in Sources */ = {isa = PBXBuildFile; fileRef = 9875805E07886E6F0038C05B /* SdefDocument.m */; };
 		98786EC807B19DA000A4B171 /* Preferences.nib in Resources */ = {isa = PBXBuildFile; fileRef = 98786EC607B19DA000A4B171 /* Preferences.nib */; };
+		9879E2E0094CB5FD005B2173 /* SKExtensions.h in Copy ShadowKit */ = {isa = PBXBuildFile; fileRef = 98757FDC078855D80038C05B /* SKExtensions.h */; };
+		9879E2E1094CB5FD005B2173 /* SKWindowController.h in Copy ShadowKit */ = {isa = PBXBuildFile; fileRef = 98298DA707AE7E7D00F09708 /* SKWindowController.h */; };
+		9879E2E2094CB5FD005B2173 /* SKLSFunctions.h in Copy ShadowKit */ = {isa = PBXBuildFile; fileRef = 98C783B507D9E2A3006D9CC1 /* SKLSFunctions.h */; };
+		9879E2E3094CB5FD005B2173 /* SKOutlineView.h in Copy ShadowKit */ = {isa = PBXBuildFile; fileRef = 98DA20E708B4F838000ABC2B /* SKOutlineView.h */; };
+		9879E2E4094CB5FD005B2173 /* SKImageAndTextCell.h in Copy ShadowKit */ = {isa = PBXBuildFile; fileRef = 98BF08D3078A06B30035ECA2 /* SKImageAndTextCell.h */; };
+		9879E2E5094CB5FD005B2173 /* SKDisclosurePanel.h in Copy ShadowKit */ = {isa = PBXBuildFile; fileRef = 98A4E1ED08003C8500E9775B /* SKDisclosurePanel.h */; };
+		9879E2E6094CB5FD005B2173 /* SKTemplateParser.h in Copy ShadowKit */ = {isa = PBXBuildFile; fileRef = 9815F1CA07E0F80200D3C6CD /* SKTemplateParser.h */; };
+		9879E2E7094CB5FD005B2173 /* SKTreeNode.h in Copy ShadowKit */ = {isa = PBXBuildFile; fileRef = 98757FDB078855D80038C05B /* SKTreeNode.h */; };
+		9879E2E8094CB5FD005B2173 /* ShadowCFContext.h in Copy ShadowKit */ = {isa = PBXBuildFile; fileRef = 984BB6F007EA201600E69BDA /* ShadowCFContext.h */; };
+		9879E2E9094CB5FD005B2173 /* ShadowBase.h in Copy ShadowKit */ = {isa = PBXBuildFile; fileRef = 98D3E3A607B4D75C001F1318 /* ShadowBase.h */; };
+		9879E2EA094CB5FD005B2173 /* SKFSFunctions.h in Copy ShadowKit */ = {isa = PBXBuildFile; fileRef = 98C77FE107D9DECA006D9CC1 /* SKFSFunctions.h */; };
+		9879E2EB094CB5FD005B2173 /* SKFunctions.h in Copy ShadowKit */ = {isa = PBXBuildFile; fileRef = 98757FDA078855D80038C05B /* SKFunctions.h */; };
+		9879E2EC094CB5FD005B2173 /* SKTableDataSource.h in Copy ShadowKit */ = {isa = PBXBuildFile; fileRef = 98DDD04707F232AD00541DFA /* SKTableDataSource.h */; };
+		9879E2ED094CB5FD005B2173 /* ShadowMacros.h in Copy ShadowKit */ = {isa = PBXBuildFile; fileRef = 98757FE0078855DD0038C05B /* ShadowMacros.h */; };
+		9879E2EE094CB5FD005B2173 /* SKXMLTemplate.h in Copy ShadowKit */ = {isa = PBXBuildFile; fileRef = 9815F1CB07E0F80200D3C6CD /* SKXMLTemplate.h */; };
+		9879E2EF094CB5FD005B2173 /* SKImageUtils.h in Copy ShadowKit */ = {isa = PBXBuildFile; fileRef = 98BF08DD078A08080035ECA2 /* SKImageUtils.h */; };
+		9879E2F0094CB5FD005B2173 /* SKProcessFunctions.h in Copy ShadowKit */ = {isa = PBXBuildFile; fileRef = 98C783C607D9E4C5006D9CC1 /* SKProcessFunctions.h */; };
+		9879E2F1094CB5FD005B2173 /* SKAppKitExtensions.h in Copy ShadowKit */ = {isa = PBXBuildFile; fileRef = 98C41B2C07F1DA5D00FAAEFA /* SKAppKitExtensions.h */; };
+		9879E2F2094CB5FD005B2173 /* SKApplication.h in Copy ShadowKit */ = {isa = PBXBuildFile; fileRef = 98298DDF07AE864500F09708 /* SKApplication.h */; };
+		9879E2F3094CB5FD005B2173 /* ShadowAEUtils.h in Copy ShadowKit */ = {isa = PBXBuildFile; fileRef = 98A05ABE07AD2850008D897D /* ShadowAEUtils.h */; };
+		9879E2F4094CB5FD005B2173 /* SKTemplate.h in Copy ShadowKit */ = {isa = PBXBuildFile; fileRef = 9815F1C907E0F80200D3C6CD /* SKTemplate.h */; };
 		98A05AC407AD2850008D897D /* ShadowAEUtils.c in Sources */ = {isa = PBXBuildFile; fileRef = 98A05AC007AD2850008D897D /* ShadowAEUtils.c */; };
-		98A4E1EE08003C8500E9775B /* SKDisclosurePanel.h in Headers */ = {isa = PBXBuildFile; fileRef = 98A4E1ED08003C8500E9775B /* SKDisclosurePanel.h */; };
 		98A4E1F208003C9B00E9775B /* SKDisclosureView.m in Sources */ = {isa = PBXBuildFile; fileRef = 98A4E1F008003C9B00E9775B /* SKDisclosureView.m */; };
 		98A4E1F308003C9B00E9775B /* SKDisclosurePanel.m in Sources */ = {isa = PBXBuildFile; fileRef = 98A4E1F108003C9B00E9775B /* SKDisclosurePanel.m */; };
 		98A52D40079F1F96003F17E8 /* SdefFile.icns in Resources */ = {isa = PBXBuildFile; fileRef = 98A52D3F079F1F96003F17E8 /* SdefFile.icns */; };
@@ -163,7 +166,6 @@
 		98BF08D1078A06A50035ECA2 /* SKImageAndTextCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 98BF08D0078A06A50035ECA2 /* SKImageAndTextCell.m */; };
 		98BF08E1078A08120035ECA2 /* SKImageUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 98BF08E0078A08120035ECA2 /* SKImageUtils.m */; };
 		98C38233083D2E5500340894 /* SdefTypesEditor.nib in Resources */ = {isa = PBXBuildFile; fileRef = 98C38231083D2E5500340894 /* SdefTypesEditor.nib */; };
-		98C41B2E07F1DA5D00FAAEFA /* SKAppKitExtensions.h in Headers */ = {isa = PBXBuildFile; fileRef = 98C41B2C07F1DA5D00FAAEFA /* SKAppKitExtensions.h */; };
 		98C41B2F07F1DA5D00FAAEFA /* SKAppKitExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 98C41B2D07F1DA5D00FAAEFA /* SKAppKitExtensions.m */; };
 		98C4F250081412A600ABBBBA /* SdefClassManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 98C4F24F081412A600ABBBBA /* SdefClassManager.m */; };
 		98C4F252081412AE00ABBBBA /* SdefClassManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 98C4F251081412AE00ABBBBA /* SdefClassManager.h */; };
@@ -195,11 +197,9 @@
 		98D5AAE7078C6FDD00DD07B7 /* Param.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 98D5AAE6078C6FDD00DD07B7 /* Param.tiff */; };
 		98D9B3D50876AEFB001AC5B1 /* Skeleton.sdef in Resources */ = {isa = PBXBuildFile; fileRef = 98D9B3D40876AEFB001AC5B1 /* Skeleton.sdef */; };
 		98DA20E608B4F82C000ABC2B /* SKOutlineView.m in Sources */ = {isa = PBXBuildFile; fileRef = 98DA20E508B4F82C000ABC2B /* SKOutlineView.m */; };
-		98DA20E808B4F838000ABC2B /* SKOutlineView.h in Headers */ = {isa = PBXBuildFile; fileRef = 98DA20E708B4F838000ABC2B /* SKOutlineView.h */; };
 		98DA3AD308411C28003C07A3 /* SdefDictionary.icns in Resources */ = {isa = PBXBuildFile; fileRef = 98DA3AD208411C28003C07A3 /* SdefDictionary.icns */; };
 		98DDCFE207F1FA0200541DFA /* EditSymbol.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 98DDCFE107F1FA0200541DFA /* EditSymbol.tiff */; };
 		98DDD04507F232A200541DFA /* SKTableDataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 98DDD04407F232A200541DFA /* SKTableDataSource.m */; };
-		98DDD04807F232AD00541DFA /* SKTableDataSource.h in Headers */ = {isa = PBXBuildFile; fileRef = 98DDD04707F232AD00541DFA /* SKTableDataSource.h */; };
 		98DDF4AD07DC405000EF07E2 /* SdtplBundle.icns in Resources */ = {isa = PBXBuildFile; fileRef = 98DDF4AC07DC405000EF07E2 /* SdtplBundle.icns */; };
 		98DF608E084074FF00CBE83B /* OSASdefImporter.h in Headers */ = {isa = PBXBuildFile; fileRef = 98DF608C084074FF00CBE83B /* OSASdefImporter.h */; };
 		98DF608F0840750000CBE83B /* OSASdefImporter.m in Sources */ = {isa = PBXBuildFile; fileRef = 98DF608D084074FF00CBE83B /* OSASdefImporter.m */; };
@@ -224,9 +224,9 @@
 		98F2D33207B2D42400F2EEC2 /* Preferences.m in Sources */ = {isa = PBXBuildFile; fileRef = 98F2D33107B2D42400F2EEC2 /* Preferences.m */; };
 		98F3F2180795194500D8BFAE /* SdefClass.nib in Resources */ = {isa = PBXBuildFile; fileRef = 98F3F2160795194500D8BFAE /* SdefClass.nib */; };
 		98F3F21B0795197200D8BFAE /* SdefClassView.m in Sources */ = {isa = PBXBuildFile; fileRef = 98F3F21A0795197200D8BFAE /* SdefClassView.m */; };
-		98F8A84C081A831800CBF3D8 /* Frame Dictionary.sdtpl in CopyFiles */ = {isa = PBXBuildFile; fileRef = 98F8A842081A830E00CBF3D8 /* Frame Dictionary.sdtpl */; };
-		98F940D807F8899C0014708A /* AppleDictionary.sdtpl in CopyFiles */ = {isa = PBXBuildFile; fileRef = 98F940C607F889690014708A /* AppleDictionary.sdtpl */; };
-		98F940D907F8899C0014708A /* AppleRTFDictionary.sdtpl in CopyFiles */ = {isa = PBXBuildFile; fileRef = 98F940C207F889690014708A /* AppleRTFDictionary.sdtpl */; };
+		98F8A84C081A831800CBF3D8 /* Frame Dictionary.sdtpl in Copy Templates */ = {isa = PBXBuildFile; fileRef = 98F8A842081A830E00CBF3D8 /* Frame Dictionary.sdtpl */; };
+		98F940D807F8899C0014708A /* AppleDictionary.sdtpl in Copy Templates */ = {isa = PBXBuildFile; fileRef = 98F940C607F889690014708A /* AppleDictionary.sdtpl */; };
+		98F940D907F8899C0014708A /* AppleRTFDictionary.sdtpl in Copy Templates */ = {isa = PBXBuildFile; fileRef = 98F940C207F889690014708A /* AppleRTFDictionary.sdtpl */; };
 		98FB9C4F08300BEA00101D8C /* AddType.tif in Resources */ = {isa = PBXBuildFile; fileRef = 98FB9C4E08300BEA00101D8C /* AddType.tif */; };
 		98FB9C5908300E2F00101D8C /* SdefXMLGenerator.m in Sources */ = {isa = PBXBuildFile; fileRef = 988FDDF3078F5607003374B6 /* SdefXMLGenerator.m */; };
 		98FB9C5A08300E3300101D8C /* SdefXMLNode.m in Sources */ = {isa = PBXBuildFile; fileRef = 98D29C93078FD2AB008FA9F6 /* SdefXMLNode.m */; };
@@ -340,16 +340,48 @@
 /* End PBXBuildStyle section */
 
 /* Begin PBXCopyFilesBuildPhase section */
-		98F940A407F888FB0014708A /* CopyFiles */ = {
+		9879E2D6094CB57B005B2173 /* Copy ShadowKit */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "$(BUILD_DIR)/ShadowKit";
+			dstSubfolderSpec = 0;
+			files = (
+				9879E2E0094CB5FD005B2173 /* SKExtensions.h in Copy ShadowKit */,
+				9879E2E1094CB5FD005B2173 /* SKWindowController.h in Copy ShadowKit */,
+				9879E2E2094CB5FD005B2173 /* SKLSFunctions.h in Copy ShadowKit */,
+				9879E2E3094CB5FD005B2173 /* SKOutlineView.h in Copy ShadowKit */,
+				9879E2E4094CB5FD005B2173 /* SKImageAndTextCell.h in Copy ShadowKit */,
+				9879E2E5094CB5FD005B2173 /* SKDisclosurePanel.h in Copy ShadowKit */,
+				9879E2E6094CB5FD005B2173 /* SKTemplateParser.h in Copy ShadowKit */,
+				9879E2E7094CB5FD005B2173 /* SKTreeNode.h in Copy ShadowKit */,
+				9879E2E8094CB5FD005B2173 /* ShadowCFContext.h in Copy ShadowKit */,
+				9879E2E9094CB5FD005B2173 /* ShadowBase.h in Copy ShadowKit */,
+				9879E2EA094CB5FD005B2173 /* SKFSFunctions.h in Copy ShadowKit */,
+				9879E2EB094CB5FD005B2173 /* SKFunctions.h in Copy ShadowKit */,
+				9879E2EC094CB5FD005B2173 /* SKTableDataSource.h in Copy ShadowKit */,
+				9879E2ED094CB5FD005B2173 /* ShadowMacros.h in Copy ShadowKit */,
+				9879E2EE094CB5FD005B2173 /* SKXMLTemplate.h in Copy ShadowKit */,
+				9879E2EF094CB5FD005B2173 /* SKImageUtils.h in Copy ShadowKit */,
+				9879E2F0094CB5FD005B2173 /* SKProcessFunctions.h in Copy ShadowKit */,
+				9879E2F1094CB5FD005B2173 /* SKAppKitExtensions.h in Copy ShadowKit */,
+				9879E2F2094CB5FD005B2173 /* SKApplication.h in Copy ShadowKit */,
+				9879E2F3094CB5FD005B2173 /* ShadowAEUtils.h in Copy ShadowKit */,
+				9879E2F4094CB5FD005B2173 /* SKTemplate.h in Copy ShadowKit */,
+			);
+			name = "Copy ShadowKit";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		98F940A407F888FB0014708A /* Copy Templates */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
 			dstPath = Templates;
 			dstSubfolderSpec = 7;
 			files = (
-				98F8A84C081A831800CBF3D8 /* Frame Dictionary.sdtpl in CopyFiles */,
-				98F940D807F8899C0014708A /* AppleDictionary.sdtpl in CopyFiles */,
-				98F940D907F8899C0014708A /* AppleRTFDictionary.sdtpl in CopyFiles */,
+				98F8A84C081A831800CBF3D8 /* Frame Dictionary.sdtpl in Copy Templates */,
+				98F940D807F8899C0014708A /* AppleDictionary.sdtpl in Copy Templates */,
+				98F940D907F8899C0014708A /* AppleRTFDictionary.sdtpl in Copy Templates */,
 			);
+			name = "Copy Templates";
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXCopyFilesBuildPhase section */
@@ -383,6 +415,11 @@
 		98168E0007A29025002B893D /* NSCoreSuite.sdef */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = NSCoreSuite.sdef; sourceTree = "<group>"; };
 		98168E0407A29036002B893D /* NSTextSuite.sdef */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = NSTextSuite.sdef; sourceTree = "<group>"; };
 		9817594F07B6961F00CEB9BC /* SdefDocumentScripting.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SdefDocumentScripting.m; sourceTree = "<group>"; };
+		981B66B2093870CE0024C0D9 /* ShadowCommon.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = ShadowCommon.xcconfig; sourceTree = "<group>"; };
+		981B66B3093870CE0024C0D9 /* ShadowDebug.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = ShadowDebug.xcconfig; sourceTree = "<group>"; };
+		981B66B4093870CE0024C0D9 /* ShadowRelease.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = ShadowRelease.xcconfig; sourceTree = "<group>"; };
+		981B66B5093870CE0024C0D9 /* ShadowTest.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = ShadowTest.xcconfig; sourceTree = "<group>"; };
+		981B66B6093870CE0024C0D9 /* ShadowUniversal.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = ShadowUniversal.xcconfig; sourceTree = "<group>"; };
 		981D86A707ADB0FE006BC0E9 /* ApplicationServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ApplicationServices.framework; path = /System/Library/Frameworks/ApplicationServices.framework; sourceTree = "<absolute>"; };
 		981D86A807ADB0FE006BC0E9 /* Carbon.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Carbon.framework; path = /System/Library/Frameworks/Carbon.framework; sourceTree = "<absolute>"; };
 		9820CD250793467D008D397F /* Dictionary.tif */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = Dictionary.tif; sourceTree = "<group>"; };
@@ -507,8 +544,6 @@
 		98CB367A082EC7670088CFD5 /* SdefBase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SdefBase.m; sourceTree = "<group>"; };
 		98CCA8F9082FEEF5002A37E2 /* SdefType.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SdefType.h; path = Headers/SdefType.h; sourceTree = "<group>"; };
 		98CCA8FA082FEEF5002A37E2 /* SdefType.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SdefType.m; sourceTree = "<group>"; };
-		98D0CCDA085CD0F800ECCE22 /* ShadowDebug.xcconfig */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text.xcconfig; name = ShadowDebug.xcconfig; path = Exploitables/ShadowKit/ShadowDebug.xcconfig; sourceTree = ProjectsRoot; };
-		98D0CCDB085CD0F800ECCE22 /* ShadowRelease.xcconfig */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text.xcconfig; name = ShadowRelease.xcconfig; path = Exploitables/ShadowKit/ShadowRelease.xcconfig; sourceTree = ProjectsRoot; };
 		98D127A907A6BD53001B486F /* CocoaSuiteImporter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CocoaSuiteImporter.h; sourceTree = "<group>"; };
 		98D127AA07A6BD53001B486F /* CocoaSuiteImporter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CocoaSuiteImporter.m; sourceTree = "<group>"; };
 		98D29C92078FD2AB008FA9F6 /* SdefXMLNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SdefXMLNode.h; sourceTree = "<group>"; };
@@ -649,8 +684,7 @@
 				2A37F4B8FDCFA73011CA2CEA /* Resources */,
 				2A37F4C3FDCFA73011CA2CEA /* Frameworks */,
 				19C28FB0FE9D524F11CA2CBB /* Products */,
-				98D0CCDA085CD0F800ECCE22 /* ShadowDebug.xcconfig */,
-				98D0CCDB085CD0F800ECCE22 /* ShadowRelease.xcconfig */,
+				981B66B1093870CE0024C0D9 /* Configurations */,
 			);
 			name = "SDef Editor";
 			sourceTree = "<group>";
@@ -790,6 +824,18 @@
 			path = ASDictionary;
 			sourceTree = "<group>";
 		};
+		981B66B1093870CE0024C0D9 /* Configurations */ = {
+			isa = PBXGroup;
+			children = (
+				981B66B2093870CE0024C0D9 /* ShadowCommon.xcconfig */,
+				981B66B3093870CE0024C0D9 /* ShadowDebug.xcconfig */,
+				981B66B5093870CE0024C0D9 /* ShadowTest.xcconfig */,
+				981B66B4093870CE0024C0D9 /* ShadowRelease.xcconfig */,
+				981B66B6093870CE0024C0D9 /* ShadowUniversal.xcconfig */,
+			);
+			path = Configurations;
+			sourceTree = SHADOWKIT_ROOT;
+		};
 		9821A16F07ADC09C003204C1 /* Aete Parser */ = {
 			isa = PBXGroup;
 			children = (
@@ -866,9 +912,8 @@
 				98D3AD50079D726100DDB6CE /* Foundation */,
 				98A05ABB07AD2850008D897D /* AppleEvent */,
 			);
-			name = ShadowKit;
-			path = Exploitables/ShadowKit/ShadowKit;
-			sourceTree = ProjectsRoot;
+			path = ShadowKit;
+			sourceTree = SHADOWKIT_ROOT;
 		};
 		98757FE4078856300038C05B /* SdefLibrary */ = {
 			isa = PBXGroup;
@@ -1296,26 +1341,6 @@
 				984A8CCA07DB2A3200591F7A /* SdefVerbView.h in Headers */,
 				984A8CD107DB2A3200591F7A /* SdefViewController.h in Headers */,
 				984A8CB907DB2A3200591F7A /* SdefWindowController.h in Headers */,
-				984A8CB507DB2A3200591F7A /* ShadowAEUtils.h in Headers */,
-				984A8CB407DB2A3200591F7A /* ShadowBase.h in Headers */,
-				984BB6F107EA201600E69BDA /* ShadowCFContext.h in Headers */,
-				984A8CA907DB2A3200591F7A /* ShadowMacros.h in Headers */,
-				98C41B2E07F1DA5D00FAAEFA /* SKAppKitExtensions.h in Headers */,
-				984A8CBD07DB2A3200591F7A /* SKApplication.h in Headers */,
-				98A4E1EE08003C8500E9775B /* SKDisclosurePanel.h in Headers */,
-				984A8CC407DB2A3200591F7A /* SKExtensions.h in Headers */,
-				984A8C9C07DB2A3200591F7A /* SKFSFunctions.h in Headers */,
-				984A8CBC07DB2A3200591F7A /* SKFunctions.h in Headers */,
-				984A8CB207DB2A3200591F7A /* SKImageAndTextCell.h in Headers */,
-				984A8C9D07DB2A3200591F7A /* SKImageUtils.h in Headers */,
-				984A8CAC07DB2A3200591F7A /* SKLSFunctions.h in Headers */,
-				984A8CA407DB2A3200591F7A /* SKProcessFunctions.h in Headers */,
-				98DDD04807F232AD00541DFA /* SKTableDataSource.h in Headers */,
-				9815F1CC07E0F80200D3C6CD /* SKTemplate.h in Headers */,
-				9815F1CD07E0F80200D3C6CD /* SKTemplateParser.h in Headers */,
-				984A8CA707DB2A3200591F7A /* SKTreeNode.h in Headers */,
-				984A8CC507DB2A3200591F7A /* SKWindowController.h in Headers */,
-				9815F1CE07E0F80200D3C6CD /* SKXMLTemplate.h in Headers */,
 				98B38DA70801D10E0025589C /* SdtplGenerator.h in Headers */,
 				98C4F252081412AE00ABBBBA /* SdefClassManager.h in Headers */,
 				986B1A32081862D3004CF2EA /* SdtplWindow.h in Headers */,
@@ -1338,7 +1363,6 @@
 				984572C0083FD0FE00EACD98 /* SdefTypesEditor.h in Headers */,
 				98DF608E084074FF00CBE83B /* OSASdefImporter.h in Headers */,
 				98E98D5F0840DFBA0093BA77 /* SdefLeave.h in Headers */,
-				98DA20E808B4F838000ABC2B /* SKOutlineView.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1349,12 +1373,13 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 98A7CBE60855010F000D862B /* Build configuration list for PBXNativeTarget "Sdef Editor" */;
 			buildPhases = (
+				9879E2D6094CB57B005B2173 /* Copy ShadowKit */,
 				984A8C4F07DB29CB00591F7A /* Headers */,
 				8D15AC300486D014006FF6A4 /* Sources */,
-				8D15AC2B0486D014006FF6A4 /* Resources */,
 				8D15AC330486D014006FF6A4 /* Frameworks */,
+				98F940A407F888FB0014708A /* Copy Templates */,
+				8D15AC2B0486D014006FF6A4 /* Resources */,
 				98DE66F107B5785100B6CF43 /* Rez */,
-				98F940A407F888FB0014708A /* CopyFiles */,
 			);
 			buildRules = (
 			);
@@ -1737,33 +1762,28 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
-		9849B8A108B548BD0036A437 /* Deployment Intel */ = {
+		9849B8A108B548BD0036A437 /* Universal Binary */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				GCC_DYNAMIC_NO_PIC = YES;
+				HEADER_SEARCH_PATHS = "\"$(BUILD_DIR)\"";
 				INFOPLIST_FILE = Resources/Info.plist;
 				INSTALL_PATH = "$(HOME)/Applications";
 				PRODUCT_NAME = "Sdef Editor";
 				WRAPPER_EXTENSION = app;
 			};
-			name = "Deployment Intel";
+			name = "Universal Binary";
 		};
-		9849B8A208B548BD0036A437 /* Deployment Intel */ = {
+		9849B8A208B548BD0036A437 /* Universal Binary */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 98D0CCDB085CD0F800ECCE22 /* ShadowRelease.xcconfig */;
+			baseConfigurationReference = 981B66B6093870CE0024C0D9 /* ShadowUniversal.xcconfig */;
 			buildSettings = {
-				ARCHS = i386;
-				GCC_FAST_OBJC_DISPATCH = YES;
-				MACOSX_DEPLOYMENT_TARGET = 10.4;
-				PREBINDING = NO;
-				SDKROOT = /Developer/SDKs/MacOSX10.4u.sdk;
 			};
-			name = "Deployment Intel";
+			name = "Universal Binary";
 		};
 		98A7CBE70855010F000D862B /* Development */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				GCC_DYNAMIC_NO_PIC = YES;
+				HEADER_SEARCH_PATHS = "\"$(BUILD_DIR)\"";
 				INFOPLIST_FILE = Resources/Info.plist;
 				INSTALL_PATH = "$(HOME)/Applications";
 				PRODUCT_NAME = "Sdef Editor";
@@ -1774,7 +1794,7 @@
 		98A7CBE80855010F000D862B /* Deployment */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				GCC_DYNAMIC_NO_PIC = YES;
+				HEADER_SEARCH_PATHS = "\"$(BUILD_DIR)\"";
 				INFOPLIST_FILE = Resources/Info.plist;
 				INSTALL_PATH = "$(HOME)/Applications";
 				PRODUCT_NAME = "Sdef Editor";
@@ -1784,37 +1804,17 @@
 		};
 		98A7CBED0855010F000D862B /* Development */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 98D0CCDA085CD0F800ECCE22 /* ShadowDebug.xcconfig */;
+			baseConfigurationReference = 981B66B3093870CE0024C0D9 /* ShadowDebug.xcconfig */;
 			buildSettings = {
 			};
 			name = Development;
 		};
 		98A7CBEE0855010F000D862B /* Deployment */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 98D0CCDB085CD0F800ECCE22 /* ShadowRelease.xcconfig */;
+			baseConfigurationReference = 981B66B5093870CE0024C0D9 /* ShadowTest.xcconfig */;
 			buildSettings = {
 			};
 			name = Deployment;
-		};
-		98D0CD8B085CD2B200ECCE22 /* Deployment Tiger */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				GCC_DYNAMIC_NO_PIC = YES;
-				INFOPLIST_FILE = Resources/Info.plist;
-				INSTALL_PATH = "$(HOME)/Applications";
-				PRODUCT_NAME = "Sdef Editor";
-				WRAPPER_EXTENSION = app;
-			};
-			name = "Deployment Tiger";
-		};
-		98D0CD8C085CD2B200ECCE22 /* Deployment Tiger */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = 98D0CCDB085CD0F800ECCE22 /* ShadowRelease.xcconfig */;
-			buildSettings = {
-				GCC_FAST_OBJC_DISPATCH = YES;
-				OTHER_CFLAGS = "-mcpu=7450";
-			};
-			name = "Deployment Tiger";
 		};
 /* End XCBuildConfiguration section */
 
@@ -1824,8 +1824,7 @@
 			buildConfigurations = (
 				98A7CBE70855010F000D862B /* Development */,
 				98A7CBE80855010F000D862B /* Deployment */,
-				9849B8A108B548BD0036A437 /* Deployment Intel */,
-				98D0CD8B085CD2B200ECCE22 /* Deployment Tiger */,
+				9849B8A108B548BD0036A437 /* Universal Binary */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Development;
@@ -1835,8 +1834,7 @@
 			buildConfigurations = (
 				98A7CBED0855010F000D862B /* Development */,
 				98A7CBEE0855010F000D862B /* Deployment */,
-				9849B8A208B548BD0036A437 /* Deployment Intel */,
-				98D0CD8C085CD2B200ECCE22 /* Deployment Tiger */,
+				9849B8A208B548BD0036A437 /* Universal Binary */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Development;

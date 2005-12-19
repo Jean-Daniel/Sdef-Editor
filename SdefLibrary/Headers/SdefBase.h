@@ -6,7 +6,7 @@
 //  Copyright 2005 Shadow Lab. All rights reserved.
 //
 
-#import "SKTreeNode.h"
+#import <ShadowKit/SKTreeNode.h>
 
 typedef enum {
   kSdefUndefinedType		= 0,

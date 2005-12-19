@@ -6,7 +6,7 @@
 //  Copyright 2005 Shadow Lab. All rights reserved.
 //
 
-#import "SKAppKitExtensions.h"
+#import <ShadowKit/SKAppKitExtensions.h>
 #import "SdefEnumerationView.h"
 #import "SdefTypedef.h"
 

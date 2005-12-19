@@ -7,7 +7,6 @@
 //
 
 #import "SdefDictionary.h"
-#import "ShadowMacros.h"
 
 #import "SdefSuite.h"
 #import "SdefClassManager.h"

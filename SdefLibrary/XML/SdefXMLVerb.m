@@ -10,7 +10,7 @@
 #import "SdefSuite.h"
 #import "SdefXMLNode.h"
 #import "SdefXMLBase.h"
-#import "SKExtensions.h"
+#import <ShadowKit/SKExtensions.h>
 #import "SdefArguments.h"
 
 @implementation SdefVerb (SdefXMLManager)

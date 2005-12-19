@@ -9,8 +9,7 @@
 #import "SdefDocument.h"
 #import "SdefEditor.h"
 
-#import "ShadowMacros.h"
-#import "SKFunctions.h"
+#import <ShadowKit/SKFunctions.h>
 
 #import "SdefWindowController.h"
 #import "SdefSymbolBrowser.h"

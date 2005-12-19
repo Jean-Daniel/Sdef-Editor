@@ -12,7 +12,7 @@
 @implementation SdefComment
 #pragma mark Protocols Implementations
 - (id)copyWithZone:(NSZone *)aZone {
-  SdefComment *copy = NSCopyObject(self, 0, aZone);
+  SdefComment *copy = (SdefComment *)NSCopyObject(self, 0, aZone);
   copy->sd_value = [sd_value copyWithZone:aZone];
   return copy;
 }

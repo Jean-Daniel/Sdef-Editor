@@ -7,7 +7,6 @@
 //
 
 #import "SdefImportsView.h"
-#import "ShadowMacros.h"
 #import "SdefParser.h"
 #import "SdefObject.h"
 #import "SdefEditor.h"

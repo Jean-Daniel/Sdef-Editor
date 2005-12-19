@@ -8,7 +8,6 @@
 
 #import "SdefObjectInspector.h"
 
-#import "ShadowMacros.h"
 
 #import "SdefObjects.h"
 #import "SdefDocument.h"

@@ -7,7 +7,6 @@
 //
 
 #import "SdefProcessor.h"
-#import "ShadowMacros.h"
 #import "SdefEditor.h"
 
 @implementation SdefProcessor

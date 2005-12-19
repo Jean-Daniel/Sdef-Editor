@@ -7,11 +7,10 @@
 //
 
 #import "SdefTemplate.h"
-#import "ShadowMacros.h"
-#import "SKFSFunctions.h"
+#import <ShadowKit/SKFSFunctions.h>
 
-#import "SKTemplate.h"
-#import "SKXMLTemplate.h"
+#import <ShadowKit/SKTemplate.h>
+#import <ShadowKit/SKXMLTemplate.h>
 
 extern NSString *const SdtplBlockTableOfContent;
 

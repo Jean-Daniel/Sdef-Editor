@@ -8,8 +8,8 @@
 
 #import "OSASdefImporter.h"
 
-#import "ShadowBase.h"
-#import "SKExtensions.h"
+#import <ShadowKit/ShadowBase.h>
+#import <ShadowKit/SKExtensions.h>
 #include <Carbon/Carbon.h>
 
 #import "SdefDocument.h"

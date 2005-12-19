@@ -7,7 +7,7 @@
 //
 
 #import "SdefWindowController.h"
-#import "SKAppKitExtensions.h"
+#import <ShadowKit/SKAppKitExtensions.h>
 #import "SdefClassView.h"
 #import "SdefClassManager.h"
 #import "SdefContents.h"

@@ -6,7 +6,7 @@
 //  Copyright 2005 Shadow Lab. All rights reserved.
 //
 
-#import "ShadowBase.h"
+#import <ShadowKit/ShadowBase.h>
 
 #import "SdefSuite.h"
 #import "SdefXMLNode.h"

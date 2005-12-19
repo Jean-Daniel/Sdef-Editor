@@ -9,8 +9,8 @@
 #import "ASDictionaryObject.h"
 #import "SdefClassManager.h"
 #import "SdefDocument.h"
-#import "SKExtensions.h"
-#import "ShadowBase.h"
+#import <ShadowKit/ShadowBase.h>
+#import <ShadowKit/SKExtensions.h>
 
 @implementation SdefObject (ASDictionary)
 

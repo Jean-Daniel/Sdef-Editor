@@ -7,9 +7,8 @@
 //
 
 #import "SdefEditor.h"
-#import "SKFunctions.h"
-#import "ShadowMacros.h"
-#import "SKApplication.h"
+#import <ShadowKit/SKFunctions.h>
+#import <ShadowKit/SKApplication.h>
 
 #include <Carbon/Carbon.h>
 

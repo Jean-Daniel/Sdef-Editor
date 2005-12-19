@@ -9,8 +9,7 @@
 #import "SdefVerbView.h"
 #import "SdefVerb.h"
 #import "SdefArguments.h"
-#import "ShadowMacros.h"
-#import "SKAppKitExtensions.h"
+#import <ShadowKit/SKAppKitExtensions.h>
 
 @implementation SdefVerbView
 

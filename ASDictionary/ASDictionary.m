@@ -7,7 +7,6 @@
 //
 
 #import "ASDictionary.h"
-#import "ShadowMacros.h"
 
 #import "SdefDictionary.h"
 #import "ASDictionaryObject.h"

@@ -9,7 +9,7 @@
 #import "AeteObject.h"
 #import "SdefVerb.h"
 #import "SdefArguments.h"
-#import "SKFunctions.h"
+#import <ShadowKit/SKFunctions.h>
 
 @implementation SdefVerb (AeteResource)
 

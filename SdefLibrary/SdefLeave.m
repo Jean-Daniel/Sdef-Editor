@@ -12,7 +12,7 @@
 @implementation SdefLeave
 #pragma mark Protocols Implementations
 - (id)copyWithZone:(NSZone *)aZone {
-  SdefLeave *copy = NSCopyObject(self, 0, aZone);
+  SdefLeave *copy = (SdefLeave *)NSCopyObject(self, 0, aZone);
   copy->sd_name = [sd_name copyWithZone:aZone];
   return copy;
 }

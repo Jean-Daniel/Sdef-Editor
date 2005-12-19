@@ -9,8 +9,8 @@
 #import "SdefClassManager.h"
 #import "SdefClass.h"
 #import "SdefSuite.h"
-#import "ShadowBase.h"
-#import "SKFunctions.h"
+#import <ShadowKit/ShadowBase.h>
+#import <ShadowKit/SKFunctions.h>
 
 #import "SdefImplementation.h"
 #import "SdefDictionary.h"

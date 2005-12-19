@@ -6,7 +6,7 @@
 //  Copyright 2005 Shadow Lab. All rights reserved.
 //
 
-#import "SKWindowController.h"
+#import <ShadowKit/SKWindowController.h>
 
 @interface ImporterWarning : SKWindowController {
   IBOutlet NSTableView *warningsTable;

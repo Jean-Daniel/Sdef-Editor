@@ -10,7 +10,7 @@
 
 #import "ASDictionaryObject.h"
 #import "ASDictionaryStream.h"
-#import "SKFunctions.h"
+#import <ShadowKit/SKFunctions.h>
 #import "SdefSuite.h"
 
 @implementation SdefSuite (ASDictionary)

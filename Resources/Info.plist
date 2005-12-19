@@ -165,7 +165,7 @@
 			<key>UTTypeIdentifier</key>
 			<string>com.apple.scripting-definition</string>
 			<key>UTTypeReferenceURL</key>
-			<string>http://shadowlab.free.fr/Creation/SdefEditor/SdefReference.html</string>
+			<string>http://www.shadowlab.org/Software/SdefEditor/SdefReference.html</string>
 			<key>UTTypeTagSpecification</key>
 			<dict>
 				<key>com.apple.ostype</key>

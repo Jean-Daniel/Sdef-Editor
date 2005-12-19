@@ -7,9 +7,9 @@
 //
 
 #import "SdefSymbolBrowser.h"
-#import "SKExtensions.h"
-#import "SKTableDataSource.h"
-#import "SKAppKitExtensions.h"
+#import <ShadowKit/SKExtensions.h>
+#import <ShadowKit/SKTableDataSource.h>
+#import <ShadowKit/SKAppKitExtensions.h>
 
 #import "SdefWindowController.h"
 #import "SdefDictionary.h"

@@ -7,9 +7,8 @@
 //
 
 #import "AeteImporter.h"
-#import "ShadowMacros.h"
-#import "SKFunctions.h"
-#import "SKExtensions.h"
+#import <ShadowKit/SKFunctions.h>
+#import <ShadowKit/SKExtensions.h>
 
 #import "SdefSuite.h"
 #import "SdefClass.h"
@@ -17,7 +16,7 @@
 #import "SdefClassManager.h"
 
 #import "AeteObject.h"
-#import "ShadowAEUtils.h"
+#import <ShadowKit/ShadowAEUtils.h>
 #include <Carbon/Carbon.h>
 
 struct AeteHeader {

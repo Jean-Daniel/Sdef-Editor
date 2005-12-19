@@ -7,11 +7,11 @@
 //
 
 #import "SdtplGenerator.h"
-#import "SKAppKitExtensions.h"
-#import "ShadowCFContext.h"
-#import "SKExtensions.h"
+#import <ShadowKit/SKAppKitExtensions.h>
+#import <ShadowKit/ShadowCFContext.h>
+#import <ShadowKit/SKExtensions.h>
+#import <ShadowKit/SKTemplate.h>
 #import "SdefTemplate.h"
-#import "SKTemplate.h"
 
 #import "SdefVerb.h"
 #import "SdefClass.h"

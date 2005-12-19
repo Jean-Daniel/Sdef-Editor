@@ -7,7 +7,6 @@
 //
 
 #import "SdefBase.h"
-#import "ShadowMacros.h"
 
 @interface SdefObject (ASDictionary)
 

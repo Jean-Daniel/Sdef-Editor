@@ -11,7 +11,7 @@
 #import "SdefClass.h"
 #import "SdefTypedef.h"
 
-#import "SKFunctions.h"
+#import <ShadowKit/SKFunctions.h>
 
 @implementation SdefSuite (AeteResource)
 

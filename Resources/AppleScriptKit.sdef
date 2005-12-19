@@ -161,6 +161,7 @@
 		</class>
 	</suite>
 	<suite name="Application Suite" code="appS" description="Classes and events representing AppleScript Studio applications">
+		<cocoa name="ASKApplicationSuite"/>
 		<enumeration name="sizM" code="sizM">
 			<enumerator name="default size mode" code="deSM" description="Default size"/>
 			<enumerator name="regular size mode" code="reSM" description="Regular size"/>
@@ -649,6 +650,7 @@
 		</command>
 	</suite>
 	<suite name="Container View Suite" code="caVS" description="Classes representing views that can contain other views">
+		<cocoa name="ASKContainerViewSuite"/>
 		<enumeration name="ETiO" code="ETiO">
 			<enumerator name="above bottom" code="aboB" description="Title at the bottom above the line"/>
 			<enumerator name="above top" code="aboT" description="Title at the top above the line"/>
@@ -1017,6 +1019,7 @@
 		</command>
 	</suite>
 	<suite name="Control View Suite" code="coVS" description="Classes representing controls">
+		<cocoa name="ASKControlViewSuite"/>
 		<enumeration name="ETeL" code="ETeL">
 			<enumerator name="center text alignment" code="ceTA" description="Align text to the center"/>
 			<enumerator name="justified text alignment" code="juTA" description="Justify the text to the left and right"/>
@@ -1760,6 +1763,7 @@
 		</command>
 	</suite>
 	<suite name="Data View Suite" code="daVS" description="Classes representing views that deal with organized data.">
+		<cocoa name="ASKDataViewSuite"/>
 		<enumeration name="ESoD" code="ESoD">
 			<enumerator name="ascending" code="ascN" description="Sort the data in an ascending fashion"/>
 			<enumerator name="descending" code="desE" description="Sort the data in a descending fashion"/>
@@ -2228,6 +2232,7 @@
 		</command>
 	</suite>
 	<suite name="Document Suite" code="docS" description="Classes and events representing documents">
+		<cocoa name="ASKDocumentSuite"/>
 		<class name="document" code="docu" description="A document" plural="documents" inherits="responder">
 			<element type="window"/>
 			<property name="file kind" code="filT" description="this property is for backwards compatibility only" type="text"/>
@@ -2258,6 +2263,7 @@
 		</command>
 	</suite>
 	<suite name="Drag and Drop Suite" code="drAD" description="Classes and events to support drag and drop">
+		<cocoa name="ASKDragAndDropSuite"/>
 		<enumeration name="EDaO" code="EDaO">
 			<enumerator name="copy drag operation" code="coDO" description="indicates the drag is a copy operation"/>
 			<enumerator name="delete drag operation" code="deDO" description="indicates the drag is a delete operation"/>
@@ -2308,6 +2314,7 @@
 		</command>
 	</suite>
 	<suite name="Menu Suite" code="menS" description="Classes representing menus and menu items">
+		<cocoa name="ASKMenuSuite"/>
 		<class name="menu" code="menE" description="A menu" plural="menus" inherits="item">
 			<element type="menu"/>
 			<element type="menu item"/>
@@ -2339,6 +2346,7 @@
 		</command>
 	</suite>
 	<suite name="Panel Suite" code="panS" description="Classes representing standard panels and alerts">
+		<cocoa name="ASKPanelSuite"/>
 		<enumeration name="EAlT" code="EAlT">
 			<enumerator name="critical" code="criT" description="Critical alert"/>
 			<enumerator name="informational" code="infA" description="Informational alert"/>
@@ -2583,6 +2591,7 @@
 		</command>
 	</suite>
 	<suite name="Plugin Suite" code="appS" description="Classes and events supporting plugins for various applications.">
+		<cocoa name="ASKPluginSuite"/>
 		<class name="plugin" code="pluG" description="A plugin to an application" plural="plugins" inherits="item"/>
 		<command name="plugin loaded" code="pluSpluL" description="The plugin was loaded">
 			<direct-parameter description="the object for the command" type="specifier"/>

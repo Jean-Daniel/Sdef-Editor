@@ -7,8 +7,8 @@
 //
 
 #import "ImportApplicationAete.h"
-#import "SKApplication.h"
-#import "SKImageUtils.h"
+#import <ShadowKit/SKApplication.h>
+#import <ShadowKit/SKImageUtils.h>
 #import "AeteImporter.h"
 #import "SdefEditor.h"
 

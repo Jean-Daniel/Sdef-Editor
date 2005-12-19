@@ -8,7 +8,7 @@
 
 #import "SdefXMLBase.h"
 #import "SdefXMLNode.h"
-#import "SKExtensions.h"
+#import <ShadowKit/SKExtensions.h>
 
 #import "SdefComment.h"
 

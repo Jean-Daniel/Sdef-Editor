@@ -7,7 +7,6 @@
 //
 
 #import "ASDictionaryStream.h"
-#import "ShadowMacros.h"
 
 #pragma mark Private Functions Declaration
 static NSFont *FontForASDictionaryStyle(ASDictionaryStyle *style);

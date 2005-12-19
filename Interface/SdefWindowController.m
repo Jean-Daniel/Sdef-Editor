@@ -9,8 +9,8 @@
 #import "SdefWindowController.h"
 #import "SdefViewController.h"
 
-#import "SKFunctions.h"
-#import "SKAppKitExtensions.h"
+#import <ShadowKit/SKFunctions.h>
+#import <ShadowKit/SKAppKitExtensions.h>
 
 #import "SdefVerb.h"
 #import "SdefClass.h"

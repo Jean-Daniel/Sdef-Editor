@@ -8,7 +8,6 @@
 
 #import "SdefObjects.h"
 
-#import "ShadowMacros.h"
 
 #import "SdefType.h"
 #import "SdefSynonym.h"

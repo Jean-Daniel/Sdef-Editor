@@ -11,8 +11,8 @@
 #import "SdefTemplate.h"
 #import "SdefDocument.h"
 #import "SdtplGenerator.h"
-#import "SKDisclosurePanel.h"
 #import "SdefWindowController.h"
+#import <ShadowKit/SKDisclosurePanel.h>
 
 @implementation SdtplWindow
 
