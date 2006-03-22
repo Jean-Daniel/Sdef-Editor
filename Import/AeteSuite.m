@@ -1,10 +1,10 @@
-//
-//  AeteSuite.m
-//  Sdef Editor
-//
-//  Created by Grayfox on 30/01/05.
-//  Copyright 2005 Shadow Lab. All rights reserved.
-//
+/*
+ *  AeteSuite.m
+ *  Sdef Editor
+ *
+ *  Created by Rainbow Team.
+ *  Copyright © 2006 Shadow Lab. All rights reserved.
+ */
 
 #import "SdefSuite.h"
 #import "SdefVerb.h"

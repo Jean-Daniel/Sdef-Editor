@@ -1,10 +1,10 @@
-//
-//  SdefSuiteView.m
-//  SDef Editor
-//
-//  Created by Grayfox on 05/01/05.
-//  Copyright 2005 Shadow Lab. All rights reserved.
-//
+/*
+ *  SdefSuiteView.m
+ *  Sdef Editor
+ *
+ *  Created by Rainbow Team.
+ *  Copyright © 2006 Shadow Lab. All rights reserved.
+ */
 
 #import <ShadowKit/SKAppKitExtensions.h>
 #import "SdefSuiteView.h"

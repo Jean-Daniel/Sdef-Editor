@@ -1,10 +1,10 @@
-//
-//  SdefEditor.m
-//  Sdef Editor
-//
-//  Created by Grayfox on 19/01/05.
-//  Copyright 2005 Shadow Lab. All rights reserved.
-//
+/*
+ *  SdefEditor.m
+ *  Sdef Editor
+ *
+ *  Created by Rainbow Team.
+ *  Copyright © 2006 Shadow Lab. All rights reserved.
+ */
 
 #import "SdefEditor.h"
 #import <ShadowKit/SKFunctions.h>

@@ -1,10 +1,10 @@
-//
-//  SdefXMLObject.m
-//  Sdef Editor
-//
-//  Created by Grayfox on 01/02/05.
-//  Copyright 2005 Shadow Lab. All rights reserved.
-//
+/*
+ *  SdefXMLObject.m
+ *  Sdef Editor
+ *
+ *  Created by Rainbow Team.
+ *  Copyright © 2006 Shadow Lab. All rights reserved.
+ */
 
 #import "SdefXMLBase.h"
 #import "SdefXMLNode.h"

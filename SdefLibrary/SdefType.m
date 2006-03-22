@@ -1,10 +1,10 @@
-//
-//  SdefType.m
-//  Sdef Editor
-//
-//  Created by Grayfox on 09/05/05.
-//  Copyright 2005 Shadow Lab. All rights reserved.
-//
+/*
+ *  SdefType.m
+ *  Sdef Editor
+ *
+ *  Created by Rainbow Team.
+ *  Copyright © 2006 Shadow Lab. All rights reserved.
+ */
 
 #import "SdefType.h"
 #import "SdefObjects.h"

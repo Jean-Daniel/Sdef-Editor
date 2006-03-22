@@ -1,10 +1,10 @@
-//
-//  SdefEnumeration.h
-//  SDef Editor
-//
-//  Created by Grayfox on 02/01/05.
-//  Copyright 2005 Shadow Lab. All rights reserved.
-//
+/*
+ *  SdefEnumeration.h
+ *  Sdef Editor
+ *
+ *  Created by Rainbow Team.
+ *  Copyright © 2006 Shadow Lab. All rights reserved.
+ */
 
 #import "SdefObjects.h"
 

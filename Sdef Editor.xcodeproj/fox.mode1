@@ -244,6 +244,8 @@
 			<key>Layout</key>
 			<array>
 				<dict>
+					<key>BecomeActive</key>
+					<true/>
 					<key>ContentConfiguration</key>
 					<dict>
 						<key>PBXBottomSmartGroupGIDs</key>
@@ -280,15 +282,9 @@
 						<key>PBXSmartGroupTreeModuleOutlineStateKey_v7</key>
 						<dict>
 							<key>PBXSmartGroupTreeModuleOutlineStateExpansionKey</key>
-							<array>
-								<string>2A37F4AAFDCFA73011CA2CEA</string>
-							</array>
+							<array/>
 							<key>PBXSmartGroupTreeModuleOutlineStateSelectionKey</key>
-							<array>
-								<array>
-									<integer>13</integer>
-								</array>
-							</array>
+							<array/>
 							<key>PBXSmartGroupTreeModuleOutlineStateVisibleRectKey</key>
 							<string>{{0, 0}, {263, 648}}</string>
 						</dict>
@@ -356,8 +352,6 @@
 							<string>0pt</string>
 						</dict>
 						<dict>
-							<key>BecomeActive</key>
-							<true/>
 							<key>ContentConfiguration</key>
 							<dict>
 								<key>PBXProjectModuleGUID</key>
@@ -394,9 +388,9 @@
 			</array>
 			<key>TableOfContents</key>
 			<array>
-				<string>98E87DB609CDA415001E0B0C</string>
+				<string>98D12B0709D211A300FBE207</string>
 				<string>1CE0B1FE06471DED0097A5F4</string>
-				<string>98E87DB709CDA415001E0B0C</string>
+				<string>98D12B0809D211A300FBE207</string>
 				<string>1CE0B20306471E060097A5F4</string>
 				<string>1CE0B20506471E060097A5F4</string>
 			</array>
@@ -515,7 +509,7 @@
 	<key>StatusbarIsVisible</key>
 	<true/>
 	<key>TimeStamp</key>
-	<real>164471973.03474799</real>
+	<real>164760760.097758</real>
 	<key>ToolbarDisplayMode</key>
 	<integer>2</integer>
 	<key>ToolbarIsVisible</key>
@@ -530,9 +524,6 @@
 	<integer>5</integer>
 	<key>WindowOrderList</key>
 	<array>
-		<string>1C530D57069F1CE1000CFCEE</string>
-		<string>1C0AD2B3069F1EA900FABCE6</string>
-		<string>98DA3A0A0841156B003C07A3</string>
 		<string>/Volumes/Stock/Users/fox/Projets/Exploitables/Sdef Editor/Sdef Editor.xcodeproj</string>
 	</array>
 	<key>WindowString</key>

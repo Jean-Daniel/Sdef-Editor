@@ -1,10 +1,10 @@
-//
-//  ImportApplicationAete.m
-//  Sdef Editor
-//
-//  Created by Grayfox on 31/01/05.
-//  Copyright 2005 Shadow Lab. All rights reserved.
-//
+/*
+ *  ImportApplicationAete.m
+ *  Sdef Editor
+ *
+ *  Created by Rainbow Team.
+ *  Copyright © 2006 Shadow Lab. All rights reserved.
+ */
 
 #import "ImportApplicationAete.h"
 #import <ShadowKit/SKApplication.h>

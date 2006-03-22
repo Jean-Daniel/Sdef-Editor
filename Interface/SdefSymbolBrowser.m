@@ -1,10 +1,10 @@
-//
-//  SdefSymbolBrowser.m
-//  Sdef Editor
-//
-//  Created by Grayfox on 22/03/05.
-//  Copyright 2005 Shadow Lab. All rights reserved.
-//
+/*
+ *  SdefSymbolBrowser.m
+ *  Sdef Editor
+ *
+ *  Created by Rainbow Team.
+ *  Copyright © 2006 Shadow Lab. All rights reserved.
+ */
 
 #import "SdefSymbolBrowser.h"
 #import <ShadowKit/SKExtensions.h>

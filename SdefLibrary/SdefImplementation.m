@@ -1,10 +1,10 @@
-//
-//  SdefImplementation.m
-//  SDef Editor
-//
-//  Created by Grayfox on 02/01/05.
-//  Copyright 2005 Shadow Lab. All rights reserved.
-//
+/*
+ *  SdefImplementation.m
+ *  Sdef Editor
+ *
+ *  Created by Rainbow Team.
+ *  Copyright © 2006 Shadow Lab. All rights reserved.
+ */
 
 #import "SdefImplementation.h"
 #import "SdefDocument.h"

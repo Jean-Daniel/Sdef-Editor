@@ -1,10 +1,10 @@
-//
-//  AeteEnumeration.m
-//  Sdef Editor
-//
-//  Created by Grayfox on 30/01/05.
-//  Copyright 2005 Shadow Lab. All rights reserved.
-//
+/*
+ *  AeteEnumeration.m
+ *  Sdef Editor
+ *
+ *  Created by Rainbow Team.
+ *  Copyright © 2006 Shadow Lab. All rights reserved.
+ */
 
 #import "AeteObject.h"
 #import <ShadowKit/SKFunctions.h>

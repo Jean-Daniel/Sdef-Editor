@@ -1,10 +1,10 @@
-//
-//  SdefLeave.h
-//  Sdef Editor
-//
-//  Created by Grayfox on 22/05/05.
-//  Copyright 2005 Shadow Lab. All rights reserved.
-//
+/*
+ *  SdefLeave.h
+ *  Sdef Editor
+ *
+ *  Created by Rainbow Team.
+ *  Copyright © 2006 Shadow Lab. All rights reserved.
+ */
 
 #import <Cocoa/Cocoa.h>
 

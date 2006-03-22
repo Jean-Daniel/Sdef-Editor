@@ -1,10 +1,10 @@
-//
-//  SdefContents.m
-//  SDef Editor
-//
-//  Created by Grayfox on 04/01/05.
-//  Copyright 2005 Shadow Lab. All rights reserved.
-//
+/*
+ *  SdefContents.m
+ *  Sdef Editor
+ *
+ *  Created by Rainbow Team.
+ *  Copyright © 2006 Shadow Lab. All rights reserved.
+ */
 
 #import "SdefContents.h"
 #import "SdefClass.h"

@@ -1,10 +1,10 @@
-//
-//  CocoaSuiteImporter.m
-//  Sdef Editor
-//
-//  Created by Grayfox on 25/01/05.
-//  Copyright 2005 Shadow Lab. All rights reserved.
-//
+/*
+ *  CocoaSuiteImporter.m
+ *  Sdef Editor
+ *
+ *  Created by Rainbow Team.
+ *  Copyright © 2006 Shadow Lab. All rights reserved.
+ */
 
 #import "CocoaSuiteImporter.h"
 #import "SdefEditor.h"

@@ -1,10 +1,10 @@
-//
-//  SdefXMLParser.m
-//  Sdef Editor
-//
-//  Created by Grayfox on 03/05/05.
-//  Copyright 2005 Shadow Lab. All rights reserved.
-//
+/*
+ *  SdefXMLParser.m
+ *  Sdef Editor
+ *
+ *  Created by Rainbow Team.
+ *  Copyright © 2006 Shadow Lab. All rights reserved.
+ */
 
 #import <ShadowKit/ShadowBase.h>
 #import <ShadowKit/SKFunctions.h>

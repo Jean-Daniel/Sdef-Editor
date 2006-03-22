@@ -1,10 +1,10 @@
-//
-//  SdtplGenerator.h
-//  Sdef Editor
-//
-//  Created by Grayfox on 04/04/05.
-//  Copyright 2005 Shadow Lab. All rights reserved.
-//
+/*
+ *  SdtplGenerator.h
+ *  Sdef Editor
+ *
+ *  Created by Rainbow Team.
+ *  Copyright © 2006 Shadow Lab. All rights reserved.
+ */
 
 #import <Foundation/Foundation.h>
 

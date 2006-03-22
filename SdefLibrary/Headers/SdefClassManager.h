@@ -1,10 +1,10 @@
-//
-//  SdefClassManager.h
-//  SDef Editor
-//
-//  Created by Grayfox on 17/01/05.
-//  Copyright 2005 Shadow Lab. All rights reserved.
-//
+/*
+ *  SdefClassManager.h
+ *  Sdef Editor
+ *
+ *  Created by Rainbow Team.
+ *  Copyright © 2006 Shadow Lab. All rights reserved.
+ */
 
 #import <Foundation/Foundation.h>
 #import <ShadowKit/SKTreeNode.h>

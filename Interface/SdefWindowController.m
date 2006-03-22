@@ -1,10 +1,10 @@
-//
-//  SdefWindowController.m
-//  SDef Editor
-//
-//  Created by Grayfox on 04/01/05.
-//  Copyright 2005 Shadow Lab. All rights reserved.
-//
+/*
+ *  SdefWindowController.m
+ *  Sdef Editor
+ *
+ *  Created by Rainbow Team.
+ *  Copyright © 2006 Shadow Lab. All rights reserved.
+ */
 
 #import "SdefWindowController.h"
 #import "SdefViewController.h"

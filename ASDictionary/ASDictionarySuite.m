@@ -1,10 +1,10 @@
-//
-//  ASDictionarySuite.m
-//  Sdef Editor
-//
-//  Created by Grayfox on 27/02/05.
-//  Copyright 2005 Shadow Lab. All rights reserved.
-//
+/*
+ *  ASDictionarySuite.m
+ *  Sdef Editor
+ *
+ *  Created by Rainbow Team.
+ *  Copyright © 2006 Shadow Lab. All rights reserved.
+ */
 
 #include <Carbon/Carbon.h>
 

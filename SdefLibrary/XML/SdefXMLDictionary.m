@@ -1,10 +1,10 @@
-//
-//  SdefXMLDictionary.m
-//  Sdef Editor
-//
-//  Created by Grayfox on 02/02/05.
-//  Copyright 2005 Shadow Lab. All rights reserved.
-//
+/*
+ *  SdefXMLDictionary.m
+ *  Sdef Editor
+ *
+ *  Created by Rainbow Team.
+ *  Copyright © 2006 Shadow Lab. All rights reserved.
+ */
 
 #import "SdefDictionary.h"
 #import "SdefSuite.h"

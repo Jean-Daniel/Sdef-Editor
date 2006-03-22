@@ -1,10 +1,10 @@
-//
-//  SdefImporter.h
-//  Sdef Editor
-//
-//  Created by Grayfox on 30/01/05.
-//  Copyright 2005 Shadow Lab. All rights reserved.
-//
+/*
+ *  SdefImporter.h
+ *  Sdef Editor
+ *
+ *  Created by Rainbow Team.
+ *  Copyright © 2006 Shadow Lab. All rights reserved.
+ */
 
 #import <Cocoa/Cocoa.h>
 
