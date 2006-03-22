@@ -1375,10 +1375,10 @@
 			buildPhases = (
 				9879E2D6094CB57B005B2173 /* Copy ShadowKit */,
 				984A8C4F07DB29CB00591F7A /* Headers */,
-				8D15AC300486D014006FF6A4 /* Sources */,
-				8D15AC330486D014006FF6A4 /* Frameworks */,
 				98F940A407F888FB0014708A /* Copy Templates */,
 				8D15AC2B0486D014006FF6A4 /* Resources */,
+				8D15AC300486D014006FF6A4 /* Sources */,
+				8D15AC330486D014006FF6A4 /* Frameworks */,
 				98DE66F107B5785100B6CF43 /* Rez */,
 			);
 			buildRules = (
@@ -1767,9 +1767,8 @@
 			buildSettings = {
 				HEADER_SEARCH_PATHS = "\"$(BUILD_DIR)\"";
 				INFOPLIST_FILE = Resources/Info.plist;
-				INSTALL_PATH = "$(HOME)/Applications";
+				MARKETING_VERSION = 1.3.1;
 				PRODUCT_NAME = "Sdef Editor";
-				WRAPPER_EXTENSION = app;
 			};
 			name = "Universal Binary";
 		};
@@ -1785,9 +1784,8 @@
 			buildSettings = {
 				HEADER_SEARCH_PATHS = "\"$(BUILD_DIR)\"";
 				INFOPLIST_FILE = Resources/Info.plist;
-				INSTALL_PATH = "$(HOME)/Applications";
+				MARKETING_VERSION = 1.3.1;
 				PRODUCT_NAME = "Sdef Editor";
-				WRAPPER_EXTENSION = app;
 			};
 			name = Development;
 		};
@@ -1796,9 +1794,8 @@
 			buildSettings = {
 				HEADER_SEARCH_PATHS = "\"$(BUILD_DIR)\"";
 				INFOPLIST_FILE = Resources/Info.plist;
-				INSTALL_PATH = "$(HOME)/Applications";
+				MARKETING_VERSION = 1.3.1;
 				PRODUCT_NAME = "Sdef Editor";
-				WRAPPER_EXTENSION = app;
 			};
 			name = Deployment;
 		};

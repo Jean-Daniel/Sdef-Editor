@@ -130,7 +130,6 @@
 - (NSString *)inherits {
   return sd_inherits;
 }
-
 - (void)setInherits:(NSString *)newInherits {
   if (sd_inherits != newInherits) {
     [[self undoManager] registerUndoWithTarget:self selector:_cmd object:sd_inherits];
@@ -138,6 +137,18 @@
     sd_inherits = [newInherits copyWithZone:[self zone]];
   }
 }
+
+- (NSString *)type {
+  return sd_type;
+}
+- (void)setType:(NSString *)type {
+  if (sd_type != type) {
+    [[self undoManager] registerUndoWithTarget:self selector:_cmd object:sd_type];
+    [sd_type release];
+    sd_type = [type copyWithZone:[self zone]];
+  }
+}
+
 
 - (SdefCollection *)elements {
   return [self childAtIndex:0];

@@ -498,7 +498,7 @@ static __inline__ NSString *SdefEscapedString(NSString *value, unsigned int form
 
 - (void)initCache {
   if (sd_tpl) {
-    sd_formats = CFDictionaryCreateMutable(kCFAllocatorDefault, 0, &kSKDictionaryKeyCallBacks, &kSKDictionaryValueCallBacks);
+    sd_formats = CFDictionaryCreateMutable(kCFAllocatorDefault, 0, &kSKDictionaryObjectKeyCallBacks, &kSKDictionaryObjectValueCallBacks);
     NSDictionary *formats = [sd_tpl formats];
     NSString *key;
     sd_gnFlags.useBlockFormat = 0;
@@ -516,9 +516,9 @@ static __inline__ NSString *SdefEscapedString(NSString *value, unsigned int form
     }
     
     /* Use retain instead of copy for key (faster) */
-    sd_links = CFDictionaryCreateMutable(kCFAllocatorDefault, 0, &kSKDictionaryKeyCallBacks, &kSKDictionaryValueCallBacks);
-    sd_files = CFDictionaryCreateMutable(kCFAllocatorDefault, 0, &kSKDictionaryKeyCallBacks, &kSKDictionaryValueCallBacks);
-    sd_anchors = CFDictionaryCreateMutable(kCFAllocatorDefault, 0, &kSKDictionaryKeyCallBacks, &kSKDictionaryValueCallBacks);
+    sd_links = CFDictionaryCreateMutable(kCFAllocatorDefault, 0, &kSKDictionaryObjectKeyCallBacks, &kSKDictionaryObjectValueCallBacks);
+    sd_files = CFDictionaryCreateMutable(kCFAllocatorDefault, 0, &kSKDictionaryObjectKeyCallBacks, &kSKDictionaryObjectValueCallBacks);
+    sd_anchors = CFDictionaryCreateMutable(kCFAllocatorDefault, 0, &kSKDictionaryObjectKeyCallBacks, &kSKDictionaryObjectValueCallBacks);
     
     sd_cancel = [[NSMutableSet alloc] init];
       

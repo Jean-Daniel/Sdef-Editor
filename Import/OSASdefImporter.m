@@ -10,6 +10,8 @@
 
 #import <ShadowKit/ShadowBase.h>
 #import <ShadowKit/SKExtensions.h>
+#import <ShadowKit/SKFSFunctions.h>
+
 #include <Carbon/Carbon.h>
 
 #import "SdefDocument.h"

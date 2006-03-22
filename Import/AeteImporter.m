@@ -9,6 +9,7 @@
 #import "AeteImporter.h"
 #import <ShadowKit/SKFunctions.h>
 #import <ShadowKit/SKExtensions.h>
+#import <ShadowKit/SKFSFunctions.h>
 
 #import "SdefSuite.h"
 #import "SdefClass.h"
@@ -130,7 +131,7 @@ bail:
     }
     if(noErr == err) {
       short count;
-      unsigned idx;
+      int idx;
       /* Standard Infos */
       count = Count1Resources(kAEUserTerminology);
       sd_aetes = [[NSMutableArray alloc] initWithCapacity:count];

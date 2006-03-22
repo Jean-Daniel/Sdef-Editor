@@ -85,6 +85,7 @@ enum {
 @interface SdefClass : SdefTerminologyObject <NSCopying, NSCoding> {
   SdefContents *sd_contents;
   /* Attributes */
+  NSString *sd_type;
   NSString *sd_plural; 
   NSString *sd_inherits;
 }
@@ -99,6 +100,9 @@ enum {
 
 - (NSString *)plural;
 - (void)setPlural:(NSString *)newPlural;
+
+- (NSString *)type;
+- (void)setType:(NSString *)aType;
 
 - (NSString *)inherits;
 - (void)setInherits:(NSString *)newInherits;

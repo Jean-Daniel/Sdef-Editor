@@ -108,7 +108,7 @@ inline NSString *SdefEditorComment() {
   if (sd_node) {
     NSMutableString *str = [[NSMutableString alloc] initWithCapacity:sd_indent + 1];
     [str appendString:@"\n"];
-    int i;
+    unsigned i;
     for (i=0; i<sd_indent; i++) {
       [str appendString:@"\t"];
     }

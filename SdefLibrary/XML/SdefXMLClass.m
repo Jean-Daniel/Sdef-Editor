@@ -50,6 +50,11 @@ unsigned SdefXMLAccessorFlagFromString(NSString *str) {
   if (node = [super xmlNodeForVersion:version]) {
     if ([self plural]) [node setAttribute:[self plural] forKey:@"plural"];
     if ([self inherits]) [node setAttribute:[self inherits] forKey:@"inherits"];
+    if ([self type]) {
+      id type = [SdefXMLNode nodeWithElementName:@"type"];
+      [type setAttribute:[self type] forKey:@"type"];
+      [node appendChild:type];
+    }
     id contents = [[self contents] xmlNodeForVersion:version];
     if (nil != contents) {
       if ([[[node firstChild] elementName] isEqualToString:@"documentation"]) {
@@ -79,8 +84,9 @@ unsigned SdefXMLAccessorFlagFromString(NSString *str) {
   NSAssert(isEqual, @"Missing isEqualToStringMethod");
   
   /* If a single type => Tiger */
-  if (isEqual(element, cmd, @"element") || 
-      isEqual(element, cmd, @"property") || 
+  if (isEqual(element, cmd, @"type") ||
+      isEqual(element, cmd, @"element") ||
+      isEqual(element, cmd, @"property") ||
       isEqual(element, cmd, @"responds-to")) {
     return kSdefParserTigerVersion;
   } else /* If a collection => Panther */

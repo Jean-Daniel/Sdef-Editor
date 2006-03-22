@@ -330,15 +330,15 @@ NSString * const SdefObjectDragType = @"SdefObjectDragType";
     return YES;
   }
   /* If line above */
-  if (index >= 0 && index < [item childCount] && object == [item childAtIndex:index]) {
+  if (index >= 0 && index < (int)[item childCount] && object == [item childAtIndex:index]) {
     return YES;
   }
   /* If line belove */
-  if (index > 0 && index <= [item childCount] && object == [item childAtIndex:index-1]) {
+  if (index > 0 && index <= (int)[item childCount] && object == [item childAtIndex:index-1]) {
     return YES;
   }
 
-  unsigned srcIdx = [object index];
+  int srcIdx = [object index];
   if ([object findRoot] == [self dictionary]) {
     /* Have to check parent before removing object */
     if (([object parent] == item) && (srcIdx <= index)) index--;

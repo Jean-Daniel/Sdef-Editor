@@ -95,6 +95,8 @@
     
     if ([sd_node respondsToSelector:@selector(addType:)]) {
       [sd_node addType:type];
+    } else if ([sd_node respondsToSelector:@selector(setType:)]) {
+      [sd_node performSelector:@selector(setType:) withObject:[type name]];
     } else {
       switch ([self shouldAddInvalidObject:type inNode:sd_node]) {
         case kSdefParserAbort: {

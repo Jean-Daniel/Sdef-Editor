@@ -322,7 +322,7 @@ NSString * const SdefObjectDidChangeNameNotification = @"SdefObjectDidChangeName
 - (void)setComments:(NSArray *)comments {
   if (sd_comments != comments) {
     [sd_comments removeAllObjects];
-    int idx;
+    unsigned idx;
     for (idx=0; idx<[comments count]; idx++) {
       [[self comments] addObject:[comments objectAtIndex:idx]];
     }

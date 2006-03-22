@@ -40,6 +40,7 @@
         [node appendChild:childNode];
       }
     }
+    /* Handle ignores */
     if ([self hasIgnore]) {
       children = [[self ignores] reverseObjectEnumerator];
       while (child = [children nextObject]) {

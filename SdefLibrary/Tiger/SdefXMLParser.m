@@ -111,7 +111,7 @@ static CFXMLParserCallBacks SdefParserCallBacks = {
   if (!document) return NO;
   [sd_comments removeAllObjects];
   
-  CFXMLParserContext ctxt = { 0, self, nil, nil, ShadowCFCopyDescription};
+  CFXMLParserContext ctxt = { 0, self, nil, nil, SKObjectCopyDescription};
   sd_parser = CFXMLParserCreate(kCFAllocatorDefault, (CFDataRef)document, NULL,
                                 kCFXMLParserNoOptions, kCFXMLNodeCurrentVersion,
                                 &SdefParserCallBacks, &ctxt);
