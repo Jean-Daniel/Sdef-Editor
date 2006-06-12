@@ -152,11 +152,13 @@ NSString * const SdtplBlockTableOfContent = @"Toc";
   } \
 }) 
 
-static __inline__ BOOL SdtplShouldCreateLinks(struct _sd_gnFlags flags) {
+SK_INLINE
+BOOL SdtplShouldCreateLinks(struct _sd_gnFlags flags) {
   return (kSdefTemplateXMLFormat == flags.format && flags.links != 0);
 }
 
-static __inline__ NSString *SdefEscapedString(NSString *value, unsigned int format) {
+SK_INLINE
+NSString *SdefEscapedString(NSString *value, unsigned int format) {
   return ((kSdefTemplateXMLFormat == format) ? [value stringByEscapingEntities:nil] : value);
 }
 
@@ -498,7 +500,7 @@ static __inline__ NSString *SdefEscapedString(NSString *value, unsigned int form
 
 - (void)initCache {
   if (sd_tpl) {
-    sd_formats = CFDictionaryCreateMutable(kCFAllocatorDefault, 0, &kSKDictionaryObjectKeyCallBacks, &kSKDictionaryObjectValueCallBacks);
+    sd_formats = CFDictionaryCreateMutable(kCFAllocatorDefault, 0, &kSKNSObjectDictionaryKeyCallBacks, &kSKNSObjectDictionaryValueCallBacks);
     NSDictionary *formats = [sd_tpl formats];
     NSString *key;
     sd_gnFlags.useBlockFormat = 0;
@@ -516,9 +518,9 @@ static __inline__ NSString *SdefEscapedString(NSString *value, unsigned int form
     }
     
     /* Use retain instead of copy for key (faster) */
-    sd_links = CFDictionaryCreateMutable(kCFAllocatorDefault, 0, &kSKDictionaryObjectKeyCallBacks, &kSKDictionaryObjectValueCallBacks);
-    sd_files = CFDictionaryCreateMutable(kCFAllocatorDefault, 0, &kSKDictionaryObjectKeyCallBacks, &kSKDictionaryObjectValueCallBacks);
-    sd_anchors = CFDictionaryCreateMutable(kCFAllocatorDefault, 0, &kSKDictionaryObjectKeyCallBacks, &kSKDictionaryObjectValueCallBacks);
+    sd_links = CFDictionaryCreateMutable(kCFAllocatorDefault, 0, &kSKNSObjectDictionaryKeyCallBacks, &kSKNSObjectDictionaryValueCallBacks);
+    sd_files = CFDictionaryCreateMutable(kCFAllocatorDefault, 0, &kSKNSObjectDictionaryKeyCallBacks, &kSKNSObjectDictionaryValueCallBacks);
+    sd_anchors = CFDictionaryCreateMutable(kCFAllocatorDefault, 0, &kSKNSObjectDictionaryKeyCallBacks, &kSKNSObjectDictionaryValueCallBacks);
     
     sd_cancel = [[NSMutableSet alloc] init];
       

@@ -13,8 +13,24 @@ static NSFont *FontForASDictionaryStyle(ASDictionaryStyle *style);
 static void ASDictionaryStyleForFont(NSFont *aFont, ASDictionaryStyle *style);
 static void ASGetStyleForASPreferences(CFStringRef str, ASDictionaryStyle *style);
 
-static __inline__ SInt16 ASFontFamilyIDForFamilyName(CFStringRef name);
-static __inline__ BOOL ASDictionaryStyleEqualsStyle(ASDictionaryStyle *style1, ASDictionaryStyle *style2);
+SK_INLINE
+SInt16 ASFontFamilyIDForFamilyName(CFStringRef name) {
+  Str255 fName;
+  FMFontFamily family = -1;
+  if (CFStringGetPascalString (name, fName, 255, CFStringGetSystemEncoding()))
+    family = FMGetFontFamilyFromName(fName);
+  return (family > 0) ? family : kFontIDTimes;
+}
+
+SK_INLINE
+BOOL ASDictionaryStyleEqualsStyle(ASDictionaryStyle *style1, ASDictionaryStyle *style2) {
+  return style1->fontFamily == style2->fontFamily &&
+  style1->fontStyle == style2->fontStyle &&
+  style1->fontSize == style2->fontSize &&
+  style1->red == style2->red &&
+  style1->green == style2->green &&
+  style1->blue == style2->blue;
+}
 
 #pragma mark -
 @implementation ASDictionaryStream
@@ -261,23 +277,6 @@ static void ASGetStyleForASPreferences(CFStringRef str, ASDictionaryStyle *style
   }
   if (colors) CFRelease(colors);
   if (values) CFRelease(values);
-}
-
-static __inline__ SInt16 ASFontFamilyIDForFamilyName(CFStringRef name) {
-  Str255 fName;
-  FMFontFamily family = -1;
-  if (CFStringGetPascalString (name, fName, 255, CFStringGetSystemEncoding()))
-    family = FMGetFontFamilyFromName(fName);
-  return (family > 0) ? family : kFontIDTimes;
-}
-
-static __inline__ BOOL ASDictionaryStyleEqualsStyle(ASDictionaryStyle *style1, ASDictionaryStyle *style2) {
-  return style1->fontFamily == style2->fontFamily &&
-  style1->fontStyle == style2->fontStyle &&
-  style1->fontSize == style2->fontSize &&
-  style1->red == style2->red &&
-  style1->green == style2->green &&
-  style1->blue == style2->blue;
 }
 
 NSFont *FontForASDictionaryStyle(ASDictionaryStyle *style) {

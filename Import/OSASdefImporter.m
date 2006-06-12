@@ -8,7 +8,6 @@
 
 #import "OSASdefImporter.h"
 
-#import <ShadowKit/ShadowBase.h>
 #import <ShadowKit/SKExtensions.h>
 #import <ShadowKit/SKFSFunctions.h>
 

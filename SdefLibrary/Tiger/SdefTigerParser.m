@@ -6,7 +6,6 @@
  *  Copyright © 2006 Shadow Lab. All rights reserved.
  */
 
-#import <ShadowKit/ShadowBase.h>
 #import "SdefTigerParser.h"
 
 #import "SdefXMLBase.h"

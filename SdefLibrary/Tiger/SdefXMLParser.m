@@ -6,7 +6,6 @@
  *  Copyright © 2006 Shadow Lab. All rights reserved.
  */
 
-#import <ShadowKit/ShadowBase.h>
 #import <ShadowKit/SKFunctions.h>
 #import <ShadowKit/ShadowCFContext.h>
 
@@ -111,7 +110,7 @@ static CFXMLParserCallBacks SdefParserCallBacks = {
   if (!document) return NO;
   [sd_comments removeAllObjects];
   
-  CFXMLParserContext ctxt = { 0, self, nil, nil, SKObjectCopyDescription};
+  CFXMLParserContext ctxt = { 0, self, nil, nil, SKCBCopyDescription};
   sd_parser = CFXMLParserCreate(kCFAllocatorDefault, (CFDataRef)document, NULL,
                                 kCFXMLParserNoOptions, kCFXMLNodeCurrentVersion,
                                 &SdefParserCallBacks, &ctxt);

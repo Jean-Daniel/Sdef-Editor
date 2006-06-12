@@ -6,8 +6,6 @@
  *  Copyright © 2006 Shadow Lab. All rights reserved.
  */
 
-#import <ShadowKit/ShadowBase.h>
-
 #import "SdefPantherParser.h"
 
 #import "SdefType.h"
