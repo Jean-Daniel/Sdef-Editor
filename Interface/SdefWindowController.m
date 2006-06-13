@@ -217,8 +217,8 @@ static inline BOOL SdefEditorExistsForItem(SdefObject *item) {
   }
 }
 
-- (BOOL)outlineView:(NSOutlineView *)outlineView shouldEditItem:(id)anItem tableColumn:(NSTableColumn *)tableColumn {
-  return [anItem isEditable] && [anItem objectType] != kSdefCollectionType;
+- (BOOL)outlineView:(NSOutlineView *)outlineView shouldEditTableColumn:(NSTableColumn *)tableColumn item:(id)item {
+  return [item isEditable] && [item objectType] != kSdefCollectionType;
 }
 
 - (void)tabView:(NSTabView *)tabView willSelectTabViewItem:(NSTabViewItem *)tabViewItem {
@@ -517,7 +517,10 @@ static inline BOOL SdefEditorExistsForItem(SdefObject *item) {
     }
   }
   
-  return ([object findRoot] != [self root]) ? NSDragOperationCopy : NSDragOperationMove;
+  if ([object findRoot] != [self root] || NSDragOperationCopy == [info draggingSourceOperationMask])
+    return NSDragOperationCopy;
+  
+  return NSDragOperationGeneric;
 }
 
 - (BOOL)outlineView:(NSOutlineView *)outlineView acceptDrop:(id <NSDraggingInfo>)info item:(SdefObject *)item childIndex:(int)index {
@@ -530,7 +533,7 @@ static inline BOOL SdefEditorExistsForItem(SdefObject *item) {
   [value getBytes:&object length:sizeof(id)];
   
   if (object)
-    return [self dropObject:object item:item childIndex:index];
+    return [self dropObject:object item:item childIndex:index operation:[info draggingSourceOperationMask]];
   
   return NO;
 }

@@ -342,7 +342,6 @@
 		981B66B2093870CE0024C0D9 /* ShadowCommon.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = ShadowCommon.xcconfig; sourceTree = "<group>"; };
 		981B66B3093870CE0024C0D9 /* ShadowDebug.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = ShadowDebug.xcconfig; sourceTree = "<group>"; };
 		981B66B4093870CE0024C0D9 /* ShadowRelease.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = ShadowRelease.xcconfig; sourceTree = "<group>"; };
-		981B66B5093870CE0024C0D9 /* ShadowTest.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = ShadowTest.xcconfig; sourceTree = "<group>"; };
 		981B66B6093870CE0024C0D9 /* ShadowUniversal.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = ShadowUniversal.xcconfig; sourceTree = "<group>"; };
 		981D86A707ADB0FE006BC0E9 /* ApplicationServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ApplicationServices.framework; path = /System/Library/Frameworks/ApplicationServices.framework; sourceTree = "<absolute>"; };
 		981D86A807ADB0FE006BC0E9 /* Carbon.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Carbon.framework; path = /System/Library/Frameworks/Carbon.framework; sourceTree = "<absolute>"; };
@@ -734,7 +733,6 @@
 			children = (
 				981B66B2093870CE0024C0D9 /* ShadowCommon.xcconfig */,
 				981B66B3093870CE0024C0D9 /* ShadowDebug.xcconfig */,
-				981B66B5093870CE0024C0D9 /* ShadowTest.xcconfig */,
 				981B66B4093870CE0024C0D9 /* ShadowRelease.xcconfig */,
 				981B66B6093870CE0024C0D9 /* ShadowUniversal.xcconfig */,
 			);
@@ -1714,7 +1712,7 @@
 		};
 		98A7CBEE0855010F000D862B /* Deployment */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 981B66B5093870CE0024C0D9 /* ShadowTest.xcconfig */;
+			baseConfigurationReference = 981B66B4093870CE0024C0D9 /* ShadowRelease.xcconfig */;
 			buildSettings = {
 			};
 			name = Deployment;
