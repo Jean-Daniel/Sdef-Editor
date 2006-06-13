@@ -6,7 +6,7 @@
 //  Copyright 2005 Shadow Lab. All rights reserved.
 //
 
-#import "SKTreeNode.h"
+#import <ShadowKit/SKTreeNode.h>
 
 @interface SimpleNode : SKTreeNode {
   NSImage *sd_icon;

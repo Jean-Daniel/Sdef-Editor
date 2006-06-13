@@ -44,7 +44,7 @@
 //  ShadowTrace();
 //  id table = [aNotification object];
 //  int row = [table selectedRow];
-//  if (row >= 0 && row < [[self object] childCount]) {
+//  if (row >= 0 && row < [[self object] count]) {
 //    [self revealObjectInTree:[[self object] childAtIndex:row]];
 //  }
 //}

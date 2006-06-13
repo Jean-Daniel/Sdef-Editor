@@ -13,15 +13,17 @@ extern NSString * const SdefInfoPboardType;
 
 extern NSString * const SdefDictionarySelectionDidChangeNotification;
 
-@class SdefObject;
+@class SdefObject, SdefDictionary, SKOutlineViewController;
 @interface SdefWindowController : NSWindowController {
   IBOutlet NSOutlineView *outline;
   IBOutlet NSTabView *inspector;
   
+  SKOutlineViewController *sd_tree;
   NSMutableDictionary *sd_viewControllers;
 }
 
 - (id)initWithOwner:(id)owner;
+- (void)setDictionary:(SdefDictionary *)dictionary;
 
 - (void)displayObject:(SdefObject *)anObject;
 

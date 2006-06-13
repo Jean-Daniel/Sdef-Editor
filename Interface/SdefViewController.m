@@ -87,7 +87,7 @@
 
 - (void)revealInTree:(id)sender {
   int row = [sender clickedRow];
-  if (row >= 0 && row < (int)[[self object] childCount]) {
+  if (row >= 0 && row < (int)[[self object] count]) {
     [self revealObjectInTree:[(SdefObject *)[self object] childAtIndex:row]];
   }
 }

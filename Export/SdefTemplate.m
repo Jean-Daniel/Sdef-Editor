@@ -39,6 +39,7 @@ static NSString * const kSdtplTemplateStrings = @"TemplateStrings"; /* NSArray *
 
 /* Definition Keys */
 NSString * const SdtplDefinitionFileKey = @"File";
+NSString * const SdtplDefinitionFileEncoding = @"Encoding"; /* NSString */
 NSString * const SdtplDefinitionSingleFileKey = @"SingleFile";
 NSString * const SdtplDefinitionRemoveBlockLine = @"RemoveBlockLines"; /* Boolean */
 
@@ -184,8 +185,15 @@ NSString * const SdtplDefinitionEventsKey = @"Events";
     id keys = [sd_def keyEnumerator];
     while (key = [keys nextObject]) {
       NSDictionary *tplDef = [sd_def objectForKey:key];
+      /* Get encoding */
+      NSString *encoding = [tplDef objectForKey:SdtplDefinitionFileEncoding];
+      CFStringEncoding cfe = encoding ? CFStringConvertIANACharSetNameToEncoding((CFStringRef)encoding) : kCFStringEncodingInvalidId;
+      /* If undefined or invalid, use utf-8 for html templates and system encoding for other templates */
+      NSStringEncoding ste = (cfe != kCFStringEncodingInvalidId) ? CFStringConvertEncodingToNSStringEncoding(cfe) :
+        (sd_tpFlags.html ? NSUTF8StringEncoding : [NSString defaultCStringEncoding]);
+      
       SKTemplate *tpl = [[tplClass alloc] initWithContentsOfFile:
-        [sd_path stringByAppendingPathComponent:[tplDef objectForKey:SdtplDefinitionFileKey]]];
+        [sd_path stringByAppendingPathComponent:[tplDef objectForKey:SdtplDefinitionFileKey]] encoding:ste];
       [tpl setRemoveBlockLine:[[tplDef objectForKey:SdtplDefinitionRemoveBlockLine] boolValue]];
       [sd_tpls setObject:tpl forKey:key];
       [tpl release];

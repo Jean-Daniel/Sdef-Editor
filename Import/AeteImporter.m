@@ -229,7 +229,7 @@ bail:
 }
 
 - (void)postProcessClass:(SdefClass *)aClass {
-  if ([[aClass properties] childCount]) {
+  if ([[aClass properties] count]) {
     SdefProperty *info = [[aClass properties] firstChild];
     if (SKHFSTypeCodeFromFileType([info code]) == pInherits) {
       id superclass = [manager sdefClassWithCode:[info type] inSuite:nil];

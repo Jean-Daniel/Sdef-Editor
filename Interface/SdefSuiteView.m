@@ -102,7 +102,7 @@
 - (void)revealType:(id)sender {
   int row = [sender clickedRow];
   SdefObject *objs = [(SdefSuite *)[self object] types];
-  if (row >= 0 && row < (int)[objs childCount]) {
+  if (row >= 0 && row < (int)[objs count]) {
     [self revealObjectInTree:[objs childAtIndex:row]];
   }
 }
@@ -110,7 +110,7 @@
 - (void)revealClass:(id)sender {
   int row = [sender clickedRow];
   SdefObject *objs = [[self object] classes];
-  if (row >= 0 && row < (int)[objs childCount]) {
+  if (row >= 0 && row < (int)[objs count]) {
     [self revealObjectInTree:[objs childAtIndex:row]];
   }
 }
@@ -118,7 +118,7 @@
 - (void)revealCommand:(id)sender {
   int row = [sender clickedRow];
   SdefObject *objs = [(SdefSuite *)[self object] commands];
-  if (row >= 0 && row < (int)[objs childCount]) {
+  if (row >= 0 && row < (int)[objs count]) {
     [self revealObjectInTree:[objs childAtIndex:row]];
   }
 }
@@ -126,7 +126,7 @@
 - (void)revealEvent:(id)sender {
   int row = [sender clickedRow];
   SdefObject *objs = [[self object] events];
-  if (row >= 0 && row < (int)[objs childCount]) {
+  if (row >= 0 && row < (int)[objs count]) {
     [self revealObjectInTree:[objs childAtIndex:row]];
   }
 }

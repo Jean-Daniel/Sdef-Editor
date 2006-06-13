@@ -11,26 +11,11 @@
 #import "SdefDocument.h"
 #import "SdefDictionary.h"
 
-NSString * const SdefNewTreeNode = @"SdefNewTreeNode";
-NSString * const SdefRemovedTreeNode = @"SdefRemovedTreeNode";
-NSString * const SdefObjectDidAppendChildNotification = @"SdefObjectDidAppendChild";
-NSString * const SdefObjectWillRemoveChildNotification = @"SdefObjectWillRemoveChild";
-NSString * const SdefObjectDidRemoveChildNotification = @"SdefObjectDidRemoveChild";
-NSString * const SdefObjectWillRemoveAllChildrenNotification = @"SdefObjectWillRemoveAllChildren";
-NSString * const SdefObjectDidRemoveAllChildrenNotification = @"SdefObjectDidRemoveAllChildren";
-NSString * const SdefObjectDidSortChildrenNotification = @"SdefObjectDidSortChildren";
-
-NSString * const SdefObjectWillChangeNameNotification = @"SdefObjectWillChangeName";
-NSString * const SdefObjectDidChangeNameNotification = @"SdefObjectDidChangeName";
-
-
 @implementation SdefObject
 #pragma mark Protocols Implementations
 - (id)copyWithZone:(NSZone *)aZone {
   SdefObject *copy = [super copyWithZone:aZone];
   copy->sd_soFlags = sd_soFlags;  
-  copy->sd_name = [sd_name copyWithZone:aZone];
-  copy->sd_icon = [sd_icon copyWithZone:aZone];
   copy->sd_comments = [sd_comments copyWithZone:aZone];
   return copy;
 }
@@ -39,10 +24,7 @@ NSString * const SdefObjectDidChangeNameNotification = @"SdefObjectDidChangeName
   if (self = [super initWithCoder:aCoder]) {
     unsigned length;
     const uint8_t*buffer = [aCoder decodeBytesForKey:@"SOFlags" returnedLength:&length];
-    memcpy(&sd_soFlags, buffer, length);
-    
-    sd_name = [[aCoder decodeObjectForKey:@"SOName"] retain];
-    sd_icon = [[aCoder decodeObjectForKey:@"SOIcon"] retain];
+    memcpy(&sd_soFlags, buffer, length);    
     sd_comments = [[aCoder decodeObjectForKey:@"SOComments"] retain];
   }
   return self;
@@ -51,25 +33,10 @@ NSString * const SdefObjectDidChangeNameNotification = @"SdefObjectDidChangeName
 - (void)encodeWithCoder:(NSCoder *)aCoder {
   [super encodeWithCoder:aCoder];
   [aCoder encodeBytes:(const void *)&sd_soFlags length:sizeof(sd_soFlags) forKey:@"SOFlags"];
-  [aCoder encodeObject:sd_name forKey:@"SOName"];
-  [aCoder encodeObject:sd_icon forKey:@"SOIcon"];
   [aCoder encodeObject:sd_comments forKey:@"SOComments"];
 }
 
 #pragma mark -
-+ (void)initialize {
-  BOOL tooLate = NO;
-  if (!tooLate) {
-    [self exposeBinding:@"icon"];
-    [self exposeBinding:@"name"];
-    tooLate = YES;
-  }
-}
-
-+ (BOOL)automaticallyNotifiesObserversForKey:(NSString *)key {
-  return ![key isEqualToString:@"children"] && ![key isEqualToString:@"name"];
-}
-
 + (SdefObjectType)objectType {
   return kSdefUndefinedType;
 }
@@ -83,30 +50,22 @@ NSString * const SdefObjectDidChangeNameNotification = @"SdefObjectDidChangeName
 }
 
 #pragma mark -
-
-+ (id)nodeWithName:(NSString *)newName {
-  return [[[self alloc] initWithName:newName] autorelease];
-}
-
-#pragma mark -
 - (id)init {
-  return [self initWithName:[[self class] defaultName]];
+  return [self initWithName:[[self class] defaultName] icon:nil];
 }
 
-- (id)initWithName:(NSString *)newName {
-  if (self = [super init]) {
-    [self setEditable:YES];
+- (id)initWithName:(NSString *)aName icon:(NSImage *)anIcon {
+  if (self = [super initWithName:aName icon:[NSImage imageNamed:[[self class] defaultIconName]]]) {
+    [self setRegisterUndo:YES];
     [self setRemovable:YES];
-    [self setIcon:[NSImage imageNamed:[[self class] defaultIconName]]];
+    [self setEditable:YES];
+    [self setNotify:YES];
     [self sdefInit];
-    [self setName:newName];
   }
   return self;
 }
 
 - (void)dealloc {
-  [sd_icon release];
-  [sd_name release];
   [sd_comments release];
   [super dealloc];
 }
@@ -142,15 +101,6 @@ NSString * const SdefObjectDidChangeNameNotification = @"SdefObjectDidChangeName
   return parent;  
 }
 
-- (void)sortByName {
-  static NSArray *sorts = nil;
-  if (!sorts) {
-    NSSortDescriptor *name = [[NSSortDescriptor alloc] initWithKey:@"name" ascending:YES selector:@selector(caseInsensitiveCompare:)];
-    sorts = [[NSArray allocWithZone:NSDefaultMallocZone()] initWithObjects:name, nil];
-    [name release];
-  }
-  [self sortUsingDescriptors:sorts];
-}
 
 - (SdefDocument *)document {
   return [[self dictionary] document];
@@ -216,34 +166,6 @@ NSString * const SdefObjectDidChangeNameNotification = @"SdefObjectDidChangeName
 }
 
 #pragma mark -
-- (NSImage *)icon {
-  return sd_icon;
-}
-
-- (void)setIcon:(NSImage *)newIcon {
-  if (sd_icon != newIcon) {
-    [sd_icon release];
-    sd_icon = [newIcon retain];
-  }
-}
-
-- (NSString *)name {
-  return sd_name;
-}
-
-- (void)setName:(NSString *)newName {
-  if (sd_name != newName) {
-    [[NSNotificationCenter defaultCenter] postNotificationName:SdefObjectWillChangeNameNotification object:self];
-    [[self undoManager] registerUndoWithTarget:self selector:_cmd object:sd_name];
-    [[self undoManager] setActionName:NSLocalizedStringFromTable(@"Change Name", @"SdefLibrary", @"Undo Action: change name.")];
-    [self willChangeValueForKey:@"name"];
-    [sd_name release];
-    sd_name = [newName copyWithZone:[self zone]];
-    [self didChangeValueForKey:@"name"];
-    [[NSNotificationCenter defaultCenter] postNotificationName:SdefObjectDidChangeNameNotification object:self];
-  }
-}
-
 - (BOOL)isHidden {
   return sd_soFlags.hidden;
 }
@@ -363,129 +285,6 @@ NSString * const SdefObjectDidChangeNameNotification = @"SdefObjectDidChangeName
 }
 - (void)removeIgnoreAtIndex:(unsigned)index {
   [sd_ignore removeObjectAtIndex:index];
-}
-
-#pragma mark -
-#pragma mark Notifications
-- (void)appendChild:(SKTreeNode *)child {
-  [[self undoManager] registerUndoWithTarget:child selector:@selector(remove) object:nil];
-//  [[self undoManager] setActionName:@"Add Object"];
-  NSIndexSet *idxSet = [NSIndexSet indexSetWithIndex:[self childCount]];
-  [self willChange:NSKeyValueChangeInsertion valuesAtIndexes:idxSet forKey:@"children"];
-  [super appendChild:child];
-  [(SdefObject *)child setEditable:[self isEditable]];
-  [self didChange:NSKeyValueChangeInsertion valuesAtIndexes:idxSet forKey:@"children"];
-  [[NSNotificationCenter defaultCenter] postNotificationName:SdefObjectDidAppendChildNotification
-                                                      object:self
-                                                    userInfo:[NSDictionary dictionaryWithObject:child forKey:SdefNewTreeNode]];
-}
-
-- (void)prependChild:(SKTreeNode *)child {
-  [[self undoManager] registerUndoWithTarget:child selector:@selector(remove) object:nil];
-//  [[self undoManager] setActionName:@"Add Object"];
-  [self willChange:NSKeyValueChangeInsertion valuesAtIndexes:[NSIndexSet indexSetWithIndex:0] forKey:@"children"];
-  [super prependChild:child];
-  [(SdefObject *)child setEditable:[self isEditable]];
-  [self didChange:NSKeyValueChangeInsertion valuesAtIndexes:[NSIndexSet indexSetWithIndex:0] forKey:@"children"];
-  [[NSNotificationCenter defaultCenter] postNotificationName:SdefObjectDidAppendChildNotification
-                                                      object:self
-                                                    userInfo:[NSDictionary dictionaryWithObject:child forKey:SdefNewTreeNode]];
-}
-
-- (void)insertChild:(id)child atIndex:(unsigned)idx {
-  /* Super call prepend or insertSibling, so no need to undo & notify here. */
-  [super insertChild:child atIndex:idx];
-//  [[self undoManager] setActionName:@"Insert Object"];
-}
-
-- (void)insertSibling:(SKTreeNode *)newSibling {
-  [[self undoManager] registerUndoWithTarget:newSibling selector:@selector(remove) object:nil];
-//  [[self undoManager] setActionName:@"Insert Object"];
-  id parent = [self parent];
-  id idx = [NSIndexSet indexSetWithIndex:[parent indexOfChild:self] + 1];
-  [parent willChange:NSKeyValueChangeInsertion valuesAtIndexes:idx forKey:@"children"];
-  [super insertSibling:newSibling];
-  [(SdefObject *)newSibling setEditable:[self isEditable]];
-  [parent didChange:NSKeyValueChangeInsertion valuesAtIndexes:idx forKey:@"children"];
-  [[NSNotificationCenter defaultCenter] postNotificationName:SdefObjectDidAppendChildNotification
-                                                      object:[self parent]
-                                                    userInfo:[NSDictionary dictionaryWithObject:newSibling forKey:SdefNewTreeNode]];
-}
-
-- (void)remove {
-  id parent = [self parent];
-  unsigned idx = [parent indexOfChild:self];
-  [(SKTreeNode *)[[self undoManager] prepareWithInvocationTarget:parent] insertChild:self atIndex:idx];
-//  [[self undoManager] setActionName:@"Delete Object"];
-  [[NSNotificationCenter defaultCenter] postNotificationName:SdefObjectWillRemoveChildNotification
-                                                      object:[self parent]
-                                                    userInfo:[NSDictionary dictionaryWithObject:self forKey:SdefRemovedTreeNode]];
-  [parent willChange:NSKeyValueChangeRemoval valuesAtIndexes:[NSIndexSet indexSetWithIndex:idx] forKey:@"children"];
-  [super remove];
-  [parent didChange:NSKeyValueChangeRemoval valuesAtIndexes:[NSIndexSet indexSetWithIndex:idx] forKey:@"children"];
-  [[NSNotificationCenter defaultCenter] postNotificationName:SdefObjectDidRemoveChildNotification
-                                                      object:parent];
-}
-
-- (void)removeChildAtIndex:(unsigned)idx {
-  /* Super call -remove, so no need to undo & notify here */
-  [super removeChildAtIndex:idx];
-}
-
-- (void)removeAllChildren {
-  id idxes = [NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0, [self childCount])];
-  [[NSNotificationCenter defaultCenter] postNotificationName:SdefObjectWillRemoveAllChildrenNotification object:self];
-  [self willChange:NSKeyValueChangeRemoval valuesAtIndexes:idxes forKey:@"children"];
-  [super removeAllChildren];
-  [self didChange:NSKeyValueChangeRemoval valuesAtIndexes:idxes forKey:@"children"];
-  [[NSNotificationCenter defaultCenter] postNotificationName:SdefObjectDidRemoveAllChildrenNotification object:self];
-}
-
-- (void)setSortedChildren:(NSArray *)ordered {
-  [[self undoManager] registerUndoWithTarget:self selector:@selector(setSortedChildren:) object:[self children]];
-  [[self undoManager] setActionName:@"Sort"];
-  id idxes = [NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0, [self childCount])];
-  [self willChange:NSKeyValueChangeReplacement valuesAtIndexes:idxes forKey:@"children"];
-  [super setSortedChildren:ordered];
-  [self didChange:NSKeyValueChangeReplacement valuesAtIndexes:idxes forKey:@"children"];
-  [[NSNotificationCenter defaultCenter] postNotificationName:SdefObjectDidSortChildrenNotification object:self];
-}
-
-#pragma mark -
-#pragma mark Children KVC compliance
-- (NSArray *)children {
-  return [super children];
-}
-
-- (void)setChildren:(NSArray *)objects {
-  [self willChangeValueForKey:@"children"];
-  [self removeAllChildren];
-  id children = [objects objectEnumerator];
-  id child;
-  while (child = [children nextObject]) {
-    [self appendChild:child];
-  }
-  [self didChangeValueForKey:@"children"];
-}
-
-- (unsigned)countOfChildren {
-  return [self childCount];
-}
-
-- (id)objectInChildrenAtIndex:(unsigned)index {
-  return [self childAtIndex:index];
-}
-
-- (void)insertObject:(id)object inChildrenAtIndex:(unsigned)index {
-  [self insertChild:object atIndex:index];
-}
-
-- (void)removeObjectFromChildrenAtIndex:(unsigned)index {
-  [self removeChildAtIndex:index];
-}
-
-- (void)replaceObjectInChildrenAtIndex:(unsigned)index withObject:(id)object {
-  [self replaceChildAtIndex:index withChild:object];
 }
 
 @end

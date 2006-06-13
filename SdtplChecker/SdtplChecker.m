@@ -7,11 +7,10 @@
 //
 
 #import "SdtplChecker.h"
-#import "SKTemplate.h"
 #import "SimpleNode.h"
 #import "SdefTemplate.h"
-#import "ShadowMacros.h"
 #import "SdefTemplateCheck.h"
+#import <ShadowKit/SKTemplate.h>
 
 NSString *const SdtplBlockTableOfContent = @"Toc";
 
@@ -167,7 +166,7 @@ static SimpleNode *SimpleTemplateTree(SKTemplate *tpl) {
   if (item == nil) {
     return [templates count];
   } else {
-    return [item childCount];
+    return [item count];
   }
 }
 

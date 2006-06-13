@@ -124,7 +124,7 @@
 	<key>CFBundleSignature</key>
 	<string>SdEd</string>
 	<key>CFBundleVersion</key>
-	<string>200</string>
+	<string>210</string>
 	<key>NSAppleScriptEnabled</key>
 	<string>NO</string>
 	<key>NSMainNibFile</key>

@@ -150,7 +150,7 @@ static NSArray *ASKStandardsSuites() {
       SdefDictionary *dico = SdefLoadDictionary(suitePath, nil, nil);
       if (dico) {
         unsigned idx;
-        for (idx=0; idx<[dico childCount]; idx++) {
+        for (idx=0; idx<[dico count]; idx++) {
           id sdefSuite = [dico childAtIndex:idx];
           [manager addSuite:sdefSuite];
           [sd_suites addObject:[sdefSuite cocoaName]];

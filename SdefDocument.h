@@ -8,8 +8,6 @@
 
 #import <Cocoa/Cocoa.h>
 
-extern NSString * const SdefObjectDragType;
-
 @class SdefObject, SdefDictionary, SdefClassManager, SdefImports;
 @class SdefWindowController, SdefSymbolBrowser;
 

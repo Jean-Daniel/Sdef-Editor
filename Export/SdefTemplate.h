@@ -33,6 +33,7 @@ extern NSString * const SdtplDefinitionEventsKey;
 
 /* Definition Options */
 extern NSString * const SdtplDefinitionFileKey;
+extern NSString * const SdtplDefinitionFileEncoding;
 extern NSString * const SdtplDefinitionSingleFileKey;
 extern NSString * const SdtplDefinitionRemoveBlockLine;
 

@@ -20,7 +20,7 @@
   if (node = [super xmlNodeForVersion:version]) {
     id childNode;
     /* Insert before parameters */
-    unsigned idx = [node childCount] - [self childCount];
+    unsigned idx = [node count] - [self count];
     childNode = [[self directParameter] xmlNodeForVersion:version];
     if (nil != childNode) {
       [node insertChild:childNode atIndex:idx];

@@ -7,10 +7,10 @@
 //
 
 #import "SdefTemplateCheck.h"
-#import "SKTemplateParser.h"
-#import "ShadowMacros.h"
 #import "SdefTemplate.h"
-#import "SKTemplate.h"
+
+#import <ShadowKit/SKTemplate.h>
+#import <ShadowKit/SKTemplateParser.h>
 
 @interface _SdtplBlockDefinition : NSObject {
   NSMutableArray *blocks;
@@ -200,13 +200,21 @@ static const unsigned SdefDefinitionRequiredKeysCount = 1;
   NSString *key;
   while (key = [enume nextObject]) {
     id item = [plist objectForKey:key];
-    NSString *file = [item objectForKey:@"File"];
+    NSString *file = [item objectForKey:SdtplDefinitionFileKey];
     file = [sd_path stringByAppendingPathComponent:file];
     if (![[NSFileManager defaultManager] fileExistsAtPath:file]) {
-      [self addError:@"%@ Template File \"%@\" not found", key, [item objectForKey:@"File"]];
+      [self addError:@"%@ Template File \"%@\" not found", key, [item objectForKey:SdtplDefinitionFileKey]];
       result = NO;
     } else {
       [parser setFile:file];
+      /* Get encoding */
+      NSString *encoding = [item objectForKey:SdtplDefinitionFileEncoding];
+      CFStringEncoding cfe = encoding ? CFStringConvertIANACharSetNameToEncoding((CFStringRef)encoding) : kCFStringEncodingInvalidId;
+      /* If undefined or invalid, use utf-8 for html templates and system encoding for other templates */
+      NSStringEncoding ste = (cfe != kCFStringEncodingInvalidId) ? 
+        CFStringConvertEncodingToNSStringEncoding(cfe) :
+        [NSString defaultCStringEncoding];
+      [parser setStringEncoding:ste];
       @try {
         [parser parse];
       } @catch (NSException *exception) {

@@ -6,7 +6,7 @@
  *  Copyright © 2006 Shadow Lab. All rights reserved.
  */
 
-#import <ShadowKit/SKTreeNode.h>
+#import <ShadowKit/SKUITreeNode.h>
 
 typedef enum {
   kSdefUndefinedType		= 0,
@@ -40,28 +40,18 @@ typedef enum {
   kSdefTigerVersion,
 } SdefVersion;
 
-extern NSString * const SdefNewTreeNode;
-extern NSString * const SdefRemovedTreeNode;
-extern NSString * const SdefObjectDidAppendChildNotification;
-extern NSString * const SdefObjectWillRemoveChildNotification;
-extern NSString * const SdefObjectDidRemoveChildNotification;
-extern NSString * const SdefObjectWillRemoveAllChildrenNotification;
-extern NSString * const SdefObjectDidRemoveAllChildrenNotification;
-extern NSString * const SdefObjectDidSortChildrenNotification;
-
-extern NSString * const SdefObjectWillChangeNameNotification;
-extern NSString * const SdefObjectDidChangeNameNotification;
-
 #pragma mark -
 #pragma mark Publics Functions Declaration
-extern NSString *SdefNameCreateWithCocoaName(NSString *cocoa);
-extern NSString *CocoaNameForSdefName(NSString *cocoa, BOOL isClass);
+SK_EXPORT
+NSString *SdefNameCreateWithCocoaName(NSString *cocoa);
+SK_EXPORT
+NSString *CocoaNameForSdefName(NSString *cocoa, BOOL isClass);
 
 @class SdefDocument;
 @class SdefClassManager;
 @class SdefImplementation, SdefDocumentation;
 @class SdefDictionary, SdefSuite, SdefCollection;
-@interface SdefObject : SKTreeNode {
+@interface SdefObject : SKUITreeNode <NSCopying, NSCoding> {
 @protected
   struct _sd_soFlags {
     unsigned int hidden:1;
@@ -74,14 +64,9 @@ extern NSString *CocoaNameForSdefName(NSString *cocoa, BOOL isClass);
     unsigned int hasImplementation:1;
   } sd_soFlags;
 @private
-  NSImage *sd_icon;
-  NSString *sd_name;
   NSMutableArray *sd_ignore;
   NSMutableArray *sd_comments;
 }
-
-+ (id)nodeWithName:(NSString *)newName;
-- (id)initWithName:(NSString *)newName;
 
 #pragma mark API
 - (void)sdefInit;
@@ -105,15 +90,7 @@ extern NSString *CocoaNameForSdefName(NSString *cocoa, BOOL isClass);
 - (NSString *)location;
 - (NSString *)objectTypeName;
 
-- (void)sortByName;
-
 #pragma mark Accessors
-- (NSImage *)icon;
-- (void)setIcon:(NSImage *)newIcon;
-
-- (NSString *)name;
-- (void)setName:(NSString *)newName;
-
 - (BOOL)isHidden;
 - (void)setHidden:(BOOL)isHidden;
 

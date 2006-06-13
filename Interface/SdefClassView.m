@@ -25,7 +25,7 @@
 - (void)revealCommand:(id)sender {
   int row = [sender clickedRow];
   id objs = [(SdefClass *)[self object] commands];
-  if (row >= 0 && row < (int)[objs childCount]) {
+  if (row >= 0 && row < (int)[objs count]) {
     id cmd = [[self classManager] commandWithName:[[objs childAtIndex:row] name]];
     if (cmd)
       [self revealObjectInTree:cmd];
@@ -35,7 +35,7 @@
 - (void)revealEvent:(id)sender {
   int row = [sender clickedRow];
   id objs = [(SdefClass *)[self object] events];
-  if (row >= 0 && row < (int)[objs childCount]) {
+  if (row >= 0 && row < (int)[objs count]) {
     id event = [[self classManager] eventWithName:[[objs childAtIndex:row] name]];
     if (event)
       [self revealObjectInTree:event];
@@ -49,10 +49,10 @@
   SdefClass *content = [self object];
   if (anObject == content) idx = 0;
   else if (anObject == [content contents]) { idx = 1; }
-  else if (anObject == [content properties] || parent == [content properties]) {
+  else if (anObject == [content elements] || parent == [content elements]) {
     idx = 2;
     controller = properties;
-  } else if (anObject == [content elements] || parent == [content elements]) {
+  } else if (anObject == [content properties] || parent == [content properties]) {
     idx = 3;
     controller = elements;
   } else if (anObject == [content commands] || parent == [content commands]) {

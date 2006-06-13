@@ -30,13 +30,14 @@ static BOOL SdefSearchFilter(NSString *search, SdefObject *object, void *ctxt);
 
 - (id)init {
   if (self = [super initWithWindowNibName:@"SdefSymbolBrowser"]) {
+    /* WARNING: do not handle multiple nodes notifications */
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(didAppendChild:)
-                                                 name:SdefObjectDidAppendChildNotification
+                                                 name:SKUITreeNodeDidInsertChildNotification
                                                object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(willRemoveChild:)
-                                                 name:SdefObjectWillRemoveChildNotification
+                                                 name:SKUITreeNodeWillRemoveChildNotification
                                                object:nil];
   }
   return self;
@@ -273,7 +274,7 @@ BOOL SdefSearchFilter(NSString *search, SdefObject *object, void *ctxt) {
 - (void)didAppendChild:(NSNotification *)aNotification {
   id node = [aNotification object];
   if ([self document] && ([node document] == [self document])) {
-    id child = [[aNotification userInfo] objectForKey:SdefNewTreeNode];
+    id child = [[aNotification userInfo] objectForKey:SKInsertedChild];
     switch ([child objectType]) {
       case kSdefSuiteType:
         [self addSuite:child];
@@ -305,7 +306,7 @@ BOOL SdefSearchFilter(NSString *search, SdefObject *object, void *ctxt) {
 - (void)willRemoveChild:(NSNotification *)aNotification {
   id node = [aNotification object];
   if ([self document] && ([node document] == [self document])) {
-    id child = [[aNotification userInfo] objectForKey:SdefRemovedTreeNode];
+    id child = [[aNotification userInfo] objectForKey:SKRemovedChild];
     switch ([child objectType]) {
       case kSdefSuiteType:
         [self removeSuite:child];

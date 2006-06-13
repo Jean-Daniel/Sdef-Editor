@@ -11,6 +11,7 @@
 
 #import <ShadowKit/SKFunctions.h>
 #import <ShadowKit/SKAppKitExtensions.h>
+#import <ShadowKit/SKOutlineViewController.h>
 
 #import "SdefVerb.h"
 #import "SdefClass.h"
@@ -20,7 +21,15 @@
 #import "SdefDocument.h"
 #import "SdefDictionary.h"
 
-#define IsObjectOwner(item)		 		[item findRoot] == (id)[(SdefDocument *)[self document] dictionary]
+#define IsObjectOwner(item)		 		[item findRoot] == [sd_tree root]
+
+static
+NSString * const SdefObjectDragType = @"SdefObjectDragType";
+
+@interface SdefDictionaryTree : SKOutlineViewController {
+}
+
+@end
 
 NSString * const SdefTreePboardType = @"SdefTreeType";
 NSString * const SdefInfoPboardType = @"SdefInfoType";
@@ -49,34 +58,9 @@ static inline BOOL SdefEditorExistsForItem(SdefObject *item) {
 - (id)initWithOwner:(id)owner {
   if (self = [super initWithWindowNibName:@"SdefDocument" owner:(owner) ? : self]) {
     sd_viewControllers = [[NSMutableDictionary alloc] initWithCapacity:16];
-    
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(didAppendNode:)
-                                                 name:SdefObjectDidAppendChildNotification
-                                               object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(willRemoveNode:)
-                                                 name:SdefObjectWillRemoveChildNotification
-                                               object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(didRemoveNode:)
-                                                 name:SdefObjectDidRemoveChildNotification
-                                               object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(willRemoveAllNodes:)
-                                                 name:SdefObjectWillRemoveAllChildrenNotification
-                                               object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(didRemoveNode:)
-                                                 name:SdefObjectDidRemoveAllChildrenNotification
-                                               object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(didChangeNodeName:)
-                                                 name:SdefObjectDidChangeNameNotification
-                                               object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(didSortChildren:)
-                                                 name:SdefObjectDidSortChildrenNotification
+                                                 name:SKUITreeNodeDidChangeNameNotification
                                                object:nil];
   }
   return self;
@@ -85,6 +69,8 @@ static inline BOOL SdefEditorExistsForItem(SdefObject *item) {
 - (void)dealloc {
   [[NSNotificationCenter defaultCenter] removeObserver:self];
   [sd_viewControllers release];
+  [sd_tree unbind:@"autoSelect"];
+  [sd_tree release];
   [super dealloc];
 }
 
@@ -94,34 +80,12 @@ static inline BOOL SdefEditorExistsForItem(SdefObject *item) {
 }
 
 - (void)displayObject:(SdefObject *)anObject {
-  if (IsObjectOwner(anObject)) {
-    /* Expand all parents */
-    SdefObject *parent = [anObject parent];
-    id path = [NSMutableArray array];
-    do {
-      [path addObject:parent];
-      parent = [parent parent];
-    } while (parent);
-    id parents = [path reverseObjectEnumerator];
-    while (parent = [parents nextObject]) {
-      [outline expandItem:parent];
-    }
-  }
+  [sd_tree displayNode:anObject];
 }
 
 - (void)setSelection:(SdefObject *)anObject display:(BOOL)display {
   if (IsObjectOwner(anObject)) {
-    if (display) [self displayObject:anObject];
-    /* Select Row */
-    int row = [outline rowForItem:anObject];
-    if (row > 0) {
-      if ([outline selectedRow] == row) {
-        [[NSNotificationCenter defaultCenter] postNotificationName:NSOutlineViewSelectionDidChangeNotification object:outline];
-      } else {
-        [outline selectRow:row byExtendingSelection:NO];
-        [outline scrollRowToVisible:row];
-      }
-    }
+    [sd_tree setSelectedNode:anObject display:display];
     if (SdefEditorExistsForItem(anObject))
       [[self window] makeFirstResponder:outline];
   }
@@ -145,58 +109,14 @@ static inline BOOL SdefEditorExistsForItem(SdefObject *item) {
 
 - (void)didChangeNodeName:(NSNotification *)aNotification {
   id item = [aNotification object];
-  if (IsObjectOwner(item)) {
-    [outline reloadItem:[aNotification object]];
-    if (item == [(SdefDocument *)[self document] dictionary]) {
-      [self synchronizeWindowTitleWithDocumentName];
-    }
+  if (item == [(SdefDocument *)[self document] dictionary]) {
+    [self synchronizeWindowTitleWithDocumentName];
   }
 }
 
 #pragma mark -
-- (void)didSortChildren:(NSNotification *)aNotification {
-  id item = [aNotification object];
-  if (IsObjectOwner(item) && [outline isItemExpanded:item]) {
-    [outline reloadItem:item reloadChildren:YES];
-  }
-}
 
-- (void)didAppendNode:(NSNotification *)aNotification {
-  SdefObject *item = [aNotification object];
-  if (IsObjectOwner(item)) {
-    [outline reloadItem:item reloadChildren:YES];
-    id child = [[aNotification userInfo] objectForKey:SdefNewTreeNode];
-    if ([[NSUserDefaults standardUserDefaults] boolForKey:@"SdefAutoSelectItem"]) {
-      [self setSelection:child];
-    } else {
-      [self displayObject:child];
-    }
-  }
-}
-
-- (void)willRemoveNode:(NSNotification *)aNotification {
-  id item = [aNotification object];
-  if (IsObjectOwner(item)) {
-    if ([item childCount] == 1) {
-      [outline collapseItem:item];
-    }
-  }
-}
-
-- (void)didRemoveNode:(NSNotification *)aNotification {
-  id item = [aNotification object];
-  if (IsObjectOwner(item)) {
-    [outline reloadItem:item reloadChildren:[item childCount] != 0];
-  }
-}
-
-- (void)willRemoveAllNodes:(NSNotification *)aNotification {
-  id item = [aNotification object];
-  if (IsObjectOwner(item)) {
-    [outline collapseItem:item];
-  }
-}
-
+// set autoselect: [[NSUserDefaults standardUserDefaults] boolForKey:@"SdefAutoSelectItem"]
 - (void)windowDidLoad {
   [outline registerForDraggedTypes:[NSArray arrayWithObject:SdefObjectDragType]];
   [super windowDidLoad];
@@ -228,9 +148,21 @@ static inline BOOL SdefEditorExistsForItem(SdefObject *item) {
 
 #pragma mark -
 - (void)awakeFromNib {
-  [outline setDataSource:[self document]];
-  [outline setDoubleAction:@selector(openInspector:)];
+  if (!sd_tree && outline) {
+    sd_tree = [[SdefDictionaryTree alloc] initWithOutlineView:outline];
+    [sd_tree setDisplayRoot:YES];
+    [sd_tree setRoot:[(SdefDocument *)[self document] dictionary]];
+    [sd_tree bind:@"autoSelect"    
+         toObject:[NSUserDefaultsController sharedUserDefaultsController]
+      withKeyPath:@"values.SdefAutoSelectItem"
+          options:nil];
+  }
   [outline setTarget:[NSApp delegate]];
+  [outline setDoubleAction:@selector(openInspector:)];
+}
+
+- (void)setDictionary:(SdefDictionary *)dictionary {
+  [sd_tree setRoot:dictionary];
 }
 
 - (IBAction)sortByName:(id)sender {
@@ -344,7 +276,7 @@ static inline BOOL SdefEditorExistsForItem(SdefObject *item) {
       case kSdefDictionaryType:
         return NO;
       case kSdefCollectionType:
-        if ([selection childCount] == 0)
+        if ([selection count] == 0)
           return NO;
       default:
         break;
@@ -510,8 +442,8 @@ static inline BOOL SdefEditorExistsForItem(SdefObject *item) {
   }
   if (destination) {
     if ([tree objectType] == kSdefCollectionType) {
-      id children = [tree childEnumerator];
       id child;
+      id children = [tree childEnumerator];
       while (child = [children nextObject]) {
         [child retain];
         [child remove];
@@ -524,6 +456,83 @@ static inline BOOL SdefEditorExistsForItem(SdefObject *item) {
   }
   else
     NSBeep();
+}
+
+@end
+
+@implementation SdefDictionaryTree 
+
+- (id)outlineView:(NSOutlineView *)outlineView objectValueForTableColumn:(NSTableColumn *)tableColumn byItem:(id)item {
+  return item;
+}
+
+- (void)outlineView:(NSOutlineView *)outlineView setObjectValue:(id)object forTableColumn:(NSTableColumn *)tableColumn byItem:(SdefObject *)item {
+  if (![[item name] isEqualToString:object]) {
+    [item setName:object];
+  }
+}
+
+#pragma mark -
+#pragma mark Drag & Drop
+- (BOOL)outlineView:(NSOutlineView *)outlineView writeItems:(NSArray *)items toPasteboard:(NSPasteboard *)pboard {
+  id selection = [items objectAtIndex:0];
+  if (selection != [self root] && [selection objectType] != kSdefCollectionType && [selection isEditable]) {
+    NSPasteboard *pboard = [NSPasteboard pasteboardWithName:NSDragPboard];
+    [pboard declareTypes:[NSArray arrayWithObject:SdefObjectDragType] owner:self];
+    id value = [NSData dataWithBytes:&selection length:sizeof(id)];
+    [pboard setData:value forType:SdefObjectDragType];
+    return YES;
+  } else {
+    return NO;
+  }
+}
+
+- (NSDragOperation)outlineView:(NSOutlineView *)outlineView validateDrop:(id <NSDraggingInfo>)info
+                  proposedItem:(id)item proposedChildIndex:(int)index {
+  NSPasteboard *pboard = [info draggingPasteboard];
+  
+  if (item == nil && index < 0)
+    return NSDragOperationNone;
+  
+  if (![[pboard types] containsObject:SdefObjectDragType]) {
+    return NSDragOperationNone;
+  }
+  id value = [pboard dataForType:SdefObjectDragType];
+  SdefObject *object = nil;
+  [value getBytes:&object length:sizeof(id)];
+  
+  SdefObjectType srcType = [[object parent] objectType];  
+  
+  if ([object objectType] == kSdefPropertyType) {
+    /* refuse if not record and not a collection that accept it */
+    if ([item objectType] != kSdefRecordType && 
+        ([item objectType] != kSdefCollectionType || ![item acceptsObjectType:kSdefPropertyType]))
+      return NSDragOperationNone;
+  } else {    
+    if (srcType != [item objectType]) {
+      return NSDragOperationNone;
+    }
+    if (srcType == kSdefCollectionType && ![item acceptsObjectType:[object objectType]]) {
+      return NSDragOperationNone;
+    }
+  }
+  
+  return ([object findRoot] != [self root]) ? NSDragOperationCopy : NSDragOperationMove;
+}
+
+- (BOOL)outlineView:(NSOutlineView *)outlineView acceptDrop:(id <NSDraggingInfo>)info item:(SdefObject *)item childIndex:(int)index {
+  NSPasteboard *pboard = [info draggingPasteboard];
+  if (![[pboard types] containsObject:SdefObjectDragType]) {
+    return NO;
+  }
+  id value = [pboard dataForType:SdefObjectDragType];
+  SdefObject *object = nil;
+  [value getBytes:&object length:sizeof(id)];
+  
+  if (object)
+    return [self dropObject:object item:item childIndex:index];
+  
+  return NO;
 }
 
 @end

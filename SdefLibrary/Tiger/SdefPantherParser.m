@@ -56,7 +56,7 @@
 
 /* Convert old base types */
 - (void)parserDidEndDocument:(CFXMLParserRef)parser {
-  NSEnumerator *children = [[self document] deepEnumerator];
+  NSEnumerator *children = [[self document] deepChildEnumerator];
   id child;
   while (child = [children nextObject]) {
     if ([child isKindOfClass:[SdefTypedObject class]]) {

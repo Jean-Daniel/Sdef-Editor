@@ -27,6 +27,15 @@
 		656F9B8D09E6A22B008A0059 /* SKApplication.m in Sources */ = {isa = PBXBuildFile; fileRef = 656F9B8B09E6A22B008A0059 /* SKApplication.m */; };
 		656F9B8F09E6A238008A0059 /* ShadowAEUtils.c in Sources */ = {isa = PBXBuildFile; fileRef = 656F9B8E09E6A238008A0059 /* ShadowAEUtils.c */; };
 		65AA322609F65C8B00D04E76 /* ShadowMacros.h in Headers */ = {isa = PBXBuildFile; fileRef = 65AA322509F65C8B00D04E76 /* ShadowMacros.h */; };
+		65EBDD360A3D476900D266C4 /* SKOutlineViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 65EBDD350A3D476900D266C4 /* SKOutlineViewController.m */; };
+		65EBDD380A3D477200D266C4 /* SKOutlineViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 65EBDD370A3D477200D266C4 /* SKOutlineViewController.h */; };
+		65EBDD4F0A3D47A900D266C4 /* SKUITreeNode.h in Headers */ = {isa = PBXBuildFile; fileRef = 65EBDD4E0A3D47A900D266C4 /* SKUITreeNode.h */; };
+		65EBDD510A3D47B200D266C4 /* SKUITreeNode.m in Sources */ = {isa = PBXBuildFile; fileRef = 65EBDD500A3D47B200D266C4 /* SKUITreeNode.m */; };
+		65EBDD530A3D47C100D266C4 /* SKExtendedTreeNode.m in Sources */ = {isa = PBXBuildFile; fileRef = 65EBDD520A3D47C100D266C4 /* SKExtendedTreeNode.m */; };
+		65EBDD550A3D47CC00D266C4 /* SKExtendedTreeNode.h in Headers */ = {isa = PBXBuildFile; fileRef = 65EBDD540A3D47CC00D266C4 /* SKExtendedTreeNode.h */; };
+		65EBDD590A3D47DE00D266C4 /* SKExtendedTreeNode.h in Copy ShadowKit */ = {isa = PBXBuildFile; fileRef = 65EBDD540A3D47CC00D266C4 /* SKExtendedTreeNode.h */; };
+		65EBDD5A0A3D47E800D266C4 /* SKOutlineViewController.h in Copy ShadowKit */ = {isa = PBXBuildFile; fileRef = 65EBDD370A3D477200D266C4 /* SKOutlineViewController.h */; };
+		65EBDD5E0A3D480000D266C4 /* SKUITreeNode.h in Copy ShadowKit */ = {isa = PBXBuildFile; fileRef = 65EBDD4E0A3D47A900D266C4 /* SKUITreeNode.h */; };
 		8D15AC2D0486D014006FF6A4 /* MainMenu.nib in Resources */ = {isa = PBXBuildFile; fileRef = 2A37F4B6FDCFA73011CA2CEA /* MainMenu.nib */; };
 		8D15AC2E0486D014006FF6A4 /* SdefDocument.nib in Resources */ = {isa = PBXBuildFile; fileRef = 2A37F4B4FDCFA73011CA2CEA /* SdefDocument.nib */; };
 		8D15AC2F0486D014006FF6A4 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 089C165FFE840EACC02AAC07 /* InfoPlist.strings */; };
@@ -237,7 +246,10 @@
 			dstPath = "$(BUILD_DIR)/ShadowKit";
 			dstSubfolderSpec = 0;
 			files = (
+				65EBDD5E0A3D480000D266C4 /* SKUITreeNode.h in Copy ShadowKit */,
+				65EBDD5A0A3D47E800D266C4 /* SKOutlineViewController.h in Copy ShadowKit */,
 				9879E2E0094CB5FD005B2173 /* SKExtensions.h in Copy ShadowKit */,
+				65EBDD590A3D47DE00D266C4 /* SKExtendedTreeNode.h in Copy ShadowKit */,
 				9879E2E1094CB5FD005B2173 /* SKWindowController.h in Copy ShadowKit */,
 				9879E2E2094CB5FD005B2173 /* SKLSFunctions.h in Copy ShadowKit */,
 				9879E2E3094CB5FD005B2173 /* SKOutlineView.h in Copy ShadowKit */,
@@ -302,6 +314,12 @@
 		656F9B8B09E6A22B008A0059 /* SKApplication.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SKApplication.m; sourceTree = "<group>"; };
 		656F9B8E09E6A238008A0059 /* ShadowAEUtils.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = ShadowAEUtils.c; sourceTree = "<group>"; };
 		65AA322509F65C8B00D04E76 /* ShadowMacros.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ShadowMacros.h; sourceTree = "<group>"; };
+		65EBDD350A3D476900D266C4 /* SKOutlineViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SKOutlineViewController.m; sourceTree = "<group>"; };
+		65EBDD370A3D477200D266C4 /* SKOutlineViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SKOutlineViewController.h; sourceTree = "<group>"; };
+		65EBDD4E0A3D47A900D266C4 /* SKUITreeNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SKUITreeNode.h; sourceTree = "<group>"; };
+		65EBDD500A3D47B200D266C4 /* SKUITreeNode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SKUITreeNode.m; sourceTree = "<group>"; };
+		65EBDD520A3D47C100D266C4 /* SKExtendedTreeNode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SKExtendedTreeNode.m; sourceTree = "<group>"; };
+		65EBDD540A3D47CC00D266C4 /* SKExtendedTreeNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SKExtendedTreeNode.h; sourceTree = "<group>"; };
 		8D15AC360486D014006FF6A4 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = Info.plist; sourceTree = "<group>"; };
 		8D15AC370486D014006FF6A4 /* Sdef Editor.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Sdef Editor.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		9803414307ADC6B00052F203 /* ScriptSuiteIcon.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = ScriptSuiteIcon.icns; sourceTree = "<group>"; };
@@ -317,7 +335,7 @@
 		98168DBA07A26C9C002B893D /* SdefExporterController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SdefExporterController.m; sourceTree = "<group>"; };
 		98168DD307A27735002B893D /* SdefProcessor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SdefProcessor.h; sourceTree = "<group>"; };
 		98168DD407A27735002B893D /* SdefProcessor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SdefProcessor.m; sourceTree = "<group>"; };
-		98168DDB07A27782002B893D /* sdp */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.executable"; path = sdp; sourceTree = "<group>"; };
+		98168DDB07A27782002B893D /* sdp */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.executable"; name = sdp; path = /usr/bin/sdp; sourceTree = "<absolute>"; };
 		98168E0007A29025002B893D /* NSCoreSuite.sdef */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = NSCoreSuite.sdef; sourceTree = "<group>"; };
 		98168E0407A29036002B893D /* NSTextSuite.sdef */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = NSTextSuite.sdef; sourceTree = "<group>"; };
 		9817594F07B6961F00CEB9BC /* SdefDocumentScripting.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SdefDocumentScripting.m; sourceTree = "<group>"; };
@@ -355,7 +373,7 @@
 		984EE81707F09E6A00828BC0 /* SdefSymbolBrowser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SdefSymbolBrowser.m; sourceTree = "<group>"; };
 		984EE81907F09E7400828BC0 /* SdefSymbolBrowser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SdefSymbolBrowser.h; sourceTree = "<group>"; };
 		984EE82507F0A01F00828BC0 /* English */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = English; path = English.lproj/SdefSymbolBrowser.nib; sourceTree = "<group>"; };
-		9852F79307A2B15600157438 /* Rez */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.executable"; path = Rez; sourceTree = "<group>"; };
+		9852F79307A2B15600157438 /* Rez */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.executable"; name = Rez; path = /Developer/Tools/Rez; sourceTree = "<absolute>"; };
 		9863B97207B846070033AA5B /* SdefSuiteScripting.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SdefSuiteScripting.m; sourceTree = "<group>"; };
 		9863B98B07B849930033AA5B /* SdefEnumerationScripting.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SdefEnumerationScripting.m; sourceTree = "<group>"; };
 		9863F7A2078B2E0C0022F623 /* AddMini.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = AddMini.tiff; sourceTree = "<group>"; };
@@ -1054,6 +1072,7 @@
 				98D3AD51079D726800DDB6CE /* Headers */,
 				656F9B8A09E6A22B008A0059 /* SKTreeNode.m */,
 				656F9B8B09E6A22B008A0059 /* SKApplication.m */,
+				65EBDD520A3D47C100D266C4 /* SKExtendedTreeNode.m */,
 			);
 			path = Foundation;
 			sourceTree = "<group>";
@@ -1063,6 +1082,7 @@
 			children = (
 				98757FDB078855D80038C05B /* SKTreeNode.h */,
 				98298DDF07AE864500F09708 /* SKApplication.h */,
+				65EBDD540A3D47CC00D266C4 /* SKExtendedTreeNode.h */,
 			);
 			path = Headers;
 			sourceTree = "<group>";
@@ -1088,6 +1108,7 @@
 			isa = PBXGroup;
 			children = (
 				98D3AD55079D729600DDB6CE /* Headers */,
+				65EBDD500A3D47B200D266C4 /* SKUITreeNode.m */,
 				98DA20E508B4F82C000ABC2B /* SKOutlineView.m */,
 				656F9B6D09E6A1DF008A0059 /* SKDisclosureView.m */,
 				656F9B6C09E6A1DF008A0059 /* SKDisclosurePanel.m */,
@@ -1095,6 +1116,7 @@
 				656F9B6F09E6A1DF008A0059 /* SKAppKitExtensions.m */,
 				656F9B7009E6A1DF008A0059 /* SKWindowController.m */,
 				656F9B7109E6A1DF008A0059 /* SKImageAndTextCell.m */,
+				65EBDD350A3D476900D266C4 /* SKOutlineViewController.m */,
 			);
 			path = AppKit;
 			sourceTree = "<group>";
@@ -1102,12 +1124,14 @@
 		98D3AD55079D729600DDB6CE /* Headers */ = {
 			isa = PBXGroup;
 			children = (
+				65EBDD4E0A3D47A900D266C4 /* SKUITreeNode.h */,
 				98DA20E708B4F838000ABC2B /* SKOutlineView.h */,
 				98A4E1ED08003C8500E9775B /* SKDisclosurePanel.h */,
 				98DDD04707F232AD00541DFA /* SKTableDataSource.h */,
 				98C41B2C07F1DA5D00FAAEFA /* SKAppKitExtensions.h */,
 				98298DA707AE7E7D00F09708 /* SKWindowController.h */,
 				98BF08D3078A06B30035ECA2 /* SKImageAndTextCell.h */,
+				65EBDD370A3D477200D266C4 /* SKOutlineViewController.h */,
 			);
 			path = Headers;
 			sourceTree = "<group>";
@@ -1249,6 +1273,9 @@
 				98DF608E084074FF00CBE83B /* OSASdefImporter.h in Headers */,
 				98E98D5F0840DFBA0093BA77 /* SdefLeave.h in Headers */,
 				65AA322609F65C8B00D04E76 /* ShadowMacros.h in Headers */,
+				65EBDD380A3D477200D266C4 /* SKOutlineViewController.h in Headers */,
+				65EBDD4F0A3D47A900D266C4 /* SKUITreeNode.h in Headers */,
+				65EBDD550A3D47CC00D266C4 /* SKExtendedTreeNode.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1460,6 +1487,9 @@
 				656F9B8C09E6A22B008A0059 /* SKTreeNode.m in Sources */,
 				656F9B8D09E6A22B008A0059 /* SKApplication.m in Sources */,
 				656F9B8F09E6A238008A0059 /* ShadowAEUtils.c in Sources */,
+				65EBDD360A3D476900D266C4 /* SKOutlineViewController.m in Sources */,
+				65EBDD510A3D47B200D266C4 /* SKUITreeNode.m in Sources */,
+				65EBDD530A3D47C100D266C4 /* SKExtendedTreeNode.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

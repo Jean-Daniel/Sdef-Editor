@@ -60,13 +60,14 @@
 - (id)initWithDictionary:(SdefDictionary *)aDictionary {
   if (self = [self init]) {
     [self setDictionary:aDictionary];
+    /* Warning do not handle multiple node manipulation */
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(didAppendChild:)
-                                                 name:SdefObjectDidAppendChildNotification
+                                                 name:SKUITreeNodeDidInsertChildNotification
                                                object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(willRemoveChild:)
-                                                 name:SdefObjectWillRemoveChildNotification
+                                                 name:SKUITreeNodeWillRemoveChildNotification
                                                object:nil];
   }
   return self;
@@ -258,7 +259,7 @@
   SdefObject *node = [aNotification object];
   if ((sd_dictionary && [node dictionary] == sd_dictionary) ||
       (sd_document && [node document] == sd_document)) {
-    id child = [[aNotification userInfo] objectForKey:SdefNewTreeNode];
+    id child = [[aNotification userInfo] objectForKey:SKInsertedChild];
     switch ([child objectType]) {
       case kSdefSuiteType:
         [self addSuite:child];
@@ -287,7 +288,7 @@
   SdefObject *node = [aNotification object];
   if ((sd_dictionary && [node dictionary] == sd_dictionary) ||
       (sd_document && [node document] == sd_document)) {
-    id child = [[aNotification userInfo] objectForKey:SdefRemovedTreeNode];
+    id child = [[aNotification userInfo] objectForKey:SKRemovedChild];
     switch ([child objectType]) {
       case kSdefSuiteType:
         [self removeSuite:child];
@@ -313,11 +314,11 @@
 }
 
 - (void)didAddDictionary:(NSNotification *)aNotification {
-  [self addDictionary:[[aNotification userInfo] objectForKey:SdefNewTreeNode]];
+  [self addDictionary:[[aNotification userInfo] objectForKey:SKInsertedChild]];
 }
 
 - (void)willRemoveDictionary:(NSNotification *)aNotification {
-  [self removeDictionary:[[aNotification userInfo] objectForKey:SdefRemovedTreeNode]];
+  [self removeDictionary:[[aNotification userInfo] objectForKey:SKRemovedChild]];
 }
 
 #pragma mark -
