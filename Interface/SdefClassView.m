@@ -42,12 +42,17 @@
   }
 }
 
+- (void)setObject:(SdefObject *)anObject {
+  [super setObject:anObject];
+  sd_idx = -1;
+}
+
 - (void)selectObject:(SdefObject*)anObject {
   int idx = -1;
   NSArrayController *controller = nil;
   SdefObject *parent = [anObject parent];
   SdefClass *content = [self object];
-  if (anObject == content) idx = 0;
+  if (anObject == content) idx = sd_idx;
   else if (anObject == [content contents]) { idx = 1; }
   else if (anObject == [content elements] || parent == [content elements]) {
     idx = 2;
@@ -67,6 +72,7 @@
   if (controller) {
     [controller setSelectedObject:anObject];
   }
+  sd_idx = 0;
 }
 
 - (id)editedObject:(id)sender {

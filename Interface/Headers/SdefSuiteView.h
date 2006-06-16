@@ -16,6 +16,7 @@
   IBOutlet id eventTable;
   IBOutlet NSArrayController *types;
 @private
+  int sd_idx;
   NSMenu *sd_typeMenu;
 }
 

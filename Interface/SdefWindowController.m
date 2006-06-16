@@ -187,13 +187,19 @@ static inline BOOL SdefEditorExistsForItem(SdefObject *item) {
     id str = SKFileTypeForHFSTypeCode([item objectType]);
     unsigned idx = [inspector indexOfTabViewItemWithIdentifier:str];
     NSAssert1(idx != NSNotFound, @"Unable to find tab item for identifier \"%@\"", str);
-    [inspector selectTabViewItemAtIndex:idx];
     SdefViewController *ctrl = [sd_viewControllers objectForKey:str];
-    [ctrl setObject:item];
+    if ([ctrl object] != item) {
+      [ctrl setObject:item];
+    }
     [ctrl selectObject:selection];
+    if ([inspector tabViewItemAtIndex:idx] != [inspector selectedTabViewItem]) {
+      [inspector selectTabViewItemAtIndex:idx];
+    }
   }
   [[NSNotificationCenter defaultCenter] postNotificationName:SdefDictionarySelectionDidChangeNotification object:[self document]];
 }
+
+
 /*
  - (void)outlineView:(NSOutlineView *)outlineView willDisplayCell:(id)cell forTableColumn:(NSTableColumn *)tableColumn item:(id)item {
    if ([[tableColumn identifier] isEqualToString:@"_item"]) {

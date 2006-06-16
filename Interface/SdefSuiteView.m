@@ -131,10 +131,15 @@
   }
 }
 
+- (void)setObject:(SdefObject *)anObject {
+  [super setObject:anObject];
+  sd_idx = -1;
+}
+
 - (void)selectObject:(SdefObject*)anObject {
   int idx = -1;
   SdefSuite *content = [self object];
-  if (anObject == content) idx = 0;
+  if (anObject == content) idx = sd_idx;
   else {
     idx = [content indexOfChild:anObject];
     if (idx == NSNotFound) idx = -1;
@@ -147,6 +152,7 @@
     [types setSelectedObject:anObject];
     [tab selectTabViewItemAtIndex:1];
   }
+  sd_idx = 0;
 }
 
 @end

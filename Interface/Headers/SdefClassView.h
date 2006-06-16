@@ -17,6 +17,8 @@
   
   IBOutlet id commandTable;
   IBOutlet id eventTable;
+  @private
+    int sd_idx;
 }
 
 @end
