@@ -26,7 +26,6 @@
 		656F9B8C09E6A22B008A0059 /* SKTreeNode.m in Sources */ = {isa = PBXBuildFile; fileRef = 656F9B8A09E6A22B008A0059 /* SKTreeNode.m */; };
 		656F9B8D09E6A22B008A0059 /* SKApplication.m in Sources */ = {isa = PBXBuildFile; fileRef = 656F9B8B09E6A22B008A0059 /* SKApplication.m */; };
 		656F9B8F09E6A238008A0059 /* ShadowAEUtils.c in Sources */ = {isa = PBXBuildFile; fileRef = 656F9B8E09E6A238008A0059 /* ShadowAEUtils.c */; };
-		65AA322609F65C8B00D04E76 /* ShadowMacros.h in Headers */ = {isa = PBXBuildFile; fileRef = 65AA322509F65C8B00D04E76 /* ShadowMacros.h */; };
 		65EBDD360A3D476900D266C4 /* SKOutlineViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 65EBDD350A3D476900D266C4 /* SKOutlineViewController.m */; };
 		65EBDD380A3D477200D266C4 /* SKOutlineViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 65EBDD370A3D477200D266C4 /* SKOutlineViewController.h */; };
 		65EBDD4F0A3D47A900D266C4 /* SKUITreeNode.h in Headers */ = {isa = PBXBuildFile; fileRef = 65EBDD4E0A3D47A900D266C4 /* SKUITreeNode.h */; };
@@ -313,7 +312,6 @@
 		656F9B8A09E6A22B008A0059 /* SKTreeNode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SKTreeNode.m; sourceTree = "<group>"; };
 		656F9B8B09E6A22B008A0059 /* SKApplication.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SKApplication.m; sourceTree = "<group>"; };
 		656F9B8E09E6A238008A0059 /* ShadowAEUtils.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = ShadowAEUtils.c; sourceTree = "<group>"; };
-		65AA322509F65C8B00D04E76 /* ShadowMacros.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ShadowMacros.h; sourceTree = "<group>"; };
 		65EBDD350A3D476900D266C4 /* SKOutlineViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SKOutlineViewController.m; sourceTree = "<group>"; };
 		65EBDD370A3D477200D266C4 /* SKOutlineViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SKOutlineViewController.h; sourceTree = "<group>"; };
 		65EBDD4E0A3D47A900D266C4 /* SKUITreeNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SKUITreeNode.h; sourceTree = "<group>"; };
@@ -1058,7 +1056,6 @@
 			children = (
 				98757FDA078855D80038C05B /* SKFunctions.h */,
 				98757FDC078855D80038C05B /* SKExtensions.h */,
-				65AA322509F65C8B00D04E76 /* ShadowMacros.h */,
 				984BB6F007EA201600E69BDA /* ShadowCFContext.h */,
 			);
 			path = Headers;
@@ -1270,7 +1267,6 @@
 				984572C0083FD0FE00EACD98 /* SdefTypesEditor.h in Headers */,
 				98DF608E084074FF00CBE83B /* OSASdefImporter.h in Headers */,
 				98E98D5F0840DFBA0093BA77 /* SdefLeave.h in Headers */,
-				65AA322609F65C8B00D04E76 /* ShadowMacros.h in Headers */,
 				65EBDD380A3D477200D266C4 /* SKOutlineViewController.h in Headers */,
 				65EBDD4F0A3D47A900D266C4 /* SKUITreeNode.h in Headers */,
 				65EBDD550A3D47CC00D266C4 /* SKExtendedTreeNode.h in Headers */,
@@ -1699,7 +1695,7 @@
 				PRODUCT_NAME = "Sdef Editor";
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_BUILDER = Grayfox;
-				VERSION_INFO_PREFIX = Sdef;
+				VERSION_INFO_PREFIX = "";
 			};
 			name = Deployment;
 		};
