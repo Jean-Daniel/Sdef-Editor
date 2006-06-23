@@ -58,8 +58,8 @@ extern NSString * const SdtplBlockTableOfContent;
   NSString *sd_cssFile;
   NSMutableSet *sd_cancel;
   SdefClassManager *sd_manager; /* Weak */
-  CFMutableDictionaryRef sd_formats;
-  CFMutableDictionaryRef sd_links, sd_files, sd_anchors;
+  NSMapTable *sd_formats;
+  NSMapTable *sd_links, *sd_files, *sd_anchors;
 }
 
 #pragma mark Accessors

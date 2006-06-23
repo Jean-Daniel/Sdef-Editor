@@ -6,8 +6,8 @@
  *  Copyright © 2006 Shadow Lab. All rights reserved.
  */
 
+#import <ShadowKit/SKCFContext.h>
 #import <ShadowKit/SKFunctions.h>
-#import <ShadowKit/ShadowCFContext.h>
 
 #import "SdefXMLBase.h"
 #import "SdefXMLParser.h"

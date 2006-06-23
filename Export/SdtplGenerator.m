@@ -8,7 +8,6 @@
 
 #import "SdtplGenerator.h"
 #import <ShadowKit/SKAppKitExtensions.h>
-#import <ShadowKit/ShadowCFContext.h>
 #import <ShadowKit/SKExtensions.h>
 #import <ShadowKit/SKTemplate.h>
 #import "SdefTemplate.h"
@@ -395,7 +394,7 @@ NSString *SdefEscapedString(NSString *value, unsigned int format) {
   sd_path = [aFile retain];
   sd_base = [[aFile stringByDeletingLastPathComponent] retain];
   
-  sd_link = (id)CFDictionaryGetValue(sd_formats, @"Links");
+  sd_link = NSMapGet(sd_formats, @"Links");
   
   SdefDictionary *dictionary = [aDico retain];
   sd_manager = [dictionary classManager];
@@ -440,10 +439,10 @@ NSString *SdefEscapedString(NSString *value, unsigned int format) {
       if ([self externalToc]) {
         root = [[sd_tpl templates] objectForKey:SdtplDefinitionTocKey];
         if (root) {
-          NSString *link = (id)CFDictionaryGetValue(sd_formats, @"Toc-Links");
+          NSString *link = NSMapGet(sd_formats, @"Toc-Links");
           if (link && ![link isEqualToString:sd_link]) {
             sd_link = link;
-            CFDictionaryRemoveAllValues(sd_links);
+            NSResetMapTable(sd_links);
           }
           @try {
             [self writeToc:dictionary usingTemplate:root];
@@ -488,10 +487,10 @@ NSString *SdefEscapedString(NSString *value, unsigned int format) {
     [self _sdtplAddFormatString:format inBlock:SdtplBlockOptionalParameter forVariable:variable];
     [self _sdtplAddFormatString:format inBlock:SdtplBlockRequiredParameter forVariable:variable];
   } else {
-    NSMutableDictionary *block = (id)CFDictionaryGetValue(sd_formats, blockName);
+    NSMutableDictionary *block = NSMapGet(sd_formats, blockName);
     if (!block) {
       block = [[NSMutableDictionary alloc] init];
-      CFDictionarySetValue(sd_formats, blockName, block);
+      NSMapInsert(sd_formats, blockName, block);
       [block release];
     }
     [block setValue:format forKey:variable];
@@ -500,7 +499,7 @@ NSString *SdefEscapedString(NSString *value, unsigned int format) {
 
 - (void)initCache {
   if (sd_tpl) {
-    sd_formats = CFDictionaryCreateMutable(kCFAllocatorDefault, 0, &kSKNSObjectDictionaryKeyCallBacks, &kSKNSObjectDictionaryValueCallBacks);
+    sd_formats = NSCreateMapTable(NSObjectMapKeyCallBacks, NSObjectMapValueCallBacks, 0);
     NSDictionary *formats = [sd_tpl formats];
     NSString *key;
     sd_gnFlags.useBlockFormat = 0;
@@ -508,7 +507,7 @@ NSString *SdefEscapedString(NSString *value, unsigned int format) {
     while (key = [keys nextObject]) {
       unsigned separator = [key rangeOfString:@"."].location;
       if (NSNotFound == separator) {
-        CFDictionarySetValue(sd_formats, key, [formats objectForKey:key]);
+        NSMapInsert(sd_formats, key, [formats objectForKey:key]);
       } else {
         sd_gnFlags.useBlockFormat = 1;
         [self _sdtplAddFormatString:[formats objectForKey:key]
@@ -518,9 +517,9 @@ NSString *SdefEscapedString(NSString *value, unsigned int format) {
     }
     
     /* Use retain instead of copy for key (faster) */
-    sd_links = CFDictionaryCreateMutable(kCFAllocatorDefault, 0, &kSKNSObjectDictionaryKeyCallBacks, &kSKNSObjectDictionaryValueCallBacks);
-    sd_files = CFDictionaryCreateMutable(kCFAllocatorDefault, 0, &kSKNSObjectDictionaryKeyCallBacks, &kSKNSObjectDictionaryValueCallBacks);
-    sd_anchors = CFDictionaryCreateMutable(kCFAllocatorDefault, 0, &kSKNSObjectDictionaryKeyCallBacks, &kSKNSObjectDictionaryValueCallBacks);
+    sd_links = NSCreateMapTable(NSObjectMapKeyCallBacks, NSObjectMapValueCallBacks, 0);
+    sd_files = NSCreateMapTable(NSObjectMapKeyCallBacks, NSObjectMapValueCallBacks, 0);
+    sd_anchors = NSCreateMapTable(NSObjectMapKeyCallBacks, NSObjectMapValueCallBacks, 0);
     
     sd_cancel = [[NSMutableSet alloc] init];
       
@@ -556,11 +555,11 @@ NSString *SdefEscapedString(NSString *value, unsigned int format) {
 
 - (void)releaseCache {
   sd_link = nil;
-  if (sd_formats) { CFRelease(sd_formats); sd_formats = nil; }
+  if (sd_formats) { NSFreeMapTable(sd_formats); sd_formats = nil; }
   
-  if (sd_links) { CFRelease(sd_links); sd_links = nil; }
-  if (sd_files) { CFRelease(sd_files); sd_files = nil; }
-  if (sd_anchors) { CFRelease(sd_anchors); sd_anchors = nil; }
+  if (sd_links) { NSFreeMapTable(sd_links); sd_links = nil; }
+  if (sd_files) { NSFreeMapTable(sd_files); sd_files = nil; }
+  if (sd_anchors) { NSFreeMapTable(sd_anchors); sd_anchors = nil; }
   
   [sd_cancel release];
   sd_cancel = nil;
@@ -575,7 +574,7 @@ NSString *SdefEscapedString(NSString *value, unsigned int format) {
 - (NSString *)formatString:(NSString *)str forVariable:(NSString *)aVariable inBlock:(NSString *)aBlock {
   NSString *format = nil;
   if (sd_gnFlags.useBlockFormat && (aBlock != nil)) {
-    NSDictionary *block = (id)CFDictionaryGetValue(sd_formats, aBlock);
+    NSDictionary *block = NSMapGet(sd_formats, aBlock);
     /* Search var in block */
     if (block) {
       format = [block objectForKey:aVariable];
@@ -583,7 +582,7 @@ NSString *SdefEscapedString(NSString *value, unsigned int format) {
   }
   /* If var not found in Block */
   if (!format) {
-    format = (id)CFDictionaryGetValue(sd_formats, aVariable);
+    format = NSMapGet(sd_formats, aVariable);
   }
   if (format) {
     return ([format rangeOfString:@"%@"].location != NSNotFound) ? [NSString stringWithFormat:format, str] : format;
@@ -595,7 +594,7 @@ NSString *SdefEscapedString(NSString *value, unsigned int format) {
 #pragma mark References Generator
 #pragma mark Files
 - (NSString *)fileForObject:(SdefObject *)anObject {
-  id file = (id)CFDictionaryGetValue(sd_files, anObject);
+  id file = NSMapGet(sd_files, anObject);
   if (!file) {
     int flag = kSdefUndefinedType;
     switch ([anObject objectType]) {
@@ -662,7 +661,7 @@ NSString *SdefEscapedString(NSString *value, unsigned int format) {
       default:
         file = _null;
     }
-    CFDictionarySetValue(sd_files, anObject, file);
+    NSMapInsert(sd_files, anObject, file);
   }
   return (file != _null) ? file : nil;
 }
@@ -671,14 +670,14 @@ NSString *SdefEscapedString(NSString *value, unsigned int format) {
 - (NSString *)anchorForObject:(SdefObject *)obj {
   NSString *name = [self anchorNameForObject:obj];
   if (name) {
-    NSString *anchor = (id)CFDictionaryGetValue(sd_formats, @"AnchorFormat");
+    NSString *anchor = NSMapGet(sd_formats, @"AnchorFormat");
     return [NSString stringWithFormat:anchor, name];
   }
   return nil;
 }
 
 - (NSString *)anchorNameForObject:(SdefObject *)anObject {
-  id anchor = (id)CFDictionaryGetValue(sd_anchors, anObject);
+  id anchor = NSMapGet(sd_anchors, anObject);
   if (!anchor) {
     switch ([anObject objectType]) {
       case kSdefDictionaryType:
@@ -694,34 +693,34 @@ NSString *SdefEscapedString(NSString *value, unsigned int format) {
       default:
         anchor = _null;
     }
-    CFDictionarySetValue(sd_anchors, anObject, anchor);
+    NSMapInsert(sd_anchors, anObject, anchor);
   }
   return (_null == anchor) ? nil : anchor;
 }
 
 #pragma mark Links
 - (NSString *)linkForType:(NSString *)aType withString:(NSString *)aString {
-  id link = (id)CFDictionaryGetValue(sd_links, aType);
+  id link = NSMapGet(sd_links, aType);
   if (!link) {
     link = aString;
     if (![SdefClassManager isBaseType:aType]) {
       SdefClass *class = [sd_manager classWithName:aType];
       link = [self linkForObject:class withString:aString];
     }
-    CFDictionarySetValue(sd_links, aType, link);
+    NSMapInsert(sd_links, aType, link);
   }
   return link;
 }
 
 - (NSString *)linkForVerb:(NSString *)aVerb withString:(NSString *)aString {
-  NSString *link = (id)CFDictionaryGetValue(sd_links, aVerb);
+  NSString *link = NSMapGet(sd_links, aVerb);
   if (!link) {
     SdefObject *object = [sd_manager commandWithName:aVerb];
     if (!object) {
       object = [sd_manager eventWithName:aVerb];
     }
     link = [self linkForObject:object withString:aString];
-    CFDictionarySetValue(sd_links, aVerb, link);
+    NSMapInsert(sd_links, aVerb, link);
   }
   return link;
 }
@@ -740,10 +739,10 @@ NSString *SdefEscapedString(NSString *value, unsigned int format) {
 }
 
 - (NSString *)linkForDictionary:(SdefDictionary *)dictionary withString:(NSString *)aString {
-  NSString *link = (id)CFDictionaryGetValue(sd_links, dictionary);
+  NSString *link = NSMapGet(sd_links, dictionary);
   if (!link) {
     link = [self linkForObject:dictionary withString:aString];
-    CFDictionarySetValue(sd_links, dictionary, link);
+    NSMapInsert(sd_links, dictionary, link);
   }
   return link;
 }
@@ -1568,7 +1567,7 @@ static unsigned SdtplDumpSimpleBlock(SdtplGenerator *self, NSEnumerator *enume, 
 static NSString *SdtplCopyFormatedString(SdtplGenerator *self, NSString *str, NSString *aVariable, NSString *aBlock) {
   NSString *format = nil;
   if (self->sd_gnFlags.useBlockFormat && (aBlock != nil)) {
-    NSDictionary *block = (id)CFDictionaryGetValue(self->sd_formats, aBlock);
+    NSDictionary *block = NSMapGet(self->sd_formats, aBlock);
     /* Search var in block */
     if (block) {
       format = [block objectForKey:aVariable];
@@ -1576,7 +1575,7 @@ static NSString *SdtplCopyFormatedString(SdtplGenerator *self, NSString *str, NS
   }
   /* If var not found in Block */
   if (!format) {
-    format = (id)CFDictionaryGetValue(self->sd_formats, aVariable);
+    format = NSMapGet(self->sd_formats, aVariable);
   }
   if (format) {
     return ([format rangeOfString:@"%@"].location != NSNotFound) ? [[NSString alloc] initWithFormat:format, str] : [format retain];
