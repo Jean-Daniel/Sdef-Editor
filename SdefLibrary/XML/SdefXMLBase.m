@@ -34,9 +34,9 @@
     /* Children */
     children = [self childEnumerator];
     while (child = [children nextObject]) {
-      id childNode = [child xmlNodeForVersion:version];
+      SdefXMLNode *childNode = [child xmlNodeForVersion:version];
       if (childNode) {
-        NSAssert1([childNode elementName] != nil, @"%@ return an invalid node", child);
+        NSAssert1([childNode isList] || [childNode elementName], @"%@ return an invalid node", child);
         [node appendChild:childNode];
       }
     }
@@ -93,22 +93,17 @@
   if (kSdefPantherVersion == version) {
     return [super xmlNodeForVersion:version];
   } else if (kSdefTigerVersion == version) {
-    SdefXMLNode *children = nil;
-    SdefXMLNode *lastChild = nil;
-    SdefObject *child;
-    NSEnumerator *enume = [self childEnumerator];
-    while (child = [enume nextObject]) {
+    SdefXMLNode *list = [[SdefXMLNode alloc] initWithElementName:nil];
+    [list setList:YES];
+    SdefObject *child = nil;
+    NSEnumerator *children = [self childEnumerator];
+    while (child = [children nextObject]) {
       SdefXMLNode *node = [child xmlNodeForVersion:version];
       if (node) {
-        if (!children) {
-          children = node;
-        } 
-        /* Use last Child to keep object ordered */
-        [lastChild insertSibling:node];
-        lastChild = node;
+        [list appendChild:node];
       }
     }
-    return children;
+    return list;
   }
   return nil;
 }

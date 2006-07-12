@@ -31,6 +31,7 @@ typedef struct AeteHeader AeteHeader;
 
 @implementation AeteImporter
 
+static
 OSStatus _GetTerminologyFromAppleEvent(AppleEvent *theEvent, NSMutableArray *terminolgies) {
   SInt32 idx;
   long count = 0;

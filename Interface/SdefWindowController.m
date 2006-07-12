@@ -3,7 +3,7 @@
  *  Sdef Editor
  *
  *  Created by Rainbow Team.
- *  Copyright © 2006 Shadow Lab. All rights reserved.
+ *  Copyright ï¿½ 2006 Shadow Lab. All rights reserved.
  */
 
 #import "SdefWindowController.h"
@@ -485,7 +485,6 @@ static inline BOOL SdefEditorExistsForItem(SdefObject *item) {
 - (BOOL)outlineView:(NSOutlineView *)outlineView writeItems:(NSArray *)items toPasteboard:(NSPasteboard *)pboard {
   id selection = [items objectAtIndex:0];
   if (selection != [self root] && [selection objectType] != kSdefCollectionType && [selection isEditable]) {
-    NSPasteboard *pboard = [NSPasteboard pasteboardWithName:NSDragPboard];
     [pboard declareTypes:[NSArray arrayWithObject:SdefObjectDragType] owner:self];
     id value = [NSData dataWithBytes:&selection length:sizeof(id)];
     [pboard setData:value forType:SdefObjectDragType];
@@ -496,10 +495,10 @@ static inline BOOL SdefEditorExistsForItem(SdefObject *item) {
 }
 
 - (NSDragOperation)outlineView:(NSOutlineView *)outlineView validateDrop:(id <NSDraggingInfo>)info
-                  proposedItem:(id)item proposedChildIndex:(int)index {
+                  proposedItem:(id)item proposedChildIndex:(int)anIndex {
   NSPasteboard *pboard = [info draggingPasteboard];
   
-  if (item == nil && index < 0)
+  if (item == nil && anIndex < 0)
     return NSDragOperationNone;
   
   if (![[pboard types] containsObject:SdefObjectDragType]) {
@@ -531,7 +530,7 @@ static inline BOOL SdefEditorExistsForItem(SdefObject *item) {
   return NSDragOperationGeneric;
 }
 
-- (BOOL)outlineView:(NSOutlineView *)outlineView acceptDrop:(id <NSDraggingInfo>)info item:(SdefObject *)item childIndex:(int)index {
+- (BOOL)outlineView:(NSOutlineView *)outlineView acceptDrop:(id <NSDraggingInfo>)info item:(SdefObject *)item childIndex:(int)anIndex {
   NSPasteboard *pboard = [info draggingPasteboard];
   if (![[pboard types] containsObject:SdefObjectDragType]) {
     return NO;
@@ -541,7 +540,7 @@ static inline BOOL SdefEditorExistsForItem(SdefObject *item) {
   [value getBytes:&object length:sizeof(id)];
   
   if (object) {
-    return [self dropObject:object item:item childIndex:index operation:[info draggingSourceOperationMask]];
+    return [self dropObject:object item:item childIndex:anIndex operation:[info draggingSourceOperationMask]];
   }
   
   return NO;

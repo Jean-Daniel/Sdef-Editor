@@ -45,12 +45,20 @@
 }
 
 #pragma mark -
+- (BOOL)isList {
+  return sd_list;
+}
+
+- (void)setList:(BOOL)flag {
+  sd_list = flag;
+}
+
 - (BOOL)isEmpty {
   return ![self hasChildren] && ([self content] == nil);
 }
 - (void)setEmpty:(BOOL)flag {
-  if (empty != flag) {
-    empty = flag;
+  if (sd_empty != flag) {
+    sd_empty = flag;
   }
 }
 
@@ -130,8 +138,8 @@
   [sd_comments addObject:comment];
 }
 
-- (void)removeCommentAtIndex:(unsigned)index {
-  [sd_comments removeObjectAtIndex:index];
+- (void)removeCommentAtIndex:(unsigned)anIndex {
+  [sd_comments removeObjectAtIndex:anIndex];
   if (sd_comments && [sd_comments count] == 0) {
     [sd_comments release];
     sd_comments = nil;

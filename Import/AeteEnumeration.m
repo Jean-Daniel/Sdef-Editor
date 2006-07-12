@@ -16,8 +16,8 @@
   BytePtr bytes = data;
   
   /* Identifier */
-  OSType *ID = (OSType *)bytes;
-  [self setCode:SKFileTypeForHFSTypeCode(*ID)];
+  OSType *identifier = (OSType *)bytes;
+  [self setCode:SKFileTypeForHFSTypeCode(*identifier)];
   [self setName:[self code]];
   bytes += 4;
   
@@ -58,8 +58,8 @@
   bytes += (long)bytes % 2;
   
   /* Identifier */
-  OSType *ID = (OSType *)bytes;
-  [self setCode:SKFileTypeForHFSTypeCode(*ID)];
+  OSType *identifier = (OSType *)bytes;
+  [self setCode:SKFileTypeForHFSTypeCode(*identifier)];
   bytes += 4;
   
   /* Description */

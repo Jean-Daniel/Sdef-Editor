@@ -217,6 +217,11 @@
   return @"Element";
 }
 
+- (void)sdefInit {
+  [super sdefInit];
+  [self setLeaf:YES];
+}
+
 - (void)dealloc {
   [super dealloc];
 }
@@ -338,6 +343,11 @@
   return @"Property";
 }
 
+- (void)sdefInit {
+  [super sdefInit];
+  [self setLeaf:YES];
+}
+
 - (void)dealloc {
   [super dealloc];
 }
@@ -396,6 +406,7 @@
 
 - (void)sdefInit {
   [super sdefInit];
+  [self setLeaf:YES];
   sd_soFlags.hasDocumentation = 0;
 }
 

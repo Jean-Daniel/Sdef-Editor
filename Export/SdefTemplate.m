@@ -26,7 +26,7 @@ NSString * const SdefTemplateDidChangeNotification = @"SdefTemplateDidChange";
 static NSString * const kSdefTemplateExtension = @"sdtpl";
 static NSString * const kSdefTemplateFolder = @"Sdef Editor/Templates/";
 
-static NSArray *SdefTemplatePaths();
+static NSArray *SdefTemplatePaths(void);
 static NSDictionary *SdefTemplatesAtPath(NSString *path);
 
 static NSString * const kSdtplVersion = @"Version"; /* Number */
@@ -162,8 +162,8 @@ NSString * const SdtplDefinitionEventsKey = @"Events";
   }
 }
 
-- (void)loadDefinition:(NSFileWrapper *)tpl {
-  NSData *fileData = [[[tpl fileWrappers] objectForKey:@"Definition.plist"] regularFileContents];
+- (void)loadDefinition:(NSFileWrapper *)aFileWrapper {
+  NSData *fileData = [[[aFileWrapper fileWrappers] objectForKey:@"Definition.plist"] regularFileContents];
   if (fileData) {
     sd_def = [NSPropertyListSerialization propertyListFromData:fileData
                                            mutabilityOption:NSPropertyListImmutable

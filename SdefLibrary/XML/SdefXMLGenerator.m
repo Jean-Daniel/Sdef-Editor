@@ -12,7 +12,8 @@
 #import "SdefXMLBase.h"
 #import <ShadowKit/SKExtensions.h>
 
-inline NSString *SdefEditorComment() {
+SK_INLINE
+NSString *SdefEditorComment() {
   return NSLocalizedStringFromTable(@" Sdef Editor ", @"SdefLibrary", @"XML Document comment");
 }
 
@@ -125,10 +126,6 @@ inline NSString *SdefEditorComment() {
   }
 }
 
-- (void)upOneLevel {
-  [self upOneLevelWithWhiteSpace:YES];
-}
-
 - (void)createDocument {
   if (sd_doc) {
     CFRelease(sd_doc);
@@ -165,28 +162,33 @@ inline NSString *SdefEditorComment() {
 }
 
 - (void)appendXMLNode:(SdefXMLNode *)node {
-  [self insertWhiteSpace];
-  id comments = [[node comments] objectEnumerator];
-  SdefComment *comment;
-  while (comment = [comments nextObject]) {
-    if (nil != [self insertComment:[comment value]])
-      [self insertWhiteSpace];
+  if (![node isList]) {
+    [self insertWhiteSpace];
+    /* Insert comments */
+    SdefComment *comment;
+    NSEnumerator *comments = [[node comments] objectEnumerator];
+    while (comment = [comments nextObject]) {
+      if ([self insertComment:[comment value]])
+        [self insertWhiteSpace];
+    }
+    /* Append the elements */
+    [self appendElementNode:[node elementName]
+             attributesKeys:[node attrKeys]
+           attributesValues:[node attrValues]
+                    isEmpty:[node isEmpty]];
+    /* Write element content if needed */
+    if ([node content]) {
+      [self insertTextNode:[node content]];
+    }
   }
-  [self appendElementNode:[node elementName]
-           attributesKeys:[node attrKeys]
-         attributesValues:[node attrValues]
-                  isEmpty:[node isEmpty]];
-  id content = [node content];
-  if (nil != content) {
-    [self insertTextNode:content];
-  }
-  id children = [node childEnumerator];
-  id child;
+  /* Append elements children if needed */
+  SdefXMLNode *child = nil;
+  NSEnumerator *children = [node childEnumerator];
   while (child = [children nextObject]) {
     [self appendXMLNode:child];
   }
-  if (![node isEmpty]) {
-    (nil != content) ? [self upOneLevelWithWhiteSpace:NO] : [self upOneLevel];
+  if (![node isList] && ![node isEmpty]) {
+    [self upOneLevelWithWhiteSpace:([node content] == nil)];
   }
 }
 

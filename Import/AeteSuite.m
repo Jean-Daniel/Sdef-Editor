@@ -35,8 +35,8 @@
   /* Alignement */
   bytes += (long)bytes % 2;
   
-  OSType *ID = (UInt32 *)bytes;
-  [self setCode:SKFileTypeForHFSTypeCode(*ID)];
+  OSType *identifier = (UInt32 *)bytes;
+  [self setCode:SKFileTypeForHFSTypeCode(*identifier)];
   bytes += 4;
   
   /* skip level and version */

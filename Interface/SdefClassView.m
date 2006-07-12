@@ -56,10 +56,10 @@
   else if (anObject == [content contents]) { idx = 1; }
   else if (anObject == [content elements] || parent == [content elements]) {
     idx = 2;
-    controller = properties;
+    controller = elements;
   } else if (anObject == [content properties] || parent == [content properties]) {
     idx = 3;
-    controller = elements;
+    controller = properties;
   } else if (anObject == [content commands] || parent == [content commands]) {
     idx = 4;
     controller = commands;

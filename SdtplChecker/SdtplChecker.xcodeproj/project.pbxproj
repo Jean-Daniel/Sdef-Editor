@@ -592,6 +592,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 9876B3C40A3B7BB20086207E /* ShadowDebug.xcconfig */;
 			buildSettings = {
+				SYMROOT = ../build;
 			};
 			name = Development;
 		};
@@ -599,6 +600,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 9876B3C70A3B7BB20086207E /* ShadowUniversal.xcconfig */;
 			buildSettings = {
+				SYMROOT = ../build;
 			};
 			name = "Universal Binary";
 		};

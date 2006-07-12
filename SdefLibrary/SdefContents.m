@@ -50,6 +50,7 @@
 #pragma mark -
 - (void)sdefInit {
   [super sdefInit];
+  [self setLeaf:YES];
   [self setRemovable:NO];
 }
 

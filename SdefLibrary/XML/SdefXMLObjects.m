@@ -44,24 +44,9 @@
   SdefXMLNode *node = nil;
   if (node = [super xmlNodeForVersion:version]) {
     if (sd_impl) {
-      BOOL swap = NO;
-      /* Key and method was change for Property and Element*/
-      if (kSdefPantherVersion == version) {
-        if ([self objectType] == kSdefPropertyType || [self objectType] == kSdefElementType) {
-          [[self undoManager] disableUndoRegistration];
-          [sd_impl setMethod:[sd_impl key]];
-          [sd_impl setKey:nil];
-          swap = YES;
-        }
-      }
       SdefXMLNode *impl = [[self impl] xmlNodeForVersion:version];
       if (nil != impl) {
         [node prependChild:impl];
-      }
-      if (swap) {
-        [sd_impl setKey:[sd_impl method]];
-        [sd_impl setMethod:nil];
-        [[self undoManager] enableUndoRegistration];
       }
     }
     [node setEmpty:![node hasChildren]];

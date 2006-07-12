@@ -259,8 +259,8 @@
   }
 }
 
-- (void)removeCommentAtIndex:(unsigned)index {
-  [sd_comments removeObjectAtIndex:index];
+- (void)removeCommentAtIndex:(unsigned)anIndex {
+  [sd_comments removeObjectAtIndex:anIndex];
 }
 
 #pragma mark Ignore
@@ -283,8 +283,8 @@
     [[self ignores] addObjectsFromArray:anArray];
   }
 }
-- (void)removeIgnoreAtIndex:(unsigned)index {
-  [sd_ignore removeObjectAtIndex:index];
+- (void)removeIgnoreAtIndex:(unsigned)anIndex {
+  [sd_ignore removeObjectAtIndex:anIndex];
 }
 
 @end

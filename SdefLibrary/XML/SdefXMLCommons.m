@@ -117,20 +117,29 @@
 - (SdefXMLNode *)xmlNodeForVersion:(SdefVersion)version {
   id node = [super xmlNodeForVersion:version];
   id attr = [self name];
-  if (nil != attr)
+  if (attr)
     [node setAttribute:attr forKey:@"name"];
   
   attr = [self sdClass];
-  if (nil != attr)
+  if (attr)
     [node setAttribute:attr forKey:@"class"];
   
-  attr = [self key];
-  if ([self key])
-    [node setAttribute:attr forKey:@"key"];
-  
-  attr = [self method];
-  if (nil != attr)
-    [node setAttribute:attr forKey:@"method"];
+  /* Key and method was change for Property and Element*/
+  if (kSdefPantherVersion == version) {
+    if ([[self owner] objectType] == kSdefPropertyType || [[self owner] objectType] == kSdefElementType) {
+      attr = [self key];
+      if (nil != attr)
+        [node setAttribute:attr forKey:@"method"];
+    }
+  } else {
+    attr = [self key];
+    if (attr)
+      [node setAttribute:attr forKey:@"key"];
+    
+    attr = [self method];
+    if (nil != attr)
+      [node setAttribute:attr forKey:@"method"];
+  }
     
   [node setEmpty:YES];
   return [node attributeCount] > 0 ? node : nil;

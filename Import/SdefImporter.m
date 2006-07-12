@@ -99,27 +99,27 @@
 #pragma mark Post Processor
 - (void)postProcess {
   SdefSuite *suite;
-  id items = [suites objectEnumerator];
+  NSEnumerator *items = [suites objectEnumerator];
   while (suite = [items nextObject]) {
     
     /* Enumerations */
-    id items = [[suite types] childEnumerator];
     SdefEnumeration *enumeration;
-    while (enumeration = [items nextObject]) {
+    NSEnumerator *children = [[suite types] childEnumerator];
+    while (enumeration = [children nextObject]) {
       [self postProcessEnumeration:enumeration];
     }
     
     /* Classes */
-    items = [[suite classes] childEnumerator];
     SdefClass *class;
-    while (class = [items nextObject]) {
+    children = [[suite classes] childEnumerator];
+    while (class = [children nextObject]) {
       [self postProcessClass:class];
     }
     
     /* Commands */
-    items = [[suite commands] childEnumerator];
     SdefVerb *command;
-    while (command = [items nextObject]) {
+    children = [[suite commands] childEnumerator];
+    while (command = [children nextObject]) {
       [self postProcessCommand:command ];
     }
   }

@@ -9,16 +9,20 @@
 #import <ShadowKit/SKTreeNode.h>
 
 @interface SdefXMLNode : SKTreeNode {
-  BOOL empty;
+  BOOL sd_list;
+  BOOL sd_empty;
   NSString *sd_name;
   NSMutableArray *sd_attrKeys, *sd_attrValues;
   
-  NSMutableArray *sd_comments;
   NSString * sd_content;
+  NSMutableArray *sd_comments;
 }
 
 + (id)nodeWithElementName:(NSString *)aName;
 - (id)initWithElementName:(NSString *)name;
+
+- (BOOL)isList;
+- (void)setList:(BOOL)flag;
 
 - (BOOL)isEmpty;
 - (void)setEmpty:(BOOL)flag;

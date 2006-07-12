@@ -270,8 +270,8 @@
   return [sd_synonyms count];
 }
 
-- (id)objectInSynonymsAtIndex:(unsigned)index {
-  return [sd_synonyms objectAtIndex:index];
+- (id)objectInSynonymsAtIndex:(unsigned)anIndex {
+  return [sd_synonyms objectAtIndex:anIndex];
 }
 
 - (void)addSynonym:(SdefSynonym *)aSynonym {
@@ -279,36 +279,36 @@
   [self insertObject:aSynonym inSynonymsAtIndex:[self countOfSynonyms]];
 }
 
-- (void)insertObject:(id)object inSynonymsAtIndex:(unsigned)index {
+- (void)insertObject:(id)object inSynonymsAtIndex:(unsigned)anIndex {
   NSUndoManager *undo = [self undoManager];
   if (undo) {
-    [[undo prepareWithInvocationTarget:self] removeObjectFromSynonymsAtIndex:index];
+    [[undo prepareWithInvocationTarget:self] removeObjectFromSynonymsAtIndex:anIndex];
     [undo setActionName:NSLocalizedStringFromTable(@"Add/Remove Synonym", @"SdefLibrary", @"Undo Action: Add/Remove synonym.")];
   }
-  [sd_synonyms insertObject:object atIndex:index];
+  [sd_synonyms insertObject:object atIndex:anIndex];
   [object setOwner:self];
 }
 
-- (void)removeObjectFromSynonymsAtIndex:(unsigned)index {
-  SdefSynonym *synonym = [sd_synonyms objectAtIndex:index];
+- (void)removeObjectFromSynonymsAtIndex:(unsigned)anIndex {
+  SdefSynonym *synonym = [sd_synonyms objectAtIndex:anIndex];
   NSUndoManager *undo = [self undoManager];
   if (undo) {
-    [[undo prepareWithInvocationTarget:self] insertObject:synonym inSynonymsAtIndex:index];
+    [[undo prepareWithInvocationTarget:self] insertObject:synonym inSynonymsAtIndex:anIndex];
     [undo setActionName:NSLocalizedStringFromTable(@"Add/Remove Synonym", @"SdefLibrary", @"Undo Action: Add/Remove synonym.")];
   }
   [synonym setOwner:nil];
-  [sd_synonyms removeObjectAtIndex:index];
+  [sd_synonyms removeObjectAtIndex:anIndex];
 }
 
-- (void)replaceObjectInSynonymsAtIndex:(unsigned)index withObject:(id)object {
-  SdefSynonym *synonym = [sd_synonyms objectAtIndex:index];
+- (void)replaceObjectInSynonymsAtIndex:(unsigned)anIndex withObject:(id)object {
+  SdefSynonym *synonym = [sd_synonyms objectAtIndex:anIndex];
   NSUndoManager *undo = [self undoManager];
   if (undo) {
-    [[undo prepareWithInvocationTarget:self] replaceObjectAtIndex:index withObject:synonym];
+    [[undo prepareWithInvocationTarget:self] replaceObjectAtIndex:anIndex withObject:synonym];
     [undo setActionName:NSLocalizedStringFromTable(@"Add/Remove Synonym", @"SdefLibrary", @"Undo Action: Add/Remove synonym.")];
   }
   [synonym setOwner:nil];
-  [sd_synonyms replaceObjectAtIndex:index withObject:object];
+  [sd_synonyms replaceObjectAtIndex:anIndex withObject:object];
   [object setOwner:self];
 }
 
@@ -404,45 +404,45 @@
   return [sd_types count];
 }
 
-- (id)objectInTypesAtIndex:(unsigned)index {
-  return [sd_types objectAtIndex:index];
+- (id)objectInTypesAtIndex:(unsigned)anIndex {
+  return [sd_types objectAtIndex:anIndex];
 }
 
-- (void)insertObject:(id)object inTypesAtIndex:(unsigned)index {
+- (void)insertObject:(id)object inTypesAtIndex:(unsigned)anIndex {
   NSUndoManager *undo = [self undoManager];
   if (undo) {
-    [[undo prepareWithInvocationTarget:self] removeObjectFromTypesAtIndex:index];
+    [[undo prepareWithInvocationTarget:self] removeObjectFromTypesAtIndex:anIndex];
     [undo setActionName:NSLocalizedStringFromTable(@"Add/Remove Type", @"SdefLibrary", @"Undo Action: Add/Remove type.")];
   }
   [self willChangeValueForKey:@"type"];
-  [sd_types insertObject:object atIndex:index];
+  [sd_types insertObject:object atIndex:anIndex];
   [self didChangeValueForKey:@"type"];
   [object setOwner:self];
 }
 
-- (void)removeObjectFromTypesAtIndex:(unsigned)index {
-  SdefType *type = [sd_types objectAtIndex:index];
+- (void)removeObjectFromTypesAtIndex:(unsigned)anIndex {
+  SdefType *type = [sd_types objectAtIndex:anIndex];
   NSUndoManager *undo = [self undoManager];
   if (undo) {
-    [[undo prepareWithInvocationTarget:self] insertObject:type inTypesAtIndex:index];
+    [[undo prepareWithInvocationTarget:self] insertObject:type inTypesAtIndex:anIndex];
     [undo setActionName:NSLocalizedStringFromTable(@"Add/Remove Type", @"SdefLibrary", @"Undo Action: Add/Remove type.")];
   }
   [type setOwner:nil];
   [self willChangeValueForKey:@"type"];
-  [sd_types removeObjectAtIndex:index];
+  [sd_types removeObjectAtIndex:anIndex];
   [self didChangeValueForKey:@"type"];
 }
 
-- (void)replaceObjectInTypesAtIndex:(unsigned)index withObject:(id)object {
-  SdefType *type = [sd_types objectAtIndex:index];
+- (void)replaceObjectInTypesAtIndex:(unsigned)anIndex withObject:(id)object {
+  SdefType *type = [sd_types objectAtIndex:anIndex];
   NSUndoManager *undo = [self undoManager];
   if (undo) {
-    [[undo prepareWithInvocationTarget:self] replaceObjectAtIndex:index withObject:type];
+    [[undo prepareWithInvocationTarget:self] replaceObjectAtIndex:anIndex withObject:type];
     [undo setActionName:NSLocalizedStringFromTable(@"Add/Remove Type", @"SdefLibrary", @"Undo Action: Add/Remove type.")];
   }
   [type setOwner:nil];
   [self willChangeValueForKey:@"type"];
-  [sd_types replaceObjectAtIndex:index withObject:object];
+  [sd_types replaceObjectAtIndex:anIndex withObject:object];
   [self didChangeValueForKey:@"type"];
   [object setOwner:self];
 }
@@ -541,10 +541,10 @@ NSString *SdefTypeStringForTypes(NSArray *types) {
   return [str autorelease];
 }
 
-NSArray *SdefTypesForTypeString(NSString *type) {
+NSArray *SdefTypesForTypeString(NSString *aType) {
   NSString *str;
   NSMutableArray *types = [[NSMutableArray alloc] init];
-  NSEnumerator *strings = [[type componentsSeparatedByString:@"|"] objectEnumerator];
+  NSEnumerator *strings = [[aType componentsSeparatedByString:@"|"] objectEnumerator];
   while (str = [strings nextObject]) {
     unsigned location;
     SdefType *type = nil;

@@ -94,6 +94,7 @@
 
 - (void)sdefInit {
   [super sdefInit];
+  [self setLeaf:YES];
   sd_soFlags.hasDocumentation = 0;
 }
 
@@ -128,6 +129,11 @@
 
 + (NSString *)defaultIconName {
   return @"Value";
+}
+
+- (void)sdefInit {
+  [super sdefInit];
+  [self setLeaf:YES];
 }
 
 @end

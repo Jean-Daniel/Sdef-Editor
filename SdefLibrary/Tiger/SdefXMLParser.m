@@ -131,6 +131,15 @@ static CFXMLParserCallBacks SdefParserCallBacks = {
 }
 
 - (void)parser:(CFXMLParserRef)parser didStartCocoa:(NSDictionary *)attributes {
+  if ([sd_node objectType] == kSdefPropertyType || [sd_node objectType] == kSdefElementType) {
+    // Make sure we use key instead of method.
+    NSString *key = [attributes objectForKey:@"method"];
+    if (key) {
+      attributes = [[attributes mutableCopy] autorelease];
+      [(id)attributes setObject:key forKey:@"key"];
+      [(id)attributes removeObjectForKey:@"method"];
+    }
+  }
   [[sd_node impl] setAttributes:attributes];
 }
 

@@ -27,8 +27,8 @@
   bytes += (long)bytes % 2;
   
   /* Identifier */
-  OSType *ID = (OSType *)bytes;
-  [self setCode:SKFileTypeForHFSTypeCode(*ID)];
+  OSType *identifier = (OSType *)bytes;
+  [self setCode:SKFileTypeForHFSTypeCode(*identifier)];
   bytes += 4;
   
   pStr = (StringPtr)bytes;
@@ -91,13 +91,13 @@
   bytes += (long)bytes % 2;
   
   /* Identifier */
-  OSType *ID = (OSType *)bytes;
-  [self setCode:SKFileTypeForHFSTypeCode(*ID)];
+  OSType *identifier = (OSType *)bytes;
+  [self setCode:SKFileTypeForHFSTypeCode(*identifier)];
   bytes += 4;
   
   /* Type */
-  ID = (UInt32 *)bytes;
-  [self setType:SKFileTypeForHFSTypeCode(*ID)];
+  identifier = (UInt32 *)bytes;
+  [self setType:SKFileTypeForHFSTypeCode(*identifier)];
   bytes += 4;
   
   /* Description */
@@ -140,8 +140,8 @@
   BytePtr bytes = data;
   
   /* Type */
-  OSType *ID = (OSType *)bytes;
-  [self setType:SKFileTypeForHFSTypeCode(*ID)];
+  OSType *identifier = (OSType *)bytes;
+  [self setType:SKFileTypeForHFSTypeCode(*identifier)];
   bytes += 4;
   
   /* Accessors */
@@ -150,8 +150,8 @@
   if (*val > 0) {
     unsigned idx = 0;
     for (idx=0; idx<*val; idx++) {
-      ID = (OSType *)bytes;
-      switch (*ID) {
+      identifier = (OSType *)bytes;
+      switch (*identifier) {
         case formAbsolutePosition:
           [self setAccIndex:YES];
           break;

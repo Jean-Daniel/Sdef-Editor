@@ -40,6 +40,11 @@
   return @"Param";
 }
 
+- (void)sdefInit {
+  [super sdefInit];
+  [self setLeaf:YES];
+}
+
 - (void)dealloc {
   [super dealloc];
 }
@@ -87,6 +92,11 @@
 
 + (NSString *)defaultIconName {
   return @"Param";
+}
+
+- (void)sdefInit {
+  [super sdefInit];
+  [self setLeaf:YES];
 }
 
 - (void)dealloc {
@@ -137,6 +147,11 @@
 
 + (NSString *)defaultIconName {
   return @"Misc";
+}
+
+- (void)sdefInit {
+  [super sdefInit];
+  [self setLeaf:YES];
 }
 
 - (void)dealloc {
