@@ -189,7 +189,7 @@ const OSType kCocoaSuiteDefinitionHFSType = 'ScSu';
       if ([importer warnings]) {
         ImporterWarning *alert = [[ImporterWarning alloc] init];
         [alert setWarnings:[importer warnings]];
-        [alert setReleaseWhenClose:YES];
+        [alert setReleasedWhenClosed:YES];
         [alert showWindow:nil];
       }
     } else {

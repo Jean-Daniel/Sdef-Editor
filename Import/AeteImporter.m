@@ -17,7 +17,7 @@
 #import "SdefClassManager.h"
 
 #import "AeteObject.h"
-#import <ShadowKit/ShadowAEUtils.h>
+#import <ShadowKit/SKAEFunctions.h>
 #include <Carbon/Carbon.h>
 
 struct AeteHeader {
@@ -37,16 +37,16 @@ OSStatus _GetTerminologyFromAppleEvent(AppleEvent *theEvent, NSMutableArray *ter
   long count = 0;
   AEDescList aetes = {typeNull, nil};
   
-  OSStatus err = ShadowAEAddMagnitude(theEvent);
+  OSStatus err = SKAEAddMagnitude(theEvent);
   require_noerr(err, bail);
   
-  err = ShadowAEAddSubject(theEvent);
+  err = SKAEAddSubject(theEvent);
   require_noerr(err, bail);
   
-  err = ShadowAEAddSInt32(theEvent, keyDirectObject, 0);
+  err = SKAEAddSInt32(theEvent, keyDirectObject, 0);
   require_noerr(err, bail);
   
-  err = ShadowAESendEventReturnAEDescList(theEvent, &aetes);
+  err = SKAESendEventReturnAEDescList(theEvent, &aetes);
   require_noerr(err, bail);
 
   err = AECountItems(&aetes, &count);
@@ -54,7 +54,7 @@ OSStatus _GetTerminologyFromAppleEvent(AppleEvent *theEvent, NSMutableArray *ter
 
   for (idx = 1; idx <= count; idx++) {
     CFDataRef data = NULL;
-    ShadowAEGetNthCFDataFromDescList(&aetes, idx, typeAETE, &data);
+    SKAEGetNthCFDataFromDescList(&aetes, idx, typeAETE, &data);
     if (data) {
       [terminolgies addObject:(id)data];
       CFRelease(data);
@@ -62,7 +62,7 @@ OSStatus _GetTerminologyFromAppleEvent(AppleEvent *theEvent, NSMutableArray *ter
   }
 
 bail:
-  ShadowAEDisposeDesc(&aetes);
+  SKAEDisposeDesc(&aetes);
   return err;
 }
 
@@ -70,17 +70,17 @@ bail:
   if (self = [super init]) {
     AppleEvent theEvent = {typeNull, nil};
     sd_aetes = [[NSMutableArray alloc] init];
-    OSStatus err = ShadowAECreateEventWithTarget(target, kASAppleScriptSuite, kGetAEUT, &theEvent);
+    OSStatus err = SKAECreateEventWithTarget(target, kASAppleScriptSuite, kGetAEUT, &theEvent);
     require_noerr(err, bail);
     
     err = _GetTerminologyFromAppleEvent(&theEvent, sd_aetes);
-    ShadowAEDisposeDesc(&theEvent);
+    SKAEDisposeDesc(&theEvent);
     
-    err = ShadowAECreateEventWithTarget(target, kASAppleScriptSuite, kGetAETE, &theEvent);
+    err = SKAECreateEventWithTarget(target, kASAppleScriptSuite, kGetAETE, &theEvent);
     require_noerr(err, bail);
     
     err = _GetTerminologyFromAppleEvent(&theEvent, sd_aetes);
-    ShadowAEDisposeDesc(&theEvent);
+    SKAEDisposeDesc(&theEvent);
     
     require(sd_aetes && [sd_aetes count], bail);
   }
@@ -96,27 +96,27 @@ bail:
 
 - (id)initWithApplicationSignature:(OSType)signature {
   AEDesc target;
-  OSStatus err = ShadowAECreateTargetWithSignature(signature, NO, &target);
+  OSStatus err = SKAECreateTargetWithSignature(signature, NO, &target);
   if (noErr == err) {
     self = [self _initWithTarget:&target];
   } else {
     [self release];
     self = nil;
   }
-  ShadowAEDisposeDesc(&target);
+  SKAEDisposeDesc(&target);
   return self;
 }
 
 - (id)initWithApplicationBundleIdentifier:(NSString *)identifier {
   AEDesc target;
-  OSStatus err = ShadowAECreateTargetWithBundleID((CFStringRef)identifier, NO, &target);
+  OSStatus err = SKAECreateTargetWithBundleID((CFStringRef)identifier, NO, &target);
   if (noErr == err) {
     self = [self _initWithTarget:&target];
   } else {
     [self release];
     self = nil;
   }
-  ShadowAEDisposeDesc(&target);
+  SKAEDisposeDesc(&target);
   return self;
 }
 

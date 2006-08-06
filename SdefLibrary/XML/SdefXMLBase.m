@@ -40,13 +40,13 @@
         [node appendChild:childNode];
       }
     }
-    /* Handle ignores */
+    /* Handle ignored */
     if ([self hasIgnore]) {
       children = [[self ignores] reverseObjectEnumerator];
       while (child = [children nextObject]) {
         id childNode = [child xmlNodeForVersion:version];
         if (childNode) {
-          NSAssert1([childNode elementName] != nil, @"%@ return an invalid node", child);
+          NSAssert1([childNode isList] || [childNode elementName], @"%@ return an invalid node", child);
           [node prependChild:childNode];
         }
       }
@@ -69,7 +69,7 @@
 }
 
 - (void)setAttributes:(NSDictionary *)attrs {
-  [self setName:[attrs objectForKey:@"name"]];
+  [self setName:[[attrs objectForKey:@"name"] stringByUnescapingEntities:nil]];
   
   NSString *hidden = [attrs objectForKey:@"hidden"];
   if (hidden && ![hidden isEqualToString:@"no"]) {

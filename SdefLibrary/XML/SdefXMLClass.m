@@ -46,11 +46,11 @@ unsigned SdefXMLAccessorFlagFromString(NSString *str) {
 - (SdefXMLNode *)xmlNodeForVersion:(SdefVersion)version {
   id node;
   if (node = [super xmlNodeForVersion:version]) {
-    if ([self plural]) [node setAttribute:[self plural] forKey:@"plural"];
-    if ([self inherits]) [node setAttribute:[self inherits] forKey:@"inherits"];
+    if ([self plural]) [node setAttribute:[[self plural] stringByEscapingEntities:nil] forKey:@"plural"];
+    if ([self inherits]) [node setAttribute:[[self inherits] stringByEscapingEntities:nil] forKey:@"inherits"];
     if ([self type]) {
       id type = [SdefXMLNode nodeWithElementName:@"type"];
-      [type setAttribute:[self type] forKey:@"type"];
+      [type setAttribute:[[self type] stringByEscapingEntities:nil] forKey:@"type"];
       [node appendChild:type];
     }
     id contents = [[self contents] xmlNodeForVersion:version];
@@ -72,8 +72,8 @@ unsigned SdefXMLAccessorFlagFromString(NSString *str) {
 #pragma mark Parsing
 - (void)setAttributes:(NSDictionary *)attrs {
   [super setAttributes:attrs];
-  [self setPlural:[attrs objectForKey:@"plural"]];
-  [self setInherits:[attrs objectForKey:@"inherits"]];
+  [self setPlural:[[attrs objectForKey:@"plural"] stringByUnescapingEntities:nil]];
+  [self setInherits:[[attrs objectForKey:@"inherits"] stringByUnescapingEntities:nil]];
 }
 
 - (int)acceptXMLElement:(NSString *)element {
@@ -138,7 +138,7 @@ unsigned SdefXMLAccessorFlagFromString(NSString *str) {
   if (node = [super xmlNodeForVersion:version]) {
     [node removeAttributeForKey:@"name"];
     id attr = [self name];
-    if (nil != attr) [node setAttribute:attr forKey:@"type"];
+    if (nil != attr) [node setAttribute:[attr stringByEscapingEntities:nil] forKey:@"type"];
     
     attr = SdefXMLAccessStringFromFlag([self access]);
     if (nil != attr) [node setAttribute:attr forKey:@"access"];
@@ -163,7 +163,7 @@ unsigned SdefXMLAccessorFlagFromString(NSString *str) {
 - (void)setAttributes:(NSDictionary *)attrs {
   [super setAttributes:attrs];
   
-  [self setName:[attrs objectForKey:@"type"]];
+  [self setName:[[attrs objectForKey:@"type"] stringByUnescapingEntities:nil]];
   [self setAccess:SdefXMLAccessFlagFromString([attrs objectForKey:@"access"])];
 }
 
@@ -221,7 +221,7 @@ unsigned SdefXMLAccessorFlagFromString(NSString *str) {
 - (SdefXMLNode *)xmlNodeForVersion:(SdefVersion)version {
   id node = nil;
   if ([self name] && (node = [super xmlNodeForVersion:version])) {
-    [node setAttribute:[self name] forKey:@"name"];
+    [node setAttribute:[[self name] stringByEscapingEntities:nil] forKey:@"name"];
   }
   return node;
 }

@@ -20,10 +20,10 @@
   if (node = [[SdefXMLNode alloc] initWithElementName:@"synonym"]) {
     /* Code */
     NSString *attr = [self code];
-    if (attr) [node setAttribute:attr forKey:@"code"];
+    if (attr) [node setAttribute:[attr stringByEscapingEntities:nil] forKey:@"code"];
     /* Name */
     attr = [self name];
-    if (attr) [node setAttribute:attr forKey:@"name"];
+    if (attr) [node setAttribute:[attr stringByEscapingEntities:nil] forKey:@"name"];
     /* Hidden */
     if ([self isHidden]) {
       if (kSdefTigerVersion == version)
@@ -50,8 +50,8 @@
 }
 
 - (void)setAttributes:(NSDictionary *)attrs {
-  [self setName:[attrs objectForKey:@"name"]];
-  [self setCode:[attrs objectForKey:@"code"]];
+  [self setName:[[attrs objectForKey:@"name"] stringByUnescapingEntities:nil]];
+  [self setCode:[[attrs objectForKey:@"code"] stringByUnescapingEntities:nil]];
   NSString *hidden = [attrs objectForKey:@"hidden"];
   if (hidden && ![hidden isEqualToString:@"no"]) {
     [self setHidden:YES];
@@ -68,7 +68,7 @@
   if (kSdefTigerVersion == version) {
     if ([self name]) {
       SdefXMLNode *typeNode = [[SdefXMLNode alloc] initWithElementName:@"type"];
-      [typeNode setAttribute:[self name] forKey:@"type"];
+      [typeNode setAttribute:[[self name] stringByEscapingEntities:nil] forKey:@"type"];
       if ([self isList])
         [typeNode setAttribute:@"yes" forKey:@"list"];
       [typeNode setEmpty:YES];
@@ -118,27 +118,27 @@
   id node = [super xmlNodeForVersion:version];
   id attr = [self name];
   if (attr)
-    [node setAttribute:attr forKey:@"name"];
+    [node setAttribute:[attr stringByEscapingEntities:nil] forKey:@"name"];
   
   attr = [self sdClass];
   if (attr)
-    [node setAttribute:attr forKey:@"class"];
+    [node setAttribute:[attr stringByEscapingEntities:nil] forKey:@"class"];
   
   /* Key and method was change for Property and Element*/
   if (kSdefPantherVersion == version) {
     if ([[self owner] objectType] == kSdefPropertyType || [[self owner] objectType] == kSdefElementType) {
       attr = [self key];
       if (nil != attr)
-        [node setAttribute:attr forKey:@"method"];
+        [node setAttribute:[attr stringByEscapingEntities:nil] forKey:@"method"];
     }
   } else {
     attr = [self key];
     if (attr)
-      [node setAttribute:attr forKey:@"key"];
+      [node setAttribute:[attr stringByEscapingEntities:nil] forKey:@"key"];
     
     attr = [self method];
     if (nil != attr)
-      [node setAttribute:attr forKey:@"method"];
+      [node setAttribute:[attr stringByEscapingEntities:nil] forKey:@"method"];
   }
     
   [node setEmpty:YES];
@@ -152,9 +152,9 @@
 #pragma mark Parsing
 - (void)setAttributes:(NSDictionary *)attrs {
   [super setAttributes:attrs];
-  [self setKey:[attrs objectForKey:@"key"]];
-  [self setMethod:[attrs objectForKey:@"method"]];
-  [self setSdClass:[attrs objectForKey:@"class"]];
+  [self setKey:[[attrs objectForKey:@"key"] stringByUnescapingEntities:nil]];
+  [self setMethod:[[attrs objectForKey:@"method"] stringByUnescapingEntities:nil]];
+  [self setSdClass:[[attrs objectForKey:@"class"] stringByUnescapingEntities:nil]];
 }
 
 - (int)acceptXMLElement:(NSString *)element {

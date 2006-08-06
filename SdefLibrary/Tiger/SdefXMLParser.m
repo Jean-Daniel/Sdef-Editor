@@ -427,7 +427,10 @@ static CFXMLParserCallBacks SdefParserCallBacks = {
 
 // ...and this reports a fatal error to the delegate. The parser will stop parsing.
 - (BOOL)parser:(CFXMLParserRef)parser parseErrorOccurred:(NSError *)parseError {
-  sd_error = [[[parseError userInfo] objectForKey:@"SdefParserError"] copy];
+  NSString *error = [[parseError userInfo] objectForKey:@"SdefParserError"];
+  CFIndex line = [self line];
+  CFIndex position = CFXMLParserGetLocation(sd_parser);
+  sd_error = [[NSString alloc] initWithFormat:@"Line %i, position: %i:\n %@", line, position, error];
   return YES;
 }
 
@@ -509,6 +512,7 @@ void SdefParserEndStructure(CFXMLParserRef parser, void *node, void *info) {
 }
 
 CFDataRef SdefParserResolveEntity(CFXMLParserRef parser, CFXMLExternalID *extID, void *info) {
+  ShadowCTrace();
   return NULL;
 }
 

@@ -102,7 +102,7 @@
     SdefTypesEditor *editor = [[SdefTypesEditor alloc] init];
     [editor setField:[sender typeField]];
     [editor setObject:[self editedObject:sender]];
-    [editor setReleaseWhenClose:YES];
+    [editor setReleasedWhenClosed:YES];
     [NSApp beginSheet:[editor window]
        modalForWindow:[sender window]
         modalDelegate:nil

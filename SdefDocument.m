@@ -155,7 +155,7 @@
 
 - (IBAction)exportUsingTemplate:(id)sender {
   SdtplWindow *exporter = [[SdtplWindow alloc] initWithDocument:self];
-  [exporter setReleaseWhenClose:YES];
+  [exporter setReleasedWhenClosed:YES];
   id win = [[self documentWindow] window];
   if (win) {
     [NSApp beginSheet:[exporter window]

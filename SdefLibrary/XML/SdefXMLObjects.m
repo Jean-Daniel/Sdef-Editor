@@ -69,10 +69,10 @@
   if (node = [super xmlNodeForVersion:version]) {
     id attr = [self name];
     if (nil != attr)
-      [node setAttribute:attr forKey:@"name"];
+      [node setAttribute:[attr stringByEscapingEntities:nil] forKey:@"name"];
     attr = [self code];
     if (nil != attr)
-      [node setAttribute:attr forKey:@"code"];
+      [node setAttribute:[attr stringByEscapingEntities:nil] forKey:@"code"];
     
     attr = [self desc];
     if (nil != attr)
@@ -96,7 +96,7 @@
 #pragma mark XML Parsing
 - (void)setAttributes:(NSDictionary *)attrs {
   [super setAttributes:attrs];
-  [self setCode:[attrs objectForKey:@"code"]];
+  [self setCode:[[attrs objectForKey:@"code"] stringByUnescapingEntities:nil]];
   [self setDesc:[[attrs objectForKey:@"description"] stringByUnescapingEntities:nil]];
 }
 
@@ -136,7 +136,7 @@
             } else if ([[type name] isEqualToString:@"location specifier"]) {
               [string appendString:@"location"];
             } else {
-              [string appendString:[type name]];
+              [string appendString:[[type name] stringByEscapingEntities:nil]];
             }
           }
         }
@@ -154,7 +154,7 @@
           }
         }
       } else if ([self hasType]) {
-        [node setAttribute:[self type] forKey:@"type"];
+        [node setAttribute:[[self type] stringByEscapingEntities:nil] forKey:@"type"];
       }
     }
   }
@@ -164,7 +164,7 @@
 #pragma mark XML Parsing
 - (void)setAttributes:(NSDictionary *)attrs {
   [super setAttributes:attrs];
-  NSString *type = [attrs objectForKey:@"type"];
+  NSString *type = [[attrs objectForKey:@"type"] stringByUnescapingEntities:nil];
   if ([type length])  {
     [self setType:type];
   }

@@ -11,6 +11,8 @@
 #import "SdefSynonym.h"
 #import "SdefXMLParser.h"
 
+#import <ShadowKit/SKExtensions.h>
+
 @class SdefXMLNode;
 @interface SdefObject (SdefXMLManager)
 #pragma mark Parser

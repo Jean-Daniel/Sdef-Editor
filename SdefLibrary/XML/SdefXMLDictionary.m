@@ -17,7 +17,7 @@
 - (SdefXMLNode *)xmlNodeForVersion:(SdefVersion)version {
   id node = nil;
   if (node = [super xmlNodeForVersion:version]) {
-    if ([self name]) [node setAttribute:[self name] forKey:@"title"];
+    if ([self name]) [node setAttribute:[[self name] stringByEscapingEntities:nil] forKey:@"title"];
   }
   return node;
 }
@@ -29,7 +29,7 @@
 #pragma mark Parsing
 - (void)setAttributes:(NSDictionary *)attrs {
   [super setAttributes:attrs];
-  [self setName:[attrs objectForKey:@"title"]];
+  [self setName:[[attrs objectForKey:@"title"] stringByUnescapingEntities:nil]];
 }
 
 - (int)acceptXMLElement:(NSString *)element {
