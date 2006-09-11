@@ -81,9 +81,9 @@
     case 1:
       return [class contents];
     case 2:
-      return [properties selectedObject];
-    case 3:
       return [elements selectedObject];
+    case 3:
+      return [properties selectedObject];
   }
   return nil;
 }
