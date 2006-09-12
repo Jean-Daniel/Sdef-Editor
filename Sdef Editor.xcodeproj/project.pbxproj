@@ -1634,7 +1634,7 @@
 		9849B8A108B548BD0036A437 /* Universal Binary */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CURRENT_PROJECT_VERSION = 202;
+				CURRENT_PROJECT_VERSION = 215;
 				HEADER_SEARCH_PATHS = "\"$(BUILD_DIR)\"";
 				INFOPLIST_FILE = Resources/Info.plist;
 				PRODUCT_NAME = "Sdef Editor";
@@ -1654,7 +1654,7 @@
 		98A7CBE70855010F000D862B /* Development */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CURRENT_PROJECT_VERSION = 202;
+				CURRENT_PROJECT_VERSION = 215;
 				HEADER_SEARCH_PATHS = "\"$(BUILD_DIR)\"";
 				INFOPLIST_FILE = Resources/Info.plist;
 				PRODUCT_NAME = "Sdef Editor";
@@ -1667,7 +1667,7 @@
 		98A7CBE80855010F000D862B /* Deployment */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CURRENT_PROJECT_VERSION = 202;
+				CURRENT_PROJECT_VERSION = 215;
 				HEADER_SEARCH_PATHS = "\"$(BUILD_DIR)\"";
 				INFOPLIST_FILE = Resources/Info.plist;
 				PRODUCT_NAME = "Sdef Editor";
