@@ -15,9 +15,11 @@
   IBOutlet id commandTable;
   IBOutlet id eventTable;
   IBOutlet NSArrayController *types;
+  IBOutlet NSArrayController *classes;
 @private
   int sd_idx;
   NSMenu *sd_typeMenu;
+  NSMenu *sd_classMenu;
 }
 
 @end

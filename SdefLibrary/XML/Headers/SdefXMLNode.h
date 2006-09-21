@@ -38,6 +38,7 @@
 - (id)attributForKey:(NSString *)key;
 - (void)setAttribute:(NSString *)value forKey:(NSString *)key;
 - (void)removeAttributeForKey:(NSString *)key;
+- (void)removeAllAttributes;
 
 - (NSString *)content;
 - (void)setContent:(NSString *)aContent;

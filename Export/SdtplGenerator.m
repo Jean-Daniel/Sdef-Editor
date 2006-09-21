@@ -165,8 +165,7 @@ NSString *SdefEscapedString(NSString *value, unsigned int format) {
 @implementation SdtplGenerator
 
 + (void)initialize {
-  static BOOL tooLate = NO;
-  if (!tooLate) {
+  if ([SdtplGenerator class] == self) {
     _null = [NSNull null];
     [[NSUserDefaults standardUserDefaults] registerDefaults:[NSDictionary dictionaryWithObjectsAndKeys:
       SKBool(NO), @"SdtplSortSuite",
@@ -183,7 +182,6 @@ NSString *SdefEscapedString(NSString *value, unsigned int format) {
     [self setKeys:tocKey triggerChangeNotificationsForDependentKey:@"externalToc"];
     [self setKeys:tocKey triggerChangeNotificationsForDependentKey:@"dictionaryToc"];
     [self setKeys:[NSArray arrayWithObject:@"css"] triggerChangeNotificationsForDependentKey:@"externalCss"];
-    tooLate = YES;
   }
 }
 

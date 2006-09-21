@@ -36,7 +36,7 @@
   bytes += (long)bytes % 2;
   
   OSType *identifier = (UInt32 *)bytes;
-  [self setCode:SKFileTypeForHFSTypeCode(*identifier)];
+  [self setCode:SKStringForOSType(*identifier)];
   bytes += 4;
   
   /* skip level and version */

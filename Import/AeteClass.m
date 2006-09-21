@@ -28,7 +28,7 @@
   
   /* Identifier */
   OSType *identifier = (OSType *)bytes;
-  [self setCode:SKFileTypeForHFSTypeCode(*identifier)];
+  [self setCode:SKStringForOSType(*identifier)];
   bytes += 4;
   
   pStr = (StringPtr)bytes;
@@ -92,12 +92,12 @@
   
   /* Identifier */
   OSType *identifier = (OSType *)bytes;
-  [self setCode:SKFileTypeForHFSTypeCode(*identifier)];
+  [self setCode:SKStringForOSType(*identifier)];
   bytes += 4;
   
   /* Type */
   identifier = (UInt32 *)bytes;
-  [self setType:SKFileTypeForHFSTypeCode(*identifier)];
+  [self setType:SKStringForOSType(*identifier)];
   bytes += 4;
   
   /* Description */
@@ -141,7 +141,7 @@
   
   /* Type */
   OSType *identifier = (OSType *)bytes;
-  [self setType:SKFileTypeForHFSTypeCode(*identifier)];
+  [self setType:SKStringForOSType(*identifier)];
   bytes += 4;
   
   /* Accessors */

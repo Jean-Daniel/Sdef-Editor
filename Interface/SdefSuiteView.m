@@ -11,6 +11,7 @@
 #import "SdefTypedef.h"
 #import "SdefSuite.h"
 
+@class SdefClass, SdefClassExtension;
 @interface SdefTypeHasClassTransformer : NSValueTransformer {
 }
 
@@ -21,15 +22,14 @@
 @implementation SdefSuiteView
 
 + (void)initialize {
-  static BOOL tooLate = NO;
-  if (!tooLate) {
-    tooLate = YES;
+  if ([SdefSuiteView class] == self) {
     [NSValueTransformer setValueTransformer:[SdefTypeHasClassTransformer transformer] forName:@"SdefHasClassTransformer"];
   }
 }
 
 - (void)dealloc {
   [sd_typeMenu release];
+  [sd_classMenu release];
   [super dealloc];
 }
 
@@ -96,6 +96,51 @@
   }
   id item = [[class alloc] init];
   [types addObject:item];
+  [item release];
+}
+
+- (NSMenu *)classMenu {
+  if (!sd_classMenu) {
+    sd_classMenu = [[NSMenu alloc] init];
+    NSMenuItem *item;
+    
+    item = [[NSMenuItem alloc] initWithTitle:@"Class" action:@selector(newClass:) keyEquivalent:@""];
+    [item setImage:[NSImage imageNamed:[SdefClass defaultIconName]]];
+    [item setTag:0];
+    [sd_classMenu addItem:item];
+    [item setTarget:self];
+    [item release];
+    
+    item = [[NSMenuItem alloc] initWithTitle:@"Class-Extension" action:@selector(newClass:) keyEquivalent:@""];
+    [item setImage:[NSImage imageNamed:[SdefClassExtension defaultIconName]]];
+    [item setTag:1];
+    [sd_classMenu addItem:item];
+    [item setTarget:self];
+    [item release];
+  }
+  return sd_classMenu;
+}
+
+- (IBAction)addClass:(id)sender {
+  [NSMenu popUpContextMenu:[self classMenu] withEvent:[[sender window] currentEvent] forView:sender];
+}
+
+- (IBAction)newClass:(id)sender {
+  Class class = Nil;
+  switch ([sender tag]) {
+    case 0:
+      class = [SdefClass class];
+      break;
+    case 1:
+      class = [SdefClassExtension class];
+      break;
+  }
+  if (!class) {
+    NSBeep();
+    return;
+  }
+  SdefObject *item = [[class alloc] init];
+  [classes addObject:item];
   [item release];
 }
 

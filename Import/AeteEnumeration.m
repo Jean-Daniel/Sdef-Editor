@@ -17,7 +17,7 @@
   
   /* Identifier */
   OSType *identifier = (OSType *)bytes;
-  [self setCode:SKFileTypeForHFSTypeCode(*identifier)];
+  [self setCode:SKStringForOSType(*identifier)];
   [self setName:[self code]];
   bytes += 4;
   
@@ -59,7 +59,7 @@
   
   /* Identifier */
   OSType *identifier = (OSType *)bytes;
-  [self setCode:SKFileTypeForHFSTypeCode(*identifier)];
+  [self setCode:SKStringForOSType(*identifier)];
   bytes += 4;
   
   /* Description */

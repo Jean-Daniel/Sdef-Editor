@@ -100,6 +100,9 @@
 }
 
 #pragma mark -
+- (BOOL)isExtension {
+  return NO;
+}
 
 - (SdefContents *)contents {
   return sd_contents;
@@ -164,6 +167,39 @@
 
 - (SdefCollection *)events {
   return [self childAtIndex:3];
+}
+
+@end
+
+#pragma mark -
+@implementation SdefClassExtension
+
++ (void)initialize {
+  if ([SdefClassExtension class] == self) {
+    [self setKeys:[NSArray arrayWithObject:@"inherits"] triggerChangeNotificationsForDependentKey:@"name"];
+  }
+}
+
++ (NSString *)defaultName {
+  return NSLocalizedStringFromTable(@"class extension", @"SdefLibrary", @"Class Extension default name");
+}
+
++ (NSString *)defaultIconName {
+  return @"Class-Extension";
+}
+
+- (BOOL)isExtension {
+  return YES;
+}
+
+- (NSString *)name {
+  return [self inherits] ? [[self inherits] stringByAppendingString:@"*"] : @"<undefined>";
+}
+
+- (void)setName:(NSString *)name {
+  if (name && [name hasSuffix:@"*"])
+    name = [name length] > 1 ? [name substringToIndex:[name length] - 2] : nil;
+  [self setInherits:name];
 }
 
 @end

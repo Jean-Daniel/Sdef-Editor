@@ -33,6 +33,17 @@
   [super parser:parser didStartClass:attributes];
 }
 
+- (void)parser:(CFXMLParserRef)parser didStartClassExtension:(NSDictionary *)attributes {
+  NSAssert([sd_node isKindOfClass:[SdefSuite class]], @"sd_node should be a suite");
+  sd_node = [sd_node classes];
+  if (sd_node) {
+    SdefClassExtension *class = [(SdefObject *)[SdefClassExtension allocWithZone:[self zone]] initWithAttributes:attributes];
+    [sd_node appendChild:class];
+    [class release];
+    sd_node = class;
+  }
+}
+
 - (void)parser:(CFXMLParserRef)parser didStartCommand:(NSDictionary *)attributes {
   sd_node = [(SdefSuite *)sd_node commands];
   [super parser:parser didStartCommand:attributes];
@@ -116,7 +127,7 @@
   } 
   [type release];
 }
-  
+
 #pragma mark Misc
 - (void)parser:(CFXMLParserRef)parser didStartElement:(NSString *)element withAttributes:(NSDictionary *)attributes {
   SEL cmd = @selector(isEqualToString:);
@@ -129,6 +140,8 @@
     [self parser:parser didStartRecordType:attributes];
   } else if (isEqual(element, cmd, @"type")) {
     [self parser:parser didStartType:attributes];
+  } else if (isEqual(element, cmd, @"class-extension")) {
+    [self parser:parser didStartClassExtension:attributes];
   } else {
     [super parser:parser didStartElement:element withAttributes:attributes];
   }

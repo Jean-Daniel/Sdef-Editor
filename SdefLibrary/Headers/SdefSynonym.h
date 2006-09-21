@@ -6,7 +6,7 @@
  *  Copyright © 2006 Shadow Lab. All rights reserved.
  */
 
-#import "SdefLeave.h"
+#import "SdefLeaf.h"
 
 /*
  <!-- SYNONYMS -->
@@ -20,7 +20,7 @@
  */
 
 @class SdefImplementation;
-@interface SdefSynonym : SdefLeave <NSCopying, NSCoding> {
+@interface SdefSynonym : SdefLeaf <NSCopying, NSCoding> {
   NSString *sd_code;
   SdefImplementation *sd_impl; 
 }

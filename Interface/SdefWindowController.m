@@ -102,7 +102,7 @@ static inline BOOL SdefEditorExistsForItem(SdefObject *item) {
     item = [item parent];
   }
   if (item && ([item objectType] != kSdefUndefinedType)) {
-    return [sd_viewControllers objectForKey:SKFileTypeForHFSTypeCode([item objectType])];
+    return [sd_viewControllers objectForKey:SKStringForOSType([item objectType])];
   }
   return nil;
 }
@@ -184,7 +184,7 @@ static inline BOOL SdefEditorExistsForItem(SdefObject *item) {
     item = [item parent];
   }
   if (item && ([item objectType] != kSdefUndefinedType)) {
-    id str = SKFileTypeForHFSTypeCode([item objectType]);
+    id str = SKStringForOSType([item objectType]);
     unsigned idx = [inspector indexOfTabViewItemWithIdentifier:str];
     NSAssert1(idx != NSNotFound, @"Unable to find tab item for identifier \"%@\"", str);
     /* Sould select else ctrl would not be created */
@@ -235,7 +235,7 @@ static inline BOOL SdefEditorExistsForItem(SdefObject *item) {
     id ctrl;
     id class = nil;
     id nibName = nil;
-    switch (SKHFSTypeCodeFromFileType(key)) {
+    switch (SKOSTypeFromString(key)) {
       case kSdefDictionaryType:
         class = @"SdefDictionaryView";
         nibName = @"SdefDictionary";

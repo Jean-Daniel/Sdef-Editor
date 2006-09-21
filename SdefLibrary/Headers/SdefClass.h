@@ -83,6 +83,7 @@ enum {
 /* class, property, and contents */
 @class SdefDocumentation, SdefContents;
 @interface SdefClass : SdefTerminologyObject <NSCopying, NSCoding> {
+  @private
   SdefContents *sd_contents;
   /* Attributes */
   NSString *sd_type;
@@ -107,6 +108,14 @@ enum {
 - (NSString *)inherits;
 - (void)setInherits:(NSString *)newInherits;
 
+- (BOOL)isExtension;
+
+@end
+
+@interface SdefClassExtension : SdefClass {
+}
+
+- (BOOL)isExtension;
 
 @end
 

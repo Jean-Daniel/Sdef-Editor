@@ -35,6 +35,7 @@
       isEqual(element, cmd, @"value-type") || 
       isEqual(element, cmd, @"record-type") || 
       isEqual(element, cmd, @"class") || 
+      isEqual(element, cmd, @"class-extension") || 
       isEqual(element, cmd, @"command") || 
       isEqual(element, cmd, @"event")) {
     return kSdefParserTigerVersion;

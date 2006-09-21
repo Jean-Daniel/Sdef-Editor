@@ -21,9 +21,7 @@
 @implementation SdefEnumerationView
 
 + (void)initialize {
-  static BOOL tooLate = NO;
-  if (!tooLate) {
-    tooLate = YES;
+  if ([SdefEnumerationView class] == self) {
     [NSValueTransformer setValueTransformer:[SdefEnumerationInlineTransformer transformer] forName:@"SdefEnumerationInline"];
   }
 }

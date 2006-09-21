@@ -394,7 +394,7 @@
 
 - (NSString *)sdefTypeForAeteType:(NSString *)aType {
   if (!aType) return nil;
-  switch (SKHFSTypeCodeFromFileType(aType)) {
+  switch (SKOSTypeFromString(aType)) {
     case typeNull:
       return nil;
     case typeBoolean:

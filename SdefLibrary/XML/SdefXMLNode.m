@@ -109,6 +109,11 @@
   }
 }
 
+- (void)removeAllAttributes {
+  [sd_attrKeys removeAllObjects];
+  [sd_attrValues removeAllObjects];
+}
+
 - (NSString *)content {
   return sd_content;
 }

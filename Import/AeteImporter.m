@@ -232,7 +232,7 @@ bail:
 - (void)postProcessClass:(SdefClass *)aClass {
   if ([[aClass properties] count]) {
     SdefProperty *info = [[aClass properties] firstChild];
-    if (SKHFSTypeCodeFromFileType([info code]) == pInherits) {
+    if (SKOSTypeFromString([info code]) == pInherits) {
       id superclass = [manager sdefClassWithCode:[info type] inSuite:nil];
       if (superclass) {
         [aClass setInherits:[superclass name]];
@@ -241,7 +241,7 @@ bail:
                 forValue:[aClass name]];
       }
       [info remove];
-    } else if (SKHFSTypeCodeFromFileType([info code]) == kAESpecialClassProperties) {
+    } else if (SKOSTypeFromString([info code]) == kAESpecialClassProperties) {
       if ([[info name] isEqualToString:@"<Plural>"]) {
         unsigned idx = [aClass index];
         [(SdefClass *)[[aClass parent] childAtIndex:idx-1] setPlural:[aClass name]];

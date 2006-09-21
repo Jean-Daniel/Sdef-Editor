@@ -1,5 +1,5 @@
 /*
- *  SdefLeave.h
+ *  SdefLeaf.h
  *  Sdef Editor
  *
  *  Created by Rainbow Team.
@@ -9,7 +9,7 @@
 #import <Cocoa/Cocoa.h>
 
 @class SdefObject;
-@interface SdefLeave : NSObject <NSCopying, NSCoding> {
+@interface SdefLeaf : NSObject <NSCopying, NSCoding> {
 @private
   NSString *sd_name;
   SdefObject *sd_owner;

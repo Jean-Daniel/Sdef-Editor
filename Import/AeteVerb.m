@@ -35,18 +35,18 @@
   
   /* event class */
   OSType *identifier = (UInt32 *)bytes;
-  NSString *type = SKFileTypeForHFSTypeCode(*identifier);
+  NSString *type = SKStringForOSType(*identifier);
   bytes += 4;
   
   /* event id */
   identifier = (UInt32 *)bytes;
-  [self setCode:[type stringByAppendingString:SKFileTypeForHFSTypeCode(*identifier)]];
+  [self setCode:[type stringByAppendingString:SKStringForOSType(*identifier)]];
   bytes += 4;
   
   /* Result */
   identifier = (UInt32 *)bytes;
   if (*identifier != typeNull) {
-    [[self result] setType:SKFileTypeForHFSTypeCode(*identifier)];
+    [[self result] setType:SKStringForOSType(*identifier)];
   }
   bytes += 4;
   
@@ -70,7 +70,7 @@
   /* Direct Parameter */
   identifier = (UInt32 *)bytes;
   if (*identifier != typeNull) {
-    [[self directParameter] setType:SKFileTypeForHFSTypeCode(*identifier)];
+    [[self directParameter] setType:SKStringForOSType(*identifier)];
   }
   bytes += 4;
   
@@ -130,12 +130,12 @@
   
   /* Keyword */
   OSType *identifier = (UInt32 *)bytes;
-  [self setCode:SKFileTypeForHFSTypeCode(*identifier)];
+  [self setCode:SKStringForOSType(*identifier)];
   bytes += 4;
   
   /* event id */
   identifier = (UInt32 *)bytes;
-  [self setType:SKFileTypeForHFSTypeCode(*identifier)];
+  [self setType:SKStringForOSType(*identifier)];
   bytes += 4;
   
   /* Description */

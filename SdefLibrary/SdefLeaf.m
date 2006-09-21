@@ -1,18 +1,18 @@
 /*
- *  SdefLeave.m
+ *  SdefLeaf.m
  *  Sdef Editor
  *
  *  Created by Rainbow Team.
  *  Copyright © 2006 Shadow Lab. All rights reserved.
  */
 
-#import "SdefLeave.h"
+#import "SdefLeaf.h"
 #import "SdefBase.h"
 
-@implementation SdefLeave
+@implementation SdefLeaf
 #pragma mark Protocols Implementations
 - (id)copyWithZone:(NSZone *)aZone {
-  SdefLeave *copy = (SdefLeave *)NSCopyObject(self, 0, aZone);
+  SdefLeaf *copy = (SdefLeaf *)NSCopyObject(self, 0, aZone);
   copy->sd_name = [sd_name copyWithZone:aZone];
   return copy;
 }

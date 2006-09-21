@@ -6,7 +6,7 @@
  *  Copyright © 2006 Shadow Lab. All rights reserved.
  */
 
-#import "SdefLeave.h"
+#import "SdefLeaf.h"
 
 /*
  <!-- TYPES -->
@@ -18,7 +18,7 @@
  */
 
 @class SdefTypedObject;
-@interface SdefType : SdefLeave <NSCopying, NSCoding> {
+@interface SdefType : SdefLeaf <NSCopying, NSCoding> {
 
 }
 

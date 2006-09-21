@@ -3,11 +3,12 @@
         {CLASS = FirstResponder; LANGUAGE = ObjC; SUPERCLASS = NSObject; }, 
         {CLASS = SKImageAndTextCell; LANGUAGE = ObjC; SUPERCLASS = NSTextFieldCell; }, 
         {
-            ACTIONS = {addType = id; }; 
+            ACTIONS = {addClass = id; addType = id; }; 
             CLASS = SdefSuiteView; 
             LANGUAGE = ObjC; 
             OUTLETS = {
                 classTable = NSTableView; 
+                classes = NSArrayController; 
                 commandTable = NSTableView; 
                 eventTable = NSTableView; 
                 tab = NSTabView; 

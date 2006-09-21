@@ -71,8 +71,11 @@
     if (nil != attr)
       [node setAttribute:[attr stringByEscapingEntities:nil] forKey:@"name"];
     attr = [self code];
-    if (nil != attr)
+    if (nil != attr) {
+      if ([attr length] == 6 && [attr hasPrefix:@"'"] && [attr hasSuffix:@"'"])
+        attr = [attr substringWithRange:NSMakeRange(1, 4)];
       [node setAttribute:[attr stringByEscapingEntities:nil] forKey:@"code"];
+    }
     
     attr = [self desc];
     if (nil != attr)

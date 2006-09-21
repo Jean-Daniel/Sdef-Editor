@@ -16,9 +16,7 @@
 @implementation SdefViewController
 
 + (void)initialize {
-  static BOOL tooLate = NO;
-  if (!tooLate) {
-    tooLate = YES;
+  if ([SdefViewController class] == self) {
     [NSValueTransformer setValueTransformer:[SdefTypeColorTransformer transformer] forName:@"SdefTypeColor"];
     [NSValueTransformer setValueTransformer:[SdefAccessTransformer transformer] forName:@"SdefAccessTransformer"];
     [NSValueTransformer setValueTransformer:[SdefObjectNameTransformer transformer] forName:@"SdefObjectNameTransformer"];

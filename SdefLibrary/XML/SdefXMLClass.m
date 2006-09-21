@@ -100,6 +100,31 @@ unsigned SdefXMLAccessorFlagFromString(NSString *str) {
 @end
 
 #pragma mark -
+@implementation SdefClassExtension (SdefXMLManager)
+#pragma mark XML Generation
+- (SdefXMLNode *)xmlNodeForVersion:(SdefVersion)version {
+  SdefXMLNode *node = nil;
+  if ([self inherits]) {
+    if (node = [super xmlNodeForVersion:version]) {
+      [node removeAllAttributes];
+      [node setAttribute:[[self inherits] stringByEscapingEntities:nil] forKey:@"extends"];
+    }
+  }
+  return node;
+}
+
+- (NSString *)xmlElementName {
+  return @"class-extension";
+}
+
+#pragma mark Parsing
+- (void)setAttributes:(NSDictionary *)attrs {
+  [self setInherits:[[attrs objectForKey:@"extends"] stringByUnescapingEntities:nil]];
+}
+
+@end
+
+#pragma mark -
 @implementation SdefContents (SdefXMLManager)
 #pragma mark XML Generation
 - (SdefXMLNode *)xmlNodeForVersion:(SdefVersion)version {

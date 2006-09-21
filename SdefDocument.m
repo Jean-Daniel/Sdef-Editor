@@ -261,7 +261,7 @@
   // if it exists.
   creatorCodeString = [infoPlist objectForKey:@"CFBundleSignature"];
   if(creatorCodeString) {
-    creatorCode = SKULong(SKHFSTypeCodeFromFileType(creatorCodeString));
+    creatorCode = SKULong(SKOSTypeFromString(creatorCodeString));
   }
   
   // Then, find the matching Info.plist dictionary entry for this type.
@@ -278,7 +278,7 @@
         if(typeCodeStrings) { 
           NSString *firstTypeCodeString = [typeCodeStrings objectAtIndex:0];
           if (firstTypeCodeString) {
-            typeCode = SKULong(SKHFSTypeCodeFromFileType(firstTypeCodeString)); 
+            typeCode = SKULong(SKOSTypeFromString(firstTypeCodeString)); 
           } 
         }
         break; 
