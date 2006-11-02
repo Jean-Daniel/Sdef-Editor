@@ -1623,7 +1623,6 @@
 				PRODUCT_NAME = "Sdef Editor";
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_BUILDER = Grayfox;
-				VERSION_INFO_PREFIX = Sdef;
 			};
 			name = "Universal Binary";
 		};
@@ -1643,7 +1642,6 @@
 				PRODUCT_NAME = "Sdef Editor";
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_BUILDER = Grayfox;
-				VERSION_INFO_PREFIX = Sdef;
 			};
 			name = Development;
 		};
@@ -1656,7 +1654,6 @@
 				PRODUCT_NAME = "Sdef Editor";
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_BUILDER = Grayfox;
-				VERSION_INFO_PREFIX = Sdef;
 			};
 			name = Deployment;
 		};

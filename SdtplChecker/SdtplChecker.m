@@ -7,10 +7,11 @@
 //
 
 #import "SdtplChecker.h"
-#import "SimpleNode.h"
 #import "SdefTemplate.h"
 #import "SdefTemplateCheck.h"
+
 #import <ShadowKit/SKTemplate.h>
+#import <ShadowKit/SKUITreeNode.h>
 
 NSString *const SdtplBlockTableOfContent = @"Toc";
 
@@ -18,16 +19,17 @@ int main(int argc, const char **argv) {
   return NSApplicationMain(argc, argv);
 }
 
-static void SdtplAppendChildrenFromStructure(SimpleNode *aNode, NSArray *variables) {
+static 
+void SdtplAppendChildrenFromStructure(SKUITreeNode *aNode, NSArray *variables) {
   id var;
   NSEnumerator *vars = [variables objectEnumerator];
   while (var = [vars nextObject]) {
-    SimpleNode *node = nil;
+    SKUITreeNode *node = nil;
     if ([var isKindOfClass:[NSString class]]) {
-      node = [[SimpleNode alloc] initWithName:var];
+      node = [[SKUITreeNode alloc] initWithName:var];
       [node setIcon:[NSImage imageNamed:@"Variable"]];
     } else {
-      node = [[SimpleNode alloc] initWithName:[var objectForKey:@"name"]];
+      node = [[SKUITreeNode alloc] initWithName:[var objectForKey:@"name"]];
       [node setIcon:[NSImage imageNamed:@"Block"]];
       SdtplAppendChildrenFromStructure(node, [var objectForKey:@"content"]);
     }
@@ -36,8 +38,8 @@ static void SdtplAppendChildrenFromStructure(SimpleNode *aNode, NSArray *variabl
   }
 }
 
-static SimpleNode *SimpleTemplateTree(SKTemplate *tpl) {
-  SimpleNode *root = [SimpleNode nodeWithName:[[tpl name] lastPathComponent]];
+static SKUITreeNode *SimpleTemplateTree(SKTemplate *tpl) {
+  SKUITreeNode *root = [SKUITreeNode nodeWithName:[[tpl name] lastPathComponent]];
   [root setIcon:[NSImage imageNamed:@"Template"]];
   SdtplAppendChildrenFromStructure(root, [[tpl structure] objectForKey:@"content"]);
   return root;
@@ -46,9 +48,7 @@ static SimpleNode *SimpleTemplateTree(SKTemplate *tpl) {
 @implementation SdtplChecker
 
 + (void)initialize {
-  static BOOL tooLate = NO;
-  if (!tooLate) {
-    tooLate = YES;
+  if ([SdtplChecker class] == self) {
     [NSValueTransformer setValueTransformer:[SdefBooleanTransformer transformer] forName:@"SdefBooleanTransformer"];
   }
 }
@@ -101,6 +101,9 @@ static SimpleNode *SimpleTemplateTree(SKTemplate *tpl) {
     [checker release];
     checker = [aChecker retain];
     [templates removeAllObjects];
+    /* Reload to avoid refresh with removed data */
+    [templatesTree reloadData];
+    
     if (checker) {
       [self launchTest:self];
       unsigned idx;
@@ -170,11 +173,11 @@ static SimpleNode *SimpleTemplateTree(SKTemplate *tpl) {
   }
 }
 
-- (id)outlineView:(NSOutlineView *)outlineView child:(int)index ofItem:(id)item {
+- (id)outlineView:(NSOutlineView *)outlineView child:(int)anIndex ofItem:(id)item {
   if (nil == item) {
-    return [templates objectAtIndex:index];
+    return [templates objectAtIndex:anIndex];
   } else {
-    return [item childAtIndex:index];
+    return [item childAtIndex:anIndex];
   }
 }
 

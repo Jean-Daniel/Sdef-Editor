@@ -22,19 +22,21 @@
 		</dict>
 	</array>
 	<key>CFBundleExecutable</key>
-	<string>Sdtpl Checker</string>
+	<string>${EXECUTABLE_NAME}</string>
 	<key>CFBundleIconFile</key>
 	<string>SdtplChecker</string>
 	<key>CFBundleIdentifier</key>
-	<string>fr.shadowlab.SdtplChecker</string>
+	<string>org.shadowlab.SdtplChecker</string>
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
+	<key>CFBundleShortVersionString</key>
+	<string>1.0.1</string>
 	<key>CFBundleSignature</key>
 	<string>Sdtc</string>
 	<key>CFBundleVersion</key>
-	<string>1.0</string>
+	<string>${CURRENT_PROJECT_VERSION}</string>
 	<key>NSMainNibFile</key>
 	<string>MainMenu</string>
 	<key>NSPrincipalClass</key>
