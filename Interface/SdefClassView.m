@@ -84,6 +84,10 @@
       return [elements selectedObject];
     case 3:
       return [properties selectedObject];
+    case 4:
+      return [commands selectedObject];
+    case 6:
+      return [events selectedObject];
   }
   return nil;
 }

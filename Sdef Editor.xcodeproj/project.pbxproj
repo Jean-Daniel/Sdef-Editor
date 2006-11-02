@@ -332,7 +332,6 @@
 		98168DDB07A27782002B893D /* sdp */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.executable"; name = sdp; path = /usr/bin/sdp; sourceTree = "<absolute>"; };
 		98168E0007A29025002B893D /* NSCoreSuite.sdef */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = NSCoreSuite.sdef; sourceTree = "<group>"; };
 		98168E0407A29036002B893D /* NSTextSuite.sdef */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = NSTextSuite.sdef; sourceTree = "<group>"; };
-		9817594F07B6961F00CEB9BC /* SdefDocumentScripting.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SdefDocumentScripting.m; sourceTree = "<group>"; };
 		981B66B2093870CE0024C0D9 /* ShadowCommon.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = ShadowCommon.xcconfig; sourceTree = "<group>"; };
 		981B66B3093870CE0024C0D9 /* ShadowDebug.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = ShadowDebug.xcconfig; sourceTree = "<group>"; };
 		981B66B4093870CE0024C0D9 /* ShadowRelease.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = ShadowRelease.xcconfig; sourceTree = "<group>"; };
@@ -352,8 +351,6 @@
 		982CCAEF07D25F2000EE7474 /* ASDictionaryClass.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ASDictionaryClass.m; sourceTree = "<group>"; };
 		982CCAF907D25FA700EE7474 /* ASDictionaryVerb.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ASDictionaryVerb.m; sourceTree = "<group>"; };
 		9836439607A0814D00DBABD3 /* English */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = English; path = English.lproj/SdefExport.nib; sourceTree = "<group>"; };
-		983916FB07B94F3E00E4743D /* SdefClassScripting.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SdefClassScripting.m; sourceTree = "<group>"; };
-		9839172307B9536E00E4743D /* SdefVerbScripting.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SdefVerbScripting.m; sourceTree = "<group>"; };
 		984572BE083FD0FE00EACD98 /* SdefTypesEditor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SdefTypesEditor.h; sourceTree = "<group>"; };
 		984572BF083FD0FE00EACD98 /* SdefTypesEditor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SdefTypesEditor.m; sourceTree = "<group>"; };
 		984A4C050830100200D062BB /* SdefXMLObjects.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SdefXMLObjects.m; sourceTree = "<group>"; };
@@ -367,8 +364,6 @@
 		984EE81907F09E7400828BC0 /* SdefSymbolBrowser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SdefSymbolBrowser.h; sourceTree = "<group>"; };
 		984EE82507F0A01F00828BC0 /* English */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = English; path = English.lproj/SdefSymbolBrowser.nib; sourceTree = "<group>"; };
 		9852F79307A2B15600157438 /* Rez */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.executable"; name = Rez; path = /Developer/Tools/Rez; sourceTree = "<absolute>"; };
-		9863B97207B846070033AA5B /* SdefSuiteScripting.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SdefSuiteScripting.m; sourceTree = "<group>"; };
-		9863B98B07B849930033AA5B /* SdefEnumerationScripting.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SdefEnumerationScripting.m; sourceTree = "<group>"; };
 		9863F7A2078B2E0C0022F623 /* AddMini.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = AddMini.tiff; sourceTree = "<group>"; };
 		9863F7A3078B2E0C0022F623 /* RemoveMini.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = RemoveMini.tiff; sourceTree = "<group>"; };
 		9863F7A4078B2E0C0022F623 /* RemoveMini_Pressed.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = RemoveMini_Pressed.tiff; sourceTree = "<group>"; };
@@ -433,7 +428,6 @@
 		98BF08D3078A06B30035ECA2 /* SKImageAndTextCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = SKImageAndTextCell.h; sourceTree = "<group>"; };
 		98BF08DD078A08080035ECA2 /* SKImageUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = SKImageUtils.h; sourceTree = "<group>"; };
 		98BF08E9078A08DD0035ECA2 /* Misc.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = Misc.tiff; sourceTree = "<group>"; };
-		98BFB16A07B6B1700066A619 /* SdefObjectScripting.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SdefObjectScripting.m; sourceTree = "<group>"; };
 		98C38232083D2E5500340894 /* English */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = English; path = English.lproj/SdefTypesEditor.nib; sourceTree = "<group>"; };
 		98C41B2C07F1DA5D00FAAEFA /* SKAppKitExtensions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = SKAppKitExtensions.h; sourceTree = "<group>"; };
 		98C4F24F081412A600ABBBBA /* SdefClassManager.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = SdefClassManager.m; sourceTree = "<group>"; };
@@ -595,7 +589,6 @@
 			children = (
 				98C77F8C07D9C8BF006D9CC1 /* Export */,
 				98D127A807A6BD3D001B486F /* Import */,
-				980D7FE607F4C66E00E130B0 /* Scripting */,
 				98B88EE307934CE50058F599 /* Interface */,
 				98757FE4078856300038C05B /* SdefLibrary */,
 				981A834A07CFBDAC007AC495 /* ASDictionary */,
@@ -677,15 +670,6 @@
 				98BDA91308274F7E0055FC80 /* SdefPantherParser.h */,
 			);
 			path = Headers;
-			sourceTree = "<group>";
-		};
-		980D7FE607F4C66E00E130B0 /* Scripting */ = {
-			isa = PBXGroup;
-			children = (
-				98CCA93A082FF723002A37E2 /* Scripting */,
-				9817594F07B6961F00CEB9BC /* SdefDocumentScripting.m */,
-			);
-			name = Scripting;
 			sourceTree = "<group>";
 		};
 		9815F1B907E0F7E000D3C6CD /* Templates */ = {
@@ -992,19 +976,6 @@
 				98C783C607D9E4C5006D9CC1 /* SKProcessFunctions.h */,
 			);
 			path = Headers;
-			sourceTree = "<group>";
-		};
-		98CCA93A082FF723002A37E2 /* Scripting */ = {
-			isa = PBXGroup;
-			children = (
-				9839172307B9536E00E4743D /* SdefVerbScripting.m */,
-				983916FB07B94F3E00E4743D /* SdefClassScripting.m */,
-				9863B97207B846070033AA5B /* SdefSuiteScripting.m */,
-				98BFB16A07B6B1700066A619 /* SdefObjectScripting.m */,
-				9863B98B07B849930033AA5B /* SdefEnumerationScripting.m */,
-			);
-			name = Scripting;
-			path = SdefLibrary/Scripting;
 			sourceTree = "<group>";
 		};
 		98D127A807A6BD3D001B486F /* Import */ = {
@@ -1646,7 +1617,7 @@
 		9849B8A108B548BD0036A437 /* Universal Binary */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CURRENT_PROJECT_VERSION = 215;
+				CURRENT_PROJECT_VERSION = 216;
 				HEADER_SEARCH_PATHS = "\"$(BUILD_DIR)\"";
 				INFOPLIST_FILE = Resources/Info.plist;
 				PRODUCT_NAME = "Sdef Editor";
@@ -1666,7 +1637,7 @@
 		98A7CBE70855010F000D862B /* Development */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CURRENT_PROJECT_VERSION = 215;
+				CURRENT_PROJECT_VERSION = 216;
 				HEADER_SEARCH_PATHS = "\"$(BUILD_DIR)\"";
 				INFOPLIST_FILE = Resources/Info.plist;
 				PRODUCT_NAME = "Sdef Editor";
@@ -1679,13 +1650,13 @@
 		98A7CBE80855010F000D862B /* Deployment */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CURRENT_PROJECT_VERSION = 215;
+				CURRENT_PROJECT_VERSION = 216;
 				HEADER_SEARCH_PATHS = "\"$(BUILD_DIR)\"";
 				INFOPLIST_FILE = Resources/Info.plist;
 				PRODUCT_NAME = "Sdef Editor";
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_BUILDER = Grayfox;
-				VERSION_INFO_PREFIX = "";
+				VERSION_INFO_PREFIX = Sdef;
 			};
 			name = Deployment;
 		};

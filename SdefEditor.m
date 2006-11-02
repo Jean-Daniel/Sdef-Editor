@@ -61,23 +61,24 @@ const OSType kCocoaSuiteDefinitionHFSType = 'ScSu';
     if (Gestalt(gestaltSystemVersion, &SystemVersion) == noErr && SystemVersion < 0x1040) {
       sdp = @"/Developer/Tools/sdp";
     }
+    NSString *rez = @"/Developer/Tools/Rez";
     [[SdefDocumentController alloc] init];
     [[NSUserDefaults standardUserDefaults] registerDefaults:[NSDictionary dictionaryWithObjectsAndKeys:
       SKBool(YES), @"SdefOpenAtStartup",
-      SKBool(YES), @"SdefBuildInSdp",
-      SKBool(YES), @"SdefBuildInRez",
+      SKBool(![[NSFileManager defaultManager] fileExistsAtPath:sdp]), @"SdefBuildInSdp",
+      SKBool(![[NSFileManager defaultManager] fileExistsAtPath:rez]), @"SdefBuildInRez",
       SKBool(YES), @"SdefAutoSelectItem",
       sdp, @"SdefSdpToolPath",
-      @"/Developer/Tools/Rez", @"SdefRezToolPath",
+      rez, @"SdefRezToolPath",
       nil]];
     [NSApp setDelegate:self];
 #if defined (DEBUG)
     [[NSUserDefaults standardUserDefaults] registerDefaults:[NSDictionary dictionaryWithObjectsAndKeys:
-      //@"YES", @"NSShowNonLocalizedStrings",
-      @"NO", @"NSShowAllViews",
-      //@"6", @"NSDragManagerLogLevel",
-      //@"YES", @"NSShowNonLocalizableStrings",
-      //    @"1", @"NSScriptingDebugLogLevel",
+      // @"YES", @"NSShowNonLocalizedStrings",
+      // @"NO", @"NSShowAllViews",
+      // @"6", @"NSDragManagerLogLevel",
+      // @"YES", @"NSShowNonLocalizableStrings",
+      // @"1", @"NSScriptingDebugLogLevel",
       nil]];
 #endif
   } 

@@ -17,7 +17,9 @@ extern NSString * const SdefDictionarySelectionDidChangeNotification;
 @interface SdefWindowController : NSWindowController {
   IBOutlet NSOutlineView *outline;
   IBOutlet NSTabView *inspector;
-  
+
+  @private
+    BOOL sd_remove;
   SKOutlineViewController *sd_tree;
   NSMutableDictionary *sd_viewControllers;
 }

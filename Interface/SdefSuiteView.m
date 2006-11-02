@@ -122,7 +122,11 @@
 }
 
 - (IBAction)addClass:(id)sender {
-  [NSMenu popUpContextMenu:[self classMenu] withEvent:[[sender window] currentEvent] forView:sender];
+  //[NSMenu popUpContextMenu:[self classMenu] withEvent:[[sender window] currentEvent] forView:sender];
+  // Tiger implementation
+  SdefObject *item = [[SdefClass alloc] init];
+  [classes addObject:item];
+  [item release];
 }
 
 - (IBAction)newClass:(id)sender {

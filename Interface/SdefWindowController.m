@@ -62,6 +62,10 @@ static inline BOOL SdefEditorExistsForItem(SdefObject *item) {
                                              selector:@selector(didChangeNodeName:)
                                                  name:SKUITreeNodeDidChangeNameNotification
                                                object:nil];
+//    [[NSNotificationCenter defaultCenter] addObserver:self
+//                                             selector:@selector(didRemoveNode:)
+//                                                 name:SKUITreeNodeDidRemoveChildNotification
+//                                               object:nil];
   }
   return self;
 }
@@ -113,6 +117,21 @@ static inline BOOL SdefEditorExistsForItem(SdefObject *item) {
     [self synchronizeWindowTitleWithDocumentName];
   }
 }
+
+//- (void)didRemoveNode:(NSNotification *)aNotification {
+//  id item = [aNotification object];
+//  if (!sd_remove && IsObjectOwner(item)) {
+//    /* was first child */
+//    if ([outline selectedRow] == ([outline rowForItem:item] +1)) {
+//      DLog(@"Should hack");
+//      if ([item hasChildren]) {
+//        [self setSelection:[item firstChild]];
+//      } else {
+//        [self setSelection:item];
+//      }
+//    }
+//  }
+//}
 
 #pragma mark -
 
@@ -201,7 +220,6 @@ static inline BOOL SdefEditorExistsForItem(SdefObject *item) {
   [[NSNotificationCenter defaultCenter] postNotificationName:SdefDictionarySelectionDidChangeNotification object:[self document]];
 }
 
-
 /*
  - (void)outlineView:(NSOutlineView *)outlineView willDisplayCell:(id)cell forTableColumn:(NSTableColumn *)tableColumn item:(id)item {
    if ([[tableColumn identifier] isEqualToString:@"_item"]) {
@@ -214,15 +232,23 @@ static inline BOOL SdefEditorExistsForItem(SdefObject *item) {
  }
  */
 - (void)deleteSelectionInOutlineView:(NSOutlineView *)outlineView {
+  sd_remove = YES;
   SdefObject *item = [outlineView itemAtRow:[outlineView selectedRow]];
   if (item != [(SdefDocument *)[self document] dictionary] && [item isEditable] && [item isRemovable]) {
     SdefObject *parent = [item parent];
     unsigned idx = [parent indexOfChild:item];
     [item remove];
-    [self setSelection:((idx > 0) ? [parent childAtIndex:idx-1] : parent) display:NO];
+    if (idx > 0) {
+      [self setSelection:[parent childAtIndex:idx-1]];
+    } else if ([parent hasChildren]) {
+      [self setSelection:[parent firstChild]];
+    } else {
+      [self setSelection:parent];
+    }
   } else {
     NSBeep();
   }
+  sd_remove = NO;
 }
 
 - (BOOL)outlineView:(NSOutlineView *)outlineView shouldEditTableColumn:(NSTableColumn *)tableColumn item:(id)item {
