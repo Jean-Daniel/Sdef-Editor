@@ -111,6 +111,8 @@
 	</array>
 	<key>CFBundleExecutable</key>
 	<string>${EXECUTABLE_NAME}</string>
+    <key>CFBundleName</key>
+    <string>${PRODUCT_NAME}</string>
 	<key>CFBundleIconFile</key>
 	<string>SdefEditor</string>
 	<key>CFBundleIdentifier</key>
@@ -119,8 +121,6 @@
 	<string>6.0</string>
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
-	<key>CFBundleShortVersionString</key>
-	<string>1.3.3</string>
 	<key>CFBundleSignature</key>
 	<string>SdEd</string>
 	<key>CFBundleVersion</key>

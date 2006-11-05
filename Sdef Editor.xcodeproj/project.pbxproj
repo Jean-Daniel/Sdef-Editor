@@ -10,12 +10,9 @@
 		656F9B5809E6A188008A0059 /* SKFunctions.m in Sources */ = {isa = PBXBuildFile; fileRef = 656F9B5409E6A188008A0059 /* SKFunctions.m */; };
 		656F9B5909E6A188008A0059 /* SKCFContext.m in Sources */ = {isa = PBXBuildFile; fileRef = 656F9B5509E6A188008A0059 /* SKCFContext.m */; };
 		656F9B5B09E6A188008A0059 /* SKExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 656F9B5709E6A188008A0059 /* SKExtensions.m */; };
-		656F9B7209E6A1DF008A0059 /* SKDisclosurePanel.m in Sources */ = {isa = PBXBuildFile; fileRef = 656F9B6C09E6A1DF008A0059 /* SKDisclosurePanel.m */; };
-		656F9B7309E6A1DF008A0059 /* SKDisclosureView.m in Sources */ = {isa = PBXBuildFile; fileRef = 656F9B6D09E6A1DF008A0059 /* SKDisclosureView.m */; };
 		656F9B7409E6A1DF008A0059 /* SKTableDataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 656F9B6E09E6A1DF008A0059 /* SKTableDataSource.m */; };
 		656F9B7509E6A1DF008A0059 /* SKAppKitExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 656F9B6F09E6A1DF008A0059 /* SKAppKitExtensions.m */; };
 		656F9B7609E6A1DF008A0059 /* SKWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 656F9B7009E6A1DF008A0059 /* SKWindowController.m */; };
-		656F9B7709E6A1DF008A0059 /* SKImageAndTextCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 656F9B7109E6A1DF008A0059 /* SKImageAndTextCell.m */; };
 		656F9B7B09E6A1F8008A0059 /* SKImageUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 656F9B7A09E6A1F8008A0059 /* SKImageUtils.m */; };
 		656F9B8109E6A20A008A0059 /* SKLSFunctions.m in Sources */ = {isa = PBXBuildFile; fileRef = 656F9B7E09E6A20A008A0059 /* SKLSFunctions.m */; };
 		656F9B8209E6A20A008A0059 /* SKFSFunctions.m in Sources */ = {isa = PBXBuildFile; fileRef = 656F9B7F09E6A20A008A0059 /* SKFSFunctions.m */; };
@@ -37,8 +34,8 @@
 		8D15AC340486D014006FF6A4 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A7FEA54F5311CA2CBB /* Cocoa.framework */; };
 		9803414407ADC6B00052F203 /* ScriptSuiteIcon.icns in Resources */ = {isa = PBXBuildFile; fileRef = 9803414307ADC6B00052F203 /* ScriptSuiteIcon.icns */; };
 		98057B5907B50A5B00C2D3C7 /* Sdef Editor Help in Resources */ = {isa = PBXBuildFile; fileRef = 98057B2307B50A5B00C2D3C7 /* Sdef Editor Help */; };
-		980AC38108327EF2002EF5F5 /* Value.tif in Resources */ = {isa = PBXBuildFile; fileRef = 980AC38008327EF2002EF5F5 /* Value.tif */; };
-		980AC38308327EFB002EF5F5 /* Record.tif in Resources */ = {isa = PBXBuildFile; fileRef = 980AC38208327EFB002EF5F5 /* Record.tif */; };
+		980AC38108327EF2002EF5F5 /* Value.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 980AC38008327EF2002EF5F5 /* Value.tiff */; };
+		980AC38308327EFB002EF5F5 /* Record.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 980AC38208327EFB002EF5F5 /* Record.tiff */; };
 		980AC3A0083284A9002EF5F5 /* SdefRecord.nib in Resources */ = {isa = PBXBuildFile; fileRef = 980AC39E083284A9002EF5F5 /* SdefRecord.nib */; };
 		980AC40A0832AB66002EF5F5 /* SdefDocumentationParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 980AC4090832AB66002EF5F5 /* SdefDocumentationParser.m */; };
 		98168DBC07A26C9C002B893D /* SdefExporterController.m in Sources */ = {isa = PBXBuildFile; fileRef = 98168DBA07A26C9C002B893D /* SdefExporterController.m */; };
@@ -46,8 +43,15 @@
 		98168DDC07A27782002B893D /* sdp in Resources */ = {isa = PBXBuildFile; fileRef = 98168DDB07A27782002B893D /* sdp */; };
 		98168E0107A29025002B893D /* NSCoreSuite.sdef in Resources */ = {isa = PBXBuildFile; fileRef = 98168E0007A29025002B893D /* NSCoreSuite.sdef */; };
 		98168E0507A29036002B893D /* NSTextSuite.sdef in Resources */ = {isa = PBXBuildFile; fileRef = 98168E0407A29036002B893D /* NSTextSuite.sdef */; };
-		9820CD270793467D008D397F /* Dictionary.tif in Resources */ = {isa = PBXBuildFile; fileRef = 9820CD250793467D008D397F /* Dictionary.tif */; };
-		9820CD280793467D008D397F /* Suite.tif in Resources */ = {isa = PBXBuildFile; fileRef = 9820CD260793467D008D397F /* Suite.tif */; };
+		9820CD270793467D008D397F /* Dictionary.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 9820CD250793467D008D397F /* Dictionary.tiff */; };
+		9820CD280793467D008D397F /* Suite.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 9820CD260793467D008D397F /* Suite.tiff */; };
+		98230E5D0AFE299B00675226 /* SKDisclosurePanel.h in Headers */ = {isa = PBXBuildFile; fileRef = 98230E4C0AFE299A00675226 /* SKDisclosurePanel.h */; };
+		98230E5F0AFE299B00675226 /* SKImageAndTextCell.h in Headers */ = {isa = PBXBuildFile; fileRef = 98230E4E0AFE299A00675226 /* SKImageAndTextCell.h */; };
+		98230E660AFE299B00675226 /* SKDisclosurePanel.m in Sources */ = {isa = PBXBuildFile; fileRef = 98230E560AFE299A00675226 /* SKDisclosurePanel.m */; };
+		98230E670AFE299B00675226 /* SKDisclosureView.m in Sources */ = {isa = PBXBuildFile; fileRef = 98230E570AFE299A00675226 /* SKDisclosureView.m */; };
+		98230E690AFE299B00675226 /* SKImageAndTextCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 98230E590AFE299A00675226 /* SKImageAndTextCell.m */; };
+		98230E6B0AFE29D400675226 /* SKDisclosurePanel.h in Copy ShadowKit */ = {isa = PBXBuildFile; fileRef = 98230E4C0AFE299A00675226 /* SKDisclosurePanel.h */; };
+		98230E6C0AFE29D400675226 /* SKImageAndTextCell.h in Copy ShadowKit */ = {isa = PBXBuildFile; fileRef = 98230E4E0AFE299A00675226 /* SKImageAndTextCell.h */; };
 		9825DDCB07F4AC16006D5F5C /* SdtplWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = 9825DDC907F4AC16006D5F5C /* SdtplWindow.m */; };
 		98298DBD07AE817D00F09708 /* ImportApplicationAete.m in Sources */ = {isa = PBXBuildFile; fileRef = 98298DBC07AE817D00F09708 /* ImportApplicationAete.m */; };
 		98298DCC07AE822E00F09708 /* ImportApplicationAete.nib in Resources */ = {isa = PBXBuildFile; fileRef = 98298DCA07AE822E00F09708 /* ImportApplicationAete.nib */; };
@@ -141,8 +145,6 @@
 		9879E2E1094CB5FD005B2173 /* SKWindowController.h in Copy ShadowKit */ = {isa = PBXBuildFile; fileRef = 98298DA707AE7E7D00F09708 /* SKWindowController.h */; };
 		9879E2E2094CB5FD005B2173 /* SKLSFunctions.h in Copy ShadowKit */ = {isa = PBXBuildFile; fileRef = 98C783B507D9E2A3006D9CC1 /* SKLSFunctions.h */; };
 		9879E2E3094CB5FD005B2173 /* SKOutlineView.h in Copy ShadowKit */ = {isa = PBXBuildFile; fileRef = 98DA20E708B4F838000ABC2B /* SKOutlineView.h */; };
-		9879E2E4094CB5FD005B2173 /* SKImageAndTextCell.h in Copy ShadowKit */ = {isa = PBXBuildFile; fileRef = 98BF08D3078A06B30035ECA2 /* SKImageAndTextCell.h */; };
-		9879E2E5094CB5FD005B2173 /* SKDisclosurePanel.h in Copy ShadowKit */ = {isa = PBXBuildFile; fileRef = 98A4E1ED08003C8500E9775B /* SKDisclosurePanel.h */; };
 		9879E2E6094CB5FD005B2173 /* SKTemplateParser.h in Copy ShadowKit */ = {isa = PBXBuildFile; fileRef = 9815F1CA07E0F80200D3C6CD /* SKTemplateParser.h */; };
 		9879E2E7094CB5FD005B2173 /* SKTreeNode.h in Copy ShadowKit */ = {isa = PBXBuildFile; fileRef = 98757FDB078855D80038C05B /* SKTreeNode.h */; };
 		9879E2E8094CB5FD005B2173 /* SKCFContext.h in Copy ShadowKit */ = {isa = PBXBuildFile; fileRef = 984BB6F007EA201600E69BDA /* SKCFContext.h */; };
@@ -186,7 +188,7 @@
 		98D363A7078A7E8C00669D72 /* Class.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 98D363A0078A7E8B00669D72 /* Class.tiff */; };
 		98D363A8078A7E8C00669D72 /* Type.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 98D363A1078A7E8B00669D72 /* Type.tiff */; };
 		98D363A9078A7E8C00669D72 /* Folder.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 98D363A2078A7E8B00669D72 /* Folder.tiff */; };
-		98D363AA078A7E8C00669D72 /* Property.tif in Resources */ = {isa = PBXBuildFile; fileRef = 98D363A3078A7E8B00669D72 /* Property.tif */; };
+		98D363AA078A7E8C00669D72 /* Property.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 98D363A3078A7E8B00669D72 /* Property.tiff */; };
 		98D363AB078A7E8C00669D72 /* Function.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 98D363A4078A7E8B00669D72 /* Function.tiff */; };
 		98D363AD078A7E8C00669D72 /* Enum.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 98D363A6078A7E8C00669D72 /* Enum.tiff */; };
 		98D363B9078A7FDD00669D72 /* SdefContents.m in Sources */ = {isa = PBXBuildFile; fileRef = 98D363B7078A7FDD00669D72 /* SdefContents.m */; };
@@ -206,12 +208,12 @@
 		98DDF4AD07DC405000EF07E2 /* SdtplBundle.icns in Resources */ = {isa = PBXBuildFile; fileRef = 98DDF4AC07DC405000EF07E2 /* SdtplBundle.icns */; };
 		98DF608E084074FF00CBE83B /* OSASdefImporter.h in Headers */ = {isa = PBXBuildFile; fileRef = 98DF608C084074FF00CBE83B /* OSASdefImporter.h */; };
 		98DF608F0840750000CBE83B /* OSASdefImporter.m in Sources */ = {isa = PBXBuildFile; fileRef = 98DF608D084074FF00CBE83B /* OSASdefImporter.m */; };
-		98E316680840961F003EC9D5 /* EditType.tif in Resources */ = {isa = PBXBuildFile; fileRef = 98E316670840961F003EC9D5 /* EditType.tif */; };
+		98E316680840961F003EC9D5 /* EditType.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 98E316670840961F003EC9D5 /* EditType.tiff */; };
 		98E3176E0840B5B0003EC9D5 /* AppleScriptKit.sdef in Resources */ = {isa = PBXBuildFile; fileRef = 98E3176D0840B5B0003EC9D5 /* AppleScriptKit.sdef */; };
 		98E317A70840B814003EC9D5 /* ImportApplicationSdef.nib in Resources */ = {isa = PBXBuildFile; fileRef = 98E317A50840B814003EC9D5 /* ImportApplicationSdef.nib */; };
 		98E3193F0840CD01003EC9D5 /* Carbon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 981D86A807ADB0FE006BC0E9 /* Carbon.framework */; };
 		98E84E8C07FE9358008BB0AB /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 98E84E8B07FE9358008BB0AB /* WebKit.framework */; };
-		98E98CE40840D96F0093BA77 /* Element.tif in Resources */ = {isa = PBXBuildFile; fileRef = 98E98CE30840D96F0093BA77 /* Element.tif */; };
+		98E98CE40840D96F0093BA77 /* Element.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 98E98CE30840D96F0093BA77 /* Element.tiff */; };
 		98E98D5F0840DFBA0093BA77 /* SdefLeaf.h in Headers */ = {isa = PBXBuildFile; fileRef = 98E98D5D0840DFBA0093BA77 /* SdefLeaf.h */; };
 		98E98D600840DFBA0093BA77 /* SdefLeaf.m in Sources */ = {isa = PBXBuildFile; fileRef = 98E98D5E0840DFBA0093BA77 /* SdefLeaf.m */; };
 		98EA0B8A078C883900ECCB4B /* SdefDictionary.nib in Resources */ = {isa = PBXBuildFile; fileRef = 98EA0B88078C883900ECCB4B /* SdefDictionary.nib */; };
@@ -230,7 +232,7 @@
 		98F8A84C081A831800CBF3D8 /* Frame Dictionary.sdtpl in Copy Templates */ = {isa = PBXBuildFile; fileRef = 98F8A842081A830E00CBF3D8 /* Frame Dictionary.sdtpl */; };
 		98F940D807F8899C0014708A /* AppleDictionary.sdtpl in Copy Templates */ = {isa = PBXBuildFile; fileRef = 98F940C607F889690014708A /* AppleDictionary.sdtpl */; };
 		98F940D907F8899C0014708A /* AppleRTFDictionary.sdtpl in Copy Templates */ = {isa = PBXBuildFile; fileRef = 98F940C207F889690014708A /* AppleRTFDictionary.sdtpl */; };
-		98FB9C4F08300BEA00101D8C /* AddType.tif in Resources */ = {isa = PBXBuildFile; fileRef = 98FB9C4E08300BEA00101D8C /* AddType.tif */; };
+		98FB9C4F08300BEA00101D8C /* AddType.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 98FB9C4E08300BEA00101D8C /* AddType.tiff */; };
 		98FB9C5908300E2F00101D8C /* SdefXMLGenerator.m in Sources */ = {isa = PBXBuildFile; fileRef = 988FDDF3078F5607003374B6 /* SdefXMLGenerator.m */; };
 		98FB9C5A08300E3300101D8C /* SdefXMLNode.m in Sources */ = {isa = PBXBuildFile; fileRef = 98D29C93078FD2AB008FA9F6 /* SdefXMLNode.m */; };
 /* End PBXBuildFile section */
@@ -250,8 +252,8 @@
 				9879E2E1094CB5FD005B2173 /* SKWindowController.h in Copy ShadowKit */,
 				9879E2E2094CB5FD005B2173 /* SKLSFunctions.h in Copy ShadowKit */,
 				9879E2E3094CB5FD005B2173 /* SKOutlineView.h in Copy ShadowKit */,
-				9879E2E4094CB5FD005B2173 /* SKImageAndTextCell.h in Copy ShadowKit */,
-				9879E2E5094CB5FD005B2173 /* SKDisclosurePanel.h in Copy ShadowKit */,
+				98230E6B0AFE29D400675226 /* SKDisclosurePanel.h in Copy ShadowKit */,
+				98230E6C0AFE29D400675226 /* SKImageAndTextCell.h in Copy ShadowKit */,
 				9879E2E6094CB5FD005B2173 /* SKTemplateParser.h in Copy ShadowKit */,
 				9879E2E7094CB5FD005B2173 /* SKTreeNode.h in Copy ShadowKit */,
 				9879E2E8094CB5FD005B2173 /* SKCFContext.h in Copy ShadowKit */,
@@ -293,12 +295,9 @@
 		656F9B5409E6A188008A0059 /* SKFunctions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = SKFunctions.m; sourceTree = "<group>"; };
 		656F9B5509E6A188008A0059 /* SKCFContext.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = SKCFContext.m; sourceTree = "<group>"; };
 		656F9B5709E6A188008A0059 /* SKExtensions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = SKExtensions.m; sourceTree = "<group>"; };
-		656F9B6C09E6A1DF008A0059 /* SKDisclosurePanel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = SKDisclosurePanel.m; sourceTree = "<group>"; };
-		656F9B6D09E6A1DF008A0059 /* SKDisclosureView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = SKDisclosureView.m; sourceTree = "<group>"; };
 		656F9B6E09E6A1DF008A0059 /* SKTableDataSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = SKTableDataSource.m; sourceTree = "<group>"; };
 		656F9B6F09E6A1DF008A0059 /* SKAppKitExtensions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = SKAppKitExtensions.m; sourceTree = "<group>"; };
 		656F9B7009E6A1DF008A0059 /* SKWindowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = SKWindowController.m; sourceTree = "<group>"; };
-		656F9B7109E6A1DF008A0059 /* SKImageAndTextCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = SKImageAndTextCell.m; sourceTree = "<group>"; };
 		656F9B7A09E6A1F8008A0059 /* SKImageUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = SKImageUtils.m; sourceTree = "<group>"; };
 		656F9B7E09E6A20A008A0059 /* SKLSFunctions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = SKLSFunctions.m; sourceTree = "<group>"; };
 		656F9B7F09E6A20A008A0059 /* SKFSFunctions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = SKFSFunctions.m; sourceTree = "<group>"; };
@@ -315,11 +314,11 @@
 		65EBDD520A3D47C100D266C4 /* SKExtendedTreeNode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = SKExtendedTreeNode.m; sourceTree = "<group>"; };
 		65EBDD540A3D47CC00D266C4 /* SKExtendedTreeNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = SKExtendedTreeNode.h; sourceTree = "<group>"; };
 		8D15AC360486D014006FF6A4 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = Info.plist; sourceTree = "<group>"; };
-		8D15AC370486D014006FF6A4 /* Sdef Editor.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Sdef Editor.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		8D15AC370486D014006FF6A4 /* Sdef Editor.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = "Sdef Editor.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		9803414307ADC6B00052F203 /* ScriptSuiteIcon.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = ScriptSuiteIcon.icns; sourceTree = "<group>"; };
 		98057B2307B50A5B00C2D3C7 /* Sdef Editor Help */ = {isa = PBXFileReference; lastKnownFileType = folder; name = "Sdef Editor Help"; path = "Misc/Sdef Editor Help"; sourceTree = SOURCE_ROOT; };
-		980AC38008327EF2002EF5F5 /* Value.tif */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = Value.tif; sourceTree = "<group>"; };
-		980AC38208327EFB002EF5F5 /* Record.tif */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = Record.tif; sourceTree = "<group>"; };
+		980AC38008327EF2002EF5F5 /* Value.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = Value.tiff; sourceTree = "<group>"; };
+		980AC38208327EFB002EF5F5 /* Record.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = Record.tiff; sourceTree = "<group>"; };
 		980AC39F083284A9002EF5F5 /* English */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = English; path = English.lproj/SdefRecord.nib; sourceTree = "<group>"; };
 		980AC4090832AB66002EF5F5 /* SdefDocumentationParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SdefDocumentationParser.m; sourceTree = "<group>"; };
 		9815F1C907E0F80200D3C6CD /* SKTemplate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = SKTemplate.h; sourceTree = "<group>"; };
@@ -338,9 +337,14 @@
 		981B66B6093870CE0024C0D9 /* ShadowUniversal.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = ShadowUniversal.xcconfig; sourceTree = "<group>"; };
 		981D86A707ADB0FE006BC0E9 /* ApplicationServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ApplicationServices.framework; path = /System/Library/Frameworks/ApplicationServices.framework; sourceTree = "<absolute>"; };
 		981D86A807ADB0FE006BC0E9 /* Carbon.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Carbon.framework; path = /System/Library/Frameworks/Carbon.framework; sourceTree = "<absolute>"; };
-		9820CD250793467D008D397F /* Dictionary.tif */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = Dictionary.tif; sourceTree = "<group>"; };
-		9820CD260793467D008D397F /* Suite.tif */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = Suite.tif; sourceTree = "<group>"; };
+		9820CD250793467D008D397F /* Dictionary.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = Dictionary.tiff; sourceTree = "<group>"; };
+		9820CD260793467D008D397F /* Suite.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = Suite.tiff; sourceTree = "<group>"; };
 		9820CD3A079347E5008D397F /* Content.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = Content.tiff; sourceTree = "<group>"; };
+		98230E4C0AFE299A00675226 /* SKDisclosurePanel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SKDisclosurePanel.h; sourceTree = "<group>"; };
+		98230E4E0AFE299A00675226 /* SKImageAndTextCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SKImageAndTextCell.h; sourceTree = "<group>"; };
+		98230E560AFE299A00675226 /* SKDisclosurePanel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SKDisclosurePanel.m; sourceTree = "<group>"; };
+		98230E570AFE299A00675226 /* SKDisclosureView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SKDisclosureView.m; sourceTree = "<group>"; };
+		98230E590AFE299A00675226 /* SKImageAndTextCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SKImageAndTextCell.m; sourceTree = "<group>"; };
 		9825DDC807F4AC16006D5F5C /* SdtplWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SdtplWindow.h; sourceTree = "<group>"; };
 		9825DDC907F4AC16006D5F5C /* SdtplWindow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SdtplWindow.m; sourceTree = "<group>"; };
 		98298DA707AE7E7D00F09708 /* SKWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = SKWindowController.h; sourceTree = "<group>"; };
@@ -414,7 +418,6 @@
 		98A05A7807AD1973008D897D /* AeteVerb.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AeteVerb.m; sourceTree = "<group>"; };
 		98A05AA207AD235C008D897D /* AeteClass.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AeteClass.m; sourceTree = "<group>"; };
 		98A05B0E07AD3D57008D897D /* AeteEnumeration.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AeteEnumeration.m; sourceTree = "<group>"; };
-		98A4E1ED08003C8500E9775B /* SKDisclosurePanel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = SKDisclosurePanel.h; sourceTree = "<group>"; };
 		98A52D3F079F1F96003F17E8 /* SdefFile.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = SdefFile.icns; sourceTree = "<group>"; };
 		98A57DA107EF6F4E00F061C5 /* English */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = English; path = English.lproj/SdtplExport.nib; sourceTree = "<group>"; };
 		98B38DA50801D10E0025589C /* SdtplGenerator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SdtplGenerator.h; sourceTree = "<group>"; };
@@ -425,7 +428,6 @@
 		98BDA84A082740440055FC80 /* SdefXMLParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SdefXMLParser.m; sourceTree = "<group>"; };
 		98BDA91308274F7E0055FC80 /* SdefPantherParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SdefPantherParser.h; sourceTree = "<group>"; };
 		98BDA91908274FA90055FC80 /* SdefPantherParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SdefPantherParser.m; sourceTree = "<group>"; };
-		98BF08D3078A06B30035ECA2 /* SKImageAndTextCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = SKImageAndTextCell.h; sourceTree = "<group>"; };
 		98BF08DD078A08080035ECA2 /* SKImageUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = SKImageUtils.h; sourceTree = "<group>"; };
 		98BF08E9078A08DD0035ECA2 /* Misc.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = Misc.tiff; sourceTree = "<group>"; };
 		98C38232083D2E5500340894 /* English */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = English; path = English.lproj/SdefTypesEditor.nib; sourceTree = "<group>"; };
@@ -446,9 +448,9 @@
 		98D363A0078A7E8B00669D72 /* Class.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = Class.tiff; sourceTree = "<group>"; };
 		98D363A1078A7E8B00669D72 /* Type.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = Type.tiff; sourceTree = "<group>"; };
 		98D363A2078A7E8B00669D72 /* Folder.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = Folder.tiff; sourceTree = "<group>"; };
-		98D363A3078A7E8B00669D72 /* Property.tif */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = Property.tif; sourceTree = "<group>"; };
+		98D363A3078A7E8B00669D72 /* Property.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = Property.tiff; sourceTree = "<group>"; };
 		98D363A4078A7E8B00669D72 /* Function.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = Function.tiff; sourceTree = "<group>"; };
-		98D363A5078A7E8C00669D72 /* Bookmarks.tif */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = Bookmarks.tif; sourceTree = "<group>"; };
+		98D363A5078A7E8C00669D72 /* Bookmarks.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = Bookmarks.tiff; sourceTree = "<group>"; };
 		98D363A6078A7E8C00669D72 /* Enum.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = Enum.tiff; sourceTree = "<group>"; };
 		98D363B6078A7FDD00669D72 /* SdefContents.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SdefContents.h; path = Headers/SdefContents.h; sourceTree = "<group>"; };
 		98D363B7078A7FDD00669D72 /* SdefContents.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SdefContents.m; sourceTree = "<group>"; };
@@ -484,11 +486,11 @@
 		98DDF4AC07DC405000EF07E2 /* SdtplBundle.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = SdtplBundle.icns; sourceTree = "<group>"; };
 		98DF608C084074FF00CBE83B /* OSASdefImporter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OSASdefImporter.h; sourceTree = "<group>"; };
 		98DF608D084074FF00CBE83B /* OSASdefImporter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OSASdefImporter.m; sourceTree = "<group>"; };
-		98E316670840961F003EC9D5 /* EditType.tif */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = EditType.tif; sourceTree = "<group>"; };
+		98E316670840961F003EC9D5 /* EditType.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = EditType.tiff; sourceTree = "<group>"; };
 		98E3176D0840B5B0003EC9D5 /* AppleScriptKit.sdef */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text.sdef; path = AppleScriptKit.sdef; sourceTree = "<group>"; };
 		98E317A60840B814003EC9D5 /* English */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = English; path = English.lproj/ImportApplicationSdef.nib; sourceTree = "<group>"; };
 		98E84E8B07FE9358008BB0AB /* WebKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebKit.framework; path = /System/Library/Frameworks/WebKit.framework; sourceTree = "<absolute>"; };
-		98E98CE30840D96F0093BA77 /* Element.tif */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = Element.tif; sourceTree = "<group>"; };
+		98E98CE30840D96F0093BA77 /* Element.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = Element.tiff; sourceTree = "<group>"; };
 		98E98D5D0840DFBA0093BA77 /* SdefLeaf.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SdefLeaf.h; path = Headers/SdefLeaf.h; sourceTree = "<group>"; };
 		98E98D5E0840DFBA0093BA77 /* SdefLeaf.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SdefLeaf.m; sourceTree = "<group>"; };
 		98EA0B89078C883900ECCB4B /* English */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = English; path = English.lproj/SdefDictionary.nib; sourceTree = "<group>"; };
@@ -527,7 +529,7 @@
 		98F8A842081A830E00CBF3D8 /* Frame Dictionary.sdtpl */ = {isa = PBXFileReference; lastKnownFileType = folder; path = "Frame Dictionary.sdtpl"; sourceTree = "<group>"; };
 		98F940C207F889690014708A /* AppleRTFDictionary.sdtpl */ = {isa = PBXFileReference; lastKnownFileType = folder; path = AppleRTFDictionary.sdtpl; sourceTree = "<group>"; };
 		98F940C607F889690014708A /* AppleDictionary.sdtpl */ = {isa = PBXFileReference; lastKnownFileType = folder; path = AppleDictionary.sdtpl; sourceTree = "<group>"; };
-		98FB9C4E08300BEA00101D8C /* AddType.tif */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = AddType.tif; sourceTree = "<group>"; };
+		98FB9C4E08300BEA00101D8C /* AddType.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = AddType.tiff; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -616,9 +618,9 @@
 				98DA3AD208411C28003C07A3 /* SdefDictionary.icns */,
 				9803414307ADC6B00052F203 /* ScriptSuiteIcon.icns */,
 				8D15AC360486D014006FF6A4 /* Info.plist */,
+				089C165FFE840EACC02AAC07 /* InfoPlist.strings */,
 				98F15DE207A42653007A93DA /* Localizable.strings */,
 				98F15DE407A42653007A93DA /* SdefLibrary.strings */,
-				089C165FFE840EACC02AAC07 /* InfoPlist.strings */,
 				98D9B3D40876AEFB001AC5B1 /* Skeleton.sdef */,
 				98168E0007A29025002B893D /* NSCoreSuite.sdef */,
 				98168E0407A29036002B893D /* NSTextSuite.sdef */,
@@ -734,21 +736,41 @@
 			name = "Aete Parser";
 			sourceTree = "<group>";
 		};
+		98230E480AFE299A00675226 /* Interface */ = {
+			isa = PBXGroup;
+			children = (
+				98230E490AFE299A00675226 /* Headers */,
+				98230E570AFE299A00675226 /* SKDisclosureView.m */,
+				98230E560AFE299A00675226 /* SKDisclosurePanel.m */,
+				98230E590AFE299A00675226 /* SKImageAndTextCell.m */,
+			);
+			path = Interface;
+			sourceTree = "<group>";
+		};
+		98230E490AFE299A00675226 /* Headers */ = {
+			isa = PBXGroup;
+			children = (
+				98230E4C0AFE299A00675226 /* SKDisclosurePanel.h */,
+				98230E4E0AFE299A00675226 /* SKImageAndTextCell.h */,
+			);
+			path = Headers;
+			sourceTree = "<group>";
+		};
 		9863F7D2078B376B0022F623 /* Images */ = {
 			isa = PBXGroup;
 			children = (
-				98FB9C4E08300BEA00101D8C /* AddType.tif */,
+				98FB9C4E08300BEA00101D8C /* AddType.tiff */,
 				9863F7A2078B2E0C0022F623 /* AddMini.tiff */,
 				9863F7A5078B2E0C0022F623 /* AddMini_Pressed.tiff */,
-				98D363A5078A7E8C00669D72 /* Bookmarks.tif */,
+				98D363A5078A7E8C00669D72 /* Bookmarks.tiff */,
 				98D5AAC6078C6EDE00DD07B7 /* Box.tiff */,
 				98D5AAE2078C6FD700DD07B7 /* Check.tiff */,
 				98D363A0078A7E8B00669D72 /* Class.tiff */,
 				9820CD3A079347E5008D397F /* Content.tiff */,
-				9820CD250793467D008D397F /* Dictionary.tif */,
-				98E316670840961F003EC9D5 /* EditType.tif */,
+				9820CD250793467D008D397F /* Dictionary.tiff */,
+				98E316670840961F003EC9D5 /* EditType.tiff */,
 				98DDCFE107F1FA0200541DFA /* EditSymbol.tiff */,
-				98E98CE30840D96F0093BA77 /* Element.tif */,
+				98E98CE30840D96F0093BA77 /* Element.tiff */,
 				98D363A6078A7E8C00669D72 /* Enum.tiff */,
 				98D363A2078A7E8B00669D72 /* Folder.tiff */,
 				98D363A4078A7E8B00669D72 /* Function.tiff */,
@@ -756,13 +778,13 @@
 				98EA0BA2078C88EE00ECCB4B /* MiniPlus.tiff */,
 				98BF08E9078A08DD0035ECA2 /* Misc.tiff */,
 				98D5AAE6078C6FDD00DD07B7 /* Param.tiff */,
-				980AC38208327EFB002EF5F5 /* Record.tif */,
+				980AC38208327EFB002EF5F5 /* Record.tiff */,
 				9863F7A3078B2E0C0022F623 /* RemoveMini.tiff */,
 				9863F7A4078B2E0C0022F623 /* RemoveMini_Pressed.tiff */,
-				9820CD260793467D008D397F /* Suite.tif */,
+				9820CD260793467D008D397F /* Suite.tiff */,
 				98D363A1078A7E8B00669D72 /* Type.tiff */,
-				980AC38008327EF2002EF5F5 /* Value.tif */,
-				98D363A3078A7E8B00669D72 /* Property.tif */,
+				980AC38008327EF2002EF5F5 /* Value.tiff */,
+				98D363A3078A7E8B00669D72 /* Property.tiff */,
 				98D5AAEC078C6FF100DD07B7 /* warning.tiff */,
 			);
 			path = Images;
@@ -789,6 +811,7 @@
 				98D3AD54079D728D00DDB6CE /* AppKit */,
 				98D3AD52079D727300DDB6CE /* Images */,
 				98C77FD107D9DE33006D9CC1 /* Functions */,
+				98230E480AFE299A00675226 /* Interface */,
 				9815F1B907E0F7E000D3C6CD /* Templates */,
 				98D3AD50079D726100DDB6CE /* Foundation */,
 			);
@@ -1060,12 +1083,9 @@
 				98D3AD55079D729600DDB6CE /* Headers */,
 				65EBDD500A3D47B200D266C4 /* SKUITreeNode.m */,
 				98DA20E508B4F82C000ABC2B /* SKOutlineView.m */,
-				656F9B6D09E6A1DF008A0059 /* SKDisclosureView.m */,
-				656F9B6C09E6A1DF008A0059 /* SKDisclosurePanel.m */,
 				656F9B6E09E6A1DF008A0059 /* SKTableDataSource.m */,
 				656F9B6F09E6A1DF008A0059 /* SKAppKitExtensions.m */,
 				656F9B7009E6A1DF008A0059 /* SKWindowController.m */,
-				656F9B7109E6A1DF008A0059 /* SKImageAndTextCell.m */,
 				65EBDD350A3D476900D266C4 /* SKOutlineViewController.m */,
 			);
 			path = AppKit;
@@ -1076,11 +1096,9 @@
 			children = (
 				65EBDD4E0A3D47A900D266C4 /* SKUITreeNode.h */,
 				98DA20E708B4F838000ABC2B /* SKOutlineView.h */,
-				98A4E1ED08003C8500E9775B /* SKDisclosurePanel.h */,
 				98DDD04707F232AD00541DFA /* SKTableDataSource.h */,
 				98C41B2C07F1DA5D00FAAEFA /* SKAppKitExtensions.h */,
 				98298DA707AE7E7D00F09708 /* SKWindowController.h */,
-				98BF08D3078A06B30035ECA2 /* SKImageAndTextCell.h */,
 				65EBDD370A3D477200D266C4 /* SKOutlineViewController.h */,
 			);
 			path = Headers;
@@ -1231,6 +1249,8 @@
 				984572C0083FD0FE00EACD98 /* SdefTypesEditor.h in Headers */,
 				98DF608E084074FF00CBE83B /* OSASdefImporter.h in Headers */,
 				98E98D5F0840DFBA0093BA77 /* SdefLeaf.h in Headers */,
+				98230E5D0AFE299B00675226 /* SKDisclosurePanel.h in Headers */,
+				98230E5F0AFE299B00675226 /* SKImageAndTextCell.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1287,13 +1307,13 @@
 				98D363AD078A7E8C00669D72 /* Enum.tiff in Resources */,
 				98D363AB078A7E8C00669D72 /* Function.tiff in Resources */,
 				98D5AABE078C6EA700DD07B7 /* Member.tiff in Resources */,
-				98D363AA078A7E8C00669D72 /* Property.tif in Resources */,
+				98D363AA078A7E8C00669D72 /* Property.tiff in Resources */,
 				9863F7A8078B2E0C0022F623 /* RemoveMini_Pressed.tiff in Resources */,
 				9863F7A9078B2E0C0022F623 /* AddMini_Pressed.tiff in Resources */,
 				98D363A7078A7E8C00669D72 /* Class.tiff in Resources */,
 				98D363A9078A7E8C00669D72 /* Folder.tiff in Resources */,
-				9820CD280793467D008D397F /* Suite.tif in Resources */,
-				9820CD270793467D008D397F /* Dictionary.tif in Resources */,
+				9820CD280793467D008D397F /* Suite.tiff in Resources */,
+				9820CD270793467D008D397F /* Dictionary.tiff in Resources */,
 				8D15AC2F0486D014006FF6A4 /* InfoPlist.strings in Resources */,
 				98F15DE607A42653007A93DA /* Localizable.strings in Resources */,
 				98F15DE707A42653007A93DA /* SdefLibrary.strings in Resources */,
@@ -1321,15 +1341,15 @@
 				98A57DA207EF6F4E00F061C5 /* SdtplExport.nib in Resources */,
 				984EE82607F0A01F00828BC0 /* SdefSymbolBrowser.nib in Resources */,
 				98DDCFE207F1FA0200541DFA /* EditSymbol.tiff in Resources */,
-				98FB9C4F08300BEA00101D8C /* AddType.tif in Resources */,
-				980AC38108327EF2002EF5F5 /* Value.tif in Resources */,
-				980AC38308327EFB002EF5F5 /* Record.tif in Resources */,
+				98FB9C4F08300BEA00101D8C /* AddType.tiff in Resources */,
+				980AC38108327EF2002EF5F5 /* Value.tiff in Resources */,
+				980AC38308327EFB002EF5F5 /* Record.tiff in Resources */,
 				980AC3A0083284A9002EF5F5 /* SdefRecord.nib in Resources */,
 				98C38233083D2E5500340894 /* SdefTypesEditor.nib in Resources */,
-				98E316680840961F003EC9D5 /* EditType.tif in Resources */,
+				98E316680840961F003EC9D5 /* EditType.tiff in Resources */,
 				98E3176E0840B5B0003EC9D5 /* AppleScriptKit.sdef in Resources */,
 				98E317A70840B814003EC9D5 /* ImportApplicationSdef.nib in Resources */,
-				98E98CE40840D96F0093BA77 /* Element.tif in Resources */,
+				98E98CE40840D96F0093BA77 /* Element.tiff in Resources */,
 				98DA3AD308411C28003C07A3 /* SdefDictionary.icns in Resources */,
 				98D9B3D50876AEFB001AC5B1 /* Skeleton.sdef in Resources */,
 			);
@@ -1426,12 +1446,9 @@
 				656F9B5809E6A188008A0059 /* SKFunctions.m in Sources */,
 				656F9B5909E6A188008A0059 /* SKCFContext.m in Sources */,
 				656F9B5B09E6A188008A0059 /* SKExtensions.m in Sources */,
-				656F9B7209E6A1DF008A0059 /* SKDisclosurePanel.m in Sources */,
-				656F9B7309E6A1DF008A0059 /* SKDisclosureView.m in Sources */,
 				656F9B7409E6A1DF008A0059 /* SKTableDataSource.m in Sources */,
 				656F9B7509E6A1DF008A0059 /* SKAppKitExtensions.m in Sources */,
 				656F9B7609E6A1DF008A0059 /* SKWindowController.m in Sources */,
-				656F9B7709E6A1DF008A0059 /* SKImageAndTextCell.m in Sources */,
 				656F9B7B09E6A1F8008A0059 /* SKImageUtils.m in Sources */,
 				656F9B8109E6A20A008A0059 /* SKLSFunctions.m in Sources */,
 				656F9B8209E6A20A008A0059 /* SKFSFunctions.m in Sources */,
@@ -1445,6 +1462,9 @@
 				65EBDD510A3D47B200D266C4 /* SKUITreeNode.m in Sources */,
 				65EBDD530A3D47C100D266C4 /* SKExtendedTreeNode.m in Sources */,
 				98665E300A86A53A00CF8291 /* SKAEFunctions.c in Sources */,
+				98230E660AFE299B00675226 /* SKDisclosurePanel.m in Sources */,
+				98230E670AFE299B00675226 /* SKDisclosureView.m in Sources */,
+				98230E690AFE299B00675226 /* SKImageAndTextCell.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
