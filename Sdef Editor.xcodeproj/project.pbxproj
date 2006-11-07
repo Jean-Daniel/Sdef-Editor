@@ -314,7 +314,7 @@
 		65EBDD520A3D47C100D266C4 /* SKExtendedTreeNode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = SKExtendedTreeNode.m; sourceTree = "<group>"; };
 		65EBDD540A3D47CC00D266C4 /* SKExtendedTreeNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = SKExtendedTreeNode.h; sourceTree = "<group>"; };
 		8D15AC360486D014006FF6A4 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = Info.plist; sourceTree = "<group>"; };
-		8D15AC370486D014006FF6A4 /* Sdef Editor.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = "Sdef Editor.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		8D15AC370486D014006FF6A4 /* Sdef Editor.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Sdef Editor.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		9803414307ADC6B00052F203 /* ScriptSuiteIcon.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = ScriptSuiteIcon.icns; sourceTree = "<group>"; };
 		98057B2307B50A5B00C2D3C7 /* Sdef Editor Help */ = {isa = PBXFileReference; lastKnownFileType = folder; name = "Sdef Editor Help"; path = "Misc/Sdef Editor Help"; sourceTree = SOURCE_ROOT; };
 		980AC38008327EF2002EF5F5 /* Value.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = Value.tiff; sourceTree = "<group>"; };
@@ -1637,12 +1637,10 @@
 		9849B8A108B548BD0036A437 /* Universal Binary */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CURRENT_PROJECT_VERSION = 216;
+				CURRENT_PROJECT_VERSION = 221;
 				HEADER_SEARCH_PATHS = "\"$(BUILD_DIR)\"";
 				INFOPLIST_FILE = Resources/Info.plist;
 				PRODUCT_NAME = "Sdef Editor";
-				VERSIONING_SYSTEM = "apple-generic";
-				VERSION_INFO_BUILDER = Grayfox;
 			};
 			name = "Universal Binary";
 		};
@@ -1656,24 +1654,20 @@
 		98A7CBE70855010F000D862B /* Development */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CURRENT_PROJECT_VERSION = 216;
+				CURRENT_PROJECT_VERSION = 221;
 				HEADER_SEARCH_PATHS = "\"$(BUILD_DIR)\"";
 				INFOPLIST_FILE = Resources/Info.plist;
 				PRODUCT_NAME = "Sdef Editor";
-				VERSIONING_SYSTEM = "apple-generic";
-				VERSION_INFO_BUILDER = Grayfox;
 			};
 			name = Development;
 		};
 		98A7CBE80855010F000D862B /* Deployment */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CURRENT_PROJECT_VERSION = 216;
+				CURRENT_PROJECT_VERSION = 221;
 				HEADER_SEARCH_PATHS = "\"$(BUILD_DIR)\"";
 				INFOPLIST_FILE = Resources/Info.plist;
 				PRODUCT_NAME = "Sdef Editor";
-				VERSIONING_SYSTEM = "apple-generic";
-				VERSION_INFO_BUILDER = Grayfox;
 			};
 			name = Deployment;
 		};
