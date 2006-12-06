@@ -7,7 +7,6 @@
  */
 
 #import "AeteObject.h"
-#import <ShadowKit/SKFunctions.h>
 #import "SdefTypedef.h"
 
 @implementation SdefEnumeration (AeteResource)
@@ -17,7 +16,7 @@
   
   /* Identifier */
   OSType *identifier = (OSType *)bytes;
-  [self setCode:SKStringForOSType(*identifier)];
+  [self setCode:AeteStringForOSType(*identifier)];
   [self setName:[self code]];
   bytes += 4;
   
@@ -59,7 +58,7 @@
   
   /* Identifier */
   OSType *identifier = (OSType *)bytes;
-  [self setCode:SKStringForOSType(*identifier)];
+  [self setCode:AeteStringForOSType(*identifier)];
   bytes += 4;
   
   /* Description */

@@ -33,7 +33,7 @@ int main(int argc, char *argv[]) {
   NSDebugEnabled = YES;
   NSHangOnUncaughtException = YES;
 #endif
-  SKPreferencesUpdateName(CFSTR("fr.shadowlab.SdefEditor"));
+//  SKPreferencesUpdateName(CFSTR("fr.shadowlab.SdefEditor"));
   return NSApplicationMain(argc, (const char **) argv);
 }
 

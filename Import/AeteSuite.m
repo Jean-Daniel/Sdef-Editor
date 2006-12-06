@@ -11,7 +11,7 @@
 #import "SdefClass.h"
 #import "SdefTypedef.h"
 
-#import <ShadowKit/SKFunctions.h>
+#import "AeteObject.h"
 
 @implementation SdefSuite (AeteResource)
 
@@ -36,7 +36,7 @@
   bytes += (long)bytes % 2;
   
   OSType *identifier = (UInt32 *)bytes;
-  [self setCode:SKStringForOSType(*identifier)];
+  [self setCode:AeteStringForOSType(*identifier)];
   bytes += 4;
   
   /* skip level and version */

@@ -2598,6 +2598,7 @@
 		</command>
 	</suite>
 	<suite name="Text View Suite" code="teVS" description="Classes representing text views">
+		<cocoa name="ASKTextViewSuite"/>
 		<enumeration name="ETeL" code="ETeL">
 			<enumerator name="center text alignment" code="ceTA" description="Align text to the center"/>
 			<enumerator name="justified text alignment" code="juTA" description="Justify the text to the left and right"/>

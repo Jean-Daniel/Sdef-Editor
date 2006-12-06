@@ -9,7 +9,6 @@
 #import "AeteObject.h"
 #import "SdefVerb.h"
 #import "SdefArguments.h"
-#import <ShadowKit/SKFunctions.h>
 
 @implementation SdefVerb (AeteResource)
 
@@ -35,18 +34,18 @@
   
   /* event class */
   OSType *identifier = (UInt32 *)bytes;
-  NSString *type = SKStringForOSType(*identifier);
+  NSString *type = AeteStringForOSType(*identifier);
   bytes += 4;
   
   /* event id */
   identifier = (UInt32 *)bytes;
-  [self setCode:[type stringByAppendingString:SKStringForOSType(*identifier)]];
+  [self setCode:[type stringByAppendingString:AeteStringForOSType(*identifier)]];
   bytes += 4;
   
   /* Result */
   identifier = (UInt32 *)bytes;
   if (*identifier != typeNull) {
-    [[self result] setType:SKStringForOSType(*identifier)];
+    [[self result] setType:AeteStringForOSType(*identifier)];
   }
   bytes += 4;
   
@@ -70,7 +69,7 @@
   /* Direct Parameter */
   identifier = (UInt32 *)bytes;
   if (*identifier != typeNull) {
-    [[self directParameter] setType:SKStringForOSType(*identifier)];
+    [[self directParameter] setType:AeteStringForOSType(*identifier)];
   }
   bytes += 4;
   
@@ -130,12 +129,12 @@
   
   /* Keyword */
   OSType *identifier = (UInt32 *)bytes;
-  [self setCode:SKStringForOSType(*identifier)];
+  [self setCode:AeteStringForOSType(*identifier)];
   bytes += 4;
   
   /* event id */
   identifier = (UInt32 *)bytes;
-  [self setType:SKStringForOSType(*identifier)];
+  [self setType:AeteStringForOSType(*identifier)];
   bytes += 4;
   
   /* Description */

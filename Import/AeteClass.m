@@ -8,7 +8,6 @@
 
 #import "AeteObject.h"
 #import "SdefClass.h"
-#import <ShadowKit/SKFunctions.h>
 
 @implementation SdefClass (AeteResource)
 
@@ -28,7 +27,7 @@
   
   /* Identifier */
   OSType *identifier = (OSType *)bytes;
-  [self setCode:SKStringForOSType(*identifier)];
+  [self setCode:AeteStringForOSType(*identifier)];
   bytes += 4;
   
   pStr = (StringPtr)bytes;
@@ -92,12 +91,12 @@
   
   /* Identifier */
   OSType *identifier = (OSType *)bytes;
-  [self setCode:SKStringForOSType(*identifier)];
+  [self setCode:AeteStringForOSType(*identifier)];
   bytes += 4;
   
   /* Type */
   identifier = (UInt32 *)bytes;
-  [self setType:SKStringForOSType(*identifier)];
+  [self setType:AeteStringForOSType(*identifier)];
   bytes += 4;
   
   /* Description */
@@ -141,7 +140,7 @@
   
   /* Type */
   OSType *identifier = (OSType *)bytes;
-  [self setType:SKStringForOSType(*identifier)];
+  [self setType:AeteStringForOSType(*identifier)];
   bytes += 4;
   
   /* Accessors */

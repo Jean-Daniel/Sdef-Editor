@@ -7,7 +7,6 @@
  */
 
 #import "AeteImporter.h"
-#import <ShadowKit/SKFunctions.h>
 #import <ShadowKit/SKExtensions.h>
 #import <ShadowKit/SKFSFunctions.h>
 
@@ -146,7 +145,6 @@ bail:
       }
       /* Extensions */
       count = Count1Resources(kAETerminologyExtension);
-      sd_aetes = [[NSMutableArray alloc] initWithCapacity:count];
       for (idx = 1; idx <= count; idx++) {
         Handle aeteH = Get1IndResource(kAETerminologyExtension, idx);
         id aete = [[NSData alloc] initWithHandle:aeteH];
@@ -243,9 +241,14 @@ bail:
       [info remove];
     } else if (SKOSTypeFromString([info code]) == kAESpecialClassProperties) {
       if ([[info name] isEqualToString:@"<Plural>"]) {
-        unsigned idx = [aClass index];
-        [(SdefClass *)[[aClass parent] childAtIndex:idx-1] setPlural:[aClass name]];
-        [aClass remove];
+        if ([[aClass properties] count] == 1) {
+          unsigned idx = [aClass index];
+          [(SdefClass *)[[aClass parent] childAtIndex:idx-1] setPlural:[aClass name]];
+          [aClass remove];
+        } else {
+          [aClass setPlural:[aClass name]];
+          [[aClass properties] removeChildAtIndex:0];
+        }
       } else {
         [self addWarning:@"Unable to import Special Properties" forValue:[aClass name]];
       }      

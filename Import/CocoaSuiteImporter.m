@@ -115,11 +115,14 @@ static NSArray *ASKStandardsSuites() {
 }
 
 - (void)loadSuite:(NSString *)suite {
-  while (suite && ![sd_suites containsObject:suite]) {
+  BOOL done = NO;
+  while (suite && ![sd_suites containsObject:suite] && !done) {
     NSString *suitePath = nil;
     if ([suite isEqualToString:@"NSCoreSuite"] || [suite isEqualToString:@"NSTextSuite"]) {
+      done = YES;
       suitePath = [[NSBundle mainBundle] pathForResource:suite ofType:@"sdef"];
     } else if ([ASKStandardsSuites() containsObject:suite]) {
+      done = YES;
       suitePath = [[NSBundle mainBundle] pathForResource:@"AppleScriptKit" ofType:@"sdef"];
     } else {
       NSOpenPanel *openPanel = nil;

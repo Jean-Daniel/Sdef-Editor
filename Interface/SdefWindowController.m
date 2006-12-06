@@ -203,7 +203,7 @@ static inline BOOL SdefEditorExistsForItem(SdefObject *item) {
     item = [item parent];
   }
   if (item && ([item objectType] != kSdefUndefinedType)) {
-    id str = SKStringForOSType([item objectType]);
+    NSString *str = SKStringForOSType([item objectType]);
     unsigned idx = [inspector indexOfTabViewItemWithIdentifier:str];
     NSAssert1(idx != NSNotFound, @"Unable to find tab item for identifier \"%@\"", str);
     /* Sould select else ctrl would not be created */
