@@ -131,7 +131,7 @@ static CFXMLParserCallBacks SdefParserCallBacks = {
 }
 
 - (void)parser:(CFXMLParserRef)parser didStartCocoa:(NSDictionary *)attributes {
-  if ([sd_node objectType] == kSdefPropertyType || [sd_node objectType] == kSdefElementType) {
+  if ([sd_node objectType] == kSdefPropertyType || [sd_node objectType] == kSdefElementType || [sd_node objectType] == kSdefContentsType) {
     // Make sure we use key instead of method.
     NSString *key = [attributes objectForKey:@"method"];
     if (key) {

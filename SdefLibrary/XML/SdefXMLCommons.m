@@ -126,7 +126,7 @@
   
   /* Key and method was change for Property and Element*/
   if (kSdefPantherVersion == version) {
-    if ([[self owner] objectType] == kSdefPropertyType || [[self owner] objectType] == kSdefElementType) {
+    if ([[self owner] objectType] == kSdefPropertyType || [[self owner] objectType] == kSdefElementType || [[self owner] objectType] == kSdefContentsType) {
       attr = [self key];
       if (nil != attr)
         [node setAttribute:[attr stringByEscapingEntities:nil] forKey:@"method"];
