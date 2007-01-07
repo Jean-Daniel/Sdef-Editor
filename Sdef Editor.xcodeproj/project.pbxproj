@@ -475,8 +475,6 @@
 		98D5AAE2078C6FD700DD07B7 /* Check.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = Check.tiff; sourceTree = "<group>"; };
 		98D5AAE6078C6FDD00DD07B7 /* Param.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = Param.tiff; sourceTree = "<group>"; };
 		98D5AAEC078C6FF100DD07B7 /* warning.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = warning.tiff; sourceTree = "<group>"; };
-		98D881D10AC321CA00107830 /* LeoDebug.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = LeoDebug.xcconfig; sourceTree = "<group>"; };
-		98D881D70AC3221F00107830 /* LeoRelease.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = LeoRelease.xcconfig; sourceTree = "<group>"; };
 		98D9B3D40876AEFB001AC5B1 /* Skeleton.sdef */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text.sdef; path = Skeleton.sdef; sourceTree = "<group>"; };
 		98DA20E508B4F82C000ABC2B /* SKOutlineView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = SKOutlineView.m; sourceTree = "<group>"; };
 		98DA20E708B4F838000ABC2B /* SKOutlineView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = SKOutlineView.h; sourceTree = "<group>"; };
@@ -714,7 +712,6 @@
 		981B66B1093870CE0024C0D9 /* Configurations */ = {
 			isa = PBXGroup;
 			children = (
-				98D881D40AC321E200107830 /* Leopard */,
 				981B66B2093870CE0024C0D9 /* ShadowCommon.xcconfig */,
 				981B66B3093870CE0024C0D9 /* ShadowDebug.xcconfig */,
 				981B66B4093870CE0024C0D9 /* ShadowRelease.xcconfig */,
@@ -1112,15 +1109,6 @@
 				988FDDF2078F5607003374B6 /* SdefXMLGenerator.h */,
 			);
 			path = Headers;
-			sourceTree = "<group>";
-		};
-		98D881D40AC321E200107830 /* Leopard */ = {
-			isa = PBXGroup;
-			children = (
-				98D881D10AC321CA00107830 /* LeoDebug.xcconfig */,
-				98D881D70AC3221F00107830 /* LeoRelease.xcconfig */,
-			);
-			name = Leopard;
 			sourceTree = "<group>";
 		};
 		98EA0B8B078C883E00ECCB4B /* Sdef Tabs */ = {
