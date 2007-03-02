@@ -336,8 +336,8 @@
 }
 
 #pragma mark -
-- (id)initWithName:(NSString *)name {
-  if (self = [super initWithName:name]) {
+- (id)initWithName:(NSString *)name icon:(NSImage *)icon {
+  if (self = [super initWithName:name icon:icon]) {
     sd_types = [[NSMutableArray alloc] init];
   }
   return self;

@@ -35,9 +35,12 @@
         hidden = hidden || (value && CFBooleanGetValue(value));
         
         if (!hidden) {
-          id appli = [[SKApplication alloc] initWithProcessSerialNumber:&psn];
-          id menuItem = [[NSMenuItem alloc] initWithTitle:[appli name] action:nil keyEquivalent:@""];
-          [menuItem setImage:SKResizedIcon([appli icon], NSMakeSize(16, 16))];
+          SKApplication *appli = [[SKApplication alloc] initWithProcessSerialNumber:&psn];
+          NSMenuItem *menuItem = [[NSMenuItem alloc] initWithTitle:[appli name] action:nil keyEquivalent:@""];
+          NSImage *icon = [appli icon];
+          [icon setScalesWhenResized:YES];
+          [icon setSize:NSMakeSize(16, 16)];
+          [menuItem setImage:icon];
           [menuItem setRepresentedObject:appli];
           [menu insertItem:menuItem atIndex:0];
           [menuItem release];
@@ -87,7 +90,10 @@
   id item = [popup itemWithTitle:[appli name]];
   if (!item) {
     item = [[NSMenuItem alloc] initWithTitle:[appli name] action:nil keyEquivalent:@""];
-    [item setImage:SKResizedIcon([appli icon], NSMakeSize(16, 16))];
+    NSImage *icon = [appli icon];
+    [icon setScalesWhenResized:YES];
+    [icon setSize:NSMakeSize(16, 16)];
+    [item setImage:icon];
     [item setRepresentedObject:appli];
     [[popup menu] insertItem:item atIndex:0];
     [item release];
