@@ -25,7 +25,7 @@
 
 - (id)initWithCoder:(NSCoder *)aCoder {
   if (self = [super init]) {
-    unsigned length;
+    NSUInteger length;
     const uint8_t *buffer = [aCoder decodeBytesForKey:@"STFlags" returnedLength:&length];
     memcpy(&sd_slFlags, buffer, length);
     

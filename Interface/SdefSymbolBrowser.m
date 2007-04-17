@@ -193,8 +193,8 @@ BOOL SdefSearchFilter(NSString *search, SdefObject *object, void *ctxt) {
 #pragma mark Loading and synchronize
 - (void)loadSymbols {
   [symbols removeAllObjects];
-  id suites = [[(SdefDocument *)[self document] dictionary] childEnumerator];
-  id suite;
+  SdefSuite *suite;
+  NSEnumerator *suites = [[(SdefDocument *)[self document] dictionary] childEnumerator];
   while (suite = [suites nextObject]) {
     [self addSuite:suite];
   }
@@ -203,8 +203,8 @@ BOOL SdefSearchFilter(NSString *search, SdefObject *object, void *ctxt) {
 - (void)addSuite:(SdefSuite *)aSuite {
   //[symbols addObject:aSuite];
   /* Enumeration/Enumerators */
-  id items = [[aSuite types] childEnumerator];
   SdefObject *item;
+  NSEnumerator *items = [[aSuite types] childEnumerator];
   while (item = [items nextObject]) {
     if (kSdefValueType == [item objectType] ||
         kSdefRecordType == [item objectType]) {
@@ -214,15 +214,15 @@ BOOL SdefSearchFilter(NSString *search, SdefObject *object, void *ctxt) {
     }
   }
   /* Classes/Property */
-  items = [[aSuite classes] childEnumerator];
   SdefClass *class;
+  items = [[aSuite classes] childEnumerator];
   while (class = [items nextObject]) {
     [symbols addObject:class];
     [symbols addObjects:[[class properties] children]];
   }
   /* Events/Commands/Parameters */
-  items = [[aSuite commands] childEnumerator];
   SdefVerb *verb;
+  items = [[aSuite commands] childEnumerator];
   while (verb = [items nextObject]) {
     [symbols addObject:verb];
     [symbols addObjects:[verb children]];

@@ -28,7 +28,7 @@
 
 - (id)init {
   if (self = [super init]) {
-    id dictionary = [[SdefDictionary alloc] init];
+    SdefDictionary *dictionary = [[SdefDictionary alloc] init];
     [dictionary appendChild:[SdefSuite node]];
     [self setDictionary:dictionary];
     [dictionary release];
@@ -43,8 +43,8 @@
 
 #pragma mark -
 - (id)windowControllerOfClass:(Class)class {
-  id windows = [[self windowControllers] objectEnumerator];
-  id window;
+  NSWindow *window;
+  NSEnumerator *windows = [[self windowControllers] objectEnumerator];
   while (window = [windows nextObject]) {
     if ([window isKindOfClass:class]) {
       return window;
@@ -62,7 +62,7 @@
 }
 
 - (IBAction)openSymbolBrowser:(id)sender {
-  id browser = [self symbolBrowser];
+  SdefSymbolBrowser *browser = [self symbolBrowser];
   if (!browser) {
     browser = [[SdefSymbolBrowser alloc] init];
     [self addWindowController:browser];
@@ -123,7 +123,7 @@
 }
 
 - (IBAction)exportASDictionary:(id)sender {
-  id panel = [NSSavePanel savePanel];
+  NSSavePanel *panel = [NSSavePanel savePanel];
   [panel setCanSelectHiddenExtension:YES];
   [panel setRequiredFileType:@"asdictionary"];
   [panel setTitle:@"Create AppleScript Dictionary."];
@@ -135,9 +135,9 @@
                     contextInfo:nil];
 }
 - (void)exportASDictionary:(NSSavePanel *)aPanel returnCode:(int)result context:(id)ctxt {
-  id file;
+  NSString *file;
   if ((result == NSOKButton) && (file = [aPanel filename])) {
-    id dico = nil;
+    NSDictionary *dico = nil;
     @try {
       dico = AppleScriptDictionaryFromSdefDictionary([self dictionary]);
     } @catch (id exception) {
@@ -156,7 +156,7 @@
 - (IBAction)exportUsingTemplate:(id)sender {
   SdtplWindow *exporter = [[SdtplWindow alloc] initWithDocument:self];
   [exporter setReleasedWhenClosed:YES];
-  id win = [[self documentWindow] window];
+  NSWindow *win = [[self documentWindow] window];
   if (win) {
     [NSApp beginSheet:[exporter window]
        modalForWindow:win
@@ -169,14 +169,14 @@
 #pragma mark -
 #pragma mark NSDocument Methods
 - (void)makeWindowControllers {
-  id controller = [[SdefWindowController alloc] initWithOwner:nil];
+  SdefWindowController *controller = [[SdefWindowController alloc] initWithOwner:nil];
   [controller setShouldCloseDocument:YES];
   [self addWindowController:controller];
   [controller release];
 }
 
 - (NSData *)dataRepresentationOfType:(NSString *)type {
-  id data = nil;
+  NSData *data = nil;
   if ([type isEqualToString:ScriptingDefinitionFileType]) {
     SdefXMLGenerator *gen = [[SdefXMLGenerator alloc] initWithRoot:[self dictionary]];
     @try {
@@ -192,7 +192,7 @@
 
 - (BOOL)loadDataRepresentation:(NSData *)data ofType:(NSString *)type {
   if ([type isEqualToString:ScriptingDefinitionFileType]) {
-    int version;
+    NSInteger version;
     [self setDictionary:SdefLoadDictionaryData(data, &version, self)];
     if (version == kSdefPantherVersion) {
       NSRunInformationalAlertPanel(@"You have opened a Panther Scripting Definition file",
@@ -222,7 +222,7 @@
 #pragma mark -
 #pragma mark SdefDocument Specific
 - (SdefObject *)selection {
-  id controllers = [self windowControllers];
+  NSArray *controllers = [self windowControllers];
   return ([controllers count]) ? [[controllers objectAtIndex:0] selection] : nil;
 }
 
@@ -268,18 +268,17 @@
   // Use the first associated HFS type code, if any exist.
   documentTypes = [infoPlist objectForKey:@"CFBundleDocumentTypes"];
   if(documentTypes) {
-    int i, count = [documentTypes count];
+    NSUInteger count = [documentTypes count];
     
-    for(i = 0; i < count; i++) {
+    for(NSUInteger i = 0; i < count; i++) {
       NSString *type = [[documentTypes objectAtIndex:i] objectForKey:@"CFBundleTypeName"];
       if(type && [type isEqualToString:documentTypeName]) {
-        NSArray *typeCodeStrings = [[documentTypes objectAtIndex:i]
-                    objectForKey:@"CFBundleTypeOSTypes"];
+        NSArray *typeCodeStrings = [[documentTypes objectAtIndex:i] objectForKey:@"CFBundleTypeOSTypes"];
         if(typeCodeStrings) { 
           NSString *firstTypeCodeString = [typeCodeStrings objectAtIndex:0];
           if (firstTypeCodeString) {
-            typeCode = SKULong(SKOSTypeFromString(firstTypeCodeString)); 
-          } 
+            typeCode = SKUInt(SKOSTypeFromString(firstTypeCodeString)); 
+          }
         }
         break; 
       } 
@@ -305,14 +304,14 @@
 
 @end
 #pragma mark -
-SdefDictionary *SdefLoadDictionary(NSString *filename, int *version, id delegate) {
+SdefDictionary *SdefLoadDictionary(NSString *filename, NSInteger *version, id delegate) {
   NSData *data = [[NSData alloc] initWithContentsOfFile:filename];
   SdefDictionary *dictionary = SdefLoadDictionaryData(data, version, delegate);
   [data release];
   return dictionary;
 }
 
-SdefDictionary *SdefLoadDictionaryData(NSData *data, int *version, id delegate) {
+SdefDictionary *SdefLoadDictionaryData(NSData *data, NSInteger *version, id delegate) {
   SdefDictionary *result = nil;
   if (data) {
     SdefXMLParser *parser = [[SdefXMLParser alloc] init];

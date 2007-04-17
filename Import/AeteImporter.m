@@ -36,10 +36,7 @@ OSStatus _GetTerminologyFromAppleEvent(AppleEvent *theEvent, NSMutableArray *ter
   long count = 0;
   AEDescList aetes = {typeNull, nil};
   
-  OSStatus err = SKAEAddMagnitude(theEvent);
-  require_noerr(err, bail);
-  
-  err = SKAEAddSubject(theEvent);
+  OSStatus err = SKAESetStandardAttributes(theEvent);
   require_noerr(err, bail);
   
   err = SKAEAddSInt32(theEvent, keyDirectObject, 0);

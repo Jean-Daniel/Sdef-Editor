@@ -19,7 +19,6 @@
 @private
   int sd_idx;
   NSMenu *sd_typeMenu;
-  NSMenu *sd_classMenu;
 }
 
 @end

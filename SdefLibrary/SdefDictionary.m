@@ -41,6 +41,7 @@
 /* Remove class manager call -[ClassManager removeDictionary:] which call [SdefDictionary retain].
 Retain must not be call in a dealloc block, so we did it before deallocation */
 - (void)release {
+#warning Retain cycle that should be avoid
   if (1 == [self retainCount]) {
     [self setClassManager:nil];
   }

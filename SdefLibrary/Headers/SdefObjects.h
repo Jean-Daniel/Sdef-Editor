@@ -44,14 +44,14 @@
 - (void)setDesc:(NSString *)newDesc;
 
 #pragma mark Synonyms KVC
-- (unsigned)countOfSynonyms;
+- (NSUInteger)countOfSynonyms;
 - (NSArray *)synonyms;
 - (void)setSynonyms:(NSArray *)synonyms;
 - (void)addSynonym:(SdefSynonym *)aSynonym;
-- (id)objectInSynonymsAtIndex:(unsigned)index;
-- (void)insertObject:(id)object inSynonymsAtIndex:(unsigned)index;
-- (void)removeObjectFromSynonymsAtIndex:(unsigned)index;
-- (void)replaceObjectInSynonymsAtIndex:(unsigned)index withObject:(id)object;
+- (id)objectInSynonymsAtIndex:(NSUInteger)index;
+- (void)insertObject:(id)object inSynonymsAtIndex:(NSUInteger)index;
+- (void)removeObjectFromSynonymsAtIndex:(NSUInteger)index;
+- (void)replaceObjectInSynonymsAtIndex:(NSUInteger)index withObject:(id)object;
 
 @end
 
@@ -71,18 +71,20 @@
 - (BOOL)hasCustomType;
 
 - (NSArray *)types;
-- (unsigned)countOfTypes;
+- (NSUInteger)countOfTypes;
 - (void)addType:(SdefType *)aType;
 - (void)setTypes:(NSArray *)objects;
-- (id)objectInTypesAtIndex:(unsigned)index;
-- (void)removeObjectFromTypesAtIndex:(unsigned)index;
-- (void)insertObject:(id)object inTypesAtIndex:(unsigned)index;
-- (void)replaceObjectInTypesAtIndex:(unsigned)index withObject:(id)object;
+- (id)objectInTypesAtIndex:(NSUInteger)index;
+- (void)removeObjectFromTypesAtIndex:(NSUInteger)index;
+- (void)insertObject:(id)object inTypesAtIndex:(NSUInteger)index;
+- (void)replaceObjectInTypesAtIndex:(NSUInteger)index withObject:(id)object;
 
 @end
 
-extern NSArray *SdefTypesForTypeString(NSString *type);
-extern NSString *SdefTypeStringForTypes(NSArray *types);
+SK_PRIVATE
+NSArray *SdefTypesForTypeString(NSString *type);
+SK_PRIVATE
+NSString *SdefTypeStringForTypes(NSArray *types);
 
 #pragma mark -
 @interface SdefTypedOrphanObject : SdefTypedObject <NSCopying, NSCoding> {

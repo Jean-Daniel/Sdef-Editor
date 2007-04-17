@@ -28,13 +28,12 @@
 #import <Foundation/NSDebug.h>
 #endif
 
-int main(int argc, char *argv[]) {
+int main(int argc, const char *argv[]) {
 #if defined (DEBUG)  
   NSDebugEnabled = YES;
   NSHangOnUncaughtException = YES;
 #endif
-//  SKPreferencesUpdateName(CFSTR("fr.shadowlab.SdefEditor"));
-  return NSApplicationMain(argc, (const char **) argv);
+  return NSApplicationMain(argc, argv);
 }
 
 NSString * const ScriptingDefinitionFileType = @"ScriptingDefinition";
@@ -56,9 +55,9 @@ const OSType kCocoaSuiteDefinitionHFSType = 'ScSu';
 
 - (id)init {
   if (self = [super init]) {
-    SInt32 SystemVersion;
     NSString *sdp = @"/usr/bin/sdp";
-    if (Gestalt(gestaltSystemVersion, &SystemVersion) == noErr && SystemVersion < 0x1040) {
+    /* Pre-Tiger versions */
+    if (SKSystemMajorVersion() == 10 && SKSystemMinorVersion() < 4) {
       sdp = @"/Developer/Tools/sdp";
     }
     NSString *rez = @"/Developer/Tools/Rez";
@@ -115,7 +114,7 @@ const OSType kCocoaSuiteDefinitionHFSType = 'ScSu';
 }
 
 - (IBAction)openSuite:(id)sender {
-  id suite = nil;
+  NSString *suite = nil;
   switch ([sender tag]) {
     case 1:
       suite = @"NSCoreSuite";
@@ -132,8 +131,8 @@ const OSType kCocoaSuiteDefinitionHFSType = 'ScSu';
   }
   NSString *suitePath = [[NSBundle mainBundle] pathForResource:suite ofType:@"sdef"];
   if (suitePath) {
-    id doc = [[NSDocumentController sharedDocumentController] openDocumentWithContentsOfFile:suitePath
-                                                                                     display:NO];
+    NSDocument *doc = [[NSDocumentController sharedDocumentController] openDocumentWithContentsOfFile:suitePath
+                                                                                              display:NO];
     [doc setFileName:nil];
     [doc showWindows];
   }
@@ -244,7 +243,7 @@ const OSType kCocoaSuiteDefinitionHFSType = 'ScSu';
   }
   if (![[openPanel filenames] count]) return;
   
-  id file = [[openPanel filenames] objectAtIndex:0];
+  NSString *file = [[openPanel filenames] objectAtIndex:0];
   [self importCocoaScriptFile:file];
 }
 
@@ -263,8 +262,8 @@ const OSType kCocoaSuiteDefinitionHFSType = 'ScSu';
   }
   if (![[openPanel filenames] count]) return;
   
-  id file = [[openPanel filenames] objectAtIndex:0];
-  id aete = [[AeteImporter alloc] initWithContentsOfFile:file];
+  NSString *file = [[openPanel filenames] objectAtIndex:0];
+  AeteImporter *aete = [[AeteImporter alloc] initWithContentsOfFile:file];
   [self importWithImporter:aete];
   [aete release];
 }
@@ -278,7 +277,7 @@ const OSType kCocoaSuiteDefinitionHFSType = 'ScSu';
     if (![appli isRunning]) {
       [appli launch];
     }
-    id aete = nil;
+    AeteImporter *aete = nil;
     switch ([appli idType]) {
       case kSKApplicationOSType:
         aete = [[AeteImporter alloc] initWithApplicationSignature:[appli signature]]; 
@@ -303,7 +302,7 @@ const OSType kCocoaSuiteDefinitionHFSType = 'ScSu';
 #pragma mark Application Delegate
 
 - (BOOL)application:(NSApplication *)theApplication openFile:(NSString *)filename {
-  id type = [[NSDocumentController sharedDocumentController] typeFromFileExtension:[filename pathExtension]];
+  NSString *type = [[NSDocumentController sharedDocumentController] typeFromFileExtension:[filename pathExtension]];
   /* If sdef, let document manager handle it */
   if ([type isEqualToString:ScriptingDefinitionFileType]) return NO;
   else if ([type isEqualToString:CocoaSuiteDefinitionFileType]) {
@@ -337,7 +336,7 @@ const OSType kCocoaSuiteDefinitionHFSType = 'ScSu';
 @implementation SdefDocumentController
 
 - (void)noteNewRecentDocument:(NSDocument *)aDocument {
-  id path = [aDocument fileName];
+  NSString *path = [aDocument fileName];
   if (![path hasPrefix:[[NSBundle mainBundle] bundlePath]]) {
     [super noteNewRecentDocument:aDocument];
   }

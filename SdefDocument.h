@@ -11,8 +11,10 @@
 @class SdefObject, SdefDictionary, SdefClassManager, SdefImports;
 @class SdefWindowController, SdefSymbolBrowser;
 
-extern SdefDictionary *SdefLoadDictionary(NSString *filename, int *version, id delegate);
-extern SdefDictionary *SdefLoadDictionaryData(NSData *data, int *version, id delegate);
+SK_PRIVATE 
+SdefDictionary *SdefLoadDictionary(NSString *filename, NSInteger *version, id delegate);
+SK_PRIVATE
+SdefDictionary *SdefLoadDictionaryData(NSData *data, NSInteger *version, id delegate);
 
 @interface SdefDocument : NSDocument {
 @private

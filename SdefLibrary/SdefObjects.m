@@ -211,7 +211,7 @@
 
 - (void)setEditable:(BOOL)flag recursive:(BOOL)recu {
   if (recu) {
-    id item;
+    SdefObject *item;
     NSEnumerator *items = [sd_synonyms objectEnumerator];
     while (item = [items nextObject]) {
       [item setEditable:flag recursive:recu];
@@ -266,11 +266,11 @@
   }
 }
 
-- (unsigned)countOfSynonyms {
+- (NSUInteger)countOfSynonyms {
   return [sd_synonyms count];
 }
 
-- (id)objectInSynonymsAtIndex:(unsigned)anIndex {
+- (id)objectInSynonymsAtIndex:(NSUInteger)anIndex {
   return [sd_synonyms objectAtIndex:anIndex];
 }
 
@@ -279,7 +279,7 @@
   [self insertObject:aSynonym inSynonymsAtIndex:[self countOfSynonyms]];
 }
 
-- (void)insertObject:(id)object inSynonymsAtIndex:(unsigned)anIndex {
+- (void)insertObject:(id)object inSynonymsAtIndex:(NSUInteger)anIndex {
   NSUndoManager *undo = [self undoManager];
   if (undo) {
     [[undo prepareWithInvocationTarget:self] removeObjectFromSynonymsAtIndex:anIndex];
@@ -289,7 +289,7 @@
   [object setOwner:self];
 }
 
-- (void)removeObjectFromSynonymsAtIndex:(unsigned)anIndex {
+- (void)removeObjectFromSynonymsAtIndex:(NSUInteger)anIndex {
   SdefSynonym *synonym = [sd_synonyms objectAtIndex:anIndex];
   NSUndoManager *undo = [self undoManager];
   if (undo) {
@@ -300,7 +300,7 @@
   [sd_synonyms removeObjectAtIndex:anIndex];
 }
 
-- (void)replaceObjectInSynonymsAtIndex:(unsigned)anIndex withObject:(id)object {
+- (void)replaceObjectInSynonymsAtIndex:(NSUInteger)anIndex withObject:(id)object {
   SdefSynonym *synonym = [sd_synonyms objectAtIndex:anIndex];
   NSUndoManager *undo = [self undoManager];
   if (undo) {
@@ -350,8 +350,7 @@
 
 #pragma mark -
 - (BOOL)hasType {
-  unsigned idx;
-  for (idx=0; idx<[sd_types count]; idx++) {
+  for (NSUInteger idx = 0; idx < [sd_types count]; idx++) {
     if ([[sd_types objectAtIndex:idx] name] != nil) {
       return YES;
     }
@@ -360,7 +359,7 @@
 }
 
 - (BOOL)hasCustomType {
-  unsigned count = [sd_types count];
+  NSUInteger count = [sd_types count];
   return count > 1 || (count > 0 && [[sd_types objectAtIndex:0] isList]);
 }
 
@@ -400,15 +399,15 @@
   }
 }
 
-- (unsigned)countOfTypes {
+- (NSUInteger)countOfTypes {
   return [sd_types count];
 }
 
-- (id)objectInTypesAtIndex:(unsigned)anIndex {
+- (id)objectInTypesAtIndex:(NSUInteger)anIndex {
   return [sd_types objectAtIndex:anIndex];
 }
 
-- (void)insertObject:(id)object inTypesAtIndex:(unsigned)anIndex {
+- (void)insertObject:(id)object inTypesAtIndex:(NSUInteger)anIndex {
   NSUndoManager *undo = [self undoManager];
   if (undo) {
     [[undo prepareWithInvocationTarget:self] removeObjectFromTypesAtIndex:anIndex];
@@ -420,7 +419,7 @@
   [object setOwner:self];
 }
 
-- (void)removeObjectFromTypesAtIndex:(unsigned)anIndex {
+- (void)removeObjectFromTypesAtIndex:(NSUInteger)anIndex {
   SdefType *type = [sd_types objectAtIndex:anIndex];
   NSUndoManager *undo = [self undoManager];
   if (undo) {
@@ -433,7 +432,7 @@
   [self didChangeValueForKey:@"type"];
 }
 
-- (void)replaceObjectInTypesAtIndex:(unsigned)anIndex withObject:(id)object {
+- (void)replaceObjectInTypesAtIndex:(NSUInteger)anIndex withObject:(id)object {
   SdefType *type = [sd_types objectAtIndex:anIndex];
   NSUndoManager *undo = [self undoManager];
   if (undo) {
@@ -546,7 +545,7 @@ NSArray *SdefTypesForTypeString(NSString *aType) {
   NSMutableArray *types = [[NSMutableArray alloc] init];
   NSEnumerator *strings = [[aType componentsSeparatedByString:@"|"] objectEnumerator];
   while (str = [strings nextObject]) {
-    unsigned location;
+    NSUInteger location;
     SdefType *type = nil;
     if ((location = [str rangeOfString:@"list of"].location) != NSNotFound) {
       type = [[SdefType alloc] initWithName:[str substringFromIndex:location + 8]];

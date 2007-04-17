@@ -8,7 +8,7 @@
 
 #import <ShadowKit/SKUITreeNode.h>
 
-typedef enum {
+enum {
   kSdefUndefinedType		= 0,
   kSdefDictionaryType 		= 'Dico',
   kSdefSuiteType			= 'Suit',
@@ -33,12 +33,14 @@ typedef enum {
   /* Misc */
   kSdefCocoaType			= 'Coco',
   kSdefDocumentationType	= 'Docu'
-} SdefObjectType;
+};
+typedef NSInteger SdefObjectType;
 
-typedef enum {
+enum {
   kSdefPantherVersion,
   kSdefTigerVersion,
-} SdefVersion;
+};
+typedef NSInteger SdefVersion;
 
 #pragma mark -
 #pragma mark Publics Functions Declaration
@@ -121,14 +123,14 @@ NSString *CocoaNameForSdefName(NSString *cocoa, BOOL isClass);
 - (NSMutableArray *)comments;
 - (void)setComments:(NSArray *)comments;
 - (void)addComment:(NSString *)comment;
-- (void)removeCommentAtIndex:(unsigned)index;
+- (void)removeCommentAtIndex:(NSUInteger)index;
 
 #pragma mark Ignore
 - (BOOL)hasIgnore;
 - (NSMutableArray *)ignores;
 - (void)addIgnore:(id)anObject;
 - (void)setIgnores:(NSArray *)anArray;
-- (void)removeIgnoreAtIndex:(unsigned)index;
+- (void)removeIgnoreAtIndex:(NSUInteger)index;
 
 @end
 

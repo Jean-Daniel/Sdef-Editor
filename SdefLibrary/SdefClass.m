@@ -100,8 +100,36 @@
 }
 
 #pragma mark -
+- (NSString *)name {
+  if ([self isExtension]) {
+    return [self inherits] ? [[self inherits] stringByAppendingString:@"*"] : @"<undefined>";
+  } else {
+    return [super name];
+  }
+}
+- (void)setName:(NSString *)name {
+  if ([self isExtension]) {
+    if (name && [name hasSuffix:@"*"])
+      name = [name length] > 1 ? [name substringToIndex:[name length] - 1] : nil;
+    [self setInherits:name];
+  } else {
+    [super setName:name];
+  }
+}
+
 - (BOOL)isExtension {
-  return NO;
+  return sd_extension;
+}
+- (void)setExtension:(BOOL)extension {
+  if (extension != sd_extension) {
+    [self willChangeValueForKey:@"name"];
+    [[[self undoManager] prepareWithInvocationTarget:self] setExtension:sd_extension];
+    sd_extension = extension;
+    [self didChangeValueForKey:@"name"];
+    [self setIcon:[NSImage imageNamed:sd_extension ? @"Class-Extension" : @"Class"]];
+    /* Nasty: should notify outline view controller */
+    [[self notificationCenter] postNotificationName:SKUITreeNodeDidChangeNameNotification object:self];
+  }
 }
 
 - (SdefContents *)contents {
@@ -135,9 +163,18 @@
 }
 - (void)setInherits:(NSString *)newInherits {
   if (sd_inherits != newInherits) {
+    if ([self isExtension])
+      [self willChangeValueForKey:@"name"];
+    
     [[self undoManager] registerUndoWithTarget:self selector:_cmd object:sd_inherits];
     [sd_inherits release];
     sd_inherits = [newInherits copyWithZone:[self zone]];
+    
+    if ([self isExtension]) {
+      [self didChangeValueForKey:@"name"];
+      /* Nasty: should notify outline view controller */
+      [[self notificationCenter] postNotificationName:SKUITreeNodeDidChangeNameNotification object:self];
+    }
   }
 }
 
@@ -167,39 +204,6 @@
 
 - (SdefCollection *)events {
   return [self childAtIndex:3];
-}
-
-@end
-
-#pragma mark -
-@implementation SdefClassExtension
-
-+ (void)initialize {
-  if ([SdefClassExtension class] == self) {
-    [self setKeys:[NSArray arrayWithObject:@"inherits"] triggerChangeNotificationsForDependentKey:@"name"];
-  }
-}
-
-+ (NSString *)defaultName {
-  return NSLocalizedStringFromTable(@"class extension", @"SdefLibrary", @"Class Extension default name");
-}
-
-+ (NSString *)defaultIconName {
-  return @"Class-Extension";
-}
-
-- (BOOL)isExtension {
-  return YES;
-}
-
-- (NSString *)name {
-  return [self inherits] ? [[self inherits] stringByAppendingString:@"*"] : @"<undefined>";
-}
-
-- (void)setName:(NSString *)name {
-  if (name && [name hasSuffix:@"*"])
-    name = [name length] > 1 ? [name substringToIndex:[name length] - 2] : nil;
-  [self setInherits:name];
 }
 
 @end
@@ -271,22 +275,22 @@
   [super setName:type];
 }
 
-- (unsigned)access {
+- (NSUInteger)access {
   return sd_access;
 }
 
-- (void)setAccess:(unsigned)newAccess {
+- (void)setAccess:(NSUInteger)newAccess {
   if (sd_access != newAccess) {
     [[[self undoManager] prepareWithInvocationTarget:self] setAccess:sd_access];
     sd_access = newAccess;
   }
 }
 
-- (unsigned)accessors {
+- (NSUInteger)accessors {
   return sd_accessors;
 }
 
-- (void)setAccessors:(unsigned)accessors {
+- (void)setAccessors:(NSUInteger)accessors {
   if (sd_accessors != accessors) {
     [[[self undoManager] prepareWithInvocationTarget:self] setAccessors:sd_accessors];
     sd_accessors = accessors;
@@ -389,10 +393,10 @@
 }
 
 #pragma mark -
-- (unsigned)access {
+- (NSUInteger)access {
   return sd_access;
 }
-- (void)setAccess:(unsigned)newAccess {
+- (void)setAccess:(NSUInteger)newAccess {
   [[[self undoManager] prepareWithInvocationTarget:self] setAccess:sd_access];
   sd_access = newAccess;
 }

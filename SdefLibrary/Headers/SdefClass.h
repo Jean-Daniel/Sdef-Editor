@@ -85,6 +85,7 @@ enum {
 @interface SdefClass : SdefTerminologyObject <NSCopying, NSCoding> {
   @private
   SdefContents *sd_contents;
+  BOOL sd_extension;
   /* Attributes */
   NSString *sd_type;
   NSString *sd_plural; 
@@ -109,31 +110,25 @@ enum {
 - (void)setInherits:(NSString *)newInherits;
 
 - (BOOL)isExtension;
-
-@end
-
-@interface SdefClassExtension : SdefClass {
-}
-
-- (BOOL)isExtension;
+- (void)setExtension:(BOOL)extension;
 
 @end
 
 @interface SdefElement : SdefTerminologyObject <NSCopying, NSCoding> {
-  unsigned int sd_accessors; /* index | name | id | range | relative | test */
+  NSUInteger sd_accessors; /* index | name | id | range | relative | test */
   
   /* Attributs */
-  unsigned sd_access; /* ( kSdefAccessRead | kSdefAccessWrite ) */
+  NSUInteger sd_access; /* ( kSdefAccessRead | kSdefAccessWrite ) */
 }
 
 - (NSString *)type;
 - (void)setType:(NSString *)aType;
 
-- (unsigned)access;
-- (void)setAccess:(unsigned)newAccess;
+- (NSUInteger)access;
+- (void)setAccess:(NSUInteger)newAccess;
 
-- (unsigned)accessors;
-- (void)setAccessors:(unsigned)accessors;
+- (NSUInteger)accessors;
+- (void)setAccessors:(NSUInteger)accessors;
 
 #pragma mark Accessors
 - (BOOL)accIndex;
@@ -153,11 +148,11 @@ enum {
 
 #pragma mark -
 @interface SdefProperty : SdefTypedObject <NSCopying, NSCoding> {
-  unsigned sd_access;
+  NSUInteger sd_access;
 }
 
-- (unsigned)access;
-- (void)setAccess:(unsigned)newAccess;
+- (NSUInteger)access;
+- (void)setAccess:(NSUInteger)newAccess;
 
 - (BOOL)isNotInProperties;
 - (void)setNotInProperties:(BOOL)flag;

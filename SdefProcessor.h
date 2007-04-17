@@ -8,12 +8,13 @@
 
 #import <Cocoa/Cocoa.h>
 
-typedef enum {
+enum {
   kSdefUndefinedFormat 			= 0,
   kSdefResourceFormat 			= 1 << 0,
   kSdefScriptSuiteFormat 		= 1 << 1,
   kSdefScriptTerminologyFormat	= 1 << 2,
-} SdefProcessorFormat;
+};
+typedef NSInteger SdefProcessorFormat;
 
 @class SdefDocument;
 @interface SdefProcessor : NSObject {

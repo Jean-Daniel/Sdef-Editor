@@ -122,16 +122,16 @@
 }
 
 - (void)addDictionary:(SdefDictionary *)aDico {
-  id suites = [aDico childEnumerator];
   SdefSuite *suite;
+  NSEnumerator *suites = [aDico childEnumerator];
   while (suite = [suites nextObject]) {
     [self addSuite:suite];
   }
 }
 
 - (void)removeDictionary:(SdefDictionary *)aDico {
-  id suites = [aDico childEnumerator];
   SdefSuite *suite;
+  NSEnumerator *suites = [aDico childEnumerator];
   while (suite = [suites nextObject]) {
     [self removeSuite:suite];
   }
@@ -139,9 +139,9 @@
 
 #pragma mark -
 - (NSArray *)types {
-  id types = [NSMutableArray arrayWithArray:[[self class] baseTypes]];
-  id items = [sd_types objectEnumerator];
-  id item;
+  SdefObject *item;
+  NSEnumerator *items = [sd_types objectEnumerator];
+  NSMutableArray *types = [NSMutableArray arrayWithArray:[[self class] baseTypes]];
   while (item = [items nextObject]) {
     if ([item name])
       [types addObject:[item name]];
@@ -167,8 +167,8 @@
 
 #pragma mark -
 - (id)typeWithName:(NSString *)name {
-  id types = [sd_types objectEnumerator];
-  id type;
+  SdefObject *type;
+  NSEnumerator *types = [sd_types objectEnumerator];
   while (type = [types nextObject]) {
     if ([[type name] isEqualToString:name])
       return type;
@@ -177,8 +177,8 @@
 }
 
 - (SdefClass *)classWithName:(NSString *)name {
-  id classes = [sd_classes objectEnumerator];
-  id class;
+  SdefClass *class;
+  NSEnumerator *classes = [sd_classes objectEnumerator];
   while (class = [classes nextObject]) {
     if ([[class name] isEqualToString:name])
       return class;
@@ -187,8 +187,8 @@
 }
 
 - (id)typeWithName:(NSString *)name class:(Class)class {
-  id types = [sd_types objectEnumerator];
-  id enumeration;
+  SdefObject *enumeration;
+  NSEnumerator *types = [sd_types objectEnumerator];
   while (enumeration = [types nextObject]) {
     if ([enumeration isMemberOfClass:class] && [[enumeration name] isEqualToString:name])
       return enumeration;
@@ -209,8 +209,8 @@
 }
 
 - (SdefVerb *)commandWithName:(NSString *)name {
-  id cmds = [sd_commands objectEnumerator];
-  id cmd;
+  SdefVerb *cmd;
+  NSEnumerator *cmds = [sd_commands objectEnumerator];
   while (cmd = [cmds nextObject]) {
     if ([[cmd name] isEqualToString:name])
       return cmd;
@@ -219,8 +219,8 @@
 }
 
 - (SdefVerb *)eventWithName:(NSString *)name {
-  id events = [sd_events objectEnumerator];
-  id event;
+  SdefVerb *event;
+  NSEnumerator *events = [sd_events objectEnumerator];
   while (event = [events nextObject]) {
     if ([[event name] isEqualToString:name])
       return event;
@@ -229,9 +229,9 @@
 }
 
 - (NSArray *)subclassesOfClass:(SdefClass *)class {
-  id classes = [NSMutableArray array];
-  id items = [sd_classes objectEnumerator];
   SdefClass *item;
+  NSMutableArray *classes = [NSMutableArray array];
+  NSEnumerator *items = [sd_classes objectEnumerator];
   while (item = [items nextObject]) {
     if ([[item inherits] isEqualToString:[class name]])
       [classes addObject:item];
@@ -242,8 +242,8 @@
 - (SdefClass *)superClassOfClass:(SdefClass *)aClass {
   NSString *parent = [aClass inherits];
   if (parent) {
-    id classes = [sd_classes objectEnumerator];
-    id class;
+    SdefClass *class;
+    NSEnumerator *classes = [sd_classes objectEnumerator];
     while (class = [classes nextObject]) {
       if (class != aClass && [[class name] isEqualToString:parent]) {
         return class;
@@ -351,8 +351,8 @@
 }
 
 - (SdefVerb *)verbWithCocoaName:(NSString *)cocoaName inSuite:(NSString *)suite {
-  id verbs = [[[self events] arrayByAddingObjectsFromArray:[self commands]] objectEnumerator];
   SdefVerb *verb;
+  NSEnumerator *verbs = [[[self events] arrayByAddingObjectsFromArray:[self commands]] objectEnumerator];
   while (verb = [verbs nextObject]) {
     if ([cocoaName isEqualToString:[verb cocoaName]]) {
       if (!suite || [suite isEqualToString:[[verb suite] cocoaName]]) {
@@ -364,8 +364,8 @@
 }
 
 - (SdefObject *)sdefTypeWithCocoaType:(NSString *)cocoaType inSuite:(NSString *)suite {
-  id enums = [sd_types objectEnumerator];
   SdefEnumeration *enume;
+  NSEnumerator *enums = [sd_types objectEnumerator];
   while (enume = [enums nextObject]) {
     if ([cocoaType isEqualToString:[enume cocoaName]]) {
       if (!suite || [suite isEqualToString:[[enume suite] cocoaName]]) {
@@ -377,8 +377,8 @@
 }
 
 - (SdefClass *)sdefClassWithCocoaClass:(NSString *)cocoaClass inSuite:(NSString *)suite {
-  id classes = [[self classes] objectEnumerator];
   SdefClass *class;
+  NSEnumerator *classes = [[self classes] objectEnumerator];
   while (class = [classes nextObject]) {
     if ([cocoaClass isEqualToString:[class cocoaClass]]) {
       if (!suite || [suite isEqualToString:[[class suite] cocoaName]]) {
@@ -445,8 +445,8 @@
 }
 
 - (SdefVerb *)verbWithCode:(NSString *)aCode inSuite:(NSString *)suiteCode {
-  id verbs = [[[self events] arrayByAddingObjectsFromArray:[self commands]] objectEnumerator];
   SdefVerb *verb;
+  NSEnumerator *verbs = [[[self events] arrayByAddingObjectsFromArray:[self commands]] objectEnumerator];
   while (verb = [verbs nextObject]) {
     if ([aCode isEqualToString:[verb code]]) {
       if (!suiteCode || [suiteCode isEqualToString:[[verb suite] code]]) {
@@ -458,8 +458,8 @@
 }
 
 - (SdefClass *)sdefClassWithCode:(NSString *)aCode inSuite:(NSString *)suiteCode {
-  id classes = [[self classes] objectEnumerator];
   SdefClass *class;
+  NSEnumerator *classes = [[self classes] objectEnumerator];
   while (class = [classes nextObject]) {
     if ([aCode isEqualToString:[class code]]) {
       if (!suiteCode || [suiteCode isEqualToString:[[class suite] code]]) {
@@ -471,8 +471,8 @@
 }
 
 - (SdefObject *)sdefTypeWithCode:(NSString *)aCode inSuite:(NSString *)suiteCode {
-  id enums = [sd_types objectEnumerator];
-  SdefEnumeration *enume;
+  SdefTerminologyObject *enume;
+  NSEnumerator *enums = [sd_types objectEnumerator];
   while (enume = [enums nextObject]) {
     if ([aCode isEqualToString:[enume code]]) {
       if (!suiteCode || [suiteCode isEqualToString:[[enume suite] code]]) {

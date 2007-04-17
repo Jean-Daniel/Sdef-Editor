@@ -63,7 +63,7 @@
     [task setLaunchPath:[[NSUserDefaults standardUserDefaults] stringForKey:@"SdefSdpToolPath"]];
   }
   
-  id args = [[NSMutableArray alloc] init];
+  NSMutableArray *args = [[NSMutableArray alloc] init];
   
   /* Set format */
   NSMutableString *format = [NSMutableString stringWithCapacity:3];
@@ -85,8 +85,7 @@
   
   /* Set Includes */
   if ([sd_includes count] > 0) {
-    unsigned idx;
-    for (idx=0; idx<[sd_includes count]; idx++) {
+    for (NSUInteger idx = 0; idx < [sd_includes count]; idx++) {
       [args addObject:@"-i"];
       [args addObject:[sd_includes objectAtIndex:idx]];
     }
@@ -128,7 +127,7 @@
   [task launch];
   
   if (input) {
-    id data = [sd_input dataRepresentationOfType:ScriptingDefinitionFileType];
+    NSData *data = [sd_input dataRepresentationOfType:ScriptingDefinitionFileType];
     @try {
       [input writeData:data];
     } @catch (id exception) {
@@ -147,7 +146,7 @@
   [task release];
   
   [sd_msg autorelease];
-  id result = [sd_msg length] ? sd_msg : nil;
+  NSString *result = [sd_msg length] ? sd_msg : nil;
   sd_msg = nil;
   return result;
 }
@@ -205,13 +204,11 @@
   }
 }
 
-
 - (SdefProcessorFormat)format {
   return sd_format;
 }
 - (void)setFormat:(SdefProcessorFormat)aFormat {
   sd_format = aFormat;
 }
-
 
 @end

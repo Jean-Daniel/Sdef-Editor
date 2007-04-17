@@ -37,7 +37,8 @@
   NSAssert([sd_node isKindOfClass:[SdefSuite class]], @"sd_node should be a suite");
   sd_node = [sd_node classes];
   if (sd_node) {
-    SdefClassExtension *class = [(SdefObject *)[SdefClassExtension allocWithZone:[self zone]] initWithAttributes:attributes];
+    SdefClass *class = [(SdefObject *)[SdefClass allocWithZone:[self zone]] initWithAttributes:attributes];
+    [class setExtension:YES];
     [sd_node appendChild:class];
     [class release];
     sd_node = class;

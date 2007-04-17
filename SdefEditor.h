@@ -8,11 +8,15 @@
 
 #import <Cocoa/Cocoa.h>
 
-extern NSString * const ScriptingDefinitionFileType;
-extern const OSType kScriptingDefinitionHFSType;
+SK_PRIVATE
+NSString * const ScriptingDefinitionFileType;
+SK_PRIVATE
+const OSType kScriptingDefinitionHFSType;
 
-extern NSString * const CocoaSuiteDefinitionFileType;
-extern const OSType kCocoaSuiteDefinitionHFSType;
+SK_PRIVATE
+NSString * const CocoaSuiteDefinitionFileType;
+SK_PRIVATE
+const OSType kCocoaSuiteDefinitionHFSType;
 
 @class SdefImporter;
 @interface SdefEditor : NSObject {

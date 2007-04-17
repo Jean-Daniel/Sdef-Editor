@@ -44,8 +44,15 @@ unsigned SdefXMLAccessorFlagFromString(NSString *str) {
 @implementation SdefClass (SdefXMLManager)
 #pragma mark XML Generation
 - (SdefXMLNode *)xmlNodeForVersion:(SdefVersion)version {
-  id node;
-  if (node = [super xmlNodeForVersion:version]) {
+  SdefXMLNode *node;
+  if ([self isExtension]) {
+    if ([self inherits]) {
+      if (node = [super xmlNodeForVersion:version]) {
+        [node removeAllAttributes];
+        [node setAttribute:[[self inherits] stringByEscapingEntities:nil] forKey:@"extends"];
+      }
+    }
+  } else if (node = [super xmlNodeForVersion:version]) {
     if ([self plural]) [node setAttribute:[[self plural] stringByEscapingEntities:nil] forKey:@"plural"];
     if ([self inherits]) [node setAttribute:[[self inherits] stringByEscapingEntities:nil] forKey:@"inherits"];
     if ([self type]) {
@@ -66,14 +73,19 @@ unsigned SdefXMLAccessorFlagFromString(NSString *str) {
 }
 
 - (NSString *)xmlElementName {
-  return @"class";
+  return [self isExtension] ? @"class-extension" : @"class";
 }
 
 #pragma mark Parsing
 - (void)setAttributes:(NSDictionary *)attrs {
   [super setAttributes:attrs];
-  [self setPlural:[[attrs objectForKey:@"plural"] stringByUnescapingEntities:nil]];
-  [self setInherits:[[attrs objectForKey:@"inherits"] stringByUnescapingEntities:nil]];
+  if ([attrs objectForKey:@"extends"]) {
+    [self setExtension:YES];
+    [self setInherits:[[attrs objectForKey:@"extends"] stringByUnescapingEntities:nil]];
+  } else {
+    [self setPlural:[[attrs objectForKey:@"plural"] stringByUnescapingEntities:nil]];
+    [self setInherits:[[attrs objectForKey:@"inherits"] stringByUnescapingEntities:nil]];
+  }
 }
 
 - (int)acceptXMLElement:(NSString *)element {
@@ -95,31 +107,6 @@ unsigned SdefXMLAccessorFlagFromString(NSString *str) {
       return kSdefParserPantherVersion;
     }
   return kSdefParserBothVersion;
-}
-
-@end
-
-#pragma mark -
-@implementation SdefClassExtension (SdefXMLManager)
-#pragma mark XML Generation
-- (SdefXMLNode *)xmlNodeForVersion:(SdefVersion)version {
-  SdefXMLNode *node = nil;
-  if ([self inherits]) {
-    if (node = [super xmlNodeForVersion:version]) {
-      [node removeAllAttributes];
-      [node setAttribute:[[self inherits] stringByEscapingEntities:nil] forKey:@"extends"];
-    }
-  }
-  return node;
-}
-
-- (NSString *)xmlElementName {
-  return @"class-extension";
-}
-
-#pragma mark Parsing
-- (void)setAttributes:(NSDictionary *)attrs {
-  [self setInherits:[[attrs objectForKey:@"extends"] stringByUnescapingEntities:nil]];
 }
 
 @end

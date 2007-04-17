@@ -22,7 +22,7 @@
 
 - (id)initWithCoder:(NSCoder *)aCoder {
   if (self = [super initWithCoder:aCoder]) {
-    unsigned length;
+    NSUInteger length;
     const uint8_t*buffer = [aCoder decodeBytesForKey:@"SOFlags" returnedLength:&length];
     memcpy(&sd_soFlags, buffer, length);    
     sd_comments = [[aCoder decodeObjectForKey:@"SOComments"] retain];
@@ -82,14 +82,14 @@
 }
 
 - (NSString *)location {
-  id parent;
+  SKUITreeNode *parent;
   /* If parent is a Class or an Enumeration and parent != self */
   if (((parent = [self firstParentOfType:kSdefClassType]) ||
        (parent = [self firstParentOfType:kSdefEnumerationType]) || 
        (parent = [self firstParentOfType:kSdefVerbType])) && parent != self) {
-    return [NSString stringWithFormat:@"%@:%@", [(id)[self suite] name], [parent name]];
+    return [NSString stringWithFormat:@"%@:%@", [[self suite] name], [parent name]];
   } else {
-    return [(id)[self suite] name];
+    return [[self suite] name];
   }
 }
 
@@ -189,8 +189,8 @@
 - (void)setEditable:(BOOL)flag recursive:(BOOL)recu {
   sd_soFlags.editable = (flag) ? 1 : 0;
   if (recu) {
-    id node;
-    id nodes = [self childEnumerator];
+    SdefObject *node;
+    NSEnumerator *nodes = [self childEnumerator];
     while (node = [nodes nextObject]) {
       [node setEditable:flag recursive:recu];
     }
@@ -244,8 +244,7 @@
 - (void)setComments:(NSArray *)comments {
   if (sd_comments != comments) {
     [sd_comments removeAllObjects];
-    unsigned idx;
-    for (idx=0; idx<[comments count]; idx++) {
+    for (NSUInteger idx = 0; idx < [comments count]; idx++) {
       [[self comments] addObject:[comments objectAtIndex:idx]];
     }
   }
@@ -259,7 +258,7 @@
   }
 }
 
-- (void)removeCommentAtIndex:(unsigned)anIndex {
+- (void)removeCommentAtIndex:(NSUInteger)anIndex {
   [sd_comments removeObjectAtIndex:anIndex];
 }
 
@@ -283,7 +282,7 @@
     [[self ignores] addObjectsFromArray:anArray];
   }
 }
-- (void)removeIgnoreAtIndex:(unsigned)anIndex {
+- (void)removeIgnoreAtIndex:(NSUInteger)anIndex {
   [sd_ignore removeObjectAtIndex:anIndex];
 }
 

@@ -43,6 +43,9 @@
 		98168DDC07A27782002B893D /* sdp in Resources */ = {isa = PBXBuildFile; fileRef = 98168DDB07A27782002B893D /* sdp */; };
 		98168E0107A29025002B893D /* NSCoreSuite.sdef in Resources */ = {isa = PBXBuildFile; fileRef = 98168E0007A29025002B893D /* NSCoreSuite.sdef */; };
 		98168E0507A29036002B893D /* NSTextSuite.sdef in Resources */ = {isa = PBXBuildFile; fileRef = 98168E0407A29036002B893D /* NSTextSuite.sdef */; };
+		9818EBCC0BD56D0D0079867A /* AESendThreadSafe.h in Headers */ = {isa = PBXBuildFile; fileRef = 9818EBCB0BD56D0D0079867A /* AESendThreadSafe.h */; };
+		9818EBCE0BD56D290079867A /* AESendThreadSafe.c in Sources */ = {isa = PBXBuildFile; fileRef = 9818EBCD0BD56D290079867A /* AESendThreadSafe.c */; };
+		9818ECAF0BD57C230079867A /* Class-Extension.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 9818ECAE0BD57C230079867A /* Class-Extension.tiff */; };
 		9820CD270793467D008D397F /* Dictionary.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 9820CD250793467D008D397F /* Dictionary.tiff */; };
 		9820CD280793467D008D397F /* Suite.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 9820CD260793467D008D397F /* Suite.tiff */; };
 		98230E5D0AFE299B00675226 /* SKDisclosurePanel.h in Headers */ = {isa = PBXBuildFile; fileRef = 98230E4C0AFE299A00675226 /* SKDisclosurePanel.h */; };
@@ -331,6 +334,9 @@
 		98168DDB07A27782002B893D /* sdp */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.executable"; name = sdp; path = /usr/bin/sdp; sourceTree = "<absolute>"; };
 		98168E0007A29025002B893D /* NSCoreSuite.sdef */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = NSCoreSuite.sdef; sourceTree = "<group>"; };
 		98168E0407A29036002B893D /* NSTextSuite.sdef */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = NSTextSuite.sdef; sourceTree = "<group>"; };
+		9818EBCB0BD56D0D0079867A /* AESendThreadSafe.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AESendThreadSafe.h; sourceTree = "<group>"; };
+		9818EBCD0BD56D290079867A /* AESendThreadSafe.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = AESendThreadSafe.c; sourceTree = "<group>"; };
+		9818ECAE0BD57C230079867A /* Class-Extension.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = "Class-Extension.tiff"; sourceTree = "<group>"; };
 		981B66B2093870CE0024C0D9 /* ShadowCommon.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = ShadowCommon.xcconfig; sourceTree = "<group>"; };
 		981B66B3093870CE0024C0D9 /* ShadowDebug.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = ShadowDebug.xcconfig; sourceTree = "<group>"; };
 		981B66B4093870CE0024C0D9 /* ShadowRelease.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = ShadowRelease.xcconfig; sourceTree = "<group>"; };
@@ -763,6 +769,7 @@
 				98D5AAC6078C6EDE00DD07B7 /* Box.tiff */,
 				98D5AAE2078C6FD700DD07B7 /* Check.tiff */,
 				98D363A0078A7E8B00669D72 /* Class.tiff */,
+				9818ECAE0BD57C230079867A /* Class-Extension.tiff */,
 				9820CD3A079347E5008D397F /* Content.tiff */,
 				9820CD250793467D008D397F /* Dictionary.tiff */,
 				98E316670840961F003EC9D5 /* EditType.tiff */,
@@ -982,6 +989,7 @@
 				98665E2F0A86A53A00CF8291 /* SKAEFunctions.c */,
 				656F9B7E09E6A20A008A0059 /* SKLSFunctions.m */,
 				656F9B7F09E6A20A008A0059 /* SKFSFunctions.m */,
+				9818EBCD0BD56D290079867A /* AESendThreadSafe.c */,
 				656F9B8009E6A20A008A0059 /* SKProcessFunctions.m */,
 			);
 			path = Functions;
@@ -993,6 +1001,7 @@
 				98665E310A86A54200CF8291 /* SKAEFunctions.h */,
 				98C783B507D9E2A3006D9CC1 /* SKLSFunctions.h */,
 				98C77FE107D9DECA006D9CC1 /* SKFSFunctions.h */,
+				9818EBCB0BD56D0D0079867A /* AESendThreadSafe.h */,
 				98C783C607D9E4C5006D9CC1 /* SKProcessFunctions.h */,
 			);
 			path = Headers;
@@ -1239,6 +1248,7 @@
 				98E98D5F0840DFBA0093BA77 /* SdefLeaf.h in Headers */,
 				98230E5D0AFE299B00675226 /* SKDisclosurePanel.h in Headers */,
 				98230E5F0AFE299B00675226 /* SKImageAndTextCell.h in Headers */,
+				9818EBCC0BD56D0D0079867A /* AESendThreadSafe.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1340,6 +1350,7 @@
 				98E98CE40840D96F0093BA77 /* Element.tiff in Resources */,
 				98DA3AD308411C28003C07A3 /* SdefDictionary.icns in Resources */,
 				98D9B3D50876AEFB001AC5B1 /* Skeleton.sdef in Resources */,
+				9818ECAF0BD57C230079867A /* Class-Extension.tiff in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1453,6 +1464,7 @@
 				98230E660AFE299B00675226 /* SKDisclosurePanel.m in Sources */,
 				98230E670AFE299B00675226 /* SKDisclosureView.m in Sources */,
 				98230E690AFE299B00675226 /* SKImageAndTextCell.m in Sources */,
+				9818EBCE0BD56D290079867A /* AESendThreadSafe.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
