@@ -13,17 +13,16 @@
 @class SdefSuite, SdefObject, SdefClass, SdefVerb, SdefDocument, SdefDictionary;
 @interface SdefClassManager : NSObject {
 @private
+  NSHashTable *sd_dicts;
   SdefDocument *sd_document;
-  SdefDictionary *sd_dictionary;
   NSMutableArray *sd_classes, *sd_commands, *sd_events, *sd_types;
 }
 
 + (BOOL)isBaseType:(NSString *)type;
 
-- (id)initWithDictionary:(SdefDictionary *)dictionary;
+- (id)initWithDocument:(SdefDocument *)aDocument;
 
 - (void)setDocument:(SdefDocument *)aDoc;
-- (void)setDictionary:(SdefDictionary *)aDico;
 
 - (void)addDictionary:(SdefDictionary *)aDico;
 - (void)removeDictionary:(SdefDictionary *)aDico;

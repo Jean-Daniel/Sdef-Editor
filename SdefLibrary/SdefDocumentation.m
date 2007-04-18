@@ -61,15 +61,15 @@
 }
 
 - (BOOL)isHtml {
-  return sd_soFlags.reserved;
+  return sd_soFlags.html;
 }
 
 - (void)setHtml:(BOOL)flag {
   flag = flag ? 1 : 0;
-  if (flag != sd_soFlags.reserved) {
-    [[[self undoManager] prepareWithInvocationTarget:self] setHtml:sd_soFlags.reserved];
+  if (flag != sd_soFlags.html) {
+    [[[self undoManager] prepareWithInvocationTarget:self] setHtml:sd_soFlags.html];
     /* Undo */
-    sd_soFlags.reserved = flag;
+    sd_soFlags.html = flag;
   }
 }
 

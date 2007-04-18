@@ -37,9 +37,9 @@ enum {
 typedef OSType SdefObjectType;
 
 enum {
-  kSdefPantherVersion,
-  kSdefTigerVersion,
-  kSdefLeopardVersion,
+  kSdefPantherVersion = 1,
+  kSdefTigerVersion   = 2,
+  kSdefLeopardVersion = 3,
 };
 typedef NSInteger SdefVersion;
 
@@ -57,14 +57,17 @@ NSString *CocoaNameForSdefName(NSString *cocoa, BOOL isClass);
 @interface SdefObject : SKUITreeNode <NSCopying, NSCoding> {
 @protected
   struct _sd_soFlags {
+    unsigned int html:1;
+    unsigned int xrefs:1;
     unsigned int hidden:1;
     unsigned int optional:1;
     unsigned int editable:1;
-    unsigned int reserved:1;
     unsigned int removable:1;
     unsigned int hasSynonyms:1;
+    unsigned int notinproperties:1;
     unsigned int hasDocumentation:1;
     unsigned int hasImplementation:1;
+    unsigned int reserved:6;
   } sd_soFlags;
 @private
   NSMutableArray *sd_ignore;

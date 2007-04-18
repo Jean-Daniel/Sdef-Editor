@@ -9,12 +9,17 @@
 #import <Cocoa/Cocoa.h>
 
 SK_PRIVATE
-NSString * const ScriptingDefinitionFileType;
+NSString * ScriptingDefinitionFileType;
+SK_PRIVATE
+NSString * TigerScriptingDefinitionFileType;
+SK_PRIVATE
+NSString * PantherScriptingDefinitionFileType;
+
 SK_PRIVATE
 const OSType kScriptingDefinitionHFSType;
 
 SK_PRIVATE
-NSString * const CocoaSuiteDefinitionFileType;
+NSString * CocoaSuiteDefinitionFileType;
 SK_PRIVATE
 const OSType kCocoaSuiteDefinitionHFSType;
 

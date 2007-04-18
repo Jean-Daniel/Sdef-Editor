@@ -13,6 +13,7 @@
 
 #import "SdefImplementation.h"
 #import "SdefDictionary.h"
+#import "SdefDocument.h"
 #import "SdefTypedef.h"
 #import "SdefSuite.h"
 #import "SdefVerb.h"
@@ -53,13 +54,6 @@
     sd_events = [[NSMutableArray allocWithZone:[self zone]] init];
     sd_classes = [[NSMutableArray allocWithZone:[self zone]] init];
     sd_commands = [[NSMutableArray allocWithZone:[self zone]] init];
-  }
-  return self;
-}
-
-- (id)initWithDictionary:(SdefDictionary *)aDictionary {
-  if (self = [self init]) {
-    [self setDictionary:aDictionary];
     /* Warning do not handle multiple node manipulation */
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(didAppendChild:)
@@ -73,8 +67,20 @@
   return self;
 }
 
+- (id)initWithDocument:(SdefDocument *)aDocument {
+  if (self = [self init]) {
+    [self setDocument:aDocument];
+  }
+  return self;
+}
+
 - (void)dealloc {
   [[NSNotificationCenter defaultCenter] removeObserver:self];
+  
+  if (sd_dicts) {
+    NSFreeHashTable(sd_dicts);
+    sd_dicts = nil;
+  }
   [sd_types release];
   [sd_events release];
   [sd_classes release];
@@ -82,22 +88,15 @@
   [super dealloc];
 }
 
-/* Warning - Weak ref */
-- (void)setDictionary:(SdefDictionary *)aDico {
-  if (sd_dictionary != aDico) {
-    if (sd_dictionary) {
-      [self removeDictionary:sd_dictionary];
-    }
-    sd_dictionary = aDico;
-    if (sd_dictionary) {
-      [self addDictionary:sd_dictionary];
-    }
-    [self setDocument:[sd_dictionary document]];
-  }
-}
-
 - (void)setDocument:(SdefDocument *)aDocument {
-  sd_document = aDocument;
+  if (aDocument != sd_document) {
+    if ([sd_document dictionary])
+     
+    sd_document = aDocument;
+    
+    if ([sd_document dictionary])
+      [self addDictionary:[sd_document dictionary]];
+  }
 }
 
 #pragma mark -
@@ -121,19 +120,31 @@
   [sd_commands removeObjectsInArray:[[aSuite commands] children]];
 }
 
+- (BOOL)containsDictionary:(SdefDictionary *)aDict {
+  return sd_dicts && aDict && (NSHashGet(sd_dicts, aDict) != nil);
+}
+
 - (void)addDictionary:(SdefDictionary *)aDico {
-  SdefSuite *suite;
-  NSEnumerator *suites = [aDico childEnumerator];
-  while (suite = [suites nextObject]) {
-    [self addSuite:suite];
+  if (!sd_dicts)
+    sd_dicts = NSCreateHashTable(NSNonRetainedObjectHashCallBacks, 0);
+  if (!NSHashGet(sd_dicts, aDico)) {
+    SdefSuite *suite;
+    NSEnumerator *suites = [aDico childEnumerator];
+    while (suite = [suites nextObject]) {
+      [self addSuite:suite];
+    }
+    NSHashInsert(sd_dicts, aDico);
   }
 }
 
 - (void)removeDictionary:(SdefDictionary *)aDico {
-  SdefSuite *suite;
-  NSEnumerator *suites = [aDico childEnumerator];
-  while (suite = [suites nextObject]) {
-    [self removeSuite:suite];
+  if (NSHashGet(sd_dicts, aDico)) {
+    SdefSuite *suite;
+    NSEnumerator *suites = [aDico childEnumerator];
+    while (suite = [suites nextObject]) {
+      [self removeSuite:suite];
+    }
+    NSHashRemove(sd_dicts, aDico);
   }
 }
 
@@ -257,7 +268,7 @@
 #pragma mark Notification Handling
 - (void)didAppendChild:(NSNotification *)aNotification {
   SdefObject *node = [aNotification object];
-  if ((sd_dictionary && [node dictionary] == sd_dictionary) ||
+  if ([self containsDictionary:[node dictionary]] ||
       (sd_document && [node document] == sd_document)) {
     id child = [[aNotification userInfo] objectForKey:SKInsertedChild];
     switch ([child objectType]) {
@@ -286,7 +297,7 @@
 
 - (void)willRemoveChild:(NSNotification *)aNotification {
   SdefObject *node = [aNotification object];
-  if ((sd_dictionary && [node dictionary] == sd_dictionary) ||
+  if ([self containsDictionary:[node dictionary]] ||
       (sd_document && [node document] == sd_document)) {
     id child = [[aNotification userInfo] objectForKey:SKRemovedChild];
     switch ([child objectType]) {

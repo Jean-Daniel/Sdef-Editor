@@ -19,6 +19,7 @@ SdefDictionary *SdefLoadDictionaryData(NSData *data, NSInteger *version, id dele
 @interface SdefDocument : NSDocument {
 @private
   SdefDictionary *sd_dictionary;
+  SdefClassManager *sd_manager;
 }
 
 - (SdefObject *)selection;
@@ -29,5 +30,7 @@ SdefDictionary *SdefLoadDictionaryData(NSData *data, NSInteger *version, id dele
 - (void)setDictionary:(SdefDictionary *)dictionary;
 
 - (IBAction)exportTerminology:(id)sender;
+
+- (SdefClassManager *)classManager;
 
 @end

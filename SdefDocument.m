@@ -13,6 +13,7 @@
 
 #import "SdefWindowController.h"
 #import "SdefSymbolBrowser.h"
+#import "SdefClassManager.h"
 #import "SdefDictionary.h"
 #import "SdtplWindow.h"
 #import "SdefObjects.h"
@@ -37,6 +38,7 @@
 }
 
 - (void)dealloc {
+  [sd_manager release];
   [sd_dictionary release];
   [super dealloc];
 }
@@ -83,43 +85,6 @@
 }
 - (void)exportSheetDidEnd:(NSWindow *)aWindow returnCode:(int)resut context:(id)ctxt {
   [[aWindow windowController] autorelease];
-}
-
-- (IBAction)exportUsingPantherFormat:(id)sender {
-  NSSavePanel *panel = [NSSavePanel savePanel];
-  [panel setCanCreateDirectories:YES];
-  [panel setCanSelectHiddenExtension:YES];
-  [panel setTreatsFilePackagesAsDirectories:YES];
-  [panel beginSheetForDirectory:nil
-                           file:[self lastComponentOfFileName]
-                 modalForWindow:[[self documentWindow] window]
-                  modalDelegate:self
-                 didEndSelector:@selector(exportAsPantherDidEnd:result:context:)
-                    contextInfo:nil];
-}
-- (void)exportAsPantherDidEnd:(NSSavePanel *)aPanel result:(int)result context:(id)context {
-  NSString *file;
-  if ((result == NSOKButton) && (file = [aPanel filename])) {
-    NSData *data = nil;
-    SdefXMLGenerator *gen = [[SdefXMLGenerator alloc] initWithRoot:[self dictionary]];
-    @try {
-      data = [gen xmlDataForVersion:kSdefPantherVersion];
-    } @catch (id exception) {
-      NSBeep();
-      SKLogException(exception);
-      NSRunAlertPanel(@"An Unknow error prevent file exportation", @"%@", @"OK", nil, nil, [exception reason]);
-    }
-    [gen release];
-    if (data) {
-      [data writeToFile:file atomically:YES];
-      id attributes = [self fileAttributesToWriteToFile:file
-                                                 ofType:ScriptingDefinitionFileType
-                                          saveOperation:NSSaveAsOperation];
-      if (attributes) {
-        [[NSFileManager defaultManager] changeFileAttributes:attributes atPath:file];
-      }
-    }
-  }
 }
 
 #if !__LP64__
@@ -180,10 +145,18 @@
 
 - (NSData *)dataRepresentationOfType:(NSString *)type {
   NSData *data = nil;
+  SdefVersion version = 0;
   if ([type isEqualToString:ScriptingDefinitionFileType]) {
+    version = kSdefLeopardVersion;
+  } else if ([type isEqualToString:TigerScriptingDefinitionFileType]) {
+    version = kSdefTigerVersion;
+  } else if ([type isEqualToString:PantherScriptingDefinitionFileType]) {
+    version = kSdefPantherVersion;
+  }
+  if (version) {
     SdefXMLGenerator *gen = [[SdefXMLGenerator alloc] initWithRoot:[self dictionary]];
     @try {
-      data = [gen xmlDataForVersion:kSdefTigerVersion];
+      data = [gen xmlDataForVersion:version];
     } @catch (id exception) {
       NSBeep();
       SKLogException(exception);
@@ -194,12 +167,14 @@
 }
 
 - (BOOL)loadDataRepresentation:(NSData *)data ofType:(NSString *)type {
-  if ([type isEqualToString:ScriptingDefinitionFileType]) {
+  if ([type isEqualToString:ScriptingDefinitionFileType] ||
+      [type isEqualToString:TigerScriptingDefinitionFileType] ||
+      [type isEqualToString:PantherScriptingDefinitionFileType]) {
     NSInteger version;
     [self setDictionary:SdefLoadDictionaryData(data, &version, self)];
-    if (version == kSdefPantherVersion) {
-      NSRunInformationalAlertPanel(@"You have opened a Panther Scripting Definition file",
-                                   @"This file will be saved using Tiger format. If you want to save it using the Panther format, choose \"Export Using old Format\" in the File menu",
+    if (version < kSdefLeopardVersion) {
+      NSRunInformationalAlertPanel(@"You have opened a Panther or Tiger Scripting Definition file",
+                                   @"This file will be saved using Leopard format. If you want to export it using an older format, choose \"Save as...\" in the File menu",
                                    @"OK", nil, nil);
       [self updateChangeCount:NSChangeDone];
     }
@@ -222,6 +197,18 @@
   return NO;
 }
 
+- (NSArray *)writableTypesForSaveOperation:(NSSaveOperationType)saveOperation {
+  switch(saveOperation) {
+    case NSSaveAsOperation:
+      return [NSArray arrayWithObjects:
+        ScriptingDefinitionFileType, 
+        TigerScriptingDefinitionFileType, 
+        PantherScriptingDefinitionFileType, nil];
+    default:
+      return [super writableTypesForSaveOperation:saveOperation];
+  }
+}
+
 #pragma mark -
 #pragma mark SdefDocument Specific
 - (SdefObject *)selection {
@@ -236,15 +223,29 @@
 - (void)setDictionary:(SdefDictionary *)newDictionary {
   if (sd_dictionary != newDictionary) {
     [sd_dictionary setDocument:nil];
+    if (sd_manager) [sd_manager removeDictionary:sd_dictionary];
+    
     [sd_dictionary release];
     sd_dictionary = [newDictionary retain];
+    
     [sd_dictionary setDocument:self];
+    if (sd_manager) [sd_manager addDictionary:sd_dictionary];
+    
     [[self undoManager] removeAllActions];
     [self updateChangeCount:NSChangeCleared];
     /* Update [sd_dictionary classManager] */
     [[self documentWindow] setDictionary:newDictionary];
     [[self symbolBrowser] loadSymbols];
   }
+}
+
+- (SdefClassManager *)classManager {
+  if (!sd_manager) {
+    sd_manager = [(SdefClassManager *)[SdefClassManager allocWithZone:[self zone]] initWithDocument:self];
+    if (sd_dictionary)
+      [sd_manager addDictionary:sd_dictionary];
+  }
+  return sd_manager;
 }
 
 #pragma mark -
@@ -264,7 +265,7 @@
   // if it exists.
   creatorCodeString = [infoPlist objectForKey:@"CFBundleSignature"];
   if(creatorCodeString) {
-    creatorCode = SKULong(SKOSTypeFromString(creatorCodeString));
+    creatorCode = SKUInt(SKOSTypeFromString(creatorCodeString));
   }
   
   // Then, find the matching Info.plist dictionary entry for this type.

@@ -36,10 +36,13 @@ int main(int argc, const char *argv[]) {
   return NSApplicationMain(argc, argv);
 }
 
-NSString * const ScriptingDefinitionFileType = @"ScriptingDefinition";
+NSString * ScriptingDefinitionFileType = @"ScriptingDefinition";
 const OSType kScriptingDefinitionHFSType = 'Sdef';
-NSString * const CocoaSuiteDefinitionFileType = @"AppleScriptSuiteDefinition";
+NSString * CocoaSuiteDefinitionFileType = @"AppleScriptSuiteDefinition";
 const OSType kCocoaSuiteDefinitionHFSType = 'ScSu';
+
+NSString *TigerScriptingDefinitionFileType = @"TigerScriptingDefinition";
+NSString *PantherScriptingDefinitionFileType = @"PantherScriptingDefinition";
 
 #if defined (DEBUG)
 @interface SdefEditor (DebugFacility)
@@ -52,6 +55,19 @@ const OSType kCocoaSuiteDefinitionHFSType = 'ScSu';
 @end
 
 @implementation SdefEditor
+
++ (void)initialize {
+  if ([SdefEditor class] == self) {
+    if (SKSystemMajorVersion() == 10 && SKSystemMinorVersion() >= 5) {
+      /* Redefine type using UTI */
+      ScriptingDefinitionFileType = @"com.apple.scripting-definition";
+      CocoaSuiteDefinitionFileType = @"org.shadowlab.cocoa-scripting";
+      
+      TigerScriptingDefinitionFileType = @"org.shadowlab.sdef.tiger";
+      PantherScriptingDefinitionFileType = @"org.shadowlab.sdef.panther";
+    }
+  }
+}
 
 - (id)init {
   if (self = [super init]) {
@@ -88,11 +104,26 @@ const OSType kCocoaSuiteDefinitionHFSType = 'ScSu';
 #if defined (DEBUG)
   [self createDebugMenu];
 #endif
+  NSMenu *file = [[[NSApp mainMenu] itemWithTag:1] submenu];
 #if MAC_OS_X_VERSION_MIN_REQUIRED < MAC_OS_X_VERSION_10_4
   // If Panther, remove open application sdef menu
   if (!OSACopyScriptingDefinition) {
-    NSMenu *file = [[[NSApp mainMenu] itemWithTag:1] submenu];
     [file removeItem:[file itemWithTag:1]];
+  }
+#endif
+#if __LP64__
+  NSMenuItem *export = [file itemWithTag:2];
+  if (export) {
+    NSMenuItem *item  = [[export submenu] itemAtIndex:0];
+    if (item) {
+      [item retain];
+      [[export submenu] removeItem:item];
+      [item setTitle:NSLocalizedString(@"Create Dictionary...", @"Create dictionary 64 bits title")];
+      NSInteger idx = [file indexOfItem:export];
+      [file removeItem:export];
+      [file insertItem:item atIndex:idx];
+      [item release];
+    }
   }
 #endif
 }
@@ -131,10 +162,13 @@ const OSType kCocoaSuiteDefinitionHFSType = 'ScSu';
   }
   NSString *suitePath = [[NSBundle mainBundle] pathForResource:suite ofType:@"sdef"];
   if (suitePath) {
-    NSDocument *doc = [[NSDocumentController sharedDocumentController] openDocumentWithContentsOfFile:suitePath
-                                                                                              display:NO];
-    [doc setFileName:nil];
-    [doc showWindows];
+    NSDocumentController *ctrl = [NSDocumentController sharedDocumentController];
+    NSDocument *doc = [ctrl openDocumentWithContentsOfFile:suitePath
+                                                    display:NO];
+    if (doc) {
+      [doc setFileName:nil];
+      [doc showWindows];
+    }
   }
 }
 
@@ -303,12 +337,11 @@ const OSType kCocoaSuiteDefinitionHFSType = 'ScSu';
 
 - (BOOL)application:(NSApplication *)theApplication openFile:(NSString *)filename {
   NSString *type = [[NSDocumentController sharedDocumentController] typeFromFileExtension:[filename pathExtension]];
-  /* If sdef, let document manager handle it */
-  if ([type isEqualToString:ScriptingDefinitionFileType]) return NO;
-  else if ([type isEqualToString:CocoaSuiteDefinitionFileType]) {
+  if ([type isEqualToString:CocoaSuiteDefinitionFileType]) {
     [self importCocoaScriptFile:filename];
     return YES;
   }
+  /* lets document manager handle it */
   return NO;
 }
 
@@ -334,6 +367,13 @@ const OSType kCocoaSuiteDefinitionHFSType = 'ScSu';
 @end
 
 @implementation SdefDocumentController
+
+- (NSString *)typeFromFileExtension:(NSString *)fileExtensionOrHFSFileType {
+  if ([fileExtensionOrHFSFileType isEqualToString:@"sdef"] || 
+      [fileExtensionOrHFSFileType isEqualToString:NSFileTypeForHFSTypeCode(kScriptingDefinitionHFSType)])
+    return ScriptingDefinitionFileType;
+  return [super typeFromFileExtension:fileExtensionOrHFSFileType];
+}
 
 - (void)noteNewRecentDocument:(NSDocument *)aDocument {
   NSString *path = [aDocument fileName];

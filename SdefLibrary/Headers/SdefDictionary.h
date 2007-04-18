@@ -20,7 +20,6 @@
 @interface SdefDictionary : SdefDocumentedObject <NSCopying, NSCoding> {
 @private
   SdefDocument *sd_document;
-  SdefClassManager *sd_manager;
 }
 
 - (NSString *)title;
@@ -31,6 +30,5 @@
 - (void)setDocument:(SdefDocument *)document;
 
 - (SdefClassManager *)classManager;
-- (void)setClassManager:(SdefClassManager *)aManager;
 
 @end
