@@ -25,7 +25,7 @@
 }
 
 #pragma mark Parsing
-- (int)acceptXMLElement:(NSString *)element {
+- (SdefParserVersion)acceptXMLElement:(NSString *)element attributes:(NSDictionary *)attrs {
   SEL cmd = @selector(isEqualToString:);
   EqualIMP isEqual = (EqualIMP)[element methodForSelector:cmd];
   NSAssert(isEqual, @"Missing isEqualToStringMethod");
@@ -38,7 +38,7 @@
       isEqual(element, cmd, @"class-extension") || 
       isEqual(element, cmd, @"command") || 
       isEqual(element, cmd, @"event")) {
-    return kSdefParserTigerVersion;
+    return kSdefParserTigerVersion | kSdefParserLeopardVersion;
   } else /* If a collection => Panther */
   if (isEqual(element, cmd, @"types") || 
       isEqual(element, cmd, @"classes") || 
@@ -46,7 +46,7 @@
       isEqual(element, cmd, @"events")) {
     return kSdefParserPantherVersion;
   }
-  return kSdefParserBothVersion;
+  return kSdefParserAllVersions;
 }
 
 @end

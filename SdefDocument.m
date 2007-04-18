@@ -306,6 +306,7 @@
 }
 
 @end
+
 #pragma mark -
 SdefDictionary *SdefLoadDictionary(NSString *filename, NSInteger *version, id delegate) {
   NSData *data = [[NSData alloc] initWithContentsOfFile:filename];
@@ -322,10 +323,16 @@ SdefDictionary *SdefLoadDictionaryData(NSData *data, NSInteger *version, id dele
     if ([parser parseData:data]) {
       result = [[parser document] retain];
       if (version) {
-        if ([parser parserVersion] == kSdefParserPantherVersion) {
-          *version = kSdefPantherVersion;
-        } else {
-          *version = kSdefTigerVersion;
+        switch ([parser parserVersion]) {
+          case kSdefParserPantherVersion:
+            *version = kSdefPantherVersion;
+            break;
+          case kSdefParserTigerVersion:
+            *version = kSdefTigerVersion;
+            break;
+          case kSdefParserLeopardVersion:
+            *version = kSdefLeopardVersion;
+            break;
         }
       }
     } else {

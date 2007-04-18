@@ -25,7 +25,7 @@
 
 #import "SdefTigerParser.h"
 #import "SdefPantherParser.h"
-
+#import "SdefLeopardParser.h"
 
 static void *SdefParserCreateStructure(CFXMLParserRef parser, CFXMLNodeRef node, void *info);
 static void SdefParserAddChild(CFXMLParserRef parser, void *parent, void *child, void *info);
@@ -46,6 +46,7 @@ static CFXMLParserCallBacks SdefParserCallBacks = {
 
 - (id)init {
   if (self = [super init]) {
+    sd_encoding = NSUTF8StringEncoding;
     sd_comments = [[NSMutableArray alloc] init];
   }
   return self;
@@ -60,21 +61,34 @@ static CFXMLParserCallBacks SdefParserCallBacks = {
 }
 
 #pragma mark -
-- (NSInteger)parserVersion {
-  return kSdefParserBothVersion;
+- (SdefParserVersion)parserVersion {
+  return kSdefParserUnknownVersion;
 }
 
-- (void)setVersion:(int)version {
+- (SdefParserVersion)supportedVersions {
+  return kSdefParserAllVersions;
+}
+
+- (NSStringEncoding)encoding {
+  return sd_encoding;
+}
+
+- (void)setVersion:(SdefParserVersion)version {
   switch (version) {
-    case kSdefParserBothVersion:
-      break;
-    case kSdefParserTigerVersion:
-      DLog(@"Transformation to Tiger Parser");
-      SKSwizzleIsaPointer(self, [SdefTigerParser class]);
-      break;
     case kSdefParserPantherVersion:
       DLog(@"Transformation to Panther Parser");
       SKSwizzleIsaPointer(self, [SdefPantherParser class]);
+      break;
+    case kSdefParserTigerVersion:
+    case kSdefParserTigerVersion | kSdefParserLeopardVersion:
+      if ([self parserVersion] != kSdefParserTigerVersion) {
+        DLog(@"Transformation to Tiger Parser");
+        SKSwizzleIsaPointer(self, [SdefTigerParser class]);
+      }
+      break;
+    case kSdefParserLeopardVersion:
+      DLog(@"Transformation to Leopard Parser");
+      SKSwizzleIsaPointer(self, [SdefLeopardParser class]);
       break;
   }
 }
@@ -354,14 +368,34 @@ static CFXMLParserCallBacks SdefParserCallBacks = {
 #pragma mark -
 #pragma mark Element Handling
 - (void)parser:(CFXMLParserRef)parser didStartElement:(NSString *)elementName infos:(CFXMLElementInfo *)infos {
+  NSDictionary *attributes = infos ? (id)infos->attributes : nil;
   if (sd_node) {
-    int version = [sd_node acceptXMLElement:elementName];
-    if ([self parserVersion] & version) {
+    SdefParserVersion version;
+    if ([elementName isEqualToString:@"xref"])
+      version = kSdefParserLeopardVersion;
+    else
+      version = [sd_node acceptXMLElement:elementName attributes:attributes];
+    
+    if ([self supportedVersions] & version) {
       if ([self parserVersion] != version) [self setVersion:version];
     } else {
+      NSString *str;
+      switch ([self parserVersion]) {
+        case kSdefParserTigerVersion:
+          str = @"Tiger";
+          break;
+        case kSdefParserPantherVersion:
+          str = @"Panther";
+          break;
+        case kSdefParserLeopardVersion:
+          str = @"Leopard";
+          break;
+        default:
+          str = @"X.3+";
+          break;
+      }
       NSString *msg = [NSString stringWithFormat:@"Invalid element %@ in %@ for %@ version",  elementName,
-        [sd_node xmlElementName],
-        ([self parserVersion] == kSdefParserTigerVersion) ? @"Tiger" : ([self parserVersion] == kSdefParserPantherVersion) ? @"Panther" : @"Both"];
+        [sd_node xmlElementName], str];
       CFXMLParserAbort(parser, kCFXMLErrorMalformedDocument, (CFStringRef)msg);
     }
   }
@@ -370,7 +404,6 @@ static CFXMLParserCallBacks SdefParserCallBacks = {
   EqualIMP isEqual = (EqualIMP)[elementName methodForSelector:cmd];
   NSAssert(isEqual, @"Missing isEqualToStringMethod");
   
-  NSDictionary *attributes = (id)infos->attributes;
   if (isEqual(elementName, cmd, @"dictionary")) {
     [self parser:parser didStartDictionary:attributes];
   } else if (isEqual(elementName, cmd, @"suite")) {
@@ -446,12 +479,17 @@ static CFXMLParserCallBacks SdefParserCallBacks = {
           [self parser:parser didStartElement:(id)CFXMLNodeGetString(aNode) infos:(CFXMLElementInfo *)CFXMLNodeGetInfoPtr(aNode)];
           result = (void *)CFXMLNodeGetString(aNode);
           break;
-        case kCFXMLNodeTypeDocument:
+        case kCFXMLNodeTypeDocument: {
+          CFXMLDocumentInfo *info = (CFXMLDocumentInfo *)CFXMLNodeGetInfoPtr(aNode);
+          if (info) {
+            sd_encoding = CFStringConvertEncodingToNSStringEncoding(info->encoding);
+          }
           /* Can find comment before first element */
           result = [NSNull null];
+        }
           break;
         case kCFXMLNodeTypeProcessingInstruction:
-          DLog(@"Data Type ID: kCFXMLNodeTypeProcessingInstruction (%@)", CFXMLNodeGetString(aNode));
+          DLog(@"Encounter processing instruction: %@", CFXMLNodeGetString(aNode));
           break;
         case kCFXMLNodeTypeComment:
           [self parser:parser foundComment:(id)CFXMLNodeGetString(aNode)];

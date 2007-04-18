@@ -9,11 +9,13 @@
 #import <Cocoa/Cocoa.h>
 
 enum {
-  kSdefParserUnknownVersion		= 0,
-  kSdefParserPantherVersion		= 1 << 0,
-  kSdefParserTigerVersion		= 1 << 1,
-  kSdefParserBothVersion		= kSdefParserPantherVersion | kSdefParserTigerVersion,
+  kSdefParserUnknownVersion = 0,
+  kSdefParserPantherVersion = 1 << 0,
+  kSdefParserTigerVersion   = 1 << 1,
+  kSdefParserLeopardVersion = 1 << 2,
+  kSdefParserAllVersions    = kSdefParserPantherVersion | kSdefParserTigerVersion | kSdefParserLeopardVersion,
 };
+typedef NSInteger SdefParserVersion;
 
 typedef enum {
   kSdefParserAbort,
@@ -21,24 +23,32 @@ typedef enum {
   kSdefParserDeleteNode,
 } SdefParserOperation;
 
-extern NSString *SdefXMLAccessStringFromFlag(NSUInteger flag);
-extern NSUInteger SdefXMLAccessFlagFromString(NSString *str);
+SK_PRIVATE
+NSString *SdefXMLAccessStringFromFlag(NSUInteger flag);
+SK_PRIVATE
+NSUInteger SdefXMLAccessFlagFromString(NSString *str);
 
-extern NSUInteger SdefXMLAccessorFlagFromString(NSString *str);
-extern NSArray *SdefXMLAccessorStringsFromFlag(NSUInteger flag);
+SK_PRIVATE
+NSUInteger SdefXMLAccessorFlagFromString(NSString *str);
+SK_PRIVATE
+NSArray *SdefXMLAccessorStringsFromFlag(NSUInteger flag);
 
 @class SdefDocumentationParser;
 @class SdefObject, SdefDictionary;
 @interface SdefXMLParser : NSObject {
   id sd_node;
   id sd_delegate;
-  id sd_subParser;
   NSString *sd_error;
   CFXMLParserRef sd_parser;
   NSMutableArray *sd_comments;
+  NSStringEncoding sd_encoding;
   SdefDictionary *sd_dictionary;
+  SdefDocumentationParser *sd_subParser;
 }
-- (NSInteger)parserVersion;
+- (SdefParserVersion)parserVersion;
+- (SdefParserVersion)supportedVersions;
+
+- (NSStringEncoding)encoding;
 
 - (id)delegate;
 - (void)setDelegate:(id)delegate;
@@ -78,6 +88,11 @@ extern NSArray *SdefXMLAccessorStringsFromFlag(NSUInteger flag);
 }
 
 - (id)initWithDocumentation:(SdefDocumentation *)doc parent:(id)theParent;
+
+- (id)parser:(CFXMLParserRef)parser didStartXMLNode:(CFXMLNodeRef)aNode;
+- (void)parser:(CFXMLParserRef)parser didEndXMLNode:(id)aNode;
+
+- (void)parser:(CFXMLParserRef)parser foundCDATA:(NSString *)CDATABlock;
 
 @end
 

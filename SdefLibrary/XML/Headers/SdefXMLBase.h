@@ -19,7 +19,7 @@
 - (id)initWithAttributes:(NSDictionary *)attributes;
 - (void)setAttributes:(NSDictionary *)attrs;
 
-- (int)acceptXMLElement:(NSString *)element;
+- (SdefParserVersion)acceptXMLElement:(NSString *)element attributes:(NSDictionary *)attrs;
 
 #pragma mark Generator
 - (NSString *)xmlElementName;
@@ -36,7 +36,7 @@
 @interface SdefSynonym (SdefXMLManager)
 #pragma mark Parser
 - (void)setAttributes:(NSDictionary *)attrs;
-- (int)acceptXMLElement:(NSString *)element;
+- (SdefParserVersion)acceptXMLElement:(NSString *)element attributes:(NSDictionary *)attrs;
 
 #pragma mark Generator
 - (SdefXMLNode *)xmlNodeForVersion:(SdefVersion)version;

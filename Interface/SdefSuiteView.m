@@ -139,7 +139,7 @@
 
 - (void)setObject:(SdefObject *)anObject {
   [super setObject:anObject];
-  sd_idx = -1;
+  sd_idx = NSNotFound;
 }
 
 - (void)selectObject:(SdefObject*)anObject {

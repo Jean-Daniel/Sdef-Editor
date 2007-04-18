@@ -26,7 +26,7 @@
       [node setComments:[self comments]];
     /* Hidden */
     if ([self isHidden]) {
-      if (kSdefTigerVersion == version)
+      if (version >= kSdefTigerVersion)
         [node setAttribute:@"yes" forKey:@"hidden"];
       else
         [node setAttribute:@"hidden" forKey:@"hidden"];
@@ -77,7 +77,7 @@
   }
 }
 
-- (int)acceptXMLElement:(NSString *)element {
+- (SdefParserVersion)acceptXMLElement:(NSString *)element attributes:(NSDictionary *)attrs {
   return kSdefParserUnknownVersion;
 }
 
@@ -92,7 +92,7 @@
   
   if (kSdefPantherVersion == version) {
     return [super xmlNodeForVersion:version];
-  } else if (kSdefTigerVersion == version) {
+  } else if (version >= kSdefTigerVersion) {
     SdefXMLNode *list = [[SdefXMLNode alloc] initWithElementName:nil];
     [list setList:YES];
     SdefObject *child = nil;
@@ -117,7 +117,7 @@
   /* Do nothing */
 }
 
-- (int)acceptXMLElement:(NSString *)element {
+- (SdefParserVersion)acceptXMLElement:(NSString *)element attributes:(NSDictionary *)attrs {
   return kSdefParserPantherVersion;
 }
 

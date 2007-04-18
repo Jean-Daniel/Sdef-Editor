@@ -88,7 +88,7 @@ NSUInteger SdefXMLAccessorFlagFromString(NSString *str) {
   }
 }
 
-- (int)acceptXMLElement:(NSString *)element {
+- (SdefParserVersion)acceptXMLElement:(NSString *)element attributes:(NSDictionary *)attrs {
   SEL cmd = @selector(isEqualToString:);
   EqualIMP isEqual = (EqualIMP)[element methodForSelector:cmd];
   NSAssert(isEqual, @"Missing isEqualToStringMethod");
@@ -96,9 +96,10 @@ NSUInteger SdefXMLAccessorFlagFromString(NSString *str) {
   /* If a single type => Tiger */
   if (isEqual(element, cmd, @"type") ||
       isEqual(element, cmd, @"element") ||
-      isEqual(element, cmd, @"property") ||
-      isEqual(element, cmd, @"responds-to")) {
-    return kSdefParserTigerVersion;
+      isEqual(element, cmd, @"property")) {
+    return kSdefParserTigerVersion | kSdefParserLeopardVersion;
+  } else if (isEqual(element, cmd, @"responds-to")) {
+    return [attrs objectForKey:@"command"] ? kSdefParserLeopardVersion : kSdefParserTigerVersion;
   } else /* If a collection => Panther */
     if (isEqual(element, cmd, @"elements") || 
         isEqual(element, cmd, @"properties") || 
@@ -106,7 +107,7 @@ NSUInteger SdefXMLAccessorFlagFromString(NSString *str) {
         isEqual(element, cmd, @"responds-to-events")) {
       return kSdefParserPantherVersion;
     }
-  return kSdefParserBothVersion;
+  return kSdefParserAllVersions;
 }
 
 @end
@@ -136,8 +137,8 @@ NSUInteger SdefXMLAccessorFlagFromString(NSString *str) {
   [self setAccess:SdefXMLAccessFlagFromString([attrs objectForKey:@"access"])];
 }
 
-- (int)acceptXMLElement:(NSString *)element {
-  return kSdefParserBothVersion;
+- (SdefParserVersion)acceptXMLElement:(NSString *)element attributes:(NSDictionary *)attrs {
+  return kSdefParserAllVersions;
 }
 
 @end
@@ -179,8 +180,8 @@ NSUInteger SdefXMLAccessorFlagFromString(NSString *str) {
   [self setAccess:SdefXMLAccessFlagFromString([attrs objectForKey:@"access"])];
 }
 
-- (int)acceptXMLElement:(NSString *)element {
-  return kSdefParserBothVersion;
+- (SdefParserVersion)acceptXMLElement:(NSString *)element attributes:(NSDictionary *)attrs {
+  return kSdefParserAllVersions;
 }
 
 @end
@@ -195,7 +196,7 @@ NSUInteger SdefXMLAccessorFlagFromString(NSString *str) {
     if (nil != attr) [node setAttribute:attr forKey:@"access"];
     
     if ([self isNotInProperties]) {
-      if (kSdefTigerVersion == version) {
+      if (version >= kSdefTigerVersion) {
         [node setAttribute:@"no" forKey:@"in-properties"];
       } else {
         [node setAttribute:@"not-in-properties" forKey:@"not-in-properties"];
@@ -220,8 +221,8 @@ NSUInteger SdefXMLAccessorFlagFromString(NSString *str) {
   }
 }
 
-- (int)acceptXMLElement:(NSString *)element {
-  return kSdefParserBothVersion;
+- (SdefParserVersion)acceptXMLElement:(NSString *)element attributes:(NSDictionary *)attrs {
+  return kSdefParserAllVersions;
 }
 
 @end
@@ -233,7 +234,10 @@ NSUInteger SdefXMLAccessorFlagFromString(NSString *str) {
 - (SdefXMLNode *)xmlNodeForVersion:(SdefVersion)version {
   id node = nil;
   if ([self name] && (node = [super xmlNodeForVersion:version])) {
-    [node setAttribute:[[self name] stringByEscapingEntities:nil] forKey:@"name"];
+    NSString *key = @"name";
+    if (version >= kSdefLeopardVersion)
+      key = @"command";
+    [node setAttribute:[[self name] stringByEscapingEntities:nil] forKey:key];
   }
   return node;
 }
@@ -243,8 +247,16 @@ NSUInteger SdefXMLAccessorFlagFromString(NSString *str) {
 }
 
 #pragma mark Parsing
-- (int)acceptXMLElement:(NSString *)element {
-  return kSdefParserBothVersion;
+- (SdefParserVersion)acceptXMLElement:(NSString *)element attributes:(NSDictionary *)attrs {
+  return kSdefParserAllVersions;
+}
+
+- (void)setAttributes:(NSDictionary *)attrs {
+  [super setAttributes:attrs];
+  
+  NSString *cmd = [attrs objectForKey:@"command"];
+  if (cmd)
+    [super setName:cmd];
 }
 
 @end

@@ -18,8 +18,11 @@
 
 @implementation SdefTigerParser
 
-- (int)parserVersion {
+- (SdefParserVersion)parserVersion {
   return kSdefParserTigerVersion;
+}
+- (SdefParserVersion)supportedVersions {
+  return kSdefParserTigerVersion | kSdefParserLeopardVersion;
 }
 
 #pragma mark Collections

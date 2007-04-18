@@ -15,7 +15,10 @@
 
 @implementation SdefPantherParser
 
-- (int)parserVersion {
+- (SdefParserVersion)parserVersion {
+  return kSdefParserPantherVersion;
+}
+- (SdefParserVersion)supportedVersions {
   return kSdefParserPantherVersion;
 }
 

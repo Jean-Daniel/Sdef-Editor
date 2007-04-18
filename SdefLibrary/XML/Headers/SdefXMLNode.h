@@ -11,6 +11,7 @@
 @interface SdefXMLNode : SKTreeNode {
   BOOL sd_list;
   BOOL sd_empty;
+  BOOL sd_cddata;
   NSString *sd_name;
   NSMutableArray *sd_attrKeys, *sd_attrValues;
   
@@ -26,6 +27,9 @@
 
 - (BOOL)isEmpty;
 - (void)setEmpty:(BOOL)flag;
+
+- (BOOL)isCDData;
+- (void)setCDData:(BOOL)flag;
 
 - (NSString *)elementName;
 - (void)setElementName:(NSString *)aName;

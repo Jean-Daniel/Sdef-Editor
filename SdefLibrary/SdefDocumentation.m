@@ -67,6 +67,7 @@
 - (void)setHtml:(BOOL)flag {
   flag = flag ? 1 : 0;
   if (flag != sd_soFlags.reserved) {
+    [[[self undoManager] prepareWithInvocationTarget:self] setHtml:sd_soFlags.reserved];
     /* Undo */
     sd_soFlags.reserved = flag;
   }
@@ -78,6 +79,7 @@
 
 - (void)setContent:(NSString *)newContent {
   if (sd_content != newContent) {
+    [[self undoManager] registerUndoWithTarget:self selector:_cmd object:sd_content];
     [sd_content release];
     sd_content = [newContent retain];
   }

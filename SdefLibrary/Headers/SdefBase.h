@@ -39,6 +39,7 @@ typedef OSType SdefObjectType;
 enum {
   kSdefPantherVersion,
   kSdefTigerVersion,
+  kSdefLeopardVersion,
 };
 typedef NSInteger SdefVersion;
 

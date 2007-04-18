@@ -62,6 +62,13 @@
   }
 }
 
+- (BOOL)isCDData {
+  return sd_cddata;
+}
+- (void)setCDData:(BOOL)flag {
+  sd_cddata = flag;
+}
+
 - (NSString *)elementName {
   return sd_name;
 }

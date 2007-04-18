@@ -108,11 +108,11 @@
 #pragma mark -
 @implementation SdefTypedObject (SdefXMLManager)
 #pragma mark XML Generation
-- (int)acceptXMLElement:(NSString *)element {
+- (SdefParserVersion)acceptXMLElement:(NSString *)element attributes:(NSDictionary *)attrs {
   if ([element isEqualToString:@"type"])
-    return kSdefParserTigerVersion;
+    return kSdefParserTigerVersion | kSdefParserLeopardVersion;
   else
-    return kSdefParserBothVersion;
+    return kSdefParserAllVersions;
 }
 
 - (SdefXMLNode *)xmlNodeForVersion:(SdefVersion)version {

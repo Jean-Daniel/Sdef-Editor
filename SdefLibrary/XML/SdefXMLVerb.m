@@ -44,8 +44,8 @@
 
 #pragma mark -
 #pragma mark Parsing
-- (int)acceptXMLElement:(NSString *)element {
-  return kSdefParserBothVersion;
+- (SdefParserVersion)acceptXMLElement:(NSString *)element attributes:(NSDictionary *)attrs {
+  return kSdefParserAllVersions;
 }
 
 @end
@@ -57,7 +57,7 @@
   if ([self hasType] && (node = [super xmlNodeForVersion:version])) {
     [node removeAttributeForKey:@"name"];
     if ([self isOptional]) {
-      if (kSdefTigerVersion == version) {
+      if (version >= kSdefTigerVersion) {
         [node setAttribute:@"yes" forKey:@"optional"];
       } else {
         [node setAttribute:@"optional" forKey:@"optional"];
@@ -82,8 +82,8 @@
   }
 }
 
-- (int)acceptXMLElement:(NSString *)element {
-  return kSdefParserBothVersion;
+- (SdefParserVersion)acceptXMLElement:(NSString *)element attributes:(NSDictionary *)attrs {
+  return kSdefParserAllVersions;
 }
 
 @end
@@ -94,7 +94,7 @@
   id node;
   if (node = [super xmlNodeForVersion:version]) {
     if ([self isOptional]) {
-      if (kSdefTigerVersion == version) {
+      if (version >= kSdefTigerVersion) {
         [node setAttribute:@"yes" forKey:@"optional"];
       } else {
         [node setAttribute:@"optional" forKey:@"optional"];
@@ -142,8 +142,8 @@
   [super setAttributes:attrs];
 }
 
-- (int)acceptXMLElement:(NSString *)element {
-  return kSdefParserBothVersion;
+- (SdefParserVersion)acceptXMLElement:(NSString *)element attributes:(NSDictionary *)attrs {
+  return kSdefParserAllVersions;
 }
 
 @end

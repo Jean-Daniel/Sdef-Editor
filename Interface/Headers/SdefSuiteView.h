@@ -17,7 +17,7 @@
   IBOutlet NSArrayController *types;
   IBOutlet NSArrayController *classes;
 @private
-  int sd_idx;
+  NSUInteger sd_idx;
   NSMenu *sd_typeMenu;
 }
 

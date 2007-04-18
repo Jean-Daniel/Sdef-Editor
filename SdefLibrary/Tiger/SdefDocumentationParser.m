@@ -137,10 +137,12 @@
   }
 }
 
-// this reports a CDATA block to the delegate as an NSData.
-- (void)parser:(CFXMLParserRef)parser foundCDATA:(NSData *)CDATABlock {
-  ShadowTrace();
+// this reports a CDATA block to the delegate.
+- (void)parser:(CFXMLParserRef)parser foundCDATA:(NSString *)CDATABlock {
   if (sd_html > 0) {
+    [sd_content appendString:CDATABlock];
+  } else {
+    WLog(@"Encounter a CDData block outside html element");
   }
 }
 
@@ -171,7 +173,7 @@
       [self parser:parser foundCharacters:(id)CFXMLNodeGetString(node)];
       break;
     case kCFXMLNodeTypeCDATASection:
-      DLog(@"Data Type ID: kCFXMLDataTypeCDATASection (%@)", CFXMLNodeGetString(node));
+      [self parser:parser foundCDATA:(id)CFXMLNodeGetString(node)];
       break;
     case kCFXMLNodeTypeEntityReference:
       [self parser:parser foundEntity:(id)CFXMLNodeGetString(node)];

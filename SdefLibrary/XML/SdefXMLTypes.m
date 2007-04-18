@@ -38,8 +38,8 @@
   }
 }
 
-- (int)acceptXMLElement:(NSString *)element {
-  return kSdefParserBothVersion;
+- (SdefParserVersion)acceptXMLElement:(NSString *)element attributes:(NSDictionary *)attrs {
+  return kSdefParserAllVersions;
 }
 
 @end
@@ -52,8 +52,8 @@
 }
 
 #pragma mark Parsing
-- (int)acceptXMLElement:(NSString *)element {
-  return kSdefParserBothVersion;
+- (SdefParserVersion)acceptXMLElement:(NSString *)element attributes:(NSDictionary *)attrs {
+  return kSdefParserAllVersions;
 }
 
 @end
@@ -62,7 +62,7 @@
 @implementation SdefValue (SdefXMLManager)
 #pragma mark XML Generation
 - (SdefXMLNode *)xmlNodeForVersion:(SdefVersion)version {
-  return (kSdefTigerVersion == version) ? [super xmlNodeForVersion:version] : nil;
+  return (version >= kSdefTigerVersion) ? [super xmlNodeForVersion:version] : nil;
 }
 
 - (NSString *)xmlElementName {
@@ -70,8 +70,8 @@
 }
 
 #pragma mark Parsing
-- (int)acceptXMLElement:(NSString *)element {
-  return kSdefParserBothVersion;
+- (SdefParserVersion)acceptXMLElement:(NSString *)element attributes:(NSDictionary *)attrs {
+  return kSdefParserAllVersions;
 }
 
 @end
@@ -80,7 +80,7 @@
 @implementation SdefRecord (SdefXMLManager)
 #pragma mark XML Generation
 - (SdefXMLNode *)xmlNodeForVersion:(SdefVersion)version {
-  return (kSdefTigerVersion == version) ? [super xmlNodeForVersion:version] : nil;
+  return (version >= kSdefTigerVersion) ? [super xmlNodeForVersion:version] : nil;
 }
 
 - (NSString *)xmlElementName {
@@ -88,8 +88,8 @@
 }
 
 #pragma mark Parsing
-- (int)acceptXMLElement:(NSString *)element {
-  return kSdefParserBothVersion;
+- (SdefParserVersion)acceptXMLElement:(NSString *)element attributes:(NSDictionary *)attrs {
+  return kSdefParserAllVersions;
 }
 
 @end

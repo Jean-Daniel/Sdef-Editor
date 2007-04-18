@@ -85,6 +85,13 @@ NSString *SdefEditorComment() {
   return tree;
 }
 
+- (CFXMLTreeRef)insertCDData:(NSString *)str {
+  CFXMLNodeRef node = CFXMLNodeCreate(kCFAllocatorDefault, kCFXMLNodeTypeCDATASection, (CFStringRef)str, NULL, kCFXMLNodeCurrentVersion);
+  CFXMLTreeRef tree = [self appendNode:node];
+  CFRelease(node);
+  return tree;
+}
+
 - (CFXMLTreeRef)insertTextNode:(NSString *)str {
   CFXMLNodeRef node = CFXMLNodeCreate(kCFAllocatorDefault, kCFXMLNodeTypeText, (CFStringRef)str, NULL, kCFXMLNodeCurrentVersion);
   CFXMLTreeRef tree  = [self appendNode:node];
@@ -178,7 +185,11 @@ NSString *SdefEditorComment() {
                     isEmpty:[node isEmpty]];
     /* Write element content if needed */
     if ([node content]) {
-      [self insertTextNode:[node content]];
+      if ([node isCDData]) {
+        [self insertCDData:[node content]];
+      } else {
+        [self insertTextNode:[node content]];
+      }
     }
   }
   /* Append elements children if needed */

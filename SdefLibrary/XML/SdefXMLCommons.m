@@ -26,7 +26,7 @@
     if (attr) [node setAttribute:[attr stringByEscapingEntities:nil] forKey:@"name"];
     /* Hidden */
     if ([self isHidden]) {
-      if (kSdefTigerVersion == version)
+      if (version >= kSdefTigerVersion)
         [node setAttribute:@"yes" forKey:@"hidden"];
       else
         [node setAttribute:@"hidden" forKey:@"hidden"];
@@ -45,8 +45,8 @@
 }
 
 #pragma mark Parsing
-- (int)acceptXMLElement:(NSString *)element {
-  return kSdefParserBothVersion;
+- (SdefParserVersion)acceptXMLElement:(NSString *)element attributes:(NSDictionary *)attrs {
+  return kSdefParserAllVersions;
 }
 
 - (void)setAttributes:(NSDictionary *)attrs {
@@ -65,7 +65,7 @@
 
 #pragma mark XML Generation
 - (SdefXMLNode *)xmlNodeForVersion:(SdefVersion)version {
-  if (kSdefTigerVersion == version) {
+  if (version >= kSdefTigerVersion) {
     if ([self name]) {
       SdefXMLNode *typeNode = [[SdefXMLNode alloc] initWithElementName:@"type"];
       [typeNode setAttribute:[[self name] stringByEscapingEntities:nil] forKey:@"type"];
@@ -87,9 +87,11 @@
   id node = nil;
   if (sd_content != nil) {
     if (node = [super xmlNodeForVersion:version]) {
-      if (kSdefTigerVersion == version && [self isHtml]) {
+      if (version >= kSdefTigerVersion && [self isHtml]) {
         SdefXMLNode *html = [[SdefXMLNode alloc] initWithElementName:@"html"];
         [html setContent:sd_content];
+        if (version >= kSdefLeopardVersion)
+          [html setCDData:YES];
         [node appendChild:html];
         [html release];
       } else {
@@ -105,8 +107,8 @@
 }
 
 #pragma mark Parsing
-- (int)acceptXMLElement:(NSString *)element {
-  return [element isEqualToString:@"html"] ? kSdefParserTigerVersion : kSdefParserBothVersion;
+- (SdefParserVersion)acceptXMLElement:(NSString *)element attributes:(NSDictionary *)attrs {
+  return [element isEqualToString:@"html"] ? kSdefParserTigerVersion | kSdefParserLeopardVersion : kSdefParserAllVersions;
 }
 
 @end
@@ -157,8 +159,8 @@
   [self setSdClass:[[attrs objectForKey:@"class"] stringByUnescapingEntities:nil]];
 }
 
-- (int)acceptXMLElement:(NSString *)element {
-  return kSdefParserBothVersion;
+- (SdefParserVersion)acceptXMLElement:(NSString *)element attributes:(NSDictionary *)attrs {
+  return kSdefParserAllVersions;
 }
 
 @end

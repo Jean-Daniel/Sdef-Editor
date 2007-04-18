@@ -126,11 +126,15 @@ bail:
       }
     }
     if(noErr == err) {
+#if __LP64__
       ResourceCount count;
+#else
+      short count;
+#endif
       /* Standard Infos */
       count = Count1Resources(kAEUserTerminology);
       sd_aetes = [[NSMutableArray alloc] initWithCapacity:count];
-      for (ResourceCount idx = 1; idx <= count; idx++) {
+      for (NSInteger idx = 1; idx <= count; idx++) {
         Handle aeteH = Get1IndResource(kAEUserTerminology, idx);
         NSData *aete = [[NSData alloc] initWithHandle:aeteH];
         if (aete) {
@@ -140,7 +144,7 @@ bail:
       }
       /* Extensions */
       count = Count1Resources(kAETerminologyExtension);
-      for (ResourceCount idx = 1; idx <= count; idx++) {
+      for (NSInteger idx = 1; idx <= count; idx++) {
         Handle aeteH = Get1IndResource(kAETerminologyExtension, idx);
         NSData *aete = [[NSData alloc] initWithHandle:aeteH];
         if (aete) {

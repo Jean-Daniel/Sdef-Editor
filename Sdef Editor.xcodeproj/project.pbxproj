@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1B751C340BD658F7006D25B8 /* SdefLeopardParser.h in Headers */ = {isa = PBXBuildFile; fileRef = 1B751C330BD658F7006D25B8 /* SdefLeopardParser.h */; };
+		1B751C3A0BD65900006D25B8 /* SdefLeopardParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 1B751C390BD65900006D25B8 /* SdefLeopardParser.m */; };
 		656F9B5809E6A188008A0059 /* SKFunctions.m in Sources */ = {isa = PBXBuildFile; fileRef = 656F9B5409E6A188008A0059 /* SKFunctions.m */; };
 		656F9B5909E6A188008A0059 /* SKCFContext.m in Sources */ = {isa = PBXBuildFile; fileRef = 656F9B5509E6A188008A0059 /* SKCFContext.m */; };
 		656F9B5B09E6A188008A0059 /* SKExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 656F9B5709E6A188008A0059 /* SKExtensions.m */; };
@@ -291,6 +293,8 @@
 /* Begin PBXFileReference section */
 		089C1660FE840EACC02AAC07 /* English */ = {isa = PBXFileReference; fileEncoding = 10; lastKnownFileType = text.plist.strings; name = English; path = English.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		1058C7A7FEA54F5311CA2CBB /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = /System/Library/Frameworks/Cocoa.framework; sourceTree = "<absolute>"; };
+		1B751C330BD658F7006D25B8 /* SdefLeopardParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SdefLeopardParser.h; sourceTree = "<group>"; };
+		1B751C390BD65900006D25B8 /* SdefLeopardParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SdefLeopardParser.m; sourceTree = "<group>"; };
 		2A37F4B5FDCFA73011CA2CEA /* English */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = English; path = English.lproj/SdefDocument.nib; sourceTree = "<group>"; };
 		2A37F4B7FDCFA73011CA2CEA /* English */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = English; path = English.lproj/MainMenu.nib; sourceTree = "<group>"; };
 		2A37F4C4FDCFA73011CA2CEA /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = /System/Library/Frameworks/AppKit.framework; sourceTree = "<absolute>"; };
@@ -664,6 +668,7 @@
 				98BDA84A082740440055FC80 /* SdefXMLParser.m */,
 				98BDA83C08273F8F0055FC80 /* SdefTigerParser.m */,
 				98BDA91908274FA90055FC80 /* SdefPantherParser.m */,
+				1B751C390BD65900006D25B8 /* SdefLeopardParser.m */,
 				980AC4090832AB66002EF5F5 /* SdefDocumentationParser.m */,
 			);
 			name = Parser;
@@ -676,6 +681,7 @@
 				98BDA848082740360055FC80 /* SdefXMLParser.h */,
 				98BDA83E08273F9C0055FC80 /* SdefTigerParser.h */,
 				98BDA91308274F7E0055FC80 /* SdefPantherParser.h */,
+				1B751C330BD658F7006D25B8 /* SdefLeopardParser.h */,
 			);
 			path = Headers;
 			sourceTree = "<group>";
@@ -1253,6 +1259,7 @@
 				98230E5D0AFE299B00675226 /* SKDisclosurePanel.h in Headers */,
 				98230E5F0AFE299B00675226 /* SKImageAndTextCell.h in Headers */,
 				9818EBCC0BD56D0D0079867A /* AESendThreadSafe.h in Headers */,
+				1B751C340BD658F7006D25B8 /* SdefLeopardParser.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1287,12 +1294,10 @@
 		2A37F4A9FDCFA73011CA2CEA /* Project object */ = {
 			isa = PBXProject;
 			buildConfigurationList = 98A7CBEC0855010F000D862B /* Build configuration list for PBXProject "Sdef Editor" */;
-			compatibilityVersion = "Xcode 2.4";
 			hasScannedForEncodings = 1;
 			mainGroup = 2A37F4AAFDCFA73011CA2CEA /* SDef Editor */;
 			projectDirPath = "";
 			projectRoot = "";
-			shouldCheckCompatibility = 1;
 			targets = (
 				8D15AC270486D014006FF6A4 /* Sdef Editor */,
 			);
@@ -1472,6 +1477,7 @@
 				98230E670AFE299B00675226 /* SKDisclosureView.m in Sources */,
 				98230E690AFE299B00675226 /* SKImageAndTextCell.m in Sources */,
 				9818EBCE0BD56D290079867A /* AESendThreadSafe.c in Sources */,
+				1B751C3A0BD65900006D25B8 /* SdefLeopardParser.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

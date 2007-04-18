@@ -32,8 +32,8 @@
   [self setName:[[attrs objectForKey:@"title"] stringByUnescapingEntities:nil]];
 }
 
-- (int)acceptXMLElement:(NSString *)element {
-  return kSdefParserBothVersion;
+- (SdefParserVersion)acceptXMLElement:(NSString *)element attributes:(NSDictionary *)attrs {
+  return kSdefParserAllVersions;
 }
 
 
