@@ -35,10 +35,11 @@
       isEqual(element, cmd, @"value-type") || 
       isEqual(element, cmd, @"record-type") || 
       isEqual(element, cmd, @"class") || 
-      isEqual(element, cmd, @"class-extension") || 
       isEqual(element, cmd, @"command") || 
       isEqual(element, cmd, @"event")) {
     return kSdefParserTigerVersion | kSdefParserLeopardVersion;
+  } else if (isEqual(element, cmd, @"class-extension")) {
+    return kSdefParserLeopardVersion;
   } else /* If a collection => Panther */
   if (isEqual(element, cmd, @"types") || 
       isEqual(element, cmd, @"classes") || 

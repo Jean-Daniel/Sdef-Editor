@@ -44,7 +44,7 @@ NSUInteger SdefXMLAccessorFlagFromString(NSString *str) {
 @implementation SdefClass (SdefXMLManager)
 #pragma mark XML Generation
 - (SdefXMLNode *)xmlNodeForVersion:(SdefVersion)version {
-  SdefXMLNode *node;
+  SdefXMLNode *node = nil;
   if ([self isExtension]) {
     if ([self inherits]) {
       if (node = [super xmlNodeForVersion:version]) {
