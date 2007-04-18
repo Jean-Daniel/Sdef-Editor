@@ -12,8 +12,9 @@
 #import "ASDictionaryObject.h"
 #import "ASDictionaryStream.h"
 
-#pragma mark -
+#if !__LP64__
 
+#pragma mark -
 NSDictionary *AppleScriptDictionaryFromSdefDictionary(SdefDictionary *sdef) {
   NSMutableArray *suites = [[NSMutableArray alloc] init];
   NSDictionary *asdict = [[NSDictionary alloc] initWithObjectsAndKeys:
@@ -34,3 +35,4 @@ NSDictionary *AppleScriptDictionaryFromSdefDictionary(SdefDictionary *sdef) {
   return [asdict autorelease];
 }
 
+#endif /* LP64 */

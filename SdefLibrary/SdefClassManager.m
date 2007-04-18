@@ -418,7 +418,11 @@
     case typeWildCard:
       return @"any";
     case typeAlias:
+#if __LP64__
+    case 'fss ':
+#else
     case typeFSS:
+#endif
     case typeFSRef:
     case typeFileURL:
     case 'file':

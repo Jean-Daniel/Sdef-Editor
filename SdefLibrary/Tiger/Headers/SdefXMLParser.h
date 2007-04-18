@@ -21,11 +21,11 @@ typedef enum {
   kSdefParserDeleteNode,
 } SdefParserOperation;
 
-extern NSString *SdefXMLAccessStringFromFlag(unsigned flag);
-extern unsigned SdefXMLAccessFlagFromString(NSString *str);
+extern NSString *SdefXMLAccessStringFromFlag(NSUInteger flag);
+extern NSUInteger SdefXMLAccessFlagFromString(NSString *str);
 
-extern unsigned SdefXMLAccessorFlagFromString(NSString *str);
-extern NSArray *SdefXMLAccessorStringsFromFlag(unsigned flag);
+extern NSUInteger SdefXMLAccessorFlagFromString(NSString *str);
+extern NSArray *SdefXMLAccessorStringsFromFlag(NSUInteger flag);
 
 @class SdefDocumentationParser;
 @class SdefObject, SdefDictionary;
@@ -38,12 +38,12 @@ extern NSArray *SdefXMLAccessorStringsFromFlag(unsigned flag);
   NSMutableArray *sd_comments;
   SdefDictionary *sd_dictionary;
 }
-- (int)parserVersion;
+- (NSInteger)parserVersion;
 
 - (id)delegate;
 - (void)setDelegate:(id)delegate;
 
-- (int)line;
+- (NSInteger)line;
 - (NSString *)error;
 - (SdefDictionary *)document;
 - (BOOL)parseData:(NSData *)document;
@@ -71,7 +71,7 @@ extern NSArray *SdefXMLAccessorStringsFromFlag(unsigned flag);
 
 @class SdefDocumentation;
 @interface SdefDocumentationParser : NSObject {
-  unsigned short sd_html;
+  NSInteger sd_html;
   SdefXMLParser *sd_parent;
   SdefDocumentation *sd_doc;
   NSMutableString *sd_content;

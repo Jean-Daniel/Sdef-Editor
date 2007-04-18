@@ -152,8 +152,7 @@ static NSArray *ASKStandardsSuites() {
     if (suitePath) {
       SdefDictionary *dico = SdefLoadDictionary(suitePath, nil, nil);
       if (dico) {
-        unsigned idx;
-        for (idx=0; idx<[dico count]; idx++) {
+        for (NSUInteger idx = 0; idx < [dico count]; idx++) {
           id sdefSuite = [dico childAtIndex:idx];
           [manager addSuite:sdefSuite];
           [sd_suites addObject:[sdefSuite cocoaName]];
@@ -295,7 +294,7 @@ static NSArray *ASKStandardsSuites() {
 #pragma mark Statics Methods Implementation
 static NSString *DecomposeCocoaName(NSString *type, NSString **suite) {
   *suite = NULL;
-  unsigned idx = [type rangeOfString:@"." options:NSLiteralSearch].location;
+  NSUInteger idx = [type rangeOfString:@"." options:NSLiteralSearch].location;
   if (suite)
     *suite = (idx != NSNotFound) ? [type substringToIndex:idx] : nil;
   return (idx != NSNotFound) ? [type substringFromIndex:idx+1] : type;
@@ -303,8 +302,8 @@ static NSString *DecomposeCocoaName(NSString *type, NSString **suite) {
 
 /* Extract string between "<" and ">" and try to decompose it */
 static NSString *DecomposeCocoaType(NSString *type, NSString **suite) {
-  unsigned start = [type rangeOfString:@"<" options:NSLiteralSearch].location;
-  unsigned end = [type rangeOfString:@">" options:NSLiteralSearch].location;
+  NSUInteger start = [type rangeOfString:@"<" options:NSLiteralSearch].location;
+  NSUInteger end = [type rangeOfString:@">" options:NSLiteralSearch].location;
   if (NSNotFound != start || NSNotFound != end) {
     type = [type substringWithRange:NSMakeRange(start+1, end - start - 1)];
   }

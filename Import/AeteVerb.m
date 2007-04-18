@@ -12,8 +12,8 @@
 
 @implementation SdefVerb (AeteResource)
 
-- (UInt32)parseData:(Byte *)data {
-  unsigned length;
+- (NSUInteger)parseData:(Byte *)data {
+  NSUInteger length;
   BytePtr bytes = data;
   StringPtr pStr = (StringPtr)bytes;
   length = StrLength(pStr);
@@ -30,7 +30,7 @@
   if (str) CFRelease(str);
   
   /* Alignement */
-  bytes += (long)bytes % 2;
+  bytes += (intptr_t)bytes % 2;
   
   /* event class */
   OSType *identifier = (UInt32 *)bytes;
@@ -57,7 +57,7 @@
   if (str) CFRelease(str);
   
   /* Alignement */
-  bytes += (long)bytes % 2;
+  bytes += (intptr_t)bytes % 2;
   
   /* Result flags */
   UInt16 *val = (UInt16 *)bytes;
@@ -81,7 +81,7 @@
   if (str) CFRelease(str);
   
   /* Alignement */
-  bytes += (long)bytes % 2;
+  bytes += (intptr_t)bytes % 2;
   
   /* Result flags */
   val = (UInt16 *)bytes;
@@ -96,8 +96,7 @@
   val = (UInt16 *)bytes;
   bytes += 2;
   if (*val > 0) {
-    unsigned idx = 0;
-    for (idx=0; idx<*val; idx++) {
+    for (NSUInteger idx = 0; idx < *val; idx++) {
       SdefParameter *param = [[SdefParameter allocWithZone:[self zone]] init];
       bytes += [param parseData:bytes];
       [self appendChild:param];
@@ -105,8 +104,8 @@
     }
   }
 
-  long total = (long)bytes;
-  total -= (long)data;
+  NSUInteger total = (NSUInteger)bytes;
+  total -= (NSUInteger)data;
   return total;
 }
 
@@ -114,8 +113,8 @@
 
 @implementation SdefParameter (AeteResource)
 
-- (UInt32)parseData:(Byte *)data {
-  unsigned length;
+- (NSUInteger)parseData:(Byte *)data {
+  NSUInteger length;
   BytePtr bytes = data;
   StringPtr pStr = (StringPtr)bytes;
   length = StrLength(pStr);
@@ -125,7 +124,7 @@
   if (str) CFRelease(str);
   
   /* Alignement */
-  bytes += (long)bytes % 2;
+  bytes += (intptr_t)bytes % 2;
   
   /* Keyword */
   OSType *identifier = (UInt32 *)bytes;
@@ -146,7 +145,7 @@
   if (str) CFRelease(str);
   
   /* Alignement */
-  bytes += (long)bytes % 2;
+  bytes += (intptr_t)bytes % 2;
   
   /* Flags */
   UInt16 *val = (UInt16 *)bytes;
@@ -158,8 +157,8 @@
   }
   bytes += 2;
   
-  long total = (long)bytes;
-  total -= (long)data;
+  NSUInteger total = (NSUInteger)bytes;
+  total -= (NSUInteger)data;
   return total;
 }
 

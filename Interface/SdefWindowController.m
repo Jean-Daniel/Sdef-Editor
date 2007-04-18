@@ -204,7 +204,7 @@ static inline BOOL SdefEditorExistsForItem(SdefObject *item) {
   }
   if (item && ([item objectType] != kSdefUndefinedType)) {
     NSString *str = SKStringForOSType([item objectType]);
-    unsigned idx = [inspector indexOfTabViewItemWithIdentifier:str];
+    NSUInteger idx = [inspector indexOfTabViewItemWithIdentifier:str];
     NSAssert1(idx != NSNotFound, @"Unable to find tab item for identifier \"%@\"", str);
     /* Sould select else ctrl would not be created */
     if ([inspector tabViewItemAtIndex:idx] != [inspector selectedTabViewItem]) {
@@ -236,7 +236,7 @@ static inline BOOL SdefEditorExistsForItem(SdefObject *item) {
   SdefObject *item = [outlineView itemAtRow:[outlineView selectedRow]];
   if (item != [(SdefDocument *)[self document] dictionary] && [item isEditable] && [item isRemovable]) {
     SdefObject *parent = [item parent];
-    unsigned idx = [parent indexOfChild:item];
+    NSUInteger idx = [parent indexOfChild:item];
     [item remove];
     if (idx > 0) {
       [self setSelection:[parent childAtIndex:idx-1]];

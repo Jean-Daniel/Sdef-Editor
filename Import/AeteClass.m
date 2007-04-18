@@ -11,8 +11,8 @@
 
 @implementation SdefClass (AeteResource)
 
-- (UInt32)parseData:(Byte *)data {
-  unsigned length;
+- (NSUInteger)parseData:(Byte *)data {
+  NSInteger length;
   BytePtr bytes = data;
   
   StringPtr pStr = (StringPtr)bytes;
@@ -23,7 +23,7 @@
   if (str) CFRelease(str);
   
   /* Alignement */
-  bytes += (long)bytes % 2;
+  bytes += (intptr_t)bytes % 2;
   
   /* Identifier */
   OSType *identifier = (OSType *)bytes;
@@ -38,14 +38,13 @@
   if (str) CFRelease(str);
   
   /* Alignement */
-  bytes += (long)bytes % 2;
+  bytes += (intptr_t)bytes % 2;
   
   /* Properties */
   UInt16 *val = (UInt16 *)bytes;
   bytes += 2;
   if (*val > 0) {
-    unsigned idx = 0;
-    for (idx=0; idx<*val; idx++) {
+    for (NSUInteger idx = 0; idx < *val; idx++) {
       SdefProperty *prop = [[SdefProperty allocWithZone:[self zone]] init];
       bytes += [prop parseData:bytes];
       [[self properties] appendChild:prop];
@@ -56,8 +55,7 @@
   val = (UInt16 *)bytes;
   bytes += 2;
   if (*val > 0) {
-    unsigned idx = 0;
-    for (idx=0; idx<*val; idx++) {
+	for (NSInteger idx = 0; idx < *val; idx++) {
       SdefElement *elt = [[SdefElement allocWithZone:[self zone]] init];
       bytes += [elt parseData:bytes];
       [[self elements] appendChild:elt];
@@ -65,8 +63,8 @@
     }
   }
   
-  long total = (long)bytes;
-  total -= (long)data;
+  NSUInteger total = (NSUInteger)bytes;
+  total -= (NSUInteger)data;
   return total;
 }
 
@@ -75,8 +73,8 @@
 #pragma mark -
 @implementation SdefProperty (AeteResource)
 
-- (UInt32)parseData:(Byte *)data {
-  unsigned length;
+- (NSUInteger)parseData:(Byte *)data {
+  NSUInteger length;
   BytePtr bytes = data;
   
   StringPtr pStr = (StringPtr)bytes;
@@ -87,7 +85,7 @@
   if (str) CFRelease(str);
   
   /* Alignement */
-  bytes += (long)bytes % 2;
+  bytes += (intptr_t)bytes % 2;
   
   /* Identifier */
   OSType *identifier = (OSType *)bytes;
@@ -108,7 +106,7 @@
   if (str) CFRelease(str);
   
   /* Alignement */
-  bytes += (long)bytes % 2;
+  bytes += (intptr_t)bytes % 2;
   
   /* Result flags */
   UInt16 *val = (UInt16 *)bytes;
@@ -118,15 +116,15 @@
   if ((1 << kAEUTPlural) & *val) {
     [self setName:@"<Plural>"];
   }
-  unsigned access = kSdefAccessRead;
+  NSUInteger perm = kSdefAccessRead;
   if ((1 << kAEUTReadWrite) & *val) {
-    access |= kSdefAccessWrite;
+    perm |= kSdefAccessWrite;
   }
-  [self setAccess:access];
+  [self setAccess:perm];
   bytes += 2;
   
-  long total = (long)bytes;
-  total -= (long)data;
+  NSUInteger total = (NSUInteger)bytes;
+  total -= (NSUInteger)data;
   return total;
 }
 
@@ -135,7 +133,7 @@
 #pragma mark -
 @implementation SdefElement (AeteResource)
 
-- (UInt32)parseData:(Byte *)data {
+- (NSUInteger)parseData:(Byte *)data {
   BytePtr bytes = data;
   
   /* Type */
@@ -147,8 +145,7 @@
   UInt16 *val = (UInt16 *)bytes;
   bytes += 2;
   if (*val > 0) {
-    unsigned idx = 0;
-    for (idx=0; idx<*val; idx++) {
+    for (NSUInteger idx = 0; idx < *val; idx++) {
       identifier = (OSType *)bytes;
       switch (*identifier) {
         case formAbsolutePosition:
@@ -175,8 +172,8 @@
     }
   }
   
-  long total = (long)bytes;
-  total -= (long)data;
+  NSUInteger total = (NSUInteger)bytes;
+  total -= (NSUInteger)data;
   return total;
 }
 

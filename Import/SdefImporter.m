@@ -58,7 +58,7 @@
   return sd_warnings;
 }
 
-- (unsigned)suiteCount {
+- (NSUInteger)suiteCount {
   return [suites count];
 }
 

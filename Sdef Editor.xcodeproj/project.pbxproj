@@ -316,6 +316,8 @@
 		65EBDD500A3D47B200D266C4 /* SKUITreeNode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = SKUITreeNode.m; sourceTree = "<group>"; };
 		65EBDD520A3D47C100D266C4 /* SKExtendedTreeNode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = SKExtendedTreeNode.m; sourceTree = "<group>"; };
 		65EBDD540A3D47CC00D266C4 /* SKExtendedTreeNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = SKExtendedTreeNode.h; sourceTree = "<group>"; };
+		85B7BC3D0BD62B0F00632EE6 /* ShadowProfile.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = ShadowProfile.xcconfig; path = /Volumes/Tiger/Users/trognon/Projects/ShadowKit/Configurations/ShadowProfile.xcconfig; sourceTree = "<absolute>"; };
+		85DE3F520BD63E54006F9C8F /* ShadowMacros.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ShadowMacros.pch; path = /Volumes/Tiger/Users/trognon/Projects/ShadowKit/ShadowKit/ShadowMacros.pch; sourceTree = "<absolute>"; };
 		8D15AC360486D014006FF6A4 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = Info.plist; sourceTree = "<group>"; };
 		8D15AC370486D014006FF6A4 /* Sdef Editor.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Sdef Editor.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		9803414307ADC6B00052F203 /* ScriptSuiteIcon.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = ScriptSuiteIcon.icns; sourceTree = "<group>"; };
@@ -720,6 +722,7 @@
 			children = (
 				981B66B2093870CE0024C0D9 /* ShadowCommon.xcconfig */,
 				981B66B3093870CE0024C0D9 /* ShadowDebug.xcconfig */,
+				85B7BC3D0BD62B0F00632EE6 /* ShadowProfile.xcconfig */,
 				981B66B4093870CE0024C0D9 /* ShadowRelease.xcconfig */,
 				981B66B6093870CE0024C0D9 /* ShadowUniversal.xcconfig */,
 			);
@@ -811,6 +814,7 @@
 		98757FE3078856260038C05B /* ShadowKit */ = {
 			isa = PBXGroup;
 			children = (
+				85DE3F520BD63E54006F9C8F /* ShadowMacros.pch */,
 				98D3AD4E079D724400DDB6CE /* Base */,
 				98D3AD54079D728D00DDB6CE /* AppKit */,
 				98D3AD52079D727300DDB6CE /* Images */,
@@ -1283,9 +1287,12 @@
 		2A37F4A9FDCFA73011CA2CEA /* Project object */ = {
 			isa = PBXProject;
 			buildConfigurationList = 98A7CBEC0855010F000D862B /* Build configuration list for PBXProject "Sdef Editor" */;
+			compatibilityVersion = "Xcode 2.4";
 			hasScannedForEncodings = 1;
 			mainGroup = 2A37F4AAFDCFA73011CA2CEA /* SDef Editor */;
 			projectDirPath = "";
+			projectRoot = "";
+			shouldCheckCompatibility = 1;
 			targets = (
 				8D15AC270486D014006FF6A4 /* Sdef Editor */,
 			);
@@ -1634,6 +1641,23 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
+		85B7BC3A0BD62AED00632EE6 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 981B66B4093870CE0024C0D9 /* ShadowRelease.xcconfig */;
+			buildSettings = {
+			};
+			name = Release;
+		};
+		85B7BC3B0BD62AED00632EE6 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CURRENT_PROJECT_VERSION = 223;
+				HEADER_SEARCH_PATHS = "\"$(BUILD_DIR)\"";
+				INFOPLIST_FILE = Resources/Info.plist;
+				PRODUCT_NAME = "Sdef Editor";
+			};
+			name = Release;
+		};
 		9849B8A108B548BD0036A437 /* Universal Binary */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -1651,7 +1675,7 @@
 			};
 			name = "Universal Binary";
 		};
-		98A7CBE70855010F000D862B /* Development */ = {
+		98A7CBE70855010F000D862B /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CURRENT_PROJECT_VERSION = 223;
@@ -1659,9 +1683,9 @@
 				INFOPLIST_FILE = Resources/Info.plist;
 				PRODUCT_NAME = "Sdef Editor";
 			};
-			name = Development;
+			name = Debug;
 		};
-		98A7CBE80855010F000D862B /* Deployment */ = {
+		98A7CBE80855010F000D862B /* Profile */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CURRENT_PROJECT_VERSION = 223;
@@ -1669,21 +1693,21 @@
 				INFOPLIST_FILE = Resources/Info.plist;
 				PRODUCT_NAME = "Sdef Editor";
 			};
-			name = Deployment;
+			name = Profile;
 		};
-		98A7CBED0855010F000D862B /* Development */ = {
+		98A7CBED0855010F000D862B /* Debug */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 981B66B3093870CE0024C0D9 /* ShadowDebug.xcconfig */;
 			buildSettings = {
 			};
-			name = Development;
+			name = Debug;
 		};
-		98A7CBEE0855010F000D862B /* Deployment */ = {
+		98A7CBEE0855010F000D862B /* Profile */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 981B66B4093870CE0024C0D9 /* ShadowRelease.xcconfig */;
+			baseConfigurationReference = 85B7BC3D0BD62B0F00632EE6 /* ShadowProfile.xcconfig */;
 			buildSettings = {
 			};
-			name = Deployment;
+			name = Profile;
 		};
 /* End XCBuildConfiguration section */
 
@@ -1691,22 +1715,24 @@
 		98A7CBE60855010F000D862B /* Build configuration list for PBXNativeTarget "Sdef Editor" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				98A7CBE70855010F000D862B /* Development */,
-				98A7CBE80855010F000D862B /* Deployment */,
+				98A7CBE70855010F000D862B /* Debug */,
+				98A7CBE80855010F000D862B /* Profile */,
+				85B7BC3B0BD62AED00632EE6 /* Release */,
 				9849B8A108B548BD0036A437 /* Universal Binary */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Development;
+			defaultConfigurationName = Debug;
 		};
 		98A7CBEC0855010F000D862B /* Build configuration list for PBXProject "Sdef Editor" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				98A7CBED0855010F000D862B /* Development */,
-				98A7CBEE0855010F000D862B /* Deployment */,
+				98A7CBED0855010F000D862B /* Debug */,
+				98A7CBEE0855010F000D862B /* Profile */,
+				85B7BC3A0BD62AED00632EE6 /* Release */,
 				9849B8A208B548BD0036A437 /* Universal Binary */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Development;
+			defaultConfigurationName = Debug;
 		};
 /* End XCConfigurationList section */
 	};

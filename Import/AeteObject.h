@@ -12,7 +12,7 @@
 
 @interface SdefObject (AeteResource)
 
-- (UInt32)parseData:(Byte *)bytes;
+- (NSUInteger)parseData:(Byte *)bytes;
 
 @end
 

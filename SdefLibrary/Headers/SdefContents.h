@@ -22,12 +22,12 @@ description  %Text;        #IMPLIED
 */
 
 @interface SdefContents : SdefTypedObject <NSCopying, NSCoding> {
-  unsigned sd_access;
+  NSUInteger sd_access;
   SdefObject *sd_owner;
 }
 
-- (unsigned)access;
-- (void)setAccess:(unsigned)newAccess;
+- (NSUInteger)access;
+- (void)setAccess:(NSUInteger)newAccess;
 
 - (id)owner;
 - (void)setOwner:(SdefObject *)anObject ;

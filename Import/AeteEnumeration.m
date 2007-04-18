@@ -11,7 +11,7 @@
 
 @implementation SdefEnumeration (AeteResource)
 
-- (UInt32)parseData:(Byte *)data {
+- (NSUInteger)parseData:(Byte *)data {
   BytePtr bytes = data;
   
   /* Identifier */
@@ -24,8 +24,7 @@
   UInt16 *val = (UInt16 *)bytes;
   bytes += 2;
   if (*val > 0) {
-    unsigned idx = 0;
-    for (idx=0; idx<*val; idx++) {
+	for (NSUInteger idx = 0; idx < *val; idx++) {
       SdefEnumerator *enumerator = [[SdefEnumerator allocWithZone:[self zone]] init];
       bytes += [enumerator parseData:bytes];
       [self appendChild:enumerator];
@@ -33,8 +32,8 @@
     }
   }
   
-  long total = (long)bytes;
-  total -= (long)data;
+  NSUInteger total = (NSUInteger)bytes;
+  total -= (NSUInteger)data;
   return total;
 }
 
@@ -42,8 +41,8 @@
 
 @implementation SdefEnumerator (AeteResource)
 
-- (UInt32)parseData:(Byte *)data {
-  unsigned length;
+- (NSUInteger)parseData:(Byte *)data {
+  NSUInteger length;
   BytePtr bytes = data;
   
   StringPtr pStr = (StringPtr)bytes;
@@ -54,7 +53,7 @@
   if (str) CFRelease(str);
   
   /* Alignement */
-  bytes += (long)bytes % 2;
+  bytes += (intptr_t)bytes % 2;
   
   /* Identifier */
   OSType *identifier = (OSType *)bytes;
@@ -70,10 +69,10 @@
   if (str) CFRelease(str);
   
   /* Alignement */
-  bytes += (long)bytes % 2;
+  bytes += (intptr_t)bytes % 2;
   
-  long total = (long)bytes;
-  total -= (long)data;
+  NSUInteger total = (NSUInteger)bytes;
+  total -= (NSUInteger)data;
   return total;
 }
 

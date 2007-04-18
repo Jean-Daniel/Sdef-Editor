@@ -13,6 +13,8 @@
 #import <ShadowKit/SKFunctions.h>
 #import "SdefSuite.h"
 
+#if !__LP64__
+
 @implementation SdefSuite (ASDictionary)
 
 - (NSDictionary *)asdictionary {
@@ -81,3 +83,5 @@
 }
 
 @end
+
+#endif /* LP64 */

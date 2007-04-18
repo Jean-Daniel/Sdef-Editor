@@ -10,8 +10,8 @@
 #import "SdefSuiteView.h"
 #import "SdefTypedef.h"
 #import "SdefSuite.h"
+#import "SdefClass.h"
 
-@class SdefClass, SdefClassExtension;
 @interface SdefTypeHasClassTransformer : NSValueTransformer {
 }
 
@@ -105,27 +105,8 @@
   [item release];
 }
 
-- (IBAction)newClass:(id)sender {
-  Class class = Nil;
-  switch ([sender tag]) {
-    case 0:
-      class = [SdefClass class];
-      break;
-    case 1:
-      class = [SdefClassExtension class];
-      break;
-  }
-  if (!class) {
-    NSBeep();
-    return;
-  }
-  SdefObject *item = [[class alloc] init];
-  [classes addObject:item];
-  [item release];
-}
-
 - (void)revealType:(id)sender {
-  int row = [sender clickedRow];
+  NSInteger row = [sender clickedRow];
   SdefObject *objs = [(SdefSuite *)[self object] types];
   if (row >= 0 && row < (int)[objs count]) {
     [self revealObjectInTree:[objs childAtIndex:row]];
@@ -133,7 +114,7 @@
 }
 
 - (void)revealClass:(id)sender {
-  int row = [sender clickedRow];
+  NSInteger row = [sender clickedRow];
   SdefObject *objs = [[self object] classes];
   if (row >= 0 && row < (int)[objs count]) {
     [self revealObjectInTree:[objs childAtIndex:row]];
@@ -141,7 +122,7 @@
 }
 
 - (void)revealCommand:(id)sender {
-  int row = [sender clickedRow];
+  NSInteger row = [sender clickedRow];
   SdefObject *objs = [(SdefSuite *)[self object] commands];
   if (row >= 0 && row < (int)[objs count]) {
     [self revealObjectInTree:[objs childAtIndex:row]];
@@ -149,7 +130,7 @@
 }
 
 - (void)revealEvent:(id)sender {
-  int row = [sender clickedRow];
+  NSInteger row = [sender clickedRow];
   SdefObject *objs = [[self object] events];
   if (row >= 0 && row < (int)[objs count]) {
     [self revealObjectInTree:[objs childAtIndex:row]];
@@ -162,15 +143,14 @@
 }
 
 - (void)selectObject:(SdefObject*)anObject {
-  int idx = -1;
+  NSUInteger idx = NSNotFound;
   SdefSuite *content = [self object];
   if (anObject == content) idx = sd_idx;
   else {
     idx = [content indexOfChild:anObject];
-    if (idx == NSNotFound) idx = -1;
-    else idx++;
+    if (idx != NSNotFound) idx++;
   }
-  if (idx >= 0)
+  if (idx != NSNotFound)
     [tab selectTabViewItemAtIndex:idx];
   /* Value specific behaviour */
   if ([anObject objectType] == kSdefValueType) {

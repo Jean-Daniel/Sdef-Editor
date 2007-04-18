@@ -84,7 +84,7 @@
 }
 
 - (void)revealInTree:(id)sender {
-  int row = [sender clickedRow];
+  NSInteger row = [sender clickedRow];
   if (row >= 0 && row < (int)[[self object] count]) {
     [self revealObjectInTree:[(SdefObject *)[self object] childAtIndex:row]];
   }
@@ -204,29 +204,29 @@
 
 /* Returns menu idx */
 - (id)transformedValue:(id)value {
-  unsigned access = [value unsignedIntValue];
-  unsigned idx = 0;
-  if (!access || ((access & kSdefAccessRead) && (access & kSdefAccessWrite))) {
+  NSUInteger rights = SKIntegerValue(value);
+  NSUInteger idx = 0;
+  if (!rights || ((rights & kSdefAccessRead) && (rights & kSdefAccessWrite))) {
     idx = 0;
-  } else if (access & kSdefAccessRead) {
+  } else if (rights & kSdefAccessRead) {
     idx = 1;
-  } else if (access & kSdefAccessWrite) {
+  } else if (rights & kSdefAccessWrite) {
     idx = 2;
   }
-  return SKUInt(idx);
+  return SKUInteger(idx);
 }
 
 /* Returns access value */
 - (id)reverseTransformedValue:(id)value {
-  switch([value unsignedIntValue]) {
+  switch(SKIntegerValue(value)) {
     case 0:
-      return SKUInt(0);
+      return SKUInteger(0);
     case 1:
-      return SKUInt(kSdefAccessRead);
+      return SKUInteger(kSdefAccessRead);
     case 2:
-      return SKUInt(kSdefAccessWrite);
+      return SKUInteger(kSdefAccessWrite);
     default:
-      return SKUInt(0);
+      return SKUInteger(0);
   }
 }
 
@@ -251,9 +251,9 @@
 
 /* Returns menu idx */
 - (id)transformedValue:(id)value {
-  id names = [[NSMutableArray alloc] init];
-  id objects = [value objectEnumerator];
   id object;
+  NSMutableArray *names = [[NSMutableArray alloc] init];
+  NSEnumerator *objects = [value objectEnumerator];
   while (object = [objects nextObject]) {
     if ([object name])
       [names addObject:[object name]];

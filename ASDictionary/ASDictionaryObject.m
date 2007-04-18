@@ -13,6 +13,8 @@
 
 @implementation SdefObject (ASDictionary)
 
+#if !__LP64__
+
 - (NSDictionary *)asdictionary {
   [NSException raise:NSInternalInconsistencyException format:@"Method %@ must be implemented by sublass %@", 
     NSStringFromSelector(_cmd), NSStringFromClass([self class])];
@@ -24,6 +26,8 @@
     NSStringFromSelector(_cmd), NSStringFromClass([self class])];
   return nil;
 }
+
+#endif /* LP64 */
 
 - (NSString *)asDictionaryTypeForType:(NSString *)type isList:(BOOL *)list {
   if (!type) return @"";
@@ -75,3 +79,4 @@
 }
 
 @end
+

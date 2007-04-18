@@ -30,7 +30,7 @@
 - (NSString *)elementName;
 - (void)setElementName:(NSString *)aName;
 
-- (unsigned)attributeCount;
+- (NSUInteger)attributeCount;
 
 - (NSArray *)attrKeys;
 - (NSArray *)attrValues;
@@ -46,6 +46,6 @@
 - (NSArray *)comments;
 - (void)setComments:(NSArray *)comments;
 - (void)addComment:(NSString *)comment;
-- (void)removeCommentAtIndex:(unsigned)index;
+- (void)removeCommentAtIndex:(NSUInteger)index;
 
 @end

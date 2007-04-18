@@ -8,5 +8,8 @@
 
 #import <Cocoa/Cocoa.h>
 
+#if !__LP64__
 @class SdefDictionary;
-extern NSDictionary *AppleScriptDictionaryFromSdefDictionary(SdefDictionary *sdef);
+SK_PRIVATE
+NSDictionary *AppleScriptDictionaryFromSdefDictionary(SdefDictionary *sdef);
+#endif

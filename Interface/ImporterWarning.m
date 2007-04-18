@@ -35,11 +35,11 @@
 }
 
 #pragma mark -
-- (int)numberOfRowsInTableView:(NSTableView *)aTableView {
+- (NSInteger)numberOfRowsInTableView:(NSTableView *)aTableView {
   return [sd_warnings count];
 }
 
-- (id)tableView:(NSTableView *)aTableView objectValueForTableColumn:(NSTableColumn *)aTableColumn row:(int)rowIndex {
+- (id)tableView:(NSTableView *)aTableView objectValueForTableColumn:(NSTableColumn *)aTableColumn row:(NSInteger)rowIndex {
   return [[sd_warnings objectAtIndex:rowIndex] valueForKey:[aTableColumn identifier]];
 }
 

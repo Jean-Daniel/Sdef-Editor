@@ -34,7 +34,7 @@ enum {
   kSdefCocoaType			= 'Coco',
   kSdefDocumentationType	= 'Docu'
 };
-typedef NSInteger SdefObjectType;
+typedef OSType SdefObjectType;
 
 enum {
   kSdefPantherVersion,

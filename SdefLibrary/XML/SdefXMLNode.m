@@ -72,7 +72,7 @@
   }
 }
 
-- (unsigned)attributeCount {
+- (NSUInteger)attributeCount {
   return [sd_attrKeys count];
 }
 
@@ -84,7 +84,7 @@
 }
 
 - (id)attributForKey:(NSString *)key {
-  unsigned idx = [sd_attrKeys indexOfObject:key];
+  NSUInteger idx = [sd_attrKeys indexOfObject:key];
   if (idx != NSNotFound) {
     return [sd_attrValues objectAtIndex:idx];
   }
@@ -92,7 +92,7 @@
 }
 
 - (void)setAttribute:(NSString *)value forKey:(NSString *)key {
-  unsigned idx = [sd_attrKeys indexOfObject:key];
+  NSUInteger idx = [sd_attrKeys indexOfObject:key];
   if (idx != NSNotFound) {
     [sd_attrValues replaceObjectAtIndex:idx withObject:value];
   } else {
@@ -102,7 +102,7 @@
 }
 
 - (void)removeAttributeForKey:(NSString *)key {
-  unsigned idx = [sd_attrKeys indexOfObject:key];
+  NSUInteger idx = [sd_attrKeys indexOfObject:key];
   if (idx != NSNotFound) {
     [sd_attrKeys removeObjectAtIndex:idx];
     [sd_attrValues removeObjectAtIndex:idx];
@@ -143,7 +143,7 @@
   [sd_comments addObject:comment];
 }
 
-- (void)removeCommentAtIndex:(unsigned)anIndex {
+- (void)removeCommentAtIndex:(NSUInteger)anIndex {
   [sd_comments removeObjectAtIndex:anIndex];
   if (sd_comments && [sd_comments count] == 0) {
     [sd_comments release];

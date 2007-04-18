@@ -232,14 +232,14 @@
 
 - (void)encodeWithCoder:(NSCoder *)aCoder {
   [super encodeWithCoder:aCoder];
-  [aCoder encodeInt:sd_access forKey:@"SEAccess"];
-  [aCoder encodeInt:sd_accessors forKey:@"SEAccessors"];
+  SKEncodeInteger(aCoder, sd_access, @"SEAccess");
+  SKEncodeInteger(aCoder, sd_accessors, @"SEAccessors");
 }
 
 - (id)initWithCoder:(NSCoder *)aCoder {
   if (self = [super initWithCoder:aCoder]) {
-    sd_access = [aCoder decodeIntForKey:@"SEAccess"];
-    sd_accessors = [aCoder decodeIntForKey:@"SEAccessors"];
+    sd_access = SKDecodeInteger(aCoder, @"SEAccess");
+    sd_accessors = SKDecodeInteger(aCoder, @"SEAccessors");
   }
   return self;
 }
@@ -360,12 +360,12 @@
 
 - (void)encodeWithCoder:(NSCoder *)aCoder {
   [super encodeWithCoder:aCoder];
-  [aCoder encodeInt:sd_access forKey:@"SPAccess"];
+  SKEncodeInteger(aCoder, sd_access, @"SPAccess");
 }
 
 - (id)initWithCoder:(NSCoder *)aCoder {
   if (self = [super initWithCoder:aCoder]) {
-    sd_access = [aCoder decodeIntForKey:@"SPAccess"];
+    sd_access = SKDecodeInteger(aCoder, @"SPAccess");
   }
   return self;
 }

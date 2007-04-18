@@ -31,7 +31,7 @@ static NSNull *_null;
 
 static NSString *SdtplSimplifieName(NSString *name);
 static void SdtplSortArrayByName(NSMutableArray *array);
-static unsigned SdtplDumpSimpleBlock(SdtplGenerator *self, NSEnumerator *enume, SKTemplate *tpl, SEL description);
+static NSUInteger SdtplDumpSimpleBlock(SdtplGenerator *self, NSEnumerator *enume, SKTemplate *tpl, SEL description);
 static NSString *SdtplCopyFormatedString(SdtplGenerator *self, NSString *str, NSString *aVariable, NSString *aBlock);
 
 #pragma mark Variables
@@ -157,7 +157,7 @@ BOOL SdtplShouldCreateLinks(struct _sd_gnFlags flags) {
 }
 
 SK_INLINE
-NSString *SdefEscapedString(NSString *value, unsigned int format) {
+NSString *SdefEscapedString(NSString *value, NSUInteger format) {
   return ((kSdefTemplateXMLFormat == format) ? [value stringByEscapingEntities:nil] : value);
 }
 
@@ -241,10 +241,10 @@ NSString *SdefEscapedString(NSString *value, unsigned int format) {
 #pragma mark KVC Accessors
 
 #pragma mark Toc & CSS
-- (unsigned)toc {
+- (NSUInteger)toc {
   return sd_gnFlags.toc;
 }
-- (void)setToc:(unsigned)toc {
+- (void)setToc:(NSUInteger)toc {
   sd_gnFlags.toc = toc;
 }
 - (BOOL)indexToc {
@@ -266,10 +266,10 @@ NSString *SdefEscapedString(NSString *value, unsigned int format) {
   sd_gnFlags.toc = (flag) ? sd_gnFlags.toc | kSdefTemplateTOCDictionary : sd_gnFlags.toc & ~kSdefTemplateTOCDictionary;
 }
 
-- (unsigned)css {
+- (NSUInteger)css {
   return sd_gnFlags.css;
 }
-- (void)setCss:(unsigned)css {
+- (void)setCss:(NSUInteger)css {
   sd_gnFlags.css = css;
 }
 - (BOOL)externalCss {
@@ -397,16 +397,16 @@ NSString *SdefEscapedString(NSString *value, unsigned int format) {
   SdefDictionary *dictionary = [aDico retain];
   sd_manager = [dictionary classManager];
   
-  BOOL write = NO;
+  BOOL bwrite = NO;
   SKTemplate *root = [[sd_tpl templates] objectForKey:SdtplDefinitionDictionaryKey];
   @try {
-    write = [self writeDictionary:dictionary usingTemplate:root];
+    bwrite = [self writeDictionary:dictionary usingTemplate:root];
   } @catch (id exception) {
-    write = NO;
+    bwrite = NO;
     SKLogException(exception);
   }
   
-  if (write) {
+  if (bwrite) {
     if (!sd_gnFlags.cancel) {
       root = [[sd_tpl templates] objectForKey:SdtplDefinitionIndexKey];
       if (root) {
@@ -437,9 +437,9 @@ NSString *SdefEscapedString(NSString *value, unsigned int format) {
       if ([self externalToc]) {
         root = [[sd_tpl templates] objectForKey:SdtplDefinitionTocKey];
         if (root) {
-          NSString *link = NSMapGet(sd_formats, @"Toc-Links");
-          if (link && ![link isEqualToString:sd_link]) {
-            sd_link = link;
+          NSString *alink = NSMapGet(sd_formats, @"Toc-Links");
+          if (alink && ![alink isEqualToString:sd_link]) {
+            sd_link = alink;
             NSResetMapTable(sd_links);
           }
           @try {
@@ -475,7 +475,7 @@ NSString *SdefEscapedString(NSString *value, unsigned int format) {
   [self releaseCache];
   
   [pool release];
-  return write;
+  return bwrite;
 }
 
 #pragma mark -
@@ -503,7 +503,7 @@ NSString *SdefEscapedString(NSString *value, unsigned int format) {
     sd_gnFlags.useBlockFormat = 0;
     NSEnumerator *keys = [formats keyEnumerator];
     while (key = [keys nextObject]) {
-      unsigned separator = [key rangeOfString:@"."].location;
+      NSUInteger separator = [key rangeOfString:@"."].location;
       if (NSNotFound == separator) {
         NSMapInsert(sd_formats, key, [formats objectForKey:key]);
       } else {
@@ -698,51 +698,51 @@ NSString *SdefEscapedString(NSString *value, unsigned int format) {
 
 #pragma mark Links
 - (NSString *)linkForType:(NSString *)aType withString:(NSString *)aString {
-  id link = NSMapGet(sd_links, aType);
-  if (!link) {
-    link = aString;
+  id alink = NSMapGet(sd_links, aType);
+  if (!alink) {
+    alink = aString;
     if (![SdefClassManager isBaseType:aType]) {
       SdefClass *class = [sd_manager classWithName:aType];
-      link = [self linkForObject:class withString:aString];
+      alink = [self linkForObject:class withString:aString];
     }
-    NSMapInsert(sd_links, aType, link);
+    NSMapInsert(sd_links, aType, alink);
   }
-  return link;
+  return alink;
 }
 
 - (NSString *)linkForVerb:(NSString *)aVerb withString:(NSString *)aString {
-  NSString *link = NSMapGet(sd_links, aVerb);
-  if (!link) {
+  NSString *alink = NSMapGet(sd_links, aVerb);
+  if (!alink) {
     SdefObject *object = [sd_manager commandWithName:aVerb];
     if (!object) {
       object = [sd_manager eventWithName:aVerb];
     }
-    link = [self linkForObject:object withString:aString];
-    NSMapInsert(sd_links, aVerb, link);
+    alink = [self linkForObject:object withString:aString];
+    NSMapInsert(sd_links, aVerb, alink);
   }
-  return link;
+  return alink;
 }
 
 - (NSString *)linkForObject:(SdefObject *)anObject withString:(NSString *)aString {
-  NSString *link = aString;
+  NSString *alink = aString;
   if (anObject) {
     if ([anObject objectType] == kSdefRespondsToType) {
-      link = [self linkForVerb:[anObject name] withString:[anObject name]];
+      alink = [self linkForVerb:[anObject name] withString:[anObject name]];
     } else {
       NSString *file = [self fileForObject:anObject];
-      link = [NSString stringWithFormat:sd_link, (file) ? : @"", [self anchorNameForObject:anObject], aString];
+      alink = [NSString stringWithFormat:sd_link, (file) ? : @"", [self anchorNameForObject:anObject], aString];
     }
   }
-  return link;
+  return alink;
 }
 
 - (NSString *)linkForDictionary:(SdefDictionary *)dictionary withString:(NSString *)aString {
-  NSString *link = NSMapGet(sd_links, dictionary);
-  if (!link) {
-    link = [self linkForObject:dictionary withString:aString];
-    NSMapInsert(sd_links, dictionary, link);
+  NSString *alink = NSMapGet(sd_links, dictionary);
+  if (!alink) {
+    alink = [self linkForObject:dictionary withString:aString];
+    NSMapInsert(sd_links, dictionary, alink);
   }
-  return link;
+  return alink;
 }
 
 #pragma mark -
@@ -1131,10 +1131,10 @@ NSString *SdefEscapedString(NSString *value, unsigned int format) {
   }
   NSAssert1([elt respondsToSelector:@selector(writeAccessorsStringToStream:)],
             @"Element %@ does not responds to writeAccessorsStringToStream:", elt);
-  NSMutableString *access = [[NSMutableString alloc] init];
-  [elt performSelector:@selector(writeAccessorsStringToStream:) withObject:access];
-  SdtplSetVariable(tpl, [tpl name], SdtplVariableAccessors, access);
-  [access release];
+  NSMutableString *rights = [[NSMutableString alloc] init];
+  [elt performSelector:@selector(writeAccessorsStringToStream:) withObject:rights];
+  SdtplSetVariable(tpl, [tpl name], SdtplVariableAccessors, rights);
+  [rights release];
 }
 
 - (void)writeProperty:(SdefProperty *)prop usingTemplate:(SKTemplate *)tpl {
@@ -1541,8 +1541,9 @@ NSString *SdefEscapedString(NSString *value, unsigned int format) {
 }
 
 #pragma mark Toc Function
-static unsigned SdtplDumpSimpleBlock(SdtplGenerator *self, NSEnumerator *enume, SKTemplate *tpl, SEL description) {
-  unsigned dumped = 0;
+static 
+NSUInteger SdtplDumpSimpleBlock(SdtplGenerator *self, NSEnumerator *enume, SKTemplate *tpl, SEL description) {
+  NSUInteger dumped = 0;
   id object;
   while (object = [enume nextObject]) {
     NSString *name = [object name];

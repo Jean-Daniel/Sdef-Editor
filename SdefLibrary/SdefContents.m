@@ -21,14 +21,14 @@
 
 - (void)encodeWithCoder:(NSCoder *)aCoder {
   [super encodeWithCoder:aCoder];
-  [aCoder encodeInt:sd_access forKey:@"SCAccess"];
+  SKEncodeInteger(aCoder, sd_access, @"SCAccess");
   [aCoder encodeConditionalObject:sd_owner forKey:@"SCOwner"];
   
 }
 
 - (id)initWithCoder:(NSCoder *)aCoder {
   if (self = [super initWithCoder:aCoder]) {
-    sd_access = [aCoder decodeIntForKey:@"SCAccess"];
+    sd_access = SKDecodeInteger(aCoder, @"SCAccess");
     sd_owner = [aCoder decodeObjectForKey:@"SCOwner"];
   }
   return self;
@@ -54,10 +54,10 @@
   [self setRemovable:NO];
 }
 
-- (unsigned)access {
+- (NSUInteger)access {
   return sd_access;
 }
-- (void)setAccess:(unsigned)newAccess {
+- (void)setAccess:(NSUInteger)newAccess {
   [[[self undoManager] prepareWithInvocationTarget:self] setAccess:sd_access];
   sd_access = newAccess;
 }

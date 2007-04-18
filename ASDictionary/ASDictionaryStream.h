@@ -8,6 +8,8 @@
 
 #import <Cocoa/Cocoa.h>
 
+#if !__LP64__
+
 #pragma mark Types Definition
 struct ASDictionaryStyle {
   UInt32 position;
@@ -84,3 +86,5 @@ extern NSAttributedString *AttributedStringForASDictionaryString(NSDictionary *c
 - (void)closeStyle;
 
 @end
+
+#endif /* LP64 */

@@ -60,7 +60,7 @@ static CFXMLParserCallBacks SdefParserCallBacks = {
 }
 
 #pragma mark -
-- (int)parserVersion {
+- (NSInteger)parserVersion {
   return kSdefParserBothVersion;
 }
 
@@ -79,7 +79,7 @@ static CFXMLParserCallBacks SdefParserCallBacks = {
   }
 }
 
-- (int)line {
+- (NSInteger)line {
   return CFXMLParserGetLineNumber(sd_parser);
 }
 
@@ -417,8 +417,7 @@ static CFXMLParserCallBacks SdefParserCallBacks = {
     [self parser:parser didStartElement:elementName withAttributes:attributes];
   }
   if ([sd_comments count]) {
-    unsigned i;
-    for (i=0; i<[sd_comments count]; i++) {
+    for (NSUInteger i = 0; i < [sd_comments count]; i++) {
       [sd_node addComment:[sd_comments objectAtIndex:i]];
     }
     [sd_comments removeAllObjects];
@@ -531,7 +530,7 @@ Boolean SdefParserHandleError(CFXMLParserRef parser, CFXMLParserStatusCode error
 @end
 
 #pragma mark -
-NSString *SdefXMLAccessStringFromFlag(unsigned flag) {
+NSString *SdefXMLAccessStringFromFlag(NSUInteger flag) {
   id str = nil;
   if (flag == (kSdefAccessRead | kSdefAccessWrite)) str = @"rw";
   else if (flag == kSdefAccessRead) str = @"r";
@@ -539,8 +538,8 @@ NSString *SdefXMLAccessStringFromFlag(unsigned flag) {
   return str;
 }
 
-unsigned SdefXMLAccessFlagFromString(NSString *str) {
-  unsigned flag = 0;
+NSUInteger SdefXMLAccessFlagFromString(NSString *str) {
+  NSUInteger flag = 0;
   if (str && [str rangeOfString:@"r"].location != NSNotFound) {
     flag |= kSdefAccessRead;
   }

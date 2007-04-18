@@ -122,6 +122,7 @@
   }
 }
 
+#if !__LP64__
 - (IBAction)exportASDictionary:(id)sender {
   NSSavePanel *panel = [NSSavePanel savePanel];
   [panel setCanSelectHiddenExtension:YES];
@@ -134,6 +135,7 @@
                  didEndSelector:@selector(exportASDictionary:returnCode:context:)
                     contextInfo:nil];
 }
+
 - (void)exportASDictionary:(NSSavePanel *)aPanel returnCode:(int)result context:(id)ctxt {
   NSString *file;
   if ((result == NSOKButton) && (file = [aPanel filename])) {
@@ -152,6 +154,7 @@
     }
   }
 }
+#endif
 
 - (IBAction)exportUsingTemplate:(id)sender {
   SdtplWindow *exporter = [[SdtplWindow alloc] initWithDocument:self];

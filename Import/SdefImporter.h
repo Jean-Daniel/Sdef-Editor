@@ -29,7 +29,7 @@
 */
 - (BOOL)import;
 - (NSArray *)warnings;
-- (unsigned)suiteCount;
+- (NSUInteger)suiteCount;
 - (NSArray *)sdefSuites;
 - (SdefDictionary *)sdefDictionary;
 

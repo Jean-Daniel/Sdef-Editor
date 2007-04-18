@@ -32,7 +32,6 @@ typedef struct AeteHeader AeteHeader;
 
 static
 OSStatus _GetTerminologyFromAppleEvent(AppleEvent *theEvent, NSMutableArray *terminolgies) {
-  SInt32 idx;
   long count = 0;
   AEDescList aetes = {typeNull, nil};
   
@@ -48,7 +47,7 @@ OSStatus _GetTerminologyFromAppleEvent(AppleEvent *theEvent, NSMutableArray *ter
   err = AECountItems(&aetes, &count);
   require_noerr(err, bail);
 
-  for (idx = 1; idx <= count; idx++) {
+  for (CFIndex idx = 1; idx <= count; idx++) {
     CFDataRef data = NULL;
     SKAEGetNthCFDataFromDescList(&aetes, idx, typeAETE, &data);
     if (data) {
@@ -118,7 +117,7 @@ bail:
 
 - (id)initWithFSRef:(FSRef *)aRef {
   if (self = [super init]) {
-    short fileRef;
+    ResFileRefNum fileRef;
     OSStatus err = FSOpenResourceFile(aRef, 0, NULL, fsRdPerm, &fileRef);
     if (mapReadErr == err) {
       HFSUniStr255 rsrcName;
@@ -127,14 +126,13 @@ bail:
       }
     }
     if(noErr == err) {
-      short count;
-      int idx;
+      ResourceCount count;
       /* Standard Infos */
       count = Count1Resources(kAEUserTerminology);
       sd_aetes = [[NSMutableArray alloc] initWithCapacity:count];
-      for (idx = 1; idx <= count; idx++) {
+      for (ResourceCount idx = 1; idx <= count; idx++) {
         Handle aeteH = Get1IndResource(kAEUserTerminology, idx);
-        id aete = [[NSData alloc] initWithHandle:aeteH];
+        NSData *aete = [[NSData alloc] initWithHandle:aeteH];
         if (aete) {
           [sd_aetes addObject:aete];
           [aete release];
@@ -142,9 +140,9 @@ bail:
       }
       /* Extensions */
       count = Count1Resources(kAETerminologyExtension);
-      for (idx = 1; idx <= count; idx++) {
+      for (ResourceCount idx = 1; idx <= count; idx++) {
         Handle aeteH = Get1IndResource(kAETerminologyExtension, idx);
-        id aete = [[NSData alloc] initWithHandle:aeteH];
+        NSData *aete = [[NSData alloc] initWithHandle:aeteH];
         if (aete) {
           [sd_aetes addObject:aete];
           [aete release];
@@ -179,8 +177,8 @@ bail:
 #pragma mark -
 #pragma mark Parsing
 - (BOOL)import {
-  id aetes = [sd_aetes objectEnumerator];
   NSData *aete;
+  NSEnumerator *aetes = [sd_aetes objectEnumerator];
   while (aete = [aetes nextObject]) {
     @try {
       BytePtr bytes = (BytePtr)[aete bytes];
@@ -188,8 +186,7 @@ bail:
       AeteHeader *header = (AeteHeader *)bytes;
       bytes += sizeof(AeteHeader);
       offset += sizeof(AeteHeader);
-      unsigned idx = 0;
-      for (idx=0; idx<header->suiteCount; idx++) {
+      for (UInt16 idx = 0; idx < header->suiteCount; idx++) {
         SdefSuite *suite = [[SdefSuite allocWithZone:[self zone]] init];
         bytes += [suite parseData:bytes];
         [suites addObject:suite];
@@ -239,7 +236,7 @@ bail:
     } else if (SKOSTypeFromString([info code]) == kAESpecialClassProperties) {
       if ([[info name] isEqualToString:@"<Plural>"]) {
         if ([[aClass properties] count] == 1) {
-          unsigned idx = [aClass index];
+          NSUInteger idx = [aClass index];
           [(SdefClass *)[[aClass parent] childAtIndex:idx-1] setPlural:[aClass name]];
           [aClass remove];
         } else {

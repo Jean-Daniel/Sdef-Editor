@@ -12,6 +12,8 @@
 #import "SdefArguments.h"
 #import <ShadowKit/SKExtensions.h>
 
+#if !__LP64__
+
 @interface SdefDirectParameter (ASDictionary)
 - (void)appendStringToStream:(ASDictionaryStream *)stream;
 @end
@@ -206,3 +208,4 @@
 
 @end
 
+#endif /* LP64 */

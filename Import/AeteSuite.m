@@ -15,8 +15,8 @@
 
 @implementation SdefSuite (AeteResource)
 
-- (UInt32)parseData:(Byte *)data {
-  unsigned length;
+- (NSUInteger)parseData:(Byte *)data {
+  NSUInteger length;
   BytePtr bytes = data;
   StringPtr pStr = (StringPtr)bytes;
   length = StrLength(pStr);
@@ -33,7 +33,7 @@
   CFRelease(str);
   
   /* Alignement */
-  bytes += (long)bytes % 2;
+  bytes += (intptr_t)bytes % 2;
   
   OSType *identifier = (UInt32 *)bytes;
   [self setCode:AeteStringForOSType(*identifier)];
@@ -45,9 +45,8 @@
   UInt16 *val = (UInt16 *)bytes;
   bytes += 2;
   if (*val > 0) {
-    unsigned idx = 0;
-    for (idx=0; idx<*val; idx++) {
-      id verb = [[SdefVerb allocWithZone:[self zone]] init];
+    for (NSUInteger idx = 0; idx < *val; idx++) {
+      SdefVerb *verb = [[SdefVerb allocWithZone:[self zone]] init];
       bytes += [verb parseData:bytes];
       [[self commands] appendChild:verb];
       [verb release];
@@ -57,9 +56,8 @@
   val = (UInt16 *)bytes;
   bytes += 2;
   if (*val > 0) {
-    unsigned idx = 0;
-    for (idx=0; idx<*val; idx++) {
-      id class = [[SdefClass allocWithZone:[self zone]] init];
+    for (NSUInteger idx = 0; idx < *val; idx++) {
+      SdefClass *class = [[SdefClass allocWithZone:[self zone]] init];
       bytes += [class parseData:bytes];
       [[self classes] appendChild:class];
       [class release];
@@ -70,15 +68,14 @@
   val = (UInt16 *)bytes;
   bytes += 2;
   if (*val > 0) {
-    unsigned idx = 0;
-    for (idx=0; idx<*val; idx++) {
+    for (NSUInteger idx = 0; idx < *val; idx++) {
       /* Name */
       pStr = (StringPtr)bytes;
       length = StrLength(pStr);
       bytes += length + 1;
       
       /* Alignement */
-      bytes += (long)bytes % 2;
+      bytes += (intptr_t)bytes % 2;
       
       /* ID */
       bytes += 4;
@@ -89,7 +86,7 @@
       bytes += length + 1;
       
       /* Alignement */
-      bytes += (long)bytes % 2;
+      bytes += (intptr_t)bytes % 2;
     }
   }
    
@@ -97,17 +94,16 @@
   val = (UInt16 *)bytes;
   bytes += 2;
   if (*val > 0) {
-    unsigned idx = 0;
-    for (idx=0; idx<*val; idx++) {
-      id enumeration = [[SdefEnumeration allocWithZone:[self zone]] init];
+    for (NSUInteger idx = 0; idx < *val; idx++) {
+      SdefEnumeration *enumeration = [[SdefEnumeration allocWithZone:[self zone]] init];
       bytes += [enumeration parseData:bytes];
       [[self types] appendChild:enumeration];
       [enumeration release];
     }
   }
   
-  long total = (long)bytes;
-  total -= (long)data;
+  NSUInteger total = (NSUInteger)bytes;
+  total -= (NSUInteger)data;
   return total;
 }
 

@@ -19,7 +19,8 @@ enum {
   kSdefTemplateXMLFormat,
 };
 
-extern NSString * const SdtplBlockTableOfContent;
+SK_PRIVATE
+NSString * const SdtplBlockTableOfContent;
 
 @class SdefObject, SdefDictionary;
 @class SdefTemplate, SdefClassManager;
@@ -68,12 +69,12 @@ extern NSString * const SdtplBlockTableOfContent;
 - (BOOL)externalToc;
 - (BOOL)dictionaryToc;
 
-- (unsigned)toc;
-- (void)setToc:(unsigned)toc;
+- (NSUInteger)toc;
+- (void)setToc:(NSUInteger)toc;
 
 - (BOOL)externalCss;
-- (unsigned)css;
-- (void)setCss:(unsigned)css;
+- (NSUInteger)css;
+- (void)setCss:(NSUInteger)css;
 
 - (NSString *)tocFile;
 - (void)setTocFile:(NSString *)aFile;

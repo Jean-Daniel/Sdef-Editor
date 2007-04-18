@@ -8,6 +8,8 @@
 
 #import "ASDictionaryStream.h"
 
+#if !__LP64__
+
 #pragma mark Private Functions Declaration
 static NSFont *FontForASDictionaryStyle(ASDictionaryStyle *style);
 static void ASDictionaryStyleForFont(NSFont *aFont, ASDictionaryStyle *style);
@@ -414,3 +416,4 @@ NSDictionary *ASDictionaryStringForAttributedString(NSAttributedString *aString)
   return dict;
 }
 
+#endif /* LP64 */

@@ -11,7 +11,7 @@
 #import "SdefXMLNode.h"
 #import "SdefClass.h"
 
-NSArray *SdefXMLAccessorStringsFromFlag(unsigned flag) {
+NSArray *SdefXMLAccessorStringsFromFlag(NSUInteger flag) {
   NSMutableArray *strings = [NSMutableArray array];
   if (flag & kSdefAccessorIndex) [strings addObject:@"index"];
   if (flag & kSdefAccessorID) [strings addObject:@"id"];
@@ -22,8 +22,8 @@ NSArray *SdefXMLAccessorStringsFromFlag(unsigned flag) {
   return strings;
 }
 
-unsigned SdefXMLAccessorFlagFromString(NSString *str) {
-  unsigned flag = 0;
+NSUInteger SdefXMLAccessorFlagFromString(NSString *str) {
+  NSUInteger flag = 0;
   if (str && [str rangeOfString:@"index"].location != NSNotFound) {
     flag |= kSdefAccessorIndex;
   } else if (str && [str rangeOfString:@"name"].location != NSNotFound) {

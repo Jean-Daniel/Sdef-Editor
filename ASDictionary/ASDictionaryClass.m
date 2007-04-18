@@ -10,6 +10,8 @@
 #import "ASDictionaryStream.h"
 #import "SdefClass.h"
 
+#if !__LP64__
+
 @interface SdefElement (ASDictionary) 
 - (void)appendStringToStream:(ASDictionaryStream *)stream;
 @end
@@ -197,3 +199,5 @@
 }
 
 @end
+
+#endif /* LP64 */

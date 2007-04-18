@@ -98,11 +98,11 @@
     [self setDesc:[terminology objectForKey:@"Description"]];
     
     /* Access */
-    unsigned access = kSdefAccessRead | kSdefAccessWrite;
+    NSUInteger rights = kSdefAccessRead | kSdefAccessWrite;
     if ([[suite objectForKey:@"ReadOnly"] isEqualToString:@"YES"]) {
-      access = kSdefAccessRead;
+      rights = kSdefAccessRead;
     }
-    [self setAccess:access];
+    [self setAccess:rights];
     
     /* Cocoa Method */
     if (![name isEqualToString:[terminology objectForKey:@"Name"]])
@@ -122,11 +122,11 @@
     [self setDesc:[terminology objectForKey:@"Description"]];
     
     /* Access */
-    unsigned access = kSdefAccessRead | kSdefAccessWrite;
+    NSUInteger rights = kSdefAccessRead | kSdefAccessWrite;
     if ([[suite objectForKey:@"ReadOnly"] isEqualToString:@"YES"]) {
-      access = kSdefAccessRead;
+      rights = kSdefAccessRead;
     }
-    [self setAccess:access];
+    [self setAccess:rights];
     
     /* Cocoa Method */
     if (![name isEqualToString:[terminology objectForKey:@"Name"]])
@@ -144,11 +144,11 @@
     [self setCode:[suite objectForKey:@"AppleEventCode"]];
     
     /* Access */
-    unsigned access = kSdefAccessRead | kSdefAccessWrite;
+    NSUInteger rights = kSdefAccessRead | kSdefAccessWrite;
     if ([[suite objectForKey:@"ReadOnly"] isEqualToString:@"YES"]) {
-      access = kSdefAccessRead;
+      rights = kSdefAccessRead;
     }
-    [self setAccess:access];
+    [self setAccess:rights];
     
     /* Cocoa Method */
     if (![name isEqualToString:[suite objectForKey:@"Name"]])

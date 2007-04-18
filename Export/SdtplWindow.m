@@ -55,10 +55,9 @@
   [panel addView:htmlView withLabel:@"HTML Options"];
   [panel addView:infoView withLabel:@"Description"];
   
-  unsigned idx;
   NSArray *views = [panel disclosureViews];
-  UInt32 prefs = [[NSUserDefaults standardUserDefaults] integerForKey:@"SdtplDislosurePanel"];
-  for (idx = 0; idx < [views count]; idx++) {
+  NSUInteger prefs = [[NSUserDefaults standardUserDefaults] integerForKey:@"SdtplDislosurePanel"];
+  for (NSUInteger idx = 0; idx < [views count]; idx++) {
     [[views objectAtIndex:idx] setVisible:(prefs & (1 << idx))];
   }
   
@@ -86,9 +85,8 @@
 #pragma mark -
 - (IBAction)close:(id)sender {
   NSArray *views = [(SKDisclosurePanel *)[self window] disclosureViews];
-  unsigned idx;
-  SInt32 prefs = 0;
-  for (idx = 0; idx < [views count]; idx++) {
+  NSInteger prefs = 0;
+  for (NSUInteger idx = 0; idx < [views count]; idx++) {
     BOOL state = [[views objectAtIndex:idx] isVisible] ? 1 : 0;
     prefs |= (state << idx);
   }
