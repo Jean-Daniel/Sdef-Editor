@@ -15,7 +15,7 @@ enum {
   kSdefParserLeopardVersion = 1 << 2,
   kSdefParserAllVersions    = kSdefParserPantherVersion | kSdefParserTigerVersion | kSdefParserLeopardVersion,
 };
-typedef NSInteger SdefParserVersion;
+typedef NSUInteger SdefParserVersion;
 
 typedef enum {
   kSdefParserAbort,

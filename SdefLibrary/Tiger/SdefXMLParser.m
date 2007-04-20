@@ -326,8 +326,8 @@ static CFXMLParserCallBacks SdefParserCallBacks = {
 }
 
 - (void)parser:(CFXMLParserRef)parser didStartElement:(NSString *)element withAttributes:(NSDictionary *)attributes {
-  CFStringRef str = CFStringCreateWithFormat(kCFAllocatorDefault, nil, CFSTR("Line %i: Unknow element %@"),
-                                             CFXMLParserGetLineNumber(parser), element);
+  CFStringRef str = CFStringCreateWithFormat(kCFAllocatorDefault, nil, CFSTR("Line %ld: Unknow element %@"),
+                                             (long)CFXMLParserGetLineNumber(parser), element);
   CFXMLParserAbort(parser, kCFXMLErrorMalformedDocument, str);
   CFRelease(str);
 }
@@ -464,7 +464,7 @@ static CFXMLParserCallBacks SdefParserCallBacks = {
   NSString *error = [[parseError userInfo] objectForKey:@"SdefParserError"];
   CFIndex line = [self line];
   CFIndex position = CFXMLParserGetLocation(sd_parser);
-  sd_error = [[NSString alloc] initWithFormat:@"Line %i, position: %i:\n %@", line, position, error];
+  sd_error = [[NSString alloc] initWithFormat:@"Line %ld, position: %ld:\n %@", (long)line, (long)position, error];
   return YES;
 }
 
@@ -512,7 +512,7 @@ static CFXMLParserCallBacks SdefParserCallBacks = {
           /* Ignore white space */
           break;
         default:
-          DLog(@"Unknown Data Type ID: %i (%@)", CFXMLNodeGetTypeCode(aNode), CFXMLNodeGetString(aNode));
+          DLog(@"Unknown Data Type ID: %ld (%@)", (long)CFXMLNodeGetTypeCode(aNode), CFXMLNodeGetString(aNode));
           break;
       }
     }

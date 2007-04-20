@@ -41,7 +41,7 @@ enum {
   kSdefTigerVersion   = 2,
   kSdefLeopardVersion = 3,
 };
-typedef NSInteger SdefVersion;
+typedef NSUInteger SdefVersion;
 
 #pragma mark -
 #pragma mark Publics Functions Declaration

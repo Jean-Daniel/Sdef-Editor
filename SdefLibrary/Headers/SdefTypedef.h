@@ -57,11 +57,11 @@ enum {
 };
 
 @interface SdefEnumeration : SdefTerminologyObject <NSCopying, NSCoding> {
-  int sd_inline;
+  NSInteger sd_inline;
 }
 
-- (int)inlineValue;
-- (void)setInlineValue:(int)value;
+- (NSInteger)inlineValue;
+- (void)setInlineValue:(NSInteger)value;
 
 @end
 

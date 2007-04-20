@@ -14,7 +14,7 @@ enum {
   kSdefScriptSuiteFormat 		= 1 << 1,
   kSdefScriptTerminologyFormat	= 1 << 2,
 };
-typedef NSInteger SdefProcessorFormat;
+typedef NSUInteger SdefProcessorFormat;
 
 @class SdefDocument;
 @interface SdefProcessor : NSObject {

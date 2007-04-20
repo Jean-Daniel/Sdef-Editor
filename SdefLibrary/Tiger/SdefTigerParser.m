@@ -84,8 +84,8 @@
 
 - (void)parser:(CFXMLParserRef)parser didStartRecordType:(NSDictionary *)attributes {
   if (![sd_node respondsToSelector:@selector(types)]) {
-    CFStringRef str = CFStringCreateWithFormat(kCFAllocatorDefault, nil, CFSTR("Unexpected \"record\" element found at line %i"),
-                                               CFXMLParserGetLineNumber(parser));
+    CFStringRef str = CFStringCreateWithFormat(kCFAllocatorDefault, nil, CFSTR("Unexpected \"record\" element found at line %ld"),
+                                               (long)CFXMLParserGetLineNumber(parser));
     CFXMLParserAbort(parser, kCFXMLErrorMalformedDocument, str);
     CFRelease(str);
   } else {
@@ -114,8 +114,8 @@
     } else {
       switch ([self shouldAddInvalidObject:type inNode:sd_node]) {
         case kSdefParserAbort: {
-          CFStringRef str = CFStringCreateWithFormat(kCFAllocatorDefault, nil, CFSTR("Unexpected \"type\" element found at line %i"),
-                                                     CFXMLParserGetLineNumber(parser));
+          CFStringRef str = CFStringCreateWithFormat(kCFAllocatorDefault, nil, CFSTR("Unexpected \"type\" element found at line %ld"),
+                                                     (long)CFXMLParserGetLineNumber(parser));
           CFXMLParserAbort(parser, kCFXMLErrorMalformedDocument, str);
           CFRelease(str);
           break;

@@ -184,9 +184,9 @@
 
 - (SdefParserOperation)sdefParser:(SdefXMLParser *)parser shouldAddInvalidObject:(id)anObject inNode:(SdefObject *)node {
   switch (NSRunAlertPanel(@"Found an invalid node in Sdef file",
-                          @"Found element \"%@\" in %@ element \"%@\" at line %i. Would you like to preserve this element, delete this element, or abort parsing.",
+                          @"Found element \"%@\" in %@ element \"%@\" at line %ld. Would you like to preserve this element, delete this element, or abort parsing.",
                           @"Preserve", @"Abort", @"Delete",
-                          [anObject objectTypeName], [node objectTypeName], [node name], [parser line])) {
+                          [anObject objectTypeName], [node objectTypeName], [node name], (long)[parser line])) {
     case NSAlertDefaultReturn:
       return kSdefParserAddNode;
     case NSAlertAlternateReturn:

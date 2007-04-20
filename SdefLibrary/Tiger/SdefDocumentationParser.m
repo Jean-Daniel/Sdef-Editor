@@ -185,7 +185,7 @@
       [self parser:parser foundIgnorableWhitespace:(id)CFXMLNodeGetString(node)];
       break;
     default:
-      DLog(@"Unknown Data Type ID: %i (%@)", CFXMLNodeGetTypeCode(node), CFXMLNodeGetString(node));
+      DLog(@"Unknown Data Type ID: %ld (%@)", (long)CFXMLNodeGetTypeCode(node), CFXMLNodeGetString(node));
   }
   return structure;
 }
