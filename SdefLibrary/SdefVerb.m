@@ -63,13 +63,14 @@
 #pragma mark -
 
 - (BOOL)isCommand {
-  id suite = [self suite];
+  SdefSuite *suite = [self suite];
   return [self parent] == [suite commands];
 }
   
 - (void)sdefInit {
   [super sdefInit];
-
+  sd_soFlags.xrefs = 1;
+  
   SdefResult *result = [[SdefResult allocWithZone:[self zone]] init];
   [self setResult:result];
   [result release];
@@ -77,6 +78,13 @@
   SdefDirectParameter *param = [[SdefDirectParameter allocWithZone:[self zone]] init];
   [self setDirectParameter:param];
   [param release];
+}
+
+- (NSString *)xmlid {
+  return sd_id;
+}
+- (void)setXmlid:(NSString *)anId {
+  SKSetterCopy(sd_id, anId);
 }
 
 - (SdefResult *)result {

@@ -87,6 +87,7 @@ enum {
   SdefContents *sd_contents;
   BOOL sd_extension;
   /* Attributes */
+  NSString *sd_id;
   NSString *sd_type;
   NSString *sd_plural; 
   NSString *sd_inherits;
@@ -99,6 +100,9 @@ enum {
 - (SdefCollection *)elements;
 - (SdefCollection *)commands;
 - (SdefCollection *)events;
+
+- (NSString *)xmlid;
+- (void)setXmlid:(NSString *)anId;
 
 - (NSString *)plural;
 - (void)setPlural:(NSString *)newPlural;

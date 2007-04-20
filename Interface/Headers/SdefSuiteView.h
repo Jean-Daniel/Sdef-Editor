@@ -21,4 +21,7 @@
   NSMenu *sd_typeMenu;
 }
 
+- (IBAction)addType:(id)sender;
+- (IBAction)newType:(id)sender;
+
 @end

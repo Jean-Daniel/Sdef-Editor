@@ -108,6 +108,15 @@ NSString *CocoaNameForSdefName(NSString *cocoa, BOOL isClass);
 - (BOOL)isRemovable;
 - (void)setRemovable:(BOOL)removable;
 
+#pragma mark XRefs
+- (BOOL)hasID;
+- (NSString *)xmlid;
+- (void)setXmlid:(NSString *)xmlid;
+
+- (BOOL)hasXrefs;
+- (NSMutableArray *)xrefs;
+- (void)setXrefs:(NSArray *)xrefs;
+
 #pragma mark Documentation
 - (BOOL)hasDocumentation;
 - (SdefDocumentation *)documentation;

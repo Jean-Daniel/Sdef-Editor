@@ -204,7 +204,29 @@
   sd_soFlags.removable = (removable) ? 1 : 0;
 }
 
-#pragma mark Optionals children
+#pragma mark Optionals Children & Attributes
+- (BOOL)hasID {
+  return NO;
+}
+- (NSString *)xmlid {
+  return nil;
+}
+- (void)setXmlid:(NSString *)xmlid {
+  // nothing
+}
+
+- (BOOL)hasXrefs {
+  return sd_soFlags.xrefs;
+}
+- (NSMutableArray *)xrefs {
+  return nil;
+}
+- (void)setXrefs:(NSArray *)xrefs {
+  // does nothing.
+  if (![self hasXrefs])
+    WLog(@"Try to set xrefs on a invalid item %@", self);
+}
+
 - (BOOL)hasDocumentation {
   return sd_soFlags.hasDocumentation;
 }

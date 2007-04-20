@@ -10,6 +10,7 @@
 
 @interface SdefDocumentedObject : SdefObject <NSCopying, NSCoding> {
 @private
+  NSMutableArray *sd_xrefs;
   SdefDocumentation *sd_documentation;
 }
 

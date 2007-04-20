@@ -172,7 +172,7 @@
       [type isEqualToString:PantherScriptingDefinitionFileType]) {
     NSInteger version;
     [self setDictionary:SdefLoadDictionaryData(data, &version, self)];
-    if (version < kSdefLeopardVersion) {
+    if (version < kSdefTigerVersion) {
       NSRunInformationalAlertPanel(@"You have opened a Panther or Tiger Scripting Definition file",
                                    @"This file will be saved using Leopard format. If you want to export it using an older format, choose \"Save as...\" in the File menu",
                                    @"OK", nil, nil);

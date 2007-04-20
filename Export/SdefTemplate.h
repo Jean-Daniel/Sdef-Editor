@@ -9,17 +9,17 @@
 #import <Cocoa/Cocoa.h>
 
 enum {
-  kSdefTemplateTOCNone			= 0,
-  kSdefTemplateTOCIndex			= 1 << 0,
-  kSdefTemplateTOCDictionary	= 1 << 1,
-  kSdefTemplateTOCExternal		= 1 << 2,
-  kSdefTemplateTOCRequired		= 1 << 3
+  kSdefTemplateTOCNone       = 0,
+  kSdefTemplateTOCIndex      = 1 << 0,
+  kSdefTemplateTOCDictionary = 1 << 1,
+  kSdefTemplateTOCExternal	 = 1 << 2,
+  kSdefTemplateTOCRequired   = 1 << 3
 };
 
 enum {
-  kSdefTemplateCSSNone		= 0,
-  kSdefTemplateCSSInline	= 1 << 0,
-  kSdefTemplateCSSExternal	= 1 << 1
+  kSdefTemplateCSSNone     = 0,
+  kSdefTemplateCSSInline   = 1 << 0,
+  kSdefTemplateCSSExternal = 1 << 1
 };
 
 /* Definition */

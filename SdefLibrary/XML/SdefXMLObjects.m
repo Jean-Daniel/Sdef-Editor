@@ -67,19 +67,26 @@
 - (SdefXMLNode *)xmlNodeForVersion:(SdefVersion)version {
   id node = nil;
   if (node = [super xmlNodeForVersion:version]) {
-    id attr = [self name];
-    if (nil != attr)
+    NSString *attr = [self name];
+    if (attr)
       [node setAttribute:[attr stringByEscapingEntities:nil] forKey:@"name"];
     attr = [self code];
-    if (nil != attr) {
+    if (attr) {
       if ([attr length] == 6 && [attr hasPrefix:@"'"] && [attr hasSuffix:@"'"])
         attr = [attr substringWithRange:NSMakeRange(1, 4)];
       [node setAttribute:[attr stringByEscapingEntities:nil] forKey:@"code"];
     }
     
     attr = [self desc];
-    if (nil != attr)
+    if (attr)
       [node setAttribute:[attr stringByEscapingEntities:nil] forKey:@"description"];
+    
+    if ([self hasID]) {
+      attr = [self xmlid];
+      if (attr) {
+        [node setAttribute:[attr stringByEscapingEntities:nil] forKey:@"id"];
+      }
+    }
     
     if ([self hasSynonyms] && sd_synonyms) {
       id synonym;
@@ -99,6 +106,9 @@
 #pragma mark XML Parsing
 - (void)setAttributes:(NSDictionary *)attrs {
   [super setAttributes:attrs];
+  if ([self hasID]) {
+    [self setXmlid:[[attrs objectForKey:@"id"] stringByUnescapingEntities:nil]];
+  }
   [self setCode:[[attrs objectForKey:@"code"] stringByUnescapingEntities:nil]];
   [self setDesc:[[attrs objectForKey:@"description"] stringByUnescapingEntities:nil]];
 }

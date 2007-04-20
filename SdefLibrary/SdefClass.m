@@ -61,13 +61,14 @@
 
 - (void)sdefInit {
   [super sdefInit];
-
+  sd_soFlags.xrefs = 1;
+  
   NSZone *zone = [self zone];
   SdefContents *contents = [[SdefContents allocWithZone:zone] init];
   [self setContents:contents];
   [contents release];
   
-  id child = [[SdefCollection allocWithZone:zone] initWithName:NSLocalizedStringFromTable(@"Elements", @"SdefLibrary", @"Elements collection default name")];
+  SdefCollection *child = [[SdefCollection allocWithZone:zone] initWithName:NSLocalizedStringFromTable(@"Elements", @"SdefLibrary", @"Elements collection default name")];
   [child setContentType:[SdefElement class]];
   [child setElementName:@"elements"];
   [self appendChild:child];
@@ -144,6 +145,13 @@
     [sd_contents setOwner:self];
     [sd_contents setEditable:[self isEditable]];
   }
+}
+
+- (NSString *)xmlid {
+  return sd_id;
+}
+- (void)setXmlid:(NSString *)anId {
+  SKSetterCopy(sd_id, anId);
 }
 
 - (NSString *)plural {

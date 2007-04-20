@@ -43,6 +43,7 @@
 
 - (void)sdefInit {
   [super sdefInit];
+  sd_soFlags.xrefs = 1;
   sd_inline = kSdefInlineAll;
 }
 
@@ -134,6 +135,7 @@
 - (void)sdefInit {
   [super sdefInit];
   [self setLeaf:YES];
+  sd_soFlags.xrefs = 1;
 }
 
 @end
@@ -167,6 +169,11 @@
 
 + (NSString *)defaultIconName {
   return @"Record";
+}
+
+- (void)sdefInit {
+  [super sdefInit];
+  sd_soFlags.xrefs = 1;
 }
 
 @end

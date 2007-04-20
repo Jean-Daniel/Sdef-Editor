@@ -7,6 +7,8 @@
  */
 
 #import "SdefLeopardParser.h"
+#import "SdefBase.h"
+#import "SdefXMLBase.h"
 
 @implementation SdefLeopardParser
 
@@ -18,9 +20,18 @@
   return kSdefParserLeopardVersion;
 }
 
+- (void)parser:(CFXMLParserRef)parser didStartXref:(NSDictionary *)attributes {
+  if (![sd_node hasXrefs]) {
+    NSString *msg = [NSString stringWithFormat:@"Unexpected xref element in %@ element", [sd_node xmlElementName]];
+    CFXMLParserAbort(parser, kCFXMLErrorMalformedDocument, (CFStringRef)msg);
+  } else {
+    
+  }
+}
+
 - (void)parser:(CFXMLParserRef)parser didStartElement:(NSString *)element withAttributes:(NSDictionary *)attributes {
   if ([element isEqualToString:@"xref"]) {
-    DLog(@"xref found");
+    [self parser:parser didStartXref:attributes];
   } else {
     [super parser:parser didStartElement:element withAttributes:attributes];
   }

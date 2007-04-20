@@ -98,13 +98,6 @@
   [item release];
 }
 
-- (IBAction)addClass:(id)sender {
-  // Tiger implementation
-  SdefObject *item = [[SdefClass alloc] init];
-  [classes addObject:item];
-  [item release];
-}
-
 - (void)revealType:(id)sender {
   NSInteger row = [sender clickedRow];
   SdefObject *objs = [(SdefSuite *)[self object] types];

@@ -52,6 +52,7 @@ description  %Text;        #IMPLIED
 
 @class SdefDocumentation, SdefDirectParameter, SdefResult;
 @interface SdefVerb : SdefTerminologyObject <NSCopying, NSCoding> {
+  NSString *sd_id;
   SdefResult *sd_result;
   SdefDirectParameter *sd_direct;
   // Code into verb are split into class & ID that are two concat four char codes (i.e. eavtquit).

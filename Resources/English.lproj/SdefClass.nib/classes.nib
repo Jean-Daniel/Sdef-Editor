@@ -1,38 +1,79 @@
-{
-    IBClasses = (
-        {CLASS = FirstResponder; LANGUAGE = ObjC; SUPERCLASS = NSObject; }, 
-        {CLASS = SKImageAndTextCell; LANGUAGE = ObjC; SUPERCLASS = NSTextFieldCell; }, 
-        {
-            ACTIONS = {editType = id; }; 
-            CLASS = SdefClassView; 
-            LANGUAGE = ObjC; 
-            OUTLETS = {
-                commandTable = NSTableView; 
-                commands = NSArrayController; 
-                elements = NSArrayController; 
-                eventTable = NSTableView; 
-                events = NSArrayController; 
-                properties = NSArrayController; 
-                tab = NSTabView; 
-            }; 
-            SUPERCLASS = SdefViewController; 
-        }, 
-        {
-            CLASS = SdefTypeButton; 
-            LANGUAGE = ObjC; 
-            OUTLETS = {typeField = NSTextField; }; 
-            SUPERCLASS = NSButton; 
-        }, 
-        {
-            CLASS = SdefViewController; 
-            LANGUAGE = ObjC; 
-            OUTLETS = {
-                objectController = NSObjectController; 
-                ownerController = NSObjectController; 
-                sdefView = NSView; 
-            }; 
-            SUPERCLASS = NSObject; 
-        }
-    ); 
-    IBVersion = 1; 
-}
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IBClasses</key>
+	<array>
+		<dict>
+			<key>CLASS</key>
+			<string>SdefClassView</string>
+			<key>LANGUAGE</key>
+			<string>ObjC</string>
+			<key>OUTLETS</key>
+			<dict>
+				<key>commandTable</key>
+				<string>id</string>
+				<key>commands</key>
+				<string>NSArrayController</string>
+				<key>elements</key>
+				<string>NSArrayController</string>
+				<key>eventTable</key>
+				<string>id</string>
+				<key>events</key>
+				<string>NSArrayController</string>
+				<key>properties</key>
+				<string>NSArrayController</string>
+				<key>tab</key>
+				<string>NSTabView</string>
+			</dict>
+			<key>SUPERCLASS</key>
+			<string>SdefViewController</string>
+		</dict>
+		<dict>
+			<key>CLASS</key>
+			<string>SdefTypeButton</string>
+			<key>LANGUAGE</key>
+			<string>ObjC</string>
+			<key>OUTLETS</key>
+			<dict>
+				<key>typeField</key>
+				<string>NSTextField</string>
+			</dict>
+			<key>SUPERCLASS</key>
+			<string>NSButton</string>
+		</dict>
+		<dict>
+			<key>ACTIONS</key>
+			<dict>
+				<key>editType</key>
+				<string>id</string>
+			</dict>
+			<key>CLASS</key>
+			<string>SdefViewController</string>
+			<key>LANGUAGE</key>
+			<string>ObjC</string>
+			<key>OUTLETS</key>
+			<dict>
+				<key>objectController</key>
+				<string>NSObjectController</string>
+				<key>ownerController</key>
+				<string>NSObjectController</string>
+				<key>sdefView</key>
+				<string>NSView</string>
+			</dict>
+			<key>SUPERCLASS</key>
+			<string>NSObject</string>
+		</dict>
+		<dict>
+			<key>CLASS</key>
+			<string>SKImageAndTextCell</string>
+			<key>LANGUAGE</key>
+			<string>ObjC</string>
+			<key>SUPERCLASS</key>
+			<string>NSTextFieldCell</string>
+		</dict>
+	</array>
+	<key>IBVersion</key>
+	<string>1</string>
+</dict>
+</plist>

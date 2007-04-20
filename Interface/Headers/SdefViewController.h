@@ -23,6 +23,8 @@
 
 - (NSView *)sdefView;
 
+- (IBAction)editType:(id)sender;
+
 - (id)object;
 - (id)editedObject:(id)sender;
 - (void)setObject:(SdefObject *)newObject;

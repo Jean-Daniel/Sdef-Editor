@@ -104,14 +104,15 @@ NSString *PantherScriptingDefinitionFileType = @"PantherScriptingDefinition";
 #if defined (DEBUG)
   [self createDebugMenu];
 #endif
-  NSMenu *file = [[[NSApp mainMenu] itemWithTag:1] submenu];
 #if MAC_OS_X_VERSION_MIN_REQUIRED < MAC_OS_X_VERSION_10_4
   // If Panther, remove open application sdef menu
   if (!OSACopyScriptingDefinition) {
+    NSMenu *file = [[[NSApp mainMenu] itemWithTag:1] submenu];
     [file removeItem:[file itemWithTag:1]];
   }
 #endif
 #if __LP64__
+  NSMenu *file = [[[NSApp mainMenu] itemWithTag:1] submenu];
   NSMenuItem *export = [file itemWithTag:2];
   if (export) {
     NSMenuItem *item  = [[export submenu] itemAtIndex:0];
