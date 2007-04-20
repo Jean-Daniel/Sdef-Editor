@@ -16,6 +16,7 @@
 - (id)copyWithZone:(NSZone *)aZone {
   SdefObject *copy = [super copyWithZone:aZone];
   copy->sd_soFlags = sd_soFlags;  
+  copy->sd_ignore = [sd_ignore copyWithZone:aZone];
   copy->sd_comments = [sd_comments copyWithZone:aZone];
   return copy;
 }
@@ -25,6 +26,7 @@
     NSUInteger length;
     const uint8_t*buffer = [aCoder decodeBytesForKey:@"SOFlags" returnedLength:&length];
     memcpy(&sd_soFlags, buffer, length);    
+    sd_ignore = [[aCoder decodeObjectForKey:@"SOIgnore"] retain];
     sd_comments = [[aCoder decodeObjectForKey:@"SOComments"] retain];
   }
   return self;
@@ -33,6 +35,7 @@
 - (void)encodeWithCoder:(NSCoder *)aCoder {
   [super encodeWithCoder:aCoder];
   [aCoder encodeBytes:(const void *)&sd_soFlags length:sizeof(sd_soFlags) forKey:@"SOFlags"];
+  [aCoder encodeObject:sd_ignore forKey:@"SOIgnore"];
   [aCoder encodeObject:sd_comments forKey:@"SOComments"];
 }
 

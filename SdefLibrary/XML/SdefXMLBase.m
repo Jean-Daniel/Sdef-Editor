@@ -15,9 +15,9 @@
 @implementation SdefObject (SdefXMLManager)
 #pragma mark XML Generation
 - (SdefXMLNode *)xmlNodeForVersion:(SdefVersion)version {
-  id node = nil;
-  id child = nil;
-  id children = nil;
+  SdefXMLNode *node = nil;
+  SdefObject *child = nil;
+  NSEnumerator *children;
   node = [SdefXMLNode nodeWithElementName:[self xmlElementName]];
   NSAssert1(!node || ([node elementName] != nil), @"%@ return an invalid node", self);
   if (node && [node elementName]) {
@@ -44,7 +44,7 @@
     if ([self hasIgnore]) {
       children = [[self ignores] reverseObjectEnumerator];
       while (child = [children nextObject]) {
-        id childNode = [child xmlNodeForVersion:version];
+        SdefXMLNode *childNode = [child xmlNodeForVersion:version];
         if (childNode) {
           NSAssert1([childNode isList] || [childNode elementName], @"%@ return an invalid node", child);
           [node prependChild:childNode];

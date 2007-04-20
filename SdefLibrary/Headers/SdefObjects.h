@@ -10,7 +10,6 @@
 
 @interface SdefDocumentedObject : SdefObject <NSCopying, NSCoding> {
 @private
-  NSMutableArray *sd_xrefs;
   SdefDocumentation *sd_documentation;
 }
 
@@ -30,11 +29,12 @@
 @end
 
 #pragma mark -
-@class SdefSynonym;
+@class SdefSynonym, SdefXRef;
 @interface SdefTerminologyObject : SdefImplementedObject <NSCopying, NSCoding> {
 @private
   NSString *sd_code; 
   NSString *sd_desc;
+  NSMutableArray *sd_xrefs;
   NSMutableArray *sd_synonyms;
 }
 
@@ -44,10 +44,22 @@
 - (NSString *)desc;
 - (void)setDesc:(NSString *)newDesc;
 
+#pragma mark XRefs KVC
+- (NSArray *)xrefs;
+- (void)setXrefs:(NSArray *)xrefs;
+
+- (NSUInteger)countOfXrefs;
+- (void)addXrefs:(SdefXRef *)aRef;
+- (id)objectInXrefsAtIndex:(NSUInteger)anIndex;
+- (void)insertObject:(id)object inXrefsAtIndex:(NSUInteger)anIndex;
+- (void)removeObjectFromXrefsAtIndex:(NSUInteger)anIndex;
+- (void)replaceObjectInXrefsAtIndex:(NSUInteger)anIndex withObject:(id)object;
+
 #pragma mark Synonyms KVC
-- (NSUInteger)countOfSynonyms;
 - (NSArray *)synonyms;
 - (void)setSynonyms:(NSArray *)synonyms;
+
+- (NSUInteger)countOfSynonyms;
 - (void)addSynonym:(SdefSynonym *)aSynonym;
 - (id)objectInSynonymsAtIndex:(NSUInteger)index;
 - (void)insertObject:(id)object inSynonymsAtIndex:(NSUInteger)index;

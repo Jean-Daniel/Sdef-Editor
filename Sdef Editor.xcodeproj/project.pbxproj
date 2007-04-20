@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1B5FEC8F0BD8E58100F57412 /* SdefXRef.h in Headers */ = {isa = PBXBuildFile; fileRef = 1B5FEC8D0BD8E58100F57412 /* SdefXRef.h */; };
+		1B5FEC900BD8E58100F57412 /* SdefXRef.m in Sources */ = {isa = PBXBuildFile; fileRef = 1B5FEC8E0BD8E58100F57412 /* SdefXRef.m */; };
 		1B751C340BD658F7006D25B8 /* SdefLeopardParser.h in Headers */ = {isa = PBXBuildFile; fileRef = 1B751C330BD658F7006D25B8 /* SdefLeopardParser.h */; };
 		1B751C3A0BD65900006D25B8 /* SdefLeopardParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 1B751C390BD65900006D25B8 /* SdefLeopardParser.m */; };
 		656F9B5809E6A188008A0059 /* SKFunctions.m in Sources */ = {isa = PBXBuildFile; fileRef = 656F9B5409E6A188008A0059 /* SKFunctions.m */; };
@@ -293,6 +295,8 @@
 /* Begin PBXFileReference section */
 		089C1660FE840EACC02AAC07 /* English */ = {isa = PBXFileReference; fileEncoding = 10; lastKnownFileType = text.plist.strings; name = English; path = English.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		1058C7A7FEA54F5311CA2CBB /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = /System/Library/Frameworks/Cocoa.framework; sourceTree = "<absolute>"; };
+		1B5FEC8D0BD8E58100F57412 /* SdefXRef.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SdefXRef.h; sourceTree = "<group>"; };
+		1B5FEC8E0BD8E58100F57412 /* SdefXRef.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SdefXRef.m; sourceTree = "<group>"; };
 		1B751C330BD658F7006D25B8 /* SdefLeopardParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SdefLeopardParser.h; sourceTree = "<group>"; };
 		1B751C390BD65900006D25B8 /* SdefLeopardParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SdefLeopardParser.m; sourceTree = "<group>"; };
 		2A37F4B5FDCFA73011CA2CEA /* English */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = English; path = English.lproj/SdefDocument.nib; sourceTree = "<group>"; };
@@ -880,6 +884,8 @@
 			children = (
 				98E98D5D0840DFBA0093BA77 /* SdefLeaf.h */,
 				98E98D5E0840DFBA0093BA77 /* SdefLeaf.m */,
+				1B5FEC8D0BD8E58100F57412 /* SdefXRef.h */,
+				1B5FEC8E0BD8E58100F57412 /* SdefXRef.m */,
 				98CCA8F9082FEEF5002A37E2 /* SdefType.h */,
 				98CCA8FA082FEEF5002A37E2 /* SdefType.m */,
 				9875801F078864330038C05B /* SdefSynonym.h */,
@@ -1260,6 +1266,7 @@
 				98230E5F0AFE299B00675226 /* SKImageAndTextCell.h in Headers */,
 				9818EBCC0BD56D0D0079867A /* AESendThreadSafe.h in Headers */,
 				1B751C340BD658F7006D25B8 /* SdefLeopardParser.h in Headers */,
+				1B5FEC8F0BD8E58100F57412 /* SdefXRef.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1294,12 +1301,10 @@
 		2A37F4A9FDCFA73011CA2CEA /* Project object */ = {
 			isa = PBXProject;
 			buildConfigurationList = 98A7CBEC0855010F000D862B /* Build configuration list for PBXProject "Sdef Editor" */;
-			compatibilityVersion = "Xcode 2.4";
 			hasScannedForEncodings = 1;
 			mainGroup = 2A37F4AAFDCFA73011CA2CEA /* SDef Editor */;
 			projectDirPath = "";
 			projectRoot = "";
-			shouldCheckCompatibility = 1;
 			targets = (
 				8D15AC270486D014006FF6A4 /* Sdef Editor */,
 			);
@@ -1480,6 +1485,7 @@
 				98230E690AFE299B00675226 /* SKImageAndTextCell.m in Sources */,
 				9818EBCE0BD56D290079867A /* AESendThreadSafe.c in Sources */,
 				1B751C3A0BD65900006D25B8 /* SdefLeopardParser.m in Sources */,
+				1B5FEC900BD8E58100F57412 /* SdefXRef.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

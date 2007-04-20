@@ -30,13 +30,15 @@
   EqualIMP isEqual = (EqualIMP)[element methodForSelector:cmd];
   NSAssert(isEqual, @"Missing isEqualToStringMethod");
   
-  /* If a single type => Tiger */
-  if (isEqual(element, cmd, @"enumeration") || 
-      isEqual(element, cmd, @"value-type") || 
-      isEqual(element, cmd, @"record-type") || 
-      isEqual(element, cmd, @"class") || 
+    /* element that contains id */
+  if (isEqual(element, cmd, @"class") || 
       isEqual(element, cmd, @"command") || 
       isEqual(element, cmd, @"event")) {
+    /* If id => Leopard, else Tiger or Leopard */
+    return [attrs objectForKey:@"id"] ? kSdefParserLeopardVersion : kSdefParserTigerVersion | kSdefParserLeopardVersion;
+  } else if (isEqual(element, cmd, @"enumeration") || 
+             isEqual(element, cmd, @"value-type") || 
+             isEqual(element, cmd, @"record-type")) {
     return kSdefParserTigerVersion | kSdefParserLeopardVersion;
   } else if (isEqual(element, cmd, @"class-extension")) {
     return kSdefParserLeopardVersion;

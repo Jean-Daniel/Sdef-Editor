@@ -9,12 +9,15 @@
 #import "SdefClass.h"
 #import "SdefContents.h"
 #import "SdefDocument.h"
+#import "SdefClassManager.h"
 #import "SdefDocumentation.h"
 
 @implementation SdefClass
 #pragma mark Protocols Implementations
 - (id)copyWithZone:(NSZone *)aZone {
   SdefClass *copy = [super copyWithZone:aZone];
+  copy->sd_id = [sd_id copyWithZone:aZone];
+  copy->sd_type = [sd_type copyWithZone:aZone];
   copy->sd_plural = [sd_plural copyWithZone:aZone];
   copy->sd_inherits = [sd_inherits copyWithZone:aZone];
   copy->sd_contents = [sd_contents copyWithZone:aZone];
@@ -24,6 +27,8 @@
 
 - (void)encodeWithCoder:(NSCoder *)aCoder {
   [super encodeWithCoder:aCoder];
+  [aCoder encodeObject:sd_id forKey:@"SCID"];
+  [aCoder encodeObject:sd_type forKey:@"SCType"];
   [aCoder encodeObject:sd_plural forKey:@"SCPlural"];
   [aCoder encodeObject:sd_inherits forKey:@"SCInherits"];
   [aCoder encodeObject:sd_contents forKey:@"SCContents"];
@@ -31,6 +36,8 @@
 
 - (id)initWithCoder:(NSCoder *)aCoder {
   if (self = [super initWithCoder:aCoder]) {
+    sd_id = [[aCoder decodeObjectForKey:@"SCID"] retain];
+    sd_type = [[aCoder decodeObjectForKey:@"SCType"] retain];
     sd_plural = [[aCoder decodeObjectForKey:@"SCPlural"] retain];
     sd_inherits = [[aCoder decodeObjectForKey:@"SCInherits"] retain];
     sd_contents = [[aCoder decodeObjectForKey:@"SCContents"] retain];
@@ -53,6 +60,7 @@
 
 - (void)dealloc {
   [sd_contents setOwner:nil];
+  [sd_id release];
   [sd_plural release];
   [sd_inherits release];
   [sd_contents release];
@@ -151,7 +159,10 @@
   return sd_id;
 }
 - (void)setXmlid:(NSString *)anId {
-  SKSetterCopy(sd_id, anId);
+  if (sd_id != anId) {
+    [[self undoManager] registerUndoWithTarget:self selector:_cmd object:sd_id];
+    SKSetterCopy(sd_id, anId);
+  }
 }
 
 - (NSString *)plural {
@@ -353,6 +364,24 @@
 - (void)setAccTest:(BOOL)flag {
   if (flag) [self setAccessors:[self accessors] | kSdefAccessorTest];
   else [self setAccessors:[self accessors] & ~kSdefAccessorTest];
+}
+
+- (NSString *)cocoaKey {
+  if (![[self impl] key]) {
+    NSString *name = [self name];
+    if (name) {
+      SdefClass *cls = [[self classManager] classWithName:name];
+      if (cls) {
+        if ([cls plural]) {
+          name = [cls plural];
+        } else {
+          name = [name stringByAppendingString:@"s"];
+        }
+      }
+    }
+    return CocoaNameForSdefName([self name], NO);
+  }
+  return [[self impl] key];
 }
 
 @end

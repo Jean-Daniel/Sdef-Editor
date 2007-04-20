@@ -102,7 +102,7 @@ NSString *SdefEditorComment() {
 - (CFXMLTreeRef)insertComment:(NSString *)str {
   CFXMLTreeRef tree = nil;
   NSMutableString *comment = [str mutableCopy]; 
-  if (nil != comment) CFStringTrimWhitespace((CFMutableStringRef)comment);
+  if (comment) CFStringTrimWhitespace((CFMutableStringRef)comment);
   if ([comment length]) {
     CFXMLNodeRef node = CFXMLNodeCreate(kCFAllocatorDefault, kCFXMLNodeTypeComment, (CFStringRef)str, NULL, kCFXMLNodeCurrentVersion);
     tree  = [self appendNode:node];
@@ -116,8 +116,7 @@ NSString *SdefEditorComment() {
   if (sd_node) {
     NSMutableString *str = [[NSMutableString alloc] initWithCapacity:sd_indent + 1];
     [str appendString:@"\n"];
-    unsigned i;
-    for (i=0; i<sd_indent; i++) {
+    for (NSUInteger i = 0; i < sd_indent; i++) {
       [str appendString:@"\t"];
     }
     [self insertTextNode:str];

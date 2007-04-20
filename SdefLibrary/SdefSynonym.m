@@ -79,29 +79,13 @@
 
 - (void)setCode:(NSString *)code {
   if (code != sd_code) {
-    NSUndoManager *undo = [[self owner] undoManager];
+    NSUndoManager *undo = [self undoManager];
     if (undo) {
       [undo registerUndoWithTarget:self selector:_cmd object:sd_code];
       [undo setActionName:NSLocalizedStringFromTable(@"Change Synonym", @"SdefLibrary", @"Undo Action: Change synonym.")];
     }
     [sd_code release];
     sd_code = [code copy];
-  }
-}
-
-- (BOOL)isHidden {
-  return sd_slFlags.hidden;
-}
-
-- (void)setHidden:(BOOL)flag {
-  flag = flag ? 1 : 0;
-  if (flag != sd_slFlags.hidden) {
-    NSUndoManager *undo = [[self owner] undoManager];
-    if (undo) {
-      [[undo prepareWithInvocationTarget:self] setHidden:sd_slFlags.hidden];
-      [undo setActionName:NSLocalizedStringFromTable(@"Change Synonym", @"SdefLibrary", @"Undo Action: Change synonym.")];
-    }
-    sd_slFlags.hidden = flag;
   }
 }
 

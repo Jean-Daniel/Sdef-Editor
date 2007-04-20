@@ -57,6 +57,10 @@
 }
 
 #pragma mark -
+- (NSUndoManager *)undoManager {
+  return [[self owner] undoManager];
+}
+
 - (NSImage *)icon {
   return [NSImage imageNamed:@"Misc"];
 }
@@ -67,7 +71,7 @@
 
 - (void)setName:(NSString *)newName {
   if (sd_name != newName) {
-    NSUndoManager *undo = [sd_owner undoManager];
+    NSUndoManager *undo = [self undoManager];
     if (undo) {
       [undo registerUndoWithTarget:self selector:_cmd object:sd_name];
       [undo setActionName:NSLocalizedStringFromTable(@"Change Name", @"SdefLibrary", @"Undo Action: change name.")];
@@ -75,6 +79,18 @@
     [sd_name release];
     sd_name = [newName stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
     [sd_name retain];
+  }
+}
+
+- (BOOL)isHidden {
+  return sd_slFlags.hidden;
+}
+
+- (void)setHidden:(BOOL)flag {
+  flag = flag ? 1 : 0;
+  if (flag != sd_slFlags.hidden) {
+    [[[self undoManager] prepareWithInvocationTarget:self] setHidden:sd_slFlags.hidden];
+    sd_slFlags.hidden = flag;
   }
 }
 
@@ -95,5 +111,7 @@
 - (id)firstParentOfType:(SdefObjectType)aType {
   return [sd_owner firstParentOfType:aType];
 }
+
+
 
 @end

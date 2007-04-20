@@ -10,22 +10,34 @@
 
 /*
 <!-- CLASSES -->
-<!ENTITY % class-contents "(contents | documentation | element | property | responds-to | synonym)">
+<!ENTITY % class-contents "(contents | documentation | element | property | responds-to | synonym | xref)">
 <!ELEMENT class ((%implementation;)?, (%class-contents;)*)>
-  <!-- not quite accurate; there can be at most one contents element. -->
+<!-- not quite accurate; there can be at most one contents element. -->
 <!ATTLIST class
-name       %Classname;     #REQUIRED
+name       %Term;          #REQUIRED
+id         ID              #IMPLIED
 code       %OSType;        #REQUIRED 
 hidden     %yorn;          #IMPLIED 
-plural     %Classname;     #IMPLIED 
+plural     %Term;          #IMPLIED 
 inherits   %Classname;     #IMPLIED 
+description  %Text;        #IMPLIED 
+>
+
+<!-- contents -->
+<!ELEMENT contents ((%implementation;)?, (type*))>
+<!ATTLIST contents
+name       %Term;          #IMPLIED
+code       %OSType;        #IMPLIED 
+type       %Typename;      #IMPLIED
+access     (r | w | rw)    "rw"     
+hidden     %yorn;          #IMPLIED 
 description  %Text;        #IMPLIED 
 >
 
 <!-- element access -->
 <!ELEMENT element ((%implementation;)?, accessor*)>
 <!ATTLIST element
-type       %Classname;     #REQUIRED
+type       %Typename;      #REQUIRED
 access     (r | w | rw)    "rw"     
 hidden     %yorn;          #IMPLIED 
 description  %Text;        #IMPLIED 
@@ -52,9 +64,12 @@ description  %Text;        #IMPLIED
 <!-- supported verbs -->
 <!ELEMENT responds-to ((%implementation;)?)>
 <!ATTLIST responds-to
-name       %Verbname;      #REQUIRED
+command    %Verbname;      #REQUIRED
 hidden     %yorn;          #IMPLIED 
+
+name       %Verbname;      #IMPLIED
 >
+<!-- "name" is now "command"; "name" is still defined for backward compatibility. -->
 
 <!-- class extensions -->
 <!ELEMENT class-extension ((%implementation;)?, (%class-contents;)*)>

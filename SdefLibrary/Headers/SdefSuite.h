@@ -12,11 +12,11 @@
  <!-- SUITES -->
  <!ELEMENT suite ((%implementation;)?, (class | class-extension | command | documentation | enumeration | event | record-type | value-type)+)>
  <!ATTLIST suite
- name       CDATA           #IMPLIED 
- code       %OSType;        #IMPLIED 
+ name       CDATA           #REQUIRED
+ code       %OSType;        #REQUIRED 
  description  %Text;        #IMPLIED
  hidden     %yorn;          #IMPLIED 
- > 
+ >
 */
 
 @interface SdefTypeCollection : SdefCollection <NSCopying, NSCoding> {

@@ -55,7 +55,7 @@
   list = list ? 1 : 0;
   if (list != sd_slFlags.list) {
     [[self owner] willChangeValueForKey:@"type"];
-    NSUndoManager *undo = [[self owner] undoManager];
+    NSUndoManager *undo = [self undoManager];
     if (undo) {
       [[undo prepareWithInvocationTarget:self] setList:sd_slFlags.list];
       [undo setActionName:NSLocalizedStringFromTable(@"Check/Uncheck List", @"SdefLibrary", @"Undo Action: Check/Uncheck List.")];

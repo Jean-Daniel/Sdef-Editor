@@ -81,7 +81,8 @@ static CFXMLParserCallBacks SdefParserCallBacks = {
       break;
     case kSdefParserTigerVersion:
     case kSdefParserTigerVersion | kSdefParserLeopardVersion:
-      if ([self parserVersion] != kSdefParserTigerVersion) {
+      /* Not already a specific version */
+      if ([self parserVersion] != kSdefParserTigerVersion && [self parserVersion] != kSdefParserLeopardVersion) {
         DLog(@"Transformation to Tiger Parser");
         SKSwizzleIsaPointer(self, [SdefTigerParser class]);
       }
@@ -371,13 +372,14 @@ static CFXMLParserCallBacks SdefParserCallBacks = {
   NSDictionary *attributes = infos ? (id)infos->attributes : nil;
   if (sd_node) {
     SdefParserVersion version;
-    if ([elementName isEqualToString:@"xref"])
+    if ([elementName isEqualToString:@"xref"]) {
       version = kSdefParserLeopardVersion;
-    else
+    } else {
       version = [sd_node acceptXMLElement:elementName attributes:attributes];
+    }
     
     if ([self supportedVersions] & version) {
-      if ([self parserVersion] != version) [self setVersion:version];
+      if ([self parserVersion] != version && version != kSdefParserAllVersions) [self setVersion:version];
     } else {
       NSString *str;
       switch ([self parserVersion]) {

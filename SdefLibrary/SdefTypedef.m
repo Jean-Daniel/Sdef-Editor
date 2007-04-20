@@ -48,11 +48,11 @@
 }
 
 #pragma mark Inline
-- (int)inlineValue {
+- (NSInteger)inlineValue {
   return sd_inline;
 }
 
-- (void)setInlineValue:(int)value {
+- (void)setInlineValue:(NSInteger)value {
   if (value != sd_inline) {
     [[[self undoManager] prepareWithInvocationTarget:self] setInlineValue:sd_inline];
     [[self undoManager] setActionName:@"Change Inline"];

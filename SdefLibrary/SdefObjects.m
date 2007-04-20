@@ -8,8 +8,8 @@
 
 #import "SdefObjects.h"
 
-
 #import "SdefType.h"
+#import "SdefXRef.h"
 #import "SdefSynonym.h"
 #import "SdefDocument.h"
 #import "SdefDocumentation.h"
@@ -170,6 +170,7 @@
   SdefTerminologyObject *copy = [super copyWithZone:aZone];
   copy->sd_code = [sd_code copyWithZone:aZone];
   copy->sd_desc = [sd_desc copyWithZone:aZone];
+  copy->sd_xrefs = [sd_synonyms copyWithZone:aZone];
   copy->sd_synonyms = [sd_synonyms copyWithZone:aZone];
   return copy;
 }
@@ -178,6 +179,7 @@
   [super encodeWithCoder:aCoder];
   [aCoder encodeObject:sd_code forKey:@"STCodeStr"];
   [aCoder encodeObject:sd_desc forKey:@"STDescription"];
+  [aCoder encodeObject:sd_xrefs forKey:@"STXRefs"];
   [aCoder encodeObject:sd_synonyms forKey:@"STSynonyms"];
 }
 
@@ -185,6 +187,7 @@
   if (self = [super initWithCoder:aCoder]) {
     sd_code = [[aCoder decodeObjectForKey:@"STCodeStr"] retain];
     sd_desc = [[aCoder decodeObjectForKey:@"STDescription"] retain];
+    sd_xrefs = [[aCoder decodeObjectForKey:@"STXRefs"] retain];
     sd_synonyms = [[aCoder decodeObjectForKey:@"STSynonyms"] retain];
   }
   return self;
@@ -193,6 +196,7 @@
 - (void)dealloc {
   [sd_code release];
   [sd_desc release];
+  [sd_xrefs release];
   [sd_synonyms release];
   [super dealloc];
 }
@@ -246,9 +250,74 @@
   }
 }
 
+#pragma mark XRefs KVC
+- (NSArray *)xrefs {
+  if (!sd_xrefs && [self hasXrefs])
+    sd_xrefs = [[NSMutableArray alloc] init];
+  return sd_xrefs;
+}
+- (void)setXrefs:(NSArray *)xrefs {
+  if ([self hasXrefs]) {
+    if (sd_xrefs != xrefs) {
+      [[self undoManager] registerUndoWithTarget:self selector:_cmd object:sd_xrefs];
+      [sd_xrefs release];
+      sd_xrefs = [xrefs mutableCopy];
+      [sd_xrefs makeObjectsPerformSelector:@selector(setOwner:) withObject:self];
+    }
+  } else {
+    [super setXrefs:xrefs];
+  }
+}
+
+- (NSUInteger)countOfXrefs {
+  return [sd_xrefs count];
+}
+
+- (id)objectInXrefsAtIndex:(NSUInteger)anIndex {
+  return [sd_xrefs objectAtIndex:anIndex];
+}
+
+- (void)addXrefs:(SdefXRef *)aRef {
+  [self xrefs];
+  [self insertObject:aRef inXrefsAtIndex:[self countOfXrefs]];
+}
+
+- (void)insertObject:(id)object inXrefsAtIndex:(NSUInteger)anIndex {
+  NSUndoManager *undo = [self undoManager];
+  if (undo) {
+    [[undo prepareWithInvocationTarget:self] removeObjectFromXrefsAtIndex:anIndex];
+    [undo setActionName:NSLocalizedStringFromTable(@"Add/Remove XRef", @"SdefLibrary", @"Undo Action: Add/Remove xref.")];
+  }
+  [sd_xrefs insertObject:object atIndex:anIndex];
+  [object setOwner:self];
+}
+
+- (void)removeObjectFromXrefsAtIndex:(NSUInteger)anIndex {
+  SdefXRef *ref = [sd_xrefs objectAtIndex:anIndex];
+  NSUndoManager *undo = [self undoManager];
+  if (undo) {
+    [[undo prepareWithInvocationTarget:self] insertObject:ref inXrefsAtIndex:anIndex];
+    [undo setActionName:NSLocalizedStringFromTable(@"Add/Remove XRef", @"SdefLibrary", @"Undo Action: Add/Remove xref.")];
+  }
+  [ref setOwner:nil];
+  [sd_xrefs removeObjectAtIndex:anIndex];
+}
+
+- (void)replaceObjectInXrefsAtIndex:(NSUInteger)anIndex withObject:(id)object {
+  SdefXRef *ref = [sd_xrefs objectAtIndex:anIndex];
+  NSUndoManager *undo = [self undoManager];
+  if (undo) {
+    [[undo prepareWithInvocationTarget:self] replaceObjectInXrefsAtIndex:anIndex withObject:ref];
+    [undo setActionName:NSLocalizedStringFromTable(@"Add/Remove XRef", @"SdefLibrary", @"Undo Action: Add/Remove xref.")];
+  }
+  [ref setOwner:nil];
+  [sd_xrefs replaceObjectAtIndex:anIndex withObject:object];
+  [object setOwner:self];
+}
+
 #pragma mark Synonyms KVC
 - (NSArray *)synonyms {
-  if (!sd_synonyms && sd_soFlags.hasSynonyms) {
+  if (!sd_synonyms && [self hasSynonyms]) {
     sd_synonyms = [[NSMutableArray allocWithZone:[self zone]] init];
   }
   return sd_synonyms;
@@ -304,7 +373,7 @@
   SdefSynonym *synonym = [sd_synonyms objectAtIndex:anIndex];
   NSUndoManager *undo = [self undoManager];
   if (undo) {
-    [[undo prepareWithInvocationTarget:self] replaceObjectAtIndex:anIndex withObject:synonym];
+    [[undo prepareWithInvocationTarget:self] replaceObjectInSynonymsAtIndex:anIndex withObject:synonym];
     [undo setActionName:NSLocalizedStringFromTable(@"Add/Remove Synonym", @"SdefLibrary", @"Undo Action: Add/Remove synonym.")];
   }
   [synonym setOwner:nil];
@@ -436,7 +505,7 @@
   SdefType *type = [sd_types objectAtIndex:anIndex];
   NSUndoManager *undo = [self undoManager];
   if (undo) {
-    [[undo prepareWithInvocationTarget:self] replaceObjectAtIndex:anIndex withObject:type];
+    [[undo prepareWithInvocationTarget:self] replaceObjectInTypesAtIndex:anIndex withObject:type];
     [undo setActionName:NSLocalizedStringFromTable(@"Add/Remove Type", @"SdefLibrary", @"Undo Action: Add/Remove type.")];
   }
   [type setOwner:nil];

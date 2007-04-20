@@ -12,18 +12,18 @@
 <!-- SIMPLE TYPES -->
 
 <!-- values -->
-<!ELEMENT value-type ((%implementation;)?, synonym*, documentation*)>
+<!ELEMENT value-type ((%implementation;)?, synonym*, documentation*, xref*)>
 <!ATTLIST value-type
 name       %Term;          #REQUIRED
 code       %OSType;        #REQUIRED 
 hidden     %yorn;          #IMPLIED 
-plural     %Classname;     #IMPLIED 
+plural     %Term;          #IMPLIED 
 description  %Text;        #IMPLIED 
 >
 
 <!-- records -->
-<!ELEMENT record-type ((%implementation;)?, synonym*, (documentation | property)+)>
-  <!-- should be at least one property. -->
+<!ELEMENT record-type ((%implementation;)?, synonym*, (documentation | property | xref)+)>
+<!-- should be at least one property. -->
 <!ATTLIST record-type
 name       %Term;          #REQUIRED
 code       %OSType;        #REQUIRED 
@@ -32,13 +32,14 @@ description  %Text;        #IMPLIED
 >
 
 <!-- enumerations -->
-<!ELEMENT enumeration ((%implementation;)?, (documentation | enumerator)+)>
-  <!-- should be at least one enumerator. -->
+<!ELEMENT enumeration ((%implementation;)?, (documentation | enumerator | xref)+)>
+<!-- should be at least one enumerator. -->
 <!ATTLIST enumeration
-name       %Typename;      #REQUIRED
+name       %Term;          #REQUIRED
 code       %OSType;        #REQUIRED
 hidden     %yorn;          #IMPLIED
 description  %Text;        #IMPLIED
+inline     CDATA           #IMPLIED
 >
 
 <!ELEMENT enumerator ((%implementation;)?, synonym*, documentation*)>

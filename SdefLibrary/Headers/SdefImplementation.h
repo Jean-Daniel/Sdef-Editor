@@ -17,6 +17,9 @@
  class      NMTOKEN         #IMPLIED
  key        NMTOKEN         #IMPLIED
  method     NMTOKEN         #IMPLIED
+ boolean-value (YES|NO)     #IMPLIED
+ integer-value NMTOKEN      #IMPLIED
+ string-value  CDATA        #IMPLIED
  >
 */
 

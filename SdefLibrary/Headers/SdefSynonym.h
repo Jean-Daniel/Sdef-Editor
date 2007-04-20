@@ -27,9 +27,6 @@
 
 - (NSImage *)icon;
 
-- (BOOL)isHidden;
-- (void)setHidden:(BOOL)flag;
-
 - (NSString *)code;
 - (void)setCode:(NSString *)code;
 

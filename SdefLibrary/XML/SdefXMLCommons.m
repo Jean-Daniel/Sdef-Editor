@@ -61,6 +61,41 @@
 @end
 
 #pragma mark -
+@implementation SdefXRef (SdefXMLManager)
+#pragma mark XML Generation
+- (SdefXMLNode *)xmlNodeForVersion:(SdefVersion)version {
+  SdefXMLNode *node = nil;
+  if ([self target]) {
+    if (node = [[SdefXMLNode alloc] initWithElementName:@"xref"]) {
+      [node setEmpty:YES];
+      /* Code */
+      NSString *attr = [self target];
+      if (attr) [node setAttribute:[attr stringByEscapingEntities:nil] forKey:@"target"];
+      /* Hidden */
+      if ([self isHidden]) {
+        if (version >= kSdefTigerVersion)
+          [node setAttribute:@"yes" forKey:@"hidden"];
+        else
+          [node setAttribute:@"hidden" forKey:@"hidden"];
+      }
+      [node autorelease];
+    }
+  }
+  return node;
+}
+
+#pragma mark Parsing
+- (void)setAttributes:(NSDictionary *)attrs {
+  [self setTarget:[[attrs objectForKey:@"target"] stringByUnescapingEntities:nil]];
+  NSString *hidden = [attrs objectForKey:@"hidden"];
+  if (hidden && ![hidden isEqualToString:@"no"]) {
+    [self setHidden:YES];
+  }
+}
+
+@end
+
+#pragma mark -
 @implementation SdefType (SdefXMLManager)
 
 #pragma mark XML Generation
@@ -84,14 +119,14 @@
 @implementation SdefDocumentation (SdefXMLManager)
 #pragma mark XML Generation
 - (SdefXMLNode *)xmlNodeForVersion:(SdefVersion)version {
-  id node = nil;
+  SdefXMLNode *node = nil;
   if (sd_content != nil) {
     if (node = [super xmlNodeForVersion:version]) {
       if (version >= kSdefTigerVersion && [self isHtml]) {
         SdefXMLNode *html = [[SdefXMLNode alloc] initWithElementName:@"html"];
         [html setContent:sd_content];
-        if (version >= kSdefLeopardVersion)
-          [html setCDData:YES];
+        /* Tiger also support CDData */
+        [html setCDData:YES];
         [node appendChild:html];
         [html release];
       } else {
@@ -117,8 +152,8 @@
 @implementation SdefImplementation (SdefXMLManager)
 #pragma mark XML Generation
 - (SdefXMLNode *)xmlNodeForVersion:(SdefVersion)version {
-  id node = [super xmlNodeForVersion:version];
-  id attr = [self name];
+  SdefXMLNode *node = [super xmlNodeForVersion:version];
+  NSString *attr = [self name];
   if (attr)
     [node setAttribute:[attr stringByEscapingEntities:nil] forKey:@"name"];
   

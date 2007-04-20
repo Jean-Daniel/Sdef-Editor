@@ -10,17 +10,19 @@
 
 /*
 <!-- VERBS (COMMANDS OR EVENTS) -->
-<!ELEMENT command ((%implementation;)?, synonym*, direct-parameter?, parameter*, result?, documentation*)>
+<!ELEMENT command ((%implementation;)?, synonym*, direct-parameter?, parameter*, result?, documentation*, xref*)>
 <!ATTLIST command
 name       %Verbname;      #REQUIRED
+id         ID              #IMPLIED
 code       %EventCode;     #REQUIRED 
 description  %Text;        #IMPLIED
 hidden     %yorn;          #IMPLIED 
 >
 
-<!ELEMENT event ((%implementation;)?, synonym*, documentation*, direct-parameter?, (documentation | parameter)*, result?, documentation*)>
+<!ELEMENT event ((%implementation;)?, synonym*, documentation*, direct-parameter?, (documentation | parameter)*, result?, documentation*, xref*)>
 <!ATTLIST event
 name       %Verbname;      #REQUIRED
+id         ID              #IMPLIED
 code       %EventCode;     #REQUIRED 
 description  %Text;        #IMPLIED
 hidden     %yorn;          #IMPLIED 

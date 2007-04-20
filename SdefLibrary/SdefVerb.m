@@ -13,6 +13,7 @@
 #pragma mark Protocols Implementations
 - (id)copyWithZone:(NSZone *)aZone {
   SdefVerb *copy = [super copyWithZone:aZone];
+  copy->sd_id = [sd_id copyWithZone:aZone];
   copy->sd_result = [sd_result copyWithZone:aZone];
   [copy->sd_result setOwner:copy];
   copy->sd_direct = [sd_direct copyWithZone:aZone];
@@ -22,12 +23,14 @@
 
 - (void)encodeWithCoder:(NSCoder *)aCoder {
   [super encodeWithCoder:aCoder];
+  [aCoder encodeObject:sd_id forKey:@"SVID"];
   [aCoder encodeObject:sd_result forKey:@"SVResult"];
   [aCoder encodeObject:sd_direct forKey:@"SVDirectParameter"];
 }
 
 - (id)initWithCoder:(NSCoder *)aCoder {
   if (self = [super initWithCoder:aCoder]) {
+    sd_id = [[aCoder decodeObjectForKey:@"SVID"] retain];
     sd_result = [[aCoder decodeObjectForKey:@"SVResult"] retain];
     sd_direct = [[aCoder decodeObjectForKey:@"SVDirectParameter"] retain];
   }
@@ -54,6 +57,7 @@
 }
 
 - (void)dealloc {
+  [sd_id release];
   [sd_result setOwner:nil];
   [sd_result release];
   [sd_direct setOwner:nil];
@@ -84,7 +88,10 @@
   return sd_id;
 }
 - (void)setXmlid:(NSString *)anId {
-  SKSetterCopy(sd_id, anId);
+  if (sd_id != anId) {
+    [[self undoManager] registerUndoWithTarget:self selector:_cmd object:sd_id];
+    SKSetterCopy(sd_id, anId);
+  }
 }
 
 - (SdefResult *)result {

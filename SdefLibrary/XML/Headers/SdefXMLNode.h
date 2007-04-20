@@ -39,7 +39,7 @@
 - (NSArray *)attrKeys;
 - (NSArray *)attrValues;
 
-- (id)attributForKey:(NSString *)key;
+- (NSString *)attributForKey:(NSString *)key;
 - (void)setAttribute:(NSString *)value forKey:(NSString *)key;
 - (void)removeAttributeForKey:(NSString *)key;
 - (void)removeAllAttributes;

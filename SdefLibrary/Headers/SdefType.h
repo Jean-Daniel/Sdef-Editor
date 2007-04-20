@@ -17,7 +17,6 @@
  >
  */
 
-@class SdefTypedObject;
 @interface SdefType : SdefLeaf <NSCopying, NSCoding> {
 
 }

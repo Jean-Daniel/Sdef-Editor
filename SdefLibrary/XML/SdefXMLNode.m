@@ -90,7 +90,7 @@
   return sd_attrValues;
 }
 
-- (id)attributForKey:(NSString *)key {
+- (NSString *)attributForKey:(NSString *)key {
   NSUInteger idx = [sd_attrKeys indexOfObject:key];
   if (idx != NSNotFound) {
     return [sd_attrValues objectAtIndex:idx];

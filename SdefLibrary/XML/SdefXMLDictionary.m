@@ -15,7 +15,7 @@
 #pragma mark XML Generation
 
 - (SdefXMLNode *)xmlNodeForVersion:(SdefVersion)version {
-  id node = nil;
+  SdefXMLNode *node = nil;
   if (node = [super xmlNodeForVersion:version]) {
     if ([self name]) [node setAttribute:[[self name] stringByEscapingEntities:nil] forKey:@"title"];
   }

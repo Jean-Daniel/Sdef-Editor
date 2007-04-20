@@ -24,12 +24,17 @@
 - (id)init;
 - (id)initWithName:(NSString *)name;
 
+- (NSUndoManager *)undoManager;
+
 - (NSString *)objectTypeName;
 
 - (NSImage *)icon;
 
 - (NSString *)name;
 - (void)setName:(NSString *)newName;
+
+- (BOOL)isHidden;
+- (void)setHidden:(BOOL)flag;
 
 - (SdefObject *)owner;
 - (void)setOwner:(SdefObject *)anObject;

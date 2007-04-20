@@ -17,11 +17,11 @@
   return @"enumeration";
 }
 
-- (SdefXMLNode *)xmlNodeForVersion:(SdefVersion)aVersion {
+- (SdefXMLNode *)xmlNodeForVersion:(SdefVersion)version {
   SdefXMLNode *node;
-  if (node = [super xmlNodeForVersion:aVersion]) {
-    if ([self inlineValue] != kSdefInlineAll)
-      [node setAttribute:[NSString stringWithFormat:@"%i", [self inlineValue]] forKey:@"inline"];
+  if (node = [super xmlNodeForVersion:version]) {
+    if (version >= kSdefTigerVersion && [self inlineValue] != kSdefInlineAll)
+      [node setAttribute:[NSString stringWithFormat:@"%li", (long)[self inlineValue]] forKey:@"inline"];
   }
   return node;
 }

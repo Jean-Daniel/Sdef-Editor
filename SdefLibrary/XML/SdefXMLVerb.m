@@ -16,18 +16,24 @@
 @implementation SdefVerb (SdefXMLManager)
 #pragma mark XML Generation
 - (SdefXMLNode *)xmlNodeForVersion:(SdefVersion)version {
-  id node;
+  SdefXMLNode *node;
   if (node = [super xmlNodeForVersion:version]) {
-    id childNode;
+    SdefXMLNode *childNode;
     /* Insert before parameters */
     NSUInteger idx = [node count] - [self count];
     childNode = [[self directParameter] xmlNodeForVersion:version];
-    if (nil != childNode) {
+    if (childNode) {
       [node insertChild:childNode atIndex:idx];
     }
     childNode = [[self result] xmlNodeForVersion:version];
-    if (nil != childNode) {
+    if (childNode) {
       [node appendChild:childNode];
+    }
+    if (version >= kSdefLeopardVersion) {
+      NSString *attr = [self xmlid];
+      if (attr) {
+        [node setAttribute:[attr stringByEscapingEntities:nil] forKey:@"id"];
+      }
     }
   }
   return node;
@@ -44,6 +50,11 @@
 
 #pragma mark -
 #pragma mark Parsing
+- (void)setAttributes:(NSDictionary *)attrs {
+  [super setAttributes:attrs];
+  [self setXmlid:[[attrs objectForKey:@"id"] stringByUnescapingEntities:nil]];
+}
+
 - (SdefParserVersion)acceptXMLElement:(NSString *)element attributes:(NSDictionary *)attrs {
   return kSdefParserAllVersions;
 }
@@ -53,7 +64,7 @@
 @implementation SdefDirectParameter (SdefXMLManager)
 #pragma mark XML Generation
 - (SdefXMLNode *)xmlNodeForVersion:(SdefVersion)version {
-  id node = nil;
+  SdefXMLNode *node = nil;
   if ([self hasType] && (node = [super xmlNodeForVersion:version])) {
     [node removeAttributeForKey:@"name"];
     if ([self isOptional]) {
@@ -91,7 +102,7 @@
 @implementation SdefParameter (SdefXMLManager)
 #pragma mark XML Generation
 - (SdefXMLNode *)xmlNodeForVersion:(SdefVersion)version {
-  id node;
+  SdefXMLNode *node;
   if (node = [super xmlNodeForVersion:version]) {
     if ([self isOptional]) {
       if (version >= kSdefTigerVersion) {
@@ -124,7 +135,7 @@
 @implementation SdefResult (SdefXMLManager)
 #pragma mark XML Generation
 - (SdefXMLNode *)xmlNodeForVersion:(SdefVersion)version {
-  id node = nil;
+  SdefXMLNode *node = nil;
   if ([self hasType] && (node = [super xmlNodeForVersion:version])) {
     [node removeAttributeForKey:@"name"];
     [node setEmpty:YES];

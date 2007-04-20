@@ -12,7 +12,7 @@
 @interface SdefXMLGenerator : NSObject {
   CFXMLTreeRef sd_doc;
   CFXMLTreeRef sd_node;
-  unsigned sd_indent;
+  NSUInteger sd_indent;
   SdefObject *sd_root;
 }
 

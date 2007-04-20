@@ -17,11 +17,11 @@
 @implementation SdefDocumentedObject (SdefXMLManager)
 #pragma mark XML Generation
 - (SdefXMLNode *)xmlNodeForVersion:(SdefVersion)version {
-  id node = nil;
+  SdefXMLNode *node = nil;
   if (node = [super xmlNodeForVersion:version]) {
     if ([self hasDocumentation]) {
       id documentation = [sd_documentation xmlNodeForVersion:version];
-      if (nil != documentation) {
+      if (documentation) {
         [node prependChild:documentation];
       }
     }
@@ -45,7 +45,7 @@
   if (node = [super xmlNodeForVersion:version]) {
     if (sd_impl) {
       SdefXMLNode *impl = [[self impl] xmlNodeForVersion:version];
-      if (nil != impl) {
+      if (impl) {
         [node prependChild:impl];
       }
     }
@@ -65,7 +65,7 @@
 @implementation SdefTerminologyObject (SdefXMLManager)
 #pragma mark XML Generation
 - (SdefXMLNode *)xmlNodeForVersion:(SdefVersion)version {
-  id node = nil;
+  SdefXMLNode *node = nil;
   if (node = [super xmlNodeForVersion:version]) {
     NSString *attr = [self name];
     if (attr)
@@ -88,8 +88,21 @@
       }
     }
     
+    /* xrefs */
+    if (version >= kSdefLeopardVersion && [self hasXrefs] && sd_xrefs) {
+      SdefXRef *xref;
+      NSEnumerator *items = [sd_xrefs objectEnumerator];
+      while (xref = [items nextObject]) {
+        SdefXMLNode *xNode = [xref xmlNodeForVersion:version];
+        if (xNode) {
+          [node appendChild:xNode];
+        }
+      }
+    }
+    
+    /* synonyms */
     if ([self hasSynonyms] && sd_synonyms) {
-      id synonym;
+      SdefSynonym *synonym;
       NSEnumerator *items = [sd_synonyms objectEnumerator];
       while (synonym = [items nextObject]) {
         SdefXMLNode *synNode = [synonym xmlNodeForVersion:version];
@@ -98,6 +111,7 @@
         }
       }
     }
+    
     [node setEmpty:![node hasChildren]];
   }
   return node;
@@ -126,14 +140,13 @@
 }
 
 - (SdefXMLNode *)xmlNodeForVersion:(SdefVersion)version {
-  id node = nil;
+  SdefXMLNode *node = nil;
   if (node = [super xmlNodeForVersion:version]) {
     if (version == kSdefPantherVersion) {
       if ([self hasType]) {
-        unsigned idx;
         NSArray *types = [self types];
         NSMutableString *string = [[NSMutableString alloc] init];
-        for (idx=0; idx<[types count]; idx++) {
+        for (NSUInteger idx = 0; idx < [types count]; idx++) {
           SdefType *type = [types objectAtIndex:idx];
           if ([type name]) {
             if ([string length] > 0) {

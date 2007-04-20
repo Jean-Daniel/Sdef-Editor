@@ -46,7 +46,7 @@ NSUInteger SdefXMLAccessorFlagFromString(NSString *str) {
 - (SdefXMLNode *)xmlNodeForVersion:(SdefVersion)version {
   SdefXMLNode *node = nil;
   if ([self isExtension]) {
-    if ([self inherits]) {
+    if (version >= kSdefLeopardVersion && [self inherits]) {
       if (node = [super xmlNodeForVersion:version]) {
         [node removeAllAttributes];
         [node setAttribute:[[self inherits] stringByEscapingEntities:nil] forKey:@"extends"];
@@ -55,13 +55,15 @@ NSUInteger SdefXMLAccessorFlagFromString(NSString *str) {
   } else if (node = [super xmlNodeForVersion:version]) {
     if ([self plural]) [node setAttribute:[[self plural] stringByEscapingEntities:nil] forKey:@"plural"];
     if ([self inherits]) [node setAttribute:[[self inherits] stringByEscapingEntities:nil] forKey:@"inherits"];
+    if (version >= kSdefLeopardVersion && [self xmlid]) [node setAttribute:[[self xmlid] stringByEscapingEntities:nil] forKey:@"id"];
+    
     if ([self type]) {
-      id type = [SdefXMLNode nodeWithElementName:@"type"];
+      SdefXMLNode *type = [SdefXMLNode nodeWithElementName:@"type"];
       [type setAttribute:[[self type] stringByEscapingEntities:nil] forKey:@"type"];
       [node appendChild:type];
     }
-    id contents = [[self contents] xmlNodeForVersion:version];
-    if (nil != contents) {
+    SdefXMLNode *contents = [[self contents] xmlNodeForVersion:version];
+    if (contents) {
       if ([[[node firstChild] elementName] isEqualToString:@"documentation"]) {
         [node insertChild:contents atIndex:1];
       } else {
@@ -83,6 +85,7 @@ NSUInteger SdefXMLAccessorFlagFromString(NSString *str) {
     [self setExtension:YES];
     [self setInherits:[[attrs objectForKey:@"extends"] stringByUnescapingEntities:nil]];
   } else {
+    [self setXmlid:[[attrs objectForKey:@"id"] stringByUnescapingEntities:nil]];
     [self setPlural:[[attrs objectForKey:@"plural"] stringByUnescapingEntities:nil]];
     [self setInherits:[[attrs objectForKey:@"inherits"] stringByUnescapingEntities:nil]];
   }
@@ -116,12 +119,12 @@ NSUInteger SdefXMLAccessorFlagFromString(NSString *str) {
 @implementation SdefContents (SdefXMLManager)
 #pragma mark XML Generation
 - (SdefXMLNode *)xmlNodeForVersion:(SdefVersion)version {
-  id node = nil;
+  SdefXMLNode *node = nil;
   if ([self hasType] && (node = [super xmlNodeForVersion:version])) {
     if (![self name]) [node setAttribute:@"contents" forKey:@"name"];
     
-    id attr = SdefXMLAccessStringFromFlag([self access]);
-    if (nil != attr) [node setAttribute:attr forKey:@"access"];
+    NSString *attr = SdefXMLAccessStringFromFlag([self access]);
+    if (attr) [node setAttribute:attr forKey:@"access"];
   }
   return node;
 }
@@ -147,20 +150,20 @@ NSUInteger SdefXMLAccessorFlagFromString(NSString *str) {
 @implementation SdefElement (SdefXMLManager)
 #pragma mark XML Generation
 - (SdefXMLNode *)xmlNodeForVersion:(SdefVersion)version {
-  id node;
+  SdefXMLNode *node;
   if (node = [super xmlNodeForVersion:version]) {
     [node removeAttributeForKey:@"name"];
-    id attr = [self name];
-    if (nil != attr) [node setAttribute:[attr stringByEscapingEntities:nil] forKey:@"type"];
+    NSString *attr = [self name];
+    if (attr) [node setAttribute:[attr stringByEscapingEntities:nil] forKey:@"type"];
     
     attr = SdefXMLAccessStringFromFlag([self access]);
-    if (nil != attr) [node setAttribute:attr forKey:@"access"];
+    if (attr) [node setAttribute:attr forKey:@"access"];
     
     /* Accessors */
-    id accessors = [SdefXMLAccessorStringsFromFlag([self accessors]) objectEnumerator];
-    id acc;
+    NSString *acc;
+    NSEnumerator *accessors = [SdefXMLAccessorStringsFromFlag([self accessors]) objectEnumerator];
     while (acc = [accessors nextObject]) {
-      id accNode = [SdefXMLNode nodeWithElementName:@"accessor"];
+      SdefXMLNode *accNode = [SdefXMLNode nodeWithElementName:@"accessor"];
       [accNode setAttribute:acc forKey:@"style"];
       [node appendChild:accNode];
     }
@@ -190,10 +193,10 @@ NSUInteger SdefXMLAccessorFlagFromString(NSString *str) {
 @implementation SdefProperty (SdefXMLManager)
 #pragma mark XML Generation
 - (SdefXMLNode *)xmlNodeForVersion:(SdefVersion)version {
-  id node;
+  SdefXMLNode *node;
   if (node = [super xmlNodeForVersion:version]) {
-    id attr = SdefXMLAccessStringFromFlag([self access]);
-    if (nil != attr) [node setAttribute:attr forKey:@"access"];
+    NSString *attr = SdefXMLAccessStringFromFlag([self access]);
+    if (attr) [node setAttribute:attr forKey:@"access"];
     
     if ([self isNotInProperties]) {
       if (version >= kSdefTigerVersion) {
@@ -216,7 +219,7 @@ NSUInteger SdefXMLAccessorFlagFromString(NSString *str) {
   
   [self setAccess:SdefXMLAccessFlagFromString([attrs objectForKey:@"access"])];
   if ([[attrs objectForKey:@"in-properties"] isEqualToString:@"no"] ||
-      (nil != [attrs objectForKey:@"not-in-properties"])) {
+      ([attrs objectForKey:@"not-in-properties"])) {
     [self setNotInProperties:YES];
   }
 }
@@ -232,7 +235,7 @@ NSUInteger SdefXMLAccessorFlagFromString(NSString *str) {
 
 #pragma mark XML Generation
 - (SdefXMLNode *)xmlNodeForVersion:(SdefVersion)version {
-  id node = nil;
+  SdefXMLNode *node = nil;
   if ([self name] && (node = [super xmlNodeForVersion:version])) {
     NSString *key = @"name";
     if (version >= kSdefLeopardVersion)
