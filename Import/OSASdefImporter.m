@@ -3,7 +3,7 @@
  *  Sdef Editor
  *
  *  Created by Rainbow Team.
- *  Copyright Â© 2006 Shadow Lab. All rights reserved.
+ *  Copyright © 2006 - 2007 Shadow Lab. All rights reserved.
  */
 
 #import "OSASdefImporter.h"
@@ -58,8 +58,12 @@
   if (sd_path && [sd_path getFSRef:&file]) {
     CFDataRef sdef = nil;
     if (noErr == OSACopyScriptingDefinition(&file, 0, &sdef) && sdef) {
-      sd_dico = [SdefLoadDictionaryData((id)sdef, nil, self) retain];
+      NSString *error = nil;
+      sd_dico = [SdefLoadDictionaryData((id)sdef, nil, self, &error) retain];
       CFRelease(sdef);
+      if (!sd_dico && error)
+        NSRunAlertPanel(@"Sdef parser failed with error:",
+                        @"%@", @"OK", nil, nil, error);
     }
   }
   [suites addObjectsFromArray:[sd_dico children]];

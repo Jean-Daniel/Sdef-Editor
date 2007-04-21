@@ -3,7 +3,7 @@
  *  Sdef Editor
  *
  *  Created by Rainbow Team.
- *  Copyright Â© 2006 Shadow Lab. All rights reserved.
+ *  Copyright © 2006 - 2007 Shadow Lab. All rights reserved.
  */
 
 #import "SdefClass.h"
@@ -16,7 +16,6 @@
 #pragma mark Protocols Implementations
 - (id)copyWithZone:(NSZone *)aZone {
   SdefClass *copy = [super copyWithZone:aZone];
-  copy->sd_id = [sd_id copyWithZone:aZone];
   copy->sd_type = [sd_type copyWithZone:aZone];
   copy->sd_plural = [sd_plural copyWithZone:aZone];
   copy->sd_inherits = [sd_inherits copyWithZone:aZone];
@@ -27,7 +26,6 @@
 
 - (void)encodeWithCoder:(NSCoder *)aCoder {
   [super encodeWithCoder:aCoder];
-  [aCoder encodeObject:sd_id forKey:@"SCID"];
   [aCoder encodeObject:sd_type forKey:@"SCType"];
   [aCoder encodeObject:sd_plural forKey:@"SCPlural"];
   [aCoder encodeObject:sd_inherits forKey:@"SCInherits"];
@@ -36,7 +34,6 @@
 
 - (id)initWithCoder:(NSCoder *)aCoder {
   if (self = [super initWithCoder:aCoder]) {
-    sd_id = [[aCoder decodeObjectForKey:@"SCID"] retain];
     sd_type = [[aCoder decodeObjectForKey:@"SCType"] retain];
     sd_plural = [[aCoder decodeObjectForKey:@"SCPlural"] retain];
     sd_inherits = [[aCoder decodeObjectForKey:@"SCInherits"] retain];
@@ -60,7 +57,6 @@
 
 - (void)dealloc {
   [sd_contents setOwner:nil];
-  [sd_id release];
   [sd_plural release];
   [sd_inherits release];
   [sd_contents release];
@@ -69,13 +65,10 @@
 
 - (void)sdefInit {
   [super sdefInit];
+  sd_soFlags.xid = 1;
   sd_soFlags.xrefs = 1;
   
   NSZone *zone = [self zone];
-  SdefContents *contents = [[SdefContents allocWithZone:zone] init];
-  [self setContents:contents];
-  [contents release];
-  
   SdefCollection *child = [[SdefCollection allocWithZone:zone] initWithName:NSLocalizedStringFromTable(@"Elements", @"SdefLibrary", @"Elements collection default name")];
   [child setContentType:[SdefElement class]];
   [child setElementName:@"elements"];
@@ -142,9 +135,10 @@
 }
 
 - (SdefContents *)contents {
+  if (!sd_contents)
+    sd_contents = [[SdefContents alloc] init];
   return sd_contents;
 }
-
 - (void)setContents:(SdefContents *)contents {
   if (sd_contents != contents) {
     [sd_contents setOwner:nil];
@@ -155,20 +149,9 @@
   }
 }
 
-- (NSString *)xmlid {
-  return sd_id;
-}
-- (void)setXmlid:(NSString *)anId {
-  if (sd_id != anId) {
-    [[self undoManager] registerUndoWithTarget:self selector:_cmd object:sd_id];
-    SKSetterCopy(sd_id, anId);
-  }
-}
-
 - (NSString *)plural {
   return sd_plural;
 }
-
 - (void)setPlural:(NSString *)newPlural {
   if (sd_plural != newPlural) {
     [[self undoManager] registerUndoWithTarget:self selector:_cmd object:sd_plural];

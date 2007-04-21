@@ -3,7 +3,7 @@
  *  Sdef Editor
  *
  *  Created by Rainbow Team.
- *  Copyright Â© 2006 Shadow Lab. All rights reserved.
+ *  Copyright © 2006 - 2007 Shadow Lab. All rights reserved.
  */
 
 #import "AeteImporter.h"
@@ -228,7 +228,7 @@ bail:
 - (void)postProcessClass:(SdefClass *)aClass {
   if ([[aClass properties] count]) {
     SdefProperty *info = [[aClass properties] firstChild];
-    if (SKOSTypeFromString([info code]) == pInherits) {
+    if (OSTypeFromSdefString([info code]) == pInherits) {
       id superclass = [manager sdefClassWithCode:[info type] inSuite:nil];
       if (superclass) {
         [aClass setInherits:[superclass name]];
@@ -237,7 +237,7 @@ bail:
                 forValue:[aClass name]];
       }
       [info remove];
-    } else if (SKOSTypeFromString([info code]) == kAESpecialClassProperties) {
+    } else if (OSTypeFromSdefString([info code]) == kAESpecialClassProperties) {
       if ([[info name] isEqualToString:@"<Plural>"]) {
         if ([[aClass properties] count] == 1) {
           NSUInteger idx = [aClass index];

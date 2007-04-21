@@ -3,7 +3,7 @@
  *  Sdef Editor
  *
  *  Created by Rainbow Team.
- *  Copyright Â© 2006 Shadow Lab. All rights reserved.
+ *  Copyright © 2006 - 2007 Shadow Lab. All rights reserved.
  */
 
 #import "SdefSuite.h"
@@ -36,7 +36,7 @@
   bytes += (intptr_t)bytes % 2;
   
   OSType *identifier = (UInt32 *)bytes;
-  [self setCode:AeteStringForOSType(*identifier)];
+  [self setCode:SdefStringForOSType(*identifier)];
   bytes += 4;
   
   /* skip level and version */

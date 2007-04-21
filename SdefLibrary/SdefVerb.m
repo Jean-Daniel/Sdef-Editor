@@ -3,7 +3,7 @@
  *  Sdef Editor
  *
  *  Created by Rainbow Team.
- *  Copyright Â© 2006 Shadow Lab. All rights reserved.
+ *  Copyright © 2006 - 2007 Shadow Lab. All rights reserved.
  */
 
 #import "SdefVerb.h"
@@ -13,7 +13,6 @@
 #pragma mark Protocols Implementations
 - (id)copyWithZone:(NSZone *)aZone {
   SdefVerb *copy = [super copyWithZone:aZone];
-  copy->sd_id = [sd_id copyWithZone:aZone];
   copy->sd_result = [sd_result copyWithZone:aZone];
   [copy->sd_result setOwner:copy];
   copy->sd_direct = [sd_direct copyWithZone:aZone];
@@ -23,14 +22,12 @@
 
 - (void)encodeWithCoder:(NSCoder *)aCoder {
   [super encodeWithCoder:aCoder];
-  [aCoder encodeObject:sd_id forKey:@"SVID"];
   [aCoder encodeObject:sd_result forKey:@"SVResult"];
   [aCoder encodeObject:sd_direct forKey:@"SVDirectParameter"];
 }
 
 - (id)initWithCoder:(NSCoder *)aCoder {
   if (self = [super initWithCoder:aCoder]) {
-    sd_id = [[aCoder decodeObjectForKey:@"SVID"] retain];
     sd_result = [[aCoder decodeObjectForKey:@"SVResult"] retain];
     sd_direct = [[aCoder decodeObjectForKey:@"SVDirectParameter"] retain];
   }
@@ -57,7 +54,6 @@
 }
 
 - (void)dealloc {
-  [sd_id release];
   [sd_result setOwner:nil];
   [sd_result release];
   [sd_direct setOwner:nil];
@@ -68,33 +64,21 @@
 
 - (BOOL)isCommand {
   SdefSuite *suite = [self suite];
-  return [self parent] == [suite commands];
+  return suite ? [self parent] == [suite commands] : !sd_soFlags.event;
 }
-  
-- (void)sdefInit {
-  [super sdefInit];
-  sd_soFlags.xrefs = 1;
-  
-  SdefResult *result = [[SdefResult allocWithZone:[self zone]] init];
-  [self setResult:result];
-  [result release];
-  
-  SdefDirectParameter *param = [[SdefDirectParameter allocWithZone:[self zone]] init];
-  [self setDirectParameter:param];
-  [param release];
+- (void)setCommand:(BOOL)flag {
+  SKSetFlag(sd_soFlags.event, !flag);
 }
 
-- (NSString *)xmlid {
-  return sd_id;
-}
-- (void)setXmlid:(NSString *)anId {
-  if (sd_id != anId) {
-    [[self undoManager] registerUndoWithTarget:self selector:_cmd object:sd_id];
-    SKSetterCopy(sd_id, anId);
-  }
+- (void)sdefInit {
+  [super sdefInit];
+  sd_soFlags.xid = 1;
+  sd_soFlags.xrefs = 1;
 }
 
 - (SdefResult *)result {
+  if (!sd_result)
+    sd_result = [[SdefResult alloc] init];
   return sd_result;
 }
 - (void)setResult:(SdefResult *)aResult {
@@ -107,6 +91,8 @@
 }
 
 - (SdefDirectParameter *)directParameter {
+  if (!sd_direct)
+    sd_direct = [[SdefDirectParameter alloc] init];
   return sd_direct;
 }
 - (void)setDirectParameter:(SdefDirectParameter *)aParameter {

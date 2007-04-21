@@ -3,7 +3,7 @@
  *  Sdef Editor
  *
  *  Created by Rainbow Team.
- *  Copyright Â© 2006 Shadow Lab. All rights reserved.
+ *  Copyright © 2006 - 2007 Shadow Lab. All rights reserved.
  */
 
 #import "SdefObjects.h"
@@ -54,13 +54,15 @@ description  %Text;        #IMPLIED
 
 @class SdefDocumentation, SdefDirectParameter, SdefResult;
 @interface SdefVerb : SdefTerminologyObject <NSCopying, NSCoding> {
-  NSString *sd_id;
+  @private
   SdefResult *sd_result;
   SdefDirectParameter *sd_direct;
   // Code into verb are split into class & ID that are two concat four char codes (i.e. eavtquit).
 }
 
 - (BOOL)isCommand;
+/* Just an hint. isCommand can returns something different */
+- (void)setCommand:(BOOL)flag;
 
 - (SdefResult *)result;
 - (void)setResult:(SdefResult *)aResult;

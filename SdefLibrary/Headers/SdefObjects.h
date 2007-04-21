@@ -3,7 +3,7 @@
  *  Sdef Editor
  *
  *  Created by Rainbow Team.
- *  Copyright Â© 2006 Shadow Lab. All rights reserved.
+ *  Copyright © 2006 - 2007 Shadow Lab. All rights reserved.
  */
 
 #import "SdefBase.h"
@@ -32,6 +32,7 @@
 @class SdefSynonym, SdefXRef;
 @interface SdefTerminologyObject : SdefImplementedObject <NSCopying, NSCoding> {
 @private
+  NSString *sd_id;
   NSString *sd_code; 
   NSString *sd_desc;
   NSMutableArray *sd_xrefs;
@@ -95,17 +96,33 @@
 @end
 
 SK_PRIVATE
+NSString *SdefStringForOSType(OSType type);
+SK_PRIVATE
+OSType OSTypeFromSdefString(NSString *string);
+
+SK_PRIVATE
 NSArray *SdefTypesForTypeString(NSString *type);
 SK_PRIVATE
 NSString *SdefTypeStringForTypes(NSArray *types);
 
 #pragma mark -
-@interface SdefTypedOrphanObject : SdefTypedObject <NSCopying, NSCoding> {
-@private
-  SdefObject *sd_owner;
+@interface SdefOrphanObject : SdefObject <NSCopying, NSCoding> {
+  @private
+  id<SdefObject> sd_owner;
 }
 
-- (id)owner;
-- (void)setOwner:(SdefObject *)anObject;
+- (id<SdefObject>)owner;
+- (void)setOwner:(id<SdefObject>)anObject;
+
+@end
+
+#pragma mark -
+@interface SdefTypedOrphanObject : SdefTypedObject <NSCopying, NSCoding> {
+@private
+  id<SdefObject> sd_owner;
+}
+
+- (id<SdefObject>)owner;
+- (void)setOwner:(id<SdefObject>)anObject;
 
 @end

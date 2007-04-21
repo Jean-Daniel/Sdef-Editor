@@ -3,7 +3,7 @@
  *  Sdef Editor
  *
  *  Created by Rainbow Team.
- *  Copyright Â© 2006 Shadow Lab. All rights reserved.
+ *  Copyright © 2006 - 2007 Shadow Lab. All rights reserved.
  */
 
 #import "SdefXMLBase.h"
@@ -11,34 +11,15 @@
 #import "SdefXMLNode.h"
 #import "SdefClass.h"
 
-NSArray *SdefXMLAccessorStringsFromFlag(NSUInteger flag) {
-  NSMutableArray *strings = [NSMutableArray array];
-  if (flag & kSdefAccessorIndex) [strings addObject:@"index"];
-  if (flag & kSdefAccessorID) [strings addObject:@"id"];
-  if (flag & kSdefAccessorName) [strings addObject:@"name"];
-  if (flag & kSdefAccessorRange) [strings addObject:@"range"];
-  if (flag & kSdefAccessorRelative) [strings addObject:@"relative"];
-  if (flag & kSdefAccessorTest) [strings addObject:@"test"];
-  return strings;
-}
+static
+NSString *SdefXMLAccessStringFromFlag(NSUInteger flag);
+static
+NSUInteger SdefXMLAccessFlagFromString(NSString *str);
 
-NSUInteger SdefXMLAccessorFlagFromString(NSString *str) {
-  NSUInteger flag = 0;
-  if (str && [str rangeOfString:@"index"].location != NSNotFound) {
-    flag |= kSdefAccessorIndex;
-  } else if (str && [str rangeOfString:@"name"].location != NSNotFound) {
-    flag |= kSdefAccessorName;
-  } else if (str && [str rangeOfString:@"id"].location != NSNotFound) {
-    flag |= kSdefAccessorID;
-  } else if (str && [str rangeOfString:@"range"].location != NSNotFound) {
-    flag |= kSdefAccessorRange;
-  } else if (str && [str rangeOfString:@"relative"].location != NSNotFound) {
-    flag |= kSdefAccessorRelative;
-  } else if (str && [str rangeOfString:@"test"].location != NSNotFound) {
-    flag |= kSdefAccessorTest;
-  }
-  return flag;
-}
+static
+NSUInteger SdefXMLAccessorFlagFromString(NSString *str);
+static
+NSArray *SdefXMLAccessorStringsFromFlag(NSUInteger flag);
 
 #pragma mark -
 @implementation SdefClass (SdefXMLManager)
@@ -62,12 +43,14 @@ NSUInteger SdefXMLAccessorFlagFromString(NSString *str) {
       [type setAttribute:[[self type] stringByEscapingEntities:nil] forKey:@"type"];
       [node appendChild:type];
     }
-    SdefXMLNode *contents = [[self contents] xmlNodeForVersion:version];
-    if (contents) {
-      if ([[[node firstChild] elementName] isEqualToString:@"documentation"]) {
-        [node insertChild:contents atIndex:1];
-      } else {
-        [node prependChild:contents];
+    if (sd_contents) {
+      SdefXMLNode *contents = [sd_contents xmlNodeForVersion:version];
+      if (contents) {
+        if ([[[node firstChild] elementName] isEqualToString:@"documentation"]) {
+          [node insertChild:contents atIndex:1];
+        } else {
+          [node prependChild:contents];
+        }
       }
     }
   }
@@ -79,8 +62,8 @@ NSUInteger SdefXMLAccessorFlagFromString(NSString *str) {
 }
 
 #pragma mark Parsing
-- (void)setAttributes:(NSDictionary *)attrs {
-  [super setAttributes:attrs];
+- (void)setXMLAttributes:(NSDictionary *)attrs {
+  [super setXMLAttributes:attrs];
   if ([attrs objectForKey:@"extends"]) {
     [self setExtension:YES];
     [self setInherits:[[attrs objectForKey:@"extends"] stringByUnescapingEntities:nil]];
@@ -91,26 +74,28 @@ NSUInteger SdefXMLAccessorFlagFromString(NSString *str) {
   }
 }
 
-- (SdefParserVersion)acceptXMLElement:(NSString *)element attributes:(NSDictionary *)attrs {
-  SEL cmd = @selector(isEqualToString:);
-  EqualIMP isEqual = (EqualIMP)[element methodForSelector:cmd];
-  NSAssert(isEqual, @"Missing isEqualToStringMethod");
-  
-  /* If a single type => Tiger */
-  if (isEqual(element, cmd, @"type") ||
-      isEqual(element, cmd, @"element") ||
-      isEqual(element, cmd, @"property")) {
-    return kSdefParserTigerVersion | kSdefParserLeopardVersion;
-  } else if (isEqual(element, cmd, @"responds-to")) {
-    return [attrs objectForKey:@"command"] ? kSdefParserLeopardVersion : kSdefParserTigerVersion;
-  } else /* If a collection => Panther */
-    if (isEqual(element, cmd, @"elements") || 
-        isEqual(element, cmd, @"properties") || 
-        isEqual(element, cmd, @"responds-to-commands") || 
-        isEqual(element, cmd, @"responds-to-events")) {
-      return kSdefParserPantherVersion;
-    }
-  return kSdefParserAllVersions;
+- (void)addXMLChild:(id<SdefObject>)child {
+  switch ([child objectType]) {
+    case kSdefContentsType:
+      [self setContents:(SdefContents *)child];
+      break;
+    case kSdefPropertyType:
+      [[self properties] appendChild:(SdefProperty *)child];
+      break;
+    case kSdefElementType:
+      [[self elements] appendChild:(SdefElement *)child];
+      break;
+    case kSdefRespondsToType:
+      [[self commands] appendChild:(SdefRespondsTo *)child];
+      break;
+      /* Undocumented type element support */
+    case kSdefTypeAtomType:
+      [self setType:[child name]];
+      break;
+    default:
+      [super addXMLChild:child];
+      break;
+  }
 }
 
 @end
@@ -134,14 +119,10 @@ NSUInteger SdefXMLAccessorFlagFromString(NSString *str) {
 }
 
 #pragma mark Parsing
-- (void)setAttributes:(NSDictionary *)attrs {
-  [super setAttributes:attrs];
+- (void)setXMLAttributes:(NSDictionary *)attrs {
+  [super setXMLAttributes:attrs];
   
   [self setAccess:SdefXMLAccessFlagFromString([attrs objectForKey:@"access"])];
-}
-
-- (SdefParserVersion)acceptXMLElement:(NSString *)element attributes:(NSDictionary *)attrs {
-  return kSdefParserAllVersions;
 }
 
 @end
@@ -176,15 +157,16 @@ NSUInteger SdefXMLAccessorFlagFromString(NSString *str) {
 }
 
 #pragma mark Parsing
-- (void)setAttributes:(NSDictionary *)attrs {
-  [super setAttributes:attrs];
+- (void)setXMLAttributes:(NSDictionary *)attrs {
+  [super setXMLAttributes:attrs];
   
   [self setName:[[attrs objectForKey:@"type"] stringByUnescapingEntities:nil]];
   [self setAccess:SdefXMLAccessFlagFromString([attrs objectForKey:@"access"])];
 }
 
-- (SdefParserVersion)acceptXMLElement:(NSString *)element attributes:(NSDictionary *)attrs {
-  return kSdefParserAllVersions;
+- (void)addXMLAccessor:(NSString *)style {
+  if (style)
+    [self setAccessors:[self accessors] | SdefXMLAccessorFlagFromString(style)];
 }
 
 @end
@@ -214,18 +196,14 @@ NSUInteger SdefXMLAccessorFlagFromString(NSString *str) {
 }
 
 #pragma mark Parsing
-- (void)setAttributes:(NSDictionary *)attrs {
-  [super setAttributes:attrs];
+- (void)setXMLAttributes:(NSDictionary *)attrs {
+  [super setXMLAttributes:attrs];
   
   [self setAccess:SdefXMLAccessFlagFromString([attrs objectForKey:@"access"])];
   if ([[attrs objectForKey:@"in-properties"] isEqualToString:@"no"] ||
       ([attrs objectForKey:@"not-in-properties"])) {
     [self setNotInProperties:YES];
   }
-}
-
-- (SdefParserVersion)acceptXMLElement:(NSString *)element attributes:(NSDictionary *)attrs {
-  return kSdefParserAllVersions;
 }
 
 @end
@@ -250,12 +228,8 @@ NSUInteger SdefXMLAccessorFlagFromString(NSString *str) {
 }
 
 #pragma mark Parsing
-- (SdefParserVersion)acceptXMLElement:(NSString *)element attributes:(NSDictionary *)attrs {
-  return kSdefParserAllVersions;
-}
-
-- (void)setAttributes:(NSDictionary *)attrs {
-  [super setAttributes:attrs];
+- (void)setXMLAttributes:(NSDictionary *)attrs {
+  [super setXMLAttributes:attrs];
   
   NSString *cmd = [attrs objectForKey:@"command"];
   if (cmd)
@@ -263,3 +237,51 @@ NSUInteger SdefXMLAccessorFlagFromString(NSString *str) {
 }
 
 @end
+
+NSString *SdefXMLAccessStringFromFlag(NSUInteger flag) {
+  id str = nil;
+  if (flag == (kSdefAccessRead | kSdefAccessWrite)) str = @"rw";
+  else if (flag == kSdefAccessRead) str = @"r";
+  else if (flag == kSdefAccessWrite) str = @"w";
+  return str;
+}
+
+NSUInteger SdefXMLAccessFlagFromString(NSString *str) {
+  NSUInteger flag = 0;
+  if (str && [str rangeOfString:@"r"].location != NSNotFound) {
+    flag |= kSdefAccessRead;
+  }
+  if (str && [str rangeOfString:@"w"].location != NSNotFound) {
+    flag |= kSdefAccessWrite;
+  }
+  return flag;
+}
+
+NSArray *SdefXMLAccessorStringsFromFlag(NSUInteger flag) {
+  NSMutableArray *strings = [NSMutableArray array];
+  if (flag & kSdefAccessorIndex) [strings addObject:@"index"];
+  if (flag & kSdefAccessorID) [strings addObject:@"id"];
+  if (flag & kSdefAccessorName) [strings addObject:@"name"];
+  if (flag & kSdefAccessorRange) [strings addObject:@"range"];
+  if (flag & kSdefAccessorRelative) [strings addObject:@"relative"];
+  if (flag & kSdefAccessorTest) [strings addObject:@"test"];
+  return strings;
+}
+
+NSUInteger SdefXMLAccessorFlagFromString(NSString *str) {
+  NSUInteger flag = 0;
+  if (str && [str rangeOfString:@"index"].location != NSNotFound) {
+    flag |= kSdefAccessorIndex;
+  } else if (str && [str rangeOfString:@"name"].location != NSNotFound) {
+    flag |= kSdefAccessorName;
+  } else if (str && [str rangeOfString:@"id"].location != NSNotFound) {
+    flag |= kSdefAccessorID;
+  } else if (str && [str rangeOfString:@"range"].location != NSNotFound) {
+    flag |= kSdefAccessorRange;
+  } else if (str && [str rangeOfString:@"relative"].location != NSNotFound) {
+    flag |= kSdefAccessorRelative;
+  } else if (str && [str rangeOfString:@"test"].location != NSNotFound) {
+    flag |= kSdefAccessorTest;
+  }
+  return flag;
+}

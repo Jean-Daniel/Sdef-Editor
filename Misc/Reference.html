@@ -110,10 +110,7 @@
           <a href="#Property">Property</a>
          </dd>
          <dd><img class="middle" src="Images/Member.png" alt="" />
-          <a href="#RespondsToCommands">Resp. to Cmds</a>
-         </dd>
-         <dd><img class="middle" src="Images/Member.png" alt="" />
-          <a href="#RespondsToEvents">Resp. to Events</a>
+          <a href="#RespondsTo">Responds to</a>
          </dd>
         </dl>
        </dd>
@@ -195,7 +192,7 @@
     and supported <a href="#Command">verbs</a> for instances of that scriptable class. Class instances are called “objects”.</p>
     <p class="definition">Every class should have a human-readable <em>name</em> and <em>description</em> and a four-character code to identify it.
     A class also typically specifies its <a href="#Property">properties</a> (or attributes and to-one relationships) and <a href="#Element">elements</a> (to-many relationships).
-    A class element also lists the commands it responds to, using the <a href="#RespondsToCommands">responds-to element.</a></p>
+    A class element also lists the commands it responds to, using the <a href="#RespondsTo">responds-to</a> element.</p>
    <h4>Attributes</h4>
    <dl class="attributes">
     <dt class="require">name</dt>
@@ -577,8 +574,6 @@
     <dd>See <a href="#Attributes">Commons Attributes</a>.</dd>
     <dt>code</dt>
     <dd>See <a href="#Attributes">Commons Attributes</a>.</dd>
-    <dt>type</dt>
-    <dd>See <a href="#Attributes">Commons Attributes</a>.</dd>
     <dt class="optional">description</dt>
     <dd>See <a href="#Attributes">Commons Attributes</a>.</dd>
     <dt class="optional">hidden</dt>
@@ -588,7 +583,7 @@
   <hr class="separator"/>
 
   <div class="element">
-   <h3 id="RespondsToCommands">Responds to Commands</h3>
+   <h3 id="RespondsTo">Responds to</h3>
    <p class="definition">
      Defines a verb that a class responds to.
      Cocoa Scripting only requires these in order to define a custom method for handling a <a href="#Command">verb</a> (see <a href="#Cocoa">Cocoa</a>).
@@ -605,12 +600,6 @@
     <dt>cocoa &#8594; method</dt>
     <dd>Name of the cocoa method that should be invoked when <em>command</em> operates on an instance of the enclosing class.</dd>
    </dl>
-  </div>
-  <hr class="separator"/>
-
-  <div class="element">
-   <h3 id="RespondsToEvents">Responds to Events</h3>
-   <p class="definition">See <a href="#RespondsToCommands">Responds to Commands</a>.</p>
   </div>
   <hr class="separator"/>
 
@@ -818,7 +807,7 @@
   <p><strong>Cocoa</strong> element can occurs in <a href="#Suite">suite</a>, <a href="#Synonym">synonym</a> and in the following terminology elements:
     <a href="#Enumeration">enumeration</a>, <a href="#Enumerator">enumerator</a>, <a href="#RecordType">record-type</a>, <a href="#ValueType">value-type</a>,
     <a href="#Class">class</a>, <a href="#ClassExtension">class-extension</a>, 
-    <a href="#Contents">contents</a>, <a href="#Element">element</a>, <a href="#Property">property</a>, <a href="#RespondsToCommands">responds-to</a>, 
+    <a href="#Contents">contents</a>, <a href="#Element">element</a>, <a href="#Property">property</a>, <a href="#RespondsTo">responds-to</a>, 
     <a href="#Command">command</a>, <a href="#Event">event</a>, <a href="#Parameter">parameter</a>.</p>
   <p><strong>Warning:</strong> The above is correct for sdp(1) , but not for Cocoa Scripting. See <a href="#Bugs">Bugs</a>.</p>
    <h4>Attributes</h4>
@@ -830,7 +819,7 @@
     <dd>Specifies a string key for an NSDictionary of command <a href="#Parameter">parameters</a>,
         or a key to be used by Cocoa scripting to access a <a href="#Property">property</a> or <a href="#Element">element</a> through key-value coding.</dd>
     <dt>method</dt>
-    <dd>Specifies an Objective-C method name. Used to specify <a href="#RespondsToCommands">responds-to</a> methods.</dd>
+    <dd>Specifies an Objective-C method name. Used to specify <a href="#RespondsTo">responds-to</a> methods.</dd>
     <dt>name</dt>
     <dd>A name used internally by Cocoa Scripting (use for <a href="#Suite">suites</a>, <a href="#Command">command</a> and
     <a href="#Event">event</a> key names,  <a href="#Enumeration">enumerations</a>, and <a href="#Enumerator">enumerators</a>).</dd>
@@ -873,7 +862,7 @@
       Cocoa scriptTerminology files do not support hidden terms, for best results, build an 'aete' into your application as well.<br />
       The value may be <code>“yes”</code> or <code>“no”</code> (the default).</dd>
   <dt class="optional">id</dt>
-  <dd>A unique identifier for the element. Use one when you want to refer to one of a set of identically named elements in a <a href="#RespondsToCommands">responds-to</a> or <a href="#XRef">xref</a> element.</dd>
+  <dd>A unique identifier for the element. Use one when you want to refer to one of a set of identically named elements in a <a href="#RespondsTo">responds-to</a> or <a href="#XRef">xref</a> element.</dd>
    </dl>
   </div>
   <hr class="separator"/>
@@ -888,7 +877,7 @@
       <p style="text-indent: 1em"><strong>after:</strong> <span style="color:#881280;">&lt;html&gt;</span><span style="color:#1a1aa6;">&lt;![CDATA[</span><span style="color:#881280;">&lt;b&gt;</span>Important<span style="color:#881280;">&lt;/b&gt;</span><span style="color:#1a1aa6;">]]&gt;</span><span style="color:#881280;">&lt;html&gt;</span></p>
       Both forms work in 10.4 and 10.5, but the former is now deprecated.
     </dd>
-    <dd>• The <code>“name”</code> attribute of <a href="#RespondsToCommands">responds-to</a> elements is now called <code>“command”</code>, and may be an id or a name.</dd>
+    <dd>• The <code>“name”</code> attribute of <a href="#RespondsTo">responds-to</a> elements is now called <code>“command”</code>, and may be an id or a name.</dd>
 
     <dt style="margin-top: 2em">Changes in Mac OS X 10.4 (Tiger):</dt>
     <dd>• <code>“collector”</code> elements such as classes, types, and properties no longer exist. Their former children should be moved to their immediate ancestor element.<br />
@@ -908,7 +897,7 @@
    <div style="text-align: center"><h3 id="Bugs">Bugs</h3></div>
    <p>Cocoa Scripting in Tiger and above supports direct use of sdefs, but does a few things incorrectly:</p>
   <ul>
-    <li>Cocoa elements are required in some places that should be optional: <a href="#Class">class</a>, <a href="#Parameter">parameter</a>, <a href="#RespondsToCommands">responds-to</a>, and <a href="#ValueType">value-type</a> elements all must have cocoa sub-elements.</li>
+    <li>Cocoa elements are required in some places that should be optional: <a href="#Class">class</a>, <a href="#Parameter">parameter</a>, <a href="#RespondsTo">responds-to</a>, and <a href="#ValueType">value-type</a> elements all must have cocoa sub-elements.</li>
     <li><a href="#Synonym">Synonym</a> elements are completely ignored.</li>
   </ul>
    </div>

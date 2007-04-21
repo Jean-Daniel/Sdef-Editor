@@ -3,12 +3,14 @@
  *  Sdef Editor
  *
  *  Created by Rainbow Team.
- *  Copyright Â© 2006 Shadow Lab. All rights reserved.
+ *  Copyright © 2006 - 2007 Shadow Lab. All rights reserved.
  */
 
 #import "AeteObject.h"
 #import "SdefVerb.h"
 #import "SdefArguments.h"
+
+#import <ShadowKit/SKFunctions.h>
 
 @implementation SdefVerb (AeteResource)
 
@@ -34,18 +36,18 @@
   
   /* event class */
   OSType *identifier = (UInt32 *)bytes;
-  NSString *type = AeteStringForOSType(*identifier);
+  NSString *type = SKStringForOSType(*identifier);
   bytes += 4;
   
   /* event id */
   identifier = (UInt32 *)bytes;
-  [self setCode:[type stringByAppendingString:AeteStringForOSType(*identifier)]];
+  [self setCode:[type stringByAppendingString:SKStringForOSType(*identifier)]];
   bytes += 4;
   
   /* Result */
   identifier = (UInt32 *)bytes;
   if (*identifier != typeNull) {
-    [[self result] setType:AeteStringForOSType(*identifier)];
+    [[self result] setType:SdefStringForOSType(*identifier)];
   }
   bytes += 4;
   
@@ -69,7 +71,7 @@
   /* Direct Parameter */
   identifier = (UInt32 *)bytes;
   if (*identifier != typeNull) {
-    [[self directParameter] setType:AeteStringForOSType(*identifier)];
+    [[self directParameter] setType:SdefStringForOSType(*identifier)];
   }
   bytes += 4;
   
@@ -128,12 +130,12 @@
   
   /* Keyword */
   OSType *identifier = (UInt32 *)bytes;
-  [self setCode:AeteStringForOSType(*identifier)];
+  [self setCode:SdefStringForOSType(*identifier)];
   bytes += 4;
   
   /* event id */
   identifier = (UInt32 *)bytes;
-  [self setType:AeteStringForOSType(*identifier)];
+  [self setType:SdefStringForOSType(*identifier)];
   bytes += 4;
   
   /* Description */

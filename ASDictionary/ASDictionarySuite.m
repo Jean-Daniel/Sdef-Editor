@@ -3,7 +3,7 @@
  *  Sdef Editor
  *
  *  Created by Rainbow Team.
- *  Copyright Â© 2006 Shadow Lab. All rights reserved.
+ *  Copyright © 2006 - 2007 Shadow Lab. All rights reserved.
  */
 
 #include <Carbon/Carbon.h>
@@ -18,7 +18,7 @@
 @implementation SdefSuite (ASDictionary)
 
 - (NSDictionary *)asdictionary {
-  if (SKOSTypeFromString([self code]) == kASTypeNamesSuite) /* Hidden terms */
+  if (OSTypeFromSdefString([self code]) == kASTypeNamesSuite) /* Hidden terms */
     return nil;
   
   id dict = [NSMutableDictionary dictionary];

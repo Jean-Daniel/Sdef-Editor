@@ -3,7 +3,7 @@
  *  Sdef Editor
  *
  *  Created by Rainbow Team.
- *  Copyright Â© 2006 Shadow Lab. All rights reserved.
+ *  Copyright © 2006 - 2007 Shadow Lab. All rights reserved.
  */
 
 #import "SdefBase.h"
@@ -77,15 +77,22 @@
 - (void)sdefInit {}
 
 #pragma mark -
+- (NSString *)name {
+  return [super name];
+}
+- (NSImage *)icon {
+  return [super icon];
+}
+
 - (SdefSuite *)suite {
-  return [self firstParentOfType:kSdefSuiteType];
+  return (id)[self firstParentOfType:kSdefSuiteType];
 }
 - (SdefDictionary *)dictionary {
-  return [self firstParentOfType:kSdefDictionaryType];
+  return (id)[self firstParentOfType:kSdefDictionaryType];
 }
 
 - (NSString *)location {
-  SKUITreeNode *parent;
+  id<SdefObject> parent;
   /* If parent is a Class or an Enumeration and parent != self */
   if (((parent = [self firstParentOfType:kSdefClassType]) ||
        (parent = [self firstParentOfType:kSdefEnumerationType]) || 
@@ -96,12 +103,12 @@
   }
 }
 
-- (id)firstParentOfType:(SdefObjectType)aType {
-  id parent = self;
+- (id<SdefObject>)firstParentOfType:(SdefObjectType)aType {
+  SdefObject *parent = self;
   while (parent && ([parent objectType] != aType)) {
     parent = [parent parent];
   }
-  return parent;  
+  return parent;
 }
 
 
@@ -209,7 +216,7 @@
 
 #pragma mark Optionals Children & Attributes
 - (BOOL)hasID {
-  return NO;
+  return sd_soFlags.xid;
 }
 - (NSString *)xmlid {
   return nil;

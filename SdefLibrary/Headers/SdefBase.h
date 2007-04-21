@@ -3,7 +3,7 @@
  *  Sdef Editor
  *
  *  Created by Rainbow Team.
- *  Copyright Â© 2006 Shadow Lab. All rights reserved.
+ *  Copyright © 2006 - 2007 Shadow Lab. All rights reserved.
  */
 
 #import <ShadowKit/SKUITreeNode.h>
@@ -37,9 +37,10 @@ enum {
 typedef OSType SdefObjectType;
 
 enum {
-  kSdefPantherVersion = 1,
-  kSdefTigerVersion   = 2,
-  kSdefLeopardVersion = 3,
+  kSdefVersionUndefined = 0,
+  kSdefPantherVersion   = 1,
+  kSdefTigerVersion     = 2,
+  kSdefLeopardVersion   = 3,
 };
 typedef NSUInteger SdefVersion;
 
@@ -50,15 +51,32 @@ NSString *SdefNameCreateWithCocoaName(NSString *cocoa);
 SK_EXPORT
 NSString *CocoaNameForSdefName(NSString *cocoa, BOOL isClass);
 
+@protocol SdefObject 
+
++ (SdefObjectType)objectType;
+- (SdefObjectType)objectType;
+
+- (NSString *)location;
+- (NSString *)objectTypeName;
+
+- (NSImage *)icon;
+- (NSString *)name;
+
+- (id<SdefObject>)firstParentOfType:(SdefObjectType)aType;
+
+@end
+
 @class SdefDocument;
 @class SdefClassManager;
 @class SdefImplementation, SdefDocumentation;
 @class SdefDictionary, SdefSuite, SdefCollection;
-@interface SdefObject : SKUITreeNode <NSCopying, NSCoding> {
+@interface SdefObject : SKUITreeNode <SdefObject, NSCopying, NSCoding> {
 @protected
   struct _sd_soFlags {
+    unsigned int xid:1;
     unsigned int html:1;
     unsigned int xrefs:1;
+    unsigned int event:1;
     unsigned int hidden:1;
     unsigned int optional:1;
     unsigned int editable:1;
@@ -67,7 +85,7 @@ NSString *CocoaNameForSdefName(NSString *cocoa, BOOL isClass);
     unsigned int notinproperties:1;
     unsigned int hasDocumentation:1;
     unsigned int hasImplementation:1;
-    unsigned int reserved:6;
+    unsigned int reserved:4;
   } sd_soFlags;
 @private
   NSMutableArray *sd_ignore;
@@ -90,7 +108,7 @@ NSString *CocoaNameForSdefName(NSString *cocoa, BOOL isClass);
 
 - (SdefSuite *)suite;
 - (SdefDictionary *)dictionary;
-- (id)firstParentOfType:(SdefObjectType)aType;
+- (id<SdefObject>)firstParentOfType:(SdefObjectType)aType;
 
 #pragma mark Strings Representations
 - (NSString *)location;
@@ -163,13 +181,3 @@ NSString *CocoaNameForSdefName(NSString *cocoa, BOOL isClass);
 - (BOOL)acceptsObjectType:(SdefObjectType)aType;
 @end
 
-#pragma mark -
-@interface SdefOrphanObject : SdefObject <NSCopying, NSCoding> {
-  @private
-  SdefObject *sd_owner;
-}
-
-- (id)owner;
-- (void)setOwner:(SdefObject *)anObject;
-
-@end

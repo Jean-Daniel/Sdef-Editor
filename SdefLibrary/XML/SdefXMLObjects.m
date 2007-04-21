@@ -3,7 +3,7 @@
  *  Sdef Editor
  *
  *  Created by Rainbow Team.
- *  Copyright Â© 2006 Shadow Lab. All rights reserved.
+ *  Copyright © 2006 - 2007 Shadow Lab. All rights reserved.
  */
 
 #import "SdefXMLBase.h"
@@ -31,8 +31,17 @@
 }
 
 #pragma mark XML Parsing
-- (void)setAttributes:(NSDictionary *)attrs {
-  [super setAttributes:attrs];
+- (void)addXMLChild:(id<SdefObject>)node {
+  switch ([node objectType]) {
+    case kSdefDocumentationType:
+      if ([self hasDocumentation]) {
+        [self setDocumentation:(SdefDocumentation *)node];
+      }
+      break;
+    default:
+      [super addXMLChild:node];
+      break;
+  }
 }
 
 @end
@@ -55,8 +64,17 @@
 }
 
 #pragma mark XML Parsing
-- (void)setAttributes:(NSDictionary *)attrs {
-  [super setAttributes:attrs];
+- (void)addXMLChild:(id<SdefObject>)node {
+  switch ([node objectType]) {
+    case kSdefCocoaType:
+      if ([self hasImplementation]) {
+        [self setImpl:(SdefImplementation *)node];
+      }
+      break;
+    default:
+      [super addXMLChild:node];
+      break;
+  }
 }
 
 @end
@@ -118,8 +136,8 @@
 }
 
 #pragma mark XML Parsing
-- (void)setAttributes:(NSDictionary *)attrs {
-  [super setAttributes:attrs];
+- (void)setXMLAttributes:(NSDictionary *)attrs {
+  [super setXMLAttributes:attrs];
   if ([self hasID]) {
     [self setXmlid:[[attrs objectForKey:@"id"] stringByUnescapingEntities:nil]];
   }
@@ -127,18 +145,24 @@
   [self setDesc:[[attrs objectForKey:@"description"] stringByUnescapingEntities:nil]];
 }
 
+- (void)addXMLChild:(id<SdefObject>)node {
+  switch ([node objectType]) {
+    case kSdefSynonymType:
+      if ([self hasSynonyms]) {
+        [self addSynonym:(SdefSynonym *)node];
+      }
+      break;
+    default:
+      [super addXMLChild:node];
+      break;
+  }
+}
+
 @end
 
 #pragma mark -
 @implementation SdefTypedObject (SdefXMLManager)
 #pragma mark XML Generation
-- (SdefParserVersion)acceptXMLElement:(NSString *)element attributes:(NSDictionary *)attrs {
-  if ([element isEqualToString:@"type"])
-    return kSdefParserTigerVersion | kSdefParserLeopardVersion;
-  else
-    return kSdefParserAllVersions;
-}
-
 - (SdefXMLNode *)xmlNodeForVersion:(SdefVersion)version {
   SdefXMLNode *node = nil;
   if (node = [super xmlNodeForVersion:version]) {
@@ -188,11 +212,22 @@
 }
 
 #pragma mark XML Parsing
-- (void)setAttributes:(NSDictionary *)attrs {
-  [super setAttributes:attrs];
+- (void)setXMLAttributes:(NSDictionary *)attrs {
+  [super setXMLAttributes:attrs];
   NSString *type = [[attrs objectForKey:@"type"] stringByUnescapingEntities:nil];
   if ([type length])  {
     [self setType:type];
+  }
+}
+
+- (void)addXMLChild:(id<SdefObject>)child {
+  switch ([child objectType]) {
+    case kSdefTypeAtomType:
+      [self addType:(SdefType *)child];
+      break;
+    default:
+      [super addXMLChild:child];
+      break;
   }
 }
 

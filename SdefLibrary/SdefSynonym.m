@@ -3,7 +3,7 @@
  *  Sdef Editor
  *
  *  Created by Rainbow Team.
- *  Copyright Â© 2006 Shadow Lab. All rights reserved.
+ *  Copyright © 2006 - 2007 Shadow Lab. All rights reserved.
  */
 
 #import "SdefSynonym.h"
@@ -34,6 +34,10 @@
 }
 
 #pragma mark -
++ (SdefObjectType)objectType {
+  return kSdefSynonymType;
+}
+
 - (void)dealloc {
   [sd_impl release];
   [sd_code release];
@@ -47,10 +51,6 @@
 }
 
 #pragma mark -
-- (NSString *)objectTypeName {
-  return @"synonym";
-}
-
 - (NSImage *)icon {
   return [NSImage imageNamed:@"Misc"];
 }
@@ -69,7 +69,7 @@
     [sd_impl setOwner:nil];
     [sd_impl release];
     sd_impl = [newImpl retain];
-    [sd_impl setOwner:(SdefObject *)self];
+    [sd_impl setOwner:self];
   }
 }
 

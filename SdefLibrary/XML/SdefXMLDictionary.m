@@ -3,7 +3,7 @@
  *  Sdef Editor
  *
  *  Created by Rainbow Team.
- *  Copyright Â© 2006 Shadow Lab. All rights reserved.
+ *  Copyright © 2006 - 2007 Shadow Lab. All rights reserved.
  */
 
 #import "SdefDictionary.h"
@@ -27,14 +27,22 @@
 }
 
 #pragma mark Parsing
-- (void)setAttributes:(NSDictionary *)attrs {
-  [super setAttributes:attrs];
-  [self setName:[[attrs objectForKey:@"title"] stringByUnescapingEntities:nil]];
+- (void)setXMLAttributes:(NSDictionary *)attrs {
+  [super setXMLAttributes:attrs];
+  NSString *attr = [attrs objectForKey:@"title"];
+  if (attr)
+    [self setName:[attr stringByUnescapingEntities:nil]];
 }
 
-- (SdefParserVersion)acceptXMLElement:(NSString *)element attributes:(NSDictionary *)attrs {
-  return kSdefParserAllVersions;
+- (void)addXMLChild:(id<SdefObject>)child {
+  switch ([child objectType]) {
+    case kSdefSuiteType:
+      [self appendChild:(SdefSuite *)child];
+      break;
+    default:
+      [super addXMLChild:child];
+      break;
+  }
 }
-
 
 @end

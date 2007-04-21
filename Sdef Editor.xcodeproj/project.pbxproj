@@ -9,8 +9,6 @@
 /* Begin PBXBuildFile section */
 		1B5FEC8F0BD8E58100F57412 /* SdefXRef.h in Headers */ = {isa = PBXBuildFile; fileRef = 1B5FEC8D0BD8E58100F57412 /* SdefXRef.h */; };
 		1B5FEC900BD8E58100F57412 /* SdefXRef.m in Sources */ = {isa = PBXBuildFile; fileRef = 1B5FEC8E0BD8E58100F57412 /* SdefXRef.m */; };
-		1B751C340BD658F7006D25B8 /* SdefLeopardParser.h in Headers */ = {isa = PBXBuildFile; fileRef = 1B751C330BD658F7006D25B8 /* SdefLeopardParser.h */; };
-		1B751C3A0BD65900006D25B8 /* SdefLeopardParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 1B751C390BD65900006D25B8 /* SdefLeopardParser.m */; };
 		656F9B5809E6A188008A0059 /* SKFunctions.m in Sources */ = {isa = PBXBuildFile; fileRef = 656F9B5409E6A188008A0059 /* SKFunctions.m */; };
 		656F9B5909E6A188008A0059 /* SKCFContext.m in Sources */ = {isa = PBXBuildFile; fileRef = 656F9B5509E6A188008A0059 /* SKCFContext.m */; };
 		656F9B5B09E6A188008A0059 /* SKExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 656F9B5709E6A188008A0059 /* SKExtensions.m */; };
@@ -41,7 +39,6 @@
 		980AC38108327EF2002EF5F5 /* Value.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 980AC38008327EF2002EF5F5 /* Value.tiff */; };
 		980AC38308327EFB002EF5F5 /* Record.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 980AC38208327EFB002EF5F5 /* Record.tiff */; };
 		980AC3A0083284A9002EF5F5 /* SdefRecord.nib in Resources */ = {isa = PBXBuildFile; fileRef = 980AC39E083284A9002EF5F5 /* SdefRecord.nib */; };
-		980AC40A0832AB66002EF5F5 /* SdefDocumentationParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 980AC4090832AB66002EF5F5 /* SdefDocumentationParser.m */; };
 		98168DBC07A26C9C002B893D /* SdefExporterController.m in Sources */ = {isa = PBXBuildFile; fileRef = 98168DBA07A26C9C002B893D /* SdefExporterController.m */; };
 		98168DD607A27735002B893D /* SdefProcessor.m in Sources */ = {isa = PBXBuildFile; fileRef = 98168DD407A27735002B893D /* SdefProcessor.m */; };
 		98168DDC07A27782002B893D /* sdp in Resources */ = {isa = PBXBuildFile; fileRef = 98168DDB07A27782002B893D /* sdp */; };
@@ -63,6 +60,12 @@
 		98298DBD07AE817D00F09708 /* ImportApplicationAete.m in Sources */ = {isa = PBXBuildFile; fileRef = 98298DBC07AE817D00F09708 /* ImportApplicationAete.m */; };
 		98298DCC07AE822E00F09708 /* ImportApplicationAete.nib in Resources */ = {isa = PBXBuildFile; fileRef = 98298DCA07AE822E00F09708 /* ImportApplicationAete.nib */; };
 		9836439707A0814D00DBABD3 /* SdefExport.nib in Resources */ = {isa = PBXBuildFile; fileRef = 9836439507A0814D00DBABD3 /* SdefExport.nib */; };
+		983A83390BDA8425006C77F6 /* SdefXMLLeaves.m in Sources */ = {isa = PBXBuildFile; fileRef = 983A83380BDA8425006C77F6 /* SdefXMLLeaves.m */; };
+		983A83840BDA8B2A006C77F6 /* SdefXMLGenerator.h in Headers */ = {isa = PBXBuildFile; fileRef = 983A83800BDA8B2A006C77F6 /* SdefXMLGenerator.h */; };
+		983A83850BDA8B2A006C77F6 /* SdefXMLGenerator.m in Sources */ = {isa = PBXBuildFile; fileRef = 983A83810BDA8B2A006C77F6 /* SdefXMLGenerator.m */; };
+		983A83860BDA8B2A006C77F6 /* SdefXMLNode.h in Headers */ = {isa = PBXBuildFile; fileRef = 983A83820BDA8B2A006C77F6 /* SdefXMLNode.h */; };
+		983A83870BDA8B2A006C77F6 /* SdefXMLNode.m in Sources */ = {isa = PBXBuildFile; fileRef = 983A83830BDA8B2A006C77F6 /* SdefXMLNode.m */; };
+		983A83A10BDA8C92006C77F6 /* SdefXMLBase.h in Headers */ = {isa = PBXBuildFile; fileRef = 983A83A00BDA8C92006C77F6 /* SdefXMLBase.h */; };
 		984572C0083FD0FE00EACD98 /* SdefTypesEditor.h in Headers */ = {isa = PBXBuildFile; fileRef = 984572BE083FD0FE00EACD98 /* SdefTypesEditor.h */; };
 		984572C1083FD0FE00EACD98 /* SdefTypesEditor.m in Sources */ = {isa = PBXBuildFile; fileRef = 984572BF083FD0FE00EACD98 /* SdefTypesEditor.m */; };
 		984A4C060830100200D062BB /* SdefXMLObjects.m in Sources */ = {isa = PBXBuildFile; fileRef = 984A4C050830100200D062BB /* SdefXMLObjects.m */; };
@@ -73,8 +76,6 @@
 		984A4C550830189800D062BB /* SdefXMLTypes.m in Sources */ = {isa = PBXBuildFile; fileRef = 989B7E2D07B043D5004251EA /* SdefXMLTypes.m */; };
 		984A4C58083018CC00D062BB /* SdefXMLClass.m in Sources */ = {isa = PBXBuildFile; fileRef = 989B7E0107B01A57004251EA /* SdefXMLClass.m */; };
 		984A4C5E08301B0C00D062BB /* SdefXMLVerb.m in Sources */ = {isa = PBXBuildFile; fileRef = 989B7E1007B01BEE004251EA /* SdefXMLVerb.m */; };
-		984A4C6608301C3200D062BB /* SdefXMLParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 98BDA84A082740440055FC80 /* SdefXMLParser.m */; };
-		984A4C6708301C3300D062BB /* SdefXMLParser.h in Headers */ = {isa = PBXBuildFile; fileRef = 98BDA848082740360055FC80 /* SdefXMLParser.h */; };
 		984A8C9B07DB2A3200591F7A /* SdefVerb.h in Headers */ = {isa = PBXBuildFile; fileRef = 9875801A078863FA0038C05B /* SdefVerb.h */; };
 		984A8CA107DB2A3200591F7A /* ImporterWarning.h in Headers */ = {isa = PBXBuildFile; fileRef = 986B93D507AB0AE400AB131C /* ImporterWarning.h */; };
 		984A8CA207DB2A3200591F7A /* SdefObjectInspector.h in Headers */ = {isa = PBXBuildFile; fileRef = 98D3A8AF079EBEF60049A8FC /* SdefObjectInspector.h */; };
@@ -109,8 +110,6 @@
 		984EE81A07F09E7400828BC0 /* SdefSymbolBrowser.h in Headers */ = {isa = PBXBuildFile; fileRef = 984EE81907F09E7400828BC0 /* SdefSymbolBrowser.h */; };
 		984EE82607F0A01F00828BC0 /* SdefSymbolBrowser.nib in Resources */ = {isa = PBXBuildFile; fileRef = 984EE82407F0A01F00828BC0 /* SdefSymbolBrowser.nib */; };
 		9852F79407A2B15600157438 /* Rez in Resources */ = {isa = PBXBuildFile; fileRef = 9852F79307A2B15600157438 /* Rez */; };
-		9862DF9E08311FD200ED1608 /* SdefPantherParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 98BDA91908274FA90055FC80 /* SdefPantherParser.m */; };
-		9862DF9F08311FD400ED1608 /* SdefTigerParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 98BDA83C08273F8F0055FC80 /* SdefTigerParser.m */; };
 		9862E0240831788000ED1608 /* SdefImporter.h in Headers */ = {isa = PBXBuildFile; fileRef = 98ECBD2B07AD7336008DE854 /* SdefImporter.h */; };
 		9862E0250831788300ED1608 /* SdefImporter.m in Sources */ = {isa = PBXBuildFile; fileRef = 98ECBD2C07AD7336008DE854 /* SdefImporter.m */; };
 		9862E0320831793F00ED1608 /* AeteImporter.h in Headers */ = {isa = PBXBuildFile; fileRef = 98A059F607ACF85E008D897D /* AeteImporter.h */; };
@@ -167,12 +166,11 @@
 		98A52D40079F1F96003F17E8 /* SdefFile.icns in Resources */ = {isa = PBXBuildFile; fileRef = 98A52D3F079F1F96003F17E8 /* SdefFile.icns */; };
 		98A57DA207EF6F4E00F061C5 /* SdtplExport.nib in Resources */ = {isa = PBXBuildFile; fileRef = 98A57DA007EF6F4E00F061C5 /* SdtplExport.nib */; };
 		98A5D64807B522A00038ECC5 /* Misc.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 98BF08E9078A08DD0035ECA2 /* Misc.tiff */; };
+		98AE578A0BDA59D200A2D977 /* SdefXMLValidator.h in Headers */ = {isa = PBXBuildFile; fileRef = 98D6FB0F0BDA042200F30DAE /* SdefXMLValidator.h */; };
 		98B38DA70801D10E0025589C /* SdtplGenerator.h in Headers */ = {isa = PBXBuildFile; fileRef = 98B38DA50801D10E0025589C /* SdtplGenerator.h */; };
 		98B38DA80801D10E0025589C /* SdtplGenerator.m in Sources */ = {isa = PBXBuildFile; fileRef = 98B38DA60801D10E0025589C /* SdtplGenerator.m */; };
 		98B5625408317C670067D99C /* AeteObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 98A05A1C07AD0956008D897D /* AeteObject.m */; };
 		98B5625508317C690067D99C /* AeteObject.h in Headers */ = {isa = PBXBuildFile; fileRef = 98A05A1B07AD0956008D897D /* AeteObject.h */; };
-		98B5625608317C800067D99C /* SdefPantherParser.h in Headers */ = {isa = PBXBuildFile; fileRef = 98BDA91308274F7E0055FC80 /* SdefPantherParser.h */; };
-		98B5625708317C8E0067D99C /* SdefTigerParser.h in Headers */ = {isa = PBXBuildFile; fileRef = 98BDA83E08273F9C0055FC80 /* SdefTigerParser.h */; };
 		98B5625808317CA40067D99C /* ASDictionary.h in Headers */ = {isa = PBXBuildFile; fileRef = 984A8C8B07DB29FF00591F7A /* ASDictionary.h */; };
 		98B5625908317CA50067D99C /* ASDictionary.m in Sources */ = {isa = PBXBuildFile; fileRef = 98F47BD607D141690097C497 /* ASDictionary.m */; };
 		98B5625A08317CA60067D99C /* ASDictionaryClass.m in Sources */ = {isa = PBXBuildFile; fileRef = 982CCAEF07D25F2000EE7474 /* ASDictionaryClass.m */; };
@@ -185,11 +183,12 @@
 		98C38233083D2E5500340894 /* SdefTypesEditor.nib in Resources */ = {isa = PBXBuildFile; fileRef = 98C38231083D2E5500340894 /* SdefTypesEditor.nib */; };
 		98C4F250081412A600ABBBBA /* SdefClassManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 98C4F24F081412A600ABBBBA /* SdefClassManager.m */; };
 		98C4F252081412AE00ABBBBA /* SdefClassManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 98C4F251081412AE00ABBBBA /* SdefClassManager.h */; };
+		98C806A00BDA228500A45088 /* SdefParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 98C8069F0BDA228500A45088 /* SdefParser.m */; };
+		98C806A20BDA229500A45088 /* SdefParser.h in Headers */ = {isa = PBXBuildFile; fileRef = 98C806A10BDA229500A45088 /* SdefParser.h */; };
+		98C806CA0BDA247A00A45088 /* SdefDocumentationParser.h in Headers */ = {isa = PBXBuildFile; fileRef = 98C806C90BDA247A00A45088 /* SdefDocumentationParser.h */; };
+		98C8075F0BDA32D400A45088 /* SdefXMLValidator.m in Sources */ = {isa = PBXBuildFile; fileRef = 98D6FB150BDA042200F30DAE /* SdefXMLValidator.m */; };
 		98CB367B082EC7670088CFD5 /* SdefBase.h in Headers */ = {isa = PBXBuildFile; fileRef = 98CB3679082EC7670088CFD5 /* SdefBase.h */; };
 		98CB367C082EC7670088CFD5 /* SdefBase.m in Sources */ = {isa = PBXBuildFile; fileRef = 98CB367A082EC7670088CFD5 /* SdefBase.m */; };
-		98CCA8A1082F3299002A37E2 /* SdefXMLGenerator.h in Headers */ = {isa = PBXBuildFile; fileRef = 988FDDF2078F5607003374B6 /* SdefXMLGenerator.h */; };
-		98CCA8A2082F329F002A37E2 /* SdefXMLNode.h in Headers */ = {isa = PBXBuildFile; fileRef = 98D29C92078FD2AB008FA9F6 /* SdefXMLNode.h */; };
-		98CCA8A3082F32A3002A37E2 /* SdefXMLBase.h in Headers */ = {isa = PBXBuildFile; fileRef = 98D42D8D07AF6AFF0040927F /* SdefXMLBase.h */; };
 		98CCA8FB082FEEF5002A37E2 /* SdefType.h in Headers */ = {isa = PBXBuildFile; fileRef = 98CCA8F9082FEEF5002A37E2 /* SdefType.h */; };
 		98CCA8FC082FEEF5002A37E2 /* SdefType.m in Sources */ = {isa = PBXBuildFile; fileRef = 98CCA8FA082FEEF5002A37E2 /* SdefType.m */; };
 		98D363A7078A7E8C00669D72 /* Class.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 98D363A0078A7E8B00669D72 /* Class.tiff */; };
@@ -208,6 +207,7 @@
 		98D5AA46078C662300DD07B7 /* SdefArguments.m in Sources */ = {isa = PBXBuildFile; fileRef = 98D5AA44078C662300DD07B7 /* SdefArguments.m */; };
 		98D5AABE078C6EA700DD07B7 /* Member.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 98D5AABD078C6EA700DD07B7 /* Member.tiff */; };
 		98D5AAE7078C6FDD00DD07B7 /* Param.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 98D5AAE6078C6FDD00DD07B7 /* Param.tiff */; };
+		98D6FB1B0BDA042300F30DAE /* SdefDocumentationParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 98D6FB100BDA042200F30DAE /* SdefDocumentationParser.m */; };
 		98D9B3D50876AEFB001AC5B1 /* Skeleton.sdef in Resources */ = {isa = PBXBuildFile; fileRef = 98D9B3D40876AEFB001AC5B1 /* Skeleton.sdef */; };
 		98DA20E608B4F82C000ABC2B /* SKOutlineView.m in Sources */ = {isa = PBXBuildFile; fileRef = 98DA20E508B4F82C000ABC2B /* SKOutlineView.m */; };
 		98DA3AD308411C28003C07A3 /* SdefDictionary.icns in Resources */ = {isa = PBXBuildFile; fileRef = 98DA3AD208411C28003C07A3 /* SdefDictionary.icns */; };
@@ -240,8 +240,6 @@
 		98F940D807F8899C0014708A /* AppleDictionary.sdtpl in Copy Templates */ = {isa = PBXBuildFile; fileRef = 98F940C607F889690014708A /* AppleDictionary.sdtpl */; };
 		98F940D907F8899C0014708A /* AppleRTFDictionary.sdtpl in Copy Templates */ = {isa = PBXBuildFile; fileRef = 98F940C207F889690014708A /* AppleRTFDictionary.sdtpl */; };
 		98FB9C4F08300BEA00101D8C /* AddType.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 98FB9C4E08300BEA00101D8C /* AddType.tiff */; };
-		98FB9C5908300E2F00101D8C /* SdefXMLGenerator.m in Sources */ = {isa = PBXBuildFile; fileRef = 988FDDF3078F5607003374B6 /* SdefXMLGenerator.m */; };
-		98FB9C5A08300E3300101D8C /* SdefXMLNode.m in Sources */ = {isa = PBXBuildFile; fileRef = 98D29C93078FD2AB008FA9F6 /* SdefXMLNode.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -295,10 +293,8 @@
 /* Begin PBXFileReference section */
 		089C1660FE840EACC02AAC07 /* English */ = {isa = PBXFileReference; fileEncoding = 10; lastKnownFileType = text.plist.strings; name = English; path = English.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		1058C7A7FEA54F5311CA2CBB /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = /System/Library/Frameworks/Cocoa.framework; sourceTree = "<absolute>"; };
-		1B5FEC8D0BD8E58100F57412 /* SdefXRef.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SdefXRef.h; sourceTree = "<group>"; };
-		1B5FEC8E0BD8E58100F57412 /* SdefXRef.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SdefXRef.m; sourceTree = "<group>"; };
-		1B751C330BD658F7006D25B8 /* SdefLeopardParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SdefLeopardParser.h; sourceTree = "<group>"; };
-		1B751C390BD65900006D25B8 /* SdefLeopardParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SdefLeopardParser.m; sourceTree = "<group>"; };
+		1B5FEC8D0BD8E58100F57412 /* SdefXRef.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; lineEnding = 0; name = SdefXRef.h; path = Headers/SdefXRef.h; sourceTree = "<group>"; };
+		1B5FEC8E0BD8E58100F57412 /* SdefXRef.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = SdefXRef.m; sourceTree = "<group>"; };
 		2A37F4B5FDCFA73011CA2CEA /* English */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = English; path = English.lproj/SdefDocument.nib; sourceTree = "<group>"; };
 		2A37F4B7FDCFA73011CA2CEA /* English */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = English; path = English.lproj/MainMenu.nib; sourceTree = "<group>"; };
 		2A37F4C4FDCFA73011CA2CEA /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = /System/Library/Frameworks/AppKit.framework; sourceTree = "<absolute>"; };
@@ -333,14 +329,13 @@
 		980AC38008327EF2002EF5F5 /* Value.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = Value.tiff; sourceTree = "<group>"; };
 		980AC38208327EFB002EF5F5 /* Record.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = Record.tiff; sourceTree = "<group>"; };
 		980AC39F083284A9002EF5F5 /* English */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = English; path = English.lproj/SdefRecord.nib; sourceTree = "<group>"; };
-		980AC4090832AB66002EF5F5 /* SdefDocumentationParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SdefDocumentationParser.m; sourceTree = "<group>"; };
 		9815F1C907E0F80200D3C6CD /* SKTemplate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = SKTemplate.h; sourceTree = "<group>"; };
 		9815F1CA07E0F80200D3C6CD /* SKTemplateParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = SKTemplateParser.h; sourceTree = "<group>"; };
 		9815F1CB07E0F80200D3C6CD /* SKXMLTemplate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = SKXMLTemplate.h; sourceTree = "<group>"; };
-		98168DB907A26C9C002B893D /* SdefExporterController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SdefExporterController.h; sourceTree = "<group>"; };
-		98168DBA07A26C9C002B893D /* SdefExporterController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SdefExporterController.m; sourceTree = "<group>"; };
-		98168DD307A27735002B893D /* SdefProcessor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SdefProcessor.h; sourceTree = "<group>"; };
-		98168DD407A27735002B893D /* SdefProcessor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SdefProcessor.m; sourceTree = "<group>"; };
+		98168DB907A26C9C002B893D /* SdefExporterController.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = SdefExporterController.h; sourceTree = "<group>"; };
+		98168DBA07A26C9C002B893D /* SdefExporterController.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = SdefExporterController.m; sourceTree = "<group>"; };
+		98168DD307A27735002B893D /* SdefProcessor.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = SdefProcessor.h; sourceTree = "<group>"; };
+		98168DD407A27735002B893D /* SdefProcessor.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = SdefProcessor.m; sourceTree = "<group>"; };
 		98168DDB07A27782002B893D /* sdp */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.executable"; name = sdp; path = /usr/bin/sdp; sourceTree = "<absolute>"; };
 		98168E0007A29025002B893D /* NSCoreSuite.sdef */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = NSCoreSuite.sdef; sourceTree = "<group>"; };
 		98168E0407A29036002B893D /* NSTextSuite.sdef */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = NSTextSuite.sdef; sourceTree = "<group>"; };
@@ -361,27 +356,33 @@
 		98230E560AFE299A00675226 /* SKDisclosurePanel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SKDisclosurePanel.m; sourceTree = "<group>"; };
 		98230E570AFE299A00675226 /* SKDisclosureView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SKDisclosureView.m; sourceTree = "<group>"; };
 		98230E590AFE299A00675226 /* SKImageAndTextCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SKImageAndTextCell.m; sourceTree = "<group>"; };
-		9825DDC807F4AC16006D5F5C /* SdtplWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SdtplWindow.h; sourceTree = "<group>"; };
-		9825DDC907F4AC16006D5F5C /* SdtplWindow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SdtplWindow.m; sourceTree = "<group>"; };
+		9825DDC807F4AC16006D5F5C /* SdtplWindow.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = SdtplWindow.h; sourceTree = "<group>"; };
+		9825DDC907F4AC16006D5F5C /* SdtplWindow.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = SdtplWindow.m; sourceTree = "<group>"; };
 		98298DA707AE7E7D00F09708 /* SKWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = SKWindowController.h; sourceTree = "<group>"; };
-		98298DBC07AE817D00F09708 /* ImportApplicationAete.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ImportApplicationAete.m; sourceTree = "<group>"; };
-		98298DBE07AE818400F09708 /* ImportApplicationAete.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ImportApplicationAete.h; sourceTree = "<group>"; };
+		98298DBC07AE817D00F09708 /* ImportApplicationAete.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = ImportApplicationAete.m; sourceTree = "<group>"; };
+		98298DBE07AE818400F09708 /* ImportApplicationAete.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = ImportApplicationAete.h; sourceTree = "<group>"; };
 		98298DCB07AE822E00F09708 /* English */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = English; path = English.lproj/ImportApplicationAete.nib; sourceTree = "<group>"; };
 		98298DDF07AE864500F09708 /* SKApplication.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = SKApplication.h; sourceTree = "<group>"; };
-		982CCAEF07D25F2000EE7474 /* ASDictionaryClass.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ASDictionaryClass.m; sourceTree = "<group>"; };
-		982CCAF907D25FA700EE7474 /* ASDictionaryVerb.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ASDictionaryVerb.m; sourceTree = "<group>"; };
+		982CCAEF07D25F2000EE7474 /* ASDictionaryClass.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = ASDictionaryClass.m; sourceTree = "<group>"; };
+		982CCAF907D25FA700EE7474 /* ASDictionaryVerb.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = ASDictionaryVerb.m; sourceTree = "<group>"; };
 		9836439607A0814D00DBABD3 /* English */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = English; path = English.lproj/SdefExport.nib; sourceTree = "<group>"; };
-		984572BE083FD0FE00EACD98 /* SdefTypesEditor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SdefTypesEditor.h; sourceTree = "<group>"; };
-		984572BF083FD0FE00EACD98 /* SdefTypesEditor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SdefTypesEditor.m; sourceTree = "<group>"; };
-		984A4C050830100200D062BB /* SdefXMLObjects.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SdefXMLObjects.m; sourceTree = "<group>"; };
-		984A8C8B07DB29FF00591F7A /* ASDictionary.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = ASDictionary.h; sourceTree = "<group>"; };
-		984A8C8C07DB29FF00591F7A /* ASDictionaryObject.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = ASDictionaryObject.h; sourceTree = "<group>"; };
-		984A8C8D07DB29FF00591F7A /* ASDictionaryStream.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = ASDictionaryStream.h; sourceTree = "<group>"; };
-		984B7D9407F8B3B7004C5C60 /* SdefTemplate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SdefTemplate.h; sourceTree = "<group>"; };
-		984B7D9507F8B3B7004C5C60 /* SdefTemplate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SdefTemplate.m; sourceTree = "<group>"; };
+		983A83380BDA8425006C77F6 /* SdefXMLLeaves.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = SdefXMLLeaves.m; sourceTree = "<group>"; };
+		983A83800BDA8B2A006C77F6 /* SdefXMLGenerator.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = SdefXMLGenerator.h; sourceTree = "<group>"; };
+		983A83810BDA8B2A006C77F6 /* SdefXMLGenerator.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = SdefXMLGenerator.m; sourceTree = "<group>"; };
+		983A83820BDA8B2A006C77F6 /* SdefXMLNode.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = SdefXMLNode.h; sourceTree = "<group>"; };
+		983A83830BDA8B2A006C77F6 /* SdefXMLNode.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = SdefXMLNode.m; sourceTree = "<group>"; };
+		983A83A00BDA8C92006C77F6 /* SdefXMLBase.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = SdefXMLBase.h; sourceTree = "<group>"; };
+		984572BE083FD0FE00EACD98 /* SdefTypesEditor.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = SdefTypesEditor.h; sourceTree = "<group>"; };
+		984572BF083FD0FE00EACD98 /* SdefTypesEditor.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = SdefTypesEditor.m; sourceTree = "<group>"; };
+		984A4C050830100200D062BB /* SdefXMLObjects.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = SdefXMLObjects.m; sourceTree = "<group>"; };
+		984A8C8B07DB29FF00591F7A /* ASDictionary.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = ASDictionary.h; sourceTree = "<group>"; };
+		984A8C8C07DB29FF00591F7A /* ASDictionaryObject.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = ASDictionaryObject.h; sourceTree = "<group>"; };
+		984A8C8D07DB29FF00591F7A /* ASDictionaryStream.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = ASDictionaryStream.h; sourceTree = "<group>"; };
+		984B7D9407F8B3B7004C5C60 /* SdefTemplate.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = SdefTemplate.h; sourceTree = "<group>"; };
+		984B7D9507F8B3B7004C5C60 /* SdefTemplate.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = SdefTemplate.m; sourceTree = "<group>"; };
 		984BB6F007EA201600E69BDA /* SKCFContext.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = SKCFContext.h; sourceTree = "<group>"; };
-		984EE81707F09E6A00828BC0 /* SdefSymbolBrowser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SdefSymbolBrowser.m; sourceTree = "<group>"; };
-		984EE81907F09E7400828BC0 /* SdefSymbolBrowser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SdefSymbolBrowser.h; sourceTree = "<group>"; };
+		984EE81707F09E6A00828BC0 /* SdefSymbolBrowser.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = SdefSymbolBrowser.m; sourceTree = "<group>"; };
+		984EE81907F09E7400828BC0 /* SdefSymbolBrowser.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = SdefSymbolBrowser.h; sourceTree = "<group>"; };
 		984EE82507F0A01F00828BC0 /* English */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = English; path = English.lproj/SdefSymbolBrowser.nib; sourceTree = "<group>"; };
 		9852F79307A2B15600157438 /* Rez */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.executable"; name = Rez; path = /Developer/Tools/Rez; sourceTree = "<absolute>"; };
 		9863F7A2078B2E0C0022F623 /* AddMini.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = AddMini.tiff; sourceTree = "<group>"; };
@@ -392,75 +393,68 @@
 		98665E310A86A54200CF8291 /* SKAEFunctions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = SKAEFunctions.h; sourceTree = "<group>"; };
 		9868410507A30B15001694EA /* SdefEditor.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = SdefEditor.icns; sourceTree = "<group>"; };
 		986B93CF07AB08F700AB131C /* English */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = English; path = English.lproj/SdefImporterWarning.nib; sourceTree = "<group>"; };
-		986B93D507AB0AE400AB131C /* ImporterWarning.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ImporterWarning.h; sourceTree = "<group>"; };
-		986B93D607AB0AE400AB131C /* ImporterWarning.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ImporterWarning.m; path = Interface/ImporterWarning.m; sourceTree = SOURCE_ROOT; };
+		986B93D507AB0AE400AB131C /* ImporterWarning.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = ImporterWarning.h; sourceTree = "<group>"; };
+		986B93D607AB0AE400AB131C /* ImporterWarning.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; name = ImporterWarning.m; path = Interface/ImporterWarning.m; sourceTree = SOURCE_ROOT; };
 		98757FDA078855D80038C05B /* SKFunctions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; name = SKFunctions.h; path = ../Headers/SKFunctions.h; sourceTree = "<group>"; };
 		98757FDB078855D80038C05B /* SKTreeNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = SKTreeNode.h; sourceTree = "<group>"; };
 		98757FDC078855D80038C05B /* SKExtensions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; name = SKExtensions.h; path = ../Headers/SKExtensions.h; sourceTree = "<group>"; };
-		98757FE5078856590038C05B /* SdefDictionary.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SdefDictionary.h; path = Headers/SdefDictionary.h; sourceTree = "<group>"; };
-		98757FE6078856590038C05B /* SdefDictionary.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SdefDictionary.m; sourceTree = "<group>"; };
-		98757FEC07885F1A0038C05B /* SdefTypedef.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SdefTypedef.h; path = Headers/SdefTypedef.h; sourceTree = "<group>"; };
-		98757FED07885F1A0038C05B /* SdefTypedef.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SdefTypedef.m; sourceTree = "<group>"; };
-		98757FF007885F280038C05B /* SdefObjects.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SdefObjects.h; path = Headers/SdefObjects.h; sourceTree = "<group>"; };
-		98757FF107885F280038C05B /* SdefObjects.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SdefObjects.m; sourceTree = "<group>"; };
-		98758014078863820038C05B /* SdefClass.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SdefClass.h; path = Headers/SdefClass.h; sourceTree = "<group>"; };
-		98758015078863820038C05B /* SdefClass.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SdefClass.m; sourceTree = "<group>"; };
-		9875801A078863FA0038C05B /* SdefVerb.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SdefVerb.h; path = Headers/SdefVerb.h; sourceTree = "<group>"; };
-		9875801B078863FA0038C05B /* SdefVerb.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SdefVerb.m; sourceTree = "<group>"; };
-		9875801F078864330038C05B /* SdefSynonym.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SdefSynonym.h; path = Headers/SdefSynonym.h; sourceTree = "<group>"; };
-		98758020078864330038C05B /* SdefSynonym.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SdefSynonym.m; sourceTree = "<group>"; };
-		987580250788646A0038C05B /* SdefSuite.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SdefSuite.h; path = Headers/SdefSuite.h; sourceTree = "<group>"; };
-		987580260788646A0038C05B /* SdefSuite.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SdefSuite.m; sourceTree = "<group>"; };
-		9875802E078864F40038C05B /* SdefImplementation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SdefImplementation.h; path = Headers/SdefImplementation.h; sourceTree = "<group>"; };
-		9875802F078864F40038C05B /* SdefImplementation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SdefImplementation.m; sourceTree = "<group>"; };
-		98758032078865170038C05B /* SdefDocumentation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SdefDocumentation.h; path = Headers/SdefDocumentation.h; sourceTree = "<group>"; };
-		98758033078865170038C05B /* SdefDocumentation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SdefDocumentation.m; sourceTree = "<group>"; };
-		9875805D07886E6F0038C05B /* SdefDocument.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SdefDocument.h; sourceTree = "<group>"; };
-		9875805E07886E6F0038C05B /* SdefDocument.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SdefDocument.m; sourceTree = "<group>"; };
+		98757FE5078856590038C05B /* SdefDictionary.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; lineEnding = 0; name = SdefDictionary.h; path = Headers/SdefDictionary.h; sourceTree = "<group>"; };
+		98757FE6078856590038C05B /* SdefDictionary.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = SdefDictionary.m; sourceTree = "<group>"; };
+		98757FEC07885F1A0038C05B /* SdefTypedef.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; lineEnding = 0; name = SdefTypedef.h; path = Headers/SdefTypedef.h; sourceTree = "<group>"; };
+		98757FED07885F1A0038C05B /* SdefTypedef.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = SdefTypedef.m; sourceTree = "<group>"; };
+		98757FF007885F280038C05B /* SdefObjects.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; lineEnding = 0; name = SdefObjects.h; path = Headers/SdefObjects.h; sourceTree = "<group>"; };
+		98757FF107885F280038C05B /* SdefObjects.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = SdefObjects.m; sourceTree = "<group>"; };
+		98758014078863820038C05B /* SdefClass.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; lineEnding = 0; name = SdefClass.h; path = Headers/SdefClass.h; sourceTree = "<group>"; };
+		98758015078863820038C05B /* SdefClass.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = SdefClass.m; sourceTree = "<group>"; };
+		9875801A078863FA0038C05B /* SdefVerb.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; lineEnding = 0; name = SdefVerb.h; path = Headers/SdefVerb.h; sourceTree = "<group>"; };
+		9875801B078863FA0038C05B /* SdefVerb.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = SdefVerb.m; sourceTree = "<group>"; };
+		9875801F078864330038C05B /* SdefSynonym.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; lineEnding = 0; name = SdefSynonym.h; path = Headers/SdefSynonym.h; sourceTree = "<group>"; };
+		98758020078864330038C05B /* SdefSynonym.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = SdefSynonym.m; sourceTree = "<group>"; };
+		987580250788646A0038C05B /* SdefSuite.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; lineEnding = 0; name = SdefSuite.h; path = Headers/SdefSuite.h; sourceTree = "<group>"; };
+		987580260788646A0038C05B /* SdefSuite.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = SdefSuite.m; sourceTree = "<group>"; };
+		9875802E078864F40038C05B /* SdefImplementation.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; lineEnding = 0; name = SdefImplementation.h; path = Headers/SdefImplementation.h; sourceTree = "<group>"; };
+		9875802F078864F40038C05B /* SdefImplementation.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = SdefImplementation.m; sourceTree = "<group>"; };
+		98758032078865170038C05B /* SdefDocumentation.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; lineEnding = 0; name = SdefDocumentation.h; path = Headers/SdefDocumentation.h; sourceTree = "<group>"; };
+		98758033078865170038C05B /* SdefDocumentation.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = SdefDocumentation.m; sourceTree = "<group>"; };
+		9875805D07886E6F0038C05B /* SdefDocument.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = SdefDocument.h; sourceTree = "<group>"; };
+		9875805E07886E6F0038C05B /* SdefDocument.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = SdefDocument.m; sourceTree = "<group>"; };
 		98786EC707B19DA000A4B171 /* English */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = English; path = English.lproj/Preferences.nib; sourceTree = "<group>"; };
-		988FDDF2078F5607003374B6 /* SdefXMLGenerator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SdefXMLGenerator.h; sourceTree = "<group>"; };
-		988FDDF3078F5607003374B6 /* SdefXMLGenerator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SdefXMLGenerator.m; sourceTree = "<group>"; };
-		989B7E0107B01A57004251EA /* SdefXMLClass.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SdefXMLClass.m; sourceTree = "<group>"; };
-		989B7E1007B01BEE004251EA /* SdefXMLVerb.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SdefXMLVerb.m; sourceTree = "<group>"; };
-		989B7E1707B04205004251EA /* SdefXMLSuite.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SdefXMLSuite.m; sourceTree = "<group>"; };
-		989B7E1B07B04264004251EA /* SdefXMLDictionary.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SdefXMLDictionary.m; sourceTree = "<group>"; };
-		989B7E2307B042E5004251EA /* SdefXMLCommons.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SdefXMLCommons.m; sourceTree = "<group>"; };
-		989B7E2D07B043D5004251EA /* SdefXMLTypes.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SdefXMLTypes.m; sourceTree = "<group>"; };
-		98A059F607ACF85E008D897D /* AeteImporter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AeteImporter.h; sourceTree = "<group>"; };
-		98A059F707ACF85E008D897D /* AeteImporter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AeteImporter.m; sourceTree = "<group>"; };
-		98A05A1B07AD0956008D897D /* AeteObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AeteObject.h; sourceTree = "<group>"; };
-		98A05A1C07AD0956008D897D /* AeteObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AeteObject.m; sourceTree = "<group>"; };
-		98A05A2007AD0965008D897D /* AeteSuite.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AeteSuite.m; sourceTree = "<group>"; };
-		98A05A7807AD1973008D897D /* AeteVerb.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AeteVerb.m; sourceTree = "<group>"; };
-		98A05AA207AD235C008D897D /* AeteClass.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AeteClass.m; sourceTree = "<group>"; };
-		98A05B0E07AD3D57008D897D /* AeteEnumeration.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AeteEnumeration.m; sourceTree = "<group>"; };
+		989B7E0107B01A57004251EA /* SdefXMLClass.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = SdefXMLClass.m; sourceTree = "<group>"; };
+		989B7E1007B01BEE004251EA /* SdefXMLVerb.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = SdefXMLVerb.m; sourceTree = "<group>"; };
+		989B7E1707B04205004251EA /* SdefXMLSuite.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = SdefXMLSuite.m; sourceTree = "<group>"; };
+		989B7E1B07B04264004251EA /* SdefXMLDictionary.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = SdefXMLDictionary.m; sourceTree = "<group>"; };
+		989B7E2307B042E5004251EA /* SdefXMLCommons.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = SdefXMLCommons.m; sourceTree = "<group>"; };
+		989B7E2D07B043D5004251EA /* SdefXMLTypes.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = SdefXMLTypes.m; sourceTree = "<group>"; };
+		98A059F607ACF85E008D897D /* AeteImporter.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = AeteImporter.h; sourceTree = "<group>"; };
+		98A059F707ACF85E008D897D /* AeteImporter.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = AeteImporter.m; sourceTree = "<group>"; };
+		98A05A1B07AD0956008D897D /* AeteObject.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = AeteObject.h; sourceTree = "<group>"; };
+		98A05A1C07AD0956008D897D /* AeteObject.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = AeteObject.m; sourceTree = "<group>"; };
+		98A05A2007AD0965008D897D /* AeteSuite.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = AeteSuite.m; sourceTree = "<group>"; };
+		98A05A7807AD1973008D897D /* AeteVerb.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = AeteVerb.m; sourceTree = "<group>"; };
+		98A05AA207AD235C008D897D /* AeteClass.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = AeteClass.m; sourceTree = "<group>"; };
+		98A05B0E07AD3D57008D897D /* AeteEnumeration.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = AeteEnumeration.m; sourceTree = "<group>"; };
 		98A52D3F079F1F96003F17E8 /* SdefFile.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = SdefFile.icns; sourceTree = "<group>"; };
 		98A57DA107EF6F4E00F061C5 /* English */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = English; path = English.lproj/SdtplExport.nib; sourceTree = "<group>"; };
-		98B38DA50801D10E0025589C /* SdtplGenerator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SdtplGenerator.h; sourceTree = "<group>"; };
-		98B38DA60801D10E0025589C /* SdtplGenerator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SdtplGenerator.m; sourceTree = "<group>"; };
-		98BDA83C08273F8F0055FC80 /* SdefTigerParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SdefTigerParser.m; sourceTree = "<group>"; };
-		98BDA83E08273F9C0055FC80 /* SdefTigerParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SdefTigerParser.h; sourceTree = "<group>"; };
-		98BDA848082740360055FC80 /* SdefXMLParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SdefXMLParser.h; sourceTree = "<group>"; };
-		98BDA84A082740440055FC80 /* SdefXMLParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SdefXMLParser.m; sourceTree = "<group>"; };
-		98BDA91308274F7E0055FC80 /* SdefPantherParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SdefPantherParser.h; sourceTree = "<group>"; };
-		98BDA91908274FA90055FC80 /* SdefPantherParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SdefPantherParser.m; sourceTree = "<group>"; };
+		98B38DA50801D10E0025589C /* SdtplGenerator.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = SdtplGenerator.h; sourceTree = "<group>"; };
+		98B38DA60801D10E0025589C /* SdtplGenerator.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = SdtplGenerator.m; sourceTree = "<group>"; };
 		98BF08DD078A08080035ECA2 /* SKImageUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = SKImageUtils.h; sourceTree = "<group>"; };
 		98BF08E9078A08DD0035ECA2 /* Misc.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = Misc.tiff; sourceTree = "<group>"; };
 		98C38232083D2E5500340894 /* English */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = English; path = English.lproj/SdefTypesEditor.nib; sourceTree = "<group>"; };
 		98C41B2C07F1DA5D00FAAEFA /* SKAppKitExtensions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = SKAppKitExtensions.h; sourceTree = "<group>"; };
-		98C4F24F081412A600ABBBBA /* SdefClassManager.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = SdefClassManager.m; sourceTree = "<group>"; };
-		98C4F251081412AE00ABBBBA /* SdefClassManager.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = SdefClassManager.h; path = Headers/SdefClassManager.h; sourceTree = "<group>"; };
+		98C4F24F081412A600ABBBBA /* SdefClassManager.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = SdefClassManager.m; sourceTree = "<group>"; };
+		98C4F251081412AE00ABBBBA /* SdefClassManager.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; lineEnding = 0; name = SdefClassManager.h; path = Headers/SdefClassManager.h; sourceTree = "<group>"; };
 		98C77FE107D9DECA006D9CC1 /* SKFSFunctions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = SKFSFunctions.h; sourceTree = "<group>"; };
 		98C783B507D9E2A3006D9CC1 /* SKLSFunctions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = SKLSFunctions.h; sourceTree = "<group>"; };
 		98C783C607D9E4C5006D9CC1 /* SKProcessFunctions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = SKProcessFunctions.h; sourceTree = "<group>"; };
-		98CB3679082EC7670088CFD5 /* SdefBase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SdefBase.h; path = Headers/SdefBase.h; sourceTree = "<group>"; };
-		98CB367A082EC7670088CFD5 /* SdefBase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SdefBase.m; sourceTree = "<group>"; };
-		98CCA8F9082FEEF5002A37E2 /* SdefType.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SdefType.h; path = Headers/SdefType.h; sourceTree = "<group>"; };
-		98CCA8FA082FEEF5002A37E2 /* SdefType.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SdefType.m; sourceTree = "<group>"; };
-		98D127A907A6BD53001B486F /* CocoaSuiteImporter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CocoaSuiteImporter.h; sourceTree = "<group>"; };
-		98D127AA07A6BD53001B486F /* CocoaSuiteImporter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CocoaSuiteImporter.m; sourceTree = "<group>"; };
-		98D29C92078FD2AB008FA9F6 /* SdefXMLNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SdefXMLNode.h; sourceTree = "<group>"; };
-		98D29C93078FD2AB008FA9F6 /* SdefXMLNode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SdefXMLNode.m; sourceTree = "<group>"; };
+		98C8069F0BDA228500A45088 /* SdefParser.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = SdefParser.m; sourceTree = "<group>"; };
+		98C806A10BDA229500A45088 /* SdefParser.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; lineEnding = 0; name = SdefParser.h; path = Headers/SdefParser.h; sourceTree = "<group>"; };
+		98C806C90BDA247A00A45088 /* SdefDocumentationParser.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; lineEnding = 0; name = SdefDocumentationParser.h; path = Headers/SdefDocumentationParser.h; sourceTree = "<group>"; };
+		98CB3679082EC7670088CFD5 /* SdefBase.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; lineEnding = 0; name = SdefBase.h; path = Headers/SdefBase.h; sourceTree = "<group>"; };
+		98CB367A082EC7670088CFD5 /* SdefBase.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = SdefBase.m; sourceTree = "<group>"; };
+		98CCA8F9082FEEF5002A37E2 /* SdefType.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; lineEnding = 0; name = SdefType.h; path = Headers/SdefType.h; sourceTree = "<group>"; };
+		98CCA8FA082FEEF5002A37E2 /* SdefType.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = SdefType.m; sourceTree = "<group>"; };
+		98D127A907A6BD53001B486F /* CocoaSuiteImporter.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = CocoaSuiteImporter.h; sourceTree = "<group>"; };
+		98D127AA07A6BD53001B486F /* CocoaSuiteImporter.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = CocoaSuiteImporter.m; sourceTree = "<group>"; };
 		98D363A0078A7E8B00669D72 /* Class.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = Class.tiff; sourceTree = "<group>"; };
 		98D363A1078A7E8B00669D72 /* Type.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = Type.tiff; sourceTree = "<group>"; };
 		98D363A2078A7E8B00669D72 /* Folder.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = Folder.tiff; sourceTree = "<group>"; };
@@ -468,29 +462,31 @@
 		98D363A4078A7E8B00669D72 /* Function.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = Function.tiff; sourceTree = "<group>"; };
 		98D363A5078A7E8C00669D72 /* Bookmarks.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = Bookmarks.tiff; sourceTree = "<group>"; };
 		98D363A6078A7E8C00669D72 /* Enum.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = Enum.tiff; sourceTree = "<group>"; };
-		98D363B6078A7FDD00669D72 /* SdefContents.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SdefContents.h; path = Headers/SdefContents.h; sourceTree = "<group>"; };
-		98D363B7078A7FDD00669D72 /* SdefContents.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SdefContents.m; sourceTree = "<group>"; };
-		98D3A17107D1D67100AC085D /* ASDictionaryObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ASDictionaryObject.m; sourceTree = "<group>"; };
-		98D3A8A607D1EB4000AC085D /* ASDictionarySuite.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ASDictionarySuite.m; sourceTree = "<group>"; };
-		98D3A8AF079EBEF60049A8FC /* SdefObjectInspector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SdefObjectInspector.h; sourceTree = SOURCE_ROOT; };
-		98D3A8B0079EBEF60049A8FC /* SdefObjectInspector.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SdefObjectInspector.m; sourceTree = SOURCE_ROOT; };
-		98D3A8C4079EC8670049A8FC /* SdefEditor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SdefEditor.h; sourceTree = "<group>"; };
-		98D3A8C5079EC8670049A8FC /* SdefEditor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SdefEditor.m; sourceTree = "<group>"; };
+		98D363B6078A7FDD00669D72 /* SdefContents.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; lineEnding = 0; name = SdefContents.h; path = Headers/SdefContents.h; sourceTree = "<group>"; };
+		98D363B7078A7FDD00669D72 /* SdefContents.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = SdefContents.m; sourceTree = "<group>"; };
+		98D3A17107D1D67100AC085D /* ASDictionaryObject.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = ASDictionaryObject.m; sourceTree = "<group>"; };
+		98D3A8A607D1EB4000AC085D /* ASDictionarySuite.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = ASDictionarySuite.m; sourceTree = "<group>"; };
+		98D3A8AF079EBEF60049A8FC /* SdefObjectInspector.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = SdefObjectInspector.h; sourceTree = SOURCE_ROOT; };
+		98D3A8B0079EBEF60049A8FC /* SdefObjectInspector.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = SdefObjectInspector.m; sourceTree = SOURCE_ROOT; };
+		98D3A8C4079EC8670049A8FC /* SdefEditor.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = SdefEditor.h; sourceTree = "<group>"; };
+		98D3A8C5079EC8670049A8FC /* SdefEditor.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = SdefEditor.m; sourceTree = "<group>"; };
 		98D3A8CF079EC9870049A8FC /* English */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = English; path = English.lproj/SdefInspector.nib; sourceTree = "<group>"; };
-		98D3A9DB079EF4B50049A8FC /* SdefComment.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SdefComment.h; path = Headers/SdefComment.h; sourceTree = "<group>"; };
-		98D3A9DC079EF4B50049A8FC /* SdefComment.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SdefComment.m; sourceTree = "<group>"; };
+		98D3A9DB079EF4B50049A8FC /* SdefComment.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; lineEnding = 0; name = SdefComment.h; path = Headers/SdefComment.h; sourceTree = "<group>"; };
+		98D3A9DC079EF4B50049A8FC /* SdefComment.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = SdefComment.m; sourceTree = "<group>"; };
 		98D3AE5E079DD05800DDB6CE /* English */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = English; path = English.lproj/SdefVerb.nib; sourceTree = "<group>"; };
-		98D3AE60079DD08600DDB6CE /* SdefVerbView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SdefVerbView.h; sourceTree = "<group>"; };
-		98D3AE61079DD08600DDB6CE /* SdefVerbView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SdefVerbView.m; sourceTree = "<group>"; };
-		98D42D8B07AF6AF00040927F /* SdefXMLBase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SdefXMLBase.m; sourceTree = "<group>"; };
-		98D42D8D07AF6AFF0040927F /* SdefXMLBase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SdefXMLBase.h; sourceTree = "<group>"; };
-		98D5AA43078C662300DD07B7 /* SdefArguments.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SdefArguments.h; path = Headers/SdefArguments.h; sourceTree = "<group>"; };
-		98D5AA44078C662300DD07B7 /* SdefArguments.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SdefArguments.m; sourceTree = "<group>"; };
+		98D3AE60079DD08600DDB6CE /* SdefVerbView.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = SdefVerbView.h; sourceTree = "<group>"; };
+		98D3AE61079DD08600DDB6CE /* SdefVerbView.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = SdefVerbView.m; sourceTree = "<group>"; };
+		98D42D8B07AF6AF00040927F /* SdefXMLBase.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = SdefXMLBase.m; sourceTree = "<group>"; };
+		98D5AA43078C662300DD07B7 /* SdefArguments.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; lineEnding = 0; name = SdefArguments.h; path = Headers/SdefArguments.h; sourceTree = "<group>"; };
+		98D5AA44078C662300DD07B7 /* SdefArguments.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = SdefArguments.m; sourceTree = "<group>"; };
 		98D5AABD078C6EA700DD07B7 /* Member.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = Member.tiff; sourceTree = "<group>"; };
 		98D5AAC6078C6EDE00DD07B7 /* Box.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = Box.tiff; sourceTree = "<group>"; };
 		98D5AAE2078C6FD700DD07B7 /* Check.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = Check.tiff; sourceTree = "<group>"; };
 		98D5AAE6078C6FDD00DD07B7 /* Param.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = Param.tiff; sourceTree = "<group>"; };
 		98D5AAEC078C6FF100DD07B7 /* warning.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = warning.tiff; sourceTree = "<group>"; };
+		98D6FB0F0BDA042200F30DAE /* SdefXMLValidator.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; lineEnding = 0; name = SdefXMLValidator.h; path = Headers/SdefXMLValidator.h; sourceTree = "<group>"; };
+		98D6FB100BDA042200F30DAE /* SdefDocumentationParser.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = SdefDocumentationParser.m; sourceTree = "<group>"; };
+		98D6FB150BDA042200F30DAE /* SdefXMLValidator.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = SdefXMLValidator.m; sourceTree = "<group>"; };
 		98D9B3D40876AEFB001AC5B1 /* Skeleton.sdef */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text.sdef; path = Skeleton.sdef; sourceTree = "<group>"; };
 		98DA20E508B4F82C000ABC2B /* SKOutlineView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = SKOutlineView.m; sourceTree = "<group>"; };
 		98DA20E708B4F838000ABC2B /* SKOutlineView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = SKOutlineView.h; sourceTree = "<group>"; };
@@ -498,48 +494,48 @@
 		98DDCFE107F1FA0200541DFA /* EditSymbol.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = EditSymbol.tiff; sourceTree = "<group>"; };
 		98DDD04707F232AD00541DFA /* SKTableDataSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = SKTableDataSource.h; sourceTree = "<group>"; };
 		98DDF4AC07DC405000EF07E2 /* SdtplBundle.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = SdtplBundle.icns; sourceTree = "<group>"; };
-		98DF608C084074FF00CBE83B /* OSASdefImporter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OSASdefImporter.h; sourceTree = "<group>"; };
-		98DF608D084074FF00CBE83B /* OSASdefImporter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OSASdefImporter.m; sourceTree = "<group>"; };
+		98DF608C084074FF00CBE83B /* OSASdefImporter.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = OSASdefImporter.h; sourceTree = "<group>"; };
+		98DF608D084074FF00CBE83B /* OSASdefImporter.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = OSASdefImporter.m; sourceTree = "<group>"; };
 		98E316670840961F003EC9D5 /* EditType.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = EditType.tiff; sourceTree = "<group>"; };
 		98E3176D0840B5B0003EC9D5 /* AppleScriptKit.sdef */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text.sdef; path = AppleScriptKit.sdef; sourceTree = "<group>"; };
 		98E317A60840B814003EC9D5 /* English */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = English; path = English.lproj/ImportApplicationSdef.nib; sourceTree = "<group>"; };
 		98E84E8B07FE9358008BB0AB /* WebKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebKit.framework; path = /System/Library/Frameworks/WebKit.framework; sourceTree = "<absolute>"; };
 		98E98CE30840D96F0093BA77 /* Element.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = Element.tiff; sourceTree = "<group>"; };
-		98E98D5D0840DFBA0093BA77 /* SdefLeaf.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SdefLeaf.h; path = Headers/SdefLeaf.h; sourceTree = "<group>"; };
-		98E98D5E0840DFBA0093BA77 /* SdefLeaf.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SdefLeaf.m; sourceTree = "<group>"; };
+		98E98D5D0840DFBA0093BA77 /* SdefLeaf.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; lineEnding = 0; name = SdefLeaf.h; path = Headers/SdefLeaf.h; sourceTree = "<group>"; };
+		98E98D5E0840DFBA0093BA77 /* SdefLeaf.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = SdefLeaf.m; sourceTree = "<group>"; };
 		98EA0B89078C883900ECCB4B /* English */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = English; path = English.lproj/SdefDictionary.nib; sourceTree = "<group>"; };
-		98EA0B96078C886300ECCB4B /* SdefDictionaryView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SdefDictionaryView.h; sourceTree = "<group>"; };
-		98EA0B97078C886300ECCB4B /* SdefDictionaryView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SdefDictionaryView.m; sourceTree = "<group>"; };
+		98EA0B96078C886300ECCB4B /* SdefDictionaryView.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = SdefDictionaryView.h; sourceTree = "<group>"; };
+		98EA0B97078C886300ECCB4B /* SdefDictionaryView.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = SdefDictionaryView.m; sourceTree = "<group>"; };
 		98EA0BA2078C88EE00ECCB4B /* MiniPlus.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = MiniPlus.tiff; sourceTree = "<group>"; };
 		98EA0C4B078C929D00ECCB4B /* English */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = English; path = English.lproj/SdefSuite.nib; sourceTree = "<group>"; };
-		98EA0C52078C92C600ECCB4B /* SdefSuiteView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SdefSuiteView.h; sourceTree = "<group>"; };
-		98EA0C53078C92C600ECCB4B /* SdefSuiteView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SdefSuiteView.m; sourceTree = "<group>"; };
-		98EA0CF9078C9D2100ECCB4B /* SdefEnumerationView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SdefEnumerationView.h; sourceTree = "<group>"; };
-		98EA0CFA078C9D2100ECCB4B /* SdefEnumerationView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SdefEnumerationView.m; sourceTree = "<group>"; };
+		98EA0C52078C92C600ECCB4B /* SdefSuiteView.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = SdefSuiteView.h; sourceTree = "<group>"; };
+		98EA0C53078C92C600ECCB4B /* SdefSuiteView.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = SdefSuiteView.m; sourceTree = "<group>"; };
+		98EA0CF9078C9D2100ECCB4B /* SdefEnumerationView.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = SdefEnumerationView.h; sourceTree = "<group>"; };
+		98EA0CFA078C9D2100ECCB4B /* SdefEnumerationView.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = SdefEnumerationView.m; sourceTree = "<group>"; };
 		98EA0D0B078C9E4F00ECCB4B /* English */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = English; path = English.lproj/SdefEnumeration.nib; sourceTree = "<group>"; };
-		98ECBD2B07AD7336008DE854 /* SdefImporter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SdefImporter.h; sourceTree = "<group>"; };
-		98ECBD2C07AD7336008DE854 /* SdefImporter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SdefImporter.m; sourceTree = "<group>"; };
-		98EF19B6078B182F0073D736 /* SdefWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SdefWindowController.h; sourceTree = "<group>"; };
-		98EF19B7078B182F0073D736 /* SdefWindowController.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = SdefWindowController.m; sourceTree = "<group>"; };
-		98EF19C9078B206B0073D736 /* SdefViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SdefViewController.h; sourceTree = "<group>"; };
-		98EF19CA078B206B0073D736 /* SdefViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SdefViewController.m; sourceTree = "<group>"; };
-		98F11E1007D3B07F002C874A /* ASDictionaryStream.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ASDictionaryStream.m; sourceTree = "<group>"; };
+		98ECBD2B07AD7336008DE854 /* SdefImporter.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = SdefImporter.h; sourceTree = "<group>"; };
+		98ECBD2C07AD7336008DE854 /* SdefImporter.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = SdefImporter.m; sourceTree = "<group>"; };
+		98EF19B6078B182F0073D736 /* SdefWindowController.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = SdefWindowController.h; sourceTree = "<group>"; };
+		98EF19B7078B182F0073D736 /* SdefWindowController.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = SdefWindowController.m; sourceTree = "<group>"; };
+		98EF19C9078B206B0073D736 /* SdefViewController.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = SdefViewController.h; sourceTree = "<group>"; };
+		98EF19CA078B206B0073D736 /* SdefViewController.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = SdefViewController.m; sourceTree = "<group>"; };
+		98F11E1007D3B07F002C874A /* ASDictionaryStream.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = ASDictionaryStream.m; sourceTree = "<group>"; };
 		98F15DE307A42653007A93DA /* English */ = {isa = PBXFileReference; fileEncoding = 10; lastKnownFileType = text.plist.strings; name = English; path = English.lproj/Localizable.strings; sourceTree = "<group>"; };
 		98F15DE507A42653007A93DA /* English */ = {isa = PBXFileReference; fileEncoding = 10; lastKnownFileType = text.plist.strings; name = English; path = English.lproj/SdefLibrary.strings; sourceTree = "<group>"; };
-		98F2D2D407B2096500F2EEC2 /* CocoaObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CocoaObject.h; sourceTree = "<group>"; };
-		98F2D2D507B2096500F2EEC2 /* CocoaObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CocoaObject.m; sourceTree = "<group>"; };
-		98F2D2DD07B20B7500F2EEC2 /* CocoaSuite.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CocoaSuite.m; sourceTree = "<group>"; };
-		98F2D2EF07B20DAF00F2EEC2 /* CocoaEnumeration.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CocoaEnumeration.m; sourceTree = "<group>"; };
-		98F2D30E07B2C96800F2EEC2 /* CocoaVerb.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CocoaVerb.m; sourceTree = "<group>"; };
-		98F2D31807B2CB0300F2EEC2 /* CocoaClass.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CocoaClass.m; sourceTree = "<group>"; };
-		98F2D33107B2D42400F2EEC2 /* Preferences.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Preferences.m; sourceTree = "<group>"; };
-		98F2D33307B2D43100F2EEC2 /* Preferences.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Preferences.h; sourceTree = "<group>"; };
+		98F2D2D407B2096500F2EEC2 /* CocoaObject.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = CocoaObject.h; sourceTree = "<group>"; };
+		98F2D2D507B2096500F2EEC2 /* CocoaObject.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = CocoaObject.m; sourceTree = "<group>"; };
+		98F2D2DD07B20B7500F2EEC2 /* CocoaSuite.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = CocoaSuite.m; sourceTree = "<group>"; };
+		98F2D2EF07B20DAF00F2EEC2 /* CocoaEnumeration.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = CocoaEnumeration.m; sourceTree = "<group>"; };
+		98F2D30E07B2C96800F2EEC2 /* CocoaVerb.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = CocoaVerb.m; sourceTree = "<group>"; };
+		98F2D31807B2CB0300F2EEC2 /* CocoaClass.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = CocoaClass.m; sourceTree = "<group>"; };
+		98F2D33107B2D42400F2EEC2 /* Preferences.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = Preferences.m; sourceTree = "<group>"; };
+		98F2D33307B2D43100F2EEC2 /* Preferences.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = Preferences.h; sourceTree = "<group>"; };
 		98F3F2170795194500D8BFAE /* English */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = English; path = English.lproj/SdefClass.nib; sourceTree = "<group>"; };
-		98F3F21A0795197200D8BFAE /* SdefClassView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SdefClassView.m; sourceTree = "<group>"; };
-		98F3F21C0795197B00D8BFAE /* SdefClassView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SdefClassView.h; sourceTree = "<group>"; };
-		98F47BD607D141690097C497 /* ASDictionary.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ASDictionary.m; sourceTree = "<group>"; };
-		98F711AA079C5D170059078F /* SdefImportsView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SdefImportsView.h; sourceTree = "<group>"; };
-		98F711AB079C5D170059078F /* SdefImportsView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SdefImportsView.m; sourceTree = "<group>"; };
+		98F3F21A0795197200D8BFAE /* SdefClassView.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = SdefClassView.m; sourceTree = "<group>"; };
+		98F3F21C0795197B00D8BFAE /* SdefClassView.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = SdefClassView.h; sourceTree = "<group>"; };
+		98F47BD607D141690097C497 /* ASDictionary.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = ASDictionary.m; sourceTree = "<group>"; };
+		98F711AA079C5D170059078F /* SdefImportsView.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = SdefImportsView.h; sourceTree = "<group>"; };
+		98F711AB079C5D170059078F /* SdefImportsView.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = SdefImportsView.m; sourceTree = "<group>"; };
 		98F8A842081A830E00CBF3D8 /* Frame Dictionary.sdtpl */ = {isa = PBXFileReference; lastKnownFileType = folder; path = "Frame Dictionary.sdtpl"; sourceTree = "<group>"; };
 		98F940C207F889690014708A /* AppleRTFDictionary.sdtpl */ = {isa = PBXFileReference; lastKnownFileType = folder; path = AppleRTFDictionary.sdtpl; sourceTree = "<group>"; };
 		98F940C607F889690014708A /* AppleDictionary.sdtpl */ = {isa = PBXFileReference; lastKnownFileType = folder; path = AppleDictionary.sdtpl; sourceTree = "<group>"; };
@@ -665,31 +661,6 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
-		980355FE0826CF8600419E98 /* Parser */ = {
-			isa = PBXGroup;
-			children = (
-				980355FF0826CF9700419E98 /* Headers */,
-				98BDA84A082740440055FC80 /* SdefXMLParser.m */,
-				98BDA83C08273F8F0055FC80 /* SdefTigerParser.m */,
-				98BDA91908274FA90055FC80 /* SdefPantherParser.m */,
-				1B751C390BD65900006D25B8 /* SdefLeopardParser.m */,
-				980AC4090832AB66002EF5F5 /* SdefDocumentationParser.m */,
-			);
-			name = Parser;
-			path = Tiger;
-			sourceTree = "<group>";
-		};
-		980355FF0826CF9700419E98 /* Headers */ = {
-			isa = PBXGroup;
-			children = (
-				98BDA848082740360055FC80 /* SdefXMLParser.h */,
-				98BDA83E08273F9C0055FC80 /* SdefTigerParser.h */,
-				98BDA91308274F7E0055FC80 /* SdefPantherParser.h */,
-				1B751C330BD658F7006D25B8 /* SdefLeopardParser.h */,
-			);
-			path = Headers;
-			sourceTree = "<group>";
-		};
 		9815F1B907E0F7E000D3C6CD /* Templates */ = {
 			isa = PBXGroup;
 			children = (
@@ -772,6 +743,17 @@
 			path = Headers;
 			sourceTree = "<group>";
 		};
+		983A837F0BDA8B2A006C77F6 /* Writer */ = {
+			isa = PBXGroup;
+			children = (
+				983A83820BDA8B2A006C77F6 /* SdefXMLNode.h */,
+				983A83830BDA8B2A006C77F6 /* SdefXMLNode.m */,
+				983A83800BDA8B2A006C77F6 /* SdefXMLGenerator.h */,
+				983A83810BDA8B2A006C77F6 /* SdefXMLGenerator.m */,
+			);
+			path = Writer;
+			sourceTree = "<group>";
+		};
 		9863F7D2078B376B0022F623 /* Images */ = {
 			isa = PBXGroup;
 			children = (
@@ -851,7 +833,6 @@
 				98758018078863B80038C05B /* Class Definition */,
 				9875802D078864DA0038C05B /* Types Definition */,
 				98758019078863E40038C05B /* Command Definition */,
-				980355FE0826CF8600419E98 /* Parser */,
 				988FDDF6078F560F003374B6 /* XML */,
 			);
 			path = SdefLibrary;
@@ -954,17 +935,18 @@
 		988FDDF6078F560F003374B6 /* XML */ = {
 			isa = PBXGroup;
 			children = (
-				98D4290907AF6A4B0040927F /* Headers */,
+				983A837F0BDA8B2A006C77F6 /* Writer */,
+				98D6FB090BDA042200F30DAE /* Reader */,
+				983A83A00BDA8C92006C77F6 /* SdefXMLBase.h */,
 				98D42D8B07AF6AF00040927F /* SdefXMLBase.m */,
 				989B7E1007B01BEE004251EA /* SdefXMLVerb.m */,
 				989B7E1707B04205004251EA /* SdefXMLSuite.m */,
-				98D29C93078FD2AB008FA9F6 /* SdefXMLNode.m */,
 				989B7E0107B01A57004251EA /* SdefXMLClass.m */,
+				989B7E2D07B043D5004251EA /* SdefXMLTypes.m */,
+				983A83380BDA8425006C77F6 /* SdefXMLLeaves.m */,
 				984A4C050830100200D062BB /* SdefXMLObjects.m */,
-				988FDDF3078F5607003374B6 /* SdefXMLGenerator.m */,
 				989B7E2307B042E5004251EA /* SdefXMLCommons.m */,
 				989B7E1B07B04264004251EA /* SdefXMLDictionary.m */,
-				989B7E2D07B043D5004251EA /* SdefXMLTypes.m */,
 			);
 			path = XML;
 			sourceTree = "<group>";
@@ -1126,14 +1108,18 @@
 			path = Headers;
 			sourceTree = "<group>";
 		};
-		98D4290907AF6A4B0040927F /* Headers */ = {
+		98D6FB090BDA042200F30DAE /* Reader */ = {
 			isa = PBXGroup;
 			children = (
-				98D42D8D07AF6AFF0040927F /* SdefXMLBase.h */,
-				98D29C92078FD2AB008FA9F6 /* SdefXMLNode.h */,
-				988FDDF2078F5607003374B6 /* SdefXMLGenerator.h */,
+				98C806A10BDA229500A45088 /* SdefParser.h */,
+				98C8069F0BDA228500A45088 /* SdefParser.m */,
+				98D6FB0F0BDA042200F30DAE /* SdefXMLValidator.h */,
+				98D6FB150BDA042200F30DAE /* SdefXMLValidator.m */,
+				98C806C90BDA247A00A45088 /* SdefDocumentationParser.h */,
+				98D6FB100BDA042200F30DAE /* SdefDocumentationParser.m */,
 			);
-			path = Headers;
+			name = Reader;
+			path = Parser;
 			sourceTree = "<group>";
 		};
 		98EA0B8B078C883E00ECCB4B /* Sdef Tabs */ = {
@@ -1244,18 +1230,12 @@
 				98C4F252081412AE00ABBBBA /* SdefClassManager.h in Headers */,
 				986B1A32081862D3004CF2EA /* SdtplWindow.h in Headers */,
 				98CB367B082EC7670088CFD5 /* SdefBase.h in Headers */,
-				98CCA8A1082F3299002A37E2 /* SdefXMLGenerator.h in Headers */,
-				98CCA8A2082F329F002A37E2 /* SdefXMLNode.h in Headers */,
-				98CCA8A3082F32A3002A37E2 /* SdefXMLBase.h in Headers */,
 				98CCA8FB082FEEF5002A37E2 /* SdefType.h in Headers */,
-				984A4C6708301C3300D062BB /* SdefXMLParser.h in Headers */,
 				9862E0240831788000ED1608 /* SdefImporter.h in Headers */,
 				9862E0320831793F00ED1608 /* AeteImporter.h in Headers */,
 				9862E043083179CF00ED1608 /* CocoaSuiteImporter.h in Headers */,
 				9862E047083179FE00ED1608 /* CocoaObject.h in Headers */,
 				98B5625508317C690067D99C /* AeteObject.h in Headers */,
-				98B5625608317C800067D99C /* SdefPantherParser.h in Headers */,
-				98B5625708317C8E0067D99C /* SdefTigerParser.h in Headers */,
 				98B5625808317CA40067D99C /* ASDictionary.h in Headers */,
 				98B5625B08317CA70067D99C /* ASDictionaryObject.h in Headers */,
 				98B5625D08317CA80067D99C /* ASDictionaryStream.h in Headers */,
@@ -1265,8 +1245,13 @@
 				98230E5D0AFE299B00675226 /* SKDisclosurePanel.h in Headers */,
 				98230E5F0AFE299B00675226 /* SKImageAndTextCell.h in Headers */,
 				9818EBCC0BD56D0D0079867A /* AESendThreadSafe.h in Headers */,
-				1B751C340BD658F7006D25B8 /* SdefLeopardParser.h in Headers */,
 				1B5FEC8F0BD8E58100F57412 /* SdefXRef.h in Headers */,
+				98C806A20BDA229500A45088 /* SdefParser.h in Headers */,
+				98C806CA0BDA247A00A45088 /* SdefDocumentationParser.h in Headers */,
+				98AE578A0BDA59D200A2D977 /* SdefXMLValidator.h in Headers */,
+				983A83840BDA8B2A006C77F6 /* SdefXMLGenerator.h in Headers */,
+				983A83860BDA8B2A006C77F6 /* SdefXMLNode.h in Headers */,
+				983A83A10BDA8C92006C77F6 /* SdefXMLBase.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1301,12 +1286,10 @@
 		2A37F4A9FDCFA73011CA2CEA /* Project object */ = {
 			isa = PBXProject;
 			buildConfigurationList = 98A7CBEC0855010F000D862B /* Build configuration list for PBXProject "Sdef Editor" */;
-			compatibilityVersion = "Xcode 2.4";
 			hasScannedForEncodings = 1;
 			mainGroup = 2A37F4AAFDCFA73011CA2CEA /* SDef Editor */;
 			projectDirPath = "";
 			projectRoot = "";
-			shouldCheckCompatibility = 1;
 			targets = (
 				8D15AC270486D014006FF6A4 /* Sdef Editor */,
 			);
@@ -1426,8 +1409,6 @@
 				9825DDCB07F4AC16006D5F5C /* SdtplWindow.m in Sources */,
 				984B7D9707F8B3B7004C5C60 /* SdefTemplate.m in Sources */,
 				98B38DA80801D10E0025589C /* SdtplGenerator.m in Sources */,
-				98FB9C5908300E2F00101D8C /* SdefXMLGenerator.m in Sources */,
-				98FB9C5A08300E3300101D8C /* SdefXMLNode.m in Sources */,
 				984A4C060830100200D062BB /* SdefXMLObjects.m in Sources */,
 				984A4C190830144C00D062BB /* SdefXMLDictionary.m in Sources */,
 				984A4C310830164E00D062BB /* SdefXMLBase.m in Sources */,
@@ -1436,9 +1417,6 @@
 				984A4C550830189800D062BB /* SdefXMLTypes.m in Sources */,
 				984A4C58083018CC00D062BB /* SdefXMLClass.m in Sources */,
 				984A4C5E08301B0C00D062BB /* SdefXMLVerb.m in Sources */,
-				984A4C6608301C3200D062BB /* SdefXMLParser.m in Sources */,
-				9862DF9E08311FD200ED1608 /* SdefPantherParser.m in Sources */,
-				9862DF9F08311FD400ED1608 /* SdefTigerParser.m in Sources */,
 				9862E0250831788300ED1608 /* SdefImporter.m in Sources */,
 				9862E0330831794100ED1608 /* AeteImporter.m in Sources */,
 				9862E03B0831799000ED1608 /* AeteVerb.m in Sources */,
@@ -1458,7 +1436,6 @@
 				98B5625E08317CA90067D99C /* ASDictionaryStream.m in Sources */,
 				98B5625F08317CAA0067D99C /* ASDictionarySuite.m in Sources */,
 				98B5626008317CAB0067D99C /* ASDictionaryVerb.m in Sources */,
-				980AC40A0832AB66002EF5F5 /* SdefDocumentationParser.m in Sources */,
 				984572C1083FD0FE00EACD98 /* SdefTypesEditor.m in Sources */,
 				98DF608F0840750000CBE83B /* OSASdefImporter.m in Sources */,
 				98E98D600840DFBA0093BA77 /* SdefLeaf.m in Sources */,
@@ -1486,8 +1463,13 @@
 				98230E670AFE299B00675226 /* SKDisclosureView.m in Sources */,
 				98230E690AFE299B00675226 /* SKImageAndTextCell.m in Sources */,
 				9818EBCE0BD56D290079867A /* AESendThreadSafe.c in Sources */,
-				1B751C3A0BD65900006D25B8 /* SdefLeopardParser.m in Sources */,
 				1B5FEC900BD8E58100F57412 /* SdefXRef.m in Sources */,
+				98D6FB1B0BDA042300F30DAE /* SdefDocumentationParser.m in Sources */,
+				98C806A00BDA228500A45088 /* SdefParser.m in Sources */,
+				98C8075F0BDA32D400A45088 /* SdefXMLValidator.m in Sources */,
+				983A83390BDA8425006C77F6 /* SdefXMLLeaves.m in Sources */,
+				983A83850BDA8B2A006C77F6 /* SdefXMLGenerator.m in Sources */,
+				983A83870BDA8B2A006C77F6 /* SdefXMLNode.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

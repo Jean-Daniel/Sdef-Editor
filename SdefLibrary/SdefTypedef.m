@@ -3,7 +3,7 @@
  *  Sdef Editor
  *
  *  Created by Rainbow Team.
- *  Copyright Â© 2006 Shadow Lab. All rights reserved.
+ *  Copyright © 2006 - 2007 Shadow Lab. All rights reserved.
  */
 
 #import "SdefTypedef.h"
@@ -43,6 +43,7 @@
 
 - (void)sdefInit {
   [super sdefInit];
+  sd_soFlags.xid = 1;
   sd_soFlags.xrefs = 1;
   sd_inline = kSdefInlineAll;
 }
@@ -135,6 +136,7 @@
 - (void)sdefInit {
   [super sdefInit];
   [self setLeaf:YES];
+  sd_soFlags.xid = 1;
   sd_soFlags.xrefs = 1;
 }
 
@@ -173,6 +175,7 @@
 
 - (void)sdefInit {
   [super sdefInit];
+  sd_soFlags.xid = 1;
   sd_soFlags.xrefs = 1;
 }
 

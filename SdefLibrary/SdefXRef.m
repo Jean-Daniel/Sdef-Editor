@@ -3,7 +3,7 @@
  *  Sdef Editor
  *
  *  Created by Rainbow Team.
- *  Copyright Â© 2006 Shadow Lab. All rights reserved.
+ *  Copyright © 2006 - 2007 Shadow Lab. All rights reserved.
  */
 
 #import "SdefXRef.h"
@@ -28,11 +28,17 @@
   return self;
 }
 
+#pragma mark -
++ (SdefObjectType)objectType {
+  return kSdefXrefType;
+}
+
 - (void)dealloc {
   [sd_target release];
   [super dealloc];
 }
 
+#pragma mark -
 - (NSString *)target {
   return sd_target;
 }

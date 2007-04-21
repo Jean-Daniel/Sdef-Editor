@@ -3,7 +3,7 @@
  *  Sdef Editor
  *
  *  Created by Rainbow Team.
- *  Copyright Â© 2006 Shadow Lab. All rights reserved.
+ *  Copyright © 2006 - 2007 Shadow Lab. All rights reserved.
  */
 
 #import "CocoaSuiteImporter.h"
@@ -150,7 +150,7 @@ static NSArray *ASKStandardsSuites() {
       [title release];
     }
     if (suitePath) {
-      SdefDictionary *dico = SdefLoadDictionary(suitePath, nil, nil);
+      SdefDictionary *dico = SdefLoadDictionary(suitePath, nil, nil, nil);
       if (dico) {
         for (NSUInteger idx = 0; idx < [dico count]; idx++) {
           id sdefSuite = [dico childAtIndex:idx];

@@ -3,7 +3,7 @@
  *  Sdef Editor
  *
  *  Created by Rainbow Team.
- *  Copyright ï¿½ 2006 Shadow Lab. All rights reserved.
+ *  Copyright © 2006 - 2007 Shadow Lab. All rights reserved.
  */
 
 #import "SdefWindowController.h"
@@ -340,7 +340,7 @@ static inline BOOL SdefEditorExistsForItem(SdefObject *item) {
       if ([selection objectType] == kSdefRespondsToType || 
           ([selection objectType] == kSdefCollectionType && [(SdefCollection *)selection acceptsObjectType:kSdefRespondsToType])) {
         id str = nil;
-        SdefClass *class = [selection firstParentOfType:kSdefClassType];
+        SdefClass *class = (SdefClass *)[selection firstParentOfType:kSdefClassType];
         if ([selection parent] == [class commands] || selection == [class commands]) {
           str = @"commands";
         } else if ([selection parent] == [class events] || selection == [class events]) {
@@ -350,7 +350,7 @@ static inline BOOL SdefEditorExistsForItem(SdefObject *item) {
       } else if ([selection objectType] == kSdefVerbType || 
                  ([selection objectType] == kSdefCollectionType && [(SdefCollection *)selection acceptsObjectType:kSdefVerbType])) {
         id str = nil;
-        SdefSuite *suite = [selection firstParentOfType:kSdefSuiteType];
+        SdefSuite *suite = (SdefSuite *)[selection firstParentOfType:kSdefSuiteType];
         if ([selection parent] == [suite commands] || selection == [suite commands]) {
           str = @"commands";
         } else if ([selection parent] == [suite events] || selection == [suite events]) {
@@ -414,7 +414,7 @@ static inline BOOL SdefEditorExistsForItem(SdefObject *item) {
       break;
       /* 4 Class content type */
     case kSdefElementType:
-      destination = [[selection firstParentOfType:kSdefClassType] elements];
+      destination = [(SdefClass *)[selection firstParentOfType:kSdefClassType] elements];
       break;
     case kSdefPropertyType:
       destination = [(SdefClass *)[selection firstParentOfType:kSdefClassType] properties];
@@ -442,8 +442,8 @@ static inline BOOL SdefEditorExistsForItem(SdefObject *item) {
       break;
     case kSdefCollectionType:
     {
-      SdefSuite *suite = [selection firstParentOfType:kSdefSuiteType];
-      SdefClass *class = [selection firstParentOfType:kSdefClassType];
+      SdefSuite *suite = (SdefSuite *)[selection firstParentOfType:kSdefSuiteType];
+      SdefClass *class = (SdefClass *)[selection firstParentOfType:kSdefClassType];
       SdefObjectType type = [[(SdefCollection *)tree contentType] objectType];
       if ([[suite types] acceptsObjectType:type]) destination = [suite types];
       else if ([[suite classes] acceptsObjectType:type]) destination = [suite classes];

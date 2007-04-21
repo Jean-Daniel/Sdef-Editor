@@ -3,7 +3,7 @@
  *  Sdef Editor
  *
  *  Created by Rainbow Team.
- *  Copyright Â© 2006 Shadow Lab. All rights reserved.
+ *  Copyright © 2006 - 2007 Shadow Lab. All rights reserved.
  */
 
 #import "AeteObject.h"
@@ -27,7 +27,7 @@
   
   /* Identifier */
   OSType *identifier = (OSType *)bytes;
-  [self setCode:AeteStringForOSType(*identifier)];
+  [self setCode:SdefStringForOSType(*identifier)];
   bytes += 4;
   
   pStr = (StringPtr)bytes;
@@ -89,12 +89,12 @@
   
   /* Identifier */
   OSType *identifier = (OSType *)bytes;
-  [self setCode:AeteStringForOSType(*identifier)];
+  [self setCode:SdefStringForOSType(*identifier)];
   bytes += 4;
   
   /* Type */
   identifier = (UInt32 *)bytes;
-  [self setType:AeteStringForOSType(*identifier)];
+  [self setType:SdefStringForOSType(*identifier)];
   bytes += 4;
   
   /* Description */
@@ -138,7 +138,7 @@
   
   /* Type */
   OSType *identifier = (OSType *)bytes;
-  [self setType:AeteStringForOSType(*identifier)];
+  [self setType:SdefStringForOSType(*identifier)];
   bytes += 4;
   
   /* Accessors */

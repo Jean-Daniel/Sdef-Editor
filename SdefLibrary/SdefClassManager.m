@@ -3,7 +3,7 @@
  *  Sdef Editor
  *
  *  Created by Rainbow Team.
- *  Copyright © 2006 Shadow Lab. All rights reserved.
+ *  Copyright © 2006 - 2007 Shadow Lab. All rights reserved.
  */
 
 #import "SdefClassManager.h"
@@ -405,7 +405,7 @@
 
 - (NSString *)sdefTypeForAeteType:(NSString *)aType {
   if (!aType) return nil;
-  switch (SKOSTypeFromString(aType)) {
+  switch (OSTypeFromSdefString(aType)) {
     case typeNull:
       return nil;
     case typeBoolean:
@@ -486,12 +486,12 @@
 }
 
 - (SdefObject *)sdefTypeWithCode:(NSString *)aCode inSuite:(NSString *)suiteCode {
-  SdefTerminologyObject *enume;
-  NSEnumerator *enums = [sd_types objectEnumerator];
-  while (enume = [enums nextObject]) {
-    if ([aCode isEqualToString:[enume code]]) {
-      if (!suiteCode || [suiteCode isEqualToString:[[enume suite] code]]) {
-        return enume;
+  NSUInteger idx = [sd_types count];
+  while (idx-- > 0) {
+    SdefTerminologyObject *object = [sd_types objectAtIndex:idx];
+    if ([aCode isEqualToString:[object code]]) {
+      if (!suiteCode || [suiteCode isEqualToString:[[object suite] code]]) {
+        return object;
       }
     }
   }

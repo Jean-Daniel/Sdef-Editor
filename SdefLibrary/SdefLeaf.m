@@ -3,7 +3,7 @@
  *  Sdef Editor
  *
  *  Created by Rainbow Team.
- *  Copyright Â© 2006 Shadow Lab. All rights reserved.
+ *  Copyright © 2006 - 2007 Shadow Lab. All rights reserved.
  */
 
 #import "SdefLeaf.h"
@@ -33,6 +33,10 @@
     sd_owner = [aCoder decodeObjectForKey:@"STOwner"];
   }
   return self;
+}
+
++ (SdefObjectType)objectType {
+  return kSdefUndefinedType;
 }
 
 - (id)init {
@@ -94,7 +98,24 @@
   }
 }
 
+- (NSString *)location {
+  NSString *loc = [sd_owner location];
+  return loc ? [loc stringByAppendingFormat:@"->%@", [self objectTypeName]] : [self objectTypeName];
+}
+
+- (SdefObjectType)objectType {
+  return [[self class] objectType];
+}
+
 - (NSString *)objectTypeName {
+  switch ([self objectType]) {
+    case kSdefTypeAtomType:
+      return NSLocalizedStringFromTable(@"Type", @"SdefLibrary", @"Object Type Name.");
+    case kSdefSynonymType:
+      return NSLocalizedStringFromTable(@"Synonym", @"SdefLibrary", @"Object Type Name.");
+    case kSdefXrefType:
+      return NSLocalizedStringFromTable(@"Xref", @"SdefLibrary", @"Object Type Name.");
+  }
   return nil;
 }
 
@@ -108,10 +129,8 @@
 }
 
 /* Needed to be owner of an orphan object (like SdefImplementation) */
-- (id)firstParentOfType:(SdefObjectType)aType {
+- (id<SdefObject>)firstParentOfType:(SdefObjectType)aType {
   return [sd_owner firstParentOfType:aType];
 }
-
-
 
 @end

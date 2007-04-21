@@ -3,7 +3,7 @@
  *  Sdef Editor
  *
  *  Created by Rainbow Team.
- *  Copyright Â© 2006 Shadow Lab. All rights reserved.
+ *  Copyright © 2006 - 2007 Shadow Lab. All rights reserved.
  */
 
 #import "SdefXMLBase.h"
@@ -60,25 +60,20 @@
 }
 
 #pragma mark XML Parsing
-- (id)initWithAttributes:(NSDictionary *)attributes {
-  if (self = [self initWithName:nil]) {
-    [self setAttributes:attributes];
-    if (![self name]) { [self setName:[[self class] defaultName]]; }
-  }
-  return self;
-}
-
-- (void)setAttributes:(NSDictionary *)attrs {
-  [self setName:[[attrs objectForKey:@"name"] stringByUnescapingEntities:nil]];
+- (void)setXMLAttributes:(NSDictionary *)attrs {
+  NSString *attr = [attrs objectForKey:@"name"];
+  if (attr)
+    [self setName:[attr stringByUnescapingEntities:nil]];
   
-  NSString *hidden = [attrs objectForKey:@"hidden"];
-  if (hidden && ![hidden isEqualToString:@"no"]) {
+  attr = [attrs objectForKey:@"hidden"];
+  if (attr && ![attr isEqualToString:@"no"]) {
     [self setHidden:YES];
   }
 }
 
-- (SdefParserVersion)acceptXMLElement:(NSString *)element attributes:(NSDictionary *)attrs {
-  return kSdefParserUnknownVersion;
+- (void)addXMLChild:(id<SdefObject>)node {
+  [NSException raise:NSInternalInconsistencyException format:@"%@ must overrided %@ to support %@ ", 
+    [self class], NSStringFromSelector(_cmd), node];
 }
 
 @end
@@ -113,12 +108,8 @@
 }
 
 #pragma mark XML Parsing
-- (void)setAttributes:(NSDictionary *)attrs {
+- (void)setXMLAttributes:(NSDictionary *)attrs {
   /* Do nothing */
-}
-
-- (SdefParserVersion)acceptXMLElement:(NSString *)element attributes:(NSDictionary *)attrs {
-  return kSdefParserPantherVersion;
 }
 
 @end

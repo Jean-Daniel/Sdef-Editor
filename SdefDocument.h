@@ -3,7 +3,7 @@
  *  Sdef Editor
  *
  *  Created by Rainbow Team.
- *  Copyright Â© 2006 Shadow Lab. All rights reserved.
+ *  Copyright © 2006 - 2007 Shadow Lab. All rights reserved.
  */
 
 #import <Cocoa/Cocoa.h>
@@ -12,9 +12,9 @@
 @class SdefWindowController, SdefSymbolBrowser;
 
 SK_PRIVATE 
-SdefDictionary *SdefLoadDictionary(NSString *filename, NSInteger *version, id delegate);
+SdefDictionary *SdefLoadDictionary(NSString *filename, NSInteger *version, id delegate, NSString **error);
 SK_PRIVATE
-SdefDictionary *SdefLoadDictionaryData(NSData *data, NSInteger *version, id delegate);
+SdefDictionary *SdefLoadDictionaryData(NSData *data, NSInteger *version, id delegate, NSString **error);
 
 @interface SdefDocument : NSDocument {
 @private

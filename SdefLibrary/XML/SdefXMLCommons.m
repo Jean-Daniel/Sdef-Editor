@@ -3,117 +3,14 @@
  *  Sdef Editor
  *
  *  Created by Rainbow Team.
- *  Copyright Â© 2006 Shadow Lab. All rights reserved.
+ *  Copyright © 2006 - 2007 Shadow Lab. All rights reserved.
  */
 
 #import "SdefXMLNode.h"
 #import "SdefXMLBase.h"
 
-#import <ShadowKit/SKExtensions.h>
 #import "SdefDocumentation.h"
 #import "SdefImplementation.h"
-
-@implementation SdefSynonym (SdefXMLManager)
-#pragma mark XML Generation
-- (SdefXMLNode *)xmlNodeForVersion:(SdefVersion)version {
-  SdefXMLNode *node;
-  if (node = [[SdefXMLNode alloc] initWithElementName:@"synonym"]) {
-    /* Code */
-    NSString *attr = [self code];
-    if (attr) [node setAttribute:[attr stringByEscapingEntities:nil] forKey:@"code"];
-    /* Name */
-    attr = [self name];
-    if (attr) [node setAttribute:[attr stringByEscapingEntities:nil] forKey:@"name"];
-    /* Hidden */
-    if ([self isHidden]) {
-      if (version >= kSdefTigerVersion)
-        [node setAttribute:@"yes" forKey:@"hidden"];
-      else
-        [node setAttribute:@"hidden" forKey:@"hidden"];
-    }
-    /* Implementation */
-    if (sd_impl) {
-      SdefXMLNode *implNode = [sd_impl xmlNodeForVersion:version];
-      if (implNode) {
-        [node prependChild:implNode];
-      }
-    }
-    [node autorelease];
-    [node setEmpty:![node hasChildren]];
-  }
-  return [node attributeCount] > 0 ? node : nil;
-}
-
-#pragma mark Parsing
-- (SdefParserVersion)acceptXMLElement:(NSString *)element attributes:(NSDictionary *)attrs {
-  return kSdefParserAllVersions;
-}
-
-- (void)setAttributes:(NSDictionary *)attrs {
-  [self setName:[[attrs objectForKey:@"name"] stringByUnescapingEntities:nil]];
-  [self setCode:[[attrs objectForKey:@"code"] stringByUnescapingEntities:nil]];
-  NSString *hidden = [attrs objectForKey:@"hidden"];
-  if (hidden && ![hidden isEqualToString:@"no"]) {
-    [self setHidden:YES];
-  }
-}
-
-@end
-
-#pragma mark -
-@implementation SdefXRef (SdefXMLManager)
-#pragma mark XML Generation
-- (SdefXMLNode *)xmlNodeForVersion:(SdefVersion)version {
-  SdefXMLNode *node = nil;
-  if ([self target]) {
-    if (node = [[SdefXMLNode alloc] initWithElementName:@"xref"]) {
-      [node setEmpty:YES];
-      /* Code */
-      NSString *attr = [self target];
-      if (attr) [node setAttribute:[attr stringByEscapingEntities:nil] forKey:@"target"];
-      /* Hidden */
-      if ([self isHidden]) {
-        if (version >= kSdefTigerVersion)
-          [node setAttribute:@"yes" forKey:@"hidden"];
-        else
-          [node setAttribute:@"hidden" forKey:@"hidden"];
-      }
-      [node autorelease];
-    }
-  }
-  return node;
-}
-
-#pragma mark Parsing
-- (void)setAttributes:(NSDictionary *)attrs {
-  [self setTarget:[[attrs objectForKey:@"target"] stringByUnescapingEntities:nil]];
-  NSString *hidden = [attrs objectForKey:@"hidden"];
-  if (hidden && ![hidden isEqualToString:@"no"]) {
-    [self setHidden:YES];
-  }
-}
-
-@end
-
-#pragma mark -
-@implementation SdefType (SdefXMLManager)
-
-#pragma mark XML Generation
-- (SdefXMLNode *)xmlNodeForVersion:(SdefVersion)version {
-  if (version >= kSdefTigerVersion) {
-    if ([self name]) {
-      SdefXMLNode *typeNode = [[SdefXMLNode alloc] initWithElementName:@"type"];
-      [typeNode setAttribute:[[self name] stringByEscapingEntities:nil] forKey:@"type"];
-      if ([self isList])
-        [typeNode setAttribute:@"yes" forKey:@"list"];
-      [typeNode setEmpty:YES];
-      return [typeNode autorelease];
-    }
-  }
-  return nil;
-}
-
-@end
 
 #pragma mark -
 @implementation SdefDocumentation (SdefXMLManager)
@@ -139,11 +36,6 @@
 
 - (NSString *)xmlElementName {
   return @"documentation";
-}
-
-#pragma mark Parsing
-- (SdefParserVersion)acceptXMLElement:(NSString *)element attributes:(NSDictionary *)attrs {
-  return [element isEqualToString:@"html"] ? kSdefParserTigerVersion | kSdefParserLeopardVersion : kSdefParserAllVersions;
 }
 
 @end
@@ -187,15 +79,11 @@
 }
 
 #pragma mark Parsing
-- (void)setAttributes:(NSDictionary *)attrs {
-  [super setAttributes:attrs];
+- (void)setXMLAttributes:(NSDictionary *)attrs {
+  [super setXMLAttributes:attrs];
   [self setKey:[[attrs objectForKey:@"key"] stringByUnescapingEntities:nil]];
   [self setMethod:[[attrs objectForKey:@"method"] stringByUnescapingEntities:nil]];
   [self setSdClass:[[attrs objectForKey:@"class"] stringByUnescapingEntities:nil]];
-}
-
-- (SdefParserVersion)acceptXMLElement:(NSString *)element attributes:(NSDictionary *)attrs {
-  return kSdefParserAllVersions;
 }
 
 @end

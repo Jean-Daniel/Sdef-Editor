@@ -3,7 +3,7 @@
  *  Sdef Editor
  *
  *  Created by Rainbow Team.
- *  Copyright Â© 2006 Shadow Lab. All rights reserved.
+ *  Copyright © 2006 - 2007 Shadow Lab. All rights reserved.
  */
 
 #import "SdefBase.h"
@@ -13,7 +13,9 @@
   CFXMLTreeRef sd_doc;
   CFXMLTreeRef sd_node;
   NSUInteger sd_indent;
+  
   SdefObject *sd_root;
+  NSString *sd_comment;
 }
 
 - (id)initWithRoot:(SdefObject *)dictionary;
@@ -21,5 +23,7 @@
 
 - (SdefObject *)root;
 - (void)setRoot:(SdefObject *)anObject;
+
+- (void)setHeaderComment:(NSString *)comment;
 
 @end

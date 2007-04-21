@@ -3,7 +3,7 @@
  *  Sdef Editor
  *
  *  Created by Rainbow Team.
- *  Copyright Â© 2006 Shadow Lab. All rights reserved.
+ *  Copyright © 2006 - 2007 Shadow Lab. All rights reserved.
  */
 
 #import "SdefImplementation.h"
@@ -24,6 +24,11 @@
   [aCoder encodeObject:sd_key forKey:@"SIKey"];
   [aCoder encodeObject:sd_class forKey:@"SIClass"];
   [aCoder encodeObject:sd_method forKey:@"SIMethod"];
+}
+
+#pragma mark -
++ (SdefObjectType)objectType {
+  return kSdefCocoaType;
 }
 
 - (id)initWithCoder:(NSCoder *)aCoder {

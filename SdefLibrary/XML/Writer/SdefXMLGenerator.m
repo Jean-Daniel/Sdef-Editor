@@ -3,7 +3,7 @@
  *  Sdef Editor
  *
  *  Created by Rainbow Team.
- *  Copyright Â© 2006 Shadow Lab. All rights reserved.
+ *  Copyright © 2006 - 2007 Shadow Lab. All rights reserved.
  */
 
 #import "SdefXMLGenerator.h"
@@ -11,11 +11,6 @@
 #import "SdefComment.h"
 #import "SdefXMLBase.h"
 #import <ShadowKit/SKExtensions.h>
-
-SK_INLINE
-NSString *SdefEditorComment() {
-  return NSLocalizedStringFromTable(@" Sdef Editor ", @"SdefLibrary", @"XML Document comment");
-}
 
 @implementation SdefXMLGenerator
 
@@ -36,6 +31,7 @@ NSString *SdefEditorComment() {
 - (void)dealloc {
   if (sd_doc) { CFRelease(sd_doc); sd_doc = nil; }
   [sd_root release];
+  [sd_comment release];
   [super dealloc];
 }
 
@@ -44,12 +40,14 @@ NSString *SdefEditorComment() {
 }
 
 - (void)setRoot:(SdefObject *)anObject {
-  if (sd_root != anObject) {
-    [sd_root release];
-    sd_root = [anObject retain];
-  }
+  SKSetterRetain(sd_root, anObject);
 }
 
+- (void)setHeaderComment:(NSString *)comment {
+  SKSetterCopy(sd_comment, comment);
+}
+
+#pragma mark -
 - (CFXMLTreeRef)appendNode:(CFXMLNodeRef)node {
   NSParameterAssert(node != nil);
   NSAssert(sd_node != NULL, @"Current node must not be nil.");
@@ -160,10 +158,9 @@ NSString *SdefEditorComment() {
   CFRelease(node);
   CFRelease(url);
   
-  NSString *signature = SdefEditorComment();
-  if ([signature length]) {
+  if ([sd_comment length]) {
     [self insertWhiteSpace];  
-    [self insertComment:signature];
+    [self insertComment:sd_comment];
   }
 }
 

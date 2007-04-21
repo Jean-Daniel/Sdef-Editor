@@ -3,7 +3,7 @@
  *  Sdef Editor
  *
  *  Created by Rainbow Team.
- *  Copyright Â© 2006 Shadow Lab. All rights reserved.
+ *  Copyright © 2006 - 2007 Shadow Lab. All rights reserved.
  */
 
 #import "SdefObjects.h"
@@ -102,7 +102,6 @@ enum {
   SdefContents *sd_contents;
   BOOL sd_extension;
   /* Attributes */
-  NSString *sd_id;
   NSString *sd_type;
   NSString *sd_plural; 
   NSString *sd_inherits;
@@ -115,9 +114,6 @@ enum {
 - (SdefCollection *)elements;
 - (SdefCollection *)commands;
 - (SdefCollection *)events;
-
-- (NSString *)xmlid;
-- (void)setXmlid:(NSString *)anId;
 
 - (NSString *)plural;
 - (void)setPlural:(NSString *)newPlural;

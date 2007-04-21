@@ -3,13 +3,19 @@
  *  Sdef Editor
  *
  *  Created by Rainbow Team.
- *  Copyright Â© 2006 Shadow Lab. All rights reserved.
+ *  Copyright © 2006 - 2007 Shadow Lab. All rights reserved.
  */
 
-#import <Cocoa/Cocoa.h>
+#import "SdefBase.h"
 
-@class SdefObject;
-@interface SdefLeaf : NSObject <NSCopying, NSCoding> {
+/* Leaves types */
+enum {
+  kSdefTypeAtomType = 'Type',
+  kSdefSynonymType = 'Syno',
+  kSdefXrefType = 'Xref',
+};
+
+@interface SdefLeaf : NSObject <SdefObject, NSCopying, NSCoding> {
 @private
   NSString *sd_name;
   SdefObject *sd_owner;
@@ -38,5 +44,7 @@
 
 - (SdefObject *)owner;
 - (void)setOwner:(SdefObject *)anObject;
+
+- (id<SdefObject>)firstParentOfType:(SdefObjectType)aType;
 
 @end

@@ -3,7 +3,7 @@
  *  Sdef Editor
  *
  *  Created by Rainbow Team.
- *  Copyright Â© 2006 Shadow Lab. All rights reserved.
+ *  Copyright © 2006 - 2007 Shadow Lab. All rights reserved.
  */
 
 #import "SdefObjects.h"
@@ -14,6 +14,8 @@
 #import "SdefDocument.h"
 #import "SdefDocumentation.h"
 #import "SdefImplementation.h"
+
+#import <ShadowKit/SKFunctions.h>
 
 @implementation SdefDocumentedObject
 #pragma mark Protocols Implementations
@@ -87,7 +89,7 @@
 
 #pragma mark -
 @implementation SdefImplementedObject
-  SdefImplementation *sd_impl;
+
 - (id)copyWithZone:(NSZone *)aZone {
   SdefImplementedObject *copy = [super copyWithZone:aZone];
   copy->sd_impl = [sd_impl copyWithZone:aZone];
@@ -168,6 +170,7 @@
 #pragma mark Protocols Implementation
 - (id)copyWithZone:(NSZone *)aZone {
   SdefTerminologyObject *copy = [super copyWithZone:aZone];
+  copy->sd_id = [sd_id copyWithZone:aZone];
   copy->sd_code = [sd_code copyWithZone:aZone];
   copy->sd_desc = [sd_desc copyWithZone:aZone];
   copy->sd_xrefs = [sd_synonyms copyWithZone:aZone];
@@ -177,6 +180,7 @@
 
 - (void)encodeWithCoder:(NSCoder *)aCoder {
   [super encodeWithCoder:aCoder];
+  [aCoder encodeObject:sd_id forKey:@"STID"];
   [aCoder encodeObject:sd_code forKey:@"STCodeStr"];
   [aCoder encodeObject:sd_desc forKey:@"STDescription"];
   [aCoder encodeObject:sd_xrefs forKey:@"STXRefs"];
@@ -185,6 +189,7 @@
 
 - (id)initWithCoder:(NSCoder *)aCoder {
   if (self = [super initWithCoder:aCoder]) {
+    sd_id = [[aCoder decodeObjectForKey:@"STID"] retain];
     sd_code = [[aCoder decodeObjectForKey:@"STCodeStr"] retain];
     sd_desc = [[aCoder decodeObjectForKey:@"STDescription"] retain];
     sd_xrefs = [[aCoder decodeObjectForKey:@"STXRefs"] retain];
@@ -194,6 +199,7 @@
 }
 
 - (void)dealloc {
+  [sd_id release];
   [sd_code release];
   [sd_desc release];
   [sd_xrefs release];
@@ -222,6 +228,18 @@
     }
   }
   [super setEditable:flag recursive:recu];
+}
+
+- (NSString *)xmlid {
+  return sd_id;
+}
+- (void)setXmlid:(NSString *)anId {
+  if (sd_id != anId) {
+    [[self undoManager] registerUndoWithTarget:self selector:_cmd object:sd_id];
+    [[self undoManager] setActionName:NSLocalizedStringFromTable(@"Change ID", @"SdefLibrary", @"Undo Action: Change id.")];
+    [sd_id release];
+    sd_id = [anId copyWithZone:[self zone]];
+  }
 }
 
 - (NSString *)code {
@@ -420,7 +438,7 @@
 #pragma mark -
 - (BOOL)hasType {
   for (NSUInteger idx = 0; idx < [sd_types count]; idx++) {
-    if ([[sd_types objectAtIndex:idx] name] != nil) {
+    if ([[sd_types objectAtIndex:idx] name]) {
       return YES;
     }
   }
@@ -539,15 +557,15 @@
 }
 
 #pragma mark Owner
-- (id)owner {
+- (id<SdefObject>)owner {
   return sd_owner;
 }
 
-- (void)setOwner:(SdefObject *)anObject {
+- (void)setOwner:(id<SdefObject>)anObject {
   sd_owner = anObject;
 }
 
-- (id)firstParentOfType:(SdefObjectType)aType {
+- (id<SdefObject>)firstParentOfType:(SdefObjectType)aType {
   return [sd_owner firstParentOfType:aType];
 }
 
@@ -575,15 +593,15 @@
 }
 
 #pragma mark Owner
-- (id)owner {
+- (id<SdefObject>)owner {
   return sd_owner;
 }
 
-- (void)setOwner:(SdefObject *)anObject {
+- (void)setOwner:(id<SdefObject>)anObject {
   sd_owner = anObject;
 }
 
-- (id)firstParentOfType:(SdefObjectType)aType {
+- (id<SdefObject>)firstParentOfType:(SdefObjectType)aType {
   return [sd_owner firstParentOfType:aType];
 }
 
@@ -593,9 +611,9 @@
 #pragma mark -
 NSString *SdefTypeStringForTypes(NSArray *types) {
   NSMutableString *str = [[NSMutableString alloc] init];
-  SdefType *type;
-  NSEnumerator *items = [types objectEnumerator];
-  while (type = [items nextObject]) {
+  NSUInteger count = [types count];
+  for (NSUInteger idx = 0; idx < count; idx++) {
+    SdefType *type = [types objectAtIndex:idx];
     if ([type name]) {
       if ([str length] > 0) {
         [str appendString:@" | "];
@@ -626,4 +644,23 @@ NSArray *SdefTypesForTypeString(NSString *aType) {
     [type release];
   }
   return [types autorelease];
+}
+
+NSString *SdefStringForOSType(OSType type) {
+  char *chrs = (char *)&type;
+  NSString *str = SKStringForOSType(type);
+  /* If invalid string or contains white space */
+  if (!str || isspace(chrs[0]) || isspace(chrs[3])) {
+    str = [NSString stringWithFormat:@"0x%.8x", OSSwapHostToBigInt32(type)];
+  }
+  return str;
+}
+
+OSType OSTypeFromSdefString(NSString *string) {
+  if ([string length] == 10 && [string hasPrefix:@"0x"]) {
+    const char *cstr = [string UTF8String];
+    return cstr ? strtol(cstr, NULL, 16) : 0;
+  } else {
+    return SKOSTypeFromString(string);
+  }
 }

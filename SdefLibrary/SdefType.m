@@ -3,7 +3,7 @@
  *  Sdef Editor
  *
  *  Created by Rainbow Team.
- *  Copyright Â© 2006 Shadow Lab. All rights reserved.
+ *  Copyright © 2006 - 2007 Shadow Lab. All rights reserved.
  */
 
 #import "SdefType.h"
@@ -27,6 +27,10 @@
 }
 
 #pragma mark -
++ (SdefObjectType)objectType {
+  return kSdefTypeAtomType;
+}
+
 - (NSString *)description {
   return [NSString stringWithFormat:@"<%@ %p> {name=%@ list=%@}", 
     NSStringFromClass([self class]), self,
@@ -36,9 +40,6 @@
 #pragma mark -
 - (NSImage *)icon {
   return [NSImage imageNamed:@"Type"];
-}
-- (NSString *)objectTypeName {
-  return @"type";
 }
 
 - (void)setName:(NSString *)aName {

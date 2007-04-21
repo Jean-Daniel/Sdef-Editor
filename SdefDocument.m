@@ -3,7 +3,7 @@
  *  Sdef Editor
  *
  *  Created by Rainbow Team.
- *  Copyright Â© 2006 Shadow Lab. All rights reserved.
+ *  Copyright © 2006 - 2007 Shadow Lab. All rights reserved.
  */
 
 #import "SdefDocument.h"
@@ -19,7 +19,7 @@
 #import "SdefObjects.h"
 #import "SdefSuite.h"
 
-#import "SdefXMLParser.h"
+#import "SdefParser.h"
 #import "SdefXMLGenerator.h"
 #import "SdefExporterController.h"
 
@@ -155,6 +155,7 @@
   }
   if (version) {
     SdefXMLGenerator *gen = [[SdefXMLGenerator alloc] initWithRoot:[self dictionary]];
+    //[gen setHeaderComment:@" Sdef Editor "];
     @try {
       data = [gen xmlDataForVersion:version];
     } @catch (id exception) {
@@ -171,7 +172,7 @@
       [type isEqualToString:TigerScriptingDefinitionFileType] ||
       [type isEqualToString:PantherScriptingDefinitionFileType]) {
     NSInteger version;
-    [self setDictionary:SdefLoadDictionaryData(data, &version, self)];
+    [self setDictionary:SdefLoadDictionaryData(data, &version, self, NULL)];
     if ([self dictionary] != nil && version < kSdefTigerVersion) {
       NSRunInformationalAlertPanel(@"You have opened a Panther or Tiger Scripting Definition file",
                                    @"This file will be saved using Leopard format. If you want to export it using an older format, choose \"Save as...\" in the File menu",
@@ -182,7 +183,7 @@
   return [self dictionary] != nil;
 }
 
-- (SdefParserOperation)sdefParser:(SdefXMLParser *)parser shouldAddInvalidObject:(id)anObject inNode:(SdefObject *)node {
+- (SdefParserOperation)sdefParser:(SdefParser *)parser shouldAddInvalidObject:(id)anObject inNode:(SdefObject *)node {
   switch (NSRunAlertPanel(@"Found an invalid node in Sdef file",
                           @"Found element \"%@\" in %@ element \"%@\" at line %ld. Would you like to preserve this element, delete this element, or abort parsing.",
                           @"Preserve", @"Abort", @"Delete",
@@ -309,37 +310,23 @@
 @end
 
 #pragma mark -
-SdefDictionary *SdefLoadDictionary(NSString *filename, NSInteger *version, id delegate) {
+SdefDictionary *SdefLoadDictionary(NSString *filename, NSInteger *version, id delegate, NSString **error) {
   NSData *data = [[NSData alloc] initWithContentsOfFile:filename];
-  SdefDictionary *dictionary = SdefLoadDictionaryData(data, version, delegate);
+  SdefDictionary *dictionary = SdefLoadDictionaryData(data, version, delegate, error);
   [data release];
   return dictionary;
 }
 
-SdefDictionary *SdefLoadDictionaryData(NSData *data, NSInteger *version, id delegate) {
+SdefDictionary *SdefLoadDictionaryData(NSData *data, NSInteger *version, id delegate, NSString **error) {
   SdefDictionary *result = nil;
   if (data) {
-    SdefXMLParser *parser = [[SdefXMLParser alloc] init];
+    SdefParser *parser = [[SdefParser alloc] init];
     [parser setDelegate:delegate];
-    if ([parser parseData:data]) {
-      result = [[parser document] retain];
-      if (version) {
-        switch ([parser parserVersion]) {
-          case kSdefParserPantherVersion:
-            *version = kSdefPantherVersion;
-            break;
-          case kSdefParserTigerVersion:
-            *version = kSdefTigerVersion;
-            break;
-          case kSdefParserLeopardVersion:
-            *version = kSdefLeopardVersion;
-            break;
-        }
-      }
-    } else {
-      NSRunAlertPanel(@"An error occured when loading file!", [parser error], @"OK", nil, nil);
+    if ([parser parseSdef:data error:error]) {
+      result = [[parser dictionary] retain];
+      if (version) *version = [parser sdefVersion];
     }
     [parser release];
   }
-  return [result autorelease];
+  return result ? [result autorelease] : nil;
 }
