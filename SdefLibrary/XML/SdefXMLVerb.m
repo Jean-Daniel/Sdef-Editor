@@ -26,16 +26,12 @@
     if (childNode) {
       [node insertChild:childNode atIndex:idx];
     }
+    
+    childNode = nil;
     if (sd_result)
       childNode = [sd_result xmlNodeForVersion:version];
     if (childNode) {
       [node appendChild:childNode];
-    }
-    if (version >= kSdefLeopardVersion) {
-      NSString *attr = [self xmlid];
-      if (attr) {
-        [node setAttribute:[attr stringByEscapingEntities:nil] forKey:@"id"];
-      }
     }
   }
   return node;

@@ -23,13 +23,13 @@ description  %Text;        #IMPLIED
 
 @interface SdefContents : SdefTypedObject <NSCopying, NSCoding> {
   NSUInteger sd_access;
-  SdefObject *sd_owner;
+  id<SdefObject> sd_owner;
 }
 
 - (NSUInteger)access;
 - (void)setAccess:(NSUInteger)newAccess;
 
 - (id)owner;
-- (void)setOwner:(SdefObject *)anObject ;
+- (void)setOwner:(id<SdefObject>)anObject ;
 
 @end

@@ -9,6 +9,7 @@
 #import "SdefWindowController.h"
 #import "SdefViewController.h"
 
+#import <ShadowKit/SKSplitView.h>
 #import <ShadowKit/SKFunctions.h>
 #import <ShadowKit/SKAppKitExtensions.h>
 #import <ShadowKit/SKOutlineViewController.h>
@@ -84,7 +85,9 @@ static inline BOOL SdefEditorExistsForItem(SdefObject *item) {
 }
 
 - (void)displayObject:(SdefObject *)anObject {
-  [sd_tree displayNode:anObject];
+  if (IsObjectOwner(anObject)) {
+    [sd_tree displayNode:anObject];
+  }
 }
 
 - (void)setSelection:(SdefObject *)anObject display:(BOOL)display {
@@ -138,6 +141,14 @@ static inline BOOL SdefEditorExistsForItem(SdefObject *item) {
 // set autoselect: [[NSUserDefaults standardUserDefaults] boolForKey:@"SdefAutoSelectItem"]
 - (void)windowDidLoad {
   [outline registerForDraggedTypes:[NSArray arrayWithObject:SdefObjectDragType]];
+  
+//  NSToolbar *tb = [[NSToolbar alloc] initWithIdentifier:@"SdefWindowToolbar"];
+//  [tb setDelegate:self];
+//  [[self window] setToolbar:tb];
+//  [tb setVisible:NO];
+//  [tb release];
+  
+  [[self window] setBackgroundColor:[NSColor colorWithCalibratedWhite:0xec/255. alpha:1]];
   [super windowDidLoad];
 }
 
@@ -167,6 +178,8 @@ static inline BOOL SdefEditorExistsForItem(SdefObject *item) {
 
 #pragma mark -
 - (void)awakeFromNib {
+  [uiSplitview setGray:YES];
+  
   if (!sd_tree && outline) {
     sd_tree = [[SdefDictionaryTree alloc] initWithOutlineView:outline];
     [sd_tree setDisplayRoot:YES];

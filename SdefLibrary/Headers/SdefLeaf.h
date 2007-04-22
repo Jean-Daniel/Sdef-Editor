@@ -12,6 +12,7 @@
 enum {
   kSdefTypeAtomType = 'Type',
   kSdefSynonymType = 'Syno',
+  kSdefCommentType = 'Cmnt',
   kSdefXrefType = 'Xref',
 };
 
@@ -22,8 +23,10 @@ enum {
 @protected
   struct _sd_slFlags {
     unsigned int list:1;
+    unsigned int html:1;
     unsigned int hidden:1;
-    unsigned int:6;
+    unsigned int editable:1;
+    unsigned int:4;
   } sd_slFlags;
 }
 
@@ -39,12 +42,16 @@ enum {
 - (NSString *)name;
 - (void)setName:(NSString *)newName;
 
+- (BOOL)isEditable;
+- (void)setEditable:(BOOL)flag;
+
 - (BOOL)isHidden;
 - (void)setHidden:(BOOL)flag;
 
 - (SdefObject *)owner;
 - (void)setOwner:(SdefObject *)anObject;
 
+- (SdefDictionary *)dictionary;
 - (id<SdefObject>)firstParentOfType:(SdefObjectType)aType;
 
 @end

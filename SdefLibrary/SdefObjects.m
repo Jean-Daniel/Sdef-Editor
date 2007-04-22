@@ -536,42 +536,6 @@
 @end
 
 #pragma mark -
-@implementation SdefOrphanObject
-#pragma mark Protocols Implementations
-- (id)copyWithZone:(NSZone *)aZone {
-  SdefOrphanObject *copy = [super copyWithZone:aZone];
-  copy->sd_owner = nil;
-  return copy;
-}
-
-- (void)encodeWithCoder:(NSCoder *)aCoder {
-  [super encodeWithCoder:aCoder];
-  [aCoder encodeConditionalObject:sd_owner forKey:@"SOOwner"];
-}
-
-- (id)initWithCoder:(NSCoder *)aCoder {
-  if (self = [super initWithCoder:aCoder]) {
-    sd_owner = [aCoder decodeObjectForKey:@"SOOwner"];
-  }
-  return self;
-}
-
-#pragma mark Owner
-- (id<SdefObject>)owner {
-  return sd_owner;
-}
-
-- (void)setOwner:(id<SdefObject>)anObject {
-  sd_owner = anObject;
-}
-
-- (id<SdefObject>)firstParentOfType:(SdefObjectType)aType {
-  return [sd_owner firstParentOfType:aType];
-}
-
-@end
-
-#pragma mark -
 @implementation SdefTypedOrphanObject
 #pragma mark Protocols Implementations
 - (id)copyWithZone:(NSZone *)aZone {

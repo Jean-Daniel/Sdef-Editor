@@ -6,7 +6,7 @@
  *  Copyright © 2006 - 2007 Shadow Lab. All rights reserved.
  */
 
-#import "SdefObjects.h"
+#import "SdefLeaf.h"
 
 /*
  <!-- IMPLEMENTATION ELEMENTS -->
@@ -24,7 +24,7 @@
 */
 
 @class SdefDocument;
-@interface SdefImplementation : SdefOrphanObject <NSCopying, NSCoding> {
+@interface SdefImplementation : SdefLeaf <NSCopying, NSCoding> {
 @private
   NSString *sd_key;
   NSString *sd_class;

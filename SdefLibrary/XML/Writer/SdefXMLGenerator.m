@@ -84,6 +84,13 @@
 }
 
 - (CFXMLTreeRef)insertCDData:(NSString *)str {
+  if ([str rangeOfString:@"]]>"].location != NSNotFound) {
+    NSMutableString *mstr = [str mutableCopy];
+    do {
+      [mstr replaceOccurrencesOfString:@"]]>" withString:@"]]&gt;" 
+                               options:0 range:NSMakeRange(0, [mstr length])];
+    } while ([str rangeOfString:@"]]>"].location != NSNotFound);
+  }
   CFXMLNodeRef node = CFXMLNodeCreate(kCFAllocatorDefault, kCFXMLNodeTypeCDATASection, (CFStringRef)str, NULL, kCFXMLNodeCurrentVersion);
   CFXMLTreeRef tree = [self appendNode:node];
   CFRelease(node);
@@ -100,13 +107,23 @@
 - (CFXMLTreeRef)insertComment:(NSString *)str {
   CFXMLTreeRef tree = nil;
   NSMutableString *comment = [str mutableCopy]; 
-  if (comment) CFStringTrimWhitespace((CFMutableStringRef)comment);
-  if ([comment length]) {
-    CFXMLNodeRef node = CFXMLNodeCreate(kCFAllocatorDefault, kCFXMLNodeTypeComment, (CFStringRef)str, NULL, kCFXMLNodeCurrentVersion);
-    tree  = [self appendNode:node];
-    CFRelease(node);
+  if (comment) {
+    CFStringTrimWhitespace((CFMutableStringRef)comment);
+    if ([comment length]) {
+      if ([str rangeOfString:@"-->"].location != NSNotFound) {
+        str = [str mutableCopy];
+        do {
+          [(id)str replaceOccurrencesOfString:@"-->" withString:@"--&gt;" 
+                                      options:NSLiteralSearch range:NSMakeRange(0, [str length])];
+        } while ([str rangeOfString:@"-->"].location != NSNotFound);
+        [str autorelease];
+      }
+      CFXMLNodeRef node = CFXMLNodeCreate(kCFAllocatorDefault, kCFXMLNodeTypeComment, (CFStringRef)str, NULL, kCFXMLNodeCurrentVersion);
+      tree  = [self appendNode:node];
+      CFRelease(node);
+    }
+    [comment release];
   }
-  [comment release];
   return tree;
 }
 

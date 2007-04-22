@@ -8,6 +8,7 @@
         }, 
         {CLASS = SKImageAndTextCell; LANGUAGE = ObjC; SUPERCLASS = NSTextFieldCell; }, 
         {CLASS = SKOutlineView; LANGUAGE = ObjC; SUPERCLASS = NSOutlineView; }, 
+        {CLASS = SKSplitView; LANGUAGE = ObjC; SUPERCLASS = NSSplitView; }, 
         {
             CLASS = SdefDocument; 
             LANGUAGE = ObjC; 
@@ -18,7 +19,7 @@
             ACTIONS = {viewDocumentation = id; }; 
             CLASS = SdefWindowController; 
             LANGUAGE = ObjC; 
-            OUTLETS = {inspector = NSTabView; outline = NSOutlineView; }; 
+            OUTLETS = {inspector = NSTabView; outline = NSOutlineView; uiSplitview = SKSplitView; }; 
             SUPERCLASS = NSWindowController; 
         }
     ); 

@@ -13,11 +13,14 @@ extern NSString * const SdefInfoPboardType;
 
 extern NSString * const SdefDictionarySelectionDidChangeNotification;
 
-@class SdefObject, SdefDictionary, SKOutlineViewController;
+@class SKSplitView;
+@class SdefObject;
+@class SdefDictionary, SKOutlineViewController;
 @interface SdefWindowController : NSWindowController {
   IBOutlet NSOutlineView *outline;
   IBOutlet NSTabView *inspector;
-
+  IBOutlet SKSplitView *uiSplitview;
+  
   @private
     BOOL sd_remove;
   SKOutlineViewController *sd_tree;

@@ -66,7 +66,7 @@
   return sd_owner;
 }
 
-- (void)setOwner:(SdefObject *)anObject {
+- (void)setOwner:(id<SdefObject>)anObject {
   sd_owner = anObject;
 }
 

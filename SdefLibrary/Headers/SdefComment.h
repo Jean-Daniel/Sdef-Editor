@@ -6,9 +6,9 @@
  *  Copyright © 2006 - 2007 Shadow Lab. All rights reserved.
  */
 
-#import <Cocoa/Cocoa.h>
+#import "SdefLeaf.h"
 
-@interface SdefComment : NSObject <NSCopying, NSCoding> {
+@interface SdefComment : SdefLeaf <NSCopying, NSCoding> {
   NSString *sd_value;
 }
 

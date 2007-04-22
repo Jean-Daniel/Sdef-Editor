@@ -106,17 +106,6 @@ SK_PRIVATE
 NSString *SdefTypeStringForTypes(NSArray *types);
 
 #pragma mark -
-@interface SdefOrphanObject : SdefObject <NSCopying, NSCoding> {
-  @private
-  id<SdefObject> sd_owner;
-}
-
-- (id<SdefObject>)owner;
-- (void)setOwner:(id<SdefObject>)anObject;
-
-@end
-
-#pragma mark -
 @interface SdefTypedOrphanObject : SdefTypedObject <NSCopying, NSCoding> {
 @private
   id<SdefObject> sd_owner;

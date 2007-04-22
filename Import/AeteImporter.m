@@ -234,7 +234,7 @@ bail:
         [aClass setInherits:[superclass name]];
       } else {
         [self addWarning:[NSString stringWithFormat:@"Unable to find superclass: %@", [info type]]
-                forValue:[aClass name]];
+                forValue:[aClass name] node:aClass];
       }
       [info remove];
     } else if (OSTypeFromSdefString([info code]) == kAESpecialClassProperties) {
@@ -242,13 +242,15 @@ bail:
         if ([[aClass properties] count] == 1) {
           NSUInteger idx = [aClass index];
           [(SdefClass *)[[aClass parent] childAtIndex:idx-1] setPlural:[aClass name]];
+          [manager removeClass:aClass];
           [aClass remove];
+          return;
         } else {
           [aClass setPlural:[aClass name]];
           [[aClass properties] removeChildAtIndex:0];
         }
       } else {
-        [self addWarning:@"Unable to import Special Properties" forValue:[aClass name]];
+        [self addWarning:@"Unable to import Special Properties" forValue:[aClass name] node:aClass];
       }      
     }
   }

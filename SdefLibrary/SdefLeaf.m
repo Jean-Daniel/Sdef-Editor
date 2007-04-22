@@ -86,10 +86,16 @@
   }
 }
 
+- (BOOL)isEditable {
+  return sd_slFlags.editable;
+}
+- (void)setEditable:(BOOL)flag {
+  SKSetFlag(sd_slFlags.editable, flag);
+}
+
 - (BOOL)isHidden {
   return sd_slFlags.hidden;
 }
-
 - (void)setHidden:(BOOL)flag {
   flag = flag ? 1 : 0;
   if (flag != sd_slFlags.hidden) {
@@ -113,6 +119,9 @@
       return NSLocalizedStringFromTable(@"Type", @"SdefLibrary", @"Object Type Name.");
     case kSdefSynonymType:
       return NSLocalizedStringFromTable(@"Synonym", @"SdefLibrary", @"Object Type Name.");
+    case kSdefCommentType:
+      return NSLocalizedStringFromTable(@"XML Comment", @"SdefLibrary", @"Object Type Name.");
+      break;
     case kSdefXrefType:
       return NSLocalizedStringFromTable(@"Xref", @"SdefLibrary", @"Object Type Name.");
   }
@@ -126,6 +135,10 @@
 
 - (void)setOwner:(SdefObject *)anObject {
   sd_owner = anObject;
+}
+
+- (SdefDictionary *)dictionary {
+  return [sd_owner dictionary];
 }
 
 /* Needed to be owner of an orphan object (like SdefImplementation) */

@@ -42,7 +42,6 @@
 - (NSString *)target {
   return sd_target;
 }
-
 - (void)setTarget:(NSString *)target {
   if (target != sd_target) {
     [[self undoManager] registerUndoWithTarget:self selector:_cmd object:sd_target];

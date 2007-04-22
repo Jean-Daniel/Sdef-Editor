@@ -15,10 +15,7 @@
 @implementation SdefObject (SdefXMLManager)
 #pragma mark XML Generation
 - (SdefXMLNode *)xmlNodeForVersion:(SdefVersion)version {
-  SdefXMLNode *node = nil;
-  SdefObject *child = nil;
-  NSEnumerator *children;
-  node = [SdefXMLNode nodeWithElementName:[self xmlElementName]];
+  SdefXMLNode *node = [SdefXMLNode nodeWithElementName:[self xmlElementName]];
   NSAssert1(!node || ([node elementName] != nil), @"%@ return an invalid node", self);
   if (node && [node elementName]) {
     /* Comments */
@@ -32,7 +29,8 @@
         [node setAttribute:@"hidden" forKey:@"hidden"];
     }
     /* Children */
-    children = [self childEnumerator];
+    SdefObject *child = nil;
+    NSEnumerator *children = [self childEnumerator];
     while (child = [children nextObject]) {
       SdefXMLNode *childNode = [child xmlNodeForVersion:version];
       if (childNode) {
@@ -85,6 +83,10 @@
   if (![self hasChildren])
     return nil;
   
+  SdefXMLNode *node = [super xmlNodeForVersion:version];
+  if (version >= kSdefTigerVersion)
+    [node setList:YES];
+  /*
   if (kSdefPantherVersion == version) {
     return [super xmlNodeForVersion:version];
   } else if (version >= kSdefTigerVersion) {
@@ -100,7 +102,8 @@
     }
     return list;
   }
-  return nil;
+   */
+  return node;
 }
 
 - (NSString *)xmlElementName {

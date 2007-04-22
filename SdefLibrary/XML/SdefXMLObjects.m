@@ -8,9 +8,9 @@
 
 #import "SdefXMLBase.h"
 #import "SdefXMLNode.h"
+
 #import "SdefType.h"
 #import "SdefObjects.h"
-#import <ShadowKit/SKExtensions.h>
 #import "SdefDocumentation.h"
 #import "SdefImplementation.h"
 
@@ -81,6 +81,11 @@
 
 #pragma mark -
 @implementation SdefTerminologyObject (SdefXMLManager)
+
+- (NSUInteger)sdefCodeLength {
+  return [self objectType] == kSdefVerbType ? 8 : 4;
+}
+
 #pragma mark XML Generation
 - (SdefXMLNode *)xmlNodeForVersion:(SdefVersion)version {
   SdefXMLNode *node = nil;
@@ -90,8 +95,9 @@
       [node setAttribute:[attr stringByEscapingEntities:nil] forKey:@"name"];
     attr = [self code];
     if (attr) {
-      if ([attr length] == 6 && [attr hasPrefix:@"'"] && [attr hasSuffix:@"'"])
-        attr = [attr substringWithRange:NSMakeRange(1, 4)];
+      /* remove quotes in string like 'hook' */
+      if ([attr length] == ([self sdefCodeLength] + 2) && [attr hasPrefix:@"'"] && [attr hasSuffix:@"'"])
+        attr = [attr substringWithRange:NSMakeRange(1, [self sdefCodeLength])];
       [node setAttribute:[attr stringByEscapingEntities:nil] forKey:@"code"];
     }
     

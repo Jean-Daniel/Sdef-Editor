@@ -51,10 +51,13 @@ NSString *SdefNameCreateWithCocoaName(NSString *cocoa);
 SK_EXPORT
 NSString *CocoaNameForSdefName(NSString *cocoa, BOOL isClass);
 
+@class SdefDictionary;
 @protocol SdefObject 
 
 + (SdefObjectType)objectType;
 - (SdefObjectType)objectType;
+
+- (SdefDictionary *)dictionary;
 
 - (NSString *)location;
 - (NSString *)objectTypeName;
@@ -62,19 +65,21 @@ NSString *CocoaNameForSdefName(NSString *cocoa, BOOL isClass);
 - (NSImage *)icon;
 - (NSString *)name;
 
+- (BOOL)isEditable;
+- (void)setEditable:(BOOL)flag;
+
 - (id<SdefObject>)firstParentOfType:(SdefObjectType)aType;
 
 @end
 
 @class SdefDocument;
 @class SdefClassManager;
+@class SdefSuite, SdefCollection;
 @class SdefImplementation, SdefDocumentation;
-@class SdefDictionary, SdefSuite, SdefCollection;
 @interface SdefObject : SKUITreeNode <SdefObject, NSCopying, NSCoding> {
 @protected
   struct _sd_soFlags {
     unsigned int xid:1;
-    unsigned int html:1;
     unsigned int xrefs:1;
     unsigned int event:1;
     unsigned int hidden:1;
@@ -85,7 +90,7 @@ NSString *CocoaNameForSdefName(NSString *cocoa, BOOL isClass);
     unsigned int notinproperties:1;
     unsigned int hasDocumentation:1;
     unsigned int hasImplementation:1;
-    unsigned int reserved:4;
+    unsigned int reserved:5;
   } sd_soFlags;
 @private
   NSMutableArray *sd_ignore;

@@ -58,19 +58,14 @@ CFXMLParserCallBacks SdefParserCallBacks = {
 #pragma mark -
 static
 SdefVersion SdefDocumentVersionFromParserVersion(SdefParserVersion vers) {
-  switch (vers) {
-    /* Panther */
-    case kSdefParserVersionPanther:
-      return kSdefPantherVersion;
-      /* Tiger */
-    case kSdefParserVersionTiger:
-    case kSdefParserVersionTiger | kSdefParserVersionLeopard:
-      return kSdefTigerVersion;
-      /* Leopard */
-    case kSdefParserVersionLeopard:
-      return kSdefLeopardVersion;
-  }
-  return kSdefVersionUndefined;
+  if (vers & kSdefParserVersionLeopard)
+    return kSdefLeopardVersion;
+  else if (vers & kSdefParserVersionTiger)
+    return kSdefTigerVersion;
+  else if (vers & kSdefParserVersionPanther)
+    return kSdefPantherVersion;
+  else
+    return kSdefVersionUndefined;
 }
 
 static 
@@ -292,40 +287,52 @@ Boolean _SdefElementIsCollection(CFStringRef element) {
 }
 
 - (void)parser:(CFXMLParserRef)parser addChild:(void *)aChild toStructure:(void *)aStruct {
-  id<SdefObject> child = (id)aChild;
-  id<SdefXMLObject> parent = (id)aStruct;
-//  DLog(@"=========== %@ -> %@", parent, child);
-  if (typeWildCard == [child objectType]) {
-    [(id)child setObject:parent];
+  if (sd_docParser) {
+    [sd_docParser parser:parser addChild:aChild toStructure:aStruct];
   } else {
-    if (parent)
-      [(id)parent addXMLChild:(id)child];
-    else
-      sd_dictionary = [(SdefDictionary *)child retain];
-    
-    /* Handle comments */
-    if ([sd_comments count]) {
-      SdefObject *commented = nil;
-      if ([(id)child respondsToSelector:@selector(addComment:)]) commented = (id)child;
-      else if ([(id)parent respondsToSelector:@selector(addComment:)]) commented = (id)parent;
-      if (commented) {
-        for (NSUInteger i = 0; i < [sd_comments count]; i++) {
-          [commented addComment:[sd_comments objectAtIndex:i]];
+    id<SdefObject> child = (id)aChild;
+    id<SdefXMLObject> parent = (id)aStruct;
+    //  DLog(@"=========== %@ -> %@", parent, child);
+    if (typeWildCard == [child objectType]) {
+      [(id)child setObject:parent];
+    } else {
+      if (parent)
+        [(id)parent addXMLChild:(id)child];
+      else
+        sd_dictionary = [(SdefDictionary *)child retain];
+      
+      /* Handle comments */
+      if ([sd_comments count]) {
+        SdefObject *commented = nil;
+        if ([(id)child respondsToSelector:@selector(addComment:)]) commented = (id)child;
+        else if ([(id)parent respondsToSelector:@selector(addComment:)]) commented = (id)parent;
+        if (commented) {
+          for (NSUInteger i = 0; i < [sd_comments count]; i++) {
+            [commented addComment:[sd_comments objectAtIndex:i]];
+          }
         }
+        [sd_comments removeAllObjects];
       }
-      [sd_comments removeAllObjects];
-    }
-    
-    /* Check documentation element */
-    if (kSdefDocumentationType == [child objectType]) {
-      sd_docParser = [[SdefDocumentationParser alloc] initWithDocumentation:(id)child parent:self];
+      
+      /* Check documentation element */
+      if (kSdefDocumentationType == [child objectType]) {
+        sd_docParser = [[SdefDocumentationParser alloc] initWithDocumentation:(id)child];
+      }
     }
   }
 }
 
 - (void)parser:(CFXMLParserRef)parser endStructure:(void *)structure {
   if (sd_docParser) {
-    [sd_docParser parser:parser endStructure:structure];
+    if ([(id)structure isKindOfClass:[SdefDocumentation class]]) {
+      [sd_docParser close];
+      [sd_docParser release];
+      sd_docParser = nil; 
+      
+      [sd_validator endElement:CFSTR("documentation")];
+    } else {
+      [sd_docParser parser:parser endStructure:structure];
+    }
   } else {
     [sd_validator endElement:(CFStringRef)[(id)structure xmlElementName]]; 
     [(id)structure release];
@@ -340,15 +347,6 @@ Boolean _SdefElementIsCollection(CFStringRef element) {
   sd_error = [[NSString alloc] initWithFormat:@"line %ld, position: %ld:\n %@", (long)line, (long)position, description];
   if (description) CFRelease(description);
   return FALSE;
-}
-
-- (void)parserDidEndDocumentation:(SdefDocumentationParser *)parser {
-  if (parser == sd_docParser) {
-    [sd_docParser release];
-    sd_docParser = nil; 
-    
-    [sd_validator endElement:CFSTR("documentation")];
-  }
 }
 
 @end
@@ -474,6 +472,9 @@ void _SdefParserPostProcessDictionary(SdefDictionary *dictionary) {
 - (NSString *)name {
   return sd_object ? [sd_object name] : nil;
 }
+
+- (BOOL)isEditable { return YES; }
+- (void)setEditable:(BOOL)flag {}
 
 - (id<SdefObject>)firstParentOfType:(SdefObjectType)aType {
   return sd_object ? [sd_object firstParentOfType:aType] : nil;

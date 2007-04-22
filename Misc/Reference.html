@@ -48,8 +48,9 @@
   @media print {
     /* style sheet for print goes here */
     #tree { display: none; }
-    #content { margin-left: 12px; }
-    h3 {text-decoration: none;}
+    #content { margin-left: 12px; border: 0px; }
+    h3 {text-decoration: none; font-size: 200%; border-width: 0px 0px 2px 0px; }
+    .separator { page-break-after: always; visibility: hidden; }
   }
   </style>
  </head>
@@ -97,7 +98,7 @@
          <dt><img class="middle" src="Images/Class.png" alt="" />
           <a href="#Class" >Class</a><br />
          </dt>
-		 <dt><img class="middle" src="Images/Class-Extension.png" alt="" />
+         <dt><img class="middle" src="Images/Class-Extension.png" alt="" />
           <a href="#ClassExtension" >Class Extension</a><br />
          </dt>
          <dd><img class="middle" src="Images/Contents.png" alt="" />
@@ -145,24 +146,23 @@
     </dl>
     <hr />
     <dl>
+     <dt><img class="middle" src="Images/dot.png" alt="" /> <a href="#Attributes">Common Attributes</a></dt>
      <dt><img class="middle" src="Images/dot.png" alt="" /> <a href="#History">History</a></dt>
      <dt><img class="middle" src="Images/dot.png" alt="" /> <a href="#Bugs">Bugs</a></dt>
     </dl>
  </div>
  <div id="content">
  <div style="text-align: center"><h2>Scripting Definition Reference</h2></div>
- <hr class="separator"/>
+ <hr />
  <p>Scripting definition files (sdefs) are XML files that describe everything about an application’s scriptability: terminology, implementation information, and complete documentation. sdp(1) uses sdefs to generate a variety of implementation and definition files for use in an application and in AppleScript.</p>
  <p> For basic concepts and style guidelines, see Technical Note TN2106, <a href="http://developer.apple.com/technotes/tn2002/tn2106.html">Scripting Interface Guidelines</a></p>
  <p>If you have already been working with sdefs in Mac OS X 10.2, 10.3 or 10.4, read the <a href="#History">History</a> section, since the format has changed in 10.4 and 10.5.</p>
  <p>If you are using Cocoa, Cocoa Scripting as of Mac OS X 10.4 (Tiger) supports using sdefs directly rather than preprocessing them with sdp(1).
  See the <a href="http://developer.apple.com/documentation/Cocoa/Conceptual/ScriptableCocoaApplications">Sdef Scriptability Guide</a> for Cocoa for details.
  (However, also see the <a href="#Bugs">Bugs</a> section.)</p>
- <hr class="separator"/>
- 
 <!-- 
+ <hr />
  <h4>Including Other Scripting Definitions</h4>
-
   <dl class="attributes">
    <dt>Leopard</dt>
    <dd>
@@ -182,9 +182,8 @@
      So deleting the information you don’t support will ensure that users see only information they can actually use with your application.</p>
    </dd>
   </dl>
- <hr class="separator"/>
- 
 -->
+ <hr class="separator"/>
  <div class="element">
    <h3 id="Class">Class</h3>
    <p class="definition">
@@ -206,7 +205,7 @@
     <dt class="optional">hidden</dt>
     <dd>See <a href="#Attributes">Commons Attributes</a>.</dd>
     <dt class="optional">plural</dt>
-    <dd>The plural name of the class. If omitted, defaults to the name with "s" appended.</dd>
+    <dd>The plural name of the class. If omitted, defaults to the name with 's' appended.</dd>
     <dt class="optional">inherits</dt>
     <dd>The class, if any, that this one descends from. <!-- For Cocoa Script Terminology, all objects descends from <code>item</code> by default. --></dd>
    </dl>
@@ -317,7 +316,7 @@
    Every sdef file you create should contain one dictionary definition.
    You typically name the dictionary after the application.</p>
    <p class="definition">A dictionary element contains one or more <a href="#Suite">suite</a> elements.
-   Most Cocoa applications include Cocoa’s default suites, as well as one or more suites of their own scriptability information.</p>
+   Most Cocoa applications include Cocoa’s default suites (the Standard and Text suites), as well as one or more suites of their own scriptability information.</p>
    <h4>Attributes</h4>
    <dl class="attributes">
     <dt class="optional">title</dt>
@@ -488,6 +487,8 @@
    <dl class="implementation">
     <dt>cocoa &#8594; name</dt>
     <dd>A name used internally by Cocoa Scripting.</dd>
+    <dt>cocoa &#8594; *-value</dt>
+    <dd>The value of the enumerator constants (Leopard and above). See <a href="#Cocoa">Cocoa</a> for details.</dd>
    </dl>
   </div>
   <hr class="separator"/>
@@ -823,12 +824,10 @@
     <dt>name</dt>
     <dd>A name used internally by Cocoa Scripting (use for <a href="#Suite">suites</a>, <a href="#Command">command</a> and
     <a href="#Event">event</a> key names,  <a href="#Enumeration">enumerations</a>, and <a href="#Enumerator">enumerators</a>).</dd>
-<!--
     <dt>boolean-value, string-value, integer-value</dt>
     <dd>A value for an <a href="#Enumerator">enumerators</a>. For <em>boolean-value</em>, the value may be <em>YES</em> or <em>NO</em>,
     for <em>string-value</em>, any text, and for <em>integer-value</em>, any integer.
     You may use at most one of these three attributes in a given cocoa element. The default value is the numeric value of the enumerator’s <em>code</em> attribute.</dd>
--->
    </dl>
   </div>
   <hr class="separator"/>
@@ -868,7 +867,7 @@
   <hr class="separator"/>
 
   <div class="history">
-  <div style="text-align: center"><h3 id="History">History</h3></div>
+  <div><h3 id="History">History</h3></div>
   <dl class="history">
     <dt>Changes in Mac OS X 10.5 (Leopard):</dt>
     <dd>• Added <a href="#XRef">xref</a> elements.</dd>
@@ -894,7 +893,7 @@
    <hr class="separator"/>
 
    <div class="bugs">
-   <div style="text-align: center"><h3 id="Bugs">Bugs</h3></div>
+   <div><h3 id="Bugs">Bugs</h3></div>
    <p>Cocoa Scripting in Tiger and above supports direct use of sdefs, but does a few things incorrectly:</p>
   <ul>
     <li>Cocoa elements are required in some places that should be optional: <a href="#Class">class</a>, <a href="#Parameter">parameter</a>, <a href="#RespondsTo">responds-to</a>, and <a href="#ValueType">value-type</a> elements all must have cocoa sub-elements.</li>

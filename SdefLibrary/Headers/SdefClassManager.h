@@ -30,6 +30,9 @@
 - (void)addSuite:(SdefSuite *)aSuite;
 - (void)removeSuite:(SdefSuite *)aSuite;
 
+- (void)addClass:(SdefClass *)aClass;
+- (void)removeClass:(SdefClass *)aClass;
+
 /*!
     @method     types
     @result     Returns all types name including base types.
@@ -47,6 +50,7 @@
 
 - (id)typeWithName:(NSString *)name;
 - (SdefClass *)classWithName:(NSString *)name;
+- (SdefVerb *)verbWithName:(NSString *)name;
 - (SdefVerb *)eventWithName:(NSString *)name;
 - (SdefVerb *)commandWithName:(NSString *)name;
 - (SdefValue *)valueWithName:(NSString *)name;

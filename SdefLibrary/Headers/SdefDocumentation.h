@@ -6,14 +6,14 @@
  *  Copyright © 2006 - 2007 Shadow Lab. All rights reserved.
  */
 
-#import "SdefObjects.h"
+#import "SdefLeaf.h"
 
 /*
  <!-- DOCUMENTATION ELEMENTS -->
  <!ELEMENT documentation (ANY | html)>
  <!ELEMENT html ANY>
 */
-@interface SdefDocumentation : SdefOrphanObject <NSCopying, NSCoding> {
+@interface SdefDocumentation : SdefLeaf <NSCopying, NSCoding> {
   id sd_content;
 }
 

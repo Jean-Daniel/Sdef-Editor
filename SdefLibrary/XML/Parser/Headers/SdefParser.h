@@ -43,9 +43,6 @@ typedef NSUInteger SdefParserOperation;
 
 - (BOOL)parseSdef:(NSData *)sdefData error:(NSString **)error;
 
-/* Documentation return point */
-- (void)parserDidEndDocumentation:(SdefDocumentationParser *)parser;
-
 @end
 
 @interface NSObject (SdefParserDelegate)

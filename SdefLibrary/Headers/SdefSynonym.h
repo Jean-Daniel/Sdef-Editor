@@ -25,8 +25,6 @@
   SdefImplementation *sd_impl; 
 }
 
-- (NSImage *)icon;
-
 - (NSString *)code;
 - (void)setCode:(NSString *)code;
 

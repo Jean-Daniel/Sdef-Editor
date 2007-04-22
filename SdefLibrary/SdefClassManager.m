@@ -148,6 +148,17 @@
   }
 }
 
+/* explicite remove */
+- (void)addClass:(SdefClass *)aClass {
+  [sd_types addObject:aClass];
+  [sd_classes addObject:aClass];
+}
+
+- (void)removeClass:(SdefClass *)aClass {
+  [sd_types removeObject:aClass];
+  [sd_classes removeObject:aClass];
+}
+
 #pragma mark -
 - (NSArray *)types {
   SdefObject *item;
@@ -219,6 +230,13 @@
   return [self typeWithName:name class:[SdefEnumeration class]];
 }
 
+- (SdefVerb *)verbWithName:(NSString *)name {
+  SdefVerb *verb = [self commandWithName:name];
+  if (!verb)
+    verb = [self eventWithName:name];
+  return verb;
+}
+
 - (SdefVerb *)commandWithName:(NSString *)name {
   SdefVerb *cmd;
   NSEnumerator *cmds = [sd_commands objectEnumerator];
@@ -279,8 +297,7 @@
         [sd_types addObject:child];
         break;
       case kSdefClassType:
-        [sd_types addObject:child];
-        [sd_classes addObject:child];
+        [self addClass:child];
         break;
       case kSdefVerbType:
         if ([child isCommand]) {
@@ -308,8 +325,7 @@
         [sd_types removeObject:child];
         break;
       case kSdefClassType:
-        [sd_types removeObject:child];
-        [sd_classes removeObject:child];
+        [self removeClass:child];
         break;
       case kSdefVerbType:
         if ([child isCommand]) {

@@ -12,23 +12,28 @@
 @implementation SdefComment
 #pragma mark Protocols Implementations
 - (id)copyWithZone:(NSZone *)aZone {
-  SdefComment *copy = (SdefComment *)NSCopyObject(self, 0, aZone);
+  SdefComment *copy = [super copyWithZone:aZone];
   copy->sd_value = [sd_value copyWithZone:aZone];
   return copy;
 }
 
 - (void)encodeWithCoder:(NSCoder *)aCoder {
+  [super encodeWithCoder:aCoder];
   [aCoder encodeObject:sd_value forKey:@"SCValue"];
 }
 
 - (id)initWithCoder:(NSCoder *)aCoder {
-  if (self = [super init]) {
+  if (self = [super initWithCoder:aCoder]) {
     sd_value = [[aCoder decodeObjectForKey:@"SCValue"] retain];
   }
   return self;
 }
 
 #pragma mark -
++ (SdefObjectType)objectType {
+  return kSdefCommentType;
+}
+
 + (id)commentWithString:(NSString *)aString {
   return [[[self alloc] initWithString:aString] autorelease]; 
 }
@@ -49,19 +54,17 @@
   [super dealloc];
 }
 
+#pragma mark -
 - (NSString *)name {
   return NSLocalizedStringFromTable(@"comment", @"SdefLibrary", @"Comment item name");
-}
-- (NSImage *)icon {
-  return [NSImage imageNamed:@"Misc"];
 }
 
 - (NSString *)value {
   return sd_value;
 }
-
 - (void)setValue:(NSString *)value {
   if (sd_value != value) {
+    //[[self undoManager] registerUndoWithTarget:self selector:_cmd object:sd_value];
     [sd_value release];
     sd_value = [value retain];
   }

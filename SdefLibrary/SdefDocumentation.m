@@ -7,7 +7,6 @@
  */
 
 #import "SdefDocumentation.h"
-#import <ShadowKit/SKExtensions.h>
 
 #import "SdefDocument.h"
 
@@ -44,11 +43,6 @@
   return @"Bookmarks";
 }
 
-- (void)sdefInit {
-  [super sdefInit];
-  [self setRemovable:NO];
-}
-
 - (id)initWithAttributes:(NSDictionary *)attrs {
   if (self = [super init]) {
   }
@@ -60,23 +54,22 @@
   [super dealloc];
 }
 
+#pragma mark -
 - (BOOL)isHtml {
-  return sd_soFlags.html;
+  return sd_slFlags.html;
 }
-
 - (void)setHtml:(BOOL)flag {
   flag = flag ? 1 : 0;
-  if (flag != sd_soFlags.html) {
-    [[[self undoManager] prepareWithInvocationTarget:self] setHtml:sd_soFlags.html];
+  if (flag != sd_slFlags.html) {
+    [[[self undoManager] prepareWithInvocationTarget:self] setHtml:sd_slFlags.html];
     /* Undo */
-    sd_soFlags.html = flag;
+    sd_slFlags.html = flag;
   }
 }
 
 - (NSString *)content {
   return sd_content;
 }
-
 - (void)setContent:(NSString *)newContent {
   if (sd_content != newContent) {
     [[self undoManager] registerUndoWithTarget:self selector:_cmd object:sd_content];

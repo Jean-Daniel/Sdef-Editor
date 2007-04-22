@@ -223,6 +223,7 @@ NSString *PantherScriptingDefinitionFileType = @"PantherScriptingDefinition";
       
       if ([importer warnings]) {
         ImporterWarning *alert = [[ImporterWarning alloc] init];
+        [alert setDocument:doc];
         [alert setWarnings:[importer warnings]];
         [alert setReleasedWhenClosed:YES];
         [alert showWindow:nil];

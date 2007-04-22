@@ -9,7 +9,7 @@
 #import <Cocoa/Cocoa.h>
 
 @class SdefObject, SdefDictionary, SdefClassManager, SdefImports;
-@class SdefWindowController, SdefSymbolBrowser;
+@class SdefWindowController, SdefSymbolBrowser, SdefValidator;
 
 SK_PRIVATE 
 SdefDictionary *SdefLoadDictionary(NSString *filename, NSInteger *version, id delegate, NSString **error);
@@ -23,6 +23,7 @@ SdefDictionary *SdefLoadDictionaryData(NSData *data, NSInteger *version, id dele
 }
 
 - (SdefObject *)selection;
+- (SdefValidator *)validator;
 - (SdefSymbolBrowser *)symbolBrowser;
 - (SdefWindowController *)documentWindow;
 

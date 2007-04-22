@@ -51,10 +51,6 @@
 }
 
 #pragma mark -
-- (NSImage *)icon {
-  return [NSImage imageNamed:@"Misc"];
-}
-
 - (SdefImplementation *)impl {
   if (!sd_impl) {
     SdefImplementation *impl = [[SdefImplementation allocWithZone:[self zone]] init];
@@ -63,7 +59,6 @@
   }
   return sd_impl;
 }
-
 - (void)setImpl:(SdefImplementation *)newImpl {
   if (sd_impl != newImpl) {
     [sd_impl setOwner:nil];
@@ -76,7 +71,6 @@
 - (NSString *)code {
   return sd_code;
 }
-
 - (void)setCode:(NSString *)code {
   if (code != sd_code) {
     NSUndoManager *undo = [self undoManager];

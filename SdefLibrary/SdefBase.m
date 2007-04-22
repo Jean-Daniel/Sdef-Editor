@@ -98,8 +98,10 @@
        (parent = [self firstParentOfType:kSdefEnumerationType]) || 
        (parent = [self firstParentOfType:kSdefVerbType])) && parent != self) {
     return [NSString stringWithFormat:@"%@:%@", [[self suite] name], [parent name]];
+  } else if (parent = (id)[self suite]){
+    return [parent name];
   } else {
-    return [[self suite] name];
+    return [self name];
   }
 }
 
@@ -277,7 +279,9 @@
   if (sd_comments != comments) {
     [sd_comments removeAllObjects];
     for (NSUInteger idx = 0; idx < [comments count]; idx++) {
-      [[self comments] addObject:[comments objectAtIndex:idx]];
+      SdefComment *cmnt = [comments objectAtIndex:idx];
+      [[self comments] addObject:cmnt];
+      [cmnt setOwner:self];
     }
   }
 }
@@ -286,12 +290,17 @@
   if (comment) {
     SdefComment *cmnt = [[SdefComment allocWithZone:[self zone]] initWithString:comment];
     [[self comments] addObject:cmnt];
+    [cmnt setOwner:self];
     [cmnt release];
   }
 }
 
 - (void)removeCommentAtIndex:(NSUInteger)anIndex {
-  [sd_comments removeObjectAtIndex:anIndex];
+  SdefComment *cmnt = [sd_comments objectAtIndex:anIndex];
+  if (cmnt) {
+    [cmnt setOwner:nil];
+    [sd_comments removeObjectAtIndex:anIndex];
+  }
 }
 
 #pragma mark Ignore

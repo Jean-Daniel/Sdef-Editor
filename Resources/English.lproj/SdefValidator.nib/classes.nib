@@ -1,0 +1,19 @@
+{
+    IBClasses = (
+        {CLASS = FirstResponder; LANGUAGE = ObjC; SUPERCLASS = NSObject; }, 
+        {
+            ACTIONS = {close = id; }; 
+            CLASS = SKWindowController; 
+            LANGUAGE = ObjC; 
+            SUPERCLASS = NSWindowController; 
+        }, 
+        {
+            ACTIONS = {changeVersion = id; refresh = id; }; 
+            CLASS = SdefValidator; 
+            LANGUAGE = ObjC; 
+            OUTLETS = {uiTable = NSTableView; uiVersion = NSPopUpButton; }; 
+            SUPERCLASS = SKWindowController; 
+        }
+    ); 
+    IBVersion = 1; 
+}

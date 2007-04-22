@@ -10,13 +10,15 @@
 
 @class SdefParser, SdefDocumentation;
 @interface SdefDocumentationParser : NSObject {
-    NSInteger sd_html;
-    SdefParser *sd_parent;
-    SdefDocumentation *sd_doc;
-    CFMutableStringRef sd_content;
+  @private
+  NSInteger sd_html;
+  SdefDocumentation *sd_doc;
+  CFMutableStringRef sd_content;
 }
 
-- (id)initWithDocumentation:(SdefDocumentation *)doc parent:(SdefParser *)theParent;
+- (id)initWithDocumentation:(SdefDocumentation *)doc;
+
+- (void)close;
 
 - (void *)parser:(CFXMLParserRef)parser createStructureForNode:(CFXMLNodeRef)node;
 - (void)parser:(CFXMLParserRef)parser addChild:(void *)child toStructure:(void *)parent;

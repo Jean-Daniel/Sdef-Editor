@@ -185,8 +185,7 @@ static NSArray *ASKStandardsSuites() {
   }
 }
 
-
-- (void)postProcessClass:(SdefClass *)aClass {
+- (void)postProcessClassContent:(SdefClass *)aClass {
   NSString *suite = nil;
   NSString *inherits = [aClass inherits];
   if (inherits != nil) {
@@ -198,7 +197,7 @@ static NSArray *ASKStandardsSuites() {
       [aClass setInherits:[parent name]];
     } else {
       [self addWarning:[NSString stringWithFormat:@"Unable to resolve super class name: %@", [aClass inherits]]
-              forValue:[aClass name]];
+              forValue:[aClass name] node:aClass];
 	}
   }
   [super postProcessClass:aClass];
@@ -207,21 +206,21 @@ static NSArray *ASKStandardsSuites() {
 - (void)postProcessContents:(SdefContents *)aContents forClass:aClass {
   if ([[aContents type] isEqualToString:@"NSArray"])
     [self addWarning:@"Contents NSArray type import as \"list of any\""
-            forValue:[aClass name]];
+            forValue:[aClass name] node:aClass];
   [super postProcessContents:aContents forClass:aClass];
 }
 
 - (void)postProcessElement:(SdefElement *)anElement inClass:(SdefClass *)aClass {
   if ([[anElement type] isEqualToString:@"NSArray"]) 
     [self addWarning:@"Element NSArray type import as \"list of any\""
-            forValue:[aClass name]];
+            forValue:[aClass name] node:anElement];
   [super postProcessElement:anElement inClass:aClass];
 }
 
 - (void)postProcessProperty:(SdefProperty *)aProperty inClass:(SdefClass *)aClass {
   if ([[aProperty type] isEqualToString:@"NSArray"])
     [self addWarning:@"NSArray type import as \"list of any\""
-            forValue:[NSString stringWithFormat:@"%@->%@", [aClass name], [aProperty name]]];
+            forValue:[NSString stringWithFormat:@"%@->%@", [aClass name], [aProperty name]] node:aProperty];
   [super postProcessProperty:aProperty inClass:aClass];
 }
 
@@ -235,7 +234,7 @@ static NSArray *ASKStandardsSuites() {
     [aCmd setName:[cmd name]];
   } else {
     [self addWarning:[NSString stringWithFormat:@"Unable to resolve command: %@", [aCmd name]]
-            forValue:[aClass name]];
+            forValue:[aClass name] node:aCmd];
   }
 }
 
@@ -243,21 +242,21 @@ static NSArray *ASKStandardsSuites() {
 - (void)postProcessParameter:(SdefParameter *)aParameter inCommand:(SdefVerb *)aCmd {
   if ([[aParameter type] isEqualToString:@"NSArray"])
     [self addWarning:@"NSArray type import as \"list of any\""
-            forValue:[NSString stringWithFormat:@"%@(%@)", [[aParameter parent] name], [aParameter name]]];
+            forValue:[NSString stringWithFormat:@"%@(%@)", [[aParameter parent] name], [aParameter name]] node:aParameter];
   [super postProcessParameter:aParameter inCommand:aCmd];
 }
 
 - (void)postProcessDirectParameter:(SdefDirectParameter *)aParameter inCommand:(SdefVerb *)aCmd {
   if ([[aParameter type] isEqualToString:@"NSArray"])
     [self addWarning:@"Direct-Param NSArray type import as \"list of any\""
-            forValue:[NSString stringWithFormat:@"%@()", [aCmd name]]];
+            forValue:[NSString stringWithFormat:@"%@()", [aCmd name]] node:aCmd];
   [super postProcessDirectParameter:aParameter inCommand:aCmd];
 }
 
 - (void)postProcessResult:(SdefResult *)aResult inCommand:(SdefVerb *)aCmd {
   if ([[aResult type] isEqualToString:@"NSArray"])
     [self addWarning:@"Result NSArray type import as \"list of any\""
-            forValue:[NSString stringWithFormat:@"%@()", [aCmd name]]];
+            forValue:[NSString stringWithFormat:@"%@()", [aCmd name]] node:aCmd];
   [super postProcessResult:aResult inCommand:aCmd];
 }
 

@@ -8,6 +8,10 @@
 
 #import "ImporterWarning.h"
 
+#import "SdefBase.h"
+#import "SdefDocument.h"
+#import "SdefWindowController.h"
+
 @implementation ImporterWarning
 
 + (NSString *)nibName {
@@ -18,6 +22,11 @@
   return @"SdefWarningReport";
 }
 
+- (void)awakeFromNib {
+  [warningsTable setTarget:self];
+  [warningsTable setDoubleAction:@selector(reveal:)];
+}
+
 - (void)dealloc {
   [warningsTable setDelegate:nil];
   [warningsTable setDataSource:nil];
@@ -26,12 +35,27 @@
 }
 
 #pragma mark -
+- (IBAction)reveal:(id)sender {
+  NSInteger row = [sender clickedRow];
+  if (row >= 0) {
+    NSDictionary *item = [sd_warnings objectAtIndex:row];
+    SdefObject *node = [item objectForKey:@"node"];
+    if (node) {
+      [[sd_document documentWindow] setSelection:node];
+    }
+  }
+}
+
 - (void)setWarnings:(NSArray *)warnings {
   if (sd_warnings != warnings) {
     [sd_warnings release];
     sd_warnings = [warnings retain];
     [warningsTable reloadData];
   }
+}
+
+- (void)setDocument:(SdefDocument *)aDocument {
+  sd_document = aDocument;
 }
 
 #pragma mark -

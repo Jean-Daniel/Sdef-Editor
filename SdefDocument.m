@@ -15,6 +15,7 @@
 #import "SdefSymbolBrowser.h"
 #import "SdefClassManager.h"
 #import "SdefDictionary.h"
+#import "SdefValidator.h"
 #import "SdtplWindow.h"
 #import "SdefObjects.h"
 #import "SdefSuite.h"
@@ -55,6 +56,10 @@
   return nil;
 }
 
+- (SdefValidator *)validator {
+  return [self windowControllerOfClass:[SdefValidator class]];
+}
+
 - (SdefSymbolBrowser *)symbolBrowser {
   return [self windowControllerOfClass:[SdefSymbolBrowser class]];
 }
@@ -71,6 +76,16 @@
     [browser release];
   }
   [browser showWindow:sender];
+}
+
+- (IBAction)openValidator:(id)sender {
+  SdefValidator *validator = [self validator];
+  if (!validator) {
+    validator = [[SdefValidator alloc] init];
+    [self addWindowController:validator];
+    [validator release];
+  }
+  [validator showWindow:sender];
 }
 
 #pragma mark Export Definition

@@ -91,8 +91,9 @@
   return nil;
 }
 
-- (void)addWarning:(NSString *)warning forValue:(NSString *)value {
-  [sd_warnings addObject:[NSDictionary dictionaryWithObjectsAndKeys:warning, @"warning", value, @"value", nil]];
+- (void)addWarning:(NSString *)warning forValue:(NSString *)value node:(SdefObject *)node {
+  [sd_warnings addObject:[NSDictionary dictionaryWithObjectsAndKeys:warning, 
+    @"warning", value, @"value", node, @"node", nil]];
 }
 
 #pragma mark -
@@ -115,6 +116,11 @@
     while (class = [children nextObject]) {
       [self postProcessClass:class];
     }
+    /* Class contents (for aete issues) */
+    children = [[suite classes] childEnumerator];
+    while (class = [children nextObject]) {
+      [self postProcessClassContent:class];
+    }
     
     /* Commands */
     SdefVerb *command;
@@ -131,6 +137,9 @@
 
 #pragma mark Class
 - (void)postProcessClass:(SdefClass *)aClass {
+    // see aete
+}
+- (void)postProcessClassContent:(SdefClass *)aClass {
   SdefObject *item;
   
   item = [aClass contents];
@@ -151,27 +160,27 @@
   items = [[aClass commands] childEnumerator];
   while (item = [items nextObject]) {
     [self postProcessRespondsTo:(SdefRespondsTo *)item inClass:aClass];
-  }  
+  }
 }
 
 - (void)postProcessContents:(SdefContents *)aContents forClass:aClass {
   if (![self resolveObjectType:aContents]) {
     [self addWarning:[NSString stringWithFormat:@"Unable to resolve contents type: %@", [aContents type]]
-            forValue:[aClass name]];
+            forValue:[aClass name] node:aClass];
   }  
 }
 
 - (void)postProcessElement:(SdefElement *)anElement inClass:(SdefClass *)aClass {
   if (![self resolveObjectType:anElement]) {
     [self addWarning:[NSString stringWithFormat:@"Unable to resolve element type: %@", [anElement type]]
-            forValue:[aClass name]];
+            forValue:[aClass name] node:anElement];
   }
 }
 
 - (void)postProcessProperty:(SdefProperty *)aProperty inClass:(SdefClass *)aClass {
   if (![self resolveObjectType:aProperty]) {
     [self addWarning:[NSString stringWithFormat:@"Unable to resolve type: %@", [aProperty type]]
-            forValue:[NSString stringWithFormat:@"%@->%@", [aClass name], [aProperty name]]];
+            forValue:[NSString stringWithFormat:@"%@->%@", [aClass name], [aProperty name]] node:aProperty];
   }
 }
 
@@ -200,21 +209,21 @@
 - (void)postProcessDirectParameter:(SdefDirectParameter *)aParameter inCommand:(SdefVerb *)aCmd {
   if (![self resolveObjectType:aParameter]) {
     [self addWarning:[NSString stringWithFormat:@"Unable to resolve Direct-Parameter type: %@", [aParameter type]]
-            forValue:[NSString stringWithFormat:@"%@()", [aCmd name]]];
+            forValue:[NSString stringWithFormat:@"%@()", [aCmd name]] node:aCmd];
   }
 }
 
 - (void)postProcessParameter:(SdefParameter *)aParameter inCommand:(SdefVerb *)aCmd {
   if (![self resolveObjectType:aParameter]) {
     [self addWarning:[NSString stringWithFormat:@"Unable to resolve type: %@", [aParameter type]]
-            forValue:[NSString stringWithFormat:@"%@(%@)", [aCmd name], [aParameter name]]];
+            forValue:[NSString stringWithFormat:@"%@(%@)", [aCmd name], [aParameter name]] node:aParameter];
   }
 }
 
 - (void)postProcessResult:(SdefResult *)aResult inCommand:(SdefVerb *)aCmd {
   if (![self resolveObjectType:aResult]) {
     [self addWarning:[NSString stringWithFormat:@"Unable to resolve Result type: %@", [aResult type]]
-            forValue:[NSString stringWithFormat:@"%@()", [aCmd name]]];
+            forValue:[NSString stringWithFormat:@"%@()", [aCmd name]] node:aCmd];
   }
 }
 

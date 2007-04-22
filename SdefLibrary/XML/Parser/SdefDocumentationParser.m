@@ -13,13 +13,12 @@
 @implementation SdefDocumentationParser
 
 - (id)init {
-  return [self initWithDocumentation:nil parent:nil];
+  return [self initWithDocumentation:nil];
 }
 
-- (id)initWithDocumentation:(SdefDocumentation *)doc parent:(SdefParser *)theParent {
+- (id)initWithDocumentation:(SdefDocumentation *)doc {
   if (self = [super init]) {
     sd_doc = doc;
-    sd_parent = theParent;
     sd_content = CFStringCreateMutable(kCFAllocatorDefault, 0);
   }
   return self;
@@ -70,13 +69,13 @@
   return infos->isEmpty ? NULL : element;
 }
 
+- (void)close {
+  [sd_doc setContent:(id)sd_content];
+}
 
 // sent when an end tag is encountered. The various parameters are supplied as above.
 - (void)parser:(CFXMLParserRef)parser didEndElement:(CFStringRef)element {
-  if (CFEqual(element, CFSTR("documentation"))) {
-    [sd_doc setContent:(id)sd_content];
-    [sd_parent parserDidEndDocumentation:self];
-  } else if (CFEqual(element, CFSTR("html"))) {
+  if (CFEqual(element, CFSTR("html"))) {
     sd_html--;
   }
   if (sd_html > 0) {
