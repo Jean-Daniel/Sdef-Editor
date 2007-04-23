@@ -7,6 +7,7 @@
  */
 
 #import "SdefBase.h"
+#import "SdefLeaf.h"
 
 @interface SdefValidatorItem : NSObject {
   @private
@@ -24,6 +25,13 @@
 @end
 
 @interface SdefObject (SdefValidator)
+
+/* fill the message array with warnign and errors */
+- (void)validate:(NSMutableArray *)messages forVersion:(SdefVersion)vers;
+
+@end
+
+@interface SdefLeaf (SdefValidator)
 
 /* fill the message array with warnign and errors */
 - (void)validate:(NSMutableArray *)messages forVersion:(SdefVersion)vers;

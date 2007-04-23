@@ -48,10 +48,28 @@ CFXMLParserCallBacks SdefParserCallBacks = {
 @interface SdefXMLPlaceholder : NSObject <SdefXMLObject> {
   @private
   NSString *sd_name;
-  id<SdefXMLObject> sd_object;
 }
 
 - (id)initWithElementName:(NSString *)name;
+
+@end
+
+enum {
+  kSdefTypeAccessor = 'Aces',
+};
+@interface SdefAccessorPlaceholder : SdefXMLPlaceholder {
+  @private
+  NSString *sd_style;
+}
+
+- (NSString *)style;
+
+@end
+
+@interface SdefCollectionPlaceholder : SdefXMLPlaceholder {
+  @private
+  id<SdefXMLObject> sd_object;
+}
 
 - (void)setObject:(id<SdefXMLObject>)object;
 
@@ -117,7 +135,7 @@ Boolean _SdefElementIsCollection(CFStringRef element) {
 //    CFDictionaryAddValue(sSdefElementMap, CFSTR("class-extension"), [SdefClass class]);
     CFDictionaryAddValue(sSdefElementMap, CFSTR("contents"), [SdefContents class]);
     CFDictionaryAddValue(sSdefElementMap, CFSTR("element"), [SdefElement class]);
-    //CFDictionaryAddValue(sSdefElementMap, CFSTR("accessor"), [SdefDictionary class]);
+    CFDictionaryAddValue(sSdefElementMap, CFSTR("accessor"), [SdefAccessorPlaceholder class]);
     CFDictionaryAddValue(sSdefElementMap, CFSTR("property"), [SdefProperty class]);
     CFDictionaryAddValue(sSdefElementMap, CFSTR("responds-to"), [SdefRespondsTo class]);
     /* Types */
@@ -225,13 +243,11 @@ Boolean _SdefElementIsCollection(CFStringRef element) {
   } else if (CFEqual(CFSTR("class-extension"), element)) {
     object = [[SdefClass alloc] init];
     [(SdefClass *)object setExtension:YES];
-  } else if (CFEqual(CFSTR("accessor"), element)) {
-    DLog(@"Parse accessor");
   } else if (CFEqual(CFSTR("event"), element)) {
     object = [[SdefVerb alloc] init];
     [(SdefVerb *)object setCommand:NO];
   } else if (_SdefElementIsCollection(element)) {
-    object = [[SdefXMLPlaceholder alloc] initWithElementName:(id)element];
+    object = [[SdefCollectionPlaceholder alloc] initWithElementName:(id)element];
   }
   
   if (object) {
@@ -297,6 +313,8 @@ Boolean _SdefElementIsCollection(CFStringRef element) {
     //  DLog(@"=========== %@ -> %@", parent, child);
     if (typeWildCard == [child objectType]) {
       [(id)child setObject:parent];
+    } else if (kSdefTypeAccessor == [child objectType]) {
+      [(id)parent addXMLAccessor:(NSString *)[(id)child style]];
     } else {
       if (parent)
         [(id)parent addXMLChild:(id)child];
@@ -437,6 +455,10 @@ void _SdefParserPostProcessDictionary(SdefDictionary *dictionary) {
 
 @implementation SdefXMLPlaceholder
 
++ (SdefObjectType)objectType {
+  return typeWildCard;
+}
+
 - (id)initWithElementName:(NSString *)name {
   if (self = [super init]) {
     sd_name = [name retain];
@@ -450,15 +472,47 @@ void _SdefParserPostProcessDictionary(SdefDictionary *dictionary) {
 }
 
 #pragma mark -
+- (SdefObjectType)objectType {
+  return [[self class] objectType];
+}
+
+- (NSString *)location { return nil; }
+- (NSString *)objectTypeName { return nil; }
+
+- (NSImage *)icon { return nil; }
+- (NSString *)name { return nil; }
+
+- (BOOL)isEditable { return YES; }
+- (void)setEditable:(BOOL)flag {}
+
+- (SdefDictionary *)dictionary { return nil; }
+- (NSUndoManager *)undoManager { return nil; }
+- (id<SdefObject>)firstParentOfType:(SdefObjectType)aType { return nil; }
+
+#pragma mark Parser
+- (void)addXMLChild:(id<SdefObject>)node { 
+  [NSException raise:NSInternalInconsistencyException 
+              format:@"%@ does not support child element", sd_name];
+}
+- (void)setXMLAttributes:(NSDictionary *)attrs { 
+  // does not support attributes.
+}
+
+#pragma mark Generator
+- (NSString *)xmlElementName { return sd_name; }
+- (SdefXMLNode *)xmlNodeForVersion:(SdefVersion)version { return nil; }
+
+@end
+
+@implementation SdefCollectionPlaceholder
+
+#pragma mark -
 - (void)setObject:(id<SdefXMLObject>)object {
   sd_object = object;
 }
 
-+ (SdefObjectType)objectType {
-  return typeWildCard;
-}
 - (SdefObjectType)objectType {
-  return sd_object ? [sd_object objectType] : typeWildCard;
+  return sd_object ? [sd_object objectType] : [super objectType];
 }
 
 - (NSString *)location {
@@ -475,9 +529,6 @@ void _SdefParserPostProcessDictionary(SdefDictionary *dictionary) {
   return sd_object ? [sd_object name] : nil;
 }
 
-- (BOOL)isEditable { return YES; }
-- (void)setEditable:(BOOL)flag {}
-
 - (SdefDictionary *)dictionary {
   return [sd_object dictionary];
 }
@@ -492,12 +543,30 @@ void _SdefParserPostProcessDictionary(SdefDictionary *dictionary) {
 - (void)addXMLChild:(id<SdefObject>)node {
   [sd_object addXMLChild:node];
 }
-- (void)setXMLAttributes:(NSDictionary *)attrs { 
-  // does not support attributes.
+
+@end
+
+@implementation SdefAccessorPlaceholder
+
++ (SdefObjectType)objectType {
+  return kSdefTypeAccessor;
 }
 
-#pragma mark Generator
-- (NSString *)xmlElementName { return sd_name; }
-- (SdefXMLNode *)xmlNodeForVersion:(SdefVersion)version { return nil; }
+- (id)init {
+  return [super initWithElementName:@"accessor"];
+}
+
+- (void) dealloc {
+  [sd_style release];
+  [super dealloc];
+}
+
+- (NSString *)style {
+  return sd_style;
+}
+
+- (void)setXMLAttributes:(NSDictionary *)attrs { 
+  sd_style = [[attrs objectForKey:@"style"] retain];
+}
 
 @end

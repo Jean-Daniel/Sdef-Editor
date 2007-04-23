@@ -146,4 +146,10 @@
   return [sd_owner firstParentOfType:aType];
 }
 
+- (SdefObject *)parent {
+  if ([[self owner] isKindOfClass:[SdefObject class]])
+    return (id)[self owner];
+  return (id)[(id)[self owner] parent];
+}
+
 @end

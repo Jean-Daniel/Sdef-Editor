@@ -89,7 +89,7 @@ CFMutableDictionaryRef sValidators = NULL;
     /* class-extension (+id) */
     elt = [[SdefBaseXMLElement alloc] init];
     [elt setElements:CFSTR("contents"), CFSTR("element"), CFSTR("property"), CFSTR("responds-to"),
-      CFSTR("documentation"), CFSTR("synonym"), CFSTR("xref"), CFSTR("cocoa"), nil];
+      CFSTR("documentation"), CFSTR("synonym"), CFSTR("xref"), CFSTR("cocoa"), CFSTR("type") /* not in DTD */, nil];
     [elt setAttributes:CFSTR("extends"), CFSTR("description"), CFSTR("hidden"), CFSTR("id"), nil];
     CFDictionarySetValue(sValidators, CFSTR("class-extension"), elt);
     [elt release];
@@ -546,7 +546,7 @@ CFMutableDictionaryRef sValidators = NULL;
 - (id)init {
   if (self = [super init]) {
     [self setElements:CFSTR("contents"), CFSTR("documentation"),
-      CFSTR("synonym"), CFSTR("xref"), CFSTR("cocoa"), nil];
+      CFSTR("synonym"), CFSTR("xref"), CFSTR("cocoa"), CFSTR("type") /* not in DTD */, nil];
   }
   return self;
 }

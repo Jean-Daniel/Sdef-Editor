@@ -49,11 +49,14 @@
 - (BOOL)validateType { return YES; }
 - (BOOL)validateCode { return YES; }
 
+/* bugs: cocoa->key required */
+
 @end
 
 #pragma mark -
 @implementation SdefDirectParameter (SdefValidator)
-  
+
+/* type optional but must be valid if exists */
 - (BOOL)validateType { return [self type] != nil; }
 
 @end

@@ -179,6 +179,8 @@ static inline BOOL SdefEditorExistsForItem(SdefObject *item) {
 #pragma mark -
 - (void)awakeFromNib {
   [uiSplitview setGray:YES];
+  [uiSplitview setBorders:kSKBorderRight];
+  [uiSplitview setDividerThickness:6];
   
   if (!sd_tree && outline) {
     sd_tree = [[SdefDictionaryTree alloc] initWithOutlineView:outline];

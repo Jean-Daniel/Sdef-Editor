@@ -15,6 +15,7 @@
   SdefImplementation *copy = [super copyWithZone:aZone];
   copy->sd_key = [sd_key copyWithZone:aZone];
   copy->sd_class = [sd_class copyWithZone:aZone];
+  copy->sd_value = [sd_value copyWithZone:aZone];
   copy->sd_method = [sd_method copyWithZone:aZone];
   return copy;
 }
@@ -23,6 +24,7 @@
   [super encodeWithCoder:aCoder];
   [aCoder encodeObject:sd_key forKey:@"SIKey"];
   [aCoder encodeObject:sd_class forKey:@"SIClass"];
+  [aCoder encodeObject:sd_value forKey:@"SIValue"];
   [aCoder encodeObject:sd_method forKey:@"SIMethod"];
 }
 
@@ -35,6 +37,7 @@
   if (self = [super initWithCoder:aCoder]) {
     sd_key = [[aCoder decodeObjectForKey:@"SIKey"] retain];
     sd_class = [[aCoder decodeObjectForKey:@"SIClass"] retain];
+    sd_value = [[aCoder decodeObjectForKey:@"SIValue"] retain];
     sd_method = [[aCoder decodeObjectForKey:@"SIMethod"] retain];
   }
   return self;
@@ -43,6 +46,7 @@
 - (void)dealloc {
   [sd_key release];
   [sd_class release];
+  [sd_value release];
   [sd_method release];
   [super dealloc];
 }
@@ -61,7 +65,7 @@
   if (sd_class != newSdClass) {
     [[self undoManager] registerUndoWithTarget:self selector:_cmd object:sd_class];
     [sd_class release];
-    sd_class = [newSdClass copyWithZone:[self zone]];
+    sd_class = [newSdClass copy];
   }
 }
 
@@ -72,7 +76,7 @@
   if (sd_key != newKey) {
     [[self undoManager] registerUndoWithTarget:self selector:_cmd object:sd_key];
     [sd_key release];
-    sd_key = [newKey copyWithZone:[self zone]];
+    sd_key = [newKey copy];
   }
 }
 
@@ -83,7 +87,29 @@
   if (sd_method != newMethod) {
     [[self undoManager] registerUndoWithTarget:self selector:_cmd object:sd_method];
     [sd_method release];
-    sd_method = [newMethod copyWithZone:[self zone]];
+    sd_method = [newMethod copy];
+  }
+}
+
+#pragma mark Value
+- (id)value {
+  return sd_value;
+}
+- (void)setValue:(id)aValue {
+  if (sd_value != aValue) {
+    [[self undoManager] registerUndoWithTarget:self selector:_cmd object:sd_value];
+    [sd_value release];
+    sd_value = [aValue copy];    
+  }
+}
+
+- (UInt8)valueType {
+  return sd_vtype;
+}
+- (void)setValueType:(UInt8)aType {
+  if (sd_vtype != aType) {
+    [[[self undoManager] prepareWithInvocationTarget:self] setValueType:sd_vtype];
+    sd_vtype = aType;
   }
 }
 

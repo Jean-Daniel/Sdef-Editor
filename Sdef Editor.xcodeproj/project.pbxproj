@@ -9,6 +9,9 @@
 /* Begin PBXBuildFile section */
 		1B5FEC8F0BD8E58100F57412 /* SdefXRef.h in Headers */ = {isa = PBXBuildFile; fileRef = 1B5FEC8D0BD8E58100F57412 /* SdefXRef.h */; };
 		1B5FEC900BD8E58100F57412 /* SdefXRef.m in Sources */ = {isa = PBXBuildFile; fileRef = 1B5FEC8E0BD8E58100F57412 /* SdefXRef.m */; };
+		1BC2401A0BDCBFF50077A527 /* SKVSplitBar.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 98D1B0500BDB5993007B3293 /* SKVSplitBar.tiff */; };
+		1BE05BAD0BDD1F2800334FBF /* SdefTypeValidator.m in Sources */ = {isa = PBXBuildFile; fileRef = 1BE05BAC0BDD1F2800334FBF /* SdefTypeValidator.m */; };
+		1BE05C0A0BDD21EB00334FBF /* SdefLeavesValidator.m in Sources */ = {isa = PBXBuildFile; fileRef = 1BE05C090BDD21EB00334FBF /* SdefLeavesValidator.m */; };
 		656F9B5809E6A188008A0059 /* SKFunctions.m in Sources */ = {isa = PBXBuildFile; fileRef = 656F9B5409E6A188008A0059 /* SKFunctions.m */; };
 		656F9B5909E6A188008A0059 /* SKCFContext.m in Sources */ = {isa = PBXBuildFile; fileRef = 656F9B5509E6A188008A0059 /* SKCFContext.m */; };
 		656F9B5B09E6A188008A0059 /* SKExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 656F9B5709E6A188008A0059 /* SKExtensions.m */; };
@@ -198,7 +201,6 @@
 		98D1B02A0BDB57D2007B3293 /* SdefToolbar.m in Sources */ = {isa = PBXBuildFile; fileRef = 98D1B0290BDB57D2007B3293 /* SdefToolbar.m */; };
 		98D1B0540BDB5993007B3293 /* SKHSplitBar.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 98D1B04E0BDB5993007B3293 /* SKHSplitBar.tiff */; };
 		98D1B0550BDB5993007B3293 /* SKSplitDot.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 98D1B04F0BDB5993007B3293 /* SKSplitDot.tiff */; };
-		98D1B0560BDB5993007B3293 /* SKVSplitBar.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 98D1B0500BDB5993007B3293 /* SKVSplitBar.tiff */; };
 		98D1B0580BDB59A0007B3293 /* SKSplitview.m in Sources */ = {isa = PBXBuildFile; fileRef = 98D1B0570BDB59A0007B3293 /* SKSplitview.m */; };
 		98D1B05A0BDB59AF007B3293 /* SKSplitview.h in Copy ShadowKit */ = {isa = PBXBuildFile; fileRef = 98D1B0590BDB59AF007B3293 /* SKSplitview.h */; };
 		98D1B1700BDB8BE9007B3293 /* SdefValidator.h in Headers */ = {isa = PBXBuildFile; fileRef = 98D1B16E0BDB8BE9007B3293 /* SdefValidator.h */; };
@@ -309,6 +311,8 @@
 		1058C7A7FEA54F5311CA2CBB /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = /System/Library/Frameworks/Cocoa.framework; sourceTree = "<absolute>"; };
 		1B5FEC8D0BD8E58100F57412 /* SdefXRef.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; lineEnding = 0; name = SdefXRef.h; path = Headers/SdefXRef.h; sourceTree = "<group>"; };
 		1B5FEC8E0BD8E58100F57412 /* SdefXRef.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = SdefXRef.m; sourceTree = "<group>"; };
+		1BE05BAC0BDD1F2800334FBF /* SdefTypeValidator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SdefTypeValidator.m; sourceTree = "<group>"; };
+		1BE05C090BDD21EB00334FBF /* SdefLeavesValidator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SdefLeavesValidator.m; sourceTree = "<group>"; };
 		2A37F4B5FDCFA73011CA2CEA /* English */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = English; path = English.lproj/SdefDocument.nib; sourceTree = "<group>"; };
 		2A37F4B7FDCFA73011CA2CEA /* English */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = English; path = English.lproj/MainMenu.nib; sourceTree = "<group>"; };
 		2A37F4C4FDCFA73011CA2CEA /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = /System/Library/Frameworks/AppKit.framework; sourceTree = "<absolute>"; };
@@ -921,8 +925,8 @@
 				9826778B0BDBF82B00F8B839 /* Headers */,
 				1B5FEC8E0BD8E58100F57412 /* SdefXRef.m */,
 				98CCA8FA082FEEF5002A37E2 /* SdefType.m */,
-				98D3A9DC079EF4B50049A8FC /* SdefComment.m */,
 				98758020078864330038C05B /* SdefSynonym.m */,
+				98D3A9DC079EF4B50049A8FC /* SdefComment.m */,
 				98758033078865170038C05B /* SdefDocumentation.m */,
 				9875802F078864F40038C05B /* SdefImplementation.m */,
 			);
@@ -1038,8 +1042,10 @@
 				98D1B16F0BDB8BE9007B3293 /* SdefValidator.m */,
 				98D1B2400BDB9AE1007B3293 /* SdefValidatorBase.h */,
 				9856F70A0BDBFEA80030472F /* SdefVerbValidator.m */,
+				1BE05BAC0BDD1F2800334FBF /* SdefTypeValidator.m */,
 				982675A70BDBDD2C00F8B839 /* SdefClassValidator.m */,
 				98D1B30E0BDBAE62007B3293 /* SdefObjectValidator.m */,
+				1BE05C090BDD21EB00334FBF /* SdefLeavesValidator.m */,
 			);
 			path = Validator;
 			sourceTree = "<group>";
@@ -1308,12 +1314,10 @@
 		2A37F4A9FDCFA73011CA2CEA /* Project object */ = {
 			isa = PBXProject;
 			buildConfigurationList = 98A7CBEC0855010F000D862B /* Build configuration list for PBXProject "Sdef Editor" */;
-			compatibilityVersion = "Xcode 2.4";
 			hasScannedForEncodings = 1;
 			mainGroup = 2A37F4AAFDCFA73011CA2CEA /* SDef Editor */;
 			projectDirPath = "";
 			projectRoot = "";
-			shouldCheckCompatibility = 1;
 			targets = (
 				8D15AC270486D014006FF6A4 /* Sdef Editor */,
 			);
@@ -1382,10 +1386,10 @@
 				98D1B0100BDB55B4007B3293 /* SdefValidator.nib in Resources */,
 				98D1B0540BDB5993007B3293 /* SKHSplitBar.tiff in Resources */,
 				98D1B0550BDB5993007B3293 /* SKSplitDot.tiff in Resources */,
-				98D1B0560BDB5993007B3293 /* SKVSplitBar.tiff in Resources */,
 				985E08150BDC0C13005BD3C3 /* valid-warning.tiff in Resources */,
 				985E08160BDC0C13005BD3C3 /* valid-note.tiff in Resources */,
 				985E08170BDC0C13005BD3C3 /* valid-error.tiff in Resources */,
+				1BC2401A0BDCBFF50077A527 /* SKVSplitBar.tiff in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1507,6 +1511,8 @@
 				98D1B30F0BDBAE62007B3293 /* SdefObjectValidator.m in Sources */,
 				982675A80BDBDD2C00F8B839 /* SdefClassValidator.m in Sources */,
 				9856F70B0BDBFEA80030472F /* SdefVerbValidator.m in Sources */,
+				1BE05BAD0BDD1F2800334FBF /* SdefTypeValidator.m in Sources */,
+				1BE05C0A0BDD21EB00334FBF /* SdefLeavesValidator.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

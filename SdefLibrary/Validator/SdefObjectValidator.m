@@ -9,6 +9,7 @@
 #import "SdefValidatorBase.h"
 
 #import "SdefLeaf.h"
+#import "SdefSuite.h"
 #import "SdefObjects.h"
 #import "SdefDictionary.h"
 #import "SdefClassManager.h"
@@ -20,11 +21,11 @@ SK_INLINE
 NSString *SystemVersionForSdefVersion(SdefVersion vers) {
   switch (vers) {
     case kSdefTigerVersion:
-      return @"Tiger";
+      return @"10.4 (Tiger)";
     case kSdefPantherVersion:
-      return @"Panther";
+      return @"10.3 (Panther)";
     case kSdefLeopardVersion:
-      return @"Leopard";
+      return @"10.5 (Leopard)";
   }
   return nil;
 }
@@ -44,12 +45,12 @@ NSString *SystemVersionForSdefVersion(SdefVersion vers) {
 
 - (SdefValidatorItem *)versionRequired:(SdefVersion)vers forAttribute:(NSString *)attr {
   return [SdefValidatorItem errorItemWithNode:(NSObject<SdefObject> *)self 
-                                      message:@"attribute %@ require %@ and above.", attr, SystemVersionForSdefVersion(vers)];
+                                      message:@"attribute '%@' requires Mac OS version %@.", attr, SystemVersionForSdefVersion(vers)];
 }
 
 - (SdefValidatorItem *)versionRequired:(SdefVersion)vers forElement:(NSString *)element {
   return [SdefValidatorItem errorItemWithNode:(NSObject<SdefObject> *)self 
-                                      message:@"element %@ require %@ and above.", element, SystemVersionForSdefVersion(vers)];
+                                      message:@"element %@ requires Mac OS version %@.", element, SystemVersionForSdefVersion(vers)];
 }
 @end
 
@@ -186,6 +187,19 @@ NSString *SystemVersionForSdefVersion(SdefVersion vers) {
   if (![self title] || [[self title] isEqualToString:[[self class] defaultName]])
     [messages addObject:[SdefValidatorItem noteItemWithNode:self
                                                     message:@"title should be your application name"]];    
+  [super validate:messages forVersion:vers];
+}
+
+@end
+
+@implementation SdefSuite (SdefValidator)
+
+- (BOOL)validateCode { return YES; }
+
+- (void)validate:(NSMutableArray *)messages forVersion:(SdefVersion)vers {
+  if (![self name])
+    [messages addObject:[self invalidValue:nil forAttribute:@"name"]];
+  
   [super validate:messages forVersion:vers];
 }
 

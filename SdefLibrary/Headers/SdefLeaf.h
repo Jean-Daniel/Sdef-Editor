@@ -54,4 +54,6 @@ enum {
 - (SdefDictionary *)dictionary;
 - (id<SdefObject>)firstParentOfType:(SdefObjectType)aType;
 
+- (SdefObject *)parent;
+
 @end

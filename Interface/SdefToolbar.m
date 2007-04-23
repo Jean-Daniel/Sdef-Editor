@@ -10,10 +10,12 @@
 
 @implementation SdefWindowController (SdefToolbarDelegate)
 
-NSString *SdefSaveDocToolbarItemIdentifier = @"SdefSaveDocToolbarItemIdentifier";
+NSString *SdefSaveDocToolbarItemIdentifier = @"org.shadowlab.sdef.toolbar.save";
+NSString *SdefOpenReferenceToolbarItemIdentifier = @"org.shadowlab.sdef.toolbar.reference";
 
 - (NSArray *)toolbarAllowedItemIdentifiers: (NSToolbar *) toolbar {
   return [NSArray arrayWithObjects: SdefSaveDocToolbarItemIdentifier,
+    SdefOpenReferenceToolbarItemIdentifier,
     //NSToolbarPrintItemIdentifier,
     //NSToolbarShowColorsItemIdentifier,
     //NSToolbarShowFontsItemIdentifier,
@@ -26,6 +28,7 @@ NSString *SdefSaveDocToolbarItemIdentifier = @"SdefSaveDocToolbarItemIdentifier"
 - (NSArray *)toolbarDefaultItemIdentifiers: (NSToolbar *) toolbar {
   return [NSArray arrayWithObjects: SdefSaveDocToolbarItemIdentifier,
     NSToolbarSeparatorItemIdentifier,
+    SdefOpenReferenceToolbarItemIdentifier,
     NSToolbarFlexibleSpaceItemIdentifier,
     NSToolbarSpaceItemIdentifier, nil];
 }
@@ -49,7 +52,15 @@ NSString *SdefSaveDocToolbarItemIdentifier = @"SdefSaveDocToolbarItemIdentifier"
     // Tell the item what message to send when it is clicked 
     //[toolbarItem setTarget:self];
     [toolbarItem setAction:@selector(saveDocument:)];
-  } else  {
+  } else if ([itemIdentifier isEqualToString:SdefOpenReferenceToolbarItemIdentifier]) {
+    [toolbarItem setLabel:@"Sdef Reference"];
+    [toolbarItem setPaletteLabel:@"Sdef Reference"];
+    
+    [toolbarItem setToolTip:@"Open Sdef format Reference"];
+    [toolbarItem setImage:[NSImage imageNamed:@"SdefReference"]];
+    
+    [toolbarItem setAction:@selector(openSdefReference:)];
+  } else {
     // itemIdentifier referred to a toolbar item that is not
     // provided or supported by us or Cocoa 
     // Returning nil will inform the toolbar

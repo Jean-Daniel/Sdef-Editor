@@ -86,10 +86,9 @@
 - (CFXMLTreeRef)insertCDData:(NSString *)str {
   if ([str rangeOfString:@"]]>"].location != NSNotFound) {
     NSMutableString *mstr = [str mutableCopy];
-    do {
-      [mstr replaceOccurrencesOfString:@"]]>" withString:@"]]&gt;" 
-                               options:0 range:NSMakeRange(0, [mstr length])];
-    } while ([str rangeOfString:@"]]>"].location != NSNotFound);
+    [mstr replaceOccurrencesOfString:@"]]>" withString:@"]]&gt;" 
+                             options:0 range:NSMakeRange(0, [mstr length])];
+    str = [mstr autorelease];
   }
   CFXMLNodeRef node = CFXMLNodeCreate(kCFAllocatorDefault, kCFXMLNodeTypeCDATASection, (CFStringRef)str, NULL, kCFXMLNodeCurrentVersion);
   CFXMLTreeRef tree = [self appendNode:node];
@@ -110,12 +109,15 @@
   if (comment) {
     CFStringTrimWhitespace((CFMutableStringRef)comment);
     if ([comment length]) {
-      if ([str rangeOfString:@"-->"].location != NSNotFound) {
+      /* '--' is not allow in XML comments. And a comment must not end with '-' */
+      if ([str rangeOfString:@"--"].location != NSNotFound || [str hasSuffix:@"-"]) {
         str = [str mutableCopy];
         do {
-          [(id)str replaceOccurrencesOfString:@"-->" withString:@"--&gt;" 
+          [(id)str replaceOccurrencesOfString:@"--" withString:@"-" 
                                       options:NSLiteralSearch range:NSMakeRange(0, [str length])];
-        } while ([str rangeOfString:@"-->"].location != NSNotFound);
+        } while ([str rangeOfString:@"--"].location != NSNotFound);
+        if ([str hasSuffix:@"-"])
+          [(id)str appendString:@" "];
         [str autorelease];
       }
       CFXMLNodeRef node = CFXMLNodeCreate(kCFAllocatorDefault, kCFXMLNodeTypeComment, (CFStringRef)str, NULL, kCFXMLNodeCurrentVersion);

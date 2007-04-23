@@ -23,9 +23,18 @@
  >
 */
 
+enum {
+  kSdefValueTypeString,
+  kSdefValueTypeInteger,
+  kSdefValueTypeBoolean,
+};
+
 @class SdefDocument;
 @interface SdefImplementation : SdefLeaf <NSCopying, NSCoding> {
 @private
+  id sd_value;
+  UInt8 sd_vtype; /* value type */
+  
   NSString *sd_key;
   NSString *sd_class;
   NSString *sd_method;
@@ -39,5 +48,12 @@
 
 - (NSString *)method;
 - (void)setMethod:(NSString *)newMethod;
+
+/* value support */
+- (id)value;
+- (void)setValue:(id)aValue;
+
+- (UInt8)valueType;
+- (void)setValueType:(UInt8)aType;
 
 @end

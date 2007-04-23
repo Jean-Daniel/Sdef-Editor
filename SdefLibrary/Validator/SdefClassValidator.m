@@ -46,6 +46,8 @@
     }
   }
   
+  /* bugs: cocoa->class required */
+  
   [super validate:messages forVersion:vers];
 }
 
@@ -54,9 +56,9 @@
 @implementation SdefElement (SdefValidator)
 
 - (void)validate:(NSMutableArray *)messages forVersion:(SdefVersion)vers {
-  if (sd_accessors && sd_accessors != 0x3f) {
-    [messages addObject:[SdefValidatorItem noteItemWithNode:self message:@"using accessors but cocoa scripting ignores them"]];
-  }
+//  if (sd_accessors && sd_accessors != 0x3f) {
+//    [messages addObject:[SdefValidatorItem noteItemWithNode:self message:@"using accessors but cocoa scripting ignores them"]];
+//  }
   
   /* should be a simple type */
   NSString *type = [self type];
@@ -102,6 +104,8 @@
     [messages addObject:[SdefValidatorItem warningItemWithNode:self
                                                        message:@"command/event '%@' not found", [self name]]];
   }
+  
+  /* bugs: cocoa->method required */
   [super validate:messages forVersion:vers];
 }
 

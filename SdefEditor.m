@@ -77,7 +77,11 @@ NSString *PantherScriptingDefinitionFileType = @"PantherScriptingDefinition";
       sdp = @"/Developer/Tools/sdp";
     }
     NSString *rez = @"/Developer/Tools/Rez";
-    [[SdefDocumentController alloc] init];
+    /* Initialize custom controller */
+    SdefDocumentController *ctrl = [[SdefDocumentController alloc] init];
+    if ([ctrl respondsToSelector:@selector(setAutosavingDelay:)]) {
+      [ctrl setAutosavingDelay:60];
+    }
     [[NSUserDefaults standardUserDefaults] registerDefaults:[NSDictionary dictionaryWithObjectsAndKeys:
       SKBool(YES), @"SdefOpenAtStartup",
       SKBool(![[NSFileManager defaultManager] fileExistsAtPath:sdp]), @"SdefBuildInSdp",
@@ -171,6 +175,10 @@ NSString *PantherScriptingDefinitionFileType = @"PantherScriptingDefinition";
       [doc showWindows];
     }
   }
+}
+
+- (IBAction)openSdefReference:(id)sender {
+  
 }
 
 #pragma mark -
