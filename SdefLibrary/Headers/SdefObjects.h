@@ -114,4 +114,6 @@ NSString *SdefTypeStringForTypes(NSArray *types);
 - (id<SdefObject>)owner;
 - (void)setOwner:(id<SdefObject>)anObject;
 
+- (id<SdefObject>)firstParentOfType:(SdefObjectType)aType;
+
 @end

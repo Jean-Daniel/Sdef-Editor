@@ -46,10 +46,7 @@
   }
   if (row >= 0) {
     SdefValidatorItem *item = [sd_messages objectAtIndex:row];
-    id node = [item object];
-    if ([node isKindOfClass:[SdefLeaf class]])
-      node = [(SdefLeaf *)node parent];
-    [[[self document] documentWindow] setSelection:node];
+    [[[self document] documentWindow] setSelection:[[item object] container]];
   }
 }
 

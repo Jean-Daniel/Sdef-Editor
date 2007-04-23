@@ -560,11 +560,16 @@
 - (id<SdefObject>)owner {
   return sd_owner;
 }
-
 - (void)setOwner:(id<SdefObject>)anObject {
   sd_owner = anObject;
 }
 
+- (SdefObject *)container {
+  return [sd_owner container];
+}
+- (SdefDictionary *)dictionary {
+  return [sd_owner dictionary];
+}
 - (id<SdefObject>)firstParentOfType:(SdefObjectType)aType {
   return [sd_owner firstParentOfType:aType];
 }

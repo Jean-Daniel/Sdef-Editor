@@ -10,6 +10,7 @@
 
 @interface AeteImporter : SdefImporter {
   NSMutableArray *sd_aetes;
+  SdefDictionary *sd_dictionary;
 }
 
 - (id)initWithFSRef:(FSRef *)aRef;

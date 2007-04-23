@@ -99,10 +99,10 @@ static NSString *SystemMajorVersion() {
     SdefProcessor *proc = [[SdefProcessor alloc] initWithSdefDocument:[self sdefDocument]];
     [proc setOutput:[[openPanel filenames] objectAtIndex:0]];
     
-    id defs = [[NSMutableArray alloc] init];
+    NSMutableArray *defs = [[NSMutableArray alloc] init];
     if ([[includes arrangedObjects] count]) {
-      id items = [[includes arrangedObjects] objectEnumerator];
       id item;
+      id items = [[includes arrangedObjects] objectEnumerator];
       while (item = [items nextObject]) {
         [defs addObject:[item valueForKey:@"path"]];
       }

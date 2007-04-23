@@ -51,7 +51,7 @@ NSString *SdefNameCreateWithCocoaName(NSString *cocoa);
 SK_EXPORT
 NSString *CocoaNameForSdefName(NSString *cocoa, BOOL isClass);
 
-@class SdefDictionary;
+@class SdefObject, SdefDictionary;
 @protocol SdefObject 
 
 + (SdefObjectType)objectType;
@@ -69,6 +69,7 @@ NSString *CocoaNameForSdefName(NSString *cocoa, BOOL isClass);
 - (BOOL)isEditable;
 - (void)setEditable:(BOOL)flag;
 
+- (SdefObject *)container;
 - (id<SdefObject>)firstParentOfType:(SdefObjectType)aType;
 
 @end
@@ -114,6 +115,8 @@ NSString *CocoaNameForSdefName(NSString *cocoa, BOOL isClass);
 
 - (SdefSuite *)suite;
 - (SdefDictionary *)dictionary;
+
+- (SdefObject *)container;
 - (id<SdefObject>)firstParentOfType:(SdefObjectType)aType;
 
 #pragma mark Strings Representations

@@ -485,6 +485,7 @@ void _SdefParserPostProcessDictionary(SdefDictionary *dictionary) {
 - (BOOL)isEditable { return YES; }
 - (void)setEditable:(BOOL)flag {}
 
+- (SdefObject *)container { return nil; }
 - (SdefDictionary *)dictionary { return nil; }
 - (NSUndoManager *)undoManager { return nil; }
 - (id<SdefObject>)firstParentOfType:(SdefObjectType)aType { return nil; }
@@ -529,6 +530,9 @@ void _SdefParserPostProcessDictionary(SdefDictionary *dictionary) {
   return sd_object ? [sd_object name] : nil;
 }
 
+- (SdefObject *)container { 
+  return [sd_object container];
+}
 - (SdefDictionary *)dictionary {
   return [sd_object dictionary];
 }

@@ -105,6 +105,10 @@
   }
 }
 
+- (SdefObject *)container {
+  return self;
+}
+
 - (id<SdefObject>)firstParentOfType:(SdefObjectType)aType {
   SdefObject *parent = self;
   while (parent && ([parent objectType] != aType)) {

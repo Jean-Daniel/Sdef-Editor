@@ -41,7 +41,7 @@
     NSDictionary *item = [sd_warnings objectAtIndex:row];
     SdefObject *node = [item objectForKey:@"node"];
     if (node) {
-      [[sd_document documentWindow] setSelection:node];
+      [[sd_document documentWindow] setSelection:[node container]];
     }
   }
 }

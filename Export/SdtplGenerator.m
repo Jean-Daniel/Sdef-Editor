@@ -1586,9 +1586,9 @@ static NSString *SdtplCopyFormatedString(SdtplGenerator *self, NSString *str, NS
 
 #pragma mark -
 
-static NSArray *SdtplSortDescriptors = nil;
-
-static void SdtplSortArrayByName(NSMutableArray *array) {
+static
+void SdtplSortArrayByName(NSMutableArray *array) {
+  static NSArray *SdtplSortDescriptors = nil;
   if (!SdtplSortDescriptors) {
     NSSortDescriptor *desc = [[NSSortDescriptor alloc] initWithKey:@"name" ascending:YES selector:@selector(caseInsensitiveCompare:)];
     SdtplSortDescriptors = [[NSArray alloc] initWithObjects:desc, nil];

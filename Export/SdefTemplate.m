@@ -54,12 +54,12 @@ NSString * const SdtplDefinitionEventsKey = @"Events";
 @implementation SdefTemplate
 
 + (NSDictionary *)findAllTemplates {
-  NSString *path;
   NSArray *paths = SdefTemplatePaths();
+  NSUInteger idx = [paths count];
   /* Add entries will replace existing entries, so use a reverse enumerator */
-  NSEnumerator *enume = [paths reverseObjectEnumerator];
-  id templates = [[NSMutableDictionary alloc] init];
-  while (path = [enume nextObject]) {
+  NSMutableDictionary *templates = [[NSMutableDictionary alloc] init];
+  while (idx-- > 0) {
+    NSString *path = [paths objectAtIndex:idx];
     [templates addEntriesFromDictionary:SdefTemplatesAtPath(path)];
   }
   return [templates autorelease];
@@ -340,13 +340,15 @@ static NSArray *SdefTemplatePaths() {
   return [NSArray arrayWithObjects:userPath, locPath, netPath, appPath, nil]; // order: User, Library, Network and Built-in
 }
 
-static NSDictionary *SdefTemplatesAtPath(NSString *path) {
-  NSString *name;
-  id templates = [NSMutableDictionary dictionary];
-  NSEnumerator *e = [[[NSFileManager defaultManager] directoryContentsAtPath:path] objectEnumerator];
-  while (name = [e nextObject]) {
+static
+NSDictionary *SdefTemplatesAtPath(NSString *path) {
+  NSMutableDictionary *templates = [NSMutableDictionary dictionary];
+  NSArray *names = [[NSFileManager defaultManager] directoryContentsAtPath:path];
+  NSUInteger idx = [names count];
+  while (idx-- > 0) {
+    NSString *name = [names objectAtIndex:idx];
     if ([[name pathExtension] isEqualToString:kSdefTemplateExtension]) {
-      id tpl = nil;
+      SdefTemplate *tpl = nil;
       @try {
         tpl = [[SdefTemplate alloc] initWithPath:[path stringByAppendingPathComponent:name]];
         [templates setObject:tpl forKey:[tpl menuName]];

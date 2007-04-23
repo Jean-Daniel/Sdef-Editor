@@ -42,9 +42,9 @@
 
 #pragma mark Class
 /* two passes post-process (for aete) */
-- (void)postProcessClass:(SdefClass *)aClass;
-- (void)postProcessClassContent:(SdefClass *)aClass;
+- (void)postProcessCleanupClass:(SdefClass *)aClass;
 
+- (void)postProcessClass:(SdefClass *)aClass;
 - (void)postProcessContents:(SdefContents *)aContents forClass:aClass;
 - (void)postProcessElement:(SdefElement *)anElement inClass:(SdefClass *)aClass;
 - (void)postProcessProperty:(SdefProperty *)aProperty inClass:(SdefClass *)aClass;

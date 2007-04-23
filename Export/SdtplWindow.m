@@ -62,16 +62,17 @@
   }
   
   /* Init Templates Menu */
-  id tpls = [[SdefTemplate findAllTemplates] allValues];
-  id sort = [[NSSortDescriptor alloc] initWithKey:@"displayName" ascending:YES selector:@selector(caseInsensitiveCompare:)];
+  NSArray *tpls = [[SdefTemplate findAllTemplates] allValues];
+  NSSortDescriptor *sort = [[NSSortDescriptor alloc] initWithKey:@"displayName" ascending:YES selector:@selector(caseInsensitiveCompare:)];
   NSArray *sorts = [[NSArray alloc] initWithObjects:sort, nil];
   [sort release];
   
-  tpls = [[tpls sortedArrayUsingDescriptors:sorts] reverseObjectEnumerator];
-  [sorts release];
   
-  id tpl;
-  while (tpl = [tpls nextObject]) {
+  tpls = [tpls sortedArrayUsingDescriptors:sorts];
+  [sorts release];
+  NSUInteger idx = [tpls count];
+  while (idx-- > 0) {
+    SdefTemplate *tpl = [tpls objectAtIndex:idx];
     NSMenuItem *item = [[NSMenuItem alloc] initWithTitle:[tpl menuName] action:nil keyEquivalent:@""];
     [item setRepresentedObject:tpl];
     [[templates menu] insertItem:item atIndex:0];

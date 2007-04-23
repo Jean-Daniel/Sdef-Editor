@@ -293,6 +293,8 @@
       case kSdefSuiteType:
         [self addSuite:child];
         break;
+      case kSdefValueType:
+      case kSdefRecordType:
       case kSdefEnumerationType:
         [sd_types addObject:child];
         break;
@@ -321,6 +323,8 @@
       case kSdefSuiteType:
         [self removeSuite:child];
         break;
+      case kSdefValueType:
+      case kSdefRecordType:
       case kSdefEnumerationType:
         [sd_types removeObject:child];
         break;

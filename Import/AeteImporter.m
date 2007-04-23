@@ -99,6 +99,17 @@ bail:
     self = nil;
   }
   SKAEDisposeDesc(&target);
+  if (self) {
+    FSRef app;
+    sd_dictionary = [[SdefDictionary alloc] init];
+    if (noErr == LSGetApplicationForInfo(kLSUnknownType, signature, NULL, kLSRolesAll, &app, NULL)) {
+      CFStringRef name = NULL;
+      if (noErr == LSCopyDisplayNameForRef(&app, &name) && name) {
+        [sd_dictionary setTitle:(NSString *)name];
+        CFRelease(name);
+      }
+    }
+  }
   return self;
 }
 
@@ -112,6 +123,19 @@ bail:
     self = nil;
   }
   SKAEDisposeDesc(&target);
+  /* resolve name */
+  if (self) {
+    FSRef app;
+    sd_dictionary = [[SdefDictionary alloc] init];
+    if (noErr == LSGetApplicationForInfo(kLSUnknownType, kLSUnknownType, 
+                                         (CFStringRef)identifier, kLSRolesAll, &app, NULL)) {
+      CFStringRef name = NULL;
+      if (noErr == LSCopyDisplayNameForRef(&app, &name) && name) {
+        [sd_dictionary setTitle:(NSString *)name];
+        CFRelease(name);
+      }
+    }
+  }
   return self;
 }
 
@@ -159,6 +183,14 @@ bail:
       self = nil;
     }
   }
+  if (self) {
+    sd_dictionary = [[SdefDictionary alloc] init];
+    CFStringRef name = NULL;
+    if (noErr == LSCopyDisplayNameForRef(aRef, &name) && name) {
+      [sd_dictionary setTitle:(NSString *)name];
+      CFRelease(name);
+    }
+  }
   return self;
 }
 
@@ -175,22 +207,27 @@ bail:
 
 - (void)dealloc {
   [sd_aetes release];
+  [sd_dictionary release];
   [super dealloc];
 }
 
 #pragma mark -
 #pragma mark Parsing
 - (BOOL)import {
-  NSData *aete;
-  NSEnumerator *aetes = [sd_aetes objectEnumerator];
-  while (aete = [aetes nextObject]) {
+  if (sd_dictionary && [sd_dictionary hasChildren])
+    [sd_dictionary removeAllChildren];
+  
+  NSUInteger count = [sd_aetes count];
+  for (NSUInteger idx = 0; idx < count; idx++) {
+    NSData *aete = [sd_aetes objectAtIndex:idx];
     @try {
       BytePtr bytes = (BytePtr)[aete bytes];
       ByteOffset offset = 0;
       AeteHeader *header = (AeteHeader *)bytes;
       bytes += sizeof(AeteHeader);
       offset += sizeof(AeteHeader);
-      for (UInt16 idx = 0; idx < header->suiteCount; idx++) {
+      NSUInteger scount = header->suiteCount;
+      while (scount-- > 0) {
         SdefSuite *suite = [[SdefSuite allocWithZone:[self zone]] init];
         bytes += [suite parseData:bytes];
         [suites addObject:suite];
@@ -203,6 +240,17 @@ bail:
     }
   }
   return YES;
+}
+
+- (SdefDictionary *)sdefDictionary {
+  if (![sd_dictionary hasChildren]) {
+    NSArray *items = [self sdefSuites];
+    NSUInteger count = [items count];
+    for (NSUInteger idx = 0; idx < count; idx++) {
+      [sd_dictionary appendChild:[items objectAtIndex:idx]];
+    }
+  }
+  return sd_dictionary;
 }
 
 #pragma mark Post Processor
@@ -225,7 +273,7 @@ bail:
   return NO;
 }
 
-- (void)postProcessClass:(SdefClass *)aClass {
+- (void)postProcessCleanupClass:(SdefClass *)aClass {
   if ([[aClass properties] count]) {
     SdefProperty *info = [[aClass properties] firstChild];
     if (OSTypeFromSdefString([info code]) == pInherits) {
@@ -239,6 +287,7 @@ bail:
       [info remove];
     } else if (OSTypeFromSdefString([info code]) == kAESpecialClassProperties) {
       if ([[info name] isEqualToString:@"<Plural>"]) {
+        /* unregister special classes */
         if ([[aClass properties] count] == 1) {
           NSUInteger idx = [aClass index];
           [(SdefClass *)[[aClass parent] childAtIndex:idx-1] setPlural:[aClass name]];
@@ -254,7 +303,7 @@ bail:
       }      
     }
   }
-  [super postProcessClass:aClass];
+  [super postProcessCleanupClass:aClass];
 }
 
 @end

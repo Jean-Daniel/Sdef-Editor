@@ -185,7 +185,7 @@ static NSArray *ASKStandardsSuites() {
   }
 }
 
-- (void)postProcessClassContent:(SdefClass *)aClass {
+- (void)postProcessClass:(SdefClass *)aClass {
   NSString *suite = nil;
   NSString *inherits = [aClass inherits];
   if (inherits != nil) {

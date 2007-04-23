@@ -137,6 +137,9 @@
   sd_owner = anObject;
 }
 
+- (SdefObject *)container {
+  return [sd_owner container];
+}
 - (SdefDictionary *)dictionary {
   return [sd_owner dictionary];
 }
@@ -144,12 +147,6 @@
 /* Needed to be owner of an orphan object (like SdefImplementation) */
 - (id<SdefObject>)firstParentOfType:(SdefObjectType)aType {
   return [sd_owner firstParentOfType:aType];
-}
-
-- (SdefObject *)parent {
-  if ([[self owner] isKindOfClass:[SdefObject class]])
-    return (id)[self owner];
-  return (id)[(id)[self owner] parent];
 }
 
 @end

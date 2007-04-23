@@ -66,11 +66,10 @@
   if (!suites) {
     [self prepareImport];
     if ([self import]) {
-      id suite;
-      id items = [suites objectEnumerator];
+      NSUInteger idx = [suites count];
       manager = [[SdefClassManager alloc] init];
-      while (suite = [items nextObject]) {
-        [manager addSuite:suite];
+      while (idx-- > 0) {
+        [manager addSuite:[suites objectAtIndex:idx]];
       }
       [self postProcess];
       [manager release];
@@ -99,9 +98,23 @@
 #pragma mark -
 #pragma mark Post Processor
 - (void)postProcess {
-  SdefSuite *suite;
-  NSEnumerator *items = [suites objectEnumerator];
-  while (suite = [items nextObject]) {
+  NSUInteger idx = [suites count];
+  /* Because aete format use fake classes to store meta-data
+  we have to first cleanup class and then whe can do a full resolution */
+  while (idx-- > 0) {
+    SdefSuite *suite = [suites objectAtIndex:idx];
+    
+    /* Classes */
+    SdefClass *class;
+    NSEnumerator *children = [[suite classes] childEnumerator];
+    while (class = [children nextObject]) {
+      [self postProcessCleanupClass:class];
+    }
+  }
+  
+  idx = [suites count];
+  while (idx-- > 0) {
+    SdefSuite *suite = [suites objectAtIndex:idx];
     
     /* Enumerations */
     SdefEnumeration *enumeration;
@@ -110,16 +123,11 @@
       [self postProcessEnumeration:enumeration];
     }
     
-    /* Classes */
+    /* Class */
     SdefClass *class;
     children = [[suite classes] childEnumerator];
     while (class = [children nextObject]) {
       [self postProcessClass:class];
-    }
-    /* Class contents (for aete issues) */
-    children = [[suite classes] childEnumerator];
-    while (class = [children nextObject]) {
-      [self postProcessClassContent:class];
     }
     
     /* Commands */
@@ -136,10 +144,10 @@
 }
 
 #pragma mark Class
-- (void)postProcessClass:(SdefClass *)aClass {
+- (void)postProcessCleanupClass:(SdefClass *)aClass {
     // see aete
 }
-- (void)postProcessClassContent:(SdefClass *)aClass {
+- (void)postProcessClass:(SdefClass *)aClass {
   SdefObject *item;
   
   item = [aClass contents];

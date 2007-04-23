@@ -77,8 +77,10 @@
 }
 
 - (SdefResult *)result {
-  if (!sd_result)
+  if (!sd_result) {
     sd_result = [[SdefResult alloc] init];
+    [sd_result setOwner:self];
+  }
   return sd_result;
 }
 - (void)setResult:(SdefResult *)aResult {
@@ -91,8 +93,10 @@
 }
 
 - (SdefDirectParameter *)directParameter {
-  if (!sd_direct)
+  if (!sd_direct) {
     sd_direct = [[SdefDirectParameter alloc] init];
+    [sd_direct setOwner:self];
+  }
   return sd_direct;
 }
 - (void)setDirectParameter:(SdefDirectParameter *)aParameter {
