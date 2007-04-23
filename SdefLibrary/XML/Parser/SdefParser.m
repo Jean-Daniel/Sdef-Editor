@@ -3,7 +3,7 @@
  *  Sdef Editor
  *
  *  Created by Rainbow Team.
- *  Copyright © 2006 - 2007 Shadow Lab. All rights reserved.
+ *  Copyright ï¿½ 2006 - 2007 Shadow Lab. All rights reserved.
  */
 
 #import "SdefParser.h"
@@ -15,9 +15,11 @@
 #import "SdefClass.h"
 #import "SdefSuite.h"
 #import "SdefTypedef.h"
+#import "SdefContents.h"
 #import "SdefArguments.h"
 #import "SdefDictionary.h"
 #import "SdefClassManager.h"
+#import "SdefDocumentation.h"
 #import "SdefImplementation.h"
 
 #import <ShadowKit/SKCFContext.h>
@@ -476,6 +478,12 @@ void _SdefParserPostProcessDictionary(SdefDictionary *dictionary) {
 - (BOOL)isEditable { return YES; }
 - (void)setEditable:(BOOL)flag {}
 
+- (SdefDictionary *)dictionary {
+  return [sd_object dictionary];
+}
+- (NSUndoManager *)undoManager {
+  return [sd_object undoManager];
+}
 - (id<SdefObject>)firstParentOfType:(SdefObjectType)aType {
   return sd_object ? [sd_object firstParentOfType:aType] : nil;
 }

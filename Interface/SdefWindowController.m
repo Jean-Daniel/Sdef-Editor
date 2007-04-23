@@ -147,8 +147,8 @@ static inline BOOL SdefEditorExistsForItem(SdefObject *item) {
 //  [[self window] setToolbar:tb];
 //  [tb setVisible:NO];
 //  [tb release];
-  
-  [[self window] setBackgroundColor:[NSColor colorWithCalibratedWhite:0xec/255. alpha:1]];
+  if (SKSystemMinorVersion() < 5)
+    [[self window] setBackgroundColor:[NSColor colorWithCalibratedWhite:0xe8/255. alpha:1]];
   [super windowDidLoad];
 }
 

@@ -129,11 +129,11 @@
 }
 
 #pragma mark Owner
-- (SdefObject *)owner {
+- (NSObject<SdefObject> *)owner {
   return sd_owner;
 }
 
-- (void)setOwner:(SdefObject *)anObject {
+- (void)setOwner:(NSObject<SdefObject> *)anObject {
   sd_owner = anObject;
 }
 

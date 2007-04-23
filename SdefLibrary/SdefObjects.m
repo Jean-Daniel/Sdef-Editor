@@ -615,7 +615,7 @@ NSString *SdefStringForOSType(OSType type) {
   NSString *str = SKStringForOSType(type);
   /* If invalid string or contains white space */
   if (!str || isspace(chrs[0]) || isspace(chrs[3])) {
-    str = [NSString stringWithFormat:@"0x%.8x", OSSwapHostToBigInt32(type)];
+    str = [NSString stringWithFormat:@"0x%.8x", type];
   }
   return str;
 }
@@ -623,7 +623,7 @@ NSString *SdefStringForOSType(OSType type) {
 OSType OSTypeFromSdefString(NSString *string) {
   if ([string length] == 10 && [string hasPrefix:@"0x"]) {
     const char *cstr = [string UTF8String];
-    return cstr ? strtol(cstr, NULL, 16) : 0;
+    return cstr ? (OSType)strtol(cstr, NULL, 16) : 0;
   } else {
     return SKOSTypeFromString(string);
   }

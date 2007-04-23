@@ -58,6 +58,7 @@ NSString *CocoaNameForSdefName(NSString *cocoa, BOOL isClass);
 - (SdefObjectType)objectType;
 
 - (SdefDictionary *)dictionary;
+- (NSUndoManager *)undoManager;
 
 - (NSString *)location;
 - (NSString *)objectTypeName;

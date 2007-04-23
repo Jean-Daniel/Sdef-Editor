@@ -19,7 +19,7 @@ enum {
 @interface SdefLeaf : NSObject <SdefObject, NSCopying, NSCoding> {
 @private
   NSString *sd_name;
-  SdefObject *sd_owner;
+  NSObject<SdefObject> *sd_owner;
 @protected
   struct _sd_slFlags {
     unsigned int list:1;
@@ -48,8 +48,8 @@ enum {
 - (BOOL)isHidden;
 - (void)setHidden:(BOOL)flag;
 
-- (SdefObject *)owner;
-- (void)setOwner:(SdefObject *)anObject;
+- (NSObject<SdefObject> *)owner;
+- (void)setOwner:(NSObject<SdefObject> *)anObject;
 
 - (SdefDictionary *)dictionary;
 - (id<SdefObject>)firstParentOfType:(SdefObjectType)aType;
