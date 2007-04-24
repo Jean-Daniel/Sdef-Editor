@@ -247,28 +247,11 @@ NSString *PantherScriptingDefinitionFileType = @"PantherScriptingDefinition";
 
 - (void)importCocoaScriptFile:(NSString *)file {
   CocoaSuiteImporter *importer = [[CocoaSuiteImporter alloc] initWithContentsOfFile:file];
-  if (![importer terminology]) {
-    NSOpenPanel *openPanel = [NSOpenPanel openPanel];
-    [openPanel setCanChooseFiles:YES];
-    [openPanel setCanCreateDirectories:NO];
-    [openPanel setCanChooseDirectories:NO];
-    [openPanel setAllowsMultipleSelection:NO];
-    [openPanel setTreatsFilePackagesAsDirectories:YES];
-    [openPanel setPrompt:@"Open Terminology"];
-    [openPanel setMessage:[NSString stringWithFormat:@"Where is %@.scriptTerminology?",
-      [[file lastPathComponent] stringByDeletingPathExtension]]];
-    switch([openPanel runModalForTypes:[NSArray arrayWithObject:@"scriptTerminology"]]) {
-      case NSCancelButton:
-        [importer release];
-        return;
-    }
-    if (![[openPanel filenames] count]) {
-      [importer release];
-      return;
-    }
-    [importer setTerminology:[NSDictionary dictionaryWithContentsOfFile:[[openPanel filenames] objectAtIndex:0]]];
+  if ([importer preload]) {
+    [self importWithImporter:importer];
+  } else {
+    NSRunAlertPanel(@"Sorry! Sdef Editor cannot import this definition", @"Try with desdp(1) tools (see 'man desdp')", @"OK", nil, nil);
   }
-  [self importWithImporter:importer];
   [importer release];
 }
 

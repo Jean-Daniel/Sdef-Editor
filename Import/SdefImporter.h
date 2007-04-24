@@ -20,8 +20,6 @@
   NSMutableArray *sd_warnings;
 }
 
-- (id)initWithContentsOfFile:(NSString *)file;
-
 /*!
     @method     import
     @abstract   Import a script terminology.

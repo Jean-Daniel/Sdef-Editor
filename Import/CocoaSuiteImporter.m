@@ -26,29 +26,74 @@
 
 
 #pragma mark Statics Methods Declaration
-static NSString *DecomposeCocoaName(NSString *type, NSString **suite);
-static NSString *DecomposeCocoaType(NSString *type, NSString **suite);
+static 
+NSString *_CocoaScriptingDecomposeName(NSString *type, NSString **suite);
+static 
+NSString *_CocoaScriptingDecomposeType(NSString *type, NSString **suite);
 
 #pragma mark -
 @implementation CocoaSuiteImporter
 
-- (id)initWithContentsOfFile:(NSString *)file {
-  id term = [[file stringByDeletingPathExtension] stringByAppendingPathExtension:@"scriptTerminology"];
-  if (![[NSFileManager defaultManager] fileExistsAtPath:file]) {
-    [self release];
-    self = nil;
-  } else {
-    self = [self initWithSuiteFile:file andTerminologyFile:term];
+static 
+NSDictionary *_CocoaScriptingFindTerminology(NSString *base, NSString *name) {
+  NSString *file = [[base stringByAppendingPathComponent:name] stringByAppendingPathExtension:@"scriptTerminology"];
+  NSDictionary *dterm = nil;
+  
+  if (file && [[NSFileManager defaultManager] fileExistsAtPath:file]) {
+    dterm = [[NSDictionary alloc] initWithContentsOfFile:file];
+    if (!dterm || ![[dterm objectForKey:@"Name"] isEqualToString:name]) {
+      [dterm release];
+      dterm = nil;
+    }
   }
-  return self;
+  
+  if (!dterm) {
+    BOOL search = YES;
+    do {
+      NSOpenPanel *openPanel = [NSOpenPanel openPanel];
+      [openPanel setMessage:[NSString stringWithFormat:@"Where is the Suite Terminology \"%@\"?", name]];
+      [openPanel setCanChooseFiles:YES];
+      [openPanel setCanCreateDirectories:NO];
+      [openPanel setCanChooseDirectories:NO];
+      [openPanel setAllowsMultipleSelection:NO];
+      [openPanel setTreatsFilePackagesAsDirectories:YES];
+      
+      switch([openPanel runModalForTypes:[NSArray arrayWithObjects:@"sdef", NSFileTypeForHFSTypeCode(kScriptingDefinitionHFSType), nil]]) {
+        case NSOKButton:
+          file = ([[openPanel filenames] count]) ? [[openPanel filenames] objectAtIndex:0] : nil;
+          break;
+        case NSCancelButton:
+          search = NO;
+          break;
+      }
+      if (file && search) {
+        dterm = [[NSDictionary alloc] initWithContentsOfFile:file];
+        if (!dterm || ![[dterm objectForKey:@"Name"] isEqualToString:name]) {
+          [dterm release];
+          dterm = nil;
+          NSRunAlertPanel(@"Invalid or not matching script terminology", @"You must provide a valid terminology: %@", @"OK", nil, nil, name);
+        }
+      }
+    } while (search);
+  }
+  return [dterm autorelease];
 }
 
-- (id)initWithSuiteFile:(NSString *)suite andTerminologyFile:(NSString *)aTerm {
-  if (self = [super initWithContentsOfFile:suite]) {
-    [self setSuite:[NSDictionary dictionaryWithContentsOfFile:suite]];
-    if (aTerm)
-      [self setTerminology:[NSDictionary dictionaryWithContentsOfFile:aTerm]];
-    if (![self suite]) {
+- (id)initWithContentsOfFile:(NSString *)file {
+  if (self = [super init]) {
+    BOOL ok = NO;
+    sd_root = [[file stringByDeletingLastPathComponent] retain];
+    NSDictionary *dsuite = [NSDictionary dictionaryWithContentsOfFile:file];
+    if (dsuite) {
+      NSString *name = [dsuite objectForKey:@"Name"];
+      NSDictionary *terminology = _CocoaScriptingFindTerminology(sd_root, name);
+      if (terminology) {
+        ok = YES;
+        sd_cache = [[NSMutableSet alloc] init];
+        [self addSuite:dsuite terminology:terminology];
+      }
+    }
+    if (!ok) {
       [self release];
       self = nil;
     }
@@ -56,41 +101,18 @@ static NSString *DecomposeCocoaType(NSString *type, NSString **suite);
   return self;
 }
 
-
 - (void)dealloc {
-  [sd_suites release];
+  [sd_root release];
+  [sd_cache release];
   
-  [sd_suite release];
-  [sd_terminology release];
+  [sd_suites release];
+  [sd_terminologies release];
   [super dealloc];
 }
 
 #pragma mark -
-
 - (SdefSuite *)sdefSuite {
   return [[self sdefSuites] objectAtIndex:0];
-}
-
-- (NSDictionary *)suite {
-  return sd_suite;
-}
-
-- (void)setSuite:(NSDictionary *)aSuite {
-  if (sd_suite != aSuite) {
-    [sd_suite release];
-    sd_suite = [aSuite retain];
-  }
-}
-
-- (NSDictionary *)terminology {
-  return sd_terminology;
-}
-
-- (void)setTerminology:(NSDictionary *)aTerminology {
-  if (sd_terminology != aTerminology) {
-    [sd_terminology release];
-    sd_terminology = [aTerminology retain];
-  }
 }
 
 #pragma mark -
@@ -114,56 +136,129 @@ static NSArray *ASKStandardsSuites() {
   return asksuites;
 }
 
+- (void)addSuite:(NSDictionary *)suite terminology:(NSDictionary *)terminology {
+  if (!sd_suites) {
+    sd_suites = [[NSMutableArray alloc] init];
+    sd_terminologies = [[NSMutableArray alloc] init];
+  }
+  [sd_suites addObject:suite];
+  [sd_terminologies addObject:terminology];
+  
+  [sd_cache addObject:[suite objectForKey:@"Name"]];
+}
+
 - (void)loadSuite:(NSString *)suite {
-  BOOL done = NO;
-  while (suite && ![sd_suites containsObject:suite] && !done) {
-    NSString *suitePath = nil;
-    if ([suite isEqualToString:@"NSCoreSuite"] || [suite isEqualToString:@"NSTextSuite"]) {
-      done = YES;
-      suitePath = [[NSBundle mainBundle] pathForResource:suite ofType:@"sdef"];
-    } else if ([ASKStandardsSuites() containsObject:suite]) {
-      done = YES;
-      suitePath = [[NSBundle mainBundle] pathForResource:@"AppleScriptKit" ofType:@"sdef"];
-    } else {
-      NSOpenPanel *openPanel = nil;
-      NSString *title = [[NSString alloc] initWithFormat:@"Where is the Suite \"%@\"?", suite];
-      switch (NSRunAlertPanel(title, @"Sdef Editor need the suite \"%@\" to correctly import your file", @"Find", @"Ignore", nil, suite)) {
-        case NSAlertDefaultReturn:
-          openPanel = [NSOpenPanel openPanel];
-          [openPanel setMessage:title];
-          [openPanel setCanChooseFiles:YES];
-          [openPanel setCanCreateDirectories:NO];
-          [openPanel setCanChooseDirectories:NO];
-          [openPanel setAllowsMultipleSelection:NO];
-          [openPanel setTreatsFilePackagesAsDirectories:YES];
-          switch([openPanel runModalForTypes:[NSArray arrayWithObjects:@"sdef", NSFileTypeForHFSTypeCode(kScriptingDefinitionHFSType), nil]]) {
-            case NSOKButton:
-              suitePath = ([[openPanel filenames] count]) ? [[openPanel filenames] objectAtIndex:0] : nil;
-              break;
-          }
-            if (suitePath) 
-              break;
-          case NSAlertAlternateReturn:
-            [sd_suites addObject:suite];
-            break;
-      }
-      [title release];
+  DLog(@"Load suite: %@", suite);
+  if ([suite isEqualToString:@"NSCoreSuite"] || [suite isEqualToString:@"NSTextSuite"]) {
+    sd_std = YES;
+    [sd_cache addObject:@"NSCoreSuite"];
+    [sd_cache addObject:@"NSTextSuite"];
+    return;
+  } else if([ASKStandardsSuites() containsObject:suite]) {
+    sd_scpt = YES;
+    [sd_cache addObjectsFromArray:ASKStandardsSuites()];
+    return;
+  }
+  
+  NSDictionary *dsuite = nil;
+  NSString *file = [[sd_root stringByAppendingPathComponent:suite] stringByAppendingPathExtension:@"scriptSuite"];
+  if (file && [[NSFileManager defaultManager] fileExistsAtPath:file]) {
+    dsuite = [NSDictionary dictionaryWithContentsOfFile:file];
+    if (!dsuite || ![[dsuite objectForKey:@"Name"] isEqualToString:suite])
+      dsuite = nil;
+  }
+  
+  if (dsuite) {
+    NSDictionary *terminology = _CocoaScriptingFindTerminology(sd_root, suite);
+    if (terminology) {
+      [self addSuite:dsuite terminology:terminology];
+      [self preloadSuite:dsuite];
     }
-    if (suitePath) {
-      SdefDictionary *dico = SdefLoadDictionary(suitePath, nil, nil, nil);
-      if (dico) {
-        for (NSUInteger idx = 0; idx < [dico count]; idx++) {
-          id sdefSuite = [dico childAtIndex:idx];
-          [manager addSuite:sdefSuite];
-          [sd_suites addObject:[sdefSuite cocoaName]];
-          DLog(@"Load Suite: %@", [sdefSuite cocoaName]);
+    return;
+  }
+  
+  /* ignore suite not found */
+  return;
+}
+
+- (void)preloadSuite:(NSDictionary *)dictionary {
+  NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+  
+  /* Check type */
+  NSString *type = [dictionary objectForKey:@"Type"];
+  if (type) {
+    NSString *suite = nil;
+    if (_CocoaScriptingDecomposeType(type, &suite) && suite) {
+      if (![sd_cache containsObject:suite])
+        [self loadSuite:suite];
+    }
+  } else {
+    /* Check superclass */
+    NSString *sclass = [dictionary objectForKey:@"Superclass"];
+    if (sclass) {
+      NSString *suite = nil;
+      if (_CocoaScriptingDecomposeName(sclass, &suite) && suite) {
+        if (![sd_cache containsObject:suite])
+          [self loadSuite:suite];
+      }
+    }
+    /* Check responds-to */
+    NSDictionary *responds = [dictionary objectForKey:@"SupportedCommands"];
+    if (responds) {
+      NSString *key;
+      NSEnumerator *keys = [responds keyEnumerator];
+      while (key = [keys nextObject]) {
+        NSString *suite = nil;
+        if (_CocoaScriptingDecomposeName(key, &suite) && suite) {
+          if (![sd_cache containsObject:suite])
+            [self loadSuite:suite];
         }
+      }
+    }
+  } 
+  
+  /* check sub dictionaries */
+  id entry;
+  NSEnumerator *values = [dictionary objectEnumerator];
+  while (entry = [values nextObject]) {
+    if ([entry isKindOfClass:[NSDictionary class]])
+      [self preloadSuite:entry];
+  }
+  [pool release];
+}
+
+- (BOOL)preload {
+  [self preloadSuite:[sd_suites objectAtIndex:0]];
+  return YES;
+}
+
+
+#pragma mark Post Processor
+- (void)loadCoreSdef:(NSString *)name {
+  NSString *path = [[NSBundle mainBundle] pathForResource:name ofType:@"sdef"];
+  if (path) {
+    SdefDictionary *dico = SdefLoadDictionary(path, nil, nil, nil);
+    if (dico) {
+      for (NSUInteger idx = 0; idx < [dico count]; idx++) {
+        SdefSuite *suite = [dico childAtIndex:idx];
+        DLog(@"Load core suite: %@", suite);
+        [manager addSuite:suite];
       }
     }
   }
 }
 
-#pragma mark Post Processor
+- (void)postProcess {
+  if (sd_std) {
+    [self loadCoreSdef:@"NSCoreSuite"];
+    [self loadCoreSdef:@"NSTextSuite"];
+  }
+  if (sd_scpt) {
+    [self loadCoreSdef:@"AppleScriptKit"];
+  }
+  [super postProcess];
+}
+
 - (BOOL)resolveObjectType:(SdefObject *)obj {
   NSString *suite = nil, *typename = nil, *type;
   type = [obj valueForKey:@"type"];
@@ -172,9 +267,7 @@ static NSArray *ASKStandardsSuites() {
   if ([type rangeOfString:@"." options:NSLiteralSearch].location == NSNotFound)
     typename = [manager sdefTypeForCocoaType:type];
   if (!typename) {
-    type = DecomposeCocoaType(type, &suite);
-    if (suite)
-      [self loadSuite:suite];
+    type = _CocoaScriptingDecomposeType(type, &suite);
     typename = [[manager sdefTypeWithCocoaType:type inSuite:suite] name];
   }
   if (typename) {
@@ -189,9 +282,7 @@ static NSArray *ASKStandardsSuites() {
   NSString *suite = nil;
   NSString *inherits = [aClass inherits];
   if (inherits != nil) {
-    inherits = DecomposeCocoaName(inherits, &suite);
-    if (suite)
-      [self loadSuite:suite];
+    inherits = _CocoaScriptingDecomposeName(inherits, &suite);
     SdefClass *parent = [manager sdefClassWithCocoaClass:inherits inSuite:suite];
     if (parent) {
       [aClass setInherits:[parent name]];
@@ -226,9 +317,7 @@ static NSArray *ASKStandardsSuites() {
 
 - (void)postProcessRespondsTo:(SdefRespondsTo *)aCmd inClass:(SdefClass *)aClass {
   NSString *suite = nil;
-  NSString *cmdName = DecomposeCocoaName([aCmd name], &suite);
-  if (suite)
-    [self loadSuite:suite];
+  NSString *cmdName = _CocoaScriptingDecomposeName([aCmd name], &suite);
   SdefVerb *cmd = [manager verbWithCocoaName:cmdName inSuite:suite];
   if (cmd) {
     [aCmd setName:[cmd name]];
@@ -260,38 +349,28 @@ static NSArray *ASKStandardsSuites() {
   [super postProcessResult:aResult inCommand:aCmd];
 }
 
-- (void)postProcess {
-  id suite = [suites count] ? [suites objectAtIndex:0] : nil;
-  if (!suite) return;
-  
-  sd_suites = [[NSMutableArray alloc] init];
-  [sd_suites addObject:[suite cocoaName]];
-  
-  [super postProcess];
-  
-  [sd_suites release];
-  sd_suites = nil;
-}
-
 #pragma mark Import
 - (BOOL)import {
-  if (![self suite] || ![self terminology])
+  NSUInteger idx = [sd_suites count];
+  if (idx == 0)
     return NO;
   
-  SdefSuite *suite = [[SdefSuite alloc] initWithName:nil suite:[self suite] andTerminology:[self terminology]];
-  if (suite) {
-    [suites addObject:suite];
-    [suite release];
-    return YES;
+  while (idx-- > 0) {
+    SdefSuite *suite = [[SdefSuite alloc] initWithName:nil suite:[sd_suites objectAtIndex:idx] andTerminology:[sd_terminologies objectAtIndex:idx]];
+    if (suite) {
+      [suites addObject:suite];
+      [suite release];
+    }    
   }
-  return NO;
+  
+  return [suites count] > 0;
 }
 
 @end
 
 #pragma mark -
 #pragma mark Statics Methods Implementation
-static NSString *DecomposeCocoaName(NSString *type, NSString **suite) {
+NSString *_CocoaScriptingDecomposeName(NSString *type, NSString **suite) {
   *suite = NULL;
   NSUInteger idx = [type rangeOfString:@"." options:NSLiteralSearch].location;
   if (suite)
@@ -300,11 +379,11 @@ static NSString *DecomposeCocoaName(NSString *type, NSString **suite) {
 }
 
 /* Extract string between "<" and ">" and try to decompose it */
-static NSString *DecomposeCocoaType(NSString *type, NSString **suite) {
+NSString *_CocoaScriptingDecomposeType(NSString *type, NSString **suite) {
   NSUInteger start = [type rangeOfString:@"<" options:NSLiteralSearch].location;
   NSUInteger end = [type rangeOfString:@">" options:NSLiteralSearch].location;
-  if (NSNotFound != start || NSNotFound != end) {
+  if (NSNotFound != start && NSNotFound != end) {
     type = [type substringWithRange:NSMakeRange(start+1, end - start - 1)];
   }
-  return DecomposeCocoaName(type, suite);  
+  return _CocoaScriptingDecomposeName(type, suite);  
 }

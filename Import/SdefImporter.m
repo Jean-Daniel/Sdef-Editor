@@ -18,12 +18,6 @@
 
 @implementation SdefImporter
 
-- (id)initWithContentsOfFile:(NSString *)file {
-  if (self = [super init]) {
-  }
-  return self;
-}
-
 - (void)dealloc {
   [suites release];
   [manager release];

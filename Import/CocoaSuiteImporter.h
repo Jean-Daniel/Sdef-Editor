@@ -10,22 +10,26 @@
 
 @class SdefSuite ;
 @interface CocoaSuiteImporter : SdefImporter {
-  NSDictionary *sd_suite;
-  NSDictionary *sd_terminology;
-
+  @private
+  NSString *sd_root;
   NSMutableArray *sd_suites;
+  NSMutableArray *sd_terminologies;
+
+  NSMutableSet *sd_cache;
+  
+  BOOL sd_std, sd_scpt;
 }
 
 - (id)initWithContentsOfFile:(NSString *)file;
-- (id)initWithSuiteFile:(NSString *)suite andTerminologyFile:(NSString *)aTerm;
+
+- (void)addSuite:(NSDictionary *)suite terminology:(NSDictionary *)terminology;
 
 - (SdefSuite *)sdefSuite;
 
-- (NSDictionary *)suite;
-- (void)setSuite:(NSDictionary *)aSuite;
+- (BOOL)preload;
 
-- (NSDictionary *)terminology;
-- (void)setTerminology:(NSDictionary *)aTerminology;
+/* private */
+- (void)preloadSuite:(NSDictionary *)dictionary;
 
 @end
 

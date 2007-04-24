@@ -1,10 +1,10 @@
-//
-//  SdefTypeValidator.m
-//  Sdef Editor
-//
-//  Created by Jean-Daniel Dupas on 23/04/07.
-//  Copyright 2007 __MyCompanyName__. All rights reserved.
-//
+/*
+ *  SdefTypeValidator.m
+ *  Sdef Editor
+ *
+ *  Created by Rainbow Team.
+ *  Copyright © 2006 - 2007 Shadow Lab. All rights reserved.
+ */
 
 #import "SdefValidatorBase.h"
 

@@ -1,14 +1,15 @@
-//
-//  SdefLeavesValidator.m
-//  Sdef Editor
-//
-//  Created by Jean-Daniel Dupas on 23/04/07.
-//  Copyright 2007 __MyCompanyName__. All rights reserved.
-//
+/*
+ *  SdefLeavesValidator.m
+ *  Sdef Editor
+ *
+ *  Created by Rainbow Team.
+ *  Copyright © 2006 - 2007 Shadow Lab. All rights reserved.
+ */
 
 #import "SdefXRef.h"
 #import "SdefType.h"
 #import "SdefComment.h"
+#import "SdefSynonym.h"
 
 #import "SdefValidatorBase.h"
 
@@ -45,4 +46,19 @@
   [super validate:messages forVersion:vers];
 }
 
+@end
+
+@implementation SdefSynonym (SdefValidator)
+  
+- (void)validate:(NSMutableArray *)messages forVersion:(SdefVersion)vers {
+  if (![self name] && ![self code]) {
+    [messages addObject:[SdefValidatorItem errorItemWithNode:self
+                                                     message:@"at least one of 'name' and 'code' is required"]];
+  }
+  if (![self code] && !SdefValidatorCheckCode([self code])) {
+    [messages addObject:[self invalidValue:[self code] forAttribute:@"code"]];
+  }
+  [super validate:messages forVersion:vers];
+}
+  
 @end

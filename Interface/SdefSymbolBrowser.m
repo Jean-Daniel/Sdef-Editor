@@ -134,7 +134,7 @@ static BOOL SdefSearchFilter(NSString *search, SdefObject *object, void *ctxt);
   if (row != -1) {
     id symbol = [symbols objectAtIndex:row];
     id ctrl = [[self document] documentWindow];
-    [ctrl setSelection:symbol];
+    [ctrl setSelection:[symbol container]];
     [ctrl showWindow:sender];
   }
 }

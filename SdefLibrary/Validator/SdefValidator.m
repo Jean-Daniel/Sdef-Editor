@@ -47,6 +47,7 @@
   if (row >= 0) {
     SdefValidatorItem *item = [sd_messages objectAtIndex:row];
     [[[self document] documentWindow] setSelection:[[item object] container]];
+    [[[self document] documentWindow] showWindow:sender];
   }
 }
 

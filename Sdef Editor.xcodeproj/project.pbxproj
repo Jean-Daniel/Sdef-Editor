@@ -74,7 +74,6 @@
 		984A4C190830144C00D062BB /* SdefXMLDictionary.m in Sources */ = {isa = PBXBuildFile; fileRef = 989B7E1B07B04264004251EA /* SdefXMLDictionary.m */; };
 		984A4C310830164E00D062BB /* SdefXMLBase.m in Sources */ = {isa = PBXBuildFile; fileRef = 98D42D8B07AF6AF00040927F /* SdefXMLBase.m */; };
 		984A4C38083016C100D062BB /* SdefXMLSuite.m in Sources */ = {isa = PBXBuildFile; fileRef = 989B7E1707B04205004251EA /* SdefXMLSuite.m */; };
-		984A4C44083017B000D062BB /* SdefXMLCommons.m in Sources */ = {isa = PBXBuildFile; fileRef = 989B7E2307B042E5004251EA /* SdefXMLCommons.m */; };
 		984A4C550830189800D062BB /* SdefXMLTypes.m in Sources */ = {isa = PBXBuildFile; fileRef = 989B7E2D07B043D5004251EA /* SdefXMLTypes.m */; };
 		984A4C58083018CC00D062BB /* SdefXMLClass.m in Sources */ = {isa = PBXBuildFile; fileRef = 989B7E0107B01A57004251EA /* SdefXMLClass.m */; };
 		984A4C5E08301B0C00D062BB /* SdefXMLVerb.m in Sources */ = {isa = PBXBuildFile; fileRef = 989B7E1007B01BEE004251EA /* SdefXMLVerb.m */; };
@@ -446,7 +445,6 @@
 		989B7E1007B01BEE004251EA /* SdefXMLVerb.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = SdefXMLVerb.m; sourceTree = "<group>"; };
 		989B7E1707B04205004251EA /* SdefXMLSuite.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = SdefXMLSuite.m; sourceTree = "<group>"; };
 		989B7E1B07B04264004251EA /* SdefXMLDictionary.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = SdefXMLDictionary.m; sourceTree = "<group>"; };
-		989B7E2307B042E5004251EA /* SdefXMLCommons.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = SdefXMLCommons.m; sourceTree = "<group>"; };
 		989B7E2D07B043D5004251EA /* SdefXMLTypes.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = SdefXMLTypes.m; sourceTree = "<group>"; };
 		98A059F607ACF85E008D897D /* AeteImporter.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = AeteImporter.h; sourceTree = "<group>"; };
 		98A059F707ACF85E008D897D /* AeteImporter.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = AeteImporter.m; sourceTree = "<group>"; };
@@ -946,7 +944,6 @@
 				989B7E2D07B043D5004251EA /* SdefXMLTypes.m */,
 				983A83380BDA8425006C77F6 /* SdefXMLLeaves.m */,
 				984A4C050830100200D062BB /* SdefXMLObjects.m */,
-				989B7E2307B042E5004251EA /* SdefXMLCommons.m */,
 				989B7E1B07B04264004251EA /* SdefXMLDictionary.m */,
 			);
 			name = "XML Support";
@@ -1472,7 +1469,6 @@
 				984A4C190830144C00D062BB /* SdefXMLDictionary.m in Sources */,
 				984A4C310830164E00D062BB /* SdefXMLBase.m in Sources */,
 				984A4C38083016C100D062BB /* SdefXMLSuite.m in Sources */,
-				984A4C44083017B000D062BB /* SdefXMLCommons.m in Sources */,
 				984A4C550830189800D062BB /* SdefXMLTypes.m in Sources */,
 				984A4C58083018CC00D062BB /* SdefXMLClass.m in Sources */,
 				984A4C5E08301B0C00D062BB /* SdefXMLVerb.m in Sources */,

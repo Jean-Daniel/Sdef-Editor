@@ -14,7 +14,8 @@
 @implementation SdefClass (CocoaTerminology)
 
 - (id)initWithName:(NSString *)name suite:(NSDictionary *)suite andTerminology:(NSDictionary *)terminology {
-  if (self = [super initWithName:[terminology objectForKey:@"Name"]]) {
+  NSString *tname = [terminology objectForKey:@"Name"];
+  if (self = [super initWithName:tname ? : name]) {
     [self setDesc:[terminology objectForKey:@"Description"]];
     id plural = [terminology objectForKey:@"PluralName"];
     if (![[[self name] stringByAppendingString:@"s"] isEqualToString:plural]) {
@@ -84,11 +85,14 @@
 
 - (id)initWithName:(NSString *)name suite:(NSDictionary *)suite andTerminology:(NSDictionary *)terminology {
   if (self = [super init]) {
-    id value = [terminology objectForKey:@"Name"];
-    if (![value isEqualToString:@"contents"]) {
-      [self setName:value];
+    NSString *tname = [terminology objectForKey:@"Name"];
+    if (!tname)
+      tname = name;
+    if (![tname isEqualToString:@"contents"]) {
+      [self setName:tname];
     }
-    value = [suite objectForKey:@"AppleEventCode"];
+    
+    NSString *value = [suite objectForKey:@"AppleEventCode"];
     if (![value isEqualToString:@"pcnt"]) {
       [self setCode:value];
     }
@@ -116,7 +120,8 @@
 @implementation SdefProperty (CocoaTerminology)
 
 - (id)initWithName:(NSString *)name suite:(NSDictionary *)suite andTerminology:(NSDictionary *)terminology {
-  if (self = [super initWithName:[terminology objectForKey:@"Name"]]) {
+  NSString *tname = [terminology objectForKey:@"Name"];
+  if (self = [super initWithName:tname ? : name]) {
     [self setCode:[suite objectForKey:@"AppleEventCode"]];
     [self setType:[suite objectForKey:@"Type"]];
     [self setDesc:[terminology objectForKey:@"Description"]];

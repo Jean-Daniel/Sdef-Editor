@@ -35,22 +35,24 @@
     CFStringAppend(sd_content, CFSTR("<"));
     CFStringAppend(sd_content, element);
     /* Append attributes */
-    CFStringRef attribute;
-    NSEnumerator *attrs = [(id)infos->attributeOrder objectEnumerator];
-    while (attribute = (CFStringRef)[attrs nextObject]) {
-      bool single = false;
-      CFStringRef value = CFDictionaryGetValue(infos->attributes, attribute);
-      /* if value contains a double quote, use simple quote */
-      if (CFStringFind(value, CFSTR("\""), 0).location != kCFNotFound) {
-        single = true;
+    if (infos->attributeOrder) {
+      CFIndex idx = CFArrayGetCount(infos->attributeOrder);
+      while (idx-- > 0) {
+        bool single = false;
+        CFStringRef attribute = CFArrayGetValueAtIndex(infos->attributeOrder, idx);
+        CFStringRef value = CFDictionaryGetValue(infos->attributes, attribute);
+        /* if value contains a double quote, use simple quote */
+        if (CFStringFind(value, CFSTR("\""), 0).location != kCFNotFound) {
+          single = true;
+        }
+        CFStringAppend(sd_content, CFSTR(" "));
+        CFStringAppend(sd_content, attribute);
+        if (single) CFStringAppend(sd_content, CFSTR("='"));
+        else CFStringAppend(sd_content, CFSTR("=\""));
+        CFStringAppend(sd_content, value);
+        if (single) CFStringAppend(sd_content, CFSTR("'"));
+        else CFStringAppend(sd_content, CFSTR("\""));
       }
-      CFStringAppend(sd_content, CFSTR(" "));
-      CFStringAppend(sd_content, attribute);
-      if (single) CFStringAppend(sd_content, CFSTR("='"));
-      else CFStringAppend(sd_content, CFSTR("=\""));
-      CFStringAppend(sd_content, value);
-      if (single) CFStringAppend(sd_content, CFSTR("'"));
-      else CFStringAppend(sd_content, CFSTR("\""));
     }
     if (infos->isEmpty) {
       CFStringAppend(sd_content, CFSTR(" />"));

@@ -161,10 +161,10 @@
 
 #pragma mark -
 - (NSArray *)types {
-  SdefObject *item;
-  NSEnumerator *items = [sd_types objectEnumerator];
+  NSUInteger idx = [sd_types count];
   NSMutableArray *types = [NSMutableArray arrayWithArray:[[self class] baseTypes]];
-  while (item = [items nextObject]) {
+  while (idx-- > 0) {
+    SdefObject *item = [sd_types objectAtIndex:idx];
     if ([item name])
       [types addObject:[item name]];
   }
@@ -189,9 +189,9 @@
 
 #pragma mark -
 - (id)typeWithName:(NSString *)name {
-  SdefObject *type;
-  NSEnumerator *types = [sd_types objectEnumerator];
-  while (type = [types nextObject]) {
+  NSUInteger idx = [sd_types count];
+  while (idx-- > 0) {
+    SdefObject *type = [sd_types objectAtIndex:idx];
     if ([[type name] isEqualToString:name])
       return type;
   }
@@ -199,9 +199,9 @@
 }
 
 - (SdefClass *)classWithName:(NSString *)name {
-  SdefClass *class;
-  NSEnumerator *classes = [sd_classes objectEnumerator];
-  while (class = [classes nextObject]) {
+  NSUInteger idx = [sd_classes count];
+  while (idx-- > 0) {
+    SdefClass *class = [sd_classes objectAtIndex:idx];
     if ([[class name] isEqualToString:name])
       return class;
   }
@@ -209,11 +209,11 @@
 }
 
 - (id)typeWithName:(NSString *)name class:(Class)class {
-  SdefObject *enumeration;
-  NSEnumerator *types = [sd_types objectEnumerator];
-  while (enumeration = [types nextObject]) {
-    if ([enumeration isMemberOfClass:class] && [[enumeration name] isEqualToString:name])
-      return enumeration;
+  NSUInteger idx = [sd_types count];
+  while (idx-- > 0) {
+    SdefObject *type = [sd_types objectAtIndex:idx];
+    if ([type isMemberOfClass:class] && [[type name] isEqualToString:name])
+      return type;
   }
   return nil;
 }
@@ -238,9 +238,9 @@
 }
 
 - (SdefVerb *)commandWithName:(NSString *)name {
-  SdefVerb *cmd;
-  NSEnumerator *cmds = [sd_commands objectEnumerator];
-  while (cmd = [cmds nextObject]) {
+  NSUInteger idx = [sd_commands count];
+  while (idx-- > 0) {
+    SdefVerb *cmd = [sd_commands objectAtIndex:idx];
     if ([[cmd name] isEqualToString:name])
       return cmd;
   }
@@ -248,9 +248,9 @@
 }
 
 - (SdefVerb *)eventWithName:(NSString *)name {
-  SdefVerb *event;
-  NSEnumerator *events = [sd_events objectEnumerator];
-  while (event = [events nextObject]) {
+  NSUInteger idx = [sd_events count];
+  while (idx-- > 0) {
+    SdefVerb *event = [sd_events objectAtIndex:idx];
     if ([[event name] isEqualToString:name])
       return event;
   }
@@ -258,10 +258,10 @@
 }
 
 - (NSArray *)subclassesOfClass:(SdefClass *)class {
-  SdefClass *item;
+  NSUInteger idx = [sd_classes count];
   NSMutableArray *classes = [NSMutableArray array];
-  NSEnumerator *items = [sd_classes objectEnumerator];
-  while (item = [items nextObject]) {
+  while (idx-- > 0) {
+    SdefClass *item = [sd_classes objectAtIndex:idx];
     if ([[item inherits] isEqualToString:[class name]])
       [classes addObject:item];
   }
@@ -271,9 +271,9 @@
 - (SdefClass *)superClassOfClass:(SdefClass *)aClass {
   NSString *parent = [aClass inherits];
   if (parent) {
-    SdefClass *class;
-    NSEnumerator *classes = [sd_classes objectEnumerator];
-    while (class = [classes nextObject]) {
+    NSUInteger idx = [sd_classes count];  
+    while (idx-- > 0) {
+      SdefClass *class = [sd_classes objectAtIndex:idx];
       if (class != aClass && [[class name] isEqualToString:parent]) {
         return class;
       }

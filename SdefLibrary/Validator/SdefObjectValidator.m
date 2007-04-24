@@ -2,8 +2,8 @@
  *  SdefObjectValidator.m
  *  Sdef Editor
  *
- *  Created by Grayfox on 22/04/07.
- *  Copyright 2007 Shadow Lab. All rights reserved.
+ *  Created by Rainbow Team.
+ *  Copyright © 2006 - 2007 Shadow Lab. All rights reserved.
  */
 
 #import "SdefValidatorBase.h"
@@ -79,10 +79,12 @@ NSString *SystemVersionForSdefVersion(SdefVersion vers) {
 @implementation SdefDocumentedObject (SdefValidator)
 
 - (void)validate:(NSMutableArray *)messages forVersion:(SdefVersion)vers {
-  if (sd_documentation && [sd_documentation isHtml] && vers <kSdefTigerVersion) {
-    SdefValidatorItem *error = [SdefValidatorItem errorItemWithNode:(NSObject<SdefObject> *)self 
-                                                            message:@"html documentation is not supported in Panther Sdef files."];
-    [messages addObject:error];
+  if (sd_documentation && [sd_documentation isHtml]) {
+    if (vers <kSdefTigerVersion) {
+      SdefValidatorItem *error = [SdefValidatorItem errorItemWithNode:(NSObject<SdefObject> *)self 
+                                                              message:@"html documentation is not supported in Panther Sdef files."];
+      [messages addObject:error];
+    }
   }
   [super validate:messages forVersion:vers];
 }
@@ -97,6 +99,22 @@ NSString *SystemVersionForSdefVersion(SdefVersion vers) {
 }
 
 @end
+
+BOOL SdefValidatorCheckCode(NSString *code) {
+  BOOL invalid = YES;
+  switch ([code length]) {
+    case 4:
+    case 10:
+      invalid = (0 == OSTypeFromSdefString(code));
+      break;
+    case 6: {
+      if ([code hasPrefix:@"'"] && [code hasSuffix:@"'"])
+        invalid = (0 == SKOSTypeFromString([code substringWithRange:NSMakeRange(1, 4)]));
+    }
+      break;
+  }
+  return !invalid;
+}
 
 @implementation SdefTerminologyObject (SdefValidator)
 
@@ -132,22 +150,8 @@ NSString *SystemVersionForSdefVersion(SdefVersion vers) {
   if ([self validateCode]) {
     if (!sd_code) {
       [messages addObject:[self invalidValue:nil forAttribute:@"code"]];
-    } else {
-      BOOL invalid = YES;
-      switch ([sd_code length]) {
-        case 4:
-        case 10:
-          invalid = (0 == OSTypeFromSdefString(sd_code));
-          break;
-        case 6: {
-          if ([sd_code hasPrefix:@"'"] && [sd_code hasSuffix:@"'"])
-            invalid = (0 == SKOSTypeFromString([sd_code substringWithRange:NSMakeRange(1, 4)]));
-        }
-          break;
-      }
-      if (invalid) {
-        [messages addObject:[self invalidValue:sd_code forAttribute:@"code"]];
-      }
+    } else if (!SdefValidatorCheckCode(sd_code)) {
+      [messages addObject:[self invalidValue:sd_code forAttribute:@"code"]];
     }
   }
   [super validate:messages forVersion:vers];

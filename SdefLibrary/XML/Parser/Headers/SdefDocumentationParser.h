@@ -2,8 +2,8 @@
  *  SdefDocumentationParser.h
  *  Sdef Editor
  *
- *  Created by Grayfox on 21/04/07.
- *  Copyright 2007 Shadow Lab. All rights reserved.
+ *  Created by Rainbow Team.
+ *  Copyright © 2006 - 2007 Shadow Lab. All rights reserved.
  */
 
 #import "SdefParser.h"

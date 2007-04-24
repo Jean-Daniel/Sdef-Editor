@@ -46,9 +46,11 @@
 
 #pragma mark -
 - (id)windowControllerOfClass:(Class)class {
-  NSWindow *window;
-  NSEnumerator *windows = [[self windowControllers] objectEnumerator];
-  while (window = [windows nextObject]) {
+  
+  NSArray *ctrls = [self windowControllers];
+  NSUInteger idx = [ctrls count];
+  while (idx-- > 0) {
+    NSWindow *window = [ctrls objectAtIndex:idx];
     if ([window isKindOfClass:class]) {
       return window;
     }

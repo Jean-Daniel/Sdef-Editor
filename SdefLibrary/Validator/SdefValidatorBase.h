@@ -2,8 +2,8 @@
  *  SdefValidatorBase.h
  *  Sdef Editor
  *
- *  Created by Grayfox on 22/04/07.
- *  Copyright 2007 Shadow Lab. All rights reserved.
+ *  Created by Rainbow Team.
+ *  Copyright © 2006 - 2007 Shadow Lab. All rights reserved.
  */
 
 #import "SdefBase.h"
@@ -23,6 +23,9 @@
 - (NSObject<SdefObject> *)object;
 
 @end
+
+SK_PRIVATE
+BOOL SdefValidatorCheckCode(NSString *code);
 
 @interface SdefObject (SdefValidator)
 

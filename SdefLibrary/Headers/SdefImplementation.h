@@ -24,6 +24,7 @@
 */
 
 enum {
+  kSdefValueTypeNone = 0,
   kSdefValueTypeString,
   kSdefValueTypeInteger,
   kSdefValueTypeBoolean,
