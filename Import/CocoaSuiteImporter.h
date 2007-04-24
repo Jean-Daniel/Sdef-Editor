@@ -11,7 +11,7 @@
 @class SdefSuite ;
 @interface CocoaSuiteImporter : SdefImporter {
   @private
-  NSString *sd_root;
+  NSMutableArray *sd_roots;
   NSMutableArray *sd_suites;
   NSMutableArray *sd_terminologies;
 

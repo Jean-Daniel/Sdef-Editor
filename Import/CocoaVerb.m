@@ -14,7 +14,13 @@
 @implementation SdefVerb (CocoaTerminology)
 
 - (id)initWithName:(NSString *)name suite:(NSDictionary *)suite andTerminology:(NSDictionary *)terminology {
-  if (self = [super initWithName:[terminology objectForKey:@"Name"]]) {
+  if (self = [super init]) {
+    NSString *tname = [terminology objectForKey:@"Name"];
+    if (!tname) {
+      tname = name;
+      [self setHidden:YES];
+    }
+    [self setName:tname];
     [self setDesc:[terminology objectForKey:@"Description"]];
     [self setCode:[[suite objectForKey:@"AppleEventClassCode"] stringByAppendingString:[suite objectForKey:@"AppleEventCode"]]];    
     NSString *sdefName = SdefNameCreateWithCocoaName(name);

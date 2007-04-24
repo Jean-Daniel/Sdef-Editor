@@ -14,6 +14,8 @@
 #import "SdefDocument.h"
 #import "SdefDictionary.h"
 
+#import <ShadowKit/SKAppKitExtensions.h>
+
 @implementation SdefValidator
 
 - (id)init {
@@ -25,7 +27,6 @@
 
 - (void)dealloc {
   ShadowTrace();
-  [sd_messages release];
   [super dealloc];
 }
 
@@ -45,7 +46,7 @@
     row = [uiTable selectedRow];
   }
   if (row >= 0) {
-    SdefValidatorItem *item = [sd_messages objectAtIndex:row];
+    SdefValidatorItem *item = [ibMessages objectAtIndex:row];
     [[[self document] documentWindow] setSelection:[[item object] container]];
     [[[self document] documentWindow] showWindow:sender];
   }
@@ -53,10 +54,10 @@
 
 - (IBAction)refresh:(id)sender {
   SdefDictionary *dict = [(SdefDocument *)[self document] dictionary];
-  if (sd_messages) [sd_messages release];
-  sd_messages = [[NSMutableArray alloc] init];
-  [dict validate:sd_messages forVersion:sd_version];
-  [uiTable reloadData];
+  NSMutableArray *messages = [[NSMutableArray alloc] init];
+  [dict validate:messages forVersion:sd_version];
+  [ibMessages setContent:messages];
+  [messages release];
 }
 
 - (IBAction)changeVersion:(id)sender {
@@ -71,15 +72,6 @@
     sd_version = version;
     [self refresh:nil];
   }
-}
-
-#pragma mark Data Source
-- (NSInteger)numberOfRowsInTableView:(NSTableView *)tableView {
-  return [sd_messages count];
-}
-
-- (id)tableView:(NSTableView *)tableView objectValueForTableColumn:(NSTableColumn *)tableColumn row:(NSInteger)row {
-  return [[sd_messages objectAtIndex:row] valueForKey:[tableColumn identifier]];
 }
 
 @end

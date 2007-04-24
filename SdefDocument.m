@@ -189,7 +189,7 @@
       [type isEqualToString:TigerScriptingDefinitionFileType] ||
       [type isEqualToString:PantherScriptingDefinitionFileType]) {
     NSInteger version;
-    [self setDictionary:SdefLoadDictionaryData(data, &version, self, NULL)];
+    [self setDictionary:SdefLoadDictionaryData(data, &version, self)];
     if ([self dictionary] != nil && version < kSdefTigerVersion) {
       NSRunInformationalAlertPanel(@"You have opened a Panther or Tiger Scripting Definition file",
                                    @"This file will be saved using Leopard format. If you want to export it using an older format, choose \"Save as...\" in the File menu",
@@ -200,19 +200,22 @@
   return [self dictionary] != nil;
 }
 
-- (SdefParserOperation)sdefParser:(SdefParser *)parser shouldAddInvalidObject:(id)anObject inNode:(SdefObject *)node {
-  switch (NSRunAlertPanel(@"Found an invalid node in Sdef file",
-                          @"Found element \"%@\" in %@ element \"%@\" at line %ld. Would you like to preserve this element, delete this element, or abort parsing.",
-                          @"Preserve", @"Abort", @"Delete",
-                          [anObject objectTypeName], [node objectTypeName], [node name], (long)[parser line])) {
-    case NSAlertDefaultReturn:
-      return kSdefParserAddNode;
-    case NSAlertAlternateReturn:
-      return kSdefParserAbort;
-    case NSAlertOtherReturn:
-      return kSdefParserDeleteNode;
+- (BOOL)sdefParser:(SdefParser *)parser handleValidationError:(NSString *)error isFatal:(BOOL)fatal {
+  if (fatal) {
+    NSRunAlertPanel(@"An unrecoverable error occured while parsing file.",
+                    @"%@",
+                    @"OK", nil, nil, error);
+    return NO;
+  } else {
+    switch (NSRunAlertPanel(@"An sdef validation error occured while parsing file.",
+                            @"%@",
+                            @"Ignore", @"Abort", nil, error)) {
+      case NSAlertAlternateReturn:
+        return NO;
+    }
   }
-  return NO;
+  /* ignore error */
+  return YES;
 }
 
 - (NSArray *)writableTypesForSaveOperation:(NSSaveOperationType)saveOperation {
@@ -327,19 +330,19 @@
 @end
 
 #pragma mark -
-SdefDictionary *SdefLoadDictionary(NSString *filename, NSInteger *version, id delegate, NSString **error) {
+SdefDictionary *SdefLoadDictionary(NSString *filename, NSInteger *version, id delegate) {
   NSData *data = [[NSData alloc] initWithContentsOfFile:filename];
-  SdefDictionary *dictionary = SdefLoadDictionaryData(data, version, delegate, error);
+  SdefDictionary *dictionary = SdefLoadDictionaryData(data, version, delegate);
   [data release];
   return dictionary;
 }
 
-SdefDictionary *SdefLoadDictionaryData(NSData *data, NSInteger *version, id delegate, NSString **error) {
+SdefDictionary *SdefLoadDictionaryData(NSData *data, NSInteger *version, id delegate) {
   SdefDictionary *result = nil;
   if (data) {
     SdefParser *parser = [[SdefParser alloc] init];
     [parser setDelegate:delegate];
-    if ([parser parseSdef:data error:error]) {
+    if ([parser parseSdef:data]) {
       result = [[parser dictionary] retain];
       if (version) *version = [parser sdefVersion];
     }

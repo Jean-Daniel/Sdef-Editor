@@ -38,17 +38,6 @@
         [node appendChild:childNode];
       }
     }
-    /* Handle ignored */
-    if ([self hasIgnore]) {
-      children = [[self ignores] reverseObjectEnumerator];
-      while (child = [children nextObject]) {
-        SdefXMLNode *childNode = [child xmlNodeForVersion:version];
-        if (childNode) {
-          NSAssert1([childNode isList] || [childNode elementName], @"%@ return an invalid node", child);
-          [node prependChild:childNode];
-        }
-      }
-    }
   }
   return node;
 }

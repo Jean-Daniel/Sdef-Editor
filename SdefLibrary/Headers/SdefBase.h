@@ -95,7 +95,6 @@ NSString *CocoaNameForSdefName(NSString *cocoa, BOOL isClass);
     unsigned int reserved:5;
   } sd_soFlags;
 @private
-  NSMutableArray *sd_ignore;
   NSMutableArray *sd_comments;
 }
 
@@ -164,13 +163,6 @@ NSString *CocoaNameForSdefName(NSString *cocoa, BOOL isClass);
 - (void)setComments:(NSArray *)comments;
 - (void)addComment:(NSString *)comment;
 - (void)removeCommentAtIndex:(NSUInteger)index;
-
-#pragma mark Ignore
-- (BOOL)hasIgnore;
-- (NSMutableArray *)ignores;
-- (void)addIgnore:(id)anObject;
-- (void)setIgnores:(NSArray *)anArray;
-- (void)removeIgnoreAtIndex:(NSUInteger)index;
 
 @end
 

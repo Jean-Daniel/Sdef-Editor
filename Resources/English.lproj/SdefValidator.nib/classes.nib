@@ -11,7 +11,11 @@
             ACTIONS = {changeVersion = id; refresh = id; }; 
             CLASS = SdefValidator; 
             LANGUAGE = ObjC; 
-            OUTLETS = {uiTable = NSTableView; uiVersion = NSPopUpButton; }; 
+            OUTLETS = {
+                ibMessages = NSArrayController; 
+                uiTable = NSTableView; 
+                uiVersion = NSPopUpButton; 
+            }; 
             SUPERCLASS = SKWindowController; 
         }
     ); 

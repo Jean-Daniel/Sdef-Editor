@@ -25,6 +25,9 @@
 @end
 
 SK_PRIVATE
+BOOL SdefValidatorIsKeyword(NSString *str);
+
+SK_PRIVATE
 BOOL SdefValidatorCheckCode(NSString *code);
 
 @interface SdefObject (SdefValidator)

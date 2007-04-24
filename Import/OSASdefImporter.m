@@ -16,6 +16,7 @@
 #import "SdefDocument.h"
 #import "SdefDictionary.h"
 
+@class SdefParser;
 @implementation OSASdefImporter
 
 + (id)allocWithZone:(NSZone *)aZone {
@@ -58,16 +59,30 @@
   if (sd_path && [sd_path getFSRef:&file]) {
     CFDataRef sdef = nil;
     if (noErr == OSACopyScriptingDefinition(&file, 0, &sdef) && sdef) {
-      NSString *error = nil;
-      sd_dico = [SdefLoadDictionaryData((id)sdef, nil, self, &error) retain];
+      sd_dico = [SdefLoadDictionaryData((id)sdef, nil, self) retain];
       CFRelease(sdef);
-      if (!sd_dico && error)
-        NSRunAlertPanel(@"Sdef parser failed with error:",
-                        @"%@", @"OK", nil, nil, error);
     }
   }
   [suites addObjectsFromArray:[sd_dico children]];
   return sd_dico != nil;
+}
+
+- (BOOL)sdefParser:(SdefParser *)parser handleValidationError:(NSString *)error isFatal:(BOOL)fatal {
+  if (fatal) {
+    NSRunAlertPanel(@"An unrecoverable error occured while parsing file.",
+                    @"%@",
+                    @"OK", nil, nil, error);
+    return NO;
+  } else {
+    switch (NSRunAlertPanel(@"An sdef validation error occured while parsing file.",
+                            @"%@",
+                            @"Ignore", @"Abort", nil, error)) {
+      case NSAlertAlternateReturn:
+        return NO;
+    }
+  }
+  /* ignore error */
+  return YES;
 }
 
 #pragma mark Post Processor

@@ -11,9 +11,9 @@
 @interface SdefValidator : SKWindowController {
   @private
   NSUInteger sd_version;
-  NSMutableArray *sd_messages;
   IBOutlet NSTableView *uiTable;
   IBOutlet NSPopUpButton *uiVersion;
+  IBOutlet NSArrayController *ibMessages;
 }
 
 - (IBAction)refresh:(id)sender;

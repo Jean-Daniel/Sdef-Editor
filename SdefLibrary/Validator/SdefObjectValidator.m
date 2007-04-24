@@ -30,6 +30,29 @@ NSString *SystemVersionForSdefVersion(SdefVersion vers) {
   return nil;
 }
 
+BOOL SdefValidatorIsKeyword(NSString *str) {
+  static NSSet *sKeyword = nil;
+  if (!sKeyword) {
+    sKeyword = [[NSSet alloc] initWithObjects:
+      @"after", @"does", @"get", @"my", @"second", @"to",
+      @"and", @"eighth", @"given", @"ninth", @"set", @"transaction",
+      @"as", @"else", @"global", @"not", @"seventh", @"true",
+      @"back", @"end", @"if", @"of", @"sixth", @"try",
+      @"before", @"equal", @"ignoring", @"on", @"some", @"until",
+      @"beginning", @"equals", @"in", @"or", @"tell", @"where",
+      @"behind", @"error", @"into", @"prop", @"tenth", @"while",
+      @"but", @"every", @"is", @"property", @"that", @"whose",
+      @"by", @"exit", @"it", @"put", @"the", @"with",
+      @"considering", @"false", @"its", @"ref", @"then", @"without",
+      @"contain", @"fifth", @"last", @"reference", @"third",
+      @"contains", @"first", @"local", @"repeat", @"through",
+      @"continue", @"fourth", @"me", @"return", @"thru",
+      @"copy", @"from", @"middle", @"returning", @"timeout",
+      @"div", @"front", @"mod", @"script", @"times", nil];
+  }
+  return str ? [sKeyword containsObject:str] : NO;
+}
+
 /* Like that, leaf and sdef object have both access to this methods */
 @implementation NSObject (SdefValidatorInternal)
 - (SdefValidatorItem *)invalidValue:(NSString *)value forAttribute:(NSString *)attr {

@@ -41,10 +41,6 @@ NSDictionary *_CocoaScriptingFindTerminology(NSString *base, NSString *name) {
   
   if (file && [[NSFileManager defaultManager] fileExistsAtPath:file]) {
     dterm = [[NSDictionary alloc] initWithContentsOfFile:file];
-    if (!dterm || ![[dterm objectForKey:@"Name"] isEqualToString:name]) {
-      [dterm release];
-      dterm = nil;
-    }
   }
   
   if (!dterm) {
@@ -58,7 +54,7 @@ NSDictionary *_CocoaScriptingFindTerminology(NSString *base, NSString *name) {
       [openPanel setAllowsMultipleSelection:NO];
       [openPanel setTreatsFilePackagesAsDirectories:YES];
       
-      switch([openPanel runModalForTypes:[NSArray arrayWithObjects:@"sdef", NSFileTypeForHFSTypeCode(kScriptingDefinitionHFSType), nil]]) {
+      switch([openPanel runModalForTypes:[NSArray arrayWithObjects:@"scriptTerminology", nil]]) {
         case NSOKButton:
           file = ([[openPanel filenames] count]) ? [[openPanel filenames] objectAtIndex:0] : nil;
           break;
@@ -68,9 +64,7 @@ NSDictionary *_CocoaScriptingFindTerminology(NSString *base, NSString *name) {
       }
       if (file && search) {
         dterm = [[NSDictionary alloc] initWithContentsOfFile:file];
-        if (!dterm || ![[dterm objectForKey:@"Name"] isEqualToString:name]) {
-          [dterm release];
-          dterm = nil;
+        if (!dterm) {
           NSRunAlertPanel(@"Invalid or not matching script terminology", @"You must provide a valid terminology: %@", @"OK", nil, nil, name);
         }
       }
@@ -82,11 +76,12 @@ NSDictionary *_CocoaScriptingFindTerminology(NSString *base, NSString *name) {
 - (id)initWithContentsOfFile:(NSString *)file {
   if (self = [super init]) {
     BOOL ok = NO;
-    sd_root = [[file stringByDeletingLastPathComponent] retain];
+    sd_roots = [[NSMutableArray alloc] init];
+    [sd_roots addObject:[[file stringByDeletingLastPathComponent] retain]];
     NSDictionary *dsuite = [NSDictionary dictionaryWithContentsOfFile:file];
     if (dsuite) {
       NSString *name = [dsuite objectForKey:@"Name"];
-      NSDictionary *terminology = _CocoaScriptingFindTerminology(sd_root, name);
+      NSDictionary *terminology = _CocoaScriptingFindTerminology([sd_roots objectAtIndex:0], name);
       if (terminology) {
         ok = YES;
         sd_cache = [[NSMutableSet alloc] init];
@@ -102,7 +97,7 @@ NSDictionary *_CocoaScriptingFindTerminology(NSString *base, NSString *name) {
 }
 
 - (void)dealloc {
-  [sd_root release];
+  [sd_roots release];
   [sd_cache release];
   
   [sd_suites release];
@@ -160,22 +155,54 @@ static NSArray *ASKStandardsSuites() {
     return;
   }
   
+  NSString *file = nil;
+  NSString *base = nil;
   NSDictionary *dsuite = nil;
-  NSString *file = [[sd_root stringByAppendingPathComponent:suite] stringByAppendingPathExtension:@"scriptSuite"];
-  if (file && [[NSFileManager defaultManager] fileExistsAtPath:file]) {
-    dsuite = [NSDictionary dictionaryWithContentsOfFile:file];
-    if (!dsuite || ![[dsuite objectForKey:@"Name"] isEqualToString:suite])
-      dsuite = nil;
+  NSUInteger count = [sd_roots count];
+  while (count-- > 0) {
+    file = [[[sd_roots objectAtIndex:count] stringByAppendingPathComponent:suite] stringByAppendingPathExtension:@"scriptSuite"];
+    if (file && [[NSFileManager defaultManager] fileExistsAtPath:file]) {
+      dsuite = [NSDictionary dictionaryWithContentsOfFile:file];
+      if (!dsuite || ![[dsuite objectForKey:@"Name"] isEqualToString:suite])
+        dsuite = nil;
+      else
+        base = [sd_roots objectAtIndex:count];
+    }
+  }
+  if (!dsuite) {
+    file = nil;
+    NSOpenPanel *openPanel = [NSOpenPanel openPanel];
+    [openPanel setMessage:[NSString stringWithFormat:@"Where is the Script Suite \"%@\"?", suite]];
+    [openPanel setCanChooseFiles:YES];
+    [openPanel setCanCreateDirectories:NO];
+    [openPanel setCanChooseDirectories:NO];
+    [openPanel setAllowsMultipleSelection:NO];
+    [openPanel setTreatsFilePackagesAsDirectories:YES];
+    
+    switch([openPanel runModalForTypes:[NSArray arrayWithObjects:@"scriptSuite", nil]]) {
+      case NSOKButton:
+        file = ([[openPanel filenames] count]) ? [[openPanel filenames] objectAtIndex:0] : nil;
+        break;
+    }
+    if (file) {
+      base = [file stringByDeletingLastPathComponent];
+      dsuite = [NSDictionary dictionaryWithContentsOfFile:file];
+      if (!dsuite || ![[dsuite objectForKey:@"Name"] isEqualToString:suite])
+        dsuite = nil;
+      else if (![sd_roots containsObject:base])
+        [sd_roots addObject:base];
+    }
   }
   
   if (dsuite) {
-    NSDictionary *terminology = _CocoaScriptingFindTerminology(sd_root, suite);
+    NSDictionary *terminology = _CocoaScriptingFindTerminology(base, suite);
     if (terminology) {
       [self addSuite:dsuite terminology:terminology];
       [self preloadSuite:dsuite];
     }
     return;
   }
+  [sd_cache addObject:suite];
   
   /* ignore suite not found */
   return;
@@ -237,7 +264,7 @@ static NSArray *ASKStandardsSuites() {
 - (void)loadCoreSdef:(NSString *)name {
   NSString *path = [[NSBundle mainBundle] pathForResource:name ofType:@"sdef"];
   if (path) {
-    SdefDictionary *dico = SdefLoadDictionary(path, nil, nil, nil);
+    SdefDictionary *dico = SdefLoadDictionary(path, nil, nil);
     if (dico) {
       for (NSUInteger idx = 0; idx < [dico count]; idx++) {
         SdefSuite *suite = [dico childAtIndex:idx];

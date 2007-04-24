@@ -9,18 +9,10 @@
 
 #import "SdefBase.h"
 
-enum {
-  kSdefParserAbort,
-  kSdefParserAddNode,
-  kSdefParserDeleteNode,
-};
-typedef NSUInteger SdefParserOperation;
-
 @class SdefXMLValidator, SdefDocumentationParser;
 @interface SdefParser : NSObject {
   id sd_delegate;
 
-  NSString *sd_error;
   SdefVersion sd_version;
   CFXMLParserRef sd_parser;
   NSMutableArray *sd_comments;
@@ -41,11 +33,11 @@ typedef NSUInteger SdefParserOperation;
 - (SdefVersion)sdefVersion;
 - (SdefDictionary *)dictionary;
 
-- (BOOL)parseSdef:(NSData *)sdefData error:(NSString **)error;
+- (BOOL)parseSdef:(NSData *)sdefData;
 
 @end
 
 @interface NSObject (SdefParserDelegate)
-- (SdefParserOperation)sdefParser:(SdefParser *)parser shouldAddInvalidObject:(id)anObject inNode:(SdefObject *)node;
+- (BOOL)sdefParser:(SdefParser *)parser handleValidationError:(NSString *)error isFatal:(BOOL)fatal;
 @end
 

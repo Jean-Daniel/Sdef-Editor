@@ -35,6 +35,10 @@ void _SdefParserUpdatePantherDictionary(SdefDictionary *dictionary);
 static
 void _SdefParserPostProcessDictionary(SdefDictionary *dictionary);
 
+enum {
+  kSdefValidationErrorStatus = 'VErr',
+};
+
 static
 CFXMLParserCallBacks SdefParserCallBacks = {
   0,
@@ -72,6 +76,15 @@ enum {
 }
 
 - (void)setObject:(id<SdefXMLObject>)object;
+
+@end
+
+enum {
+  kSdefTypeIgnore = 'Igno',
+};
+@interface SdefInvalidElementPlaceholder : SdefXMLPlaceholder {
+}
+
 
 @end
 
@@ -181,10 +194,11 @@ Boolean _SdefElementIsCollection(CFStringRef element) {
   return sd_delegate;
 }
 - (void)setDelegate:(id)delegate {
+  NSParameterAssert(!delegate || [delegate respondsToSelector:@selector(sdefParser:handleValidationError:isFatal:)]);
   sd_delegate = delegate;
 }
 
-- (BOOL)parseSdef:(NSData *)sdefData error:(NSString **)error {
+- (BOOL)parseSdef:(NSData *)sdefData  {
   BOOL result = NO;
   if (sd_dictionary) {
     [sd_dictionary release];
@@ -205,15 +219,12 @@ Boolean _SdefElementIsCollection(CFStringRef element) {
       sd_validator = nil;
       sd_parser = nil;
     }
-    if (!result) {
-      if (error) *error = sd_error;
-    } else if (sd_dictionary) {
+    if (sd_dictionary) {
       if (sd_version <= kSdefPantherVersion)
         _SdefParserUpdatePantherDictionary(sd_dictionary);
       else 
         _SdefParserPostProcessDictionary(sd_dictionary);
     }
-    sd_error = nil;
   }
   return result;
 }
@@ -230,11 +241,16 @@ Boolean _SdefElementIsCollection(CFStringRef element) {
 - (id)parser:(CFXMLParserRef)parser createStructureForElement:(CFStringRef)element infos:(CFXMLElementInfo *)infos {
   NSString *error = nil;
   SdefParserVersion version = [sd_validator validateElement:element attributes:infos->attributes error:&error];
-  if (kSdefParserVersionUnknown == version) {
-    DLog(@"Parser validation error: %@ (%@, %@)", error, element, infos->attributes);
-    return NULL;
-  }
   [sd_validator startElement:element];
+  
+  if (kSdefParserVersionUnknown == version) {
+    NSString *str = [NSString stringWithFormat:@"Parser validation error line %ld: %@ (%@, %@)", (long)CFXMLParserGetLineNumber(parser),
+      error, element, infos->attributes];
+    if ([sd_delegate sdefParser:self handleValidationError:str isFatal:NO])
+      return [[SdefInvalidElementPlaceholder alloc] initWithElementName:(id)element];
+    else
+      CFXMLParserAbort(parser, kSdefValidationErrorStatus, CFSTR(""));
+  }
   
   id<SdefXMLObject> object = nil;
   Class class = _SdefGetObjectClassForElement(element);
@@ -315,6 +331,8 @@ Boolean _SdefElementIsCollection(CFStringRef element) {
       [(id)child setObject:parent];
     } else if (kSdefTypeAccessor == [child objectType]) {
       [(id)parent addXMLAccessor:(NSString *)[(id)child style]];
+    } else if (kSdefTypeIgnore == [child objectType]) {
+      // invalid object. skip
     } else {
       if (parent)
         [(id)parent addXMLChild:(id)child];
@@ -360,13 +378,15 @@ Boolean _SdefElementIsCollection(CFStringRef element) {
 }
 
 - (Boolean)parser:(CFXMLParserRef)parser handleError:(CFXMLParserStatusCode)error {
-  // ...and this reports a fatal error to the delegate. The parser will stop parsing.
+  if (kSdefValidationErrorStatus == error)
+    return false;
+  
   CFIndex line = [self line];
   CFIndex position = CFXMLParserGetLocation(sd_parser);
   CFStringRef description = CFXMLParserCopyErrorDescription(parser);
-  sd_error = [[NSString alloc] initWithFormat:@"line %ld, position: %ld:\n %@", (long)line, (long)position, description];
+  NSString *str = [NSString stringWithFormat:@"line %ld, position: %ld:\n %@", (long)line, (long)position, description];
   if (description) CFRelease(description);
-  return FALSE;
+  return [sd_delegate sdefParser:self handleValidationError:str isFatal:YES];
 }
 
 @end
@@ -392,7 +412,7 @@ CFDataRef SdefParserResolveExternalEntity(CFXMLParserRef parser, CFXMLExternalID
   ShadowCTrace();
   return NULL;
 }
-
+/* if handleError returns true, the parser will attempt to recover */
 Boolean SdefParserHandleError(CFXMLParserRef parser, CFXMLParserStatusCode error, void *info) {
   SdefParser *delegate = info;
   return [delegate parser:parser handleError:error];
@@ -571,6 +591,14 @@ void _SdefParserPostProcessDictionary(SdefDictionary *dictionary) {
 
 - (void)setXMLAttributes:(NSDictionary *)attrs { 
   sd_style = [[attrs objectForKey:@"style"] retain];
+}
+
+@end
+
+@implementation SdefInvalidElementPlaceholder
+
++ (SdefObjectType)objectType {
+  return kSdefTypeIgnore;
 }
 
 @end

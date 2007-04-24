@@ -17,6 +17,9 @@
 - (void)validate:(NSMutableArray *)messages forVersion:(SdefVersion)vers {
   if (![self name]) {
     [messages addObject:[self invalidValue:nil forAttribute:@"name"]];
+  } else if (SdefValidatorIsKeyword([self name])) {
+    [messages addObject:[SdefValidatorItem warningItemWithNode:self
+                                                       message:@"'%@' is an applescript keyword and should not be used", [self name]]];
   }
   
   /* should be a simple type */
@@ -88,6 +91,9 @@
 - (void)validate:(NSMutableArray *)messages forVersion:(SdefVersion)vers {
   if (![self name]) {
     [messages addObject:[self invalidValue:nil forAttribute:@"name"]];
+  } else if (SdefValidatorIsKeyword([self name])) {
+    [messages addObject:[SdefValidatorItem warningItemWithNode:self
+                                                       message:@"'%@' is an applescript keyword and should not be used", [self name]]];
   }
   [super validate:messages forVersion:vers];
 }
