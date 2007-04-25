@@ -158,6 +158,11 @@
         [self addSynonym:(SdefSynonym *)node];
       }
       break;
+    case kSdefXrefType:
+      if ([self hasXrefs]) {
+        [self addXrefs:(SdefXRef *)node];
+      }
+      break;
     default:
       [super addXMLChild:node];
       break;

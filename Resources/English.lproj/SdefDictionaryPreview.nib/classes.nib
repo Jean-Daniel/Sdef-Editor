@@ -1,0 +1,42 @@
+{
+    IBClasses = (
+        {CLASS = FirstResponder; LANGUAGE = ObjC; SUPERCLASS = NSObject; }, 
+        {CLASS = NSSegmentedControl; LANGUAGE = ObjC; SUPERCLASS = NSControl; }, 
+        {
+            ACTIONS = {makeTextLarger = id; makeTextSmaller = id; }; 
+            CLASS = OSADictionaryController; 
+            LANGUAGE = ObjC; 
+            OUTLETS = {dictionaryView = OSADictionaryView; searchField = NSSearchField; }; 
+            SUPERCLASS = NSController; 
+        }, 
+        {
+            CLASS = OSADictionaryView; 
+            LANGUAGE = ObjC; 
+            OUTLETS = {
+                "_containmentBrowser" = NSBrowser; 
+                "_contentView" = WebView; 
+                "_inheritanceBrowser" = NSBrowser; 
+                "_outlineView" = NSOutlineView; 
+                "_splitView" = OSASplitView; 
+                "_suiteBrowser" = NSBrowser; 
+                "_tabView" = NSTabView; 
+                "_tableView" = NSTableView; 
+            }; 
+            SUPERCLASS = OSASplitView; 
+        }, 
+        {CLASS = OSASplitView; LANGUAGE = ObjC; SUPERCLASS = NSSplitView; }, 
+        {
+            ACTIONS = {close = id; }; 
+            CLASS = SKWindowController; 
+            LANGUAGE = ObjC; 
+            SUPERCLASS = NSWindowController; 
+        }, 
+        {
+            CLASS = SdefDictionaryPreview; 
+            LANGUAGE = ObjC; 
+            OUTLETS = {ibDictionary = OSADictionaryController; }; 
+            SUPERCLASS = SKWindowController; 
+        }
+    ); 
+    IBVersion = 1; 
+}

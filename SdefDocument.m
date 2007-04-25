@@ -11,6 +11,7 @@
 
 #import <ShadowKit/SKFunctions.h>
 
+#import "SdefDictionaryPreview.h"
 #import "SdefWindowController.h"
 #import "SdefSymbolBrowser.h"
 #import "SdefClassManager.h"
@@ -70,6 +71,10 @@
   return [self windowControllerOfClass:[SdefWindowController class]];
 }
 
+- (SdefDictionaryPreview *)dictionaryPreview {
+  return [self windowControllerOfClass:[SdefDictionaryPreview class]];
+}
+
 - (IBAction)openSymbolBrowser:(id)sender {
   SdefSymbolBrowser *browser = [self symbolBrowser];
   if (!browser) {
@@ -78,6 +83,16 @@
     [browser release];
   }
   [browser showWindow:sender];
+}
+
+- (IBAction)openDictionaryPreview:(id)sender {
+  SdefDictionaryPreview *preview = [self dictionaryPreview];
+  if (!preview) {
+    preview = [[SdefDictionaryPreview alloc] init];
+    [self addWindowController:preview];
+    [preview release];
+  }
+  [preview showWindow:sender];
 }
 
 - (IBAction)openValidator:(id)sender {
@@ -190,9 +205,9 @@
       [type isEqualToString:PantherScriptingDefinitionFileType]) {
     NSInteger version;
     [self setDictionary:SdefLoadDictionaryData(data, &version, self)];
-    if ([self dictionary] != nil && version < kSdefTigerVersion) {
+    if ([self dictionary] != nil && version < kSdefLeopardVersion) {
       NSRunInformationalAlertPanel(@"You have opened a Panther or Tiger Scripting Definition file",
-                                   @"This file will be saved using Leopard format. If you want to export it using an older format, choose \"Save as...\" in the File menu",
+                                   @"This file will be saved using Leopard format. If you want to export it using an older format, use \"Save as...\" (File menu)",
                                    @"OK", nil, nil);
       [self updateChangeCount:NSChangeDone];
     }

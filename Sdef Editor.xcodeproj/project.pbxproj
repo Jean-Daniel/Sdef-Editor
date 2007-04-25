@@ -243,6 +243,15 @@
 		98EA0C55078C92C600ECCB4B /* SdefSuiteView.m in Sources */ = {isa = PBXBuildFile; fileRef = 98EA0C53078C92C600ECCB4B /* SdefSuiteView.m */; };
 		98EA0CFC078C9D2100ECCB4B /* SdefEnumerationView.m in Sources */ = {isa = PBXBuildFile; fileRef = 98EA0CFA078C9D2100ECCB4B /* SdefEnumerationView.m */; };
 		98EA0D0C078C9E4F00ECCB4B /* SdefEnumeration.nib in Resources */ = {isa = PBXBuildFile; fileRef = 98EA0D0A078C9E4F00ECCB4B /* SdefEnumeration.nib */; };
+		98ECD0C10BDFFA010060D31C /* SdefDictionaryPreview.m in Sources */ = {isa = PBXBuildFile; fileRef = 98ECD0C00BDFFA010060D31C /* SdefDictionaryPreview.m */; };
+		98ECD0C50BDFFA190060D31C /* SdefDictionaryPreview.h in Headers */ = {isa = PBXBuildFile; fileRef = 98ECD0C40BDFFA190060D31C /* SdefDictionaryPreview.h */; };
+		98ECD0D40BDFFA9A0060D31C /* SdefDictionaryPreview.nib in Resources */ = {isa = PBXBuildFile; fileRef = 98ECD0D20BDFFA9A0060D31C /* SdefDictionaryPreview.nib */; };
+		98ECD0FD0BDFFE380060D31C /* OSAKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 98ECD0ED0BDFFDA70060D31C /* OSAKit.framework */; };
+		98ECD1270BE0036A0060D31C /* OSADictionaryController.h in Headers */ = {isa = PBXBuildFile; fileRef = 98ECD1250BE0036A0060D31C /* OSADictionaryController.h */; };
+		98ECD1280BE0036A0060D31C /* OSADictionary.h in Headers */ = {isa = PBXBuildFile; fileRef = 98ECD1260BE0036A0060D31C /* OSADictionary.h */; };
+		98ECD1880BE006790060D31C /* OSADictionaryController-OSAPrivate.h in Headers */ = {isa = PBXBuildFile; fileRef = 98ECD1870BE006790060D31C /* OSADictionaryController-OSAPrivate.h */; };
+		98ECD1A40BE008980060D31C /* OSADictionaryView.h in Headers */ = {isa = PBXBuildFile; fileRef = 98ECD1A30BE008980060D31C /* OSADictionaryView.h */; };
+		98ECD1BF0BE009130060D31C /* OSASplitView.h in Headers */ = {isa = PBXBuildFile; fileRef = 98ECD1BE0BE009130060D31C /* OSASplitView.h */; };
 		98EF19B9078B182F0073D736 /* SdefWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 98EF19B7078B182F0073D736 /* SdefWindowController.m */; };
 		98EF19CC078B206B0073D736 /* SdefViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 98EF19CA078B206B0073D736 /* SdefViewController.m */; };
 		98F15DE607A42653007A93DA /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 98F15DE207A42653007A93DA /* Localizable.strings */; };
@@ -547,6 +556,15 @@
 		98EA0D0B078C9E4F00ECCB4B /* English */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = English; path = English.lproj/SdefEnumeration.nib; sourceTree = "<group>"; };
 		98ECBD2B07AD7336008DE854 /* SdefImporter.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = SdefImporter.h; sourceTree = "<group>"; };
 		98ECBD2C07AD7336008DE854 /* SdefImporter.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = SdefImporter.m; sourceTree = "<group>"; };
+		98ECD0C00BDFFA010060D31C /* SdefDictionaryPreview.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SdefDictionaryPreview.m; sourceTree = "<group>"; };
+		98ECD0C40BDFFA190060D31C /* SdefDictionaryPreview.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SdefDictionaryPreview.h; sourceTree = "<group>"; };
+		98ECD0D30BDFFA9A0060D31C /* English */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = English; path = English.lproj/SdefDictionaryPreview.nib; sourceTree = "<group>"; };
+		98ECD0ED0BDFFDA70060D31C /* OSAKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OSAKit.framework; path = /System/Library/Frameworks/OSAKit.framework; sourceTree = "<absolute>"; };
+		98ECD1250BE0036A0060D31C /* OSADictionaryController.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = OSADictionaryController.h; sourceTree = "<group>"; };
+		98ECD1260BE0036A0060D31C /* OSADictionary.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = OSADictionary.h; sourceTree = "<group>"; };
+		98ECD1870BE006790060D31C /* OSADictionaryController-OSAPrivate.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = "OSADictionaryController-OSAPrivate.h"; sourceTree = "<group>"; };
+		98ECD1A30BE008980060D31C /* OSADictionaryView.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = OSADictionaryView.h; sourceTree = "<group>"; };
+		98ECD1BE0BE009130060D31C /* OSASplitView.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = OSASplitView.h; sourceTree = "<group>"; };
 		98EF19B6078B182F0073D736 /* SdefWindowController.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = SdefWindowController.h; sourceTree = "<group>"; };
 		98EF19B7078B182F0073D736 /* SdefWindowController.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = SdefWindowController.m; sourceTree = "<group>"; };
 		98EF19C9078B206B0073D736 /* SdefViewController.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = SdefViewController.h; sourceTree = "<group>"; };
@@ -581,6 +599,7 @@
 			files = (
 				98E3193F0840CD01003EC9D5 /* Carbon.framework in Frameworks */,
 				8D15AC340486D014006FF6A4 /* Cocoa.framework in Frameworks */,
+				98ECD0FD0BDFFE380060D31C /* OSAKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -603,6 +622,7 @@
 				981D86A707ADB0FE006BC0E9 /* ApplicationServices.framework */,
 				2A37F4C5FDCFA73011CA2CEA /* Foundation.framework */,
 				2A37F4C4FDCFA73011CA2CEA /* AppKit.framework */,
+				98ECD0ED0BDFFDA70060D31C /* OSAKit.framework */,
 			);
 			name = "Other Frameworks";
 			sourceTree = "<group>";
@@ -680,6 +700,7 @@
 				98D1B00E0BDB55B4007B3293 /* SdefValidator.nib */,
 				98C38231083D2E5500340894 /* SdefTypesEditor.nib */,
 				984EE82407F0A01F00828BC0 /* SdefSymbolBrowser.nib */,
+				98ECD0D20BDFFA9A0060D31C /* SdefDictionaryPreview.nib */,
 			);
 			path = Resources;
 			sourceTree = "<group>";
@@ -719,13 +740,13 @@
 			children = (
 				984A8C8B07DB29FF00591F7A /* ASDictionary.h */,
 				98F47BD607D141690097C497 /* ASDictionary.m */,
-				984A8C8D07DB29FF00591F7A /* ASDictionaryStream.h */,
-				98F11E1007D3B07F002C874A /* ASDictionaryStream.m */,
-				984A8C8C07DB29FF00591F7A /* ASDictionaryObject.h */,
-				98D3A17107D1D67100AC085D /* ASDictionaryObject.m */,
 				982CCAF907D25FA700EE7474 /* ASDictionaryVerb.m */,
 				98D3A8A607D1EB4000AC085D /* ASDictionarySuite.m */,
 				982CCAEF07D25F2000EE7474 /* ASDictionaryClass.m */,
+				984A8C8C07DB29FF00591F7A /* ASDictionaryObject.h */,
+				98D3A17107D1D67100AC085D /* ASDictionaryObject.m */,
+				984A8C8D07DB29FF00591F7A /* ASDictionaryStream.h */,
+				98F11E1007D3B07F002C874A /* ASDictionaryStream.m */,
 			);
 			path = ASDictionary;
 			sourceTree = "<group>";
@@ -872,11 +893,17 @@
 			children = (
 				98F2D33307B2D43100F2EEC2 /* Preferences.h */,
 				986B93D507AB0AE400AB131C /* ImporterWarning.h */,
-				98D3A8AF079EBEF60049A8FC /* SdefObjectInspector.h */,
 				984EE81907F09E7400828BC0 /* SdefSymbolBrowser.h */,
+				98D3A8AF079EBEF60049A8FC /* SdefObjectInspector.h */,
+				98ECD0C40BDFFA190060D31C /* SdefDictionaryPreview.h */,
 				98EF19B6078B182F0073D736 /* SdefWindowController.h */,
 				98168DB907A26C9C002B893D /* SdefExporterController.h */,
 				98298DBE07AE818400F09708 /* ImportApplicationAete.h */,
+				98ECD1BE0BE009130060D31C /* OSASplitView.h */,
+				98ECD1260BE0036A0060D31C /* OSADictionary.h */,
+				98ECD1A30BE008980060D31C /* OSADictionaryView.h */,
+				98ECD1250BE0036A0060D31C /* OSADictionaryController.h */,
+				98ECD1870BE006790060D31C /* OSADictionaryController-OSAPrivate.h */,
 			);
 			path = Headers;
 			sourceTree = "<group>";
@@ -900,8 +927,8 @@
 			isa = PBXGroup;
 			children = (
 				9826778A0BDBF7EC00F8B839 /* Headers */,
-				987580260788646A0038C05B /* SdefSuite.m */,
 				9875801B078863FA0038C05B /* SdefVerb.m */,
+				987580260788646A0038C05B /* SdefSuite.m */,
 				98758015078863820038C05B /* SdefClass.m */,
 				98757FED07885F1A0038C05B /* SdefTypedef.m */,
 				98D363B7078A7FDD00669D72 /* SdefContents.m */,
@@ -956,11 +983,12 @@
 				9863FF0A079DF709000EDF96 /* Headers */,
 				98F2D33107B2D42400F2EEC2 /* Preferences.m */,
 				986B93D607AB0AE400AB131C /* ImporterWarning.m */,
-				98D3A8B0079EBEF60049A8FC /* SdefObjectInspector.m */,
 				984EE81707F09E6A00828BC0 /* SdefSymbolBrowser.m */,
+				98D3A8B0079EBEF60049A8FC /* SdefObjectInspector.m */,
+				98ECD0C00BDFFA010060D31C /* SdefDictionaryPreview.m */,
 				98EF19B7078B182F0073D736 /* SdefWindowController.m */,
-				98168DBA07A26C9C002B893D /* SdefExporterController.m */,
 				98298DBC07AE817D00F09708 /* ImportApplicationAete.m */,
+				98168DBA07A26C9C002B893D /* SdefExporterController.m */,
 				98EF19CD078B20720073D736 /* Sdef Views */,
 				98D1B0290BDB57D2007B3293 /* SdefToolbar.m */,
 			);
@@ -1277,6 +1305,12 @@
 				983A83A10BDA8C92006C77F6 /* SdefXMLBase.h in Headers */,
 				98D1B1700BDB8BE9007B3293 /* SdefValidator.h in Headers */,
 				98D1B2410BDB9AE1007B3293 /* SdefValidatorBase.h in Headers */,
+				98ECD0C50BDFFA190060D31C /* SdefDictionaryPreview.h in Headers */,
+				98ECD1270BE0036A0060D31C /* OSADictionaryController.h in Headers */,
+				98ECD1280BE0036A0060D31C /* OSADictionary.h in Headers */,
+				98ECD1880BE006790060D31C /* OSADictionaryController-OSAPrivate.h in Headers */,
+				98ECD1A40BE008980060D31C /* OSADictionaryView.h in Headers */,
+				98ECD1BF0BE009130060D31C /* OSASplitView.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1387,6 +1421,7 @@
 				985E08160BDC0C13005BD3C3 /* valid-note.tiff in Resources */,
 				985E08170BDC0C13005BD3C3 /* valid-error.tiff in Resources */,
 				1BC2401A0BDCBFF50077A527 /* SKVSplitBar.tiff in Resources */,
+				98ECD0D40BDFFA9A0060D31C /* SdefDictionaryPreview.nib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1509,6 +1544,7 @@
 				9856F70B0BDBFEA80030472F /* SdefVerbValidator.m in Sources */,
 				1BE05BAD0BDD1F2800334FBF /* SdefTypeValidator.m in Sources */,
 				1BE05C0A0BDD21EB00334FBF /* SdefLeavesValidator.m in Sources */,
+				98ECD0C10BDFFA010060D31C /* SdefDictionaryPreview.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1659,6 +1695,14 @@
 			name = SdefEnumeration.nib;
 			sourceTree = "<group>";
 		};
+		98ECD0D20BDFFA9A0060D31C /* SdefDictionaryPreview.nib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				98ECD0D30BDFFA9A0060D31C /* English */,
+			);
+			name = SdefDictionaryPreview.nib;
+			sourceTree = "<group>";
+		};
 		98F15DE207A42653007A93DA /* Localizable.strings */ = {
 			isa = PBXVariantGroup;
 			children = (
@@ -1699,6 +1743,11 @@
 				CURRENT_PROJECT_VERSION = 230;
 				HEADER_SEARCH_PATHS = "\"$(BUILD_DIR)\"";
 				INFOPLIST_FILE = Resources/Info.plist;
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					"-weak_framework",
+					OSAKit,
+				);
 				PRODUCT_NAME = "Sdef Editor";
 			};
 			name = Release;
@@ -1709,6 +1758,11 @@
 				CURRENT_PROJECT_VERSION = 230;
 				HEADER_SEARCH_PATHS = "\"$(BUILD_DIR)\"";
 				INFOPLIST_FILE = Resources/Info.plist;
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					"-weak_framework",
+					OSAKit,
+				);
 				PRODUCT_NAME = "Sdef Editor";
 			};
 			name = "Universal Binary";
@@ -1736,6 +1790,11 @@
 				CURRENT_PROJECT_VERSION = 230;
 				HEADER_SEARCH_PATHS = "\"$(BUILD_DIR)\"";
 				INFOPLIST_FILE = Resources/Info.plist;
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					"-weak_framework",
+					OSAKit,
+				);
 				PRODUCT_NAME = "Sdef Editor";
 			};
 			name = Profile;

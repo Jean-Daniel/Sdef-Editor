@@ -373,6 +373,19 @@ Boolean _SdefElementIsCollection(CFStringRef element) {
     }
   } else {
     [sd_validator endElement:(CFStringRef)[(id)structure xmlElementName]]; 
+    
+    /* Handle comments */
+    if ([sd_comments count]) {
+      SdefObject *commented = nil;
+      if ([(id)structure respondsToSelector:@selector(addComment:)]) commented = (id)structure;
+      if (commented) {
+        for (NSUInteger i = 0; i < [sd_comments count]; i++) {
+          [commented addComment:[sd_comments objectAtIndex:i]];
+        }
+      }
+      [sd_comments removeAllObjects];
+    }
+    
     [(id)structure release];
   }
 }

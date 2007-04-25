@@ -546,7 +546,7 @@ CFMutableDictionaryRef sValidators = NULL;
 - (id)init {
   if (self = [super init]) {
     [self setElements:CFSTR("contents"), CFSTR("documentation"),
-      CFSTR("synonym"), CFSTR("xref"), CFSTR("cocoa"), CFSTR("type") /* not in DTD */, nil];
+      CFSTR("synonym"), CFSTR("xref"), CFSTR("cocoa"), nil];
   }
   return self;
 }
@@ -561,6 +561,9 @@ CFMutableDictionaryRef sValidators = NULL;
              CFEqual(element, CFSTR("responds-to-commands")) ||
              CFEqual(element, CFSTR("responds-to-events"))) {
     return kSdefParserVersionPanther;
+  } else if (CFEqual(element, CFSTR("type"))) {
+    /* Not in DTD */
+    return kSdefParserVersionAll;
   }
   return [super acceptElement:element];
 }
@@ -591,7 +594,7 @@ CFMutableDictionaryRef sValidators = NULL;
              CFEqual(element, CFSTR("commands")) ||
              CFEqual(element, CFSTR("events"))) {
     return kSdefParserVersionPanther;
-  }
+  } 
   return [super acceptElement:element];
 }
 

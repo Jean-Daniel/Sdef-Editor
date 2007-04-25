@@ -6,6 +6,7 @@
                 exportTerminology = id; 
                 exportUsingPantherFormat = id; 
                 exportUsingTemplate = id; 
+                openDictionaryPreview = id; 
                 openSymbolBrowser = id; 
                 openValidator = id; 
             }; 
