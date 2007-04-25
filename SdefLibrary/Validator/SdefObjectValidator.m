@@ -53,6 +53,41 @@ BOOL SdefValidatorIsKeyword(NSString *str) {
   return str ? [sKeyword containsObject:str] : NO;
 }
 
+NSString *SdefValidatorCodeForName(NSString *name) {
+  static NSDictionary *sStdCodes = nil;
+  if (!sStdCodes) {
+    sStdCodes = [[NSDictionary alloc] initWithObjectsAndKeys:
+      @"pname", @"name",
+      @"ID  ", @"id",
+      @"pidx", @"index",
+      @"pcls", @"class",
+      @"pALL", @"properties",
+      @"vers", @"version",
+      /* classes */
+      @"cobj", @"item",
+      @"capp", @"application",
+      @"colr", @"color",
+      @"docu", @"document",
+      @"cwin", @"window",
+      /* types */
+      @"****", @"any",
+      @"bool", @"boolean",
+      @"ldt ", @"date",
+      @"file", @"file",
+      @"long", @"integer",
+      @"insl", @"location specifier",
+      @"nmbr", @"number",
+      @"QDpt", @"point",
+      @"doub", @"real",
+      @"reco", @"record",
+      @"qdrt", @"rectangle",
+      @"obj ", @"specifier",
+      @"TEXT", @"text",
+      @"type", @"type", nil];
+  }
+  return name ? [sStdCodes objectForKey:name] : nil;
+}
+
 /* Like that, leaf and sdef object have both access to this methods */
 @implementation NSObject (SdefValidatorInternal)
 - (SdefValidatorItem *)invalidValue:(NSString *)value forAttribute:(NSString *)attr {
@@ -128,7 +163,7 @@ BOOL SdefValidatorCheckCode(NSString *code) {
   switch ([code length]) {
     case 4:
     case 10:
-      invalid = (0 == OSTypeFromSdefString(code));
+      invalid = (0 == SdefOSTypeFromString(code));
       break;
     case 6: {
       if ([code hasPrefix:@"'"] && [code hasSuffix:@"'"])

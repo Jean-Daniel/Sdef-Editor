@@ -276,7 +276,7 @@ bail:
 - (void)postProcessCleanupClass:(SdefClass *)aClass {
   if ([[aClass properties] count]) {
     SdefProperty *info = [[aClass properties] firstChild];
-    if (OSTypeFromSdefString([info code]) == pInherits) {
+    if (SdefOSTypeFromString([info code]) == pInherits) {
       id superclass = [manager sdefClassWithCode:[info type] inSuite:nil];
       if (superclass) {
         [aClass setInherits:[superclass name]];
@@ -285,7 +285,7 @@ bail:
                 forValue:[aClass name] node:aClass];
       }
       [info remove];
-    } else if (OSTypeFromSdefString([info code]) == kAESpecialClassProperties) {
+    } else if (SdefOSTypeFromString([info code]) == kAESpecialClassProperties) {
       if ([[info name] isEqualToString:@"<Plural>"]) {
         /* unregister special classes */
         if ([[aClass properties] count] == 1) {

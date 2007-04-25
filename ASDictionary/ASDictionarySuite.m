@@ -18,7 +18,7 @@
 @implementation SdefSuite (ASDictionary)
 
 - (NSDictionary *)asdictionary {
-  if (OSTypeFromSdefString([self code]) == kASTypeNamesSuite) /* Hidden terms */
+  if (SdefOSTypeFromString([self code]) == kASTypeNamesSuite) /* Hidden terms */
     return nil;
   
   id dict = [NSMutableDictionary dictionary];

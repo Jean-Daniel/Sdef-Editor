@@ -10,6 +10,8 @@
 #import "SdefClassManager.h"
 #import "SdefClass.h"
 
+#import <ShadowKit/SKFunctions.h>
+
 @implementation SdefClass (SdefValidator)
 
 - (BOOL)validateCode { return YES; }
@@ -20,6 +22,13 @@
   } else if (SdefValidatorIsKeyword([self name])) {
     [messages addObject:[SdefValidatorItem warningItemWithNode:self
                                                        message:@"'%@' is an applescript keyword and should not be used", [self name]]];
+  } else {
+    NSString *code = SdefValidatorCodeForName([self name]);
+    if (code && [self code]) {
+      if (SKOSTypeFromString(code) != SdefOSTypeFromString([self code]))
+        [messages addObject:[SdefValidatorItem warningItemWithNode:self
+                                                           message:@"the name '%@' should use the code '%@' to avoid conflict", [self name], code]];
+    }
   }
   
   /* should be a simple type */
@@ -94,6 +103,13 @@
   } else if (SdefValidatorIsKeyword([self name])) {
     [messages addObject:[SdefValidatorItem warningItemWithNode:self
                                                        message:@"'%@' is an applescript keyword and should not be used", [self name]]];
+  } else {
+    NSString *code = SdefValidatorCodeForName([self name]);
+    if (code && [self code]) {
+      if (SKOSTypeFromString(code) != SdefOSTypeFromString([self code]))
+        [messages addObject:[SdefValidatorItem warningItemWithNode:self
+                                                           message:@"the name '%@' should use the code '%@' to avoid conflict", [self name], code]];
+    }
   }
   [super validate:messages forVersion:vers];
 }

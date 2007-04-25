@@ -425,7 +425,7 @@
 
 - (NSString *)sdefTypeForAeteType:(NSString *)aType {
   if (!aType) return nil;
-  switch (OSTypeFromSdefString(aType)) {
+  switch (SdefOSTypeFromString(aType)) {
     case typeNull:
       return nil;
     case typeBoolean:

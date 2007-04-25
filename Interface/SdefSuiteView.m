@@ -73,7 +73,15 @@
 }
 
 - (IBAction)addType:(id)sender {
-  [NSMenu popUpContextMenu:[self typeMenu] withEvent:[[sender window] currentEvent] forView:sender];
+  NSEvent *event = [[sender window] currentEvent];
+  if ([event type] != NSLeftMouseDown && [sender isKindOfClass:[NSView class]]) {
+    NSPoint location = [sender convertPoint:NSMakePoint(3, 10) toView:nil];
+    event = [NSEvent mouseEventWithType:NSLeftMouseDown
+                               location:location
+                          modifierFlags:0 timestamp:[event timestamp]
+                           windowNumber:[event windowNumber] context:[event context] eventNumber:0 clickCount:1 pressure:0];
+  }
+  [NSMenu popUpContextMenu:[self typeMenu] withEvent:event forView:sender];
 }
 
 - (IBAction)newType:(id)sender {

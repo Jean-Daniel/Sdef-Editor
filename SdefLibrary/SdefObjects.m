@@ -625,7 +625,7 @@ NSString *SdefStringForOSType(OSType type) {
   return str;
 }
 
-OSType OSTypeFromSdefString(NSString *string) {
+OSType SdefOSTypeFromString(NSString *string) {
   if ([string length] == 10 && [string hasPrefix:@"0x"]) {
     const char *cstr = [string UTF8String];
     return cstr ? (OSType)strtol(cstr, NULL, 16) : 0;

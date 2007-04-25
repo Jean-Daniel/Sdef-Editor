@@ -30,6 +30,9 @@ BOOL SdefValidatorIsKeyword(NSString *str);
 SK_PRIVATE
 BOOL SdefValidatorCheckCode(NSString *code);
 
+SK_PRIVATE
+NSString *SdefValidatorCodeForName(NSString *name);
+
 @interface SdefObject (SdefValidator)
 
 /* fill the message array with warnign and errors */
