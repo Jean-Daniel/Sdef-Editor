@@ -25,7 +25,7 @@
   } else {
     NSString *code = SdefValidatorCodeForName([self name]);
     if (code && [self code]) {
-      if (SKOSTypeFromString(code) != SdefOSTypeFromString([self code]))
+      if (!SdefTypeStringEqual(code, [self code]))
         [messages addObject:[SdefValidatorItem warningItemWithNode:self
                                                            message:@"the name '%@' should use the code '%@' to avoid conflict", [self name], code]];
     }
@@ -106,7 +106,7 @@
   } else {
     NSString *code = SdefValidatorCodeForName([self name]);
     if (code && [self code]) {
-      if (SKOSTypeFromString(code) != SdefOSTypeFromString([self code]))
+      if (!SdefTypeStringEqual(code, [self code]))
         [messages addObject:[SdefValidatorItem warningItemWithNode:self
                                                            message:@"the name '%@' should use the code '%@' to avoid conflict", [self name], code]];
     }

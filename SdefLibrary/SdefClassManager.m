@@ -483,8 +483,8 @@
   SdefVerb *verb;
   NSEnumerator *verbs = [[[self events] arrayByAddingObjectsFromArray:[self commands]] objectEnumerator];
   while (verb = [verbs nextObject]) {
-    if ([aCode isEqualToString:[verb code]]) {
-      if (!suiteCode || [suiteCode isEqualToString:[[verb suite] code]]) {
+    if (SdefTypeStringEqual(aCode, [verb code])) {
+     if (!suiteCode || SdefTypeStringEqual(suiteCode, [[verb suite] code])) {
         return verb;
       }
     }
@@ -496,8 +496,8 @@
   SdefClass *class;
   NSEnumerator *classes = [[self classes] objectEnumerator];
   while (class = [classes nextObject]) {
-    if ([aCode isEqualToString:[class code]]) {
-      if (!suiteCode || [suiteCode isEqualToString:[[class suite] code]]) {
+    if (SdefTypeStringEqual(aCode, [class code])) {
+      if (!suiteCode || SdefTypeStringEqual(suiteCode, [[class suite] code])) {
         return class;
       }
     }
@@ -509,8 +509,8 @@
   NSUInteger idx = [sd_types count];
   while (idx-- > 0) {
     SdefTerminologyObject *object = [sd_types objectAtIndex:idx];
-    if ([aCode isEqualToString:[object code]]) {
-      if (!suiteCode || [suiteCode isEqualToString:[[object suite] code]]) {
+    if (SdefTypeStringEqual(aCode, [object code])) {
+      if (!suiteCode || SdefTypeStringEqual(suiteCode, [[object suite] code])) {
         return object;
       }
     }

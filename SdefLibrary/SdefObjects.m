@@ -615,6 +615,13 @@ NSArray *SdefTypesForTypeString(NSString *aType) {
   return [types autorelease];
 }
 
+Boolean SdefTypeStringEqual(NSString *c1, NSString *c2) {
+  NSUInteger l1 = [c1 length], l2 = [c2 length];
+  if (l1 == l2)
+    return [c1 isEqualToString:c2];
+  return SdefOSTypeFromString(c1) == SdefOSTypeFromString(c2);
+}
+
 NSString *SdefStringForOSType(OSType type) {
   char *chrs = (char *)&type;
   NSString *str = SKStringForOSType(type);
@@ -626,10 +633,19 @@ NSString *SdefStringForOSType(OSType type) {
 }
 
 OSType SdefOSTypeFromString(NSString *string) {
-  if ([string length] == 10 && [string hasPrefix:@"0x"]) {
-    const char *cstr = [string UTF8String];
-    return cstr ? (OSType)strtol(cstr, NULL, 16) : 0;
-  } else {
-    return SKOSTypeFromString(string);
+  switch ([string length]) {
+    case 4:
+      return SKOSTypeFromString(string);
+    case 6:
+      if ([string hasPrefix:@"'"] && [string hasSuffix:@"'"])
+        return NSHFSTypeCodeFromFileType(string);
+      break;
+    case 10:
+      if ([string hasPrefix:@"0x"]) {
+        const char *cstr = [string UTF8String];
+        return cstr ? (OSType)strtol(cstr, NULL, 16) : 0;
+      }
+      break;
   }
+  return kLSUnknownType;
 }

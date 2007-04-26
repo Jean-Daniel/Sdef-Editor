@@ -10,6 +10,10 @@
 #import <ShadowKit/SKFunctions.h>
 #import <ShadowKit/SKApplication.h>
 
+#if MAC_OS_X_VERSION_MIN_REQUIRED < MAC_OS_X_VERSION_10_4
+#include <Carbon/Carbon.h>
+#endif
+
 #import "SdefSuite.h"
 #import "Preferences.h"
 #import "SdefDocument.h"
@@ -41,11 +45,9 @@ const OSType kCocoaSuiteDefinitionHFSType = 'ScSu';
 NSString *TigerScriptingDefinitionFileType = @"TigerScriptingDefinition";
 NSString *PantherScriptingDefinitionFileType = @"PantherScriptingDefinition";
 
-#if defined (DEBUG)
 @interface SdefEditor (DebugFacility)
 - (void)createDebugMenu;
 @end
-#endif
 
 @interface SdefDocumentController : NSDocumentController {
 }
@@ -90,6 +92,7 @@ NSString *PantherScriptingDefinitionFileType = @"PantherScriptingDefinition";
     [NSApp setDelegate:self];
 #if defined (DEBUG)
     [[NSUserDefaults standardUserDefaults] registerDefaults:[NSDictionary dictionaryWithObjectsAndKeys:
+      SKBool(YES), @"SdefDebugMenu",
       // @"YES", @"NSShowNonLocalizedStrings",
       // @"NO", @"NSShowAllViews",
       // @"6", @"NSDragManagerLogLevel",
@@ -102,9 +105,8 @@ NSString *PantherScriptingDefinitionFileType = @"PantherScriptingDefinition";
 }
 
 - (void)awakeFromNib {
-#if defined (DEBUG)
-  [self createDebugMenu];
-#endif
+  if ([[NSUserDefaults standardUserDefaults] boolForKey:@"SdefDebugMenu"])
+    [self createDebugMenu];
 #if MAC_OS_X_VERSION_MIN_REQUIRED < MAC_OS_X_VERSION_10_4
   // If Panther, remove open application sdef menu
   if (!OSACopyScriptingDefinition) {
@@ -292,6 +294,14 @@ NSString *PantherScriptingDefinitionFileType = @"PantherScriptingDefinition";
   [aete release];
 }
 
+- (IBAction)importSystemSuites:(id)sender {
+  AeteImporter *aete = [[AeteImporter alloc] initWithSystemSuites];
+  if (aete) {
+    [self importWithImporter:aete];
+    [aete release];
+  }
+}
+
 - (IBAction)importApplicationAete:(id)sender {
   ImportApplicationAete *panel = [[ImportApplicationAete alloc] init];
   [panel showWindow:sender];
@@ -340,18 +350,15 @@ NSString *PantherScriptingDefinitionFileType = @"PantherScriptingDefinition";
 
 #pragma mark -
 #pragma mark Debug Menu
-#if defined (DEBUG)
 - (void)createDebugMenu {
-//  id debugMenu = [[NSMenuItem alloc] initWithTitle:@"" action:nil keyEquivalent:@""];
-//  id menu = [[NSMenu alloc] initWithTitle:@"Debug"];
-//  [menu addItemWithTitle:@"Create XHTML dictionary" action:@selector(SdtplExporter:) keyEquivalent:@""];
-//  [debugMenu setSubmenu:menu];
-//  [menu release];
-//  [[NSApp mainMenu] insertItem:debugMenu atIndex:[[NSApp mainMenu] numberOfItems] -1];
-//  [debugMenu release];
+  NSMenuItem *debugMenu = [[NSMenuItem alloc] initWithTitle:@"" action:nil keyEquivalent:@""];
+  NSMenu *menu = [[NSMenu alloc] initWithTitle:@"Debug"];
+  [menu addItemWithTitle:@"Import System Suites" action:@selector(importSystemSuites:) keyEquivalent:@""];
+  [debugMenu setSubmenu:menu];
+  [menu release];
+  [[NSApp mainMenu] insertItem:debugMenu atIndex:[[NSApp mainMenu] numberOfItems] -1];
+  [debugMenu release];
 }
-
-#endif
 
 @end
 

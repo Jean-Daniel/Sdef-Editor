@@ -99,6 +99,8 @@ SK_PRIVATE
 NSString *SdefStringForOSType(OSType type);
 SK_PRIVATE
 OSType SdefOSTypeFromString(NSString *string);
+SK_PRIVATE
+Boolean SdefTypeStringEqual(NSString *c1, NSString *c2);
 
 SK_PRIVATE
 NSArray *SdefTypesForTypeString(NSString *type);

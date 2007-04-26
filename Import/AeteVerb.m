@@ -130,7 +130,7 @@
   
   /* Keyword */
   OSType *identifier = (UInt32 *)bytes;
-  [self setCode:SdefStringForOSType(*identifier)];
+  [self setCode:SKStringForOSType(*identifier)];
   bytes += 4;
   
   /* event id */

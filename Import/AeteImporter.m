@@ -65,19 +65,21 @@ bail:
   if (self = [super init]) {
     AppleEvent theEvent = {typeNull, nil};
     sd_aetes = [[NSMutableArray alloc] init];
-    OSStatus err = SKAECreateEventWithTarget(target, kASAppleScriptSuite, kGetAEUT, &theEvent);
-    require_noerr(err, bail);
+    if (target) {
+      OSStatus err = SKAECreateEventWithTarget(target, kASAppleScriptSuite, kGetAEUT, &theEvent);
+      require_noerr(err, bail);
+      
+      err = _GetTerminologyFromAppleEvent(&theEvent, sd_aetes);
+      SKAEDisposeDesc(&theEvent);
+      
+      err = SKAECreateEventWithTarget(target, kASAppleScriptSuite, kGetAETE, &theEvent);
+      require_noerr(err, bail);
+      
+      err = _GetTerminologyFromAppleEvent(&theEvent, sd_aetes);
+      SKAEDisposeDesc(&theEvent);
     
-    err = _GetTerminologyFromAppleEvent(&theEvent, sd_aetes);
-    SKAEDisposeDesc(&theEvent);
-    
-    err = SKAECreateEventWithTarget(target, kASAppleScriptSuite, kGetAETE, &theEvent);
-    require_noerr(err, bail);
-    
-    err = _GetTerminologyFromAppleEvent(&theEvent, sd_aetes);
-    SKAEDisposeDesc(&theEvent);
-    
-    require(sd_aetes && [sd_aetes count], bail);
+      require(sd_aetes && [sd_aetes count], bail);
+    }
   }
   return self;
 /* On Error */
@@ -86,6 +88,34 @@ bail:
   sd_aetes = nil;
   [self release];
   self = nil;
+  return self;
+}
+
+- (id)initWithSystemSuites {
+  if (self = [self _initWithTarget:NULL]) {
+    ComponentInstance cpnt;
+    OSStatus err = OpenADefaultComponent(kOSAComponentType, kOSAGenericScriptingComponentSubtype, &cpnt);
+    if (noErr == err) {
+      ComponentInstance asct;
+      err = OSAGetScriptingComponent(cpnt, kAppleScriptSubtype, &asct);
+      
+      if (noErr == err) {
+        AEDesc aetes = SKAEEmptyDesc();
+        err = OSAGetSysTerminology(asct, kOSAModeNull, 0, &aetes);
+        if (noErr == err) {
+          CFDataRef data = NULL;
+          SKAEGetCFDataFromDescriptor(&aetes, &data);
+          if (data) {
+            [sd_aetes addObject:(id)data];
+            CFRelease(data);
+          }
+          SKAEDisposeDesc(&aetes);
+        }
+        CloseComponent(asct);
+      }
+      CloseComponent(cpnt);
+    }
+  }
   return self;
 }
 

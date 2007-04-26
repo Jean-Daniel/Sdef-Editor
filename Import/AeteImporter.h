@@ -13,6 +13,7 @@
   SdefDictionary *sd_dictionary;
 }
 
+- (id)initWithSystemSuites;
 - (id)initWithFSRef:(FSRef *)aRef;
 - (id)initWithApplicationSignature:(OSType)signature;
 - (id)initWithApplicationBundleIdentifier:(NSString *)identifier;

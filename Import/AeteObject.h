@@ -7,6 +7,7 @@
  */
 
 #import "SdefBase.h"
+#import <ShadowKit/SKFunctions.h>
 
 @interface SdefObject (AeteResource)
 

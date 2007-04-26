@@ -75,3 +75,4 @@
 - (SdefObject *)sdefTypeWithCode:(NSString *)aCode inSuite:(NSString *)suiteCode;
 
 @end
+
