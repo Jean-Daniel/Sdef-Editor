@@ -6,9 +6,7 @@
  *  Copyright © 2006 - 2007 Shadow Lab. All rights reserved.
  */
 
-#import <Cocoa/Cocoa.h>
-
-@class SdefObject, SdefDictionary, SdefClassManager, SdefImports;
+@class SdefObject, SdefDictionary, SdefClassManager;
 @class SdefWindowController, SdefSymbolBrowser, SdefValidator;
 
 SK_PRIVATE 

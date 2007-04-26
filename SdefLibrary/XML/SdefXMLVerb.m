@@ -21,29 +21,27 @@
     SdefXMLNode *childNode = nil;
     /* Insert before parameters */
     NSUInteger idx = [node count] - [self count];
-    if (sd_direct)
+    /* Direct Parameter */
+    if (sd_direct) {
       childNode = [sd_direct xmlNodeForVersion:version];
-    if (childNode) {
-      [node insertChild:childNode atIndex:idx];
+      if (childNode) {
+        [node insertChild:childNode atIndex:idx];
+      }
     }
     
-    childNode = nil;
-    if (sd_result)
+    /* Result */
+    if (sd_result) {
       childNode = [sd_result xmlNodeForVersion:version];
-    if (childNode) {
-      [node appendChild:childNode];
+      if (childNode) {
+        [node appendChild:childNode];
+      }
     }
   }
   return node;
 }
 
 - (NSString *)xmlElementName {
-  SdefSuite *suite = [self suite];
-  if ([self parent] == [suite commands]) {
-    return @"command";
-  } else if ([self parent] == [suite events])
-    return @"event"; 
-  return nil;
+  return [self isCommand] ? @"command" : @"event"; 
 }
 
 #pragma mark Parsing

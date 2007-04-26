@@ -11,7 +11,6 @@
 
 #import <ShadowKit/SKFunctions.h>
 
-#import "SdefDictionaryPreview.h"
 #import "SdefWindowController.h"
 #import "SdefSymbolBrowser.h"
 #import "SdefClassManager.h"
@@ -71,10 +70,6 @@
   return [self windowControllerOfClass:[SdefWindowController class]];
 }
 
-- (SdefDictionaryPreview *)dictionaryPreview {
-  return [self windowControllerOfClass:[SdefDictionaryPreview class]];
-}
-
 - (IBAction)openSymbolBrowser:(id)sender {
   SdefSymbolBrowser *browser = [self symbolBrowser];
   if (!browser) {
@@ -83,16 +78,6 @@
     [browser release];
   }
   [browser showWindow:sender];
-}
-
-- (IBAction)openDictionaryPreview:(id)sender {
-  SdefDictionaryPreview *preview = [self dictionaryPreview];
-  if (!preview) {
-    preview = [[SdefDictionaryPreview alloc] init];
-    [self addWindowController:preview];
-    [preview release];
-  }
-  [preview showWindow:sender];
 }
 
 - (IBAction)openValidator:(id)sender {

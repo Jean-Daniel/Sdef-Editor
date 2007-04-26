@@ -6,8 +6,6 @@
  *  Copyright © 2006 - 2007 Shadow Lab. All rights reserved.
  */
 
-#import <Cocoa/Cocoa.h>
-
 SK_PRIVATE
 NSString * ScriptingDefinitionFileType;
 SK_PRIVATE

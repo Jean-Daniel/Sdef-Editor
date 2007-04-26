@@ -21,6 +21,7 @@
     /* Comments */
     if (sd_comments)
       [node setComments:[self comments]];
+    
     /* Hidden */
     if ([self isHidden]) {
       if (version >= kSdefTigerVersion)
@@ -28,6 +29,7 @@
       else
         [node setAttribute:@"hidden" forKey:@"hidden"];
     }
+    
     /* Children */
     SdefObject *child = nil;
     NSEnumerator *children = [self childEnumerator];
@@ -43,6 +45,7 @@
 }
 
 - (NSString *)xmlElementName {
+  [NSException raise:NSInternalInconsistencyException format:@"the mehod %@ must be overriden", NSStringFromSelector(_cmd)];
   return nil;
 }
 
@@ -75,23 +78,6 @@
   SdefXMLNode *node = [super xmlNodeForVersion:version];
   if (version >= kSdefTigerVersion)
     [node setList:YES];
-  /*
-  if (kSdefPantherVersion == version) {
-    return [super xmlNodeForVersion:version];
-  } else if (version >= kSdefTigerVersion) {
-    SdefXMLNode *list = [[SdefXMLNode alloc] initWithElementName:nil];
-    [list setList:YES];
-    SdefObject *child = nil;
-    NSEnumerator *children = [self childEnumerator];
-    while (child = [children nextObject]) {
-      SdefXMLNode *node = [child xmlNodeForVersion:version];
-      if (node) {
-        [list appendChild:node];
-      }
-    }
-    return list;
-  }
-   */
   return node;
 }
 

@@ -10,8 +10,6 @@
 #import <ShadowKit/SKFunctions.h>
 #import <ShadowKit/SKApplication.h>
 
-#include <Carbon/Carbon.h>
-
 #import "SdefSuite.h"
 #import "Preferences.h"
 #import "SdefDocument.h"
@@ -21,7 +19,6 @@
 #import "OSASdefImporter.h"
 #import "CocoaSuiteImporter.h"
 #import "SdefObjectInspector.h"
-#import "SdefWindowController.h"
 #import "ImportApplicationAete.h"
 
 #if defined (DEBUG)
@@ -327,7 +324,6 @@ NSString *PantherScriptingDefinitionFileType = @"PantherScriptingDefinition";
 
 #pragma mark -
 #pragma mark Application Delegate
-
 - (BOOL)application:(NSApplication *)theApplication openFile:(NSString *)filename {
   NSString *type = [[NSDocumentController sharedDocumentController] typeFromFileExtension:[filename pathExtension]];
   if ([type isEqualToString:CocoaSuiteDefinitionFileType]) {
@@ -363,8 +359,9 @@ NSString *PantherScriptingDefinitionFileType = @"PantherScriptingDefinition";
 
 - (NSString *)typeFromFileExtension:(NSString *)fileExtensionOrHFSFileType {
   if ([fileExtensionOrHFSFileType isEqualToString:@"sdef"] || 
-      [fileExtensionOrHFSFileType isEqualToString:NSFileTypeForHFSTypeCode(kScriptingDefinitionHFSType)])
+      [fileExtensionOrHFSFileType isEqualToString:NSFileTypeForHFSTypeCode(kScriptingDefinitionHFSType)]) {
     return ScriptingDefinitionFileType;
+  }
   return [super typeFromFileExtension:fileExtensionOrHFSFileType];
 }
 

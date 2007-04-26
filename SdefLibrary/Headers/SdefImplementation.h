@@ -24,10 +24,10 @@
 */
 
 enum {
-  kSdefValueTypeNone = 0,
-  kSdefValueTypeString,
-  kSdefValueTypeInteger,
-  kSdefValueTypeBoolean,
+  kSdefValueTypeNone    = 0,
+  kSdefValueTypeString  = 1,
+  kSdefValueTypeInteger = 2,
+  kSdefValueTypeBoolean = 3,
 };
 
 @class SdefDocument;

@@ -10,6 +10,7 @@
 #import "SdefType.h"
 #import "SdefComment.h"
 #import "SdefSynonym.h"
+#import "SdefImplementation.h"
 
 #import "SdefValidatorBase.h"
 
@@ -62,3 +63,18 @@
 }
   
 @end
+
+@implementation SdefImplementation (SdefValidator)
+
+- (void)validate:(NSMutableArray *)messages forVersion:(SdefVersion)vers {
+  if (vers < kSdefLeopardVersion) {
+    if ([self valueType] != kSdefValueTypeNone)
+      [messages addObject:[self versionRequired:kSdefLeopardVersion forAttribute:@"*-value"]];
+  } else if ([self valueType] != kSdefValueTypeNone && ![self value]) {
+    [messages addObject:[self invalidValue:nil forAttribute:@"*-value"]];
+  }
+  [super validate:messages forVersion:vers];
+}
+
+@end
+

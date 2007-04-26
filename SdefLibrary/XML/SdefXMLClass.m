@@ -29,14 +29,13 @@ NSArray *SdefXMLAccessorStringsFromFlag(NSUInteger flag);
   if ([self isExtension]) {
     if (version >= kSdefLeopardVersion && [self inherits]) {
       if (node = [super xmlNodeForVersion:version]) {
-        [node removeAllAttributes];
+        [node removeAttributeForKey:@"name"];
         [node setAttribute:[[self inherits] stringByEscapingEntities:nil] forKey:@"extends"];
       }
     }
   } else if (node = [super xmlNodeForVersion:version]) {
     if ([self plural]) [node setAttribute:[[self plural] stringByEscapingEntities:nil] forKey:@"plural"];
     if ([self inherits]) [node setAttribute:[[self inherits] stringByEscapingEntities:nil] forKey:@"inherits"];
-    if (version >= kSdefLeopardVersion && [self xmlid]) [node setAttribute:[[self xmlid] stringByEscapingEntities:nil] forKey:@"id"];
     
     if ([self type]) {
       SdefXMLNode *type = [SdefXMLNode nodeWithElementName:@"type"];
@@ -65,10 +64,8 @@ NSArray *SdefXMLAccessorStringsFromFlag(NSUInteger flag);
 - (void)setXMLAttributes:(NSDictionary *)attrs {
   [super setXMLAttributes:attrs];
   if ([attrs objectForKey:@"extends"]) {
-    [self setExtension:YES];
     [self setInherits:[[attrs objectForKey:@"extends"] stringByUnescapingEntities:nil]];
   } else {
-    [self setXmlid:[[attrs objectForKey:@"id"] stringByUnescapingEntities:nil]];
     [self setPlural:[[attrs objectForKey:@"plural"] stringByUnescapingEntities:nil]];
     [self setInherits:[[attrs objectForKey:@"inherits"] stringByUnescapingEntities:nil]];
   }
@@ -141,11 +138,11 @@ NSArray *SdefXMLAccessorStringsFromFlag(NSUInteger flag);
     if (attr) [node setAttribute:attr forKey:@"access"];
     
     /* Accessors */
-    NSString *acc;
-    NSEnumerator *accessors = [SdefXMLAccessorStringsFromFlag([self accessors]) objectEnumerator];
-    while (acc = [accessors nextObject]) {
+    NSArray *accessors = SdefXMLAccessorStringsFromFlag([self accessors]);
+    NSUInteger idx = [accessors count];
+    while (idx-- > 0) {
       SdefXMLNode *accNode = [SdefXMLNode nodeWithElementName:@"accessor"];
-      [accNode setAttribute:acc forKey:@"style"];
+      [accNode setAttribute:[accessors objectAtIndex:idx] forKey:@"style"];
       [node appendChild:accNode];
     }
   }

@@ -25,6 +25,7 @@
   [aCoder encodeObject:sd_key forKey:@"SIKey"];
   [aCoder encodeObject:sd_class forKey:@"SIClass"];
   [aCoder encodeObject:sd_value forKey:@"SIValue"];
+  SKEncodeInteger(aCoder, sd_vtype, @"SIValueType");
   [aCoder encodeObject:sd_method forKey:@"SIMethod"];
 }
 
@@ -38,6 +39,7 @@
     sd_key = [[aCoder decodeObjectForKey:@"SIKey"] retain];
     sd_class = [[aCoder decodeObjectForKey:@"SIClass"] retain];
     sd_value = [[aCoder decodeObjectForKey:@"SIValue"] retain];
+    sd_vtype = (UInt8)SKDecodeInteger(aCoder, @"SIValueType");
     sd_method = [[aCoder decodeObjectForKey:@"SIMethod"] retain];
   }
   return self;

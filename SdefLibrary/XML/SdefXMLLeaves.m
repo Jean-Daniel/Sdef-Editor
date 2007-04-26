@@ -194,7 +194,9 @@
   
   /* Key and method was change for Property and Element*/
   if (kSdefPantherVersion == version) {
-    if ([[self owner] objectType] == kSdefPropertyType || [[self owner] objectType] == kSdefElementType || [[self owner] objectType] == kSdefContentsType) {
+    if ([[self owner] objectType] == kSdefPropertyType ||
+        [[self owner] objectType] == kSdefElementType ||
+        [[self owner] objectType] == kSdefContentsType) {
       attr = [self key];
       if (nil != attr)
         [node setAttribute:[attr stringByEscapingEntities:nil] forKey:@"method"];
@@ -208,7 +210,19 @@
     if (nil != attr)
       [node setAttribute:[attr stringByEscapingEntities:nil] forKey:@"method"];
   }
-  
+  if (version >= kSdefLeopardVersion && [self value]) {
+    switch ([self valueType]) {
+      case kSdefValueTypeString:
+        [node setAttribute:[[self value] stringByEscapingEntities:nil] forKey:@"string-value"];
+        break;
+      case kSdefValueTypeInteger:
+        [node setAttribute:[NSString stringWithFormat:@"%ld", (long)SKIntegerValue([self value])] forKey:@"integer-value"];
+        break;
+      case kSdefValueTypeBoolean:
+        [node setAttribute:[[self value] boolValue] ? @"YES" : @"NO" forKey:@"boolean-value"];
+        break;
+    }
+  }
   [node setEmpty:YES];
   return [node attributeCount] > 0 ? node : nil;
 }

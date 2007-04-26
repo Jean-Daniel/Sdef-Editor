@@ -6,8 +6,6 @@
  *  Copyright © 2006 - 2007 Shadow Lab. All rights reserved.
  */
 
-#import <Cocoa/Cocoa.h>
-
 enum {
   kSdefUndefinedFormat 			= 0,
   kSdefResourceFormat 			= 1 << 0,

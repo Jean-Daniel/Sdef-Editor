@@ -2,11 +2,11 @@
     IBClasses = (
         {
             ACTIONS = {
+                chooseDictionary = id; 
                 exportASDictionary = id; 
                 exportTerminology = id; 
                 exportUsingPantherFormat = id; 
                 exportUsingTemplate = id; 
-                openDictionaryPreview = id; 
                 openSymbolBrowser = id; 
                 openValidator = id; 
             }; 
