@@ -9,15 +9,15 @@
 #import "SdefViewController.h"
 
 @interface SdefEnumerationView : SdefViewController {
-  IBOutlet id tab;
-  IBOutlet NSArrayController *enumerators;
+  IBOutlet NSTabView *uiTab;
+  IBOutlet NSArrayController *ibEnumerators;
 }
 
 @end
 
 @interface SdefRecordView : SdefViewController {
-  IBOutlet id tab;
-  IBOutlet NSArrayController *properties;
+  IBOutlet NSTabView *uiTab;
+  IBOutlet NSArrayController *ibProperties;
 }
 
 @end

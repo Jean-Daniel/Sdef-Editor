@@ -99,7 +99,6 @@
 }
 - (void)setValue:(id)aValue {
   if (sd_value != aValue) {
-    [[self undoManager] registerUndoWithTarget:self selector:_cmd object:sd_value];
     [sd_value release];
     sd_value = [aValue copy];    
   }
@@ -111,8 +110,47 @@
 - (void)setValueType:(UInt8)aType {
   if (sd_vtype != aType) {
     [[[self undoManager] prepareWithInvocationTarget:self] setValueType:sd_vtype];
+    NSString *key;
+    switch (aType) {
+      case kSdefValueTypeString: key = @"textValue"; break;
+      case kSdefValueTypeInteger: key = @"integerValue"; break;
+      case kSdefValueTypeBoolean: key = @"booleanValue"; break;
+      default: key = @"value"; break;
+    }
+    [self willChangeValueForKey:key];
     sd_vtype = aType;
+    /* Cast */
+    if (sd_vtype == kSdefValueTypeString && [sd_value isKindOfClass:[NSNumber class]]) {
+      [self setValue:[sd_value stringValue]];
+    } else if ((sd_vtype == kSdefValueTypeInteger || sd_vtype == kSdefValueTypeBoolean) && [sd_value isKindOfClass:[NSString class]]) {
+      [self setValue:SKInteger(SKIntegerValue(sd_value))];
+    }
+    [self didChangeValueForKey:key];
   }
+}
+
+- (NSString *)textValue {
+  return sd_vtype == kSdefValueTypeString ? sd_value : nil;
+}
+- (void)setTextValue:(NSString *)value {
+  [[self undoManager] registerUndoWithTarget:self selector:_cmd object:[self textValue]];
+  [self setValue:value];
+}
+
+- (NSInteger)integerValue {
+  return sd_vtype == kSdefValueTypeInteger ? SKIntegerValue(sd_value) : nil;
+}
+- (void)setIntegerValue:(NSInteger)value {
+  [[[self undoManager] prepareWithInvocationTarget:self] setIntegerValue:[self integerValue]];
+  [self setValue:SKInteger(value)];
+}
+
+- (BOOL)booleanValue {
+  return sd_vtype == kSdefValueTypeBoolean ? [sd_value boolValue] : nil;
+}
+- (void)setBooleanValue:(BOOL)value {
+  [[[self undoManager] prepareWithInvocationTarget:self] setBooleanValue:[self booleanValue]];
+  [self setValue:SKBool(value)];
 }
 
 @end

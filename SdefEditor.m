@@ -9,6 +9,7 @@
 #import "SdefEditor.h"
 #import <ShadowKit/SKFunctions.h>
 #import <ShadowKit/SKApplication.h>
+#import <ShadowKit/SKAboutController.h>
 
 #if MAC_OS_X_VERSION_MIN_REQUIRED < MAC_OS_X_VERSION_10_4
 #include <Carbon/Carbon.h>

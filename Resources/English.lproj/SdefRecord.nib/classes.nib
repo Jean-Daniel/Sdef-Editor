@@ -6,7 +6,7 @@
             ACTIONS = {editType = id; }; 
             CLASS = SdefEnumerationView; 
             LANGUAGE = ObjC; 
-            OUTLETS = {properties = NSArrayController; tab = id; }; 
+            OUTLETS = {ibProperties = NSArrayController; uiTab = NSTabView; }; 
             SUPERCLASS = SdefViewController; 
         }, 
         {

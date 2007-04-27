@@ -57,7 +57,7 @@ NSString *SdefValidatorCodeForName(NSString *name) {
   static NSDictionary *sStdCodes = nil;
   if (!sStdCodes) {
     sStdCodes = [[NSDictionary alloc] initWithObjectsAndKeys:
-      @"pname", @"name",
+      @"pnam", @"name",
       @"ID  ", @"id",
       @"pidx", @"index",
       @"pcls", @"class",
@@ -82,7 +82,7 @@ NSString *SdefValidatorCodeForName(NSString *name) {
       @"reco", @"record",
       @"qdrt", @"rectangle",
       @"obj ", @"specifier",
-      @"TEXT", @"text",
+      @"ctxt", @"text",
       @"type", @"type", nil];
   }
   return name ? [sStdCodes objectForKey:name] : nil;
@@ -153,6 +153,8 @@ NSString *SdefValidatorCodeForName(NSString *name) {
 @implementation SdefImplementedObject (SdefValidator)
 
 - (void)validate:(NSMutableArray *)messages forVersion:(SdefVersion)vers {
+  if (sd_impl)
+    [sd_impl validate:messages forVersion:vers];
   [super validate:messages forVersion:vers];
 }
 

@@ -27,21 +27,21 @@
 }
 
 - (void)selectObject:(SdefObject*)anObject {
-  int idx = -1;
+  NSInteger idx = -1;
   SdefEnumeration *content = [self object];
   if (anObject == content) idx = 0;
   else if ([anObject parent] == content) {
     idx = 1;
-    [enumerators setSelectedObject:anObject];
+    [ibEnumerators setSelectedObject:anObject];
   }
   if (idx >= 0)
-    [tab selectTabViewItemAtIndex:idx];
+    [uiTab selectTabViewItemAtIndex:idx];
 }
 
 //- (void)tableViewSelectionDidChange:(NSNotification *)aNotification {
 //  ShadowTrace();
 //  id table = [aNotification object];
-//  int row = [table selectedRow];
+//  NSInteger row = [table selectedRow];
 //  if (row >= 0 && row < [[self object] count]) {
 //    [self revealObjectInTree:[[self object] childAtIndex:row]];
 //  }
@@ -52,19 +52,19 @@
 @implementation SdefRecordView
 
 - (void)selectObject:(SdefObject*)anObject {
-  int idx = -1;
+  NSInteger idx = -1;
   SdefRecord *content = [self object];
   if (anObject == content) idx = 0;
   else if ([anObject parent] == content) {
     idx = 1;
-    [properties setSelectedObject:anObject];
+    [ibProperties setSelectedObject:anObject];
   }
   if (idx >= 0)
-    [tab selectTabViewItemAtIndex:idx];
+    [uiTab selectTabViewItemAtIndex:idx];
 }
 
 - (id)editedObject:(id)sender {
-  return [properties selectedObject];
+  return [ibProperties selectedObject];
 }
 
 @end
@@ -88,13 +88,13 @@
 
 /* Transform */
 - (id)transformedValue:(id)value {
-  int inlin = [value intValue];
+  NSInteger inlin = SKIntegerValue(value);
   return (kSdefInlineAll == inlin) ? nil : value;
 }
 
 /* Returns access value */
 - (id)reverseTransformedValue:(id)value {
-  return (value) ? value : SKInt(kSdefInlineAll);
+  return (value) ? value : SKInteger(kSdefInlineAll);
 }
 
 @end

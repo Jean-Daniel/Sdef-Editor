@@ -142,6 +142,7 @@ static inline BOOL SdefEditorExistsForItem(SdefObject *item) {
 - (void)windowDidLoad {
   [outline registerForDraggedTypes:[NSArray arrayWithObject:SdefObjectDragType]];
   
+  [[self window] center];
 //  NSToolbar *tb = [[NSToolbar alloc] initWithIdentifier:@"SdefWindowToolbar"];
 //  [tb setDelegate:self];
 //  [[self window] setToolbar:tb];
