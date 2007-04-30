@@ -31,9 +31,11 @@
 
 - (void)dealloc {
   [sd_name release];
+  [sd_metas release];
   [sd_content release];
   [sd_comments release];
   [sd_attrKeys release];
+  [sd_postmetas release];
   [sd_attrValues release];
   [super dealloc];
 }
@@ -54,7 +56,7 @@
 }
 
 - (BOOL)isEmpty {
-  return ![self hasChildren] && ([self content] == nil);
+  return ![self hasChildren] && ![self content] && 0 == [sd_postmetas count];
 }
 - (void)setEmpty:(BOOL)flag {
   if (sd_empty != flag) {
@@ -155,6 +157,29 @@
   if (sd_comments && [sd_comments count] == 0) {
     [sd_comments release];
     sd_comments = nil;
+  }
+}
+
+- (NSDictionary *)metas {
+  return sd_metas;
+}
+- (NSDictionary *)postmetas {
+  return sd_postmetas;
+}
+- (void)setMeta:(NSString *)value forKey:(NSString *)key {
+  if (value) {
+    if (!sd_metas) sd_metas = [[NSMutableDictionary alloc] init];
+    [sd_metas setObject:value forKey:key];
+  } else if (sd_metas) {
+    [sd_metas removeObjectForKey:key];
+  }
+}
+- (void)setPostMeta:(NSString *)value forKey:(NSString *)key {
+  if (value) {
+    if (!sd_postmetas) sd_postmetas = [[NSMutableDictionary alloc] init];
+    [sd_postmetas setObject:value forKey:key];
+  } else if (sd_postmetas) {
+    [sd_postmetas removeObjectForKey:key];
   }
 }
 

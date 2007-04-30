@@ -16,13 +16,13 @@
 
 - (id)init {
   if (self = [super init]) {
-    
+    sd_metas = YES;
   }
   return self;
 }
 
 - (id)initWithRoot:(SdefObject *)anObject {
-  if (self = [super init]) {
+  if (self = [self init]) {
     [self setRoot:anObject];
   }
   return self;
@@ -35,14 +35,17 @@
   [super dealloc];
 }
 
+#pragma mark -
 - (SdefObject *)root {
   return sd_root;
 }
-
 - (void)setRoot:(SdefObject *)anObject {
   SKSetterRetain(sd_root, anObject);
 }
 
+- (void)setIgnoreMetas:(BOOL)flag {
+  sd_metas = !flag;
+}
 - (void)setHeaderComment:(NSString *)comment {
   SKSetterCopy(sd_comment, comment);
 }
@@ -183,9 +186,28 @@
   }
 }
 
+- (void)insertMetas:(NSDictionary *)metas wsbefore:(BOOL)flag {
+  if (sd_metas && metas && [metas count] > 0) {
+    NSString *key;
+    NSEnumerator *iter = [metas keyEnumerator];
+    while (key = [iter nextObject]) {
+      if (flag)
+        [self insertWhiteSpace];
+      if ([self insertComment:[NSString stringWithFormat:@" @%@(%@) ", key, [metas objectForKey:key]]]) {
+        if (!flag)
+          [self insertWhiteSpace];
+      }
+    }
+  }
+}
+
 - (void)appendXMLNode:(SdefXMLNode *)node {
   if (![node isList]) {
     [self insertWhiteSpace];
+    
+    /* Insert meta */
+    [self insertMetas:[node metas] wsbefore:NO];
+    
     /* Insert comments */
     SdefComment *comment;
     NSEnumerator *comments = [[node comments] objectEnumerator];
@@ -213,6 +235,10 @@
   while (child = [children nextObject]) {
     [self appendXMLNode:child];
   }
+  
+  /* Insert postmeta */
+  [self insertMetas:[node postmetas] wsbefore:YES];
+  
   if (![node isList] && ![node isEmpty]) {
     [self upOneLevelWithWhiteSpace:([node content] == nil)];
   }
@@ -221,9 +247,10 @@
 - (NSData *)xmlDataForVersion:(SdefVersion)version {
   if (!sd_root)
     return nil;
+  
   [self createDocument];
-  if (!sd_doc)
-    return nil;
+  if (!sd_doc) return nil;
+  
   [self appendXMLNode:[sd_root xmlNodeForVersion:version]];
   CFDataRef xml = CFXMLTreeCreateXMLData(kCFAllocatorDefault, sd_doc);
   return [(id)xml autorelease];

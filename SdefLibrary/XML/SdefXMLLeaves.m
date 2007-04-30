@@ -35,6 +35,16 @@
 }
 
 #pragma mark Parsing
+- (void)addXMLChild:(id<SdefObject>)node {
+  [NSException raise:NSInvalidArgumentException format:@"%@ does not support children", self];
+}
+- (void)addXMLComment:(NSString *)comment {
+  ShadowTrace();
+}
+
+- (void)setXMLMetas:(NSDictionary *)metas {
+  //DLog(@"Metas: %@, %@", self, metas);
+}
 - (void)setXMLAttributes:(NSDictionary *)attrs {
   NSString *hidden = [attrs objectForKey:@"hidden"];
   if (hidden && ![hidden isEqualToString:@"no"]) {
@@ -210,17 +220,21 @@
     if (nil != attr)
       [node setAttribute:[attr stringByEscapingEntities:nil] forKey:@"method"];
   }
-  if (version >= kSdefLeopardVersion && [self value]) {
-    switch ([self valueType]) {
-      case kSdefValueTypeString:
-        [node setAttribute:[[self value] stringByEscapingEntities:nil] forKey:@"string-value"];
-        break;
-      case kSdefValueTypeInteger:
-        [node setAttribute:[NSString stringWithFormat:@"%ld", (long)SKIntegerValue([self value])] forKey:@"integer-value"];
-        break;
-      case kSdefValueTypeBoolean:
-        [node setAttribute:[[self value] boolValue] ? @"YES" : @"NO" forKey:@"boolean-value"];
-        break;
+  if ([self valueType] != kSdefValueTypeNone) {
+    if (version >= kSdefLeopardVersion) {
+      switch ([self valueType]) {
+        case kSdefValueTypeString:
+          [node setAttribute:[[self textValue] stringByEscapingEntities:nil] forKey:@"string-value"];
+          break;
+        case kSdefValueTypeInteger:
+          [node setAttribute:[NSString stringWithFormat:@"%ld", (long)[self integerValue]] forKey:@"integer-value"];
+          break;
+        case kSdefValueTypeBoolean:
+          [node setAttribute:[self booleanValue] ? @"YES" : @"NO" forKey:@"boolean-value"];
+          break;
+      }
+    } else {
+      /* warning: *-value not supported */
     }
   }
   [node setEmpty:YES];
@@ -232,6 +246,25 @@
 }
 
 #pragma mark Parsing
+- (void)sd_setXMLValue:(NSDictionary *)attrs {
+  NSString *attr;
+  if (attr = [attrs objectForKey:@"boolean-value"]) {
+    [self setValueType:kSdefValueTypeBoolean];
+    [self setBooleanValue:[attr caseInsensitiveCompare:@"YES"] == 0];
+  } else if (attr = [attrs objectForKey:@"integer-value"]) {
+    [self setValueType:kSdefValueTypeInteger];
+    [self setIntegerValue:SKIntegerValue(attr)];
+  } else if (attr = [attrs objectForKey:@"string-value"]) {
+    [self setValueType:kSdefValueTypeString];
+    [self setTextValue:[attr stringByUnescapingEntities:nil]];
+  }
+}
+
+- (void)setXMLMetas:(NSDictionary *)metas {
+  [self sd_setXMLValue:metas];
+  [super setXMLMetas:metas];
+}
+
 - (void)setXMLAttributes:(NSDictionary *)attrs {
   [super setXMLAttributes:attrs];
   [self setKey:[[attrs objectForKey:@"key"] stringByUnescapingEntities:nil]];
@@ -239,17 +272,7 @@
   [self setMethod:[[attrs objectForKey:@"method"] stringByUnescapingEntities:nil]];
   [self setSdClass:[[attrs objectForKey:@"class"] stringByUnescapingEntities:nil]];
   
-  NSString *attr;
-  if (attr = [attrs objectForKey:@"boolean-value"]) {
-    [self setValueType:kSdefValueTypeBoolean];
-    [self setValue:SKBool([attr caseInsensitiveCompare:@"YES"] == 0)];
-  } else if (attr = [attrs objectForKey:@"integer-value"]) {
-    [self setValueType:kSdefValueTypeInteger];
-    [self setValue:SKInteger(SKIntegerValue(attr))];
-  } else if (attr = [attrs objectForKey:@"string-value"]) {
-    [self setValueType:kSdefValueTypeString];
-    [self setValue:attr];
-  }
+  [self sd_setXMLValue:attrs];
 }
 
 @end

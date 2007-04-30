@@ -713,10 +713,7 @@ NSString *SdefEscapedString(NSString *value, NSUInteger format) {
 - (NSString *)linkForVerb:(NSString *)aVerb withString:(NSString *)aString {
   NSString *alink = NSMapGet(sd_links, aVerb);
   if (!alink) {
-    SdefObject *object = [sd_manager commandWithName:aVerb];
-    if (!object) {
-      object = [sd_manager eventWithName:aVerb];
-    }
+    SdefObject *object = [sd_manager verbWithIdentifier:aVerb];
     alink = [self linkForObject:object withString:aString];
     NSMapInsert(sd_links, aVerb, alink);
   }

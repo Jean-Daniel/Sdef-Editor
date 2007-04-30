@@ -37,62 +37,6 @@
 		<dict>
 			<key>CFBundleTypeExtensions</key>
 			<array>
-				<string>sdef</string>
-			</array>
-			<key>CFBundleTypeIconFile</key>
-			<string>SdefFile</string>
-			<key>CFBundleTypeMIMETypes</key>
-			<array>
-				<string>text/xml</string>
-			</array>
-			<key>CFBundleTypeName</key>
-			<string>TigerScriptingDefinition</string>
-			<key>CFBundleTypeOSTypes</key>
-			<array>
-				<string>Sdef</string>
-			</array>
-			<key>CFBundleTypeRole</key>
-			<string>Viewer</string>
-			<key>LSItemContentTypes</key>
-			<array>
-				<string>org.shadowlab.sdef.tiger</string>
-			</array>
-			<key>LSTypeIsPackage</key>
-			<false/>
-			<key>NSDocumentClass</key>
-			<string>SdefDocument</string>
-		</dict>
-		<dict>
-			<key>CFBundleTypeExtensions</key>
-			<array>
-				<string>sdef</string>
-			</array>
-			<key>CFBundleTypeIconFile</key>
-			<string>SdefFile</string>
-			<key>CFBundleTypeMIMETypes</key>
-			<array>
-				<string>text/xml</string>
-			</array>
-			<key>CFBundleTypeName</key>
-			<string>PantherScriptingDefinition</string>
-			<key>CFBundleTypeOSTypes</key>
-			<array>
-				<string>Sdef</string>
-			</array>
-			<key>CFBundleTypeRole</key>
-			<string>Viewer</string>
-			<key>LSItemContentTypes</key>
-			<array>
-				<string>org.shadowlab.sdef.panther</string>
-			</array>
-			<key>LSTypeIsPackage</key>
-			<false/>
-			<key>NSDocumentClass</key>
-			<string>SdefDocument</string>
-		</dict>
-		<dict>
-			<key>CFBundleTypeExtensions</key>
-			<array>
 				<string>sdtpl</string>
 			</array>
 			<key>CFBundleTypeIconFile</key>
@@ -207,48 +151,6 @@
 				<key>public.filename-extension</key>
 				<array>
 					<string>sdtpl</string>
-				</array>
-			</dict>
-		</dict>
-		<dict>
-			<key>UTTypeConformsTo</key>
-			<array>
-				<string>com.apple.scripting-definition</string>
-			</array>
-			<key>UTTypeDescription</key>
-			<string>Tiger Scripting Definition File</string>
-			<key>UTTypeIconFile</key>
-			<string>SdefFile</string>
-			<key>UTTypeIdentifier</key>
-			<string>org.shadowlab.sdef.tiger</string>
-			<key>UTTypeTagSpecification</key>
-			<dict>
-				<key>com.apple.ostype</key>
-				<string>Sdef</string>
-				<key>public.filename-extension</key>
-				<array>
-					<string>sdef</string>
-				</array>
-			</dict>
-		</dict>
-		<dict>
-			<key>UTTypeConformsTo</key>
-			<array>
-				<string>com.apple.scripting-definition</string>
-			</array>
-			<key>UTTypeDescription</key>
-			<string>Tiger Scripting Definition File</string>
-			<key>UTTypeIconFile</key>
-			<string>SdefFile</string>
-			<key>UTTypeIdentifier</key>
-			<string>org.shadowlab.sdef.panther</string>
-			<key>UTTypeTagSpecification</key>
-			<dict>
-				<key>com.apple.ostype</key>
-				<string>Sdef</string>
-				<key>public.filename-extension</key>
-				<array>
-					<string>sdef</string>
 				</array>
 			</dict>
 		</dict>

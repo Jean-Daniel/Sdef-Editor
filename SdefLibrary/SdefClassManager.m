@@ -54,15 +54,6 @@
     sd_events = [[NSMutableArray allocWithZone:[self zone]] init];
     sd_classes = [[NSMutableArray allocWithZone:[self zone]] init];
     sd_commands = [[NSMutableArray allocWithZone:[self zone]] init];
-    /* Warning do not handle multiple node manipulation */
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(didAppendChild:)
-                                                 name:SKUITreeNodeDidInsertChildNotification
-                                               object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(willRemoveChild:)
-                                                 name:SKUITreeNodeWillRemoveChildNotification
-                                               object:nil];
   }
   return self;
 }
@@ -89,14 +80,17 @@
 }
 
 - (void)setDocument:(SdefDocument *)aDocument {
-  if (aDocument != sd_document) {
-    if ([sd_document dictionary])
-     
-    sd_document = aDocument;
-    
-    if ([sd_document dictionary])
-      [self addDictionary:[sd_document dictionary]];
-  }
+  NSAssert(sd_document == nil, @"Does not support document swapping.");
+  sd_document = aDocument;
+  /* Warning do not handle multiple node manipulation */
+  [[sd_document notificationCenter] addObserver:self
+                                       selector:@selector(didAppendChild:)
+                                           name:SKUITreeNodeDidInsertChildNotification
+                                         object:nil];
+  [[sd_document notificationCenter] addObserver:self
+                                       selector:@selector(willRemoveChild:)
+                                           name:SKUITreeNodeWillRemoveChildNotification
+                                         object:nil];
 }
 
 #pragma mark -
@@ -230,28 +224,30 @@
   return [self typeWithName:name class:[SdefEnumeration class]];
 }
 
-- (SdefVerb *)verbWithName:(NSString *)name {
-  SdefVerb *verb = [self commandWithName:name];
+- (SdefVerb *)verbWithIdentifier:(NSString *)identifier {
+  SdefVerb *verb = [self commandWithIdentifier:identifier];
   if (!verb)
-    verb = [self eventWithName:name];
+    verb = [self eventWithIdentifier:identifier];
   return verb;
 }
 
-- (SdefVerb *)commandWithName:(NSString *)name {
+- (SdefVerb *)commandWithIdentifier:(NSString *)identifier {
   NSUInteger idx = [sd_commands count];
   while (idx-- > 0) {
     SdefVerb *cmd = [sd_commands objectAtIndex:idx];
-    if ([[cmd name] isEqualToString:name])
+    if ([[cmd name] isEqualToString:identifier] || 
+        [[cmd xmlid] isEqualToString:identifier])
       return cmd;
   }
   return nil;
 }
 
-- (SdefVerb *)eventWithName:(NSString *)name {
+- (SdefVerb *)eventWithIdentifier:(NSString *)identifier {
   NSUInteger idx = [sd_events count];
   while (idx-- > 0) {
     SdefVerb *event = [sd_events objectAtIndex:idx];
-    if ([[event name] isEqualToString:name])
+    if ([[event name] isEqualToString:identifier] || 
+        [[event xmlid] isEqualToString:identifier])
       return event;
   }
   return nil;
@@ -286,8 +282,7 @@
 #pragma mark Notification Handling
 - (void)didAppendChild:(NSNotification *)aNotification {
   SdefObject *node = [aNotification object];
-  if ([self containsDictionary:[node dictionary]] ||
-      (sd_document && [node document] == sd_document)) {
+  if ([self containsDictionary:[node dictionary]]) {
     id child = [[aNotification userInfo] objectForKey:SKInsertedChild];
     switch ([child objectType]) {
       case kSdefSuiteType:
@@ -316,8 +311,7 @@
 
 - (void)willRemoveChild:(NSNotification *)aNotification {
   SdefObject *node = [aNotification object];
-  if ([self containsDictionary:[node dictionary]] ||
-      (sd_document && [node document] == sd_document)) {
+  if ([self containsDictionary:[node dictionary]]) {
     id child = [[aNotification userInfo] objectForKey:SKRemovedChild];
     switch ([child objectType]) {
       case kSdefSuiteType:

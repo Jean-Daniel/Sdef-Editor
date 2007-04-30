@@ -44,7 +44,6 @@ extern NSString * const StdplVariableAnchorFormat;
 
 /* Misc */
 extern NSString * const SdefInvalidTemplateException;
-extern NSString * const SdefTemplateDidChangeNotification;
 
 @class SKTemplate;
 @interface SdefTemplate : NSObject {

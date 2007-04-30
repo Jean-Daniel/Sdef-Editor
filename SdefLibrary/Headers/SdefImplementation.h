@@ -51,10 +51,16 @@ enum {
 - (void)setMethod:(NSString *)newMethod;
 
 /* value support */
-- (id)value;
-- (void)setValue:(id)aValue;
-
 - (UInt8)valueType;
 - (void)setValueType:(UInt8)aType;
+
+- (NSString *)textValue;
+- (void)setTextValue:(NSString *)value;
+
+- (NSInteger)integerValue;
+- (void)setIntegerValue:(NSInteger)value;
+
+- (BOOL)booleanValue;
+- (void)setBooleanValue:(BOOL)value;
 
 @end

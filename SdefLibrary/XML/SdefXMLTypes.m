@@ -7,6 +7,7 @@
  */
 
 #import "SdefTypedef.h"
+#import "SdefImplementation.h"
 
 #import "SdefXMLNode.h"
 #import "SdefXMLBase.h"
@@ -32,7 +33,7 @@
   [super setXMLAttributes:attrs];
   NSString *value = [attrs objectForKey:@"inline"];
   if (value) {
-    [self setInlineValue:[value intValue]];
+    [self setInlineValue:SKIntegerValue(value)];
   } else {
     [self setInlineValue:kSdefInlineAll];
   }
@@ -54,8 +55,37 @@
 #pragma mark -
 @implementation SdefEnumerator (SdefXMLManager)
 #pragma mark XML Generation
+- (SdefXMLNode *)xmlNodeForVersion:(SdefVersion)version {
+  SdefXMLNode *node;
+  if (node = [super xmlNodeForVersion:version]) {
+    /* cocoa *-value */
+    if ([[self impl] valueType] != kSdefValueTypeNone) {
+      if (version < kSdefLeopardVersion) {
+        switch ([[self impl] valueType]) {
+          case kSdefValueTypeString:
+            [node setPostMeta:[[[self impl] textValue] stringByEscapingEntities:nil] forKey:@"string-value"];
+            break;
+          case kSdefValueTypeInteger:
+            [node setPostMeta:[NSString stringWithFormat:@"%ld", (long)[[self impl] integerValue]] forKey:@"integer-value"];
+            break;
+          case kSdefValueTypeBoolean:
+            [node setPostMeta:[[self impl] booleanValue] ? @"YES" : @"NO" forKey:@"boolean-value"];
+            break;
+        }
+      }
+    }
+  } 
+  return node;
+}
+
 - (NSString *)xmlElementName {
   return @"enumerator";
+}
+
+#pragma mark Parser
+- (void)setXMLMetas:(NSDictionary *)metas {
+  [[self impl] setXMLMetas:metas];
+  [super setXMLMetas:metas];
 }
 
 @end

@@ -23,6 +23,7 @@ typedef NSUInteger SdefParserVersion;
 
 - (SdefParserVersion)version;
 
+- (CFStringRef)element;
 - (void)startElement:(CFStringRef)element;
 - (void)endElement:(CFStringRef)element;
 

@@ -14,7 +14,7 @@
 
 @implementation SdefClass (SdefValidator)
 
-- (BOOL)validateCode { return YES; }
+- (BOOL)validateCode { return ![self isExtension]; }
 
 - (void)validate:(NSMutableArray *)messages forVersion:(SdefVersion)vers {
   if (![self name]) {
@@ -40,9 +40,9 @@
   }
   
   /* class-extension */
-  if ([self isExtension] && vers < kSdefLeopardVersion) {
-    [messages addObject:[self versionRequired:kSdefLeopardVersion forElement:@"class-extension"]];
-  }
+//  if ([self isExtension] && vers < kSdefLeopardVersion) {
+//    [messages addObject:[self versionRequired:kSdefLeopardVersion forElement:@"class-extension"]];
+//  }
   
   /* contents */
   if (sd_contents) {
@@ -122,7 +122,7 @@
 - (void)validate:(NSMutableArray *)messages forVersion:(SdefVersion)vers {
   if (![self name]) {
     [messages addObject:[self invalidValue:nil forAttribute:@"command"]];
-  } else if (![[self classManager] verbWithName:[self name]]) {
+  } else if (![[self classManager] verbWithIdentifier:[self name]]) {
     [messages addObject:[SdefValidatorItem warningItemWithNode:self
                                                        message:@"command/event '%@' not found", [self name]]];
   }

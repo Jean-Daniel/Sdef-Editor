@@ -9,7 +9,6 @@
 #import "SdefEditor.h"
 #import <ShadowKit/SKFunctions.h>
 #import <ShadowKit/SKApplication.h>
-#import <ShadowKit/SKAboutController.h>
 
 #if MAC_OS_X_VERSION_MIN_REQUIRED < MAC_OS_X_VERSION_10_4
 #include <Carbon/Carbon.h>
@@ -30,6 +29,10 @@
 #import <Foundation/NSDebug.h>
 #endif
 
+enum {
+  kSdefEditorCurrentVersion = 0x010500, /* 1.5.0 */
+};
+
 int main(int argc, const char *argv[]) {
 #if defined (DEBUG)  
   NSDebugEnabled = YES;
@@ -42,9 +45,6 @@ NSString * ScriptingDefinitionFileType = @"ScriptingDefinition";
 const OSType kScriptingDefinitionHFSType = 'Sdef';
 NSString * CocoaSuiteDefinitionFileType = @"AppleScriptSuiteDefinition";
 const OSType kCocoaSuiteDefinitionHFSType = 'ScSu';
-
-NSString *TigerScriptingDefinitionFileType = @"TigerScriptingDefinition";
-NSString *PantherScriptingDefinitionFileType = @"PantherScriptingDefinition";
 
 @interface SdefEditor (DebugFacility)
 - (void)createDebugMenu;
@@ -62,9 +62,6 @@ NSString *PantherScriptingDefinitionFileType = @"PantherScriptingDefinition";
       /* Redefine type using UTI */
       ScriptingDefinitionFileType = @"com.apple.scripting-definition";
       CocoaSuiteDefinitionFileType = @"org.shadowlab.cocoa-scripting";
-      
-      TigerScriptingDefinitionFileType = @"org.shadowlab.sdef.tiger";
-      PantherScriptingDefinitionFileType = @"org.shadowlab.sdef.panther";
     }
   }
 }
@@ -94,6 +91,7 @@ NSString *PantherScriptingDefinitionFileType = @"PantherScriptingDefinition";
 #if defined (DEBUG)
     [[NSUserDefaults standardUserDefaults] registerDefaults:[NSDictionary dictionaryWithObjectsAndKeys:
       SKBool(YES), @"SdefDebugMenu",
+      SKBool(YES), @"SdefPantherExportEnabled",
       // @"YES", @"NSShowNonLocalizedStrings",
       // @"NO", @"NSShowAllViews",
       // @"6", @"NSDragManagerLogLevel",
@@ -103,6 +101,10 @@ NSString *PantherScriptingDefinitionFileType = @"PantherScriptingDefinition";
 #endif
   } 
   return self;
+}
+
+- (void)showWelcome {
+  ShadowTrace();
 }
 
 - (void)awakeFromNib {
@@ -131,6 +133,12 @@ NSString *PantherScriptingDefinitionFileType = @"PantherScriptingDefinition";
     }
   }
 #endif
+  
+  NSUInteger version = [[NSUserDefaults standardUserDefaults] integerForKey:@"SdefEditorVersion"];
+  if (version < kSdefEditorCurrentVersion) {
+    [[NSUserDefaults standardUserDefaults] setInteger:kSdefEditorCurrentVersion forKey:@"SdefEditorVersion"];
+    [self showWelcome];
+  }
 }
 
 - (IBAction)openInspector:(id)sender {
@@ -364,14 +372,6 @@ NSString *PantherScriptingDefinitionFileType = @"PantherScriptingDefinition";
 @end
 
 @implementation SdefDocumentController
-
-- (NSString *)typeFromFileExtension:(NSString *)fileExtensionOrHFSFileType {
-  if ([fileExtensionOrHFSFileType isEqualToString:@"sdef"] || 
-      [fileExtensionOrHFSFileType isEqualToString:NSFileTypeForHFSTypeCode(kScriptingDefinitionHFSType)]) {
-    return ScriptingDefinitionFileType;
-  }
-  return [super typeFromFileExtension:fileExtensionOrHFSFileType];
-}
 
 - (void)noteNewRecentDocument:(NSDocument *)aDocument {
   NSString *path = [aDocument fileName];

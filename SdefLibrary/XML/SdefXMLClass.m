@@ -7,8 +7,10 @@
  */
 
 #import "SdefXMLBase.h"
-#import "SdefContents.h"
 #import "SdefXMLNode.h"
+
+#import "SdefClassManager.h"
+#import "SdefContents.h"
 #import "SdefClass.h"
 
 static
@@ -27,29 +29,43 @@ NSArray *SdefXMLAccessorStringsFromFlag(NSUInteger flag);
 - (SdefXMLNode *)xmlNodeForVersion:(SdefVersion)version {
   SdefXMLNode *node = nil;
   if ([self isExtension]) {
-    if (version >= kSdefLeopardVersion && [self inherits]) {
-      if (node = [super xmlNodeForVersion:version]) {
+    if ([self inherits] && (node = [super xmlNodeForVersion:version])) {
+      if (version >=  kSdefTigerVersion) { /* kSdefLeopardVersion) { */
         [node removeAttributeForKey:@"name"];
+        [node removeAttributeForKey:@"code"];
         [node setAttribute:[[self inherits] stringByEscapingEntities:nil] forKey:@"extends"];
+      } else {
+        [node setElementName:@"class"];
+        [node setMeta:@"YES" forKey:@"class-extension"];
+        [node setAttribute:[[self inherits] stringByEscapingEntities:nil] forKey:@"name"];
+        [node setAttribute:[[self inherits] stringByEscapingEntities:nil] forKey:@"inherits"];
+        if (![self code] && [self inherits]) {
+          NSString *code = [[[self classManager] classWithName:[self inherits]] code];
+          if (code)
+            [node setAttribute:code forKey:@"code"];
+        }
       }
     }
   } else if (node = [super xmlNodeForVersion:version]) {
     if ([self plural]) [node setAttribute:[[self plural] stringByEscapingEntities:nil] forKey:@"plural"];
     if ([self inherits]) [node setAttribute:[[self inherits] stringByEscapingEntities:nil] forKey:@"inherits"];
-    
-    if ([self type]) {
-      SdefXMLNode *type = [SdefXMLNode nodeWithElementName:@"type"];
-      [type setAttribute:[[self type] stringByEscapingEntities:nil] forKey:@"type"];
-      [node appendChild:type];
-    }
-    if (sd_contents) {
-      SdefXMLNode *contents = [sd_contents xmlNodeForVersion:version];
-      if (contents) {
-        if ([[[node firstChild] elementName] isEqualToString:@"documentation"]) {
-          [node insertChild:contents atIndex:1];
-        } else {
-          [node prependChild:contents];
-        }
+  }
+  
+  /* undocumented type */
+  if ([self type]) {
+    SdefXMLNode *type = [SdefXMLNode nodeWithElementName:@"type"];
+    [type setAttribute:[[self type] stringByEscapingEntities:nil] forKey:@"type"];
+    [node appendChild:type];
+  }
+  
+  /* contents */
+  if (sd_contents) {
+    SdefXMLNode *contents = [sd_contents xmlNodeForVersion:version];
+    if (contents) {
+      if ([[[node firstChild] elementName] isEqualToString:@"documentation"]) {
+        [node insertChild:contents atIndex:1];
+      } else {
+        [node prependChild:contents];
       }
     }
   }
@@ -61,6 +77,17 @@ NSArray *SdefXMLAccessorStringsFromFlag(NSUInteger flag);
 }
 
 #pragma mark Parsing
+
+- (void)setXMLMetas:(NSDictionary *)metas {
+  NSString *ext = [metas objectForKey:@"class-extension"];
+  if (ext && [ext isEqualToString:@"YES"]) {
+    [self setInherits:[self name]];
+    [self setExtension:YES];
+    [self setCode:nil];
+  }
+  [super setXMLMetas:metas];
+}
+
 - (void)setXMLAttributes:(NSDictionary *)attrs {
   [super setXMLAttributes:attrs];
   if ([attrs objectForKey:@"extends"]) {
@@ -230,7 +257,7 @@ NSArray *SdefXMLAccessorStringsFromFlag(NSUInteger flag);
   
   NSString *cmd = [attrs objectForKey:@"command"];
   if (cmd)
-    [super setName:cmd];
+    [super setName:[cmd stringByUnescapingEntities:nil]];
 }
 
 @end

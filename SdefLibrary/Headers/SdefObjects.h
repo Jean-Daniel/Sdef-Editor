@@ -50,22 +50,24 @@
 - (void)setXrefs:(NSArray *)xrefs;
 
 - (NSUInteger)countOfXrefs;
-- (void)addXrefs:(SdefXRef *)aRef;
 - (id)objectInXrefsAtIndex:(NSUInteger)anIndex;
 - (void)insertObject:(id)object inXrefsAtIndex:(NSUInteger)anIndex;
 - (void)removeObjectFromXrefsAtIndex:(NSUInteger)anIndex;
 - (void)replaceObjectInXrefsAtIndex:(NSUInteger)anIndex withObject:(id)object;
+
+- (void)addXRef:(SdefXRef *)aRef;
 
 #pragma mark Synonyms KVC
 - (NSArray *)synonyms;
 - (void)setSynonyms:(NSArray *)synonyms;
 
 - (NSUInteger)countOfSynonyms;
-- (void)addSynonym:(SdefSynonym *)aSynonym;
 - (id)objectInSynonymsAtIndex:(NSUInteger)index;
 - (void)insertObject:(id)object inSynonymsAtIndex:(NSUInteger)index;
 - (void)removeObjectFromSynonymsAtIndex:(NSUInteger)index;
 - (void)replaceObjectInSynonymsAtIndex:(NSUInteger)index withObject:(id)object;
+
+- (void)addSynonym:(SdefSynonym *)aSynonym;
 
 @end
 

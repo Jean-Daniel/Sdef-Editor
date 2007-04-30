@@ -9,6 +9,7 @@
 #import "SdefDictionary.h"
 
 #import "SdefSuite.h"
+#import "SdefDocument.h"
 #import "SdefClassManager.h"
 #import "SdefDocumentation.h"
 
@@ -22,11 +23,13 @@
 
 - (void)encodeWithCoder:(NSCoder *)aCoder {
   [super encodeWithCoder:aCoder];
+  SKEncodeInteger(aCoder, sd_version, @"SDVersion");
   [aCoder encodeConditionalObject:sd_document forKey:@"SDDocument"];
 }
 
 - (id)initWithCoder:(NSCoder *)aCoder {
   if (self = [super initWithCoder:aCoder]) {
+    sd_version = SKDecodeInteger(aCoder, @"SDVersion");
     sd_document = [aCoder decodeObjectForKey:@"SDDocument"];
   }
   return self;
@@ -35,6 +38,11 @@
 #pragma mark -
 + (void)initialize {
   [self setKeys:[NSArray arrayWithObject:@"name"] triggerChangeNotificationsForDependentKey:@"title"];
+}
+
+- (void)sdefInit {
+  [super sdefInit];
+  sd_version = kSdefLeopardVersion;
 }
 
 - (void)dealloc {
@@ -58,7 +66,6 @@
 - (NSString *)title {
   return [self name];
 }
-
 - (void)setTitle:(NSString *)newTitle {
   [self setName:newTitle];
 }
@@ -66,17 +73,27 @@
 - (SdefDocument *)document {
   return sd_document;
 }
-
 - (void)setDocument:(SdefDocument *)document {
   sd_document = document;
 }
 
 - (SdefClassManager *)classManager {
-  return [[self document] classManager];
+  return [sd_document classManager];
+}
+
+- (NSNotificationCenter *)notificationCenter {
+  return [sd_document notificationCenter];
 }
 
 - (NSArray *)suites {
   return [self children];
+}
+
+- (SdefVersion)version {
+  return sd_version;
+}
+- (void)setVersion:(SdefVersion)vers {
+  sd_version = vers;
 }
 
 @end

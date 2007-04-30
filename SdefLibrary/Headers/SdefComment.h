@@ -19,3 +19,4 @@
 - (void)setValue:(NSString *)value;
 
 @end
+

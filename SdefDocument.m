@@ -39,14 +39,15 @@
 }
 
 - (void)dealloc {
+  [sd_center release];
   [sd_manager release];
+  [sd_dictionary setDocument:nil];
   [sd_dictionary release];
   [super dealloc];
 }
 
 #pragma mark -
 - (id)windowControllerOfClass:(Class)class {
-  
   NSArray *ctrls = [self windowControllers];
   NSUInteger idx = [ctrls count];
   while (idx-- > 0) {
@@ -154,7 +155,7 @@
 #pragma mark -
 #pragma mark NSDocument Methods
 - (void)makeWindowControllers {
-  SdefWindowController *controller = [[SdefWindowController alloc] initWithOwner:nil];
+  SdefWindowController *controller = [[SdefWindowController alloc] init];
   [controller setShouldCloseDocument:YES];
   [self addWindowController:controller];
   [controller release];
@@ -164,15 +165,11 @@
   NSData *data = nil;
   SdefVersion version = 0;
   if ([type isEqualToString:ScriptingDefinitionFileType]) {
-    version = kSdefLeopardVersion;
-  } else if ([type isEqualToString:TigerScriptingDefinitionFileType]) {
-    version = kSdefTigerVersion;
-  } else if ([type isEqualToString:PantherScriptingDefinitionFileType]) {
-    version = kSdefPantherVersion;
+    version = [[self dictionary] version];
   }
   if (version) {
     SdefXMLGenerator *gen = [[SdefXMLGenerator alloc] initWithRoot:[self dictionary]];
-    //[gen setHeaderComment:@" Sdef Editor "];
+    //[gen setHeaderComment:@" @meta target 10.4 "];
     @try {
       data = [gen xmlDataForVersion:version];
     } @catch (id exception) {
@@ -185,16 +182,15 @@
 }
 
 - (BOOL)loadDataRepresentation:(NSData *)data ofType:(NSString *)type {
-  if ([type isEqualToString:ScriptingDefinitionFileType] ||
-      [type isEqualToString:TigerScriptingDefinitionFileType] ||
-      [type isEqualToString:PantherScriptingDefinitionFileType]) {
+  if ([type isEqualToString:ScriptingDefinitionFileType]) {
     NSInteger version;
     [self setDictionary:SdefLoadDictionaryData(data, &version, self)];
-    if ([self dictionary] != nil && version < kSdefLeopardVersion) {
-      NSRunInformationalAlertPanel(@"You have opened a Panther or Tiger Scripting Definition file",
-                                   @"This file will be saved using Leopard format. If you want to export it using an older format, use \"Save as...\" (File menu)",
-                                   @"OK", nil, nil);
-      [self updateChangeCount:NSChangeDone];
+    if ([self dictionary] != nil) {
+      if (version < kSdefTigerVersion) {
+        /* Warning: using deprecated useless format */
+        DLog(@"Deprecated format");
+        [self updateChangeCount:NSChangeDone];
+      }
     }
   }
   return [self dictionary] != nil;
@@ -218,18 +214,6 @@
   return YES;
 }
 
-- (NSArray *)writableTypesForSaveOperation:(NSSaveOperationType)saveOperation {
-  switch(saveOperation) {
-    case NSSaveAsOperation:
-      return [NSArray arrayWithObjects:
-        ScriptingDefinitionFileType, 
-        TigerScriptingDefinitionFileType, 
-        PantherScriptingDefinitionFileType, nil];
-    default:
-      return [super writableTypesForSaveOperation:saveOperation];
-  }
-}
-
 #pragma mark -
 #pragma mark SdefDocument Specific
 - (SdefObject *)selection {
@@ -240,7 +224,6 @@
 - (SdefDictionary *)dictionary {
   return sd_dictionary;
 }
-
 - (void)setDictionary:(SdefDictionary *)newDictionary {
   if (sd_dictionary != newDictionary) {
     [sd_dictionary setDocument:nil];
@@ -267,6 +250,12 @@
       [sd_manager addDictionary:sd_dictionary];
   }
   return sd_manager;
+}
+- (NSNotificationCenter *)notificationCenter {
+  if (!sd_center) {
+    sd_center = [[NSNotificationCenter alloc] init];
+  }
+  return sd_center;
 }
 
 #pragma mark -

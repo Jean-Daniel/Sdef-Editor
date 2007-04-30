@@ -19,6 +19,9 @@
 
 #pragma mark Parser
 - (void)addXMLChild:(id<SdefObject>)node;
+- (void)addXMLComment:(NSString *)comment;
+
+- (void)setXMLMetas:(NSDictionary *)metas;
 - (void)setXMLAttributes:(NSDictionary *)attrs;
 
 #pragma mark Generator
@@ -30,6 +33,9 @@
 @interface SdefObject (SdefXMLObject) <SdefXMLObject>
 #pragma mark Parser
 - (void)addXMLChild:(id<SdefObject>)node;
+- (void)addXMLComment:(NSString *)comment;
+
+- (void)setXMLMetas:(NSDictionary *)metas;
 - (void)setXMLAttributes:(NSDictionary *)attrs;
 
 #pragma mark Generator
@@ -40,6 +46,9 @@
 
 @interface SdefLeaf (SdefXMLObject) <SdefXMLObject>
 #pragma mark Parsing
+- (void)addXMLComment:(NSString *)comment;
+
+- (void)setXMLMetas:(NSDictionary *)metas;
 - (void)setXMLAttributes:(NSDictionary *)attrs;
 
 #pragma mark XML Generation

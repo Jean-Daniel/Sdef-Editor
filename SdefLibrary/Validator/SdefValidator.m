@@ -32,6 +32,7 @@
 
 #pragma mark -
 - (void)awakeFromNib {
+  sd_version = [[(SdefDocument *)[self document] dictionary] version];
   [uiVersion selectItemWithTag:sd_version];
   [uiTable setTarget:self];
   [uiTable setDoubleAction:@selector(reveal:)];

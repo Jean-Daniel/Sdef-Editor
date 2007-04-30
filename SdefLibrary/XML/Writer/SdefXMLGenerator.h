@@ -14,6 +14,7 @@
   CFXMLTreeRef sd_node;
   NSUInteger sd_indent;
   
+  BOOL sd_metas;
   SdefObject *sd_root;
   NSString *sd_comment;
 }
@@ -24,6 +25,7 @@
 - (SdefObject *)root;
 - (void)setRoot:(SdefObject *)anObject;
 
+- (void)setIgnoreMetas:(BOOL)flag;
 - (void)setHeaderComment:(NSString *)comment;
 
 @end

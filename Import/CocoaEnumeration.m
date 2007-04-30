@@ -13,7 +13,7 @@
 @implementation SdefEnumeration (CocoaTerminology)
 
 - (id)initWithName:(NSString *)name suite:(NSDictionary *)suite andTerminology:(NSDictionary *)terminology {
-  NSString *sdefName = SdefNameCreateWithCocoaName(name);
+  NSString *sdefName = SdefNameFromCocoaName(name);
   if (self = [super initWithName:sdefName]) {
     [[self impl] setName:name];
     [self setCode:[suite objectForKey:@"AppleEventCode"]];
@@ -28,7 +28,6 @@
       [enumerator release];
     }
   }
-  [sdefName release];
   return self;
 }
 

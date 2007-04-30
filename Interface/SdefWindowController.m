@@ -56,23 +56,15 @@ static inline BOOL SdefEditorExistsForItem(SdefObject *item) {
 
 @implementation SdefWindowController
 
-- (id)initWithOwner:(id)owner {
-  if (self = [super initWithWindowNibName:@"SdefDocument" owner:(owner) ? : self]) {
+- (id)init {
+  if (self = [super initWithWindowNibName:@"SdefDocument"]) {
     sd_viewControllers = [[NSMutableDictionary alloc] initWithCapacity:16];
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(didChangeNodeName:)
-                                                 name:SKUITreeNodeDidChangeNameNotification
-                                               object:nil];
-//    [[NSNotificationCenter defaultCenter] addObserver:self
-//                                             selector:@selector(didRemoveNode:)
-//                                                 name:SKUITreeNodeDidRemoveChildNotification
-//                                               object:nil];
   }
   return self;
 }
 
 - (void)dealloc {
-  [[NSNotificationCenter defaultCenter] removeObserver:self];
+  [self setDocument:nil];
   [sd_viewControllers release];
   [sd_tree unbind:@"autoSelect"];
   [sd_tree release];
@@ -171,6 +163,24 @@ static inline BOOL SdefEditorExistsForItem(SdefObject *item) {
     }
   }
   return rect;
+}
+
+- (void)setDocument:(NSDocument *)aDocument {
+  if ([super document]) {
+    [[[super document] notificationCenter] removeObserver:self];
+  }
+  [super setDocument:aDocument];
+  if ([super document]) {
+    /* WARNING: do not handle multiple nodes notifications */
+    [[[super document] notificationCenter] addObserver:self
+                                              selector:@selector(didChangeNodeName:)
+                                                  name:SKUITreeNodeDidChangeNameNotification
+                                                object:nil];
+    //    [[[super document] notificationCenter] addObserver:self
+    //                                             selector:@selector(didRemoveNode:)
+    //                                                 name:SKUITreeNodeDidRemoveChildNotification
+    //                                               object:nil];
+  }
 }
 
 - (NSString *)windowTitleForDocumentDisplayName:(NSString *)displayName {

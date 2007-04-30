@@ -34,7 +34,7 @@ typedef struct AeteHeader AeteHeader;
 static
 OSStatus _GetTerminologyFromAppleEvent(AppleEvent *theEvent, NSMutableArray *terminolgies) {
   long count = 0;
-  AEDescList aetes = {typeNull, nil};
+  AEDescList aetes = SKAEEmptyDesc();
   
   OSStatus err = SKAESetStandardAttributes(theEvent);
   require_noerr(err, bail);

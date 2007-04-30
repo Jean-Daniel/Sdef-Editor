@@ -122,7 +122,8 @@
     /* Cast */
     if (sd_vtype == kSdefValueTypeString && [sd_value isKindOfClass:[NSNumber class]]) {
       [self setValue:[sd_value stringValue]];
-    } else if ((sd_vtype == kSdefValueTypeInteger || sd_vtype == kSdefValueTypeBoolean) && [sd_value isKindOfClass:[NSString class]]) {
+    } else if ((sd_vtype == kSdefValueTypeInteger || sd_vtype == kSdefValueTypeBoolean) && 
+               (!sd_value || [sd_value isKindOfClass:[NSString class]])) {
       [self setValue:SKInteger(SKIntegerValue(sd_value))];
     }
     [self didChangeValueForKey:key];

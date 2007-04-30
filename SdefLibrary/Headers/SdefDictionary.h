@@ -19,6 +19,7 @@
 @class SdefDocument, SdefClassManager;
 @interface SdefDictionary : SdefDocumentedObject <NSCopying, NSCoding> {
 @private
+  SdefVersion sd_version;
   SdefDocument *sd_document;
 }
 
@@ -30,5 +31,8 @@
 - (void)setDocument:(SdefDocument *)document;
 
 - (SdefClassManager *)classManager;
+
+- (SdefVersion)version;
+- (void)setVersion:(SdefVersion)vers;
 
 @end

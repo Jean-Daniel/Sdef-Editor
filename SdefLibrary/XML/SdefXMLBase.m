@@ -50,6 +50,17 @@
 }
 
 #pragma mark XML Parsing
+- (void)addXMLChild:(id<SdefObject>)node {
+  [NSException raise:NSInternalInconsistencyException format:@"%@ must overrided %@ to support %@ ", 
+    [self class], NSStringFromSelector(_cmd), node];
+}
+- (void)addXMLComment:(NSString *)comment {
+  [self addComment:[SdefComment commentWithString:comment]];
+}
+
+- (void)setXMLMetas:(NSDictionary *)metas {
+  //DLog(@"Metas: %@, %@", self, metas);
+}
 - (void)setXMLAttributes:(NSDictionary *)attrs {
   NSString *attr = [attrs objectForKey:@"name"];
   if (attr)
@@ -59,11 +70,6 @@
   if (attr && ![attr isEqualToString:@"no"]) {
     [self setHidden:YES];
   }
-}
-
-- (void)addXMLChild:(id<SdefObject>)node {
-  [NSException raise:NSInternalInconsistencyException format:@"%@ must overrided %@ to support %@ ", 
-    [self class], NSStringFromSelector(_cmd), node];
 }
 
 @end

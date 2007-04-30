@@ -30,24 +30,34 @@ static BOOL SdefSearchFilter(NSString *search, SdefObject *object, void *ctxt);
 
 - (id)init {
   if (self = [super initWithWindowNibName:@"SdefSymbolBrowser"]) {
-    /* WARNING: do not handle multiple nodes notifications */
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(didAppendChild:)
-                                                 name:SKUITreeNodeDidInsertChildNotification
-                                               object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(willRemoveChild:)
-                                                 name:SKUITreeNodeWillRemoveChildNotification
-                                               object:nil];
+    
   }
   return self;
 }
 
 - (void)dealloc {
   ShadowTrace();
+  [self setDocument:nil];
   [searchField setTarget:nil];
-  [[NSNotificationCenter defaultCenter] removeObserver:self];
   [super dealloc];
+}
+
+- (void)setDocument:(NSDocument *)aDocument {
+  if ([super document]) {
+    [[[super document] notificationCenter] removeObserver:self];
+  }
+  [super setDocument:aDocument];
+  if ([super document]) {
+    /* WARNING: do not handle multiple nodes notifications */
+    [[[super document] notificationCenter] addObserver:self
+                                              selector:@selector(didAppendChild:)
+                                                  name:SKUITreeNodeDidInsertChildNotification
+                                                object:nil];
+    [[[super document] notificationCenter] addObserver:self
+                                              selector:@selector(willRemoveChild:)
+                                                  name:SKUITreeNodeWillRemoveChildNotification
+                                                object:nil];
+  }
 }
 
 - (NSString *)windowTitleForDocumentDisplayName:(NSString *)displayName {

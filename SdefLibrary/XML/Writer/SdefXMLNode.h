@@ -17,6 +17,8 @@
   
   NSString * sd_content;
   NSMutableArray *sd_comments;
+  NSMutableDictionary *sd_metas;
+  NSMutableDictionary *sd_postmetas;
 }
 
 + (id)nodeWithElementName:(NSString *)aName;
@@ -51,5 +53,11 @@
 - (void)setComments:(NSArray *)comments;
 - (void)addComment:(NSString *)comment;
 - (void)removeCommentAtIndex:(NSUInteger)index;
+
+/* set nil value to remove a meta */
+- (NSDictionary *)metas;
+- (NSDictionary *)postmetas;
+- (void)setMeta:(NSString *)value forKey:(NSString *)key;
+- (void)setPostMeta:(NSString *)value forKey:(NSString *)key;
 
 @end

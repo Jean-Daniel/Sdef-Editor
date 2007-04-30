@@ -16,6 +16,8 @@
   SdefVersion sd_version;
   CFXMLParserRef sd_parser;
   NSMutableArray *sd_comments;
+  CFMutableDictionaryRef sd_metas;
+  
   /* root element */
   SdefDictionary *sd_dictionary;
   

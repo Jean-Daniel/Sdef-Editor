@@ -17,16 +17,16 @@
   if (self = [super init]) {
     NSString *tname = [terminology objectForKey:@"Name"];
     if (!tname) {
-      tname = name;
+      tname = SdefNameFromCocoaName(name);
       [self setHidden:YES];
     }
     [self setName:tname];
     [self setDesc:[terminology objectForKey:@"Description"]];
-    [self setCode:[[suite objectForKey:@"AppleEventClassCode"] stringByAppendingString:[suite objectForKey:@"AppleEventCode"]]];    
-    NSString *sdefName = SdefNameCreateWithCocoaName(name);
+    [self setCode:[NSString stringWithFormat:@"%@%@", [suite objectForKey:@"AppleEventClassCode"], [suite objectForKey:@"AppleEventCode"]]];
+    
+    NSString *sdefName = SdefNameFromCocoaName(name);
     if (![sdefName isEqualToString:[self name]])
       [[self impl] setName:name];
-    [sdefName release];
     [[self impl] setSdClass:[suite objectForKey:@"CommandClass"]];
     
     /* Result */

@@ -126,6 +126,11 @@
   if (extension != sd_extension) {
     [self willChangeValueForKey:@"name"];
     [[[self undoManager] prepareWithInvocationTarget:self] setExtension:sd_extension];
+    
+    /* should be before sd_extension = ... to avoid multi notifications */
+    if (extension && ![self inherits] && [self name])
+      [self setInherits:[self name]];
+    
     sd_extension = extension;
     [self didChangeValueForKey:@"name"];
     [self setIcon:[NSImage imageNamed:sd_extension ? @"Class-Extension" : @"Class"]];

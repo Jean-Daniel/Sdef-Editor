@@ -69,6 +69,7 @@ NSString *SdefValidatorCodeForName(NSString *name) {
       @"colr", @"color",
       @"docu", @"document",
       @"cwin", @"window",
+      @"pcnt", @"contents",
       /* types */
       @"****", @"any",
       @"bool", @"boolean",

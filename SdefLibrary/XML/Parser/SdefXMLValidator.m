@@ -294,9 +294,9 @@ CFMutableDictionaryRef sValidators = NULL;
   CFStringRef last = [self element];
   if (!last || !CFEqual(element, last)) {
     WLog(@"Invalid validator stack state");
-  } else {
-    CFArrayRemoveValueAtIndex(sd_stack, CFArrayGetCount(sd_stack) - 1);
   }
+  if (last)
+    CFArrayRemoveValueAtIndex(sd_stack, CFArrayGetCount(sd_stack) - 1);
 }
 
 - (NSString *)invalidAttribute:(NSString *)attribute inElement:(NSString *)element {
@@ -588,7 +588,7 @@ CFMutableDictionaryRef sValidators = NULL;
       CFEqual(element, CFSTR("event"))) {
     return kSdefParserVersionTiger | kSdefParserVersionLeopard;
   } else if (CFEqual(element, CFSTR("class-extension"))) {
-    return kSdefParserVersionLeopard;
+    return kSdefParserVersionTiger | kSdefParserVersionLeopard; /* kSdefParserVersionLeopard; */
   } else if (CFEqual(element, CFSTR("types")) ||
              CFEqual(element, CFSTR("classes")) ||
              CFEqual(element, CFSTR("commands")) ||

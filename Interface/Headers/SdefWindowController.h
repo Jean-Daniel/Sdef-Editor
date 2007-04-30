@@ -27,7 +27,7 @@ extern NSString * const SdefDictionarySelectionDidChangeNotification;
   NSMutableDictionary *sd_viewControllers;
 }
 
-- (id)initWithOwner:(id)owner;
+- (id)init;
 - (void)setDictionary:(SdefDictionary *)dictionary;
 
 - (void)displayObject:(SdefObject *)anObject;

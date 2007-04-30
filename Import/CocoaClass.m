@@ -17,7 +17,7 @@
   if (self = [super init]) {
     NSString *tname = [terminology objectForKey:@"Name"];
     if (!tname) {
-      tname = name;
+      tname = SdefNameFromCocoaName(name);
       [self setHidden:YES];
     }
     [self setName:tname];
@@ -92,7 +92,7 @@
   if (self = [super init]) {
     NSString *tname = [terminology objectForKey:@"Name"];
     if (!tname)
-      tname = name;
+      tname = SdefNameFromCocoaName(name);
     if (![tname isEqualToString:@"contents"]) {
       [self setName:tname];
     }
@@ -114,8 +114,8 @@
     [self setAccess:rights];
     
     /* Cocoa Method */
-    if (![name isEqualToString:[terminology objectForKey:@"Name"]])
-      [[self impl] setMethod:name];
+    if (!tname || ![name isEqualToString:tname])
+      [[self impl] setKey:name];
   }
   return self;
 }
@@ -128,7 +128,7 @@
   if (self = [super init]) {
     NSString *tname = [terminology objectForKey:@"Name"];
     if (!tname) {
-      tname = name;
+      tname = SdefNameFromCocoaName(name);
       [self setHidden:YES];
     }
     [self setName:tname];
@@ -144,8 +144,8 @@
     [self setAccess:rights];
     
     /* Cocoa Method */
-    if (![name isEqualToString:[terminology objectForKey:@"Name"]])
-      [[self impl] setMethod:name];
+    if (!tname || ![name isEqualToString:tname])
+      [[self impl] setKey:name];
   }
   return self;
 }
@@ -167,7 +167,7 @@
     
     /* Cocoa Method */
     if (![name isEqualToString:[suite objectForKey:@"Name"]])
-      [[self impl] setMethod:name];
+      [[self impl] setKey:name];
   }
   return self;
 }

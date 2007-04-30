@@ -11,6 +11,24 @@
 #import "SdefDocument.h"
 #import "SdefDictionary.h"
 
+static
+NSImage *SdefImageNamed(NSString *name) {
+  static NSMutableDictionary *sImages = nil;
+  if (!sImages) {
+    sImages = [[NSMutableDictionary alloc] init];
+  }
+  NSImage *image = nil;
+  if (name) {
+    image = [sImages objectForKey:name];
+    if (!image) {
+      image = [NSImage imageNamed:name];
+      if (image)
+        [sImages setObject:image forKey:name];
+    }
+  }
+  return image;
+}
+
 @implementation SdefObject
 #pragma mark Protocols Implementations
 - (id)copyWithZone:(NSZone *)aZone {
@@ -55,7 +73,7 @@
 }
 
 - (id)initWithName:(NSString *)aName icon:(NSImage *)anIcon {
-  if (self = [super initWithName:aName icon:[NSImage imageNamed:[[self class] defaultIconName]]]) {
+  if (self = [super initWithName:aName icon:SdefImageNamed([[self class] defaultIconName])]) {
     [self setRegisterUndo:YES];
     [self setRemovable:YES];
     [self setEditable:YES];
@@ -114,7 +132,6 @@
   return parent;
 }
 
-
 - (SdefDocument *)document {
   return [[self dictionary] document];
 }
@@ -123,7 +140,10 @@
 }
 
 - (SdefClassManager *)classManager {
-  return [[self dictionary] classManager];
+  return [[self document] classManager];
+}
+- (NSNotificationCenter *)notificationCenter {
+  return [[self document] notificationCenter];
 }
 
 - (SdefObjectType)objectType {
@@ -275,7 +295,6 @@
   }
   return sd_comments;
 }
-
 - (void)setComments:(NSArray *)comments {
   if (sd_comments != comments) {
     [sd_comments removeAllObjects];
@@ -287,15 +306,11 @@
   }
 }
 
-- (void)addComment:(NSString *)comment {
-  if (comment) {
-    SdefComment *cmnt = [[SdefComment allocWithZone:[self zone]] initWithString:comment];
-    [[self comments] addObject:cmnt];
-    [cmnt setOwner:self];
-    [cmnt release];
-  }
-}
 
+- (void)addComment:(SdefComment *)comment {
+  [[self comments] addObject:comment];
+  [comment setOwner:self];
+}
 - (void)removeCommentAtIndex:(NSUInteger)anIndex {
   SdefComment *cmnt = [sd_comments objectAtIndex:anIndex];
   if (cmnt) {
@@ -407,7 +422,7 @@ NSString *CocoaNameForSdefName(NSString *sdefName, BOOL isClass) {
   return name;
 }
 
-NSString *SdefNameCreateWithCocoaName(NSString *cocoa) {
+NSString *SdefNameFromCocoaName(NSString *cocoa) {
   static CFLocaleRef english = nil;
   if (!cocoa) return nil;
   
@@ -426,5 +441,5 @@ NSString *SdefNameCreateWithCocoaName(NSString *cocoa) {
   }
   if (!english) english = CFLocaleCreate(kCFAllocatorDefault, CFSTR("English"));
   CFStringLowercase(sdef, english);
-  return (id)sdef;
+  return [(id)sdef autorelease];
 }

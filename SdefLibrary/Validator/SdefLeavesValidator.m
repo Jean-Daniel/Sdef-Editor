@@ -70,8 +70,13 @@
   if (vers < kSdefLeopardVersion) {
     if ([self valueType] != kSdefValueTypeNone)
       [messages addObject:[self versionRequired:kSdefLeopardVersion forAttribute:@"*-value"]];
-  } else if ([self valueType] != kSdefValueTypeNone && ![self value]) {
-    [messages addObject:[self invalidValue:nil forAttribute:@"*-value"]];
+  } else {
+    switch ([self valueType]) {
+      case kSdefValueTypeString:
+        if (![self textValue])
+          [messages addObject:[self invalidValue:nil forAttribute:@"*-value"]];
+        break;
+    }
   }
   [super validate:messages forVersion:vers];
 }

@@ -47,7 +47,7 @@ typedef NSUInteger SdefVersion;
 #pragma mark -
 #pragma mark Publics Functions Declaration
 SK_EXPORT
-NSString *SdefNameCreateWithCocoaName(NSString *cocoa);
+NSString *SdefNameFromCocoaName(NSString *cocoa);
 SK_EXPORT
 NSString *CocoaNameForSdefName(NSString *cocoa, BOOL isClass);
 
@@ -77,7 +77,7 @@ NSString *CocoaNameForSdefName(NSString *cocoa, BOOL isClass);
 @class SdefDocument;
 @class SdefClassManager;
 @class SdefSuite, SdefCollection;
-@class SdefImplementation, SdefDocumentation;
+@class SdefImplementation, SdefDocumentation, SdefComment;
 @interface SdefObject : SKUITreeNode <SdefObject, NSCopying, NSCoding> {
 @protected
   struct _sd_soFlags {
@@ -161,8 +161,8 @@ NSString *CocoaNameForSdefName(NSString *cocoa, BOOL isClass);
 #pragma mark Comments
 - (NSMutableArray *)comments;
 - (void)setComments:(NSArray *)comments;
-- (void)addComment:(NSString *)comment;
-- (void)removeCommentAtIndex:(NSUInteger)index;
+
+- (void)addComment:(SdefComment *)comment;
 
 @end
 

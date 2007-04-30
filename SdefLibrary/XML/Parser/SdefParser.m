@@ -163,11 +163,13 @@ Boolean _SdefElementIsCollection(CFStringRef element) {
 - (id)init {
   if (self = [super init]) {
     sd_comments = [[NSMutableArray alloc] init];
+    sd_metas = CFDictionaryCreateMutable(kCFAllocatorDefault, 0, &kCFTypeDictionaryKeyCallBacks, &kCFTypeDictionaryValueCallBacks);
   }
   return self;
 }
 
 - (void)dealloc {
+  if (sd_metas) CFRelease(sd_metas);
   [sd_comments release];
   [sd_validator release];
   [sd_docParser release];
@@ -206,6 +208,8 @@ Boolean _SdefElementIsCollection(CFStringRef element) {
   }
   if (sdefData) {
     [sd_comments removeAllObjects];
+    if (sd_metas) CFDictionaryRemoveAllValues(sd_metas);
+    
     CFXMLParserContext ctxt = { 0, self, nil, nil, SKCBNSObjectCopyDescription };
     sd_parser = CFXMLParserCreate(kCFAllocatorDefault, (CFDataRef)sdefData, NULL,
                                   kCFXMLParserNoOptions, kCFXMLNodeCurrentVersion,
@@ -231,6 +235,26 @@ Boolean _SdefElementIsCollection(CFStringRef element) {
 
 #pragma mark -
 - (void)parser:(CFXMLParserRef)parser handleComment:(CFStringRef)comment {
+  if (CFStringHasPrefix(comment, CFSTR(" @"))) {
+    CFRange start, end;
+    if (CFStringFindWithOptions(comment, CFSTR("("), 
+                                CFRangeMake(0, CFStringGetLength(comment)), 0, &start) &&
+        CFStringFindWithOptions(comment, CFSTR(")"), 
+                                CFRangeMake(0, CFStringGetLength(comment)), kCFCompareBackwards, &end) &&
+        (start.location + start.length) < end.location) {
+      CFStringRef key = NULL, value = NULL;
+      key = CFStringCreateWithSubstring(kCFAllocatorDefault, comment, CFRangeMake(2, start.location - 2));
+      start.location += start.length;
+      value = CFStringCreateWithSubstring(kCFAllocatorDefault, comment, CFRangeMake(start.location, end.location - start.location));
+      if (key && value)
+        CFDictionarySetValue(sd_metas, key, value);
+      if (key) CFRelease(key);
+      if (value) CFRelease(value);
+      
+      return;
+    }
+  } 
+  /* else */
   NSString *str = [[NSString alloc] initWithString:(id)comment];
   if (str) {
     [sd_comments addObject:str];
@@ -284,9 +308,6 @@ Boolean _SdefElementIsCollection(CFStringRef element) {
         case kCFXMLNodeTypeElement:
           structure = [self parser:parser createStructureForElement:CFXMLNodeGetString(node) infos:(CFXMLElementInfo *)CFXMLNodeGetInfoPtr(node)];
           break;
-        case kCFXMLNodeTypeDocument:
-          /* Ignore document info */
-          break;
         case kCFXMLNodeTypeProcessingInstruction:
           DLog(@"Encounter processing instruction: %@", CFXMLNodeGetString(node));
           break;
@@ -320,11 +341,27 @@ Boolean _SdefElementIsCollection(CFStringRef element) {
   return structure;
 }
 
+- (void)sd_addCommentsToObject:(id<SdefXMLObject>)object {
+  if ([sd_comments count]) {
+    if (object) {
+      for (NSUInteger i = 0; i < [sd_comments count]; i++) {
+        /* parse meta */
+        [object addXMLComment:[sd_comments objectAtIndex:i]];
+      }
+    }
+    [sd_comments removeAllObjects];
+  }
+  if (sd_metas && CFDictionaryGetCount(sd_metas) > 0) {
+    [object setXMLMetas:(id)sd_metas];
+    CFDictionaryRemoveAllValues(sd_metas);
+  }
+}
+
 - (void)parser:(CFXMLParserRef)parser addChild:(void *)aChild toStructure:(void *)aStruct {
   if (sd_docParser) {
     [sd_docParser parser:parser addChild:aChild toStructure:aStruct];
   } else {
-    id<SdefObject> child = (id)aChild;
+    id<SdefXMLObject> child = (id)aChild;
     id<SdefXMLObject> parent = (id)aStruct;
     //  DLog(@"=========== %@ -> %@", parent, child);
     if (typeWildCard == [child objectType]) {
@@ -340,17 +377,7 @@ Boolean _SdefElementIsCollection(CFStringRef element) {
         sd_dictionary = [(SdefDictionary *)child retain];
       
       /* Handle comments */
-      if ([sd_comments count]) {
-        SdefObject *commented = nil;
-        if ([(id)child respondsToSelector:@selector(addComment:)]) commented = (id)child;
-        else if ([(id)parent respondsToSelector:@selector(addComment:)]) commented = (id)parent;
-        if (commented) {
-          for (NSUInteger i = 0; i < [sd_comments count]; i++) {
-            [commented addComment:[sd_comments objectAtIndex:i]];
-          }
-        }
-        [sd_comments removeAllObjects];
-      }
+      [self sd_addCommentsToObject:child];
       
       /* Check documentation element */
       if (kSdefDocumentationType == [child objectType]) {
@@ -372,19 +399,15 @@ Boolean _SdefElementIsCollection(CFStringRef element) {
       [sd_docParser parser:parser endStructure:structure];
     }
   } else {
-    [sd_validator endElement:(CFStringRef)[(id)structure xmlElementName]]; 
+    /* handle special case where class become class extension */
+    if ([(id)[sd_validator element] isEqualToString:@"class"] &&
+        [[(id)structure xmlElementName] isEqualToString:@"class-extension"])
+      [sd_validator endElement:CFSTR("class")]; 
+    else
+      [sd_validator endElement:(CFStringRef)[(id)structure xmlElementName]]; 
     
     /* Handle comments */
-    if ([sd_comments count]) {
-      SdefObject *commented = nil;
-      if ([(id)structure respondsToSelector:@selector(addComment:)]) commented = (id)structure;
-      if (commented) {
-        for (NSUInteger i = 0; i < [sd_comments count]; i++) {
-          [commented addComment:[sd_comments objectAtIndex:i]];
-        }
-      }
-      [sd_comments removeAllObjects];
-    }
+    [self sd_addCommentsToObject:(id)structure];
     
     [(id)structure release];
   }
@@ -407,18 +430,31 @@ Boolean _SdefElementIsCollection(CFStringRef element) {
 #pragma mark -
 #pragma mark Core Foundation Parser
 void *SdefParserCreateStructure(CFXMLParserRef parser, CFXMLNodeRef node, void *info) {
+  if (CFXMLNodeGetTypeCode(node) == kCFXMLNodeTypeDocument) {
+    // handle start document
+    return @"__document__";
+  }
+  
   SdefParser *delegate = info;
   return [delegate parser:parser createStructureForNode:node];
 }
 
 void SdefParserAddChild(CFXMLParserRef parser, void *parent, void *child, void *info) {
   SdefParser *delegate = info;
-  return [delegate parser:parser addChild:child toStructure:parent];
+  if (![(id)parent isEqual:@"__document__"]) {
+    [delegate parser:parser addChild:child toStructure:parent];
+  } else {
+    [delegate parser:parser addChild:child toStructure:nil];
+  }
 }
 
 void SdefParserEndStructure(CFXMLParserRef parser, void *node, void *info) {
-  SdefParser *delegate = info;
-  [delegate parser:parser endStructure:node];
+  if (![(id)node isEqual:@"__document__"]) {
+    SdefParser *delegate = info;
+    [delegate parser:parser endStructure:node];
+  } else {
+    // handle end of document
+  }
 }
 
 CFDataRef SdefParserResolveExternalEntity(CFXMLParserRef parser, CFXMLExternalID *extID, void *info) {
@@ -475,7 +511,7 @@ void _SdefParserPostProcessDictionary(SdefDictionary *dictionary) {
       SdefRespondsTo *cmd;
       NSEnumerator *cmds = [[class commands] childEnumerator];
       while (cmd = [cmds nextObject]) {
-        if ([[cmd classManager] eventWithName:[cmd name]]) {
+        if ([[cmd classManager] eventWithIdentifier:[cmd name]]) {
           [cmd retain];
           [cmd remove];
           [[class events] appendChild:cmd];
@@ -486,6 +522,8 @@ void _SdefParserPostProcessDictionary(SdefDictionary *dictionary) {
   }
 }
 
+
+#pragma mark -
 @implementation SdefXMLPlaceholder
 
 + (SdefObjectType)objectType {
@@ -528,13 +566,19 @@ void _SdefParserPostProcessDictionary(SdefDictionary *dictionary) {
   [NSException raise:NSInternalInconsistencyException 
               format:@"%@ does not support child element", sd_name];
 }
+- (void)addXMLComment:(NSString *)comment {
+  // ignore comments
+}
+- (void)setXMLMetas:(NSDictionary *)metas {
+  // ignore metas.
+}
 - (void)setXMLAttributes:(NSDictionary *)attrs { 
-  // does not support attributes.
+  // ignore attributes.
 }
 
 #pragma mark Generator
 - (NSString *)xmlElementName { return sd_name; }
-- (SdefXMLNode *)xmlNodeForVersion:(SdefVersion)version { return nil; }
+- (SdefXMLNode *)xmlNodeForVersion:(SdefVersion)version warnings:(NSMutableArray *)warnings { return nil; }
 
 @end
 

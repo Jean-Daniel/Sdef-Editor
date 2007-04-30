@@ -295,7 +295,7 @@
   return [sd_xrefs objectAtIndex:anIndex];
 }
 
-- (void)addXrefs:(SdefXRef *)aRef {
+- (void)addXRef:(SdefXRef *)aRef {
   [self xrefs];
   [self insertObject:aRef inXrefsAtIndex:[self countOfXrefs]];
 }
@@ -596,21 +596,31 @@ NSString *SdefTypeStringForTypes(NSArray *types) {
   return [str autorelease];
 }
 
+SK_INLINE
+SdefType *__SdefTypeFromString(NSString *str) {
+  NSUInteger location;
+  SdefType *type = nil;
+  if ((location = [str rangeOfString:@"list of"].location) != NSNotFound) {
+    type = [[SdefType alloc] initWithName:[str substringFromIndex:location + 8]];
+    [type setList:YES];
+  } else {
+    type = [[SdefType alloc] initWithName:str];
+  }
+  return [type autorelease];
+}
+
 NSArray *SdefTypesForTypeString(NSString *aType) {
-  NSString *str;
-  NSMutableArray *types = [[NSMutableArray alloc] init];
-  NSEnumerator *strings = [[aType componentsSeparatedByString:@"|"] objectEnumerator];
-  while (str = [strings nextObject]) {
-    NSUInteger location;
-    SdefType *type = nil;
-    if ((location = [str rangeOfString:@"list of"].location) != NSNotFound) {
-      type = [[SdefType alloc] initWithName:[str substringFromIndex:location + 8]];
-      [type setList:YES];
-    } else {
-      type = [[SdefType alloc] initWithName:str];
+  NSArray *types = nil;
+  if ([aType rangeOfString:@"|"].location != NSNotFound) {
+    NSString *str;
+    NSMutableArray *mtypes = [[NSMutableArray alloc] init];
+    NSEnumerator *strings = [[aType componentsSeparatedByString:@"|"] objectEnumerator];
+    while (str = [strings nextObject]) {
+      [mtypes addObject:__SdefTypeFromString(str)];
     }
-    [types addObject:type];
-    [type release];
+    types = mtypes;
+  } else {
+    types = [[NSArray alloc] initWithObjects:__SdefTypeFromString(aType), nil];
   }
   return [types autorelease];
 }

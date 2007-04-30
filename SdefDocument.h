@@ -18,6 +18,7 @@ SdefDictionary *SdefLoadDictionaryData(NSData *data, NSInteger *version, id dele
 @private
   SdefDictionary *sd_dictionary;
   SdefClassManager *sd_manager;
+  NSNotificationCenter *sd_center;
 }
 
 - (SdefObject *)selection;
@@ -31,5 +32,6 @@ SdefDictionary *SdefLoadDictionaryData(NSData *data, NSInteger *version, id dele
 - (IBAction)exportTerminology:(id)sender;
 
 - (SdefClassManager *)classManager;
+- (NSNotificationCenter *)notificationCenter;
 
 @end

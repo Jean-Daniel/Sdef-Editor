@@ -20,7 +20,7 @@
   SdefXMLNode *node = nil;
   if (node = [super xmlNodeForVersion:version]) {
     if ([self hasDocumentation]) {
-      id documentation = [sd_documentation xmlNodeForVersion:version];
+      SdefXMLNode *documentation = [sd_documentation xmlNodeForVersion:version];
       if (documentation) {
         [node prependChild:documentation];
       }
@@ -105,22 +105,42 @@
     if (attr)
       [node setAttribute:[attr stringByEscapingEntities:nil] forKey:@"description"];
     
-    if ([self hasID]) {
-      attr = [self xmlid];
-      if (attr) {
+    if ([self hasID] && (attr = [self xmlid])) {
+      if (version >= kSdefLeopardVersion) {
         [node setAttribute:[attr stringByEscapingEntities:nil] forKey:@"id"];
+      } else {
+        [node setMeta:[attr stringByEscapingEntities:nil] forKey:@"id"];
       }
     }
     
     /* xrefs */
-    if (version >= kSdefLeopardVersion && [self hasXrefs] && sd_xrefs) {
-      SdefXRef *xref;
-      NSEnumerator *items = [sd_xrefs objectEnumerator];
-      while (xref = [items nextObject]) {
-        SdefXMLNode *xNode = [xref xmlNodeForVersion:version];
-        if (xNode) {
-          [node appendChild:xNode];
+    if ([self hasXrefs] && [sd_xrefs count] > 0) {
+      if (version >= kSdefLeopardVersion) {
+        SdefXRef *xref;
+        NSEnumerator *items = [sd_xrefs objectEnumerator];
+        while (xref = [items nextObject]) {
+          SdefXMLNode *xNode = [xref xmlNodeForVersion:version];
+          if (xNode) {
+            [node appendChild:xNode];
+          }
         }
+      } else {
+        /* warning: xref not supported. */
+        SdefXRef *xref;
+        NSEnumerator *items = [sd_xrefs objectEnumerator];
+        NSMutableString *meta = [[NSMutableString alloc] init];
+        [meta appendString:@"0:"];
+        while (xref = [items nextObject]) {
+          if ([xref target]) {
+            [meta appendString:[xref target]];
+            [meta appendString:[xref isHidden] ? @",1," : @",0,"];
+          }
+        }
+        if ([meta length] > 2) {
+          [meta deleteCharactersInRange:NSMakeRange([meta length] - 1, 1)];
+          [node setMeta:meta forKey:@"xrefs"];
+        }
+        [meta release];
       }
     }
     
@@ -142,6 +162,45 @@
 }
 
 #pragma mark XML Parsing
+- (void)setXMLMetas:(NSDictionary *)metas {
+  if ([self hasID]) {
+    NSString *uid = [metas objectForKey:@"id"];
+    if (uid) {
+      [self setXmlid:[uid stringByUnescapingEntities:nil]];
+    }
+  }
+  if ([self hasXrefs]) {
+    NSString *xrefs = [metas objectForKey:@"xrefs"];
+    if (xrefs) {
+      NSScanner *scanner = [[NSScanner alloc] initWithString:xrefs];
+      
+      NSInteger version = 0;
+      BOOL ok = [scanner scanInt:&version];
+      if (ok) 
+        ok = [scanner scanString:@":" intoString:NULL];
+      if (ok) {
+        do {
+          NSInteger hidden;
+          NSString *target;
+          ok = [scanner scanUpToString:@"," intoString:&target];
+          if (ok) ok = [scanner scanString:@"," intoString:NULL];
+          if (ok) ok = [scanner scanInt:&hidden];
+          if (ok) {
+            SdefXRef *ref = [[SdefXRef alloc] init];
+            [ref setTarget:target];
+            [ref setHidden:hidden];
+            [self addXRef:ref];
+            [ref release];
+          }
+          /* advance to next */
+          if (![scanner isAtEnd]) ok = [scanner scanString:@"," intoString:NULL];
+        } while (ok);
+      }
+      [scanner release];
+    }
+  }
+}
+
 - (void)setXMLAttributes:(NSDictionary *)attrs {
   [super setXMLAttributes:attrs];
   if ([self hasID]) {
@@ -160,7 +219,7 @@
       break;
     case kSdefXrefType:
       if ([self hasXrefs]) {
-        [self addXrefs:(SdefXRef *)node];
+        [self addXRef:(SdefXRef *)node];
       }
       break;
     default:

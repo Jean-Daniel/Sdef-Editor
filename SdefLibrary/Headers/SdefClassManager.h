@@ -50,9 +50,9 @@
 
 - (id)typeWithName:(NSString *)name;
 - (SdefClass *)classWithName:(NSString *)name;
-- (SdefVerb *)verbWithName:(NSString *)name;
-- (SdefVerb *)eventWithName:(NSString *)name;
-- (SdefVerb *)commandWithName:(NSString *)name;
+- (SdefVerb *)verbWithIdentifier:(NSString *)identifier;
+- (SdefVerb *)eventWithIdentifier:(NSString *)identifier;
+- (SdefVerb *)commandWithIdentifier:(NSString *)identifier;
 - (SdefValue *)valueWithName:(NSString *)name;
 - (SdefRecord *)recordWithName:(NSString *)name;
 - (SdefEnumeration *)enumerationWithName:(NSString *)name;

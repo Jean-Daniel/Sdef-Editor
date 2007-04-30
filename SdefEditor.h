@@ -8,10 +8,6 @@
 
 SK_PRIVATE
 NSString * ScriptingDefinitionFileType;
-SK_PRIVATE
-NSString * TigerScriptingDefinitionFileType;
-SK_PRIVATE
-NSString * PantherScriptingDefinitionFileType;
 
 SK_PRIVATE
 const OSType kScriptingDefinitionHFSType;

@@ -21,7 +21,6 @@ NSString * const StdplVariableAnchorFormat = @"AnchorFormat";
 
 /* Misc */
 NSString * const SdefInvalidTemplateException = @"SdefInvalidTemplate";
-NSString * const SdefTemplateDidChangeNotification = @"SdefTemplateDidChange";
 
 static NSString * const kSdefTemplateExtension = @"sdtpl";
 static NSString * const kSdefTemplateFolder = @"Sdef Editor/Templates/";
@@ -273,10 +272,6 @@ NSString * const SdtplDefinitionEventsKey = @"Events";
 }
 
 #pragma mark -
-- (void)notifyChange {
-  [[NSNotificationCenter defaultCenter] postNotificationName:SdefTemplateDidChangeNotification object:self];
-}
-
 - (NSArray *)styles {
   return sd_styles;
 }
@@ -285,10 +280,7 @@ NSString * const SdtplDefinitionEventsKey = @"Events";
   return sd_selectedStyle;
 }
 - (void)setSelectedStyle:(NSDictionary *)style {
-  if (style != sd_selectedStyle) {
-    sd_selectedStyle = style;
-    [self notifyChange];
-  }
+  sd_selectedStyle = style;
 }
 
 #pragma mark -
@@ -314,10 +306,7 @@ NSString * const SdtplDefinitionEventsKey = @"Events";
 }
 
 - (void)setToc:(unsigned)toc {
-//  if (toc != sd_tpFlags.toc) {
-    sd_tpFlags.toc = toc;
-//    [self notifyChange];
-//  }
+  sd_tpFlags.toc = toc;
 }
 
 - (unsigned)css {
