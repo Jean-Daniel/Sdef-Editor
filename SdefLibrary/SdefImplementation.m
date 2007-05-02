@@ -139,7 +139,7 @@
 }
 
 - (NSInteger)integerValue {
-  return sd_vtype == kSdefValueTypeInteger ? SKIntegerValue(sd_value) : nil;
+  return sd_vtype == kSdefValueTypeInteger ? SKIntegerValue(sd_value) : 0;
 }
 - (void)setIntegerValue:(NSInteger)value {
   [[[self undoManager] prepareWithInvocationTarget:self] setIntegerValue:[self integerValue]];
@@ -147,7 +147,7 @@
 }
 
 - (BOOL)booleanValue {
-  return sd_vtype == kSdefValueTypeBoolean ? [sd_value boolValue] : nil;
+  return sd_vtype == kSdefValueTypeBoolean ? [sd_value boolValue] : NO;
 }
 - (void)setBooleanValue:(BOOL)value {
   [[[self undoManager] prepareWithInvocationTarget:self] setBooleanValue:[self booleanValue]];

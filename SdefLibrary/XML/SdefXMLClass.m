@@ -30,7 +30,7 @@ NSArray *SdefXMLAccessorStringsFromFlag(NSUInteger flag);
   SdefXMLNode *node = nil;
   if ([self isExtension]) {
     if ([self inherits] && (node = [super xmlNodeForVersion:version])) {
-      if (version >=  kSdefTigerVersion) { /* kSdefLeopardVersion) { */
+      if (version >=  /* kSdefTigerVersion */ kSdefLeopardVersion) {
         [node removeAttributeForKey:@"name"];
         [node removeAttributeForKey:@"code"];
         [node setAttribute:[[self inherits] stringByEscapingEntities:nil] forKey:@"extends"];
@@ -40,9 +40,17 @@ NSArray *SdefXMLAccessorStringsFromFlag(NSUInteger flag);
         [node setAttribute:[[self inherits] stringByEscapingEntities:nil] forKey:@"name"];
         [node setAttribute:[[self inherits] stringByEscapingEntities:nil] forKey:@"inherits"];
         if (![self code] && [self inherits]) {
-          NSString *code = [[[self classManager] classWithName:[self inherits]] code];
-          if (code)
-            [node setAttribute:code forKey:@"code"];
+          SdefClass *parent = [[self classManager] classWithName:[self inherits]];
+          if (parent) {
+            NSString *code = [parent code];
+            if (code)
+              [node setAttribute:code forKey:@"code"];
+            if (![self impl]) {
+              SdefXMLNode *impl = [[parent impl] xmlNodeForVersion:version];
+              if (impl)
+                [node prependChild:impl];
+            }
+          }
         }
       }
     }

@@ -12,6 +12,7 @@
 #import "SdefClassManager.h"
 #import "SdefContents.h"
 #import "SdefClass.h"
+#import "SdefVerb.h"
 
 @implementation SdefClassView
 
@@ -24,9 +25,9 @@
 
 - (void)revealCommand:(id)sender {
   NSInteger row = [sender clickedRow];
-  id objs = [(SdefClass *)[self object] commands];
+  SdefCollection *objs = [(SdefClass *)[self object] commands];
   if (row >= 0 && row < (int)[objs count]) {
-    id cmd = [[self classManager] commandWithName:[[objs childAtIndex:row] name]];
+    SdefVerb *cmd = [[self classManager] commandWithIdentifier:[[objs childAtIndex:row] name]];
     if (cmd)
       [self revealObjectInTree:cmd];
   }
@@ -34,9 +35,9 @@
 
 - (void)revealEvent:(id)sender {
   NSInteger row = [sender clickedRow];
-  id objs = [(SdefClass *)[self object] events];
+  SdefCollection *objs = [(SdefClass *)[self object] events];
   if (row >= 0 && row < (int)[objs count]) {
-    id event = [[self classManager] eventWithName:[[objs childAtIndex:row] name]];
+    SdefVerb *event = [[self classManager] eventWithIdentifier:[[objs childAtIndex:row] name]];
     if (event)
       [self revealObjectInTree:event];
   }

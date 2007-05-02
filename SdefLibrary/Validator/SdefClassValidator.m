@@ -40,9 +40,9 @@
   }
   
   /* class-extension */
-//  if ([self isExtension] && vers < kSdefLeopardVersion) {
-//    [messages addObject:[self versionRequired:kSdefLeopardVersion forElement:@"class-extension"]];
-//  }
+  if ([self isExtension] && vers < kSdefLeopardVersion) {
+    [messages addObject:[self versionRequired:kSdefLeopardVersion forElement:@"class-extension"]];
+  }
   
   /* contents */
   if (sd_contents) {

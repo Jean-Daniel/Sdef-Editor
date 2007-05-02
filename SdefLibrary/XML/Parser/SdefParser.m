@@ -3,7 +3,7 @@
  *  Sdef Editor
  *
  *  Created by Rainbow Team.
- *  Copyright © 2006 - 2007 Shadow Lab. All rights reserved.
+ *  Copyright ï¿½ 2006 - 2007 Shadow Lab. All rights reserved.
  */
 
 #import "SdefParser.h"
@@ -578,7 +578,7 @@ void _SdefParserPostProcessDictionary(SdefDictionary *dictionary) {
 
 #pragma mark Generator
 - (NSString *)xmlElementName { return sd_name; }
-- (SdefXMLNode *)xmlNodeForVersion:(SdefVersion)version warnings:(NSMutableArray *)warnings { return nil; }
+- (SdefXMLNode *)xmlNodeForVersion:(SdefVersion)version { return nil; }
 
 @end
 

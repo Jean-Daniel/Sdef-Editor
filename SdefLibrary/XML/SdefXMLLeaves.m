@@ -193,51 +193,53 @@
 @implementation SdefImplementation (SdefXMLManager)
 #pragma mark XML Generation
 - (SdefXMLNode *)xmlNodeForVersion:(SdefVersion)version {
-  SdefXMLNode *node = [super xmlNodeForVersion:version];
-  NSString *attr = [self name];
-  if (attr)
-    [node setAttribute:[attr stringByEscapingEntities:nil] forKey:@"name"];
-  
-  attr = [self sdClass];
-  if (attr)
-    [node setAttribute:[attr stringByEscapingEntities:nil] forKey:@"class"];
-  
-  /* Key and method was change for Property and Element*/
-  if (kSdefPantherVersion == version) {
-    if ([[self owner] objectType] == kSdefPropertyType ||
-        [[self owner] objectType] == kSdefElementType ||
-        [[self owner] objectType] == kSdefContentsType) {
-      attr = [self key];
-      if (nil != attr)
-        [node setAttribute:[attr stringByEscapingEntities:nil] forKey:@"method"];
-    }
-  } else {
-    attr = [self key];
-    if (attr)
-      [node setAttribute:[attr stringByEscapingEntities:nil] forKey:@"key"];
+  SdefXMLNode *node;
+  if (node = [super xmlNodeForVersion:version]) {
+    [node setEmpty:YES];
+    NSString *attr = [self name];
+    if (attr && [attr length] > 0)
+      [node setAttribute:[attr stringByEscapingEntities:nil] forKey:@"name"];
     
-    attr = [self method];
-    if (nil != attr)
-      [node setAttribute:[attr stringByEscapingEntities:nil] forKey:@"method"];
-  }
-  if ([self valueType] != kSdefValueTypeNone) {
-    if (version >= kSdefLeopardVersion) {
-      switch ([self valueType]) {
-        case kSdefValueTypeString:
-          [node setAttribute:[[self textValue] stringByEscapingEntities:nil] forKey:@"string-value"];
-          break;
-        case kSdefValueTypeInteger:
-          [node setAttribute:[NSString stringWithFormat:@"%ld", (long)[self integerValue]] forKey:@"integer-value"];
-          break;
-        case kSdefValueTypeBoolean:
-          [node setAttribute:[self booleanValue] ? @"YES" : @"NO" forKey:@"boolean-value"];
-          break;
+    attr = [self sdClass];
+    if (attr && [attr length] > 0)
+      [node setAttribute:[attr stringByEscapingEntities:nil] forKey:@"class"];
+    
+    /* Key and method was change for Property and Element*/
+    if (kSdefPantherVersion == version) {
+      if ([[self owner] objectType] == kSdefPropertyType ||
+          [[self owner] objectType] == kSdefElementType ||
+          [[self owner] objectType] == kSdefContentsType) {
+        attr = [self key];
+        if (attr && [attr length] > 0)
+          [node setAttribute:[attr stringByEscapingEntities:nil] forKey:@"method"];
       }
     } else {
-      /* warning: *-value not supported */
+      attr = [self key];
+      if (attr && [attr length] > 0)
+        [node setAttribute:[attr stringByEscapingEntities:nil] forKey:@"key"];
+      
+      attr = [self method];
+      if (attr && [attr length] > 0)
+        [node setAttribute:[attr stringByEscapingEntities:nil] forKey:@"method"];
+    }
+    if ([self valueType] != kSdefValueTypeNone) {
+      if (version >= kSdefLeopardVersion) {
+        switch ([self valueType]) {
+          case kSdefValueTypeString:
+            [node setAttribute:[[self textValue] stringByEscapingEntities:nil] forKey:@"string-value"];
+            break;
+          case kSdefValueTypeInteger:
+            [node setAttribute:[NSString stringWithFormat:@"%ld", (long)[self integerValue]] forKey:@"integer-value"];
+            break;
+          case kSdefValueTypeBoolean:
+            [node setAttribute:[self booleanValue] ? @"YES" : @"NO" forKey:@"boolean-value"];
+            break;
+        }
+      } else {
+        /* warning: *-value not supported */
+      }
     }
   }
-  [node setEmpty:YES];
   return [node attributeCount] > 0 ? node : nil;
 }
 
