@@ -120,11 +120,32 @@
     [self willChangeValueForKey:key];
     sd_vtype = aType;
     /* Cast */
-    if (sd_vtype == kSdefValueTypeString && [sd_value isKindOfClass:[NSNumber class]]) {
-      [self setValue:[sd_value stringValue]];
-    } else if ((sd_vtype == kSdefValueTypeInteger || sd_vtype == kSdefValueTypeBoolean) && 
-               (!sd_value || [sd_value isKindOfClass:[NSString class]])) {
-      [self setValue:SKInteger(SKIntegerValue(sd_value))];
+    switch (sd_vtype) { // target type
+      case kSdefValueTypeString:
+        if ([sd_value isKindOfClass:[NSNumber class]])
+          [self setValue:[sd_value stringValue]];
+        else
+          [self setValue:@""];
+        break;
+      case kSdefValueTypeInteger:
+        if (!sd_value || [sd_value isKindOfClass:[NSString class]])
+          [self setValue:SKInteger(SKIntegerValue(sd_value))];
+        else
+          [self setValue:SKInteger(0)];
+        break;
+      case kSdefValueTypeBoolean:
+        if ([sd_value isKindOfClass:[NSString class]]) {
+          if (NSOrderedSame == [sd_value caseInsensitiveCompare:@"yes"] ||
+              NSOrderedSame == [sd_value caseInsensitiveCompare:@"true"] ||
+              SKIntegerValue(sd_value)) {
+            [self setValue:SKBool(YES)];
+          } else {
+            [self setValue:SKBool(NO)];
+          }
+        } else {
+          [self setValue:SKBool(NO)];
+        }
+        break;
     }
     [self didChangeValueForKey:key];
   }

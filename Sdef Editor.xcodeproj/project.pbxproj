@@ -9,6 +9,11 @@
 /* Begin PBXBuildFile section */
 		1B5FEC8F0BD8E58100F57412 /* SdefXRef.h in Headers */ = {isa = PBXBuildFile; fileRef = 1B5FEC8D0BD8E58100F57412 /* SdefXRef.h */; };
 		1B5FEC900BD8E58100F57412 /* SdefXRef.m in Sources */ = {isa = PBXBuildFile; fileRef = 1B5FEC8E0BD8E58100F57412 /* SdefXRef.m */; };
+		1B9C1D620BF8407A00281647 /* SKFSFunctions.m in Sources */ = {isa = PBXBuildFile; fileRef = 656F9B7F09E6A20A008A0059 /* SKFSFunctions.m */; };
+		1B9C1D630BF8407C00281647 /* SKLSFunctions.m in Sources */ = {isa = PBXBuildFile; fileRef = 656F9B7E09E6A20A008A0059 /* SKLSFunctions.m */; };
+		1B9C1D640BF8408500281647 /* SKAEFunctions.h in Headers */ = {isa = PBXBuildFile; fileRef = 98665E310A86A54200CF8291 /* SKAEFunctions.h */; };
+		1B9C1D6B0BF8409000281647 /* AESendThreadSafe.c in Sources */ = {isa = PBXBuildFile; fileRef = 9818EBCD0BD56D290079867A /* AESendThreadSafe.c */; };
+		1B9C1D720BF8409600281647 /* SKAEFunctions.c in Sources */ = {isa = PBXBuildFile; fileRef = 98665E2F0A86A53A00CF8291 /* SKAEFunctions.c */; };
 		1BB1E2280BE26E5300EEB652 /* SdefEditor.m in Sources */ = {isa = PBXBuildFile; fileRef = 98D3A8C5079EC8670049A8FC /* SdefEditor.m */; };
 		1BB1E23A0BE26E7800EEB652 /* SKAppKitExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 656F9B6F09E6A1DF008A0059 /* SKAppKitExtensions.m */; };
 		1BB1E2440BE26E8A00EEB652 /* SKExtensions.h in Headers */ = {isa = PBXBuildFile; fileRef = 98757FDC078855D80038C05B /* SKExtensions.h */; };
@@ -16,13 +21,13 @@
 		1BC2401A0BDCBFF50077A527 /* SKVSplitBar.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 98D1B0500BDB5993007B3293 /* SKVSplitBar.tiff */; };
 		1BE05BAD0BDD1F2800334FBF /* SdefTypeValidator.m in Sources */ = {isa = PBXBuildFile; fileRef = 1BE05BAC0BDD1F2800334FBF /* SdefTypeValidator.m */; };
 		1BE05C0A0BDD21EB00334FBF /* SdefLeavesValidator.m in Sources */ = {isa = PBXBuildFile; fileRef = 1BE05C090BDD21EB00334FBF /* SdefLeavesValidator.m */; };
+		1BFA58840BF83E8D00E54826 /* SKBaseFunctions.c in Sources */ = {isa = PBXBuildFile; fileRef = 1BFA58830BF83E8D00E54826 /* SKBaseFunctions.c */; };
+		1BFA588D0BF83EC900E54826 /* SKExtensions.h in Copy ShadowKit */ = {isa = PBXBuildFile; fileRef = 98757FDC078855D80038C05B /* SKExtensions.h */; };
 		656F9B5809E6A188008A0059 /* SKFunctions.m in Sources */ = {isa = PBXBuildFile; fileRef = 656F9B5409E6A188008A0059 /* SKFunctions.m */; };
 		656F9B5909E6A188008A0059 /* SKCFContext.m in Sources */ = {isa = PBXBuildFile; fileRef = 656F9B5509E6A188008A0059 /* SKCFContext.m */; };
 		656F9B7409E6A1DF008A0059 /* SKTableDataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 656F9B6E09E6A1DF008A0059 /* SKTableDataSource.m */; };
 		656F9B7609E6A1DF008A0059 /* SKWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 656F9B7009E6A1DF008A0059 /* SKWindowController.m */; };
 		656F9B7B09E6A1F8008A0059 /* SKImageUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 656F9B7A09E6A1F8008A0059 /* SKImageUtils.m */; };
-		656F9B8109E6A20A008A0059 /* SKLSFunctions.m in Sources */ = {isa = PBXBuildFile; fileRef = 656F9B7E09E6A20A008A0059 /* SKLSFunctions.m */; };
-		656F9B8209E6A20A008A0059 /* SKFSFunctions.m in Sources */ = {isa = PBXBuildFile; fileRef = 656F9B7F09E6A20A008A0059 /* SKFSFunctions.m */; };
 		656F9B8309E6A20A008A0059 /* SKProcessFunctions.m in Sources */ = {isa = PBXBuildFile; fileRef = 656F9B8009E6A20A008A0059 /* SKProcessFunctions.m */; };
 		656F9B8709E6A217008A0059 /* SKTemplate.m in Sources */ = {isa = PBXBuildFile; fileRef = 656F9B8409E6A217008A0059 /* SKTemplate.m */; };
 		656F9B8809E6A217008A0059 /* SKTemplateParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 656F9B8509E6A217008A0059 /* SKTemplateParser.m */; };
@@ -50,7 +55,6 @@
 		98168E0107A29025002B893D /* NSCoreSuite.sdef in Resources */ = {isa = PBXBuildFile; fileRef = 98168E0007A29025002B893D /* NSCoreSuite.sdef */; };
 		98168E0507A29036002B893D /* NSTextSuite.sdef in Resources */ = {isa = PBXBuildFile; fileRef = 98168E0407A29036002B893D /* NSTextSuite.sdef */; };
 		9818EBCC0BD56D0D0079867A /* AESendThreadSafe.h in Headers */ = {isa = PBXBuildFile; fileRef = 9818EBCB0BD56D0D0079867A /* AESendThreadSafe.h */; };
-		9818EBCE0BD56D290079867A /* AESendThreadSafe.c in Sources */ = {isa = PBXBuildFile; fileRef = 9818EBCD0BD56D290079867A /* AESendThreadSafe.c */; };
 		9818ECAF0BD57C230079867A /* Class-Extension.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 9818ECAE0BD57C230079867A /* Class-Extension.tiff */; };
 		9820CD270793467D008D397F /* Dictionary.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 9820CD250793467D008D397F /* Dictionary.tiff */; };
 		9820CD280793467D008D397F /* Suite.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 9820CD260793467D008D397F /* Suite.tiff */; };
@@ -137,8 +141,6 @@
 		9863F7A7078B2E0C0022F623 /* RemoveMini.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 9863F7A3078B2E0C0022F623 /* RemoveMini.tiff */; };
 		9863F7A8078B2E0C0022F623 /* RemoveMini_Pressed.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 9863F7A4078B2E0C0022F623 /* RemoveMini_Pressed.tiff */; };
 		9863F7A9078B2E0C0022F623 /* AddMini_Pressed.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 9863F7A5078B2E0C0022F623 /* AddMini_Pressed.tiff */; };
-		98665E300A86A53A00CF8291 /* SKAEFunctions.c in Sources */ = {isa = PBXBuildFile; fileRef = 98665E2F0A86A53A00CF8291 /* SKAEFunctions.c */; };
-		98665E320A86A54200CF8291 /* SKAEFunctions.h in Copy ShadowKit */ = {isa = PBXBuildFile; fileRef = 98665E310A86A54200CF8291 /* SKAEFunctions.h */; };
 		9868410607A30B15001694EA /* SdefEditor.icns in Resources */ = {isa = PBXBuildFile; fileRef = 9868410507A30B15001694EA /* SdefEditor.icns */; };
 		986B1A32081862D3004CF2EA /* SdtplWindow.h in Headers */ = {isa = PBXBuildFile; fileRef = 9825DDC807F4AC16006D5F5C /* SdtplWindow.h */; };
 		986B93D007AB08F700AB131C /* SdefImporterWarning.nib in Resources */ = {isa = PBXBuildFile; fileRef = 986B93CE07AB08F700AB131C /* SdefImporterWarning.nib */; };
@@ -265,9 +267,9 @@
 			dstSubfolderSpec = 0;
 			files = (
 				65EBDD5E0A3D480000D266C4 /* SKUITreeNode.h in Copy ShadowKit */,
+				1BFA588D0BF83EC900E54826 /* SKExtensions.h in Copy ShadowKit */,
 				65EBDD5A0A3D47E800D266C4 /* SKOutlineViewController.h in Copy ShadowKit */,
 				65EBDD590A3D47DE00D266C4 /* SKExtendedTreeNode.h in Copy ShadowKit */,
-				98665E320A86A54200CF8291 /* SKAEFunctions.h in Copy ShadowKit */,
 				9879E2E1094CB5FD005B2173 /* SKWindowController.h in Copy ShadowKit */,
 				9879E2E2094CB5FD005B2173 /* SKLSFunctions.h in Copy ShadowKit */,
 				9879E2E3094CB5FD005B2173 /* SKOutlineView.h in Copy ShadowKit */,
@@ -312,6 +314,7 @@
 		1B5FEC8E0BD8E58100F57412 /* SdefXRef.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = SdefXRef.m; sourceTree = "<group>"; };
 		1BE05BAC0BDD1F2800334FBF /* SdefTypeValidator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SdefTypeValidator.m; sourceTree = "<group>"; };
 		1BE05C090BDD21EB00334FBF /* SdefLeavesValidator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SdefLeavesValidator.m; sourceTree = "<group>"; };
+		1BFA58830BF83E8D00E54826 /* SKBaseFunctions.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = SKBaseFunctions.c; sourceTree = "<group>"; };
 		2A37F4B5FDCFA73011CA2CEA /* English */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = English; path = English.lproj/SdefDocument.nib; sourceTree = "<group>"; };
 		2A37F4B7FDCFA73011CA2CEA /* English */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = English; path = English.lproj/MainMenu.nib; sourceTree = "<group>"; };
 		2A37F4C4FDCFA73011CA2CEA /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = /System/Library/Frameworks/AppKit.framework; sourceTree = "<absolute>"; };
@@ -1054,6 +1057,7 @@
 				656F9B5409E6A188008A0059 /* SKFunctions.m */,
 				656F9B5509E6A188008A0059 /* SKCFContext.m */,
 				656F9B5709E6A188008A0059 /* SKExtensions.m */,
+				1BFA58830BF83E8D00E54826 /* SKBaseFunctions.c */,
 			);
 			path = Base;
 			sourceTree = "<group>";
@@ -1278,6 +1282,7 @@
 				98D1B1700BDB8BE9007B3293 /* SdefValidator.h in Headers */,
 				98D1B2410BDB9AE1007B3293 /* SdefValidatorBase.h in Headers */,
 				1BB1E2440BE26E8A00EEB652 /* SKExtensions.h in Headers */,
+				1B9C1D640BF8408500281647 /* SKAEFunctions.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1415,8 +1420,6 @@
 				656F9B7409E6A1DF008A0059 /* SKTableDataSource.m in Sources */,
 				656F9B7609E6A1DF008A0059 /* SKWindowController.m in Sources */,
 				656F9B7B09E6A1F8008A0059 /* SKImageUtils.m in Sources */,
-				656F9B8109E6A20A008A0059 /* SKLSFunctions.m in Sources */,
-				656F9B8209E6A20A008A0059 /* SKFSFunctions.m in Sources */,
 				656F9B8309E6A20A008A0059 /* SKProcessFunctions.m in Sources */,
 				656F9B8709E6A217008A0059 /* SKTemplate.m in Sources */,
 				656F9B8809E6A217008A0059 /* SKTemplateParser.m in Sources */,
@@ -1427,7 +1430,6 @@
 				65EBDD510A3D47B200D266C4 /* SKUITreeNode.m in Sources */,
 				65EBDD530A3D47C100D266C4 /* SKExtendedTreeNode.m in Sources */,
 				98D1B0580BDB59A0007B3293 /* SKSplitview.m in Sources */,
-				98665E300A86A53A00CF8291 /* SKAEFunctions.c in Sources */,
 				98230E660AFE299B00675226 /* SKDisclosurePanel.m in Sources */,
 				98230E670AFE299B00675226 /* SKDisclosureView.m in Sources */,
 				98230E690AFE299B00675226 /* SKImageAndTextCell.m in Sources */,
@@ -1493,7 +1495,6 @@
 				984572C1083FD0FE00EACD98 /* SdefTypesEditor.m in Sources */,
 				98DF608F0840750000CBE83B /* OSASdefImporter.m in Sources */,
 				98E98D600840DFBA0093BA77 /* SdefLeaf.m in Sources */,
-				9818EBCE0BD56D290079867A /* AESendThreadSafe.c in Sources */,
 				1B5FEC900BD8E58100F57412 /* SdefXRef.m in Sources */,
 				98D6FB1B0BDA042300F30DAE /* SdefDocumentationParser.m in Sources */,
 				98C806A00BDA228500A45088 /* SdefParser.m in Sources */,
@@ -1511,6 +1512,11 @@
 				1BB1E2280BE26E5300EEB652 /* SdefEditor.m in Sources */,
 				1BB1E23A0BE26E7800EEB652 /* SKAppKitExtensions.m in Sources */,
 				1BB1E24B0BE26E9400EEB652 /* SKExtensions.m in Sources */,
+				1BFA58840BF83E8D00E54826 /* SKBaseFunctions.c in Sources */,
+				1B9C1D620BF8407A00281647 /* SKFSFunctions.m in Sources */,
+				1B9C1D630BF8407C00281647 /* SKLSFunctions.m in Sources */,
+				1B9C1D6B0BF8409000281647 /* AESendThreadSafe.c in Sources */,
+				1B9C1D720BF8409600281647 /* SKAEFunctions.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

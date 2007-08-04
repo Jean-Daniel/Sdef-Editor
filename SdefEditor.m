@@ -8,6 +8,7 @@
 
 #import "SdefEditor.h"
 #import <ShadowKit/SKFunctions.h>
+#import <ShadowKit/SKLSFunctions.h>
 #import <ShadowKit/SKApplication.h>
 
 #if MAC_OS_X_VERSION_MIN_REQUIRED < MAC_OS_X_VERSION_10_4
@@ -344,10 +345,24 @@ const OSType kCocoaSuiteDefinitionHFSType = 'ScSu';
 #pragma mark -
 #pragma mark Application Delegate
 - (BOOL)application:(NSApplication *)theApplication openFile:(NSString *)filename {
+  Boolean isapp = false;
   NSString *type = [[NSDocumentController sharedDocumentController] typeFromFileExtension:[filename pathExtension]];
   if ([type isEqualToString:CocoaSuiteDefinitionFileType]) {
     [self importCocoaScriptFile:filename];
     return YES;
+  } else {
+#if MAC_OS_X_VERSION_MIN_REQUIRED < MAC_OS_X_VERSION_10_4
+    if (OSACopyScriptingDefinition) {
+#endif
+      if ((noErr == SKLSIsApplicationAtPath((CFStringRef)filename, &isapp)) && isapp) {
+        SdefImporter *importer = [[OSASdefImporter alloc] initWithFile:filename];
+        [self importWithImporter:importer];
+        [importer release];
+        return YES;
+      }
+#if MAC_OS_X_VERSION_MIN_REQUIRED < MAC_OS_X_VERSION_10_4      
+    }
+#endif
   }
   /* lets document manager handle it */
   return NO;
