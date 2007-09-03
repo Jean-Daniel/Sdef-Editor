@@ -1,0 +1,27 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+ <head>
+  <meta http-equiv="content-type" content="text/html;charset=utf-8">
+  <title>Terminology Exportation</title>
+  <meta name="copyright" content="Copyright 2005 - 2007 Shadow Lab. Tous droits r&eacute;serv&eacute;s.">
+  <meta name="keywords" content="export, save, import, load">
+  <link href="../styles/task_style.css" rel="stylesheet" media="all">
+  <link href="../styles/custom_style.css" rel="stylesheet" media="screen">
+ </head>
+ <body>
+  <a name="TerminologyExportation"></a>
+  <h1>Terminology Exportation (usefull only if you target Mac OS X.3)</h1>
+  <p class="indent">The Export command in the File menu allows you to transform a sdef file into Cocoa Scripting Definition and/or into 'aete' resources.
+  If you want to know more about exportation, please read <!--<a href="sdp.html">-->"sdp manual"<!--</a>-->.</p>
+  <p class="indent">Export Panel (Figure 1) allow you to choose exportation format and options.<br>
+  <div style="text-align: center"><img src="../images/Export.png" alt="Export"></p>
+  <em style="font-size: 0.9em"><strong>Figure 1:</strong> Export Panel.</em></div>
+  <p class="indent"><strong>Target Version</strong> specify the minimum system version to be compatible with. This flag is only meaningful for Cocoa Scripting.</p>
+  <p class="indent"><strong>include NSCoreSuite</strong>: When you export your suite as Cocoa Terminology, all classes inherits properties of <em>item</em> class of NSCoreSuite.
+  To avoid warning or error, you must include NSCoreSuite (or include a cutom suite that also define item class).</p>
+  <p class="indent"><strong>Compiled Resources</strong>: To generate compiled resources, Sdef Editor uses <em>sdp</em> to obtains .r file and then it uses <em>Rez</em> to compile this file.</p>
+  <div class="taskbox">
+   <p>If you dont want to use build-in Tools (sdp and Rez), you can change Tool Path in Sdef Editor Preferences.</p>
+  </div>
+ </body>
+</html>

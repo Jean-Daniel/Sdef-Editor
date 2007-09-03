@@ -1,0 +1,44 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+        "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+ <head>
+  <meta http-equiv="content-type" content="text/html;charset=utf-8">
+  <title>Terminology Importation</title>
+  <meta name="copyright" content="Copyright 2005 - 2007 Shadow Lab. Tous droits r&eacute;serv&eacute;s.">
+  <meta name="keywords" content="browser, item">
+  <link href="../styles/task_style.css" rel="stylesheet" media="all">
+  <link href="../styles/custom_style.css" rel="stylesheet" media="screen">
+ </head>
+ <body>
+  <a name="SdefImportation"></a>
+  <h1>Terminology Importation</h1>
+  <h2><u>Cocoa Script Suite Importation</u></h2>
+  <p class="indent">Cocoa Terminology files (.scriptSuite & .scriptTerminology) handle less features than sdef files.
+  Here is a list of possible problems.</p>
+  <ul style="list-style-type: disc">
+  <li><strong>All Elements</strong>: Hidden property is not defined in Cocoa Terminology.</li>
+  <li><strong>Suite</strong>: OK.</li>
+  <li><strong>Enumeration</strong>: Name can be unaccurate & Description is not defined.</li>
+  <li><strong>Enumerator</strong>: OK.</li>
+  <li><strong>Events</strong>: Events are interpreted as Commands.</li>
+  <li><strong>Commands</strong>: "Direct Parameter" isn't defined if type is 'object'. Result "Description" is not defined.</li>
+  <li><strong>Classes</strong>: OK.</li>
+  <li><strong>Parameters/Contents</strong>: "Not In Properties" and "Write Only" are not defined.</li>
+  <li><strong>Responds To Events</strong>: Interpreted as "Responds To Commands".</li>
+  <li><strong>Elements</strong>: Description is not defined. Accessors are not defined.</li>
+  </ul>
+  <p class="indent">.scriptSuite & .scriptTerminology should be in the same folder. If it is not the case, Sdef Editor will ask you where .scriptTerminology file is.</p>
+  <hr>
+  <h2><u>'aete' Resources Importation</u></h2>
+  <p class="indent">Like "Cocoa Suite", 'aete' resources do not contains all informations needed to fully restore a sdef file.</p>
+  <ul style="list-style-type: disc">
+  <li>'aete' resources does not define Cocoa class, name, method and keys.</li>
+  <li>'aete' resources does not define "Responds To" in classes. (Classes commands and events will be empty).</li>
+  <li>Some types defined into 'aete' Resources have no equivalent in sdef format.</li>
+  </ul>
+  <hr>
+  <h2><u>Application 'aete' Importation</u></h2>
+  <p class="indent">Each Scripting Application need be able to responds to GetAETE AppleEvent, by sending its 'aete' resource.
+  Sdef Editor use this ability to import a running Application 'aete' resource.</p>
+  </body>
+</html>

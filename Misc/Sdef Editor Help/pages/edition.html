@@ -1,0 +1,41 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+ <head>
+  <meta http-equiv="content-type" content="text/html;charset=utf-8">
+  <title>Terminology Edition</title>
+  <meta name="copyright" content="Copyright 2005 - 2007 Shadow Lab. Tous droits r&eacute;serv&eacute;s.">
+  <meta name="keywords" content="action, categorie, plugin">
+  <link href="../styles/task_style.css" rel="stylesheet" media="all">
+  <link href="../styles/custom_style.css" rel="stylesheet" media="screen">
+ </head>
+ <body>
+  <a name="TerminologyCreation"></a>
+  <h1>Terminology Edition</h1>
+  <p class="indent">In Sdef Editor, each document contains one <em>Dictionary</em>,
+  which can contain one or more <em>Suites</em>. A <em>Suite</em> contains <em>Types</em>,
+  <em>Classes</em>, <em>Commands</em> and <em>Events</em>.
+  Classes contains <em>Properties</em>,
+  <em>Elements</em>, <em>Commands</em> and <em>Events</em>.
+  This object hierarchy is represented in a Tree.</p>
+  <p class="indent">To edit content of an object, you have to select it in the tree view, and an editor panel will display (in the right part) details about the selected item (Figure 1).</p>
+  <div style="text-align: center;"><img style="margin-bottom: 4px;" src="../images/editor-window.png" alt="Edition"><br> 
+  <em style="font-size: 0.9em;"><strong>Figure 1:</strong> Right part represents the selected Suite.</em></div>
+  <div class="taskbox">
+   <ul>
+
+   <li>You can delete an object by selecting it in the tree and pressing delete key (⌫).</li>
+   <li>You can reorganise Objects in the Tree with Drag & Drop.</li>
+   <li><em>Commands</em> & <em>Events</em> are in fact the same kind of objects.
+   So you can drag & drop a <em>Command</em> in <em>Events</em> Folder and an <em>Event</em> in <em>Commands</em> Folder.</li>
+   </ul>
+  </div>
+  <hr><p class="indent">Some elements supports <em>Synonyms</em> and <em>Documentation</em>. To edit those fieds, you can use the Inspector panel (Figure 2).</p>
+  <p class="indent"><img src="../images/warning.png" class="middle" alt="warning"> : <em>Synonyms</em> and <em>Documentation</em> Elements are defined in the Sdef specification,
+  but they are not always properly handled by the "Scripting Definition Processor" (sdp) that transforms sdef files into Cocoa or aete terminology.</p>
+  <div style="text-align: center"><img style="margin-bottom: 4px;" src="../images/Inspector.png" alt="Inspector"><br><em style="font-size: 0.9em"><strong>Figure 2:</strong> Inspector Panel.</em></div>
+  <p class="indent">Inspector panel allows to add comments on every Objects. Comments will be render as standards XML comments in sdef files.</p>
+  <div class="taskbox">
+   <p>To Open Inspector panel you can either double clic on an Object in the Tree View, or use Windows Menu (⌘I).</p>
+  </div>
+ </body>
+</html>
