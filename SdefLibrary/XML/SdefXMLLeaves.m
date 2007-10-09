@@ -210,8 +210,12 @@
           [[self owner] objectType] == kSdefElementType ||
           [[self owner] objectType] == kSdefContentsType) {
         attr = [self key];
-        if (attr && [attr length] > 0)
+        /* responds-to should allows empty command */
+        if ([[self owner] objectType] == kSdefRespondsToType) {
+          [node setAttribute:attr ? [attr stringByEscapingEntities:nil] : @"" forKey:@"method"]; 
+        } else if (attr && [attr length] > 0) {
           [node setAttribute:[attr stringByEscapingEntities:nil] forKey:@"method"];
+        }
       }
     } else {
       attr = [self key];
@@ -219,8 +223,12 @@
         [node setAttribute:[attr stringByEscapingEntities:nil] forKey:@"key"];
       
       attr = [self method];
-      if (attr && [attr length] > 0)
+      /* responds-to should allows empty command */
+      if ([[self owner] objectType] == kSdefRespondsToType) {
+        [node setAttribute:attr ? [attr stringByEscapingEntities:nil] : @"" forKey:@"method"]; 
+      } else if (attr && [attr length] > 0) {
         [node setAttribute:[attr stringByEscapingEntities:nil] forKey:@"method"];
+      }
     }
     if ([self valueType] != kSdefValueTypeNone) {
       if (version >= kSdefLeopardVersion) {

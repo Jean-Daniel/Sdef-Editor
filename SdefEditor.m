@@ -3,7 +3,7 @@
  *  Sdef Editor
  *
  *  Created by Rainbow Team.
- *  Copyright © 2006 - 2007 Shadow Lab. All rights reserved.
+ *  Copyright ï¿½ 2006 - 2007 Shadow Lab. All rights reserved.
  */
 
 #import "SdefEditor.h"
@@ -31,7 +31,7 @@
 #endif
 
 enum {
-  kSdefEditorCurrentVersion = 0x010500, /* 1.5.0 */
+  kSdefEditorCurrentVersion = 0x010501, /* 1.5.1 */
 };
 
 int main(int argc, const char *argv[]) {
@@ -56,16 +56,6 @@ const OSType kCocoaSuiteDefinitionHFSType = 'ScSu';
 @end
 
 @implementation SdefEditor
-
-+ (void)initialize {
-  if ([SdefEditor class] == self) {
-    if (SKSystemMajorVersion() == 10 && SKSystemMinorVersion() >= 5) {
-      /* Redefine type using UTI */
-      ScriptingDefinitionFileType = @"com.apple.scripting-definition";
-      CocoaSuiteDefinitionFileType = @"org.shadowlab.cocoa-scripting";
-    }
-  }
-}
 
 - (id)init {
   if (self = [super init]) {

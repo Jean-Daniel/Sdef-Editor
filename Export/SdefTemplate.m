@@ -323,9 +323,9 @@ NSString * const SdtplDefinitionEventsKey = @"Events";
 #pragma mark Private Functions Implementations
 static NSArray *SdefTemplatePaths() {
   NSString *appPath = [[[NSBundle mainBundle] resourcePath] stringByAppendingPathComponent:@"Templates"];
-  NSString *userPath = [SKFSFindFolder(kApplicationSupportFolderType, kUserDomain) stringByAppendingPathComponent:kSdefTemplateFolder];
-  NSString *locPath = [SKFSFindFolder(kApplicationSupportFolderType, kLocalDomain) stringByAppendingPathComponent:kSdefTemplateFolder];
-  NSString *netPath = [SKFSFindFolder(kApplicationSupportFolderType, kNetworkDomain) stringByAppendingPathComponent:kSdefTemplateFolder];
+  NSString *userPath = [SKFSFindFolder(kApplicationSupportFolderType, kUserDomain, NO) stringByAppendingPathComponent:kSdefTemplateFolder];
+  NSString *locPath = [SKFSFindFolder(kApplicationSupportFolderType, kLocalDomain, NO) stringByAppendingPathComponent:kSdefTemplateFolder];
+  NSString *netPath = [SKFSFindFolder(kApplicationSupportFolderType, kNetworkDomain, NO) stringByAppendingPathComponent:kSdefTemplateFolder];
   return [NSArray arrayWithObjects:userPath, locPath, netPath, appPath, nil]; // order: User, Library, Network and Built-in
 }
 
