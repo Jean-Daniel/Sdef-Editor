@@ -50,7 +50,7 @@ OSStatus _GetTerminologyFromAppleEvent(AppleEvent *theEvent, NSMutableArray *ter
 
   for (CFIndex idx = 1; idx <= count; idx++) {
     CFDataRef data = NULL;
-    SKAEGetNthCFDataFromDescList(&aetes, idx, typeAETE, &data);
+    SKAECopyNthCFDataFromDescList(&aetes, idx, typeAETE, &data);
     if (data) {
       [terminolgies addObject:(id)data];
       CFRelease(data);
@@ -105,7 +105,7 @@ bail:
         err = OSAGetSysTerminology(asct, kOSAModeNull, 0, &aetes);
         if (noErr == err) {
           CFDataRef data = NULL;
-          SKAEGetCFDataFromDescriptor(&aetes, &data);
+          SKAECopyCFDataFromDescriptor(&aetes, &data);
           if (data) {
             [sd_aetes addObject:(id)data];
             CFRelease(data);
