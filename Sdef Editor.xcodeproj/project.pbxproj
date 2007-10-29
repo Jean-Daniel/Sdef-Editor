@@ -1703,7 +1703,7 @@
 		85B7BC3B0BD62AED00632EE6 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CURRENT_PROJECT_VERSION = 232;
+				CURRENT_PROJECT_VERSION = 250;
 				HEADER_SEARCH_PATHS = "\"$(SHADOWKIT_ROOT)/include\"";
 				INFOPLIST_FILE = Resources/Info.plist;
 				OTHER_LDFLAGS = (
@@ -1719,7 +1719,7 @@
 		9849B8A108B548BD0036A437 /* Universal Binary */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CURRENT_PROJECT_VERSION = 232;
+				CURRENT_PROJECT_VERSION = 250;
 				HEADER_SEARCH_PATHS = "\"$(SHADOWKIT_ROOT)/include\"";
 				INFOPLIST_FILE = Resources/Info.plist;
 				OTHER_LDFLAGS = (
@@ -1742,7 +1742,7 @@
 		98A7CBE70855010F000D862B /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CURRENT_PROJECT_VERSION = 232;
+				CURRENT_PROJECT_VERSION = 250;
 				HEADER_SEARCH_PATHS = "\"$(SHADOWKIT_ROOT)/include\"";
 				INFOPLIST_FILE = Resources/Info.plist;
 				PRODUCT_NAME = "Sdef Editor";
@@ -1752,7 +1752,7 @@
 		98A7CBE80855010F000D862B /* Profile */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CURRENT_PROJECT_VERSION = 232;
+				CURRENT_PROJECT_VERSION = 250;
 				HEADER_SEARCH_PATHS = "\"$(SHADOWKIT_ROOT)/include\"";
 				INFOPLIST_FILE = Resources/Info.plist;
 				OTHER_LDFLAGS = (
