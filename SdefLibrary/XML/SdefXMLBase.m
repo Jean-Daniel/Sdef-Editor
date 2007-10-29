@@ -30,15 +30,29 @@
         [node setAttribute:@"hidden" forKey:@"hidden"];
     }
     
-    /* Children */
-    SdefObject *child = nil;
-    NSEnumerator *children = [self childEnumerator];
-    while (child = [children nextObject]) {
-      SdefXMLNode *childNode = [child xmlNodeForVersion:version];
-      if (childNode) {
-        NSAssert1([childNode isList] || [childNode elementName], @"%@ return an invalid node", child);
-        [node appendChild:childNode];
+    /* xincludes */
+    if ([self hasXInclude]) {
+      NSArray *xincludes = [self xincludes];
+      for (NSUInteger idx = 0; idx < [xincludes count]; idx++) {
+        SdefXMLNode *xnode = [[xincludes objectAtIndex:idx] xmlNodeForVersion:version];
+        if (xnode)
+          [node appendChild:xnode];
       }
+    }
+    
+    /* Children */
+    /* we have to test if the node is declared empty, 
+      because xinclude effectively contains children but we do not have to dump them */
+    //if (![node isEmpty]) {
+      SdefObject *child = nil;
+      NSEnumerator *children = [self childEnumerator];
+      while (child = [children nextObject]) {
+        SdefXMLNode *childNode = [child xmlNodeForVersion:version];
+        if (childNode) {
+          NSAssert1([childNode isList] || [childNode elementName], @"%@ return an invalid node", child);
+          [node appendChild:childNode];
+        }
+      //}
     }
   }
   return node;
@@ -50,9 +64,16 @@
 }
 
 #pragma mark XML Parsing
-- (void)addXMLChild:(id<SdefObject>)node {
-  [NSException raise:NSInternalInconsistencyException format:@"%@ must overrided %@ to support %@ ", 
-    [self class], NSStringFromSelector(_cmd), node];
+- (void)addXMLChild:(id<SdefObject>)child {
+  switch ([child objectType]) {
+    case kSdefXIncludeType:
+      [self addXInclude:(SdefXInclude *)child];
+      break;
+    default:
+      [NSException raise:NSInternalInconsistencyException format:@"%@ must overrided %@ to support %@ ", 
+        [self class], NSStringFromSelector(_cmd), child];
+      break;
+  }
 }
 - (void)addXMLComment:(NSString *)comment {
   [self addComment:[SdefComment commentWithString:comment]];
@@ -97,3 +118,42 @@
 }
 
 @end
+
+#pragma mark -
+@implementation SdefXInclude (SdefXMLManager)
+#pragma mark XML Generation
+- (NSString *)xmlElementName {
+  return @"xi:include";
+}
+- (SdefXMLNode *)xmlNodeForVersion:(SdefVersion)version {
+  SdefXMLNode *node = nil;
+  if ([[self attributes] count] > 0) {
+    if (node = [super xmlNodeForVersion:version]) {
+      [node setEmpty:YES];
+      [node addAttributesFromDictionary:[self attributes]];
+//      /* href */
+//      NSString *attr = [self href];
+//      if (attr) [node setAttribute:[attr stringByEscapingEntities:nil] forKey:@"href"];
+//      /* pointer */
+//      attr = [self pointer];
+//      if (attr) [node setAttribute:[attr stringByEscapingEntities:nil] forKey:@"pointer"];      
+    }
+  } else {
+    /* we have to dump all children */
+    //[node setList:YES];
+  }
+  
+  return node;
+}
+
+#pragma mark Parsing
+- (void)setXMLAttributes:(NSDictionary *)attrs {
+  [self setAttributes:attrs];
+//  NSString *attr = [attrs objectForKey:@"href"];
+//  if (attr) [self setHref:[attr stringByUnescapingEntities:nil]];
+//  attr = [attrs objectForKey:@"pointer"];
+//  if (attr) [self setPointer:[attr stringByUnescapingEntities:nil]];
+}
+
+@end
+

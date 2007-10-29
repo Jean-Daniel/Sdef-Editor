@@ -43,6 +43,7 @@
 
 - (NSString *)attributForKey:(NSString *)key;
 - (void)setAttribute:(NSString *)value forKey:(NSString *)key;
+- (void)addAttributesFromDictionary:(NSDictionary *)dict;
 - (void)removeAttributeForKey:(NSString *)key;
 - (void)removeAllAttributes;
 

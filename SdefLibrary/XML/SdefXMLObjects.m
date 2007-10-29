@@ -125,7 +125,7 @@
           }
         }
       } else {
-        /* warning: xref not supported. */
+        /* warning: xref not supported in Tiger. */
         SdefXRef *xref;
         NSEnumerator *items = [sd_xrefs objectEnumerator];
         NSMutableString *meta = [[NSMutableString alloc] init];

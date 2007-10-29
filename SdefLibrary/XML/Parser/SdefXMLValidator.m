@@ -218,6 +218,13 @@ CFMutableDictionaryRef sValidators = NULL;
     CFDictionarySetValue(sValidators, CFSTR("xref"), elt);
     [elt release];
     
+    /* xinclude */
+    elt = [[SdefBaseXMLElement alloc] init];
+    /* base on W3C Working Draft 10 November 2003 */
+    [elt setAttributes:CFSTR("href"), CFSTR("parse"), CFSTR("xpointer"), CFSTR("encoding"), 
+      CFSTR("accept"), CFSTR("accept-charset"), CFSTR("accept-language"), nil];
+    CFDictionarySetValue(sValidators, CFSTR("xi:include"), elt);
+    [elt release];
     
     /* ~~~~~~~~~~~~~~ Panther collections ~~~~~~~~~~~~~~ */
     elt = [[SdefBaseXMLElement alloc] init];
@@ -384,6 +391,9 @@ CFMutableDictionaryRef sValidators = NULL;
   return kSdefParserVersionUnknown;
 }
 - (SdefParserVersion)acceptElement:(CFStringRef)element {
+  if (CFEqual(element, CFSTR("xi:include")))
+    return kSdefParserVersionLeopard;
+  
   return kSdefParserVersionUnknown;
 }
 
@@ -440,7 +450,7 @@ CFMutableDictionaryRef sValidators = NULL;
       if (CFEqual(element, CFSTR("type"))) {
         /* type element is for Tiger and above */
         return kSdefParserVersionTiger | kSdefParserVersionLeopard;
-      } else if (CFEqual(element, CFSTR("xref"))) {
+      } else if (CFEqual(element, CFSTR("xref")) || CFEqual(element, CFSTR("xi:include"))) {
         return kSdefParserVersionLeopard;
       } else {
         return kSdefParserVersionAll;

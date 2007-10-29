@@ -110,6 +110,14 @@
   }
 }
 
+- (void)addAttributesFromDictionary:(NSDictionary *)dict {
+  NSString *key;
+  NSEnumerator *keys = [dict keyEnumerator];
+  while (key = [keys nextObject]) {
+    [self setAttribute:[dict objectForKey:key] forKey:key];
+  }
+}
+
 - (void)removeAttributeForKey:(NSString *)key {
   NSUInteger idx = [sd_attrKeys indexOfObject:key];
   if (idx != NSNotFound) {

@@ -85,6 +85,7 @@ NSImage *SdefImageNamed(NSString *name) {
 
 - (void)dealloc {
   [sd_comments release];
+  [sd_includes release];
   [super dealloc];
 }
 
@@ -260,6 +261,18 @@ NSImage *SdefImageNamed(NSString *name) {
     WLog(@"Try to set xrefs on a invalid item %@", self);
 }
 
+- (BOOL)hasXInclude {
+  return [sd_includes count] > 0;
+}
+- (NSArray *)xincludes {
+  return sd_includes;
+}
+- (void)addXInclude:(id)xinclude {
+  if (!sd_includes)
+    sd_includes = [[NSMutableArray alloc] init];
+  [sd_includes addObject:xinclude];
+}
+
 - (BOOL)hasDocumentation {
   return sd_soFlags.hasDocumentation;
 }
@@ -388,6 +401,72 @@ NSImage *SdefImageNamed(NSString *name) {
 
 - (BOOL)acceptsObjectType:(SdefObjectType)aType {
   return sd_contentType ? [sd_contentType objectType] == aType : NO;
+}
+
+@end
+
+#pragma mark -
+@implementation SdefXInclude
+#pragma mark Protocols Implementations
+- (id)copyWithZone:(NSZone *)aZone {
+  SdefXInclude *copy = [super copyWithZone:aZone];
+//  copy->sd_href = [sd_href copyWithZone:aZone];
+//  copy->sd_pointer = [sd_pointer copyWithZone:aZone];
+  copy->sd_attrs = [sd_attrs copyWithZone:aZone];
+  return copy;
+}
+
+- (void)encodeWithCoder:(NSCoder *)aCoder {
+  [super encodeWithCoder:aCoder];
+  //  [aCoder encodeObject:sd_href forKey:@"SXIncludeHRef"];
+  //  [aCoder encodeObject:sd_pointer forKey:@"SXIncludePointer"];
+    [aCoder encodeObject:sd_attrs forKey:@"SXIncludeAttributes"];
+}
+
+- (id)initWithCoder:(NSCoder *)aCoder {
+  if (self = [super initWithCoder:aCoder]) {
+//    sd_pointer = [[aCoder decodeObjectForKey:@"SXIncludePointer"] retain];
+//    sd_href = [[aCoder decodeObjectForKey:@"SXIncludeHRef"] retain];
+    sd_attrs = [[aCoder decodeObjectForKey:@"SXIncludeAttributes"] retain];
+  }
+  return self;
+}
+
+- (void)dealloc {
+  [sd_attrs release];
+//  [sd_pointer release];
+//  [sd_href release];
+  [super dealloc];
+}
+
+#pragma mark -
++ (SdefObjectType)objectType {
+  return kSdefXIncludeType;
+}
+
++ (NSString *)defaultIconName {
+  return @"XInclude";
+}
+
+//- (NSString *)href {
+//  return sd_href;
+//}
+//- (void)setHref:(NSString *)aRef {
+//  SKSetterCopy(sd_href, aRef);
+//}
+//
+//- (NSString *)pointer {
+//  return sd_pointer;
+//}
+//- (void)setPointer:(NSString *)aPointer {
+//  SKSetterCopy(sd_pointer, aPointer);
+//}
+
+- (NSDictionary *)attributes {
+  return sd_attrs;
+}
+- (void)setAttributes:(NSDictionary *)attrs {
+  SKSetterCopy(sd_attrs, attrs);
 }
 
 @end

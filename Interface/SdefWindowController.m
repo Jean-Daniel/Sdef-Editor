@@ -47,7 +47,9 @@ static inline BOOL SdefEditorExistsForItem(SdefObject *item) {
     case kSdefVerbType:
       /* Enumeration */
     case kSdefRecordType:
-    case kSdefEnumerationType:  
+    case kSdefEnumerationType:
+      /* XInclude */
+    case kSdefXIncludeType:
       return YES;
     default:
       return NO;

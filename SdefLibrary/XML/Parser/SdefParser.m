@@ -156,6 +156,8 @@ Boolean _SdefElementIsCollection(CFStringRef element) {
     CFDictionaryAddValue(sSdefElementMap, CFSTR("record-type"), [SdefRecord class]);
     CFDictionaryAddValue(sSdefElementMap, CFSTR("enumeration"), [SdefEnumeration class]);
     CFDictionaryAddValue(sSdefElementMap, CFSTR("enumerator"), [SdefEnumerator class]);
+    /* XInclude */
+    CFDictionaryAddValue(sSdefElementMap, CFSTR("xi:include"), [SdefXInclude class]);
   }
 }
 

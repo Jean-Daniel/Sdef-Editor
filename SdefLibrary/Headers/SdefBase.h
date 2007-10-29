@@ -9,30 +9,32 @@
 #import <ShadowKit/SKUITreeNode.h>
 
 enum {
-  kSdefUndefinedType		= 0,
-  kSdefDictionaryType 		= 'Dico',
-  kSdefSuiteType			= 'Suit',
-  kSdefCollectionType		= 'Cole',
+  kSdefUndefinedType       = 0,
+  kSdefDictionaryType      = 'Dico',
+  kSdefSuiteType           = 'Suit',
+  kSdefCollectionType      = 'Cole',
   /* Class */
-  kSdefClassType			= 'Clas',
-  kSdefContentsType			= 'Cont',
-  kSdefPropertyType			= 'Prop',
-  kSdefElementType			= 'Elmt',
-  kSdefRespondsToType		= 'ReTo',
+  kSdefClassType           = 'Clas',
+  kSdefContentsType        = 'Cont',
+  kSdefPropertyType        = 'Prop',
+  kSdefElementType         = 'Elmt',
+  kSdefRespondsToType      = 'ReTo',
   /* Verbs */
-  kSdefVerbType				= 'Verb',
-  kSdefParameterType		= 'Para',
-  kSdefDirectParameterType	= 'DiPa',
-  kSdefResultType			= 'Resu',
+  kSdefVerbType            = 'Verb',
+  kSdefParameterType       = 'Para',
+  kSdefDirectParameterType = 'DiPa',
+  kSdefResultType          = 'Resu',
   /* Enumeration */
-  kSdefEnumerationType		= 'Enum',
-  kSdefEnumeratorType		= 'Enor',
+  kSdefEnumerationType     = 'Enum',
+  kSdefEnumeratorType      = 'Enor',
   /* Value */
-  kSdefValueType			= 'Valu',
-  kSdefRecordType			= 'Reco',
+  kSdefValueType           = 'Valu',
+  kSdefRecordType          = 'Reco',
   /* Misc */
-  kSdefCocoaType			= 'Coco',
-  kSdefDocumentationType	= 'Docu'
+  kSdefCocoaType           = 'Coco',
+  kSdefDocumentationType   = 'Docu',
+  /* XInclude */
+  kSdefXIncludeType        = 'XInc',
 };
 typedef OSType SdefObjectType;
 
@@ -94,8 +96,9 @@ NSString *CocoaNameForSdefName(NSString *cocoa, BOOL isClass);
     unsigned int hasImplementation:1;
     unsigned int reserved:5;
   } sd_soFlags;
-@private
-  NSMutableArray *sd_comments;
+  @private
+    NSMutableArray *sd_comments;
+  NSMutableArray *sd_includes;
 }
 
 #pragma mark API
@@ -164,11 +167,16 @@ NSString *CocoaNameForSdefName(NSString *cocoa, BOOL isClass);
 
 - (void)addComment:(SdefComment *)comment;
 
+#pragma mark XInclude
+- (BOOL)hasXInclude;
+- (NSArray *)xincludes;
+- (void)addXInclude:(id)xinclude;
+
 @end
 
 #pragma mark -
 @interface SdefCollection : SdefObject <NSCopying, NSCoding> {
-@private
+  @private
   Class sd_contentType;
   NSString *sd_elementName;
 }
@@ -182,3 +190,21 @@ NSString *CocoaNameForSdefName(NSString *cocoa, BOOL isClass);
 - (BOOL)acceptsObjectType:(SdefObjectType)aType;
 @end
 
+#pragma mark -
+@interface SdefXInclude : SdefObject <NSCopying, NSCoding> {
+  @private
+//  NSString *sd_href;
+//  NSString *sd_pointer;
+  NSDictionary *sd_attrs;
+}
+
+//- (NSString *)href;
+//- (void)setHref:(NSString *)aRef;
+//
+//- (NSString *)pointer;
+//- (void)setPointer:(NSString *)aPointer;
+
+- (NSDictionary *)attributes;
+- (void)setAttributes:(NSDictionary *)attrs;
+
+@end

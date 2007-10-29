@@ -26,7 +26,7 @@ enum {
     unsigned int html:1;
     unsigned int hidden:1;
     unsigned int editable:1;
-    unsigned int:4;
+    unsigned int reserved:4;
   } sd_slFlags;
 }
 
