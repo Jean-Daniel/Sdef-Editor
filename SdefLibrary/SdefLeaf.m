@@ -61,10 +61,6 @@
 }
 
 #pragma mark -
-- (NSUndoManager *)undoManager {
-  return [[self owner] undoManager];
-}
-
 - (NSImage *)icon {
   return [NSImage imageNamed:@"Misc"];
 }
@@ -104,11 +100,6 @@
   }
 }
 
-- (NSString *)location {
-  NSString *loc = [sd_owner location];
-  return loc ? [loc stringByAppendingFormat:@"->%@", [self objectTypeName]] : [self objectTypeName];
-}
-
 - (SdefObjectType)objectType {
   return [[self class] objectType];
 }
@@ -129,19 +120,33 @@
 }
 
 #pragma mark Owner
+/* Note: should copy change in SdefTypedOrphanObject */
 - (NSObject<SdefObject> *)owner {
   return sd_owner;
 }
 
 - (void)setOwner:(NSObject<SdefObject> *)anObject {
   sd_owner = anObject;
+  /* inherited flags */
+  if (sd_owner)
+    [self setEditable:[sd_owner isEditable]];
+}
+
+- (NSString *)location {
+  NSString *loc = [sd_owner location];
+  return loc ? [loc stringByAppendingFormat:@"->%@", [self objectTypeName]] : [self objectTypeName];
 }
 
 - (SdefObject *)container {
   return [sd_owner container];
 }
+
 - (SdefDictionary *)dictionary {
   return [sd_owner dictionary];
+}
+
+- (NSUndoManager *)undoManager {
+  return [sd_owner undoManager];
 }
 
 /* Needed to be owner of an orphan object (like SdefImplementation) */

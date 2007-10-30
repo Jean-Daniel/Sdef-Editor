@@ -12,14 +12,16 @@
 @class SdefXMLValidator, SdefDocumentationParser;
 @interface SdefParser : NSObject {
   id sd_delegate;
-
+  
+  void *sd_parser;
+  bool sd_xinclude;
   SdefVersion sd_version;
-  CFXMLParserRef sd_parser;
   NSMutableArray *sd_comments;
   CFMutableDictionaryRef sd_metas;
   
   /* root element */
-  SdefDictionary *sd_dictionary;
+  NSMutableArray *sd_roots;
+  NSMutableDictionary *sd_includes;
   
   SdefXMLValidator *sd_validator;
   /* html documentation parser */
@@ -32,14 +34,15 @@
 - (NSInteger)line;
 - (NSInteger)location;
 
+- (NSArray *)objects;
 - (SdefVersion)sdefVersion;
 - (SdefDictionary *)dictionary;
 
-- (BOOL)parseSdef:(NSData *)sdefData;
+- (BOOL)parseSdef:(NSData *)sdefData base:(NSURL *)anURL error:(NSError **)outError;
 
 @end
 
 @interface NSObject (SdefParserDelegate)
-- (BOOL)sdefParser:(SdefParser *)parser handleValidationError:(NSString *)error isFatal:(BOOL)fatal;
+- (BOOL)sdefParser:(SdefParser *)parser shouldIgnoreValidationError:(NSError *)error isFatal:(BOOL)fatal;
 @end
 

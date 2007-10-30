@@ -81,6 +81,7 @@ CFMutableDictionaryRef sValidators = NULL;
     
     /* class (custom) */
     elt = [[SdefXMLClass alloc] init];
+    [elt setElements:CFSTR("contents"), CFSTR("documentation"), CFSTR("synonym"), CFSTR("xref"), CFSTR("cocoa"), nil];
     [elt setAttributes:CFSTR("name"), CFSTR("code"), CFSTR("hidden"), CFSTR("description"),
       CFSTR("id"), CFSTR("inherits"), CFSTR("plural"), nil];
     CFDictionarySetValue(sValidators, CFSTR("class"), elt);
@@ -96,6 +97,7 @@ CFMutableDictionaryRef sValidators = NULL;
     
     /* cocoa (custom) */
     elt = [[SdefXMLCocoa alloc] init];
+    [elt setAttributes:CFSTR("class"), CFSTR("key"), CFSTR("method"), CFSTR("name"), nil];
     CFDictionarySetValue(sValidators, CFSTR("cocoa"), elt);
     [elt release];
     
@@ -139,6 +141,7 @@ CFMutableDictionaryRef sValidators = NULL;
     
     /* enumeration (custom, +synonym) */
     elt = [[SdefXMLEnumeration alloc] init];
+    [elt setAttributes:CFSTR("name"), CFSTR("code"), CFSTR("hidden"), CFSTR("description"), CFSTR("id"), nil];
     [elt setElements:CFSTR("cocoa"), CFSTR("documentation"), CFSTR("synonym"), 
       CFSTR("enumerator"), CFSTR("xref"), nil];
     CFDictionarySetValue(sValidators, CFSTR("enumeration"), elt);
@@ -162,6 +165,8 @@ CFMutableDictionaryRef sValidators = NULL;
     /* property (custom) */
     elt = [[SdefXMLProperty alloc] init];
     [elt setElements:CFSTR("cocoa"), CFSTR("type"), CFSTR("synonym"), CFSTR("documentation"), nil];
+    [elt setAttributes:CFSTR("name"), CFSTR("code"), CFSTR("hidden"), CFSTR("description"), 
+      CFSTR("type"), CFSTR("access"),  nil];
     CFDictionarySetValue(sValidators, CFSTR("property"), elt);
     [elt release];
     
@@ -183,12 +188,14 @@ CFMutableDictionaryRef sValidators = NULL;
     /* responds-to (custom) */
     elt = [[SdefXMLRespondsTo alloc] init];
     [elt setElements:CFSTR("cocoa"), nil];
+    [elt setAttributes:CFSTR("hidden"), nil];
     CFDictionarySetValue(sValidators, CFSTR("responds-to"), elt);
     [elt release];
     
     /* suite (custom) */
     elt = [[SdefXMLSuite alloc] init];
     [elt setAttributes:CFSTR("name"), CFSTR("code"), CFSTR("hidden"), CFSTR("description"), nil];
+    [elt setElements:CFSTR("cocoa"), CFSTR("documentation"), nil];
     CFDictionarySetValue(sValidators, CFSTR("suite"), elt);
     [elt release];
     
@@ -223,7 +230,7 @@ CFMutableDictionaryRef sValidators = NULL;
     /* base on W3C Working Draft 10 November 2003 */
     [elt setAttributes:CFSTR("href"), CFSTR("parse"), CFSTR("xpointer"), CFSTR("encoding"), 
       CFSTR("accept"), CFSTR("accept-charset"), CFSTR("accept-language"), nil];
-    CFDictionarySetValue(sValidators, CFSTR("xi:include"), elt);
+    CFDictionarySetValue(sValidators, CFSTR("include"), elt);
     [elt release];
     
     /* ~~~~~~~~~~~~~~ Panther collections ~~~~~~~~~~~~~~ */
@@ -391,7 +398,7 @@ CFMutableDictionaryRef sValidators = NULL;
   return kSdefParserVersionUnknown;
 }
 - (SdefParserVersion)acceptElement:(CFStringRef)element {
-  if (CFEqual(element, CFSTR("xi:include")))
+  if (CFEqual(element, CFSTR("include")))
     return kSdefParserVersionLeopard;
   
   return kSdefParserVersionUnknown;
@@ -450,7 +457,7 @@ CFMutableDictionaryRef sValidators = NULL;
       if (CFEqual(element, CFSTR("type"))) {
         /* type element is for Tiger and above */
         return kSdefParserVersionTiger | kSdefParserVersionLeopard;
-      } else if (CFEqual(element, CFSTR("xref")) || CFEqual(element, CFSTR("xi:include"))) {
+      } else if (CFEqual(element, CFSTR("xref")) || CFEqual(element, CFSTR("include"))) {
         return kSdefParserVersionLeopard;
       } else {
         return kSdefParserVersionAll;
@@ -468,13 +475,6 @@ CFMutableDictionaryRef sValidators = NULL;
 #pragma mark -
 @implementation SdefXMLCocoa
 
-- (id)init {
-  if (self = [super init]) {
-    [self setAttributes:CFSTR("class"), CFSTR("key"), CFSTR("method"), CFSTR("name"), nil];
-  }
-  return self;
-}
-
 - (SdefParserVersion)acceptAttribute:(CFStringRef)attribute value:(CFStringRef)value {
   /* type-values appear in Leopard */
   if (CFEqual(attribute, CFSTR("boolean-value")) || 
@@ -490,13 +490,6 @@ CFMutableDictionaryRef sValidators = NULL;
 
 @implementation SdefXMLEnumeration
 
-- (id)init {
-  if (self = [super init]) {
-    [self setAttributes:CFSTR("name"), CFSTR("code"), CFSTR("hidden"), CFSTR("description"), CFSTR("id"), nil];
-  }
-  return self;
-}
-
 - (SdefParserVersion)acceptAttribute:(CFStringRef)attribute value:(CFStringRef)value {
   /* inline appears in Tiger */
   if (CFEqual(attribute, CFSTR("inline"))) {
@@ -508,14 +501,6 @@ CFMutableDictionaryRef sValidators = NULL;
 @end
 
 @implementation SdefXMLProperty
-
-- (id)init {
-  if (self = [super init]) {
-    [self setAttributes:CFSTR("name"), CFSTR("code"), CFSTR("hidden"), CFSTR("description"), 
-      CFSTR("type"), CFSTR("access"),  nil];
-  }
-  return self;
-}
 
 - (SdefParserVersion)acceptAttribute:(CFStringRef)attribute value:(CFStringRef)value {
   /* in-properties replace not-in-properties in Tiger */
@@ -531,13 +516,6 @@ CFMutableDictionaryRef sValidators = NULL;
 
 @implementation SdefXMLRespondsTo
 
-- (id)init {
-  if (self = [super init]) {
-    [self setAttributes:CFSTR("hidden"), nil];
-  }
-  return self;
-}
-
 - (SdefParserVersion)acceptAttribute:(CFStringRef)attribute value:(CFStringRef)value {
   /* command replace name in Leopard */
   if (CFEqual(attribute, CFSTR("command"))) {
@@ -552,14 +530,6 @@ CFMutableDictionaryRef sValidators = NULL;
 
 #pragma mark -
 @implementation SdefXMLClass
-
-- (id)init {
-  if (self = [super init]) {
-    [self setElements:CFSTR("contents"), CFSTR("documentation"),
-      CFSTR("synonym"), CFSTR("xref"), CFSTR("cocoa"), nil];
-  }
-  return self;
-}
 
 - (SdefParserVersion)acceptElement:(CFStringRef)element {
   if (CFEqual(element, CFSTR("element")) ||
@@ -581,13 +551,6 @@ CFMutableDictionaryRef sValidators = NULL;
 @end
 
 @implementation SdefXMLSuite
-
-- (id)init {
-  if (self = [super init]) {
-    [self setElements:CFSTR("cocoa"), CFSTR("documentation"), nil];
-  }
-  return self;
-}
 
 - (SdefParserVersion)acceptElement:(CFStringRef)element {
   if (CFEqual(element, CFSTR("enumeration")) ||

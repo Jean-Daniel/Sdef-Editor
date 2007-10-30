@@ -181,31 +181,33 @@
   return data;
 }
 
-- (BOOL)loadDataRepresentation:(NSData *)data ofType:(NSString *)type {
-  if ([type isEqualToString:ScriptingDefinitionFileType]) {
+- (BOOL)readFromURL:(NSURL *)absoluteURL ofType:(NSString *)typeName error:(NSError **)outError {
+  if ([typeName isEqualToString:ScriptingDefinitionFileType]) {
     NSInteger version;
-    [self setDictionary:SdefLoadDictionaryData(data, &version, self)];
+    [self setDictionary:SdefLoadDictionary(absoluteURL, &version, self, outError)];
     if ([self dictionary] != nil) {
       if (version < kSdefTigerVersion) {
         /* Warning: using deprecated useless format */
-        DLog(@"Deprecated format");
         [self updateChangeCount:NSChangeDone];
       }
+    } else {
+      if (!*outError)
+        *outError = [NSError errorWithDomain:NSCocoaErrorDomain code:NSFileReadCorruptFileError userInfo:nil];
     }
   }
   return [self dictionary] != nil;
 }
 
-- (BOOL)sdefParser:(SdefParser *)parser handleValidationError:(NSString *)error isFatal:(BOOL)fatal {
+- (BOOL)sdefParser:(SdefParser *)parser shouldIgnoreValidationError:(NSError *)error isFatal:(BOOL)fatal {
   if (fatal) {
     NSRunAlertPanel(@"An unrecoverable error occured while parsing file.",
                     @"%@",
-                    @"OK", nil, nil, error);
+                    @"OK", nil, nil, [error localizedDescription]);
     return NO;
   } else {
     switch (NSRunAlertPanel(@"An sdef validation error occured while parsing file.",
                             @"%@",
-                            @"Ignore", @"Abort", nil, error)) {
+                            @"Ignore", @"Abort", nil, [error localizedDescription])) {
       case NSAlertAlternateReturn:
         return NO;
     }
@@ -319,19 +321,19 @@
 @end
 
 #pragma mark -
-SdefDictionary *SdefLoadDictionary(NSString *filename, NSInteger *version, id delegate) {
-  NSData *data = [[NSData alloc] initWithContentsOfFile:filename];
-  SdefDictionary *dictionary = SdefLoadDictionaryData(data, version, delegate);
+SdefDictionary *SdefLoadDictionary(NSURL *file, NSInteger *version, id delegate, NSError **error) {
+  NSData *data = [[NSData alloc] initWithContentsOfURL:file];
+  SdefDictionary *dictionary = SdefLoadDictionaryData(data, file, version, delegate, error);
   [data release];
   return dictionary;
 }
 
-SdefDictionary *SdefLoadDictionaryData(NSData *data, NSInteger *version, id delegate) {
+SdefDictionary *SdefLoadDictionaryData(NSData *data, NSURL *base, NSInteger *version, id delegate, NSError **error) {
   SdefDictionary *result = nil;
   if (data) {
     SdefParser *parser = [[SdefParser alloc] init];
     [parser setDelegate:delegate];
-    if ([parser parseSdef:data]) {
+    if ([parser parseSdef:data base:base error:error]) {
       result = [[parser dictionary] retain];
       if (version) *version = [parser sdefVersion];
     }

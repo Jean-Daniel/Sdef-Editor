@@ -21,15 +21,11 @@ description  %Text;        #IMPLIED
 >
 */
 
-@interface SdefContents : SdefTypedObject <NSCopying, NSCoding> {
+@interface SdefContents : SdefTypedOrphanObject <NSCopying, NSCoding> {
   NSUInteger sd_access;
-  id<SdefObject> sd_owner;
 }
 
 - (NSUInteger)access;
 - (void)setAccess:(NSUInteger)newAccess;
-
-- (id)owner;
-- (void)setOwner:(id<SdefObject>)anObject ;
 
 @end

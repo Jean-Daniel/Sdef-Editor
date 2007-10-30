@@ -7,6 +7,7 @@
  */
 
 #import "SdefParser.h"
+#import "SdefParserInternal.h"
 
 @class SdefParser, SdefDocumentation;
 @interface SdefDocumentationParser : NSObject {
@@ -20,8 +21,8 @@
 
 - (void)close;
 
-- (void *)parser:(CFXMLParserRef)parser createStructureForNode:(CFXMLNodeRef)node;
-- (void)parser:(CFXMLParserRef)parser addChild:(void *)child toStructure:(void *)parent;
-- (void)parser:(CFXMLParserRef)parser endStructure:(void *)structure;
+- (void *)parser:(SdefDOMParser *)parser createStructureForNode:(xmlNodePtr)node;
+- (void)parser:(SdefDOMParser *)parser addChild:(void *)child toStructure:(void *)parent;
+- (void)parser:(SdefDOMParser *)parser endStructure:(void *)structure;
 
 @end

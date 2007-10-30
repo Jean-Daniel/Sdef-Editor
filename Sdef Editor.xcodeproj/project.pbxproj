@@ -7,15 +7,14 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		1B5ECC9B0CD6168D007B8226 /* SKXMLTemplate.m in Sources */ = {isa = PBXBuildFile; fileRef = 656F9B8609E6A217008A0059 /* SKXMLTemplate.m */; };
-		1B5ECC9C0CD6168E007B8226 /* SKTemplateParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 656F9B8509E6A217008A0059 /* SKTemplateParser.m */; };
-		1B5ECCA30CD61692007B8226 /* SKTemplate.m in Sources */ = {isa = PBXBuildFile; fileRef = 656F9B8409E6A217008A0059 /* SKTemplate.m */; };
 		1B5ECF320CD62725007B8226 /* XInclude.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 1B5ECF310CD62725007B8226 /* XInclude.tiff */; };
 		1B5ECF480CD627D6007B8226 /* SdefXInclude.nib in Resources */ = {isa = PBXBuildFile; fileRef = 1B5ECF420CD627D6007B8226 /* SdefXInclude.nib */; };
 		1B5ECF510CD62807007B8226 /* SdefXIncludeView.h in Headers */ = {isa = PBXBuildFile; fileRef = 1B5ECF4F0CD62807007B8226 /* SdefXIncludeView.h */; };
 		1B5ECF520CD62807007B8226 /* SdefXIncludeView.m in Sources */ = {isa = PBXBuildFile; fileRef = 1B5ECF500CD62807007B8226 /* SdefXIncludeView.m */; };
 		1B5FEC8F0BD8E58100F57412 /* SdefXRef.h in Headers */ = {isa = PBXBuildFile; fileRef = 1B5FEC8D0BD8E58100F57412 /* SdefXRef.h */; };
 		1B5FEC900BD8E58100F57412 /* SdefXRef.m in Sources */ = {isa = PBXBuildFile; fileRef = 1B5FEC8E0BD8E58100F57412 /* SdefXRef.m */; };
+		1B73E9CC0CD7965C00FC60B2 /* SdefParserInternal.h in Headers */ = {isa = PBXBuildFile; fileRef = 1B73E9CB0CD7965B00FC60B2 /* SdefParserInternal.h */; };
+		1B73ECA70CD7A73400FC60B2 /* SdefParserInternal.m in Sources */ = {isa = PBXBuildFile; fileRef = 1B73ECA60CD7A73400FC60B2 /* SdefParserInternal.m */; };
 		1B9C1D620BF8407A00281647 /* SKFSFunctions.m in Sources */ = {isa = PBXBuildFile; fileRef = 656F9B7F09E6A20A008A0059 /* SKFSFunctions.m */; };
 		1B9C1D630BF8407C00281647 /* SKLSFunctions.m in Sources */ = {isa = PBXBuildFile; fileRef = 656F9B7E09E6A20A008A0059 /* SKLSFunctions.m */; };
 		1B9C1D6B0BF8409000281647 /* AESendThreadSafe.c in Sources */ = {isa = PBXBuildFile; fileRef = 9818EBCD0BD56D290079867A /* AESendThreadSafe.c */; };
@@ -26,6 +25,12 @@
 		1BC2401A0BDCBFF50077A527 /* SKVSplitBar.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 98D1B0500BDB5993007B3293 /* SKVSplitBar.tiff */; };
 		1BE05BAD0BDD1F2800334FBF /* SdefTypeValidator.m in Sources */ = {isa = PBXBuildFile; fileRef = 1BE05BAC0BDD1F2800334FBF /* SdefTypeValidator.m */; };
 		1BE05C0A0BDD21EB00334FBF /* SdefLeavesValidator.m in Sources */ = {isa = PBXBuildFile; fileRef = 1BE05C090BDD21EB00334FBF /* SdefLeavesValidator.m */; };
+		1BEBD3EC0CD76868008B5D36 /* SKXMLTemplate.m in Sources */ = {isa = PBXBuildFile; fileRef = 656F9B8609E6A217008A0059 /* SKXMLTemplate.m */; };
+		1BEBD3ED0CD76869008B5D36 /* SKTemplate.m in Sources */ = {isa = PBXBuildFile; fileRef = 656F9B8409E6A217008A0059 /* SKTemplate.m */; };
+		1BEBD3EE0CD76869008B5D36 /* SKTemplateParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 656F9B8509E6A217008A0059 /* SKTemplateParser.m */; };
+		1BEBD4C40CD76E6C008B5D36 /* libxml2s.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 1BEBD4C30CD76E6C008B5D36 /* libxml2s.a */; };
+		1BEBD4CB0CD76E8B008B5D36 /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 1BEBD4CA0CD76E8B008B5D36 /* libz.dylib */; };
+		1BEBD4D00CD76E9B008B5D36 /* libiconv.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 1BEBD4CF0CD76E9B008B5D36 /* libiconv.dylib */; };
 		656F9B5809E6A188008A0059 /* SKFunctions.m in Sources */ = {isa = PBXBuildFile; fileRef = 656F9B5409E6A188008A0059 /* SKFunctions.m */; };
 		656F9B5909E6A188008A0059 /* SKCFContext.m in Sources */ = {isa = PBXBuildFile; fileRef = 656F9B5509E6A188008A0059 /* SKCFContext.m */; };
 		656F9B7409E6A1DF008A0059 /* SKTableDataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 656F9B6E09E6A1DF008A0059 /* SKTableDataSource.m */; };
@@ -48,7 +53,6 @@
 		980AC3A0083284A9002EF5F5 /* SdefRecord.nib in Resources */ = {isa = PBXBuildFile; fileRef = 980AC39E083284A9002EF5F5 /* SdefRecord.nib */; };
 		98168DBC07A26C9C002B893D /* SdefExporterController.m in Sources */ = {isa = PBXBuildFile; fileRef = 98168DBA07A26C9C002B893D /* SdefExporterController.m */; };
 		98168DD607A27735002B893D /* SdefProcessor.m in Sources */ = {isa = PBXBuildFile; fileRef = 98168DD407A27735002B893D /* SdefProcessor.m */; };
-		98168DDC07A27782002B893D /* sdp in Resources */ = {isa = PBXBuildFile; fileRef = 98168DDB07A27782002B893D /* sdp */; };
 		98168E0107A29025002B893D /* NSCoreSuite.sdef in Resources */ = {isa = PBXBuildFile; fileRef = 98168E0007A29025002B893D /* NSCoreSuite.sdef */; };
 		98168E0507A29036002B893D /* NSTextSuite.sdef in Resources */ = {isa = PBXBuildFile; fileRef = 98168E0407A29036002B893D /* NSTextSuite.sdef */; };
 		9818ECAF0BD57C230079867A /* Class-Extension.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 9818ECAE0BD57C230079867A /* Class-Extension.tiff */; };
@@ -109,7 +113,6 @@
 		984EE81807F09E6A00828BC0 /* SdefSymbolBrowser.m in Sources */ = {isa = PBXBuildFile; fileRef = 984EE81707F09E6A00828BC0 /* SdefSymbolBrowser.m */; };
 		984EE81A07F09E7400828BC0 /* SdefSymbolBrowser.h in Headers */ = {isa = PBXBuildFile; fileRef = 984EE81907F09E7400828BC0 /* SdefSymbolBrowser.h */; };
 		984EE82607F0A01F00828BC0 /* SdefSymbolBrowser.nib in Resources */ = {isa = PBXBuildFile; fileRef = 984EE82407F0A01F00828BC0 /* SdefSymbolBrowser.nib */; };
-		9852F79407A2B15600157438 /* Rez in Resources */ = {isa = PBXBuildFile; fileRef = 9852F79307A2B15600157438 /* Rez */; };
 		9856F70B0BDBFEA80030472F /* SdefVerbValidator.m in Sources */ = {isa = PBXBuildFile; fileRef = 9856F70A0BDBFEA80030472F /* SdefVerbValidator.m */; };
 		985E08150BDC0C13005BD3C3 /* valid-warning.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 985E08120BDC0C13005BD3C3 /* valid-warning.tiff */; };
 		985E08160BDC0C13005BD3C3 /* valid-note.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 985E08130BDC0C13005BD3C3 /* valid-note.tiff */; };
@@ -273,8 +276,8 @@
 			dstPath = Templates;
 			dstSubfolderSpec = 7;
 			files = (
-				98F8A84C081A831800CBF3D8 /* Frame Dictionary.sdtpl in Copy Templates */,
 				98F940D807F8899C0014708A /* AppleDictionary.sdtpl in Copy Templates */,
+				98F8A84C081A831800CBF3D8 /* Frame Dictionary.sdtpl in Copy Templates */,
 				98F940D907F8899C0014708A /* AppleRTFDictionary.sdtpl in Copy Templates */,
 			);
 			name = "Copy Templates";
@@ -318,11 +321,16 @@
 		1B5ECF500CD62807007B8226 /* SdefXIncludeView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SdefXIncludeView.m; sourceTree = "<group>"; };
 		1B5FEC8D0BD8E58100F57412 /* SdefXRef.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; lineEnding = 0; name = SdefXRef.h; path = Headers/SdefXRef.h; sourceTree = "<group>"; };
 		1B5FEC8E0BD8E58100F57412 /* SdefXRef.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = SdefXRef.m; sourceTree = "<group>"; };
+		1B73E9CB0CD7965B00FC60B2 /* SdefParserInternal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SdefParserInternal.h; sourceTree = "<group>"; };
+		1B73ECA60CD7A73400FC60B2 /* SdefParserInternal.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SdefParserInternal.m; sourceTree = "<group>"; };
 		1B79A9040C8C0B46000AEEFC /* SKSplitview.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SKSplitview.h; sourceTree = "<group>"; };
 		1B79A9050C8C0B46000AEEFC /* SKDisclosurePanel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SKDisclosurePanel.h; sourceTree = "<group>"; };
 		1B79A9060C8C0B46000AEEFC /* SKImageAndTextCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SKImageAndTextCell.h; sourceTree = "<group>"; };
 		1BE05BAC0BDD1F2800334FBF /* SdefTypeValidator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SdefTypeValidator.m; sourceTree = "<group>"; };
 		1BE05C090BDD21EB00334FBF /* SdefLeavesValidator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SdefLeavesValidator.m; sourceTree = "<group>"; };
+		1BEBD4C30CD76E6C008B5D36 /* libxml2s.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libxml2s.a; path = sdk/lib/libxml2s.a; sourceTree = SHARED_CODE_DIR; };
+		1BEBD4CA0CD76E8B008B5D36 /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = /usr/lib/libz.dylib; sourceTree = "<absolute>"; };
+		1BEBD4CF0CD76E9B008B5D36 /* libiconv.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libiconv.dylib; path = /usr/lib/libiconv.dylib; sourceTree = "<absolute>"; };
 		2A37F4B5FDCFA73011CA2CEA /* English */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = English; path = English.lproj/SdefDocument.nib; sourceTree = "<group>"; };
 		2A37F4B7FDCFA73011CA2CEA /* English */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = English; path = English.lproj/MainMenu.nib; sourceTree = "<group>"; };
 		2A37F4C4FDCFA73011CA2CEA /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = /System/Library/Frameworks/AppKit.framework; sourceTree = "<absolute>"; };
@@ -558,8 +566,11 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				98E3193F0840CD01003EC9D5 /* Carbon.framework in Frameworks */,
+				1BEBD4CB0CD76E8B008B5D36 /* libz.dylib in Frameworks */,
+				1BEBD4C40CD76E6C008B5D36 /* libxml2s.a in Frameworks */,
+				1BEBD4D00CD76E9B008B5D36 /* libiconv.dylib in Frameworks */,
 				8D15AC340486D014006FF6A4 /* Cocoa.framework in Frameworks */,
+				98E3193F0840CD01003EC9D5 /* Carbon.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -569,6 +580,9 @@
 		1058C7A6FEA54F5311CA2CBB /* Linked Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				1BEBD4CA0CD76E8B008B5D36 /* libz.dylib */,
+				1BEBD4C30CD76E6C008B5D36 /* libxml2s.a */,
+				1BEBD4CF0CD76E9B008B5D36 /* libiconv.dylib */,
 				981D86A807ADB0FE006BC0E9 /* Carbon.framework */,
 				1058C7A7FEA54F5311CA2CBB /* Cocoa.framework */,
 				98E84E8B07FE9358008BB0AB /* WebKit.framework */,
@@ -734,10 +748,10 @@
 			isa = PBXGroup;
 			children = (
 				1B06FC470C84893B0074A70E /* SKTemplate.h */,
-				1B06FC460C84893B0074A70E /* SKXMLTemplate.h */,
-				1B06FC480C84893B0074A70E /* SKTemplateParser.h */,
 				656F9B8409E6A217008A0059 /* SKTemplate.m */,
+				1B06FC460C84893B0074A70E /* SKXMLTemplate.h */,
 				656F9B8609E6A217008A0059 /* SKXMLTemplate.m */,
+				1B06FC480C84893B0074A70E /* SKTemplateParser.h */,
 				656F9B8509E6A217008A0059 /* SKTemplateParser.m */,
 			);
 			path = Templates;
@@ -777,11 +791,11 @@
 			children = (
 				98D1B04A0BDB5993007B3293 /* Resources */,
 				1B79A9040C8C0B46000AEEFC /* SKSplitview.h */,
-				1B79A9050C8C0B46000AEEFC /* SKDisclosurePanel.h */,
-				1B79A9060C8C0B46000AEEFC /* SKImageAndTextCell.h */,
 				98D1B0570BDB59A0007B3293 /* SKSplitview.m */,
+				1B79A9050C8C0B46000AEEFC /* SKDisclosurePanel.h */,
 				98230E570AFE299A00675226 /* SKDisclosureView.m */,
 				98230E560AFE299A00675226 /* SKDisclosurePanel.m */,
+				1B79A9060C8C0B46000AEEFC /* SKImageAndTextCell.h */,
 				98230E590AFE299A00675226 /* SKImageAndTextCell.m */,
 			);
 			path = Interface;
@@ -1059,10 +1073,10 @@
 			isa = PBXGroup;
 			children = (
 				1B06FC4C0C848A4A0074A70E /* SKTreeNode.h */,
-				1B06FC4D0C848A4A0074A70E /* SKApplication.h */,
-				1B06FC4E0C848A4A0074A70E /* SKExtendedTreeNode.h */,
 				656F9B8A09E6A22B008A0059 /* SKTreeNode.m */,
+				1B06FC4D0C848A4A0074A70E /* SKApplication.h */,
 				656F9B8B09E6A22B008A0059 /* SKApplication.m */,
+				1B06FC4E0C848A4A0074A70E /* SKExtendedTreeNode.h */,
 				65EBDD520A3D47C100D266C4 /* SKExtendedTreeNode.m */,
 			);
 			path = Foundation;
@@ -1096,6 +1110,8 @@
 			children = (
 				98C806A10BDA229500A45088 /* SdefParser.h */,
 				98C8069F0BDA228500A45088 /* SdefParser.m */,
+				1B73E9CB0CD7965B00FC60B2 /* SdefParserInternal.h */,
+				1B73ECA60CD7A73400FC60B2 /* SdefParserInternal.m */,
 				98D6FB0F0BDA042200F30DAE /* SdefXMLValidator.h */,
 				98D6FB150BDA042200F30DAE /* SdefXMLValidator.m */,
 				98C806C90BDA247A00A45088 /* SdefDocumentationParser.h */,
@@ -1235,6 +1251,7 @@
 				98D1B1700BDB8BE9007B3293 /* SdefValidator.h in Headers */,
 				98D1B2410BDB9AE1007B3293 /* SdefValidatorBase.h in Headers */,
 				1B5ECF510CD62807007B8226 /* SdefXIncludeView.h in Headers */,
+				1B73E9CC0CD7965C00FC60B2 /* SdefParserInternal.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1250,7 +1267,6 @@
 				8D15AC2B0486D014006FF6A4 /* Resources */,
 				8D15AC300486D014006FF6A4 /* Sources */,
 				8D15AC330486D014006FF6A4 /* Frameworks */,
-				98DE66F107B5785100B6CF43 /* Rez */,
 			);
 			buildRules = (
 			);
@@ -1349,8 +1365,6 @@
 				98A52D40079F1F96003F17E8 /* SdefFile.icns in Resources */,
 				9868410607A30B15001694EA /* SdefEditor.icns in Resources */,
 				9803414407ADC6B00052F203 /* ScriptSuiteIcon.icns in Resources */,
-				98168DDC07A27782002B893D /* sdp in Resources */,
-				9852F79407A2B15600157438 /* Rez in Resources */,
 				98057B5907B50A5B00C2D3C7 /* Sdef Editor Help in Resources */,
 				98DDF4AD07DC405000EF07E2 /* SdtplBundle.icns in Resources */,
 				98A57DA207EF6F4E00F061C5 /* SdtplExport.nib in Resources */,
@@ -1382,16 +1396,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
-
-/* Begin PBXRezBuildPhase section */
-		98DE66F107B5785100B6CF43 /* Rez */ = {
-			isa = PBXRezBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-/* End PBXRezBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		8D15AC300486D014006FF6A4 /* Sources */ = {
@@ -1496,10 +1500,11 @@
 				1B9C1D630BF8407C00281647 /* SKLSFunctions.m in Sources */,
 				1B9C1D6B0BF8409000281647 /* AESendThreadSafe.c in Sources */,
 				1B9C1D720BF8409600281647 /* SKAEFunctions.c in Sources */,
-				1B5ECC9B0CD6168D007B8226 /* SKXMLTemplate.m in Sources */,
-				1B5ECC9C0CD6168E007B8226 /* SKTemplateParser.m in Sources */,
-				1B5ECCA30CD61692007B8226 /* SKTemplate.m in Sources */,
 				1B5ECF520CD62807007B8226 /* SdefXIncludeView.m in Sources */,
+				1BEBD3EC0CD76868008B5D36 /* SKXMLTemplate.m in Sources */,
+				1BEBD3ED0CD76869008B5D36 /* SKTemplate.m in Sources */,
+				1BEBD3EE0CD76869008B5D36 /* SKTemplateParser.m in Sources */,
+				1B73ECA70CD7A73400FC60B2 /* SdefParserInternal.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1704,8 +1709,18 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CURRENT_PROJECT_VERSION = 250;
-				HEADER_SEARCH_PATHS = "\"$(SHADOWKIT_ROOT)/include\"";
+				HEADER_SEARCH_PATHS = (
+					"$(HEADER_SEARCH_PATHS_QUOTED_1)",
+					"$(HEADER_SEARCH_PATHS_QUOTED_2)",
+				);
+				HEADER_SEARCH_PATHS_QUOTED_1 = "\"$(SHADOWKIT_ROOT)/include\"";
+				HEADER_SEARCH_PATHS_QUOTED_2 = "\"$(SHARED_CODE_DIR)/sdk/include/libxml2\"";
 				INFOPLIST_FILE = Resources/Info.plist;
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(LIBRARY_SEARCH_PATHS_QUOTED_1)",
+				);
+				LIBRARY_SEARCH_PATHS_QUOTED_1 = "\"$(SRCROOT)/../../Shared/sdk/lib\"";
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-weak_framework",
@@ -1720,8 +1735,18 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CURRENT_PROJECT_VERSION = 250;
-				HEADER_SEARCH_PATHS = "\"$(SHADOWKIT_ROOT)/include\"";
+				HEADER_SEARCH_PATHS = (
+					"$(HEADER_SEARCH_PATHS_QUOTED_1)",
+					"$(HEADER_SEARCH_PATHS_QUOTED_2)",
+				);
+				HEADER_SEARCH_PATHS_QUOTED_1 = "\"$(SHADOWKIT_ROOT)/include\"";
+				HEADER_SEARCH_PATHS_QUOTED_2 = "\"$(SHARED_CODE_DIR)/sdk/include/libxml2\"";
 				INFOPLIST_FILE = Resources/Info.plist;
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(LIBRARY_SEARCH_PATHS_QUOTED_1)",
+				);
+				LIBRARY_SEARCH_PATHS_QUOTED_1 = "\"$(SRCROOT)/../../Shared/sdk/lib\"";
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-weak_framework",
@@ -1743,8 +1768,18 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CURRENT_PROJECT_VERSION = 250;
-				HEADER_SEARCH_PATHS = "\"$(SHADOWKIT_ROOT)/include\"";
+				HEADER_SEARCH_PATHS = (
+					"$(HEADER_SEARCH_PATHS_QUOTED_1)",
+					"$(HEADER_SEARCH_PATHS_QUOTED_2)",
+				);
+				HEADER_SEARCH_PATHS_QUOTED_1 = "\"$(SHADOWKIT_ROOT)/include\"";
+				HEADER_SEARCH_PATHS_QUOTED_2 = "\"$(SHARED_CODE_DIR)/sdk/include/libxml2\"";
 				INFOPLIST_FILE = Resources/Info.plist;
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(LIBRARY_SEARCH_PATHS_QUOTED_1)",
+				);
+				LIBRARY_SEARCH_PATHS_QUOTED_1 = "\"$(SRCROOT)/../../Shared/sdk/lib\"";
 				PRODUCT_NAME = "Sdef Editor";
 			};
 			name = Debug;
@@ -1753,8 +1788,18 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CURRENT_PROJECT_VERSION = 250;
-				HEADER_SEARCH_PATHS = "\"$(SHADOWKIT_ROOT)/include\"";
+				HEADER_SEARCH_PATHS = (
+					"$(HEADER_SEARCH_PATHS_QUOTED_1)",
+					"$(HEADER_SEARCH_PATHS_QUOTED_2)",
+				);
+				HEADER_SEARCH_PATHS_QUOTED_1 = "\"$(SHADOWKIT_ROOT)/include\"";
+				HEADER_SEARCH_PATHS_QUOTED_2 = "\"$(SHARED_CODE_DIR)/sdk/include/libxml2\"";
 				INFOPLIST_FILE = Resources/Info.plist;
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(LIBRARY_SEARCH_PATHS_QUOTED_1)",
+				);
+				LIBRARY_SEARCH_PATHS_QUOTED_1 = "\"$(SRCROOT)/../../Shared/sdk/lib\"";
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-weak_framework",

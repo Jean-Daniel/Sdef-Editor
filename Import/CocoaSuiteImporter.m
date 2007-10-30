@@ -264,7 +264,7 @@ static NSArray *ASKStandardsSuites() {
 - (void)loadCoreSdef:(NSString *)name {
   NSString *path = [[NSBundle mainBundle] pathForResource:name ofType:@"sdef"];
   if (path) {
-    SdefDictionary *dico = SdefLoadDictionary(path, nil, nil);
+    SdefDictionary *dico = SdefLoadDictionary([NSURL fileURLWithPath:path], nil, NULL, NULL);
     if (dico) {
       for (NSUInteger idx = 0; idx < [dico count]; idx++) {
         SdefSuite *suite = [dico childAtIndex:idx];

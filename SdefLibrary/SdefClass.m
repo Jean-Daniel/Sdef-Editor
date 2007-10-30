@@ -141,7 +141,8 @@
 
 - (SdefContents *)contents {
   if (!sd_contents)
-    sd_contents = [[SdefContents alloc] init];
+    [self setContents:[[[SdefContents alloc] init] autorelease]];
+  
   return sd_contents;
 }
 - (void)setContents:(SdefContents *)contents {
@@ -150,7 +151,6 @@
     [sd_contents release];
     sd_contents = [contents retain];
     [sd_contents setOwner:self];
-    [sd_contents setEditable:[self isEditable]];
   }
 }
 

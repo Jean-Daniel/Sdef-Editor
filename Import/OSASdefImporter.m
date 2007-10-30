@@ -59,7 +59,7 @@
   if (sd_path && [sd_path getFSRef:&file]) {
     CFDataRef sdef = nil;
     if (noErr == OSACopyScriptingDefinition(&file, 0, &sdef) && sdef) {
-      sd_dico = [SdefLoadDictionaryData((id)sdef, nil, self) retain];
+      sd_dico = [SdefLoadDictionaryData((id)sdef, nil, NULL, self, NULL) retain];
       CFRelease(sdef);
     }
   }
@@ -67,16 +67,16 @@
   return sd_dico != nil;
 }
 
-- (BOOL)sdefParser:(SdefParser *)parser handleValidationError:(NSString *)error isFatal:(BOOL)fatal {
+- (BOOL)sdefParser:(SdefParser *)parser shouldIgnoreValidationError:(NSError *)error isFatal:(BOOL)fatal {
   if (fatal) {
     NSRunAlertPanel(@"An unrecoverable error occured while parsing file.",
                     @"%@",
-                    @"OK", nil, nil, error);
+                    @"OK", nil, nil, [error localizedDescription]);
     return NO;
   } else {
     switch (NSRunAlertPanel(@"An sdef validation error occured while parsing file.",
                             @"%@",
-                            @"Ignore", @"Abort", nil, error)) {
+                            @"Ignore", @"Abort", nil, [error localizedDescription])) {
       case NSAlertAlternateReturn:
         return NO;
     }

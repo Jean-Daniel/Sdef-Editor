@@ -112,11 +112,11 @@ NSString *SdefTypeStringForTypes(NSArray *types);
 #pragma mark -
 @interface SdefTypedOrphanObject : SdefTypedObject <NSCopying, NSCoding> {
 @private
-  id<SdefObject> sd_owner;
+  NSObject<SdefObject> *sd_owner;
 }
 
-- (id<SdefObject>)owner;
-- (void)setOwner:(id<SdefObject>)anObject;
+- (NSObject<SdefObject> *)owner;
+- (void)setOwner:(NSObject<SdefObject> *)anObject;
 
 - (id<SdefObject>)firstParentOfType:(SdefObjectType)aType;
 

@@ -3,12 +3,13 @@
  *  Sdef Editor
  *
  *  Created by Rainbow Team.
- *  Copyright � 2006 - 2007 Shadow Lab. All rights reserved.
+ *  Copyright (c) 2006 - 2007 Shadow Lab. All rights reserved.
  */
 
 #import "SdefParser.h"
 #import "SdefXMLBase.h"
 #import "SdefXMLValidator.h"
+#import "SdefParserInternal.h"
 #import "SdefDocumentationParser.h"
 
 #import "SdefVerb.h"
@@ -22,32 +23,29 @@
 #import "SdefDocumentation.h"
 #import "SdefImplementation.h"
 
-#import <ShadowKit/SKCFContext.h>
-
-static void *SdefParserCreateStructure(CFXMLParserRef parser, CFXMLNodeRef node, void *info);
-static void SdefParserAddChild(CFXMLParserRef parser, void *parent, void *child, void *info);
-static void SdefParserEndStructure(CFXMLParserRef parser, void *xmlType, void *info);
-static CFDataRef SdefParserResolveExternalEntity(CFXMLParserRef parser, CFXMLExternalID *extID, void *info);
-static Boolean SdefParserHandleError(CFXMLParserRef parser, CFXMLParserStatusCode error, void *info);
+#include <libxml/parser.h>
+#include <libxml/xinclude.h>
 
 static 
-void _SdefParserUpdatePantherDictionary(SdefDictionary *dictionary);
+void _SdefParserUpdatePantherObjects(NSArray *roots);
 static
-void _SdefParserPostProcessDictionary(SdefDictionary *dictionary);
+void _SdefParserPostProcessObjects(NSArray *roots);
 
 enum {
   kSdefValidationErrorStatus = 'VErr',
 };
 
-static
-CFXMLParserCallBacks SdefParserCallBacks = {
-  0,
-  SdefParserCreateStructure,
-  SdefParserAddChild,
-  SdefParserEndStructure,
-  SdefParserResolveExternalEntity,
-  SdefParserHandleError
-};
+
+static 
+void _SdefSetIncludeNamespace(xmlNodePtr a_node, xmlNsPtr ns) {
+  for (xmlNode *cur_node = a_node; cur_node; cur_node = cur_node->next) {
+    if (cur_node->type == XML_ELEMENT_NODE && 0 == xmlStrcmp(cur_node->name, (const xmlChar *)"include")) {
+      xmlSetNs(cur_node, ns);
+    }
+    
+    _SdefSetIncludeNamespace(cur_node->children, ns);
+  }
+}
 
 @interface SdefXMLPlaceholder : NSObject <SdefXMLObject> {
   @private
@@ -117,12 +115,13 @@ Boolean _SdefElementIsCollection(CFStringRef element) {
   CFEqual(CFSTR("responds-to-events"), element) || CFEqual(CFSTR("commands"), element) || CFEqual(CFSTR("events"), element);
 }
 
-
 #pragma mark -
 @implementation SdefParser
 
 + (void)initialize {
   if ([SdefParser class] == self) {
+    xmlInitParser();
+    
     sSdefElementMap = CFDictionaryCreateMutable(kCFAllocatorDefault, 0, 
                                                 &kCFTypeDictionaryKeyCallBacks, &kCFTypeDictionaryValueCallBacks);
     /* Base */
@@ -172,82 +171,142 @@ Boolean _SdefElementIsCollection(CFStringRef element) {
 
 - (void)dealloc {
   if (sd_metas) CFRelease(sd_metas);
+  [sd_roots release];
   [sd_comments release];
   [sd_validator release];
   [sd_docParser release];
-  [sd_dictionary release];  
   [super dealloc];
 }
 
 #pragma mark -
-- (NSInteger)line {
-  return sd_parser ? CFXMLParserGetLineNumber(sd_parser) : -1;
-}
-- (NSInteger)location {
-  return sd_parser ? CFXMLParserGetLocation(sd_parser) : -1;
+- (void)reset {
+  if (sd_roots) {
+    [sd_roots release];
+    sd_roots = nil;
+  }
+  if (sd_includes) {
+    [sd_includes release];
+    sd_includes = nil;
+  }
+  [sd_comments removeAllObjects];
+  sd_version = kSdefParserVersionUnknown;
+  if (sd_metas) CFDictionaryRemoveAllValues(sd_metas);
 }
 
+- (NSInteger)line {
+  return sd_parser ? [(id)sd_parser line] : -1;
+  //return sd_parser ? CFXMLParserGetLineNumber(sd_parser) : -1;
+}
+- (NSInteger)location {
+  return sd_parser ? [(id)sd_parser location] : -1;
+  //return sd_parser ? CFXMLParserGetLocation(sd_parser) : -1;
+}
+
+- (NSArray *)objects {
+  return sd_roots;
+}
 - (SdefVersion)sdefVersion {
   return sd_version;
 }
 - (SdefDictionary *)dictionary {
-  return sd_dictionary;
+  if ([sd_roots count] == 1) {
+    SdefDictionary *object = [sd_roots objectAtIndex:0];
+    return [object objectType] == kSdefDictionaryType ? object : nil;
+  }
+  return nil;
 }
 
 - (id)delegate {
   return sd_delegate;
 }
 - (void)setDelegate:(id)delegate {
-  NSParameterAssert(!delegate || [delegate respondsToSelector:@selector(sdefParser:handleValidationError:isFatal:)]);
+  NSParameterAssert(!delegate || [delegate respondsToSelector:@selector(sdefParser:shouldIgnoreValidationError:isFatal:)]);
   sd_delegate = delegate;
 }
 
-- (BOOL)parseSdef:(NSData *)sdefData  {
+- (BOOL)parseFragment:(xmlNodePtr)aNode parent:(NSString *)parent base:(NSURL *)anURL {
+  
+  if (parent)
+    [sd_validator startElement:(CFStringRef)parent];
+
+  SdefDOMParser *parser = [[SdefDOMParser alloc] initWithDelegate:self];
+  BOOL ok = [parser parse:aNode];
+  [parser release];
+  
+  if (parent)
+    [sd_validator endElement:(CFStringRef)parent];
+  
+  return ok;
+}
+
+- (BOOL)parseSdef:(NSData *)sdefData base:(NSURL *)anURL error:(NSError **)outError {
+  [self reset];
   BOOL result = NO;
-  if (sd_dictionary) {
-    [sd_dictionary release];
-    sd_dictionary = nil;
+  if (outError) *outError = nil;
+  
+  if (sd_roots) {
+    [sd_roots release];
+    sd_roots = nil;
   }
   if (sdefData) {
     [sd_comments removeAllObjects];
     if (sd_metas) CFDictionaryRemoveAllValues(sd_metas);
     
-    CFXMLParserContext ctxt = { 0, self, nil, nil, SKCBNSObjectCopyDescription };
-    sd_parser = CFXMLParserCreate(kCFAllocatorDefault, (CFDataRef)sdefData, NULL,
-                                  kCFXMLParserNoOptions, kCFXMLNodeCurrentVersion,
-                                  &SdefParserCallBacks, &ctxt);
-    if (sd_parser) {
+    int flags = XML_PARSE_RECOVER | XML_PARSE_NOENT | XML_PARSE_NSCLEAN | XML_PARSE_NOCDATA | XML_PARSE_COMPACT /* | XML_PARSE_NOERROR | XML_PARSE_NOWARNING */;
+    xmlDocPtr doc = xmlReadMemory([sdefData bytes], [sdefData length],
+                                  [[anURL absoluteString] UTF8String], NULL, flags);
+    
+    if (doc) {
       sd_validator = [[SdefXMLValidator alloc] init];
-      result = CFXMLParserParse(sd_parser);
+      /* correct doc if needed */
+      if (!xmlSearchNs(doc, xmlDocGetRootElement(doc), (const xmlChar *)"xi")) {
+        /* xmlns:xi="http://www.w3.org/2001/XInclude" */
+        xmlNsPtr ns = xmlNewNs(xmlDocGetRootElement(doc), (const xmlChar *)"http://www.w3.org/2001/XInclude", (const xmlChar *)"xi");
+        _SdefSetIncludeNamespace(xmlDocGetRootElement(doc), ns);
+      }
+      
+      /* process xincludes */
+      xmlXIncludeProcessFlags(doc, flags);
+      
+      result = [self parseFragment:xmlDocGetRootElement(doc) parent:nil base:anURL];
       sd_version = SdefDocumentVersionFromParserVersion([sd_validator version]);
       [sd_validator release];
-      CFRelease(sd_parser);
       sd_validator = nil;
-      sd_parser = nil;
+      xmlFreeDoc(doc);
+      doc = NULL;
+    } else if (outError) {
+      xmlErrorPtr error = xmlGetLastError();
+      if (error) {
+        *outError = [NSError errorWithDomain:NSXMLParserErrorDomain code:error->code userInfo:nil];
+      } else {
+        *outError = nil;
+      }
     }
-    if (sd_dictionary) {
+    
+    if ([sd_roots count] > 0) {
       if (sd_version <= kSdefPantherVersion)
-        _SdefParserUpdatePantherDictionary(sd_dictionary);
+        _SdefParserUpdatePantherObjects(sd_roots);
       else 
-        _SdefParserPostProcessDictionary(sd_dictionary);
+        _SdefParserPostProcessObjects(sd_roots);
     }
   }
   return result;
 }
 
 #pragma mark -
-- (void)parser:(CFXMLParserRef)parser handleComment:(CFStringRef)comment {
-  if (CFStringHasPrefix(comment, CFSTR(" @"))) {
+- (void)parser:(SdefDOMParser *)parser handleComment:(const xmlChar *)aComment {
+  CFStringRef cmt = CFStringCreateWithCString(kCFAllocatorDefault, (const char *)aComment, [parser cfencoding]);
+  if (CFStringHasPrefix(cmt, CFSTR(" @"))) {
     CFRange start, end;
-    if (CFStringFindWithOptions(comment, CFSTR("("), 
-                                CFRangeMake(0, CFStringGetLength(comment)), 0, &start) &&
-        CFStringFindWithOptions(comment, CFSTR(")"), 
-                                CFRangeMake(0, CFStringGetLength(comment)), kCFCompareBackwards, &end) &&
+    if (CFStringFindWithOptions(cmt, CFSTR("("), 
+                                CFRangeMake(0, CFStringGetLength(cmt)), 0, &start) &&
+        CFStringFindWithOptions(cmt, CFSTR(")"), 
+                                CFRangeMake(0, CFStringGetLength(cmt)), kCFCompareBackwards, &end) &&
         (start.location + start.length) < end.location) {
       CFStringRef key = NULL, value = NULL;
-      key = CFStringCreateWithSubstring(kCFAllocatorDefault, comment, CFRangeMake(2, start.location - 2));
+      key = CFStringCreateWithSubstring(kCFAllocatorDefault, cmt, CFRangeMake(2, start.location - 2));
       start.location += start.length;
-      value = CFStringCreateWithSubstring(kCFAllocatorDefault, comment, CFRangeMake(start.location, end.location - start.location));
+      value = CFStringCreateWithSubstring(kCFAllocatorDefault, cmt, CFRangeMake(start.location, end.location - start.location));
       if (key && value)
         CFDictionarySetValue(sd_metas, key, value);
       if (key) CFRelease(key);
@@ -257,88 +316,110 @@ Boolean _SdefElementIsCollection(CFStringRef element) {
     }
   } 
   /* else */
-  NSString *str = [[NSString alloc] initWithString:(id)comment];
-  if (str) {
-    [sd_comments addObject:str];
-    [str release];
-  }
+  [sd_comments addObject:(id)cmt];
+  CFRelease(cmt);
 }
 
-- (id)parser:(CFXMLParserRef)parser createStructureForElement:(CFStringRef)element infos:(CFXMLElementInfo *)infos {
+- (id)parser:(SdefDOMParser *)parser createStructureForElement:(xmlNodePtr)element {
   NSString *error = nil;
-  SdefParserVersion version = [sd_validator validateElement:element attributes:infos->attributes error:&error];
-  [sd_validator startElement:element];
+  id<SdefXMLObject> object = nil;
   
+  CFStringRef name = CFStringCreateWithCString(kCFAllocatorDefault, (const char *)element->name, [parser cfencoding]);
+  CFDictionaryRef attrs = _SdefXMLCreateDictionaryWithAttributes(element->properties, [parser cfencoding]);
+  SdefParserVersion version = [sd_validator validateElement:name attributes:attrs error:&error];
+  [sd_validator startElement:name];
+
   if (kSdefParserVersionUnknown == version) {
-    NSString *str = [NSString stringWithFormat:@"Parser validation error line %ld: %@ (%@, %@)", (long)CFXMLParserGetLineNumber(parser),
-      error, element, infos->attributes];
-    if ([sd_delegate sdefParser:self handleValidationError:str isFatal:NO])
-      return [[SdefInvalidElementPlaceholder alloc] initWithElementName:(id)element];
-    else
-      CFXMLParserAbort(parser, kSdefValidationErrorStatus, CFSTR(""));
+    NSString *reason = [NSString stringWithFormat:@"Parser validation error line %ld: %@ (%@, %@)", 
+      (long)[parser line], error, name, attrs];
+    NSDictionary *info = [NSDictionary dictionaryWithObjectsAndKeys:
+      reason, NSLocalizedDescriptionKey, error, NSUnderlyingErrorKey, nil];
+    NSError *anError = [NSError errorWithDomain:NSXMLParserErrorDomain code:NSXMLParserInternalError userInfo:info];
+    if ([sd_delegate sdefParser:self shouldIgnoreValidationError:anError isFatal:NO]) {
+      id elt = [[SdefInvalidElementPlaceholder alloc] initWithElementName:(id)name];
+      if (attrs) CFRelease(attrs);
+      CFRelease(name);
+      return elt;
+    } else {
+      [parser abortWithError:kSdefValidationErrorStatus reason:@""];
+    }
   }
   
-  id<SdefXMLObject> object = nil;
-  Class class = _SdefGetObjectClassForElement(element);
+  Class class = _SdefGetObjectClassForElement(name);
   if (class) {
     object = [[class alloc] init];
-  } else if (CFEqual(CFSTR("class-extension"), element)) {
+  } else if (CFEqual(CFSTR("class-extension"), name)) {
     object = [[SdefClass alloc] init];
     [(SdefClass *)object setExtension:YES];
-  } else if (CFEqual(CFSTR("event"), element)) {
+  } else if (CFEqual(CFSTR("event"), name)) {
     object = [[SdefVerb alloc] init];
     [(SdefVerb *)object setCommand:NO];
-  } else if (_SdefElementIsCollection(element)) {
-    object = [[SdefCollectionPlaceholder alloc] initWithElementName:(id)element];
+  } else if (_SdefElementIsCollection(name)) {
+    object = [[SdefCollectionPlaceholder alloc] initWithElementName:(id)name];
   }
   
   if (object) {
-    if (infos->attributes && CFDictionaryGetCount(infos->attributes) > 0)
-      [object setXMLAttributes:(id)infos->attributes];
+    if (attrs && CFDictionaryGetCount(attrs) > 0)
+      [object setXMLAttributes:(id)attrs];
   }
+  if (attrs) CFRelease(attrs);
+  CFRelease(name);
   return object;
 }
 
 #pragma mark Parser Core
-- (void *)parser:(CFXMLParserRef)parser createStructureForNode:(CFXMLNodeRef)node {
+- (void *)parser:(SdefDOMParser *)parser createStructureForNode:(xmlNodePtr)node {
   void *structure = NULL;
   @try {
     if (sd_docParser) {
       structure = [sd_docParser parser:parser createStructureForNode:node];
     } else {
-      switch (CFXMLNodeGetTypeCode(node)) {
-        case kCFXMLNodeTypeElement:
-          structure = [self parser:parser createStructureForElement:CFXMLNodeGetString(node) infos:(CFXMLElementInfo *)CFXMLNodeGetInfoPtr(node)];
+      switch (node->type) {
+        case XML_DOCUMENT_NODE:
+          structure = @"__document__";
           break;
-        case kCFXMLNodeTypeProcessingInstruction:
-          DLog(@"Encounter processing instruction: %@", CFXMLNodeGetString(node));
+        case XML_ELEMENT_NODE:
+          structure = [self parser:parser createStructureForElement:node];
           break;
-        case kCFXMLNodeTypeComment:
-          [self parser:parser handleComment:CFXMLNodeGetString(node)];
+        case XML_PI_NODE:
+          DLog(@"Encounter processing instruction: %s", node->name);
           break;
-        case kCFXMLNodeTypeText:
-          DLog(@"Data Type ID: kCFXMLNodeTypeText (%@)", CFXMLNodeGetString(node));
+        case XML_COMMENT_NODE:
+          [self parser:parser handleComment:node->content];
           break;
-        case kCFXMLNodeTypeCDATASection:
-          DLog(@"Data Type ID: kCFXMLDataTypeCDATASection (%@)", CFXMLNodeGetString(node));
+        case XML_TEXT_NODE:
+          /* probably white-space: skip it */
+          //DLog(@"Data Type ID: kCFXMLNodeTypeText (%s)", node->content);
           break;
-        case kCFXMLNodeTypeEntityReference:
-          DLog(@"Data Type ID: kCFXMLNodeTypeEntityReference (%@)", CFXMLNodeGetString(node));
+        case XML_CDATA_SECTION_NODE:
+          DLog(@"Data Type ID: kCFXMLDataTypeCDATASection (%s)", node->content);
           break;
-        case kCFXMLNodeTypeDocumentType:
-          DLog(@"Data Type ID: kCFXMLNodeTypeDocumentType (%@)", CFXMLNodeGetString(node));
+        case XML_ENTITY_REF_NODE:
+          DLog(@"Data Type ID: kCFXMLNodeTypeEntityReference (%s)", node->name);
           break;
-        case kCFXMLNodeTypeWhitespace:
-          /* Ignore white space */
+        case XML_DTD_NODE:
+        case XML_DOCUMENT_TYPE_NODE:
+          DLog(@"Data Type ID: kCFXMLNodeTypeDocumentType (%s)", node->name);
           break;
+        case XML_XINCLUDE_START:
+          sd_xinclude = true;
+          DLog(@"Start xinclude");
+          break;
+        case XML_XINCLUDE_END:
+          sd_xinclude = false;
+          DLog(@"End xinclude");
+          break;
+//        case kCFXMLNodeTypeWhitespace:
+//          /* Ignore white space */
+//          break;
         default:
-          DLog(@"Unknown Data Type ID: %ld (%@)", (long)CFXMLNodeGetTypeCode(node), CFXMLNodeGetString(node));
+          DLog(@"Unknown Data Type ID: %ld (%s)", (long)node->type, node->name);
           break;
       }
     }
   } @catch (id exception) {
     SKLogException(exception);
-    CFXMLParserAbort(parser, kCFXMLErrorMalformedDocument, (CFStringRef)[exception reason]);
+    [parser abortWithError:kCFXMLErrorMalformedDocument reason:[exception reason]];
   }
   return structure;
 }
@@ -359,7 +440,7 @@ Boolean _SdefElementIsCollection(CFStringRef element) {
   }
 }
 
-- (void)parser:(CFXMLParserRef)parser addChild:(void *)aChild toStructure:(void *)aStruct {
+- (void)parser:(SdefDOMParser *)parser addChild:(void *)aChild toStructure:(void *)aStruct {
   if (sd_docParser) {
     [sd_docParser parser:parser addChild:aChild toStructure:aStruct];
   } else {
@@ -373,10 +454,16 @@ Boolean _SdefElementIsCollection(CFStringRef element) {
     } else if (kSdefTypeIgnore == [child objectType]) {
       // invalid object. skip
     } else {
-      if (parent)
+      if (parent) {
         [(id)parent addXMLChild:(id)child];
-      else
-        sd_dictionary = [(SdefDictionary *)child retain];
+      } else {
+        if (!sd_roots) sd_roots = [[NSMutableArray alloc] init];
+        [sd_roots addObject:child];
+      }
+      
+      /* Handle xinclude */
+      if (sd_xinclude)
+        [child setEditable:NO];
       
       /* Handle comments */
       [self sd_addCommentsToObject:child];
@@ -389,7 +476,7 @@ Boolean _SdefElementIsCollection(CFStringRef element) {
   }
 }
 
-- (void)parser:(CFXMLParserRef)parser endStructure:(void *)structure {
+- (void)parser:(SdefDOMParser *)parser endStructure:(void *)structure {
   if (sd_docParser) {
     if ([(id)structure isKindOfClass:[SdefDocumentation class]]) {
       [sd_docParser close];
@@ -415,111 +502,132 @@ Boolean _SdefElementIsCollection(CFStringRef element) {
   }
 }
 
-- (Boolean)parser:(CFXMLParserRef)parser handleError:(CFXMLParserStatusCode)error {
-  if (kSdefValidationErrorStatus == error)
-    return false;
-  
-  CFIndex line = [self line];
-  CFIndex position = CFXMLParserGetLocation(sd_parser);
-  CFStringRef description = CFXMLParserCopyErrorDescription(parser);
-  NSString *str = [NSString stringWithFormat:@"line %ld, position: %ld:\n %@", (long)line, (long)position, description];
-  if (description) CFRelease(description);
-  return [sd_delegate sdefParser:self handleValidationError:str isFatal:YES];
-}
-
 @end
 
 #pragma mark -
 #pragma mark Core Foundation Parser
-void *SdefParserCreateStructure(CFXMLParserRef parser, CFXMLNodeRef node, void *info) {
-  if (CFXMLNodeGetTypeCode(node) == kCFXMLNodeTypeDocument) {
-    // handle start document
-    return @"__document__";
-  }
-  
-  SdefParser *delegate = info;
-  return [delegate parser:parser createStructureForNode:node];
-}
-
-void SdefParserAddChild(CFXMLParserRef parser, void *parent, void *child, void *info) {
-  SdefParser *delegate = info;
-  if (![(id)parent isEqual:@"__document__"]) {
-    [delegate parser:parser addChild:child toStructure:parent];
-  } else {
-    [delegate parser:parser addChild:child toStructure:nil];
-  }
-}
-
-void SdefParserEndStructure(CFXMLParserRef parser, void *node, void *info) {
-  if (![(id)node isEqual:@"__document__"]) {
-    SdefParser *delegate = info;
-    [delegate parser:parser endStructure:node];
-  } else {
-    // handle end of document
-  }
-}
-
-CFDataRef SdefParserResolveExternalEntity(CFXMLParserRef parser, CFXMLExternalID *extID, void *info) {
-  ShadowCTrace();
-  return NULL;
-}
-/* if handleError returns true, the parser will attempt to recover */
-Boolean SdefParserHandleError(CFXMLParserRef parser, CFXMLParserStatusCode error, void *info) {
-  SdefParser *delegate = info;
-  return [delegate parser:parser handleError:error];
-}
+//void *SdefParserCreateStructure(CFXMLParserRef parser, CFXMLNodeRef node, void *info) {
+//  if (CFXMLNodeGetTypeCode(node) == kCFXMLNodeTypeDocument) {
+//    // handle start document
+//    return @"__document__";
+//  }
+//  
+//  SdefParser *delegate = info;
+//  return [delegate parser:parser createStructureForNode:node];
+//}
+//
+//void SdefParserAddChild(CFXMLParserRef parser, void *parent, void *child, void *info) {
+//  SdefParser *delegate = info;
+//  if (![(id)parent isEqual:@"__document__"]) {
+//    [delegate parser:parser addChild:child toStructure:parent];
+//  } else {
+//    [delegate parser:parser addChild:child toStructure:nil];
+//  }
+//}
+//
+//void SdefParserEndStructure(CFXMLParserRef parser, void *node, void *info) {
+//  if (![(id)node isEqual:@"__document__"]) {
+//    SdefParser *delegate = info;
+//    [delegate parser:parser endStructure:node];
+//  } else {
+//    // handle end of document
+//  }
+//}
+//
+//CFDataRef SdefParserResolveExternalEntity(CFXMLParserRef parser, CFXMLExternalID *extID, void *info) {
+//  ShadowCTrace();
+//  return NULL;
+//}
+///* if handleError returns true, the parser will attempt to recover */
+//Boolean SdefParserHandleError(CFXMLParserRef parser, CFXMLParserStatusCode error, void *info) {
+//  SdefParser *delegate = info;
+//  return [delegate parser:parser handleError:error];
+//}
 
 #pragma mark -
 #pragma mark Panther Support
 #pragma mark Misc
 /* Convert old base types */
-static
-void _SdefParserUpdatePantherDictionary(SdefDictionary *dictionary) {
-  id child;
-  NSEnumerator *children = [dictionary deepChildEnumerator];
-  while (child = [children nextObject]) {
-    if ([child isKindOfClass:[SdefTypedObject class]]) {
-      NSArray *types = [child types];
-      for (NSUInteger idx=0; idx<[types count]; idx++) {
-        SdefType *type = [types objectAtIndex:idx];
-        if ([[type name] isEqualToString:@"string"]) {
-          [type setName:@"text"];
-        } else if ([[type name] isEqualToString:@"object"]) {
-          [type setName:@"specifier"];
-        } else if ([[type name] isEqualToString:@"location"]) {
-          [type setName:@"location specifier"];
-        }
+SK_INLINE
+void __SdefParserUpdatePantherObject(id object) {
+  if ([object isKindOfClass:[SdefTypedObject class]]) {
+    NSArray *types = [object types];
+    for (NSUInteger idx = 0; idx < [types count]; idx++) {
+      SdefType *type = [types objectAtIndex:idx];
+      if ([[type name] isEqualToString:@"string"]) {
+        [type setName:@"text"];
+      } else if ([[type name] isEqualToString:@"object"]) {
+        [type setName:@"specifier"];
+      } else if ([[type name] isEqualToString:@"location"]) {
+        [type setName:@"location specifier"];
       }
-    } else if ([child isKindOfClass:[SdefProperty class]] || 
-               [child isKindOfClass:[SdefElement class]]) {
-      /* Change property and element cocoa attribute */
-      NSString *method = [[child impl] method];
-      if (method) {
-        [[child impl] setKey:method];
-        [[child impl] setMethod:nil];
-      }
+    }
+  } else if ([object isKindOfClass:[SdefProperty class]] || [object isKindOfClass:[SdefElement class]]) {
+    /* Change property and element cocoa attribute */
+    NSString *method = [[object impl] method];
+    if (method) {
+      [[object impl] setKey:method];
+      [[object impl] setMethod:nil];
     }
   }
 }
 
 static
-void _SdefParserPostProcessDictionary(SdefDictionary *dictionary) {
-  SdefSuite *suite;
-  NSEnumerator *suites = [dictionary childEnumerator];
-  while (suite = [suites nextObject]) {
-    SdefClass *class;
-    NSEnumerator *classes = [[suite classes] childEnumerator];
-    while (class = [classes nextObject]) {
-      SdefRespondsTo *cmd;
-      NSEnumerator *cmds = [[class commands] childEnumerator];
-      while (cmd = [cmds nextObject]) {
-        if ([[cmd classManager] eventWithIdentifier:[cmd name]]) {
-          [cmd retain];
-          [cmd remove];
-          [[class events] appendChild:cmd];
-          [cmd release];
-        }
+void _SdefParserUpdatePantherObjects(NSArray *roots) {
+  for (NSUInteger idx = 0; idx < [roots count]; idx++) {
+    id child;
+    SdefObject *root = [roots objectAtIndex:idx];
+    __SdefParserUpdatePantherObject(root);
+    NSEnumerator *children = [root deepChildEnumerator];
+    while (child = [children nextObject]) {
+      __SdefParserUpdatePantherObject(child);
+    }
+  }
+}
+
+SK_INLINE
+void __SdefParserPostProcessClass(SdefClass *cls) {
+  SdefRespondsTo *cmd;
+  NSEnumerator *cmds = [[cls commands] childEnumerator];
+  while (cmd = [cmds nextObject]) {
+    if ([[cmd classManager] eventWithIdentifier:[cmd name]]) {
+      [cmd retain];
+      [cmd remove];
+      [[cls events] appendChild:cmd];
+      [cmd release];
+    }
+  }
+}
+
+/* post process */
+SK_INLINE
+void __SdefParserPostProcessObject(id object) {
+  switch ([object objectType]) {
+    case kSdefSuiteType: {
+      SdefClass *class;
+      NSEnumerator *classes = [[object classes] childEnumerator];
+      while (class = [classes nextObject]) {
+        __SdefParserPostProcessClass(class);
       }
+    }
+      break;
+    case kSdefClassType:
+      __SdefParserPostProcessClass(object);
+      break;
+    default:
+      break;
+  }
+}
+
+static
+void _SdefParserPostProcessObjects(NSArray *roots) {
+  for (NSUInteger idx = 0; idx < [roots count]; idx++) {
+    id child;
+    SdefObject *root = [roots objectAtIndex:idx];
+    __SdefParserPostProcessObject(root);
+    NSEnumerator *children = [root deepChildEnumerator];
+    while (child = [children nextObject]) {
+      __SdefParserPostProcessObject(child);
     }
   }
 }
@@ -568,7 +676,7 @@ void _SdefParserPostProcessDictionary(SdefDictionary *dictionary) {
   [NSException raise:NSInternalInconsistencyException 
               format:@"%@ does not support child element", sd_name];
 }
-- (void)addXMLComment:(NSString *)comment {
+- (void)addXMLComment:(NSString *)aComment {
   // ignore comments
 }
 - (void)setXMLMetas:(NSDictionary *)metas {
@@ -639,7 +747,7 @@ void _SdefParserPostProcessDictionary(SdefDictionary *dictionary) {
   return [super initWithElementName:@"accessor"];
 }
 
-- (void) dealloc {
+- (void)dealloc {
   [sd_style release];
   [super dealloc];
 }

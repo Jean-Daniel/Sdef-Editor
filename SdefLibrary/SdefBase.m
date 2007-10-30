@@ -92,6 +92,13 @@ NSImage *SdefImageNamed(NSString *name) {
 #pragma mark -
 - (void)sdefInit {}
 
+- (void)setParent:(SdefObject *)parent {
+  [super setParent:parent];
+  /* set inherited flags */
+  if (parent)
+    [self setEditable:[parent isEditable] recursive:YES];
+}
+
 #pragma mark -
 - (NSString *)name {
   return [super name];

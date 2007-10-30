@@ -248,17 +248,24 @@ static inline BOOL SdefEditorExistsForItem(SdefObject *item) {
   [[NSNotificationCenter defaultCenter] postNotificationName:SdefDictionarySelectionDidChangeNotification object:[self document]];
 }
 
-/*
+
  - (void)outlineView:(NSOutlineView *)outlineView willDisplayCell:(id)cell forTableColumn:(NSTableColumn *)tableColumn item:(id)item {
    if ([[tableColumn identifier] isEqualToString:@"_item"]) {
-     if ([outlineView rowForItem:item] == [outlineView selectedRow]) {
-       [cell setTextColor:([[self window] firstResponder] == self) ? [NSColor whiteColor] : [NSColor blackColor]];
+     if ([item isEditable]) {
+       [cell setTextColor:[NSColor controlTextColor]];
+     } else if ([outlineView rowForItem:item] == [outlineView selectedRow]) {
+       [cell setTextColor:([[self window] firstResponder] == outlineView) ? [NSColor selectedControlTextColor] : [NSColor blackColor]];
      } else {
-       [cell setTextColor:([item isEditable]) ? [NSColor textColor] : [NSColor disabledControlTextColor]];
+       [cell setTextColor:[NSColor disabledControlTextColor]];
      }
+//     if ([outlineView rowForItem:item] == [outlineView selectedRow]) {
+//       [cell setTextColor:([[self window] firstResponder] == self) ? [NSColor whiteColor] : [NSColor blackColor]];
+//     } else {
+//     [cell setTextColor:([item isEditable]) ? [NSColor textColor] : [NSColor disabledControlTextColor]];
+//     }
    }
  }
- */
+
 - (void)deleteSelectionInOutlineView:(NSOutlineView *)outlineView {
   sd_remove = YES;
   SdefObject *item = [outlineView itemAtRow:[outlineView selectedRow]];

@@ -143,7 +143,6 @@
     [sd_impl release];
     sd_impl = [newImpl retain];
     [sd_impl setOwner:self];
-    [sd_impl setEditable:[self isEditable]];
   }
 }
 
@@ -557,19 +556,36 @@
 }
 
 #pragma mark Owner
-- (id<SdefObject>)owner {
+/* Note: should copy change in SdefLeaf */
+- (NSObject<SdefObject> *)owner {
   return sd_owner;
 }
-- (void)setOwner:(id<SdefObject>)anObject {
+
+- (void)setOwner:(NSObject<SdefObject> *)anObject {
   sd_owner = anObject;
+  /* inherited flags */
+  if (sd_owner)
+    [self setEditable:[sd_owner isEditable]];
+}
+
+- (NSString *)location {
+  NSString *loc = [sd_owner location];
+  return loc ? [loc stringByAppendingFormat:@"->%@", [self objectTypeName]] : [self objectTypeName];
 }
 
 - (SdefObject *)container {
   return [sd_owner container];
 }
+
 - (SdefDictionary *)dictionary {
   return [sd_owner dictionary];
 }
+
+- (NSUndoManager *)undoManager {
+  return [sd_owner undoManager];
+}
+
+/* Needed to be owner of an orphan object (like SdefImplementation) */
 - (id<SdefObject>)firstParentOfType:(SdefObjectType)aType {
   return [sd_owner firstParentOfType:aType];
 }

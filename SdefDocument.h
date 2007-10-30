@@ -10,9 +10,9 @@
 @class SdefWindowController, SdefSymbolBrowser, SdefValidator;
 
 SK_PRIVATE 
-SdefDictionary *SdefLoadDictionary(NSString *filename, NSInteger *version, id delegate);
+SdefDictionary *SdefLoadDictionary(NSURL *file, NSInteger *version, id delegate, NSError **error);
 SK_PRIVATE
-SdefDictionary *SdefLoadDictionaryData(NSData *data, NSInteger *version, id delegate);
+SdefDictionary *SdefLoadDictionaryData(NSData *data, NSURL *base, NSInteger *version, id delegate, NSError **error);
 
 @interface SdefDocument : NSDocument {
 @private
