@@ -16,6 +16,7 @@
 #import "SdefClass.h"
 #import "SdefSuite.h"
 #import "SdefTypedef.h"
+#import "SdefXInclude.h"
 #import "SdefContents.h"
 #import "SdefArguments.h"
 #import "SdefDictionary.h"
@@ -156,7 +157,7 @@ Boolean _SdefElementIsCollection(CFStringRef element) {
     CFDictionaryAddValue(sSdefElementMap, CFSTR("enumeration"), [SdefEnumeration class]);
     CFDictionaryAddValue(sSdefElementMap, CFSTR("enumerator"), [SdefEnumerator class]);
     /* XInclude */
-    CFDictionaryAddValue(sSdefElementMap, CFSTR("xi:include"), [SdefXInclude class]);
+    CFDictionaryAddValue(sSdefElementMap, CFSTR("include"), [SdefXInclude class]);
   }
 }
 
@@ -164,6 +165,7 @@ Boolean _SdefElementIsCollection(CFStringRef element) {
 - (id)init {
   if (self = [super init]) {
     sd_comments = [[NSMutableArray alloc] init];
+    sd_xincludes = [[NSMutableArray alloc] init];
     sd_metas = CFDictionaryCreateMutable(kCFAllocatorDefault, 0, &kCFTypeDictionaryKeyCallBacks, &kCFTypeDictionaryValueCallBacks);
   }
   return self;
@@ -173,6 +175,7 @@ Boolean _SdefElementIsCollection(CFStringRef element) {
   if (sd_metas) CFRelease(sd_metas);
   [sd_roots release];
   [sd_comments release];
+  [sd_xincludes release];
   [sd_validator release];
   [sd_docParser release];
   [super dealloc];
@@ -180,15 +183,10 @@ Boolean _SdefElementIsCollection(CFStringRef element) {
 
 #pragma mark -
 - (void)reset {
-  if (sd_roots) {
-    [sd_roots release];
-    sd_roots = nil;
-  }
-  if (sd_includes) {
-    [sd_includes release];
-    sd_includes = nil;
-  }
+  [sd_roots release];
+  sd_roots = nil;
   [sd_comments removeAllObjects];
+  [sd_xincludes removeAllObjects];
   sd_version = kSdefParserVersionUnknown;
   if (sd_metas) CFDictionaryRemoveAllValues(sd_metas);
 }
@@ -249,10 +247,10 @@ Boolean _SdefElementIsCollection(CFStringRef element) {
     sd_roots = nil;
   }
   if (sdefData) {
-    [sd_comments removeAllObjects];
-    if (sd_metas) CFDictionaryRemoveAllValues(sd_metas);
-    
-    int flags = XML_PARSE_RECOVER | XML_PARSE_NOENT | XML_PARSE_NSCLEAN | XML_PARSE_NOCDATA | XML_PARSE_COMPACT /* | XML_PARSE_NOERROR | XML_PARSE_NOWARNING */;
+    int flags = XML_PARSE_RECOVER | XML_PARSE_NOENT | XML_PARSE_NSCLEAN | XML_PARSE_NOCDATA | XML_PARSE_COMPACT;
+#if !defined(DEBUG)
+    flags |= XML_PARSE_NOWARNING | XML_PARSE_NOERROR;
+#endif
     xmlDocPtr doc = xmlReadMemory([sdefData bytes], [sdefData length],
                                   [[anURL absoluteString] UTF8String], NULL, flags);
     
@@ -266,7 +264,9 @@ Boolean _SdefElementIsCollection(CFStringRef element) {
       }
       
       /* process xincludes */
-      xmlXIncludeProcessFlags(doc, flags);
+      if (xmlXIncludeProcessFlags(doc, flags) < 0) {
+        WCLog("xinclude processing failed.");
+      }
       
       result = [self parseFragment:xmlDocGetRootElement(doc) parent:nil base:anURL];
       sd_version = SdefDocumentVersionFromParserVersion([sd_validator version]);
@@ -327,7 +327,9 @@ Boolean _SdefElementIsCollection(CFStringRef element) {
   CFStringRef name = CFStringCreateWithCString(kCFAllocatorDefault, (const char *)element->name, [parser cfencoding]);
   CFDictionaryRef attrs = _SdefXMLCreateDictionaryWithAttributes(element->properties, [parser cfencoding]);
   SdefParserVersion version = [sd_validator validateElement:name attributes:attrs error:&error];
-  [sd_validator startElement:name];
+  /* include should not be append to the validator stack */
+  if (!CFEqual(name, CFSTR("include")))
+    [sd_validator startElement:name];
 
   if (kSdefParserVersionUnknown == version) {
     NSString *reason = [NSString stringWithFormat:@"Parser validation error line %ld: %@ (%@, %@)", 
@@ -336,13 +338,13 @@ Boolean _SdefElementIsCollection(CFStringRef element) {
       reason, NSLocalizedDescriptionKey, error, NSUnderlyingErrorKey, nil];
     NSError *anError = [NSError errorWithDomain:NSXMLParserErrorDomain code:NSXMLParserInternalError userInfo:info];
     if ([sd_delegate sdefParser:self shouldIgnoreValidationError:anError isFatal:NO]) {
-      id elt = [[SdefInvalidElementPlaceholder alloc] initWithElementName:(id)name];
-      if (attrs) CFRelease(attrs);
-      CFRelease(name);
-      return elt;
+      object = [[SdefInvalidElementPlaceholder alloc] initWithElementName:(id)name];
     } else {
       [parser abortWithError:kSdefValidationErrorStatus reason:@""];
     }
+    if (attrs) CFRelease(attrs);
+    CFRelease(name);
+    return object;
   }
   
   Class class = _SdefGetObjectClassForElement(name);
@@ -402,12 +404,14 @@ Boolean _SdefElementIsCollection(CFStringRef element) {
           DLog(@"Data Type ID: kCFXMLNodeTypeDocumentType (%s)", node->name);
           break;
         case XML_XINCLUDE_START:
-          sd_xinclude = true;
-          DLog(@"Start xinclude");
+          DLog(@"******* Start xinclude *******");
+          structure = [self parser:parser createStructureForElement:node];
+          [sd_xincludes addObject:structure];
+          [(id)structure release];
           break;
         case XML_XINCLUDE_END:
-          sd_xinclude = false;
-          DLog(@"End xinclude");
+          DLog(@"******* End xinclude *******");
+          [sd_xincludes removeLastObject];
           break;
 //        case kCFXMLNodeTypeWhitespace:
 //          /* Ignore white space */
@@ -454,16 +458,21 @@ Boolean _SdefElementIsCollection(CFStringRef element) {
     } else if (kSdefTypeIgnore == [child objectType]) {
       // invalid object. skip
     } else {
+      /* Handle xinclude */
+      if ([sd_xincludes count] > 0) {
+        [child setXIncluded:YES];
+        SdefXInclude *include = [sd_xincludes lastObject];
+        if ((id)[include owner] == parent) {
+          DLog(@"add include root: %@", child);
+        } 
+      }
+      
       if (parent) {
         [(id)parent addXMLChild:(id)child];
       } else {
         if (!sd_roots) sd_roots = [[NSMutableArray alloc] init];
         [sd_roots addObject:child];
       }
-      
-      /* Handle xinclude */
-      if (sd_xinclude)
-        [child setEditable:NO];
       
       /* Handle comments */
       [self sd_addCommentsToObject:child];
@@ -487,12 +496,12 @@ Boolean _SdefElementIsCollection(CFStringRef element) {
     } else {
       [sd_docParser parser:parser endStructure:structure];
     }
-  } else {
+  } else if (![[(id)structure xmlElementName] isEqualToString:@"xi:include"]) {
     /* handle special case where class become class extension */
     if ([(id)[sd_validator element] isEqualToString:@"class"] &&
         [[(id)structure xmlElementName] isEqualToString:@"class-extension"])
       [sd_validator endElement:CFSTR("class")]; 
-    else
+    else 
       [sd_validator endElement:(CFStringRef)[(id)structure xmlElementName]]; 
     
     /* Handle comments */
@@ -665,6 +674,9 @@ void _SdefParserPostProcessObjects(NSArray *roots) {
 
 - (BOOL)isEditable { return YES; }
 - (void)setEditable:(BOOL)flag {}
+
+- (BOOL)isXIncluded { return NO; }
+- (void)setXIncluded:(BOOL)flag {}
 
 - (SdefObject *)container { return nil; }
 - (SdefDictionary *)dictionary { return nil; }

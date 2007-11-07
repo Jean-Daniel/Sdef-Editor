@@ -18,12 +18,14 @@
 - (id)copyWithZone:(NSZone *)aZone {
   SdefDictionary *copy = [super copyWithZone:aZone];
   copy->sd_document = nil;
+  copy->sd_xincludes = [sd_xincludes copy];
   return copy;
 }
 
 - (void)encodeWithCoder:(NSCoder *)aCoder {
   [super encodeWithCoder:aCoder];
   SKEncodeInteger(aCoder, sd_version, @"SDVersion");
+  //[aCoder encodeObject:sd_xincludes forKey:@"SDXIncludes"];
   [aCoder encodeConditionalObject:sd_document forKey:@"SDDocument"];
 }
 
@@ -31,6 +33,7 @@
   if (self = [super initWithCoder:aCoder]) {
     sd_version = SKDecodeInteger(aCoder, @"SDVersion");
     sd_document = [aCoder decodeObjectForKey:@"SDDocument"];
+    //sd_xincludes = [[aCoder decodeObjectForKey:@"SDXIncludes"] retain];
   }
   return self;
 }
@@ -46,6 +49,7 @@
 }
 
 - (void)dealloc {
+  [sd_xincludes release];
   [super dealloc];
 }
 

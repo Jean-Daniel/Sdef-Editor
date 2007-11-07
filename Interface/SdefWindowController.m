@@ -48,8 +48,6 @@ static inline BOOL SdefEditorExistsForItem(SdefObject *item) {
       /* Enumeration */
     case kSdefRecordType:
     case kSdefEnumerationType:
-      /* XInclude */
-    case kSdefXIncludeType:
       return YES;
     default:
       return NO;
@@ -269,7 +267,7 @@ static inline BOOL SdefEditorExistsForItem(SdefObject *item) {
 - (void)deleteSelectionInOutlineView:(NSOutlineView *)outlineView {
   sd_remove = YES;
   SdefObject *item = [outlineView itemAtRow:[outlineView selectedRow]];
-  if (item != [(SdefDocument *)[self document] dictionary] && [item isEditable] && [item isRemovable]) {
+  if (item != [(SdefDocument *)[self document] dictionary] && [item isRemovable]) {
     SdefObject *parent = [item parent];
     NSUInteger idx = [parent indexOfChild:item];
     [item remove];

@@ -14,14 +14,13 @@
   id sd_delegate;
   
   void *sd_parser;
-  bool sd_xinclude;
   SdefVersion sd_version;
   NSMutableArray *sd_comments;
+  NSMutableArray *sd_xincludes;
   CFMutableDictionaryRef sd_metas;
   
   /* root element */
   NSMutableArray *sd_roots;
-  NSMutableDictionary *sd_includes;
   
   SdefXMLValidator *sd_validator;
   /* html documentation parser */

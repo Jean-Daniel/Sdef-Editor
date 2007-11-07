@@ -33,8 +33,6 @@ enum {
   /* Misc */
   kSdefCocoaType           = 'Coco',
   kSdefDocumentationType   = 'Docu',
-  /* XInclude */
-  kSdefXIncludeType        = 'XInc',
 };
 typedef OSType SdefObjectType;
 
@@ -71,6 +69,9 @@ NSString *CocoaNameForSdefName(NSString *cocoa, BOOL isClass);
 - (BOOL)isEditable;
 - (void)setEditable:(BOOL)flag;
 
+- (BOOL)isXIncluded;
+- (void)setXIncluded:(BOOL)flag;
+
 - (SdefObject *)container;
 - (id<SdefObject>)firstParentOfType:(SdefObjectType)aType;
 
@@ -87,6 +88,7 @@ NSString *CocoaNameForSdefName(NSString *cocoa, BOOL isClass);
     unsigned int xrefs:1;
     unsigned int event:1;
     unsigned int hidden:1;
+    unsigned int xinclude:1;
     unsigned int optional:1;
     unsigned int editable:1;
     unsigned int removable:1;
@@ -94,7 +96,7 @@ NSString *CocoaNameForSdefName(NSString *cocoa, BOOL isClass);
     unsigned int notinproperties:1;
     unsigned int hasDocumentation:1;
     unsigned int hasImplementation:1;
-    unsigned int reserved:5;
+    unsigned int reserved:4;
   } sd_soFlags;
   @private
     NSMutableArray *sd_comments;
@@ -136,6 +138,9 @@ NSString *CocoaNameForSdefName(NSString *cocoa, BOOL isClass);
 
 - (BOOL)isRemovable;
 - (void)setRemovable:(BOOL)removable;
+
+- (BOOL)isXIncluded;
+- (void)setXIncluded:(BOOL)flag;
 
 #pragma mark XRefs
 - (BOOL)hasID;
@@ -190,21 +195,3 @@ NSString *CocoaNameForSdefName(NSString *cocoa, BOOL isClass);
 - (BOOL)acceptsObjectType:(SdefObjectType)aType;
 @end
 
-#pragma mark -
-@interface SdefXInclude : SdefObject <NSCopying, NSCoding> {
-  @private
-//  NSString *sd_href;
-//  NSString *sd_pointer;
-  NSDictionary *sd_attrs;
-}
-
-//- (NSString *)href;
-//- (void)setHref:(NSString *)aRef;
-//
-//- (NSString *)pointer;
-//- (void)setPointer:(NSString *)aPointer;
-
-- (NSDictionary *)attributes;
-- (void)setAttributes:(NSDictionary *)attrs;
-
-@end

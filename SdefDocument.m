@@ -28,12 +28,19 @@
 
 @implementation SdefDocument
 
-- (id)init {
-  if (self = [super init]) {
+- (id)initWithType:(NSString *)typeName error:(NSError **)outError {
+  if (self = [super initWithType:typeName error:outError]) {
     SdefDictionary *dictionary = [[SdefDictionary alloc] init];
     [dictionary appendChild:[SdefSuite node]];
     [self setDictionary:dictionary];
     [dictionary release];
+  }
+  return self;
+}
+
+- (id)initWithContentsOfURL:(NSURL *)absoluteURL ofType:(NSString *)typeName error:(NSError **)outError {
+  if (self = [super initWithContentsOfURL:absoluteURL ofType:typeName error:outError]) {
+    
   }
   return self;
 }
@@ -161,10 +168,11 @@
   [controller release];
 }
 
-- (NSData *)dataRepresentationOfType:(NSString *)type {
+- (NSData *)dataOfType:(NSString *)typeName error:(NSError **)outError {
+  *outError = nil;
   NSData *data = nil;
   SdefVersion version = 0;
-  if ([type isEqualToString:ScriptingDefinitionFileType]) {
+  if ([typeName isEqualToString:ScriptingDefinitionFileType]) {
     version = [[self dictionary] version];
   }
   if (version) {
@@ -261,23 +269,26 @@
 }
 
 #pragma mark -
-- (NSDictionary *)fileAttributesToWriteToFile:(NSString *)fullDocumentPath
-                                       ofType:(NSString *)documentTypeName
-                                saveOperation:(NSSaveOperationType)saveOperationType {
-  
+- (NSDictionary *)fileAttributesToWriteToURL:(NSURL *)absoluteURL
+                                      ofType:(NSString *)typeName
+                            forSaveOperation:(NSSaveOperationType)saveOperation
+                         originalContentsURL:(NSURL *)absoluteOriginalContentsURL 
+                                       error:(NSError **)outError {
   NSDictionary *infoPlist = [[NSBundle mainBundle] infoDictionary];
-  NSString *creatorCodeString;
   NSArray *documentTypes;
-  NSNumber *typeCode, *creatorCode;
-  NSMutableDictionary *newAttributes;
-  
-  typeCode = creatorCode = nil;
+  NSString *creatorCodeString;
+  NSNumber *typeCode = nil, *creatorCode = nil;
 
+  NSDictionary *attrs = [super fileAttributesToWriteToURL:absoluteURL ofType:typeName forSaveOperation:saveOperation
+                                      originalContentsURL:absoluteOriginalContentsURL error:outError];
+  if (!attrs)
+    return nil;
+  
   // First, set creatorCode to the HFS creator code for the application,
   // if it exists.
   creatorCodeString = [infoPlist objectForKey:@"CFBundleSignature"];
   if(creatorCodeString) {
-    creatorCode = SKUInt(SKOSTypeFromString(creatorCodeString));
+    creatorCode = SKUInteger(SKOSTypeFromString(creatorCodeString));
   }
   
   // Then, find the matching Info.plist dictionary entry for this type.
@@ -288,12 +299,12 @@
     
     for(NSUInteger i = 0; i < count; i++) {
       NSString *type = [[documentTypes objectAtIndex:i] objectForKey:@"CFBundleTypeName"];
-      if(type && [type isEqualToString:documentTypeName]) {
+      if(type && [type isEqualToString:typeName]) {
         NSArray *typeCodeStrings = [[documentTypes objectAtIndex:i] objectForKey:@"CFBundleTypeOSTypes"];
         if(typeCodeStrings) { 
           NSString *firstTypeCodeString = [typeCodeStrings objectAtIndex:0];
           if (firstTypeCodeString) {
-            typeCode = SKUInt(SKOSTypeFromString(firstTypeCodeString)); 
+            typeCode = SKUInteger(SKOSTypeFromString(firstTypeCodeString)); 
           }
         }
         break; 
@@ -301,21 +312,19 @@
     }  
   }
   
+
   // If neither type nor creator code exist, use the default implementation.
   if(!(typeCode || creatorCode)) {
-    return [super fileAttributesToWriteToFile:fullDocumentPath
-                                       ofType:documentTypeName saveOperation:saveOperationType];  
+    return attrs;
   }
   
   // Otherwise, add the type and/or creator to the dictionary.
-  newAttributes = [NSMutableDictionary dictionaryWithDictionary:[super
-        fileAttributesToWriteToFile:fullDocumentPath ofType:documentTypeName
-                      saveOperation:saveOperationType]];
+  NSMutableDictionary *newAttrs = [[attrs mutableCopy] autorelease];
   if(typeCode)
-    [newAttributes setObject:typeCode forKey:NSFileHFSTypeCode];
+    [newAttrs setObject:typeCode forKey:NSFileHFSTypeCode];
   if(creatorCode)
-    [newAttributes setObject:creatorCode forKey:NSFileHFSCreatorCode];
-  return newAttributes;  
+    [newAttrs setObject:creatorCode forKey:NSFileHFSCreatorCode];
+  return newAttrs;  
 }
 
 @end

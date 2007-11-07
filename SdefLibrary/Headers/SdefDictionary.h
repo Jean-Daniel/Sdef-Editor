@@ -21,6 +21,8 @@
 @private
   SdefVersion sd_version;
   SdefDocument *sd_document;
+  
+  NSMutableDictionary *sd_xincludes;
 }
 
 - (NSString *)title;

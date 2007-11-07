@@ -19,16 +19,6 @@
 @class SdefParser;
 @implementation OSASdefImporter
 
-+ (id)allocWithZone:(NSZone *)aZone {
-  // Don't check weak ref in Tiger
-#if MAC_OS_X_VERSION_MIN_REQUIRED < MAC_OS_X_VERSION_10_4
-  if (!OSACopyScriptingDefinition) {
-    return nil;
-  }
-#endif
-  return [super allocWithZone:aZone];
-}
-
 - (id)initWithFile:(NSString *)file {
   if (self = [super init]) {
     sd_path = [file copy];

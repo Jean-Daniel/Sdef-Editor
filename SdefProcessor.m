@@ -127,11 +127,14 @@
   [task launch];
   
   if (input) {
-    NSData *data = [sd_input dataRepresentationOfType:ScriptingDefinitionFileType];
-    @try {
-      [input writeData:data];
-    } @catch (id exception) {
-      SKLogException(exception);
+    NSError *error = nil;
+    NSData *data = [sd_input dataOfType:ScriptingDefinitionFileType error:&error];
+    if (data) {
+      @try {
+        [input writeData:data];
+      } @catch (id exception) {
+        SKLogException(exception);
+      }
     }
     [input closeFile];
   }

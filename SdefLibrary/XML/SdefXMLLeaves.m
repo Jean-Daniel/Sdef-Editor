@@ -9,6 +9,7 @@
 #import "SdefXMLNode.h"
 #import "SdefXMLBase.h"
 
+#import "SdefXInclude.h"
 #import "SdefDocumentation.h"
 #import "SdefImplementation.h"
 
@@ -20,7 +21,7 @@
 }
 - (SdefXMLNode *)xmlNodeForVersion:(SdefVersion)version {
   SdefXMLNode *node;
-  if (node = [[SdefXMLNode alloc] initWithElementName:[self xmlElementName]]) {
+  if (node = [SdefXMLNode nodeWithElementName:[self xmlElementName]]) {
     /* Hidden */
     if ([self isHidden]) {
       if (version >= kSdefTigerVersion)
@@ -28,8 +29,6 @@
       else
         [node setAttribute:@"hidden" forKey:@"hidden"];
     }
-    
-    [node autorelease];
   }
   return node;
 }
@@ -286,3 +285,36 @@
 }
 
 @end
+
+#pragma mark -
+@implementation SdefXInclude (SdefXMLManager)
+#pragma mark XML Generation
+- (NSString *)xmlElementName {
+  return @"xi:include";
+}
+- (SdefXMLNode *)xmlNodeForVersion:(SdefVersion)version {
+  SdefXMLNode *node = nil;
+  if (version >= kSdefLeopardVersion) {
+    if (node = [super xmlNodeForVersion:version]) {
+      [node setEmpty:YES];
+      /* href */
+      NSString *attr = [self href];
+      if (attr) [node setAttribute:[attr stringByEscapingEntities:nil] forKey:@"href"];
+      /* pointer */
+      attr = [self pointer];
+      if (attr) [node setAttribute:[attr stringByEscapingEntities:nil] forKey:@"xpointer"];      
+    }
+  }  
+  return node;
+}
+
+#pragma mark Parsing
+- (void)setXMLAttributes:(NSDictionary *)attrs {
+  NSString *attr = [attrs objectForKey:@"href"];
+  if (attr) [self setHref:[attr stringByUnescapingEntities:nil]];
+  attr = [attrs objectForKey:@"xpointer"];
+  if (attr) [self setPointer:[attr stringByUnescapingEntities:nil]];
+}
+
+@end
+

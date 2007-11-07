@@ -31,7 +31,7 @@
     }
     
     /* xincludes */
-    if ([self hasXInclude]) {
+    if ([self hasXInclude] && [self xincludes]) {
       NSArray *xincludes = [self xincludes];
       for (NSUInteger idx = 0; idx < [xincludes count]; idx++) {
         SdefXMLNode *xnode = [[xincludes objectAtIndex:idx] xmlNodeForVersion:version];
@@ -67,7 +67,7 @@
 - (void)addXMLChild:(id<SdefObject>)child {
   switch ([child objectType]) {
     case kSdefXIncludeType:
-      [self addXInclude:(SdefXInclude *)child];
+      [self addXInclude:child];
       break;
     default:
       [NSException raise:NSInternalInconsistencyException format:@"%@ must overrided %@ to support %@ ", 
@@ -115,44 +115,6 @@
 #pragma mark XML Parsing
 - (void)setXMLAttributes:(NSDictionary *)attrs {
   /* Do nothing */
-}
-
-@end
-
-#pragma mark -
-@implementation SdefXInclude (SdefXMLManager)
-#pragma mark XML Generation
-- (NSString *)xmlElementName {
-  return @"xi:include";
-}
-- (SdefXMLNode *)xmlNodeForVersion:(SdefVersion)version {
-  SdefXMLNode *node = nil;
-  if ([[self attributes] count] > 0) {
-    if (node = [super xmlNodeForVersion:version]) {
-      [node setEmpty:YES];
-      [node addAttributesFromDictionary:[self attributes]];
-//      /* href */
-//      NSString *attr = [self href];
-//      if (attr) [node setAttribute:[attr stringByEscapingEntities:nil] forKey:@"href"];
-//      /* pointer */
-//      attr = [self pointer];
-//      if (attr) [node setAttribute:[attr stringByEscapingEntities:nil] forKey:@"pointer"];      
-    }
-  } else {
-    /* we have to dump all children */
-    //[node setList:YES];
-  }
-  
-  return node;
-}
-
-#pragma mark Parsing
-- (void)setXMLAttributes:(NSDictionary *)attrs {
-  [self setAttributes:attrs];
-//  NSString *attr = [attrs objectForKey:@"href"];
-//  if (attr) [self setHref:[attr stringByUnescapingEntities:nil]];
-//  attr = [attrs objectForKey:@"pointer"];
-//  if (attr) [self setPointer:[attr stringByUnescapingEntities:nil]];
 }
 
 @end

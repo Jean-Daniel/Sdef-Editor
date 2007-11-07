@@ -95,8 +95,8 @@ NSImage *SdefImageNamed(NSString *name) {
 - (void)setParent:(SdefObject *)parent {
   [super setParent:parent];
   /* set inherited flags */
-  if (parent)
-    [self setEditable:[parent isEditable] recursive:YES];
+//  if (parent)
+//    [self setEditable:[parent isEditable] recursive:YES];
 }
 
 #pragma mark -
@@ -221,14 +221,15 @@ NSImage *SdefImageNamed(NSString *name) {
 }
 
 - (BOOL)isEditable {
-  return sd_soFlags.editable;
+  return sd_soFlags.editable && !sd_soFlags.xinclude;
 }
 - (void)setEditable:(BOOL)flag {
   [self setEditable:flag recursive:NO];
 }
 
 - (void)setEditable:(BOOL)flag recursive:(BOOL)recu {
-  sd_soFlags.editable = (flag) ? 1 : 0;
+  SKSetFlag(sd_soFlags.editable, flag);
+  
   if (recu) {
     SdefObject *node;
     NSEnumerator *nodes = [self childEnumerator];
@@ -238,11 +239,20 @@ NSImage *SdefImageNamed(NSString *name) {
   }
 }
 
+- (BOOL)isXIncluded {
+  return sd_soFlags.xinclude;
+}
+- (void)setXIncluded:(BOOL)flag {
+  SKSetFlag(sd_soFlags.xinclude, flag);
+}
+
 - (BOOL)isRemovable {
+  if ([self parent] && ![[self parent] isEditable])
+    return NO;
   return sd_soFlags.removable;
 }
 - (void)setRemovable:(BOOL)removable {
-  sd_soFlags.removable = (removable) ? 1 : 0;
+  SKSetFlag(sd_soFlags.removable, removable);
 }
 
 #pragma mark Optionals Children & Attributes
@@ -269,7 +279,7 @@ NSImage *SdefImageNamed(NSString *name) {
 }
 
 - (BOOL)hasXInclude {
-  return [sd_includes count] > 0;
+  return YES;
 }
 - (NSArray *)xincludes {
   return sd_includes;
@@ -277,6 +287,7 @@ NSImage *SdefImageNamed(NSString *name) {
 - (void)addXInclude:(id)xinclude {
   if (!sd_includes)
     sd_includes = [[NSMutableArray alloc] init];
+  [xinclude setOwner:self];
   [sd_includes addObject:xinclude];
 }
 
@@ -385,10 +396,13 @@ NSImage *SdefImageNamed(NSString *name) {
 }
 
 #pragma mark -
+- (BOOL)hasXInclude {
+  return NO;
+}
+
 - (Class)contentType {
   return sd_contentType;
 }
-
 - (void)setContentType:(Class)newContentType {
   if (sd_contentType != newContentType) {
     sd_contentType = newContentType;
@@ -398,7 +412,6 @@ NSImage *SdefImageNamed(NSString *name) {
 - (NSString *)elementName {
   return sd_elementName;
 }
-
 - (void)setElementName:(NSString *)aName {
   if (sd_elementName != aName) {
     [sd_elementName release];
@@ -408,72 +421,6 @@ NSImage *SdefImageNamed(NSString *name) {
 
 - (BOOL)acceptsObjectType:(SdefObjectType)aType {
   return sd_contentType ? [sd_contentType objectType] == aType : NO;
-}
-
-@end
-
-#pragma mark -
-@implementation SdefXInclude
-#pragma mark Protocols Implementations
-- (id)copyWithZone:(NSZone *)aZone {
-  SdefXInclude *copy = [super copyWithZone:aZone];
-//  copy->sd_href = [sd_href copyWithZone:aZone];
-//  copy->sd_pointer = [sd_pointer copyWithZone:aZone];
-  copy->sd_attrs = [sd_attrs copyWithZone:aZone];
-  return copy;
-}
-
-- (void)encodeWithCoder:(NSCoder *)aCoder {
-  [super encodeWithCoder:aCoder];
-  //  [aCoder encodeObject:sd_href forKey:@"SXIncludeHRef"];
-  //  [aCoder encodeObject:sd_pointer forKey:@"SXIncludePointer"];
-    [aCoder encodeObject:sd_attrs forKey:@"SXIncludeAttributes"];
-}
-
-- (id)initWithCoder:(NSCoder *)aCoder {
-  if (self = [super initWithCoder:aCoder]) {
-//    sd_pointer = [[aCoder decodeObjectForKey:@"SXIncludePointer"] retain];
-//    sd_href = [[aCoder decodeObjectForKey:@"SXIncludeHRef"] retain];
-    sd_attrs = [[aCoder decodeObjectForKey:@"SXIncludeAttributes"] retain];
-  }
-  return self;
-}
-
-- (void)dealloc {
-  [sd_attrs release];
-//  [sd_pointer release];
-//  [sd_href release];
-  [super dealloc];
-}
-
-#pragma mark -
-+ (SdefObjectType)objectType {
-  return kSdefXIncludeType;
-}
-
-+ (NSString *)defaultIconName {
-  return @"XInclude";
-}
-
-//- (NSString *)href {
-//  return sd_href;
-//}
-//- (void)setHref:(NSString *)aRef {
-//  SKSetterCopy(sd_href, aRef);
-//}
-//
-//- (NSString *)pointer {
-//  return sd_pointer;
-//}
-//- (void)setPointer:(NSString *)aPointer {
-//  SKSetterCopy(sd_pointer, aPointer);
-//}
-
-- (NSDictionary *)attributes {
-  return sd_attrs;
-}
-- (void)setAttributes:(NSDictionary *)attrs {
-  SKSetterCopy(sd_attrs, attrs);
 }
 
 @end

@@ -14,6 +14,8 @@ enum {
   kSdefSynonymType = 'Syno',
   kSdefCommentType = 'Cmnt',
   kSdefXrefType = 'Xref',
+  /* XInclude */
+  kSdefXIncludeType = 'XInc',
 };
 
 @interface SdefLeaf : NSObject <SdefObject, NSCopying, NSCoding> {
@@ -25,8 +27,9 @@ enum {
     unsigned int list:1;
     unsigned int html:1;
     unsigned int hidden:1;
+    unsigned int xinclude:1;
     unsigned int editable:1;
-    unsigned int reserved:4;
+    unsigned int reserved:3;
   } sd_slFlags;
 }
 
@@ -42,11 +45,14 @@ enum {
 - (NSString *)name;
 - (void)setName:(NSString *)newName;
 
+- (BOOL)isHidden;
+- (void)setHidden:(BOOL)flag;
+
 - (BOOL)isEditable;
 - (void)setEditable:(BOOL)flag;
 
-- (BOOL)isHidden;
-- (void)setHidden:(BOOL)flag;
+- (BOOL)isXIncluded;
+- (void)setXIncluded:(BOOL)flag;
 
 - (NSObject<SdefObject> *)owner;
 - (void)setOwner:(NSObject<SdefObject> *)anObject;

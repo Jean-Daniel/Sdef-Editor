@@ -81,7 +81,6 @@
     [sd_documentation release];
     sd_documentation = [doc retain];
     [sd_documentation setOwner:self];
-    [sd_documentation setEditable:[self isEditable]];
   }	
 }
 
@@ -564,8 +563,8 @@
 - (void)setOwner:(NSObject<SdefObject> *)anObject {
   sd_owner = anObject;
   /* inherited flags */
-  if (sd_owner)
-    [self setEditable:[sd_owner isEditable]];
+//  if (sd_owner)
+//    [self setEditable:[sd_owner isEditable]];
 }
 
 - (NSString *)location {

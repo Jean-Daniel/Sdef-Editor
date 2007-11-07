@@ -105,6 +105,8 @@ CFDictionaryRef _SdefXMLCreateDictionaryWithAttributes(xmlAttr *attr, CFStringEn
     }
   } while(sd_current && !sd_abort);
   sd_current = NULL;
+  [stack release];
+  
   return !sd_abort;
 }
 

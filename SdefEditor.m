@@ -11,10 +11,6 @@
 #import <ShadowKit/SKLSFunctions.h>
 #import <ShadowKit/SKApplication.h>
 
-#if MAC_OS_X_VERSION_MIN_REQUIRED < MAC_OS_X_VERSION_10_4
-#include <Carbon/Carbon.h>
-#endif
-
 #import "SdefSuite.h"
 #import "Preferences.h"
 #import "SdefDocument.h"
@@ -31,7 +27,7 @@
 #endif
 
 enum {
-  kSdefEditorCurrentVersion = 0x010501, /* 1.5.1 */
+  kSdefEditorCurrentVersion = 0x010502, /* 1.5.1 */
 };
 
 int main(int argc, const char *argv[]) {
@@ -101,13 +97,6 @@ const OSType kCocoaSuiteDefinitionHFSType = 'ScSu';
 - (void)awakeFromNib {
   if ([[NSUserDefaults standardUserDefaults] boolForKey:@"SdefDebugMenu"])
     [self createDebugMenu];
-#if MAC_OS_X_VERSION_MIN_REQUIRED < MAC_OS_X_VERSION_10_4
-  // If Panther, remove open application sdef menu
-  if (!OSACopyScriptingDefinition) {
-    NSMenu *file = [[[NSApp mainMenu] itemWithTag:1] submenu];
-    [file removeItem:[file itemWithTag:1]];
-  }
-#endif
 #if __LP64__
   NSMenu *file = [[[NSApp mainMenu] itemWithTag:1] submenu];
   NSMenuItem *export = [file itemWithTag:2];
@@ -166,12 +155,15 @@ const OSType kCocoaSuiteDefinitionHFSType = 'ScSu';
   }
   NSString *suitePath = [[NSBundle mainBundle] pathForResource:suite ofType:@"sdef"];
   if (suitePath) {
+    NSError *error = nil;
     NSDocumentController *ctrl = [NSDocumentController sharedDocumentController];
-    NSDocument *doc = [ctrl openDocumentWithContentsOfFile:suitePath
-                                                    display:NO];
+    NSDocument *doc = [ctrl openDocumentWithContentsOfURL:[NSURL fileURLWithPath:suitePath] display:NO error:&error];
     if (doc) {
-      [doc setFileName:nil];
+      [doc setFileURL:nil];
+      [doc makeWindowControllers];
       [doc showWindows];
+    } else if (error) {
+      [NSApp presentError:error];
     }
   }
 }
@@ -183,14 +175,6 @@ const OSType kCocoaSuiteDefinitionHFSType = 'ScSu';
 #pragma mark -
 #pragma mark Importation
 - (IBAction)openApplicationTerminology:(id)sender {
-// Don't check weak ref in Tiger
-#if MAC_OS_X_VERSION_MIN_REQUIRED < MAC_OS_X_VERSION_10_4
-  if (!OSACopyScriptingDefinition) {
-    NSBeep();
-    return;
-  }
-#endif
-  
   ImportApplicationAete *panel = [[ImportApplicationAete alloc] initWithWindowNibName:@"ImportApplicationSdef"];
   [panel showWindow:sender];
   [NSApp runModalForWindow:[panel window]];
@@ -210,9 +194,11 @@ const OSType kCocoaSuiteDefinitionHFSType = 'ScSu';
     NSArray *suites = [importer sdefSuites];
     SdefDictionary *dico = [importer sdefDictionary];
     if ([dico hasChildren] || [suites count]) {
-      SdefDocument *doc = [[NSDocumentController sharedDocumentController] openUntitledDocumentOfType:ScriptingDefinitionFileType display:NO];
-      
-      if (dico) {
+      NSError *error = nil;
+      SdefDocument *doc = [[NSDocumentController sharedDocumentController] openUntitledDocumentAndDisplay:NO error:&error];
+      if (!doc) {
+        if (error) [NSApp presentError:error];
+      } else if (dico) {
         [doc setDictionary:dico];
       } else if ([suites count]) {
         [[doc dictionary] removeAllChildren];
@@ -225,7 +211,7 @@ const OSType kCocoaSuiteDefinitionHFSType = 'ScSu';
         [[doc undoManager] removeAllActions];
         [doc updateChangeCount:NSChangeCleared];
       }
-      
+      [doc makeWindowControllers];
       [doc showWindows];
       
       if ([importer warnings]) {
@@ -341,18 +327,12 @@ const OSType kCocoaSuiteDefinitionHFSType = 'ScSu';
     [self importCocoaScriptFile:filename];
     return YES;
   } else {
-#if MAC_OS_X_VERSION_MIN_REQUIRED < MAC_OS_X_VERSION_10_4
-    if (OSACopyScriptingDefinition) {
-#endif
-      if ((noErr == SKLSIsApplicationAtPath((CFStringRef)filename, &isapp)) && isapp) {
-        SdefImporter *importer = [[OSASdefImporter alloc] initWithFile:filename];
-        [self importWithImporter:importer];
-        [importer release];
-        return YES;
-      }
-#if MAC_OS_X_VERSION_MIN_REQUIRED < MAC_OS_X_VERSION_10_4      
+    if ((noErr == SKLSIsApplicationAtPath((CFStringRef)filename, &isapp)) && isapp) {
+      SdefImporter *importer = [[OSASdefImporter alloc] initWithFile:filename];
+      [self importWithImporter:importer];
+      [importer release];
+      return YES;
     }
-#endif
   }
   /* lets document manager handle it */
   return NO;
@@ -379,7 +359,7 @@ const OSType kCocoaSuiteDefinitionHFSType = 'ScSu';
 @implementation SdefDocumentController
 
 - (void)noteNewRecentDocument:(NSDocument *)aDocument {
-  NSString *path = [aDocument fileName];
+  NSString *path = [[aDocument fileURL] path];
   if (![path hasPrefix:[[NSBundle mainBundle] bundlePath]]) {
     [super noteNewRecentDocument:aDocument];
   }

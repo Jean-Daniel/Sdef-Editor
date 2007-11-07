@@ -83,10 +83,17 @@
 }
 
 - (BOOL)isEditable {
-  return sd_slFlags.editable;
+  return sd_slFlags.editable && !sd_slFlags.xinclude;
 }
 - (void)setEditable:(BOOL)flag {
   SKSetFlag(sd_slFlags.editable, flag);
+}
+
+- (BOOL)isXIncluded {
+  return sd_slFlags.xinclude;
+}
+- (void)setXIncluded:(BOOL)flag {
+  SKSetFlag(sd_slFlags.xinclude, flag);
 }
 
 - (BOOL)isHidden {
@@ -128,8 +135,8 @@
 - (void)setOwner:(NSObject<SdefObject> *)anObject {
   sd_owner = anObject;
   /* inherited flags */
-  if (sd_owner)
-    [self setEditable:[sd_owner isEditable]];
+//  if (sd_owner)
+//    [self setEditable:[sd_owner isEditable]];
 }
 
 - (NSString *)location {
