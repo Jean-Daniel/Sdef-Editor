@@ -174,8 +174,10 @@ NSString *CocoaNameForSdefName(NSString *cocoa, BOOL isClass);
 
 #pragma mark XInclude
 - (BOOL)hasXInclude;
-- (NSArray *)xincludes;
+- (NSMutableArray *)xincludes;
 - (void)addXInclude:(id)xinclude;
+/* returns YES if contains at least one xinclude element */
+- (BOOL)containsXInclude;
 
 @end
 

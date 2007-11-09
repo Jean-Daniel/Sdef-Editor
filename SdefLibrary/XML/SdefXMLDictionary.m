@@ -13,13 +13,29 @@
 
 @implementation SdefDictionary (SdefXMLManager)
 #pragma mark XML Generation
+- (BOOL)sd_usesXInclude {
+  if ([self containsXInclude])
+    return YES;
+  
+  SdefObject *child;
+  NSEnumerator *children = [self deepChildEnumerator];
+  while (child = [children nextObject]) {
+    if ([child containsXInclude])
+      return YES;
+  }
+  return NO;
+}
+
 - (SdefXMLNode *)xmlNodeForVersion:(SdefVersion)version {
   SdefXMLNode *node = nil;
   if (node = [super xmlNodeForVersion:version]) {
     if ([self name]) [node setAttribute:[[self name] stringByEscapingEntities:nil] forKey:@"title"];
     switch (version) {
-      case kSdefLeopardVersion: 
+      case kSdefLeopardVersion: {
         //[node setMeta:@"10.5" forKey:@"version"];
+        if ([self sd_usesXInclude])
+          [node setAttribute:@"http://www.w3.org/2003/XInclude" forKey:@"xmlns:xi"];
+      }
         break;
       case kSdefTigerVersion: 
         [node setMeta:@"10.4" forKey:@"version"];

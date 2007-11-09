@@ -281,14 +281,17 @@ NSImage *SdefImageNamed(NSString *name) {
 - (BOOL)hasXInclude {
   return YES;
 }
-- (NSArray *)xincludes {
+- (NSMutableArray *)xincludes {
+  if (!sd_includes)
+    sd_includes = [[NSMutableArray alloc] init];
   return sd_includes;
 }
 - (void)addXInclude:(id)xinclude {
-  if (!sd_includes)
-    sd_includes = [[NSMutableArray alloc] init];
   [xinclude setOwner:self];
-  [sd_includes addObject:xinclude];
+  [[self xincludes] addObject:xinclude];
+}
+- (BOOL)containsXInclude {
+  return sd_includes && [sd_includes count] > 0;
 }
 
 - (BOOL)hasDocumentation {

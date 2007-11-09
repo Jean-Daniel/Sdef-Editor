@@ -31,7 +31,7 @@
     }
     
     /* xincludes */
-    if ([self hasXInclude] && [self xincludes]) {
+    if ([self containsXInclude] > 0) {
       NSArray *xincludes = [self xincludes];
       for (NSUInteger idx = 0; idx < [xincludes count]; idx++) {
         SdefXMLNode *xnode = [[xincludes objectAtIndex:idx] xmlNodeForVersion:version];
@@ -41,18 +41,16 @@
     }
     
     /* Children */
-    /* we have to test if the node is declared empty, 
-      because xinclude effectively contains children but we do not have to dump them */
-    //if (![node isEmpty]) {
-      SdefObject *child = nil;
-      NSEnumerator *children = [self childEnumerator];
-      while (child = [children nextObject]) {
+    SdefObject *child = nil;
+    NSEnumerator *children = [self childEnumerator];
+    while (child = [children nextObject]) {
+      if (![child isXIncluded]) {
         SdefXMLNode *childNode = [child xmlNodeForVersion:version];
         if (childNode) {
           NSAssert1([childNode isList] || [childNode elementName], @"%@ return an invalid node", child);
           [node appendChild:childNode];
         }
-      //}
+      }
     }
   }
   return node;
