@@ -32,23 +32,38 @@
     [[self impl] setSdClass:name];
     
     /* Properties & Contents */
+    NSString *content = [suite objectForKey:@"DefaultSubcontainerAttribute"];
+    
     NSMutableDictionary *suiteItems = [[NSMutableDictionary alloc] initWithDictionary:[suite objectForKey:@"Attributes"]];
     [suiteItems addEntriesFromDictionary:[suite objectForKey:@"ToOneRelationships"]];
     NSMutableDictionary *termItems = [[NSMutableDictionary alloc] initWithDictionary:[terminology objectForKey:@"Attributes"]];
     [termItems addEntriesFromDictionary:[terminology objectForKey:@"ToOneRelationships"]];
-    NSString *content = [suite objectForKey:@"DefaultSubcontainerAttribute"];
-    id key, keys = [suiteItems keyEnumerator];
+    
+    NSString *key;
+    NSEnumerator *keys = [suiteItems keyEnumerator];
     while (key = [keys nextObject]) {
+      bool isContents = false;
+      NSDictionary *pterm = [termItems objectForKey:key];
+      NSDictionary *psuite = [suiteItems objectForKey:key];
+      
       if (content && [key isEqualToString:content]) {
-        id contents = [[SdefContents allocWithZone:[self zone]] initWithName:key
-                                                                       suite:[suiteItems objectForKey:key]
-                                                              andTerminology:[termItems objectForKey:key]];
+        isContents = true;
+      } else if (!content && 
+                 [[pterm objectForKey:@"Name"] isEqualToString:@"contents"] && 
+                 [[psuite objectForKey:@"AppleEventCode"] isEqualToString:@"pcnt"]) {
+        isContents = true;
+      }
+      
+      if (isContents) {
+        SdefContents *contents = [[SdefContents allocWithZone:[self zone]] initWithName:key
+                                                                                  suite:psuite
+                                                                         andTerminology:pterm];
         [self setContents:contents];
         [contents release];
       } else {
-        id property = [[SdefProperty allocWithZone:[self zone]] initWithName:key
-                                                                       suite:[suiteItems objectForKey:key]
-                                                              andTerminology:[termItems objectForKey:key]];
+        SdefProperty *property = [[SdefProperty allocWithZone:[self zone]] initWithName:key
+                                                                                  suite:psuite
+                                                                         andTerminology:pterm];
         [[self properties] appendChild:property];
         [property release];
       }

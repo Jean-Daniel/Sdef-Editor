@@ -37,7 +37,8 @@
 - (SdefVersion)sdefVersion;
 - (SdefDictionary *)dictionary;
 
-- (BOOL)parseSdef:(NSData *)sdefData base:(NSURL *)anURL error:(NSError **)outError;
+- (BOOL)parseContentsOfURL:(NSURL *)anURL error:(NSError **)outError;
+- (BOOL)parseData:(NSData *)sdefData base:(NSURL *)anURL error:(NSError **)outError;
 
 @end
 

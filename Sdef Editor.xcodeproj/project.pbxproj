@@ -319,7 +319,7 @@
 		1B5ECF310CD62725007B8226 /* XInclude.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = XInclude.tiff; sourceTree = "<group>"; };
 		1B5ECF4F0CD62807007B8226 /* SdefXIncludeView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SdefXIncludeView.h; path = ../SdefXIncludeView.h; sourceTree = "<group>"; };
 		1B5ECF500CD62807007B8226 /* SdefXIncludeView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SdefXIncludeView.m; sourceTree = "<group>"; };
-		1B5FEC8D0BD8E58100F57412 /* SdefXRef.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; lineEnding = 0; name = SdefXRef.h; path = Headers/SdefXRef.h; sourceTree = "<group>"; };
+		1B5FEC8D0BD8E58100F57412 /* SdefXRef.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = SdefXRef.h; sourceTree = "<group>"; };
 		1B5FEC8E0BD8E58100F57412 /* SdefXRef.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = SdefXRef.m; sourceTree = "<group>"; };
 		1B73E9CB0CD7965B00FC60B2 /* SdefParserInternal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SdefParserInternal.h; sourceTree = "<group>"; };
 		1B73ECA60CD7A73400FC60B2 /* SdefParserInternal.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SdefParserInternal.m; sourceTree = "<group>"; };
@@ -327,7 +327,7 @@
 		1B79A9050C8C0B46000AEEFC /* SKDisclosurePanel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SKDisclosurePanel.h; sourceTree = "<group>"; };
 		1B79A9060C8C0B46000AEEFC /* SKImageAndTextCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SKImageAndTextCell.h; sourceTree = "<group>"; };
 		1BC332C40CD894C3009109F0 /* SdefXInclude.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SdefXInclude.h; sourceTree = "<group>"; };
-		1BC332C50CD894C3009109F0 /* SdefXInclude.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SdefXInclude.m; path = "/Volumes/Data/Developer/Projects/Softwares/Sdef Editor/SdefLibrary/SdefXInclude.m"; sourceTree = "<absolute>"; };
+		1BC332C50CD894C3009109F0 /* SdefXInclude.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SdefXInclude.m; sourceTree = "<group>"; };
 		1BE05BAC0BDD1F2800334FBF /* SdefTypeValidator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SdefTypeValidator.m; sourceTree = "<group>"; };
 		1BE05C090BDD21EB00334FBF /* SdefLeavesValidator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SdefLeavesValidator.m; sourceTree = "<group>"; };
 		1BEBD4C30CD76E6C008B5D36 /* libxml2s.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libxml2s.a; path = sdk/lib/libxml2s.a; sourceTree = SHARED_CODE_DIR; };
@@ -429,13 +429,13 @@
 		98758015078863820038C05B /* SdefClass.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = SdefClass.m; sourceTree = "<group>"; };
 		9875801A078863FA0038C05B /* SdefVerb.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; lineEnding = 0; name = SdefVerb.h; path = Headers/SdefVerb.h; sourceTree = "<group>"; };
 		9875801B078863FA0038C05B /* SdefVerb.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = SdefVerb.m; sourceTree = "<group>"; };
-		9875801F078864330038C05B /* SdefSynonym.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; lineEnding = 0; name = SdefSynonym.h; path = Headers/SdefSynonym.h; sourceTree = "<group>"; };
+		9875801F078864330038C05B /* SdefSynonym.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = SdefSynonym.h; sourceTree = "<group>"; };
 		98758020078864330038C05B /* SdefSynonym.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = SdefSynonym.m; sourceTree = "<group>"; };
 		987580250788646A0038C05B /* SdefSuite.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; lineEnding = 0; name = SdefSuite.h; path = Headers/SdefSuite.h; sourceTree = "<group>"; };
 		987580260788646A0038C05B /* SdefSuite.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = SdefSuite.m; sourceTree = "<group>"; };
-		9875802E078864F40038C05B /* SdefImplementation.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; lineEnding = 0; name = SdefImplementation.h; path = Headers/SdefImplementation.h; sourceTree = "<group>"; };
+		9875802E078864F40038C05B /* SdefImplementation.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = SdefImplementation.h; sourceTree = "<group>"; };
 		9875802F078864F40038C05B /* SdefImplementation.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = SdefImplementation.m; sourceTree = "<group>"; };
-		98758032078865170038C05B /* SdefDocumentation.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; lineEnding = 0; name = SdefDocumentation.h; path = Headers/SdefDocumentation.h; sourceTree = "<group>"; };
+		98758032078865170038C05B /* SdefDocumentation.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = SdefDocumentation.h; sourceTree = "<group>"; };
 		98758033078865170038C05B /* SdefDocumentation.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = SdefDocumentation.m; sourceTree = "<group>"; };
 		9875805D07886E6F0038C05B /* SdefDocument.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = SdefDocument.h; sourceTree = "<group>"; };
 		9875805E07886E6F0038C05B /* SdefDocument.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = SdefDocument.m; sourceTree = "<group>"; };
@@ -466,7 +466,7 @@
 		98C806C90BDA247A00A45088 /* SdefDocumentationParser.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; lineEnding = 0; name = SdefDocumentationParser.h; path = Headers/SdefDocumentationParser.h; sourceTree = "<group>"; };
 		98CB3679082EC7670088CFD5 /* SdefBase.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; lineEnding = 0; name = SdefBase.h; path = Headers/SdefBase.h; sourceTree = "<group>"; };
 		98CB367A082EC7670088CFD5 /* SdefBase.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = SdefBase.m; sourceTree = "<group>"; };
-		98CCA8F9082FEEF5002A37E2 /* SdefType.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; lineEnding = 0; name = SdefType.h; path = Headers/SdefType.h; sourceTree = "<group>"; };
+		98CCA8F9082FEEF5002A37E2 /* SdefType.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = SdefType.h; sourceTree = "<group>"; };
 		98CCA8FA082FEEF5002A37E2 /* SdefType.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = SdefType.m; sourceTree = "<group>"; };
 		98D127A907A6BD53001B486F /* CocoaSuiteImporter.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = CocoaSuiteImporter.h; sourceTree = "<group>"; };
 		98D127AA07A6BD53001B486F /* CocoaSuiteImporter.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = CocoaSuiteImporter.m; sourceTree = "<group>"; };
@@ -496,7 +496,7 @@
 		98D3A8C4079EC8670049A8FC /* SdefEditor.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = SdefEditor.h; sourceTree = "<group>"; };
 		98D3A8C5079EC8670049A8FC /* SdefEditor.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = SdefEditor.m; sourceTree = "<group>"; };
 		98D3A8CF079EC9870049A8FC /* English */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = English; path = English.lproj/SdefInspector.nib; sourceTree = "<group>"; };
-		98D3A9DB079EF4B50049A8FC /* SdefComment.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; lineEnding = 0; name = SdefComment.h; path = Headers/SdefComment.h; sourceTree = "<group>"; };
+		98D3A9DB079EF4B50049A8FC /* SdefComment.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = SdefComment.h; sourceTree = "<group>"; };
 		98D3A9DC079EF4B50049A8FC /* SdefComment.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = SdefComment.m; sourceTree = "<group>"; };
 		98D3AE5E079DD05800DDB6CE /* English */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = English; path = English.lproj/SdefVerb.nib; sourceTree = "<group>"; };
 		98D3AE60079DD08600DDB6CE /* SdefVerbView.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = SdefVerbView.h; sourceTree = "<group>"; };
@@ -841,7 +841,7 @@
 				98758032078865170038C05B /* SdefDocumentation.h */,
 				9875802E078864F40038C05B /* SdefImplementation.h */,
 			);
-			name = Headers;
+			path = Headers;
 			sourceTree = "<group>";
 		};
 		983A837F0BDA8B2A006C77F6 /* Writer */ = {

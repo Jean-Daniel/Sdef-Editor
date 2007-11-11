@@ -331,18 +331,18 @@
 
 #pragma mark -
 SdefDictionary *SdefLoadDictionary(NSURL *file, NSInteger *version, id delegate, NSError **error) {
-  NSData *data = [[NSData alloc] initWithContentsOfURL:file];
-  SdefDictionary *dictionary = SdefLoadDictionaryData(data, file, version, delegate, error);
-  [data release];
+  //NSData *data = [[NSData alloc] initWithContentsOfURL:file];
+  SdefDictionary *dictionary = SdefLoadDictionaryData(nil, file, version, delegate, error);
+  //[data release];
   return dictionary;
 }
 
 SdefDictionary *SdefLoadDictionaryData(NSData *data, NSURL *base, NSInteger *version, id delegate, NSError **error) {
   SdefDictionary *result = nil;
-  if (data) {
+  if (data || base) {
     SdefParser *parser = [[SdefParser alloc] init];
     [parser setDelegate:delegate];
-    if ([parser parseSdef:data base:base error:error]) {
+    if ([parser parseData:data base:base error:error]) {
       result = [[parser dictionary] retain];
       if (version) *version = [parser sdefVersion];
     }

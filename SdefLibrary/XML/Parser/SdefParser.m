@@ -223,7 +223,6 @@ Boolean _SdefElementIsCollection(CFStringRef element) {
 }
 
 - (BOOL)parseFragment:(xmlNodePtr)aNode parent:(NSString *)parent base:(NSURL *)anURL {
-  
   if (parent)
     [sd_validator startElement:(CFStringRef)parent];
 
@@ -237,43 +236,41 @@ Boolean _SdefElementIsCollection(CFStringRef element) {
   return ok;
 }
 
-- (BOOL)parseSdef:(NSData *)sdefData base:(NSURL *)anURL error:(NSError **)outError {
+- (BOOL)parseData:(NSData *)sdefData base:(NSURL *)baseURL error:(NSError **)outError {
   [self reset];
   BOOL result = NO;
   if (outError) *outError = nil;
   
-  if (sd_roots) {
-    [sd_roots release];
-    sd_roots = nil;
-  }
-  if (sdefData) {
-    int flags = XML_PARSE_RECOVER | XML_PARSE_NOENT | XML_PARSE_NSCLEAN | XML_PARSE_NOCDATA | XML_PARSE_COMPACT;
+  if (sdefData || baseURL) {
+    int flags = XML_PARSE_RECOVER | XML_PARSE_NOENT | XML_PARSE_NSCLEAN | XML_PARSE_COMPACT;
 #if !defined(DEBUG)
     flags |= XML_PARSE_NOWARNING | XML_PARSE_NOERROR;
 #endif
-    xmlDocPtr doc = xmlReadMemory([sdefData bytes], [sdefData length],
-                                  [[anURL absoluteString] UTF8String], NULL, flags);
-    
-    if (doc) {
+    xmlDocPtr document;
+    if (sdefData)
+      document = xmlReadMemory([sdefData bytes], [sdefData length], [[baseURL absoluteString] UTF8String], NULL, flags);
+    else
+      document = xmlReadFile([[baseURL absoluteString] UTF8String], NULL, flags);
+
+    if (document) {
       sd_validator = [[SdefXMLValidator alloc] init];
       /* correct doc if needed */
-      if (!xmlSearchNs(doc, xmlDocGetRootElement(doc), (const xmlChar *)"xi")) {
+      if (!xmlSearchNs(document, xmlDocGetRootElement(document), (const xmlChar *)"xi")) {
         /* xmlns:xi="http://www.w3.org/2001/XInclude" */
-        xmlNsPtr ns = xmlNewNs(xmlDocGetRootElement(doc), (const xmlChar *)"http://www.w3.org/2001/XInclude", (const xmlChar *)"xi");
-        _SdefSetIncludeNamespace(xmlDocGetRootElement(doc), ns);
+        xmlNsPtr ns = xmlNewNs(xmlDocGetRootElement(document), (const xmlChar *)"http://www.w3.org/2001/XInclude", (const xmlChar *)"xi");
+        _SdefSetIncludeNamespace(xmlDocGetRootElement(document), ns);
       }
       
       /* process xincludes */
-      if (xmlXIncludeProcessFlags(doc, flags) < 0) {
+      if (xmlXIncludeProcessFlags(document, flags) < 0) {
         WCLog("xinclude processing failed.");
       }
       
-      result = [self parseFragment:xmlDocGetRootElement(doc) parent:nil base:anURL];
+      result = [self parseFragment:xmlDocGetRootElement(document) parent:nil base:baseURL];
       sd_version = SdefDocumentVersionFromParserVersion([sd_validator version]);
+      if (document) xmlFreeDoc(document);
       [sd_validator release];
       sd_validator = nil;
-      xmlFreeDoc(doc);
-      doc = NULL;
     } else if (outError) {
       xmlErrorPtr error = xmlGetLastError();
       if (error) {
@@ -291,6 +288,10 @@ Boolean _SdefElementIsCollection(CFStringRef element) {
     }
   }
   return result;
+}
+
+- (BOOL)parseContentsOfURL:(NSURL *)anURL error:(NSError **)outError {
+  return [self parseData:nil base:anURL error:outError];
 }
 
 #pragma mark -

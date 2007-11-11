@@ -8,6 +8,8 @@
 
 #import "SdefXInclude.h"
 
+#import "SdefParser.h"
+
 @implementation SdefXInclude
 #pragma mark Protocols Implementations
 - (id)copyWithZone:(NSZone *)aZone {
@@ -60,4 +62,11 @@
   SKSetterCopy(sd_pointer, aPointer);
 }
 
+#pragma mark -
+- (BOOL)sdefParser:(SdefParser *)parser shouldIgnoreValidationError:(NSError *)error isFatal:(BOOL)fatal {
+  [[[self dictionary] document] presentError:error];
+  return NO;
+}
+
 @end
+
