@@ -172,7 +172,8 @@
   *outError = nil;
   NSData *data = nil;
   SdefVersion version = 0;
-  if ([typeName isEqualToString:ScriptingDefinitionFileType]) {
+	if (outError) *outError = nil;
+  if ([typeName isEqualToString:ScriptingDefinitionFileType] || [typeName isEqualToString:ScriptingDefinitionFileUTI]) {
     version = [[self dictionary] version];
   }
   if (version) {
@@ -190,7 +191,7 @@
 }
 
 - (BOOL)readFromURL:(NSURL *)absoluteURL ofType:(NSString *)typeName error:(NSError **)outError {
-  if ([typeName isEqualToString:ScriptingDefinitionFileType]) {
+  if ([typeName isEqualToString:ScriptingDefinitionFileType] || [typeName isEqualToString:ScriptingDefinitionFileUTI]) {
     NSInteger version;
     [self setDictionary:SdefLoadDictionary(absoluteURL, &version, self, outError)];
     if ([self dictionary] != nil) {
@@ -202,7 +203,9 @@
       if (!*outError)
         *outError = [NSError errorWithDomain:NSCocoaErrorDomain code:NSFileReadCorruptFileError userInfo:nil];
     }
-  }
+  } else if (outError) {
+		*outError = [NSError errorWithDomain:NSCocoaErrorDomain code:NSFileReadCorruptFileError userInfo:nil];
+	}
   return [self dictionary] != nil;
 }
 

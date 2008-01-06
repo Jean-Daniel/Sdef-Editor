@@ -323,7 +323,7 @@ NSAttributedString *AttributedStringForASDictionaryString(NSDictionary *content)
                                                  blue:style.blue / 65535.0
                                                 alpha:1] forKey:NSForegroundColorAttributeName];
     if (style.fontStyle & underline) {
-      [attributes setObject:SKInt(NSUnderlineStyleSingle | NSUnderlinePatternSolid) forKey:NSUnderlineStyleAttributeName];
+      [attributes setObject:SKInteger(NSUnderlineStyleSingle | NSUnderlinePatternSolid) forKey:NSUnderlineStyleAttributeName];
     }
     if (style.fontStyle & outline) {
       [attributes setObject:SKFloat(3.0) forKey:NSStrokeWidthAttributeName];
@@ -344,8 +344,9 @@ void ASDictionaryStyleForFont(NSFont *aFont, ASDictionaryStyle *style) {
   
   NSString *name = [aFont fontName];
   ATSUFontID fontId;
-  OSStatus err = ATSUFindFontFromName([name cString],
-                                      [name cStringLength],
+	const char *fontName = [name UTF8String];
+  OSStatus err = ATSUFindFontFromName(fontName,
+                                      strlen(fontName),
                                       kFontPostscriptName,
                                       kFontNoPlatformCode,
                                       kFontNoScriptCode,

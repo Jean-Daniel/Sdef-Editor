@@ -7,13 +7,15 @@
  */
 
 SK_PRIVATE
-NSString * ScriptingDefinitionFileType;
+NSString * const ScriptingDefinitionFileType;
+SK_PRIVATE
+NSString * const ScriptingDefinitionFileUTI;
 
 SK_PRIVATE
 const OSType kScriptingDefinitionHFSType;
 
 SK_PRIVATE
-NSString * CocoaSuiteDefinitionFileType;
+NSString * const CocoaSuiteDefinitionFileType;
 SK_PRIVATE
 const OSType kCocoaSuiteDefinitionHFSType;
 

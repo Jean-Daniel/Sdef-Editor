@@ -67,7 +67,7 @@
   return suite ? [self parent] == [suite commands] : !sd_soFlags.event;
 }
 - (void)setCommand:(BOOL)flag {
-  SKSetFlag(sd_soFlags.event, !flag);
+  SKFlagSet(sd_soFlags.event, !flag);
 }
 
 - (void)sdefInit {

@@ -3,7 +3,7 @@
  *  Sdef Editor
  *
  *  Created by Rainbow Team.
- *  Copyright © 2006 - 2007 Shadow Lab. All rights reserved.
+ *  Copyright ï¿½ 2006 - 2007 Shadow Lab. All rights reserved.
  */
 
 #import "SdefBase.h"
@@ -228,7 +228,7 @@ NSImage *SdefImageNamed(NSString *name) {
 }
 
 - (void)setEditable:(BOOL)flag recursive:(BOOL)recu {
-  SKSetFlag(sd_soFlags.editable, flag);
+  SKFlagSet(sd_soFlags.editable, flag);
   
   if (recu) {
     SdefObject *node;
@@ -243,7 +243,7 @@ NSImage *SdefImageNamed(NSString *name) {
   return sd_soFlags.xinclude;
 }
 - (void)setXIncluded:(BOOL)flag {
-  SKSetFlag(sd_soFlags.xinclude, flag);
+  SKFlagSet(sd_soFlags.xinclude, flag);
 }
 
 - (BOOL)isRemovable {
@@ -252,7 +252,7 @@ NSImage *SdefImageNamed(NSString *name) {
   return sd_soFlags.removable;
 }
 - (void)setRemovable:(BOOL)removable {
-  SKSetFlag(sd_soFlags.removable, removable);
+  SKFlagSet(sd_soFlags.removable, removable);
 }
 
 #pragma mark Optionals Children & Attributes

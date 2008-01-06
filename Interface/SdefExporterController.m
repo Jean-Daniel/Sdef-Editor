@@ -215,18 +215,17 @@ static NSString *SystemMajorVersion() {
   if (![[NSFileManager defaultManager] fileExistsAtPath:resource]) {
     return;
   }
+	NSString *rezTool = nil;
   NSString *dest = [folder stringByAppendingPathComponent:@"Scripting.rsrc"];
-  id rezTool = nil;
   // The path to the binary is the first argument that was passed in
-  if ([[NSUserDefaults standardUserDefaults] boolForKey:@"SdefBuildInRez"])
-    rezTool = [[NSBundle mainBundle] pathForResource:@"Rez" ofType:@""];
-  else {
-    rezTool = [[NSUserDefaults standardUserDefaults] stringForKey:@"SdefRezToolPath"];
-  }
-  
-  id rez = [NSTask launchedTaskWithLaunchPath:rezTool
-                                     arguments:[NSArray arrayWithObjects:resource, @"-o", dest, @"-useDF", nil]];
-  [rez waitUntilExit];
+	rezTool = [[NSUserDefaults standardUserDefaults] stringForKey:@"SdefRezToolPath"];
+	if (![[NSFileManager defaultManager] fileExistsAtPath:rezTool]) {
+		NSRunAlertPanel(@"Rez not found", @"Set the Rez tool path in Sdef Editor Preferences", @"OK", nil, nil);
+	} else {
+		NSTask *rez = [NSTask launchedTaskWithLaunchPath:rezTool
+																					 arguments:[NSArray arrayWithObjects:resource, @"-o", dest, @"-useDF", nil]];
+		[rez waitUntilExit];
+	}
 }
 
 - (IBAction)include:(id)sender {

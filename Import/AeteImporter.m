@@ -174,18 +174,14 @@ bail:
   if (self = [super init]) {
     ResFileRefNum fileRef;
     OSStatus err = FSOpenResourceFile(aRef, 0, NULL, fsRdPerm, &fileRef);
-    if (mapReadErr == err) {
+    if (noErr != err) {
       HFSUniStr255 rsrcName;
       if (noErr == FSGetResourceForkName(&rsrcName)) {
         err = FSOpenResourceFile(aRef, rsrcName.length, rsrcName.unicode, fsRdPerm, &fileRef);
       }
     }
     if(noErr == err) {
-#if __LP64__
       ResourceCount count;
-#else
-      short count;
-#endif
       /* Standard Infos */
       count = Count1Resources(kAEUserTerminology);
       sd_aetes = [[NSMutableArray alloc] initWithCapacity:count];
@@ -218,7 +214,7 @@ bail:
     sd_dictionary = [[SdefDictionary alloc] init];
     CFStringRef name = NULL;
     if (noErr == LSCopyDisplayNameForRef(aRef, &name) && name) {
-      [sd_dictionary setTitle:(NSString *)name];
+      [sd_dictionary setTitle:[(NSString *)name stringByDeletingPathExtension]];
       CFRelease(name);
     }
   }

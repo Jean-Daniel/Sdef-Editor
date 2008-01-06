@@ -175,7 +175,7 @@ NSString *SdefEscapedString(NSString *value, NSUInteger format) {
       SKBool(YES), @"SdtplGroupEvents",
       SKBool(NO), @"SdtplIgnoreEvents",
       SKBool(YES), @"SdtplIgnoreRespondsTo",
-      SKInt(kSdefTemplateCSSInline), @"SdtplCSSStyle",
+      SKInteger(kSdefTemplateCSSInline), @"SdtplCSSStyle",
       nil]];
     NSArray *tocKey = [NSArray arrayWithObject:@"toc"];
     [self setKeys:tocKey triggerChangeNotificationsForDependentKey:@"indexToc"];

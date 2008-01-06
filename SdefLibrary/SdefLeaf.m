@@ -3,7 +3,7 @@
  *  Sdef Editor
  *
  *  Created by Rainbow Team.
- *  Copyright © 2006 - 2007 Shadow Lab. All rights reserved.
+ *  Copyright ï¿½ 2006 - 2007 Shadow Lab. All rights reserved.
  */
 
 #import "SdefLeaf.h"
@@ -86,14 +86,14 @@
   return sd_slFlags.editable && !sd_slFlags.xinclude;
 }
 - (void)setEditable:(BOOL)flag {
-  SKSetFlag(sd_slFlags.editable, flag);
+  SKFlagSet(sd_slFlags.editable, flag);
 }
 
 - (BOOL)isXIncluded {
   return sd_slFlags.xinclude;
 }
 - (void)setXIncluded:(BOOL)flag {
-  SKSetFlag(sd_slFlags.xinclude, flag);
+  SKFlagSet(sd_slFlags.xinclude, flag);
 }
 
 - (BOOL)isHidden {

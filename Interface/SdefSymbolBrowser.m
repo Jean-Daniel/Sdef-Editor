@@ -77,31 +77,31 @@ static BOOL SdefSearchFilter(NSString *search, SdefObject *object, void *ctxt);
   id item = [[NSMenuItem alloc] initWithTitle:@"All Fields"
                                        action:@selector(limitSearch:)
                                 keyEquivalent:@""];
-  [item setRepresentedObject:SKUInt(kSdefSearchAll)];
+  [item setRepresentedObject:SKUInteger(kSdefSearchAll)];
   [menu addItem:item];
   [item release];
   item = [[NSMenuItem alloc] initWithTitle:@"Symbol"
                                     action:@selector(limitSearch:)
                              keyEquivalent:@""];
-  [item setRepresentedObject:SKUInt(kSdefSearchSymbol)];
+  [item setRepresentedObject:SKUInteger(kSdefSearchSymbol)];
   [menu addItem:item];
   [item release];
   item = [[NSMenuItem alloc] initWithTitle:@"Symbol Type"
                                     action:@selector(limitSearch:)
                              keyEquivalent:@""];
-  [item setRepresentedObject:SKUInt(kSdefSearchSymbolType)];
+  [item setRepresentedObject:SKUInteger(kSdefSearchSymbolType)];
   [menu addItem:item];
   [item release];
   item = [[NSMenuItem alloc] initWithTitle:@"Code"
                                     action:@selector(limitSearch:)
                              keyEquivalent:@""];
-  [item setRepresentedObject:SKUInt(kSdefSearchCode)];
+  [item setRepresentedObject:SKUInteger(kSdefSearchCode)];
   [menu addItem:item];
   [item release];
   item = [[NSMenuItem alloc] initWithTitle:@"Suite"
                                     action:@selector(limitSearch:)
                              keyEquivalent:@""];
-  [item setRepresentedObject:SKUInt(kSdefSearchSuite)];
+  [item setRepresentedObject:SKUInteger(kSdefSearchSuite)];
   [menu addItem:item];
   [item release];
   

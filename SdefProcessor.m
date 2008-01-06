@@ -57,12 +57,12 @@
   [task setStandardError:[task standardOutput]];
   
   // The path to the binary is the first argument that was passed in
-  if ([[NSUserDefaults standardUserDefaults] boolForKey:@"SdefBuildInSdp"])
-    [task setLaunchPath:[[NSBundle mainBundle] pathForResource:@"sdp" ofType:@""]];
-  else {
-    [task setLaunchPath:[[NSUserDefaults standardUserDefaults] stringForKey:@"SdefSdpToolPath"]];
-  }
-  
+	NSString *path = [[NSUserDefaults standardUserDefaults] stringForKey:@"SdefSdpToolPath"];
+	if (![[NSFileManager defaultManager] fileExistsAtPath:path]) {
+		NSRunAlertPanel(@"sdp not found", @"Set the sdp path into Sdef Editor preferences", @"OK", nil, nil);
+		return nil;
+	}
+	[task setLaunchPath:path];
   NSMutableArray *args = [[NSMutableArray alloc] init];
   
   /* Set format */

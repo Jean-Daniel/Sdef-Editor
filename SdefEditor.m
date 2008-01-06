@@ -27,7 +27,7 @@
 #endif
 
 enum {
-  kSdefEditorCurrentVersion = 0x010502, /* 1.5.1 */
+  kSdefEditorCurrentVersion = 0x010600, /* 1.6.0 */
 };
 
 int main(int argc, const char *argv[]) {
@@ -38,9 +38,11 @@ int main(int argc, const char *argv[]) {
   return NSApplicationMain(argc, argv);
 }
 
-NSString * ScriptingDefinitionFileType = @"ScriptingDefinition";
+NSString * const ScriptingDefinitionFileType = @"ScriptingDefinition";
+NSString * const ScriptingDefinitionFileUTI = @"com.apple.scripting-definition";
+;
 const OSType kScriptingDefinitionHFSType = 'Sdef';
-NSString * CocoaSuiteDefinitionFileType = @"AppleScriptSuiteDefinition";
+NSString * const CocoaSuiteDefinitionFileType = @"AppleScriptSuiteDefinition";
 const OSType kCocoaSuiteDefinitionHFSType = 'ScSu';
 
 @interface SdefEditor (DebugFacility)
@@ -55,12 +57,9 @@ const OSType kCocoaSuiteDefinitionHFSType = 'ScSu';
 
 - (id)init {
   if (self = [super init]) {
-    NSString *sdp = @"/usr/bin/sdp";
-    /* Pre-Tiger versions */
-    if (SKSystemMajorVersion() == 10 && SKSystemMinorVersion() < 4) {
-      sdp = @"/Developer/Tools/sdp";
-    }
-    NSString *rez = @"/Developer/Tools/Rez";
+		/* Assume we are using Xcode 2.5 or later */
+    NSString *sdp = @"/Developer/usr/bin/sdp";
+		NSString *rez = @"/Developer/usr/bin/Rez";
     /* Initialize custom controller */
     SdefDocumentController *ctrl = [[SdefDocumentController alloc] init];
     if ([ctrl respondsToSelector:@selector(setAutosavingDelay:)]) {
@@ -68,8 +67,6 @@ const OSType kCocoaSuiteDefinitionHFSType = 'ScSu';
     }
     [[NSUserDefaults standardUserDefaults] registerDefaults:[NSDictionary dictionaryWithObjectsAndKeys:
       SKBool(YES), @"SdefOpenAtStartup",
-      SKBool(![[NSFileManager defaultManager] fileExistsAtPath:sdp]), @"SdefBuildInSdp",
-      SKBool(![[NSFileManager defaultManager] fileExistsAtPath:rez]), @"SdefBuildInRez",
       SKBool(YES), @"SdefAutoSelectItem",
       sdp, @"SdefSdpToolPath",
       rez, @"SdefRezToolPath",
@@ -129,6 +126,7 @@ const OSType kCocoaSuiteDefinitionHFSType = 'ScSu';
   static Preferences *preferences = nil;
   if (!preferences) {
     preferences = [[Preferences alloc] init];
+		[[preferences window] center];
   }
   [preferences showWindow:sender];
 }
