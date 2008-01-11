@@ -97,16 +97,16 @@
 
 @end
 
-SK_PRIVATE
+WB_PRIVATE
 NSString *SdefStringForOSType(OSType type);
-SK_PRIVATE
+WB_PRIVATE
 OSType SdefOSTypeFromString(NSString *string);
-SK_PRIVATE
+WB_PRIVATE
 Boolean SdefTypeStringEqual(NSString *c1, NSString *c2);
 
-SK_PRIVATE
+WB_PRIVATE
 NSArray *SdefTypesForTypeString(NSString *type);
-SK_PRIVATE
+WB_PRIVATE
 NSString *SdefTypeStringForTypes(NSArray *types);
 
 #pragma mark -

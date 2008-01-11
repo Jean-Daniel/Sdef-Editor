@@ -86,14 +86,14 @@
   return sd_slFlags.editable && !sd_slFlags.xinclude;
 }
 - (void)setEditable:(BOOL)flag {
-  SKFlagSet(sd_slFlags.editable, flag);
+  WBFlagSet(sd_slFlags.editable, flag);
 }
 
 - (BOOL)isXIncluded {
   return sd_slFlags.xinclude;
 }
 - (void)setXIncluded:(BOOL)flag {
-  SKFlagSet(sd_slFlags.xinclude, flag);
+  WBFlagSet(sd_slFlags.xinclude, flag);
 }
 
 - (BOOL)isHidden {

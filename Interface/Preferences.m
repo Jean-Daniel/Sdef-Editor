@@ -28,14 +28,14 @@
   return sdp;
 }
 - (void)setSdp:(NSString *)newSdp {
-	SKSetterCopy(sdp, newSdp);
+	WBSetterCopy(sdp, newSdp);
 }
 
 - (NSString *)rez {
   return rez;
 }
 - (void)setRez:(NSString *)newRez {
-	SKSetterCopy(rez, newRez);
+	WBSetterCopy(rez, newRez);
 }
 
 #pragma mark -

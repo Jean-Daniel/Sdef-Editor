@@ -135,7 +135,7 @@
     [self didChangeValueForKey:@"name"];
     [self setIcon:[NSImage imageNamed:sd_extension ? @"Class-Extension" : @"Class"]];
     /* Nasty: should notify outline view controller */
-    [[self notificationCenter] postNotificationName:SKUITreeNodeDidChangeNameNotification object:self];
+    [[self notificationCenter] postNotificationName:WBUITreeNodeDidChangeNameNotification object:self];
   }
 }
 
@@ -180,7 +180,7 @@
     if ([self isExtension]) {
       [self didChangeValueForKey:@"name"];
       /* Nasty: should notify outline view controller */
-      [[self notificationCenter] postNotificationName:SKUITreeNodeDidChangeNameNotification object:self];
+      [[self notificationCenter] postNotificationName:WBUITreeNodeDidChangeNameNotification object:self];
     }
   }
 }
@@ -239,14 +239,14 @@
 
 - (void)encodeWithCoder:(NSCoder *)aCoder {
   [super encodeWithCoder:aCoder];
-  SKEncodeInteger(aCoder, sd_access, @"SEAccess");
-  SKEncodeInteger(aCoder, sd_accessors, @"SEAccessors");
+  WBEncodeInteger(aCoder, sd_access, @"SEAccess");
+  WBEncodeInteger(aCoder, sd_accessors, @"SEAccessors");
 }
 
 - (id)initWithCoder:(NSCoder *)aCoder {
   if (self = [super initWithCoder:aCoder]) {
-    sd_access = SKDecodeInteger(aCoder, @"SEAccess");
-    sd_accessors = SKDecodeInteger(aCoder, @"SEAccessors");
+    sd_access = WBDecodeInteger(aCoder, @"SEAccess");
+    sd_accessors = WBDecodeInteger(aCoder, @"SEAccessors");
   }
   return self;
 }
@@ -385,12 +385,12 @@
 
 - (void)encodeWithCoder:(NSCoder *)aCoder {
   [super encodeWithCoder:aCoder];
-  SKEncodeInteger(aCoder, sd_access, @"SPAccess");
+  WBEncodeInteger(aCoder, sd_access, @"SPAccess");
 }
 
 - (id)initWithCoder:(NSCoder *)aCoder {
   if (self = [super initWithCoder:aCoder]) {
-    sd_access = SKDecodeInteger(aCoder, @"SPAccess");
+    sd_access = WBDecodeInteger(aCoder, @"SPAccess");
   }
   return self;
 }

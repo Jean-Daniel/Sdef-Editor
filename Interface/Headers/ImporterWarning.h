@@ -3,13 +3,13 @@
  *  Sdef Editor
  *
  *  Created by Rainbow Team.
- *  Copyright © 2006 - 2007 Shadow Lab. All rights reserved.
+ *  Copyright Â© 2006 - 2007 Shadow Lab. All rights reserved.
  */
 
-#import <ShadowKit/SKWindowController.h>
+#import WBHEADER(WBWindowController.h)
 
 @class SdefDocument;
-@interface ImporterWarning : SKWindowController {
+@interface ImporterWarning : WBWindowController {
   IBOutlet NSTableView *warningsTable;
   NSArray *sd_warnings;
   SdefDocument *sd_document;

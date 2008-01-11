@@ -228,7 +228,7 @@ NSImage *SdefImageNamed(NSString *name) {
 }
 
 - (void)setEditable:(BOOL)flag recursive:(BOOL)recu {
-  SKFlagSet(sd_soFlags.editable, flag);
+  WBFlagSet(sd_soFlags.editable, flag);
   
   if (recu) {
     SdefObject *node;
@@ -243,7 +243,7 @@ NSImage *SdefImageNamed(NSString *name) {
   return sd_soFlags.xinclude;
 }
 - (void)setXIncluded:(BOOL)flag {
-  SKFlagSet(sd_soFlags.xinclude, flag);
+  WBFlagSet(sd_soFlags.xinclude, flag);
 }
 
 - (BOOL)isRemovable {
@@ -252,7 +252,7 @@ NSImage *SdefImageNamed(NSString *name) {
   return sd_soFlags.removable;
 }
 - (void)setRemovable:(BOOL)removable {
-  SKFlagSet(sd_soFlags.removable, removable);
+  WBFlagSet(sd_soFlags.removable, removable);
 }
 
 #pragma mark Optionals Children & Attributes

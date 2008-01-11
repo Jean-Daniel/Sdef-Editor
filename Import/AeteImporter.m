@@ -7,8 +7,9 @@
  */
 
 #import "AeteImporter.h"
-#import <ShadowKit/SKExtensions.h>
-#import <ShadowKit/SKFSFunctions.h>
+
+#import WBHEADER(WBExtensions.h)
+#import WBHEADER(WBFSFunctions.h)
 
 #import "SdefSuite.h"
 #import "SdefClass.h"
@@ -17,7 +18,7 @@
 #import "SdefClassManager.h"
 
 #import "AeteObject.h"
-#import <ShadowKit/SKAEFunctions.h>
+#import WBHEADER(WBAEFunctions.h)
 #include <Carbon/Carbon.h>
 
 struct AeteHeader {
@@ -34,15 +35,15 @@ typedef struct AeteHeader AeteHeader;
 static
 OSStatus _GetTerminologyFromAppleEvent(AppleEvent *theEvent, NSMutableArray *terminolgies) {
   long count = 0;
-  AEDescList aetes = SKAEEmptyDesc();
+  AEDescList aetes = WBAEEmptyDesc();
   
-  OSStatus err = SKAESetStandardAttributes(theEvent);
+  OSStatus err = WBAESetStandardAttributes(theEvent);
   require_noerr(err, bail);
   
-  err = SKAEAddSInt32(theEvent, keyDirectObject, 0);
+  err = WBAEAddSInt32(theEvent, keyDirectObject, 0);
   require_noerr(err, bail);
   
-  err = SKAESendEventReturnAEDescList(theEvent, &aetes);
+  err = WBAESendEventReturnAEDescList(theEvent, &aetes);
   require_noerr(err, bail);
 
   err = AECountItems(&aetes, &count);
@@ -50,7 +51,7 @@ OSStatus _GetTerminologyFromAppleEvent(AppleEvent *theEvent, NSMutableArray *ter
 
   for (CFIndex idx = 1; idx <= count; idx++) {
     CFDataRef data = NULL;
-    SKAECopyNthCFDataFromDescList(&aetes, idx, typeAETE, &data);
+    WBAECopyNthCFDataFromDescList(&aetes, idx, typeAETE, &data);
     if (data) {
       [terminolgies addObject:(id)data];
       CFRelease(data);
@@ -58,7 +59,7 @@ OSStatus _GetTerminologyFromAppleEvent(AppleEvent *theEvent, NSMutableArray *ter
   }
 
 bail:
-  SKAEDisposeDesc(&aetes);
+  WBAEDisposeDesc(&aetes);
   return err;
 }
 
@@ -67,17 +68,17 @@ bail:
     AppleEvent theEvent = {typeNull, nil};
     sd_aetes = [[NSMutableArray alloc] init];
     if (target) {
-      OSStatus err = SKAECreateEventWithTarget(target, kASAppleScriptSuite, kGetAEUT, &theEvent);
+      OSStatus err = WBAECreateEventWithTarget(target, kASAppleScriptSuite, kGetAEUT, &theEvent);
       require_noerr(err, bail);
       
       err = _GetTerminologyFromAppleEvent(&theEvent, sd_aetes);
-      SKAEDisposeDesc(&theEvent);
+      WBAEDisposeDesc(&theEvent);
       
-      err = SKAECreateEventWithTarget(target, kASAppleScriptSuite, kGetAETE, &theEvent);
+      err = WBAECreateEventWithTarget(target, kASAppleScriptSuite, kGetAETE, &theEvent);
       require_noerr(err, bail);
       
       err = _GetTerminologyFromAppleEvent(&theEvent, sd_aetes);
-      SKAEDisposeDesc(&theEvent);
+      WBAEDisposeDesc(&theEvent);
     
       require(sd_aetes && [sd_aetes count], bail);
     }
@@ -101,16 +102,16 @@ bail:
       err = OSAGetScriptingComponent(cpnt, kAppleScriptSubtype, &asct);
       
       if (noErr == err) {
-        AEDesc aetes = SKAEEmptyDesc();
+        AEDesc aetes = WBAEEmptyDesc();
         err = OSAGetSysTerminology(asct, kOSAModeNull, 0, &aetes);
         if (noErr == err) {
           CFDataRef data = NULL;
-          SKAECopyCFDataFromDescriptor(&aetes, &data);
+          WBAECopyCFDataFromDescriptor(&aetes, &data);
           if (data) {
             [sd_aetes addObject:(id)data];
             CFRelease(data);
           }
-          SKAEDisposeDesc(&aetes);
+          WBAEDisposeDesc(&aetes);
         }
         CloseComponent(asct);
       }
@@ -122,14 +123,14 @@ bail:
 
 - (id)initWithApplicationSignature:(OSType)signature {
   AEDesc target;
-  OSStatus err = SKAECreateTargetWithSignature(signature, NO, &target);
+  OSStatus err = WBAECreateTargetWithSignature(signature, NO, &target);
   if (noErr == err) {
     self = [self _initWithTarget:&target];
   } else {
     [self release];
     self = nil;
   }
-  SKAEDisposeDesc(&target);
+  WBAEDisposeDesc(&target);
   if (self) {
     FSRef app;
     sd_dictionary = [[SdefDictionary alloc] init];
@@ -146,14 +147,14 @@ bail:
 
 - (id)initWithApplicationBundleIdentifier:(NSString *)identifier {
   AEDesc target;
-  OSStatus err = SKAECreateTargetWithBundleID((CFStringRef)identifier, NO, &target);
+  OSStatus err = WBAECreateTargetWithBundleID((CFStringRef)identifier, NO, &target);
   if (noErr == err) {
     self = [self _initWithTarget:&target];
   } else {
     [self release];
     self = nil;
   }
-  SKAEDisposeDesc(&target);
+  WBAEDisposeDesc(&target);
   /* resolve name */
   if (self) {
     FSRef app;
@@ -261,7 +262,7 @@ bail:
         [suite release];
       }
     } @catch (id exception) {
-      SKLogException(exception);
+      WBLogException(exception);
       [suites removeAllObjects];
       return NO;
     }

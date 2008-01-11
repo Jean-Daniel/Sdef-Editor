@@ -3,13 +3,13 @@
  *  Sdef Editor
  *
  *  Created by Rainbow Team.
- *  Copyright © 2006 - 2007 Shadow Lab. All rights reserved.
+ *  Copyright Â© 2006 - 2007 Shadow Lab. All rights reserved.
  */
 
 #import "OSASdefImporter.h"
 
-#import <ShadowKit/SKExtensions.h>
-#import <ShadowKit/SKFSFunctions.h>
+#import WBHEADER(WBExtensions.h)
+#import WBHEADER(WBFSFunctions.h)
 
 #include <Carbon/Carbon.h>
 
@@ -80,7 +80,7 @@
   NSString *type = [object valueForKey:@"type"];
   if (type) {
     SEL cmd = @selector(isEqualToString:);
-    EqualIMP isEqual = (EqualIMP)[type methodForSelector:cmd];
+    BOOL (*isEqual)(id, SEL, id) = (BOOL(*)(id, SEL, id))[type methodForSelector:cmd];
     NSAssert(isEqual, @"Missing isEqualToStringMethod");
     
     if (isEqual(type, cmd, @"Unicode text")) {

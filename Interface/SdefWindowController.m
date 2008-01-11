@@ -3,16 +3,16 @@
  *  Sdef Editor
  *
  *  Created by Rainbow Team.
- *  Copyright © 2006 - 2007 Shadow Lab. All rights reserved.
+ *  Copyright Â© 2006 - 2007 Shadow Lab. All rights reserved.
  */
 
 #import "SdefWindowController.h"
 #import "SdefViewController.h"
 
-#import <ShadowKit/SKSplitView.h>
-#import <ShadowKit/SKFunctions.h>
-#import <ShadowKit/SKAppKitExtensions.h>
-#import <ShadowKit/SKOutlineViewController.h>
+#import WBHEADER(WBSplitView.h)
+#import WBHEADER(WBFunctions.h)
+#import WBHEADER(WBAppKitExtensions.h)
+#import WBHEADER(WBOutlineViewController.h)
 
 #import "SdefVerb.h"
 #import "SdefClass.h"
@@ -27,7 +27,7 @@
 static
 NSString * const SdefObjectDragType = @"SdefObjectDragType";
 
-@interface SdefDictionaryTree : SKOutlineViewController {
+@interface SdefDictionaryTree : WBOutlineViewController {
 }
 
 @end
@@ -101,7 +101,7 @@ static inline BOOL SdefEditorExistsForItem(SdefObject *item) {
     item = [item parent];
   }
   if (item && ([item objectType] != kSdefUndefinedType)) {
-    return [sd_viewControllers objectForKey:SKStringForOSType([item objectType])];
+    return [sd_viewControllers objectForKey:WBStringForOSType([item objectType])];
   }
   return nil;
 }
@@ -140,7 +140,7 @@ static inline BOOL SdefEditorExistsForItem(SdefObject *item) {
 //  [[self window] setToolbar:tb];
 //  [tb setVisible:NO];
 //  [tb release];
-  if (SKSystemMinorVersion() < 5)
+  if (WBSystemMinorVersion() < 5)
     [[self window] setBackgroundColor:[NSColor colorWithCalibratedWhite:0xe8/255. alpha:1]];
   [super windowDidLoad];
 }
@@ -174,11 +174,11 @@ static inline BOOL SdefEditorExistsForItem(SdefObject *item) {
     /* WARNING: do not handle multiple nodes notifications */
     [[[super document] notificationCenter] addObserver:self
                                               selector:@selector(didChangeNodeName:)
-                                                  name:SKUITreeNodeDidChangeNameNotification
+                                                  name:WBUITreeNodeDidChangeNameNotification
                                                 object:nil];
     //    [[[super document] notificationCenter] addObserver:self
     //                                             selector:@selector(didRemoveNode:)
-    //                                                 name:SKUITreeNodeDidRemoveChildNotification
+    //                                                 name:WBUITreeNodeDidRemoveChildNotification
     //                                               object:nil];
   }
 }
@@ -190,7 +190,7 @@ static inline BOOL SdefEditorExistsForItem(SdefObject *item) {
 #pragma mark -
 - (void)awakeFromNib {
   [uiSplitview setGray:YES];
-  [uiSplitview setBorders:kSKBorderRight];
+  [uiSplitview setBorders:kWBBorderRight];
   [uiSplitview setDividerThickness:6];
   
   if (!sd_tree && outline) {
@@ -229,7 +229,7 @@ static inline BOOL SdefEditorExistsForItem(SdefObject *item) {
     item = [item parent];
   }
   if (item && ([item objectType] != kSdefUndefinedType)) {
-    NSString *str = SKStringForOSType([item objectType]);
+    NSString *str = WBStringForOSType([item objectType]);
     NSUInteger idx = [inspector indexOfTabViewItemWithIdentifier:str];
     NSAssert1(idx != NSNotFound, @"Unable to find tab item for identifier \"%@\"", str);
     /* Sould select else ctrl would not be created */
@@ -294,7 +294,7 @@ static inline BOOL SdefEditorExistsForItem(SdefObject *item) {
     id ctrl;
     id class = nil;
     id nibName = nil;
-    switch (SKOSTypeFromString(key)) {
+    switch (WBOSTypeFromString(key)) {
       case kSdefDictionaryType:
         class = @"SdefDictionaryView";
         nibName = @"SdefDictionary";
@@ -440,7 +440,7 @@ static inline BOOL SdefEditorExistsForItem(SdefObject *item) {
       @try {
         destination = [(SdefSuite *)[selection firstParentOfType:kSdefSuiteType] valueForKey:str];
       } @catch (id exception) {
-        SKLogException(exception);
+        WBLogException(exception);
         destination = nil;
       }
     }
@@ -461,7 +461,7 @@ static inline BOOL SdefEditorExistsForItem(SdefObject *item) {
       @try {
         destination = [(SdefClass *)[selection firstParentOfType:kSdefClassType] valueForKey:str];
       } @catch (id exception) {
-        SKLogException(exception);
+        WBLogException(exception);
         destination = nil;
       }
     }
@@ -486,7 +486,7 @@ static inline BOOL SdefEditorExistsForItem(SdefObject *item) {
         @try {
           destination = [suite valueForKey:str];
         } @catch (id exception) {
-          SKLogException(exception);
+          WBLogException(exception);
           destination = nil;
         }
       }
@@ -498,7 +498,7 @@ static inline BOOL SdefEditorExistsForItem(SdefObject *item) {
         @try {
           destination = [class valueForKey:str];
         } @catch (id exception) {
-          SKLogException(exception);
+          WBLogException(exception);
           destination = nil;
         }
       }

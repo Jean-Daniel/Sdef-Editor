@@ -3,11 +3,10 @@
  *  Sdef Editor
  *
  *  Created by Rainbow Team.
- *  Copyright © 2006 - 2007 Shadow Lab. All rights reserved.
+ *  Copyright Â© 2006 - 2007 Shadow Lab. All rights reserved.
  */
 
-#import <Foundation/Foundation.h>
-#import <ShadowKit/SKTreeNode.h>
+#import WBHEADER(WBTreeNode.h)
 
 @class SdefValue, SdefRecord, SdefEnumeration;
 @class SdefSuite, SdefObject, SdefClass, SdefVerb, SdefDocument, SdefDictionary;

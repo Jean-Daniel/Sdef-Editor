@@ -9,7 +9,8 @@
 #import "SdefVerbView.h"
 #import "SdefVerb.h"
 #import "SdefArguments.h"
-#import <ShadowKit/SKAppKitExtensions.h>
+
+#import WBHEADER(WBAppKitExtensions.h)
 
 @implementation SdefVerbView
 

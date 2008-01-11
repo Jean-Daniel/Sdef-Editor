@@ -15,9 +15,9 @@
 #import "SdefClassManager.h"
 #import "SdefDocumentation.h"
 
-#import <ShadowKit/SKFunctions.h>
+#import WBHEADER(WBFunctions.h)
 
-SK_INLINE 
+WB_INLINE 
 NSString *SystemVersionForSdefVersion(SdefVersion vers) {
   switch (vers) {
     case kSdefTigerVersion:
@@ -170,7 +170,7 @@ BOOL SdefValidatorCheckCode(NSString *code) {
       break;
     case 6: {
       if ([code hasPrefix:@"'"] && [code hasSuffix:@"'"])
-        invalid = (0 == SKOSTypeFromString([code substringWithRange:NSMakeRange(1, 4)]));
+        invalid = (0 == WBOSTypeFromString([code substringWithRange:NSMakeRange(1, 4)]));
     }
       break;
   }

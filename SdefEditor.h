@@ -6,17 +6,17 @@
  *  Copyright © 2006 - 2007 Shadow Lab. All rights reserved.
  */
 
-SK_PRIVATE
+WB_PRIVATE
 NSString * const ScriptingDefinitionFileType;
-SK_PRIVATE
+WB_PRIVATE
 NSString * const ScriptingDefinitionFileUTI;
 
-SK_PRIVATE
+WB_PRIVATE
 const OSType kScriptingDefinitionHFSType;
 
-SK_PRIVATE
+WB_PRIVATE
 NSString * const CocoaSuiteDefinitionFileType;
-SK_PRIVATE
+WB_PRIVATE
 const OSType kCocoaSuiteDefinitionHFSType;
 
 @class SdefImporter;

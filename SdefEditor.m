@@ -7,9 +7,10 @@
  */
 
 #import "SdefEditor.h"
-#import <ShadowKit/SKFunctions.h>
-#import <ShadowKit/SKLSFunctions.h>
-#import <ShadowKit/SKApplication.h>
+
+#import WBHEADER(WBFunctions.h)
+#import WBHEADER(WBLSFunctions.h)
+#import WBHEADER(WBApplication.h)
 
 #import "SdefSuite.h"
 #import "Preferences.h"
@@ -66,16 +67,16 @@ const OSType kCocoaSuiteDefinitionHFSType = 'ScSu';
       [ctrl setAutosavingDelay:60];
     }
     [[NSUserDefaults standardUserDefaults] registerDefaults:[NSDictionary dictionaryWithObjectsAndKeys:
-      SKBool(YES), @"SdefOpenAtStartup",
-      SKBool(YES), @"SdefAutoSelectItem",
+      WBBool(YES), @"SdefOpenAtStartup",
+      WBBool(YES), @"SdefAutoSelectItem",
       sdp, @"SdefSdpToolPath",
       rez, @"SdefRezToolPath",
       nil]];
     [NSApp setDelegate:self];
 #if defined (DEBUG)
     [[NSUserDefaults standardUserDefaults] registerDefaults:[NSDictionary dictionaryWithObjectsAndKeys:
-      SKBool(YES), @"SdefDebugMenu",
-      SKBool(YES), @"SdefPantherExportEnabled",
+      WBBool(YES), @"SdefDebugMenu",
+      WBBool(YES), @"SdefPantherExportEnabled",
       // @"YES", @"NSShowNonLocalizedStrings",
       // @"NO", @"NSShowAllViews",
       // @"6", @"NSDragManagerLogLevel",
@@ -176,7 +177,7 @@ const OSType kCocoaSuiteDefinitionHFSType = 'ScSu';
   ImportApplicationAete *panel = [[ImportApplicationAete alloc] initWithWindowNibName:@"ImportApplicationSdef"];
   [panel showWindow:sender];
   [NSApp runModalForWindow:[panel window]];
-  SKApplication *appli = [panel selection];
+  WBApplication *appli = [panel selection];
   if (appli) {
     NSString *path = [appli path];
     
@@ -223,7 +224,7 @@ const OSType kCocoaSuiteDefinitionHFSType = 'ScSu';
       NSRunAlertPanel(@"Importation failed!", @"Sdef Editor cannot import this file. Is it in a valid format?", @"OK", nil, nil);
     }
   } @catch (id exception) {
-    SKLogException(exception);
+    WBLogException(exception);
     NSBeep();
   }
 }
@@ -290,17 +291,17 @@ const OSType kCocoaSuiteDefinitionHFSType = 'ScSu';
   ImportApplicationAete *panel = [[ImportApplicationAete alloc] init];
   [panel showWindow:sender];
   [NSApp runModalForWindow:[panel window]];
-  SKApplication *appli = [panel selection];
+  WBApplication *appli = [panel selection];
   if (appli) {
     if (![appli isRunning]) {
       [appli launch];
     }
     AeteImporter *aete = nil;
     switch ([appli idType]) {
-      case kSKApplicationOSType:
+      case kWBApplicationOSType:
         aete = [[AeteImporter alloc] initWithApplicationSignature:[appli signature]]; 
         break;
-      case kSKApplicationBundleIdentifier:
+      case kWBApplicationBundleIdentifier:
         aete = [[AeteImporter alloc] initWithApplicationBundleIdentifier:[appli identifier]];
         break;
       default:
@@ -325,7 +326,7 @@ const OSType kCocoaSuiteDefinitionHFSType = 'ScSu';
     [self importCocoaScriptFile:filename];
     return YES;
   } else {
-    if ((noErr == SKLSIsApplicationAtPath((CFStringRef)filename, &isapp)) && isapp) {
+    if ((noErr == WBLSIsApplicationAtPath((CFStringRef)filename, &isapp)) && isapp) {
       SdefImporter *importer = [[OSASdefImporter alloc] initWithFile:filename];
       [self importWithImporter:importer];
       [importer release];

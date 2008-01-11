@@ -33,7 +33,7 @@
   [super setXMLAttributes:attrs];
   NSString *value = [attrs objectForKey:@"inline"];
   if (value) {
-    [self setInlineValue:SKIntegerValue(value)];
+    [self setInlineValue:WBIntegerValue(value)];
   } else {
     [self setInlineValue:kSdefInlineAll];
   }

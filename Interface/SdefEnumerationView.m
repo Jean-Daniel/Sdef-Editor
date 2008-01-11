@@ -3,12 +3,13 @@
  *  Sdef Editor
  *
  *  Created by Rainbow Team.
- *  Copyright © 2006 - 2007 Shadow Lab. All rights reserved.
+ *  Copyright Â© 2006 - 2007 Shadow Lab. All rights reserved.
  */
 
-#import <ShadowKit/SKAppKitExtensions.h>
 #import "SdefEnumerationView.h"
 #import "SdefTypedef.h"
+
+#import WBHEADER(WBAppKitExtensions.h)
 
 @interface SdefEnumerationInlineTransformer : NSValueTransformer {
 }
@@ -88,13 +89,13 @@
 
 /* Transform */
 - (id)transformedValue:(id)value {
-  NSInteger inlin = SKIntegerValue(value);
+  NSInteger inlin = WBIntegerValue(value);
   return (kSdefInlineAll == inlin) ? nil : value;
 }
 
 /* Returns access value */
 - (id)reverseTransformedValue:(id)value {
-  return (value) ? value : SKInteger(kSdefInlineAll);
+  return (value) ? value : WBInteger(kSdefInlineAll);
 }
 
 @end

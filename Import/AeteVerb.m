@@ -3,14 +3,14 @@
  *  Sdef Editor
  *
  *  Created by Rainbow Team.
- *  Copyright © 2006 - 2007 Shadow Lab. All rights reserved.
+ *  Copyright Â© 2006 - 2007 Shadow Lab. All rights reserved.
  */
 
 #import "AeteObject.h"
 #import "SdefVerb.h"
 #import "SdefArguments.h"
 
-#import <ShadowKit/SKFunctions.h>
+#import WBHEADER(WBFunctions.h)
 
 @implementation SdefVerb (AeteResource)
 
@@ -36,12 +36,12 @@
   
   /* event class */
   OSType *identifier = (UInt32 *)bytes;
-  NSString *type = SKStringForOSType(*identifier);
+  NSString *type = WBStringForOSType(*identifier);
   bytes += 4;
   
   /* event id */
   identifier = (UInt32 *)bytes;
-  [self setCode:[type stringByAppendingString:SKStringForOSType(*identifier)]];
+  [self setCode:[type stringByAppendingString:WBStringForOSType(*identifier)]];
   bytes += 4;
   
   /* Result */
@@ -130,7 +130,7 @@
   
   /* Keyword */
   OSType *identifier = (UInt32 *)bytes;
-  [self setCode:SKStringForOSType(*identifier)];
+  [self setCode:WBStringForOSType(*identifier)];
   bytes += 4;
   
   /* event id */

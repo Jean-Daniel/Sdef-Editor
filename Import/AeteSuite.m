@@ -36,7 +36,7 @@
   bytes += (intptr_t)bytes % 2;
   
   OSType *identifier = (UInt32 *)bytes;
-  [self setCode:SKStringForOSType(*identifier)];
+  [self setCode:WBStringForOSType(*identifier)];
   bytes += 4;
   
   /* skip level and version */

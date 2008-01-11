@@ -3,13 +3,13 @@
  *  Sdef Editor
  *
  *  Created by Rainbow Team.
- *  Copyright © 2006 - 2007 Shadow Lab. All rights reserved.
+ *  Copyright Â© 2006 - 2007 Shadow Lab. All rights reserved.
  */
 
 #import "ASDictionaryObject.h"
 #import "SdefClassManager.h"
 #import "SdefDocument.h"
-#import <ShadowKit/SKExtensions.h>
+#import WBHEADER(WBExtensions.h)
 
 @implementation SdefObject (ASDictionary)
 
@@ -41,7 +41,7 @@
   }
   
   SEL equalSel = @selector(isEqualToString:);
-  EqualIMP equal = (EqualIMP)[type methodForSelector:equalSel];
+  BOOL (*equal)(id, SEL, id) = (BOOL(*)(id, SEL, id))[type methodForSelector:equalSel];
   
   if (equal(type, equalSel, @"string"))
     return @"Unicode text";

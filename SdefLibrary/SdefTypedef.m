@@ -18,12 +18,12 @@
 
 - (void)encodeWithCoder:(NSCoder *)aCoder {
   [super encodeWithCoder:aCoder];
-  SKEncodeInteger(aCoder, sd_inline, @"SEInline");
+  WBEncodeInteger(aCoder, sd_inline, @"SEInline");
 }
 
 - (id)initWithCoder:(NSCoder *)aCoder {
   if (self = [super initWithCoder:aCoder]) {
-    sd_inline = SKDecodeInteger(aCoder, @"SEInline");  
+    sd_inline = WBDecodeInteger(aCoder, @"SEInline");  
   }
   return self;
 }

@@ -24,14 +24,14 @@
 
 - (void)encodeWithCoder:(NSCoder *)aCoder {
   [super encodeWithCoder:aCoder];
-  SKEncodeInteger(aCoder, sd_version, @"SDVersion");
+  WBEncodeInteger(aCoder, sd_version, @"SDVersion");
   //[aCoder encodeObject:sd_xincludes forKey:@"SDXIncludes"];
   [aCoder encodeConditionalObject:sd_document forKey:@"SDDocument"];
 }
 
 - (id)initWithCoder:(NSCoder *)aCoder {
   if (self = [super initWithCoder:aCoder]) {
-    sd_version = SKDecodeInteger(aCoder, @"SDVersion");
+    sd_version = WBDecodeInteger(aCoder, @"SDVersion");
     sd_document = [aCoder decodeObjectForKey:@"SDDocument"];
     //sd_xincludes = [[aCoder decodeObjectForKey:@"SDXIncludes"] retain];
   }

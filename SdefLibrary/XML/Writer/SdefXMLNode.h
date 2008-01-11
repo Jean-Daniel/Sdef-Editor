@@ -3,12 +3,12 @@
  *  Sdef Editor
  *
  *  Created by Rainbow Team.
- *  Copyright © 2006 - 2007 Shadow Lab. All rights reserved.
+ *  Copyright Â© 2006 - 2007 Shadow Lab. All rights reserved.
  */
 
-#import <ShadowKit/SKTreeNode.h>
+#import WBHEADER(WBTreeNode.h)
 
-@interface SdefXMLNode : SKTreeNode {
+@interface SdefXMLNode : WBTreeNode {
   BOOL sd_list;
   BOOL sd_empty;
   BOOL sd_cddata;

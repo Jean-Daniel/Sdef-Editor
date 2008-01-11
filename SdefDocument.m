@@ -9,7 +9,7 @@
 #import "SdefDocument.h"
 #import "SdefEditor.h"
 
-#import <ShadowKit/SKFunctions.h>
+#import WBHEADER(WBFunctions.h)
 
 #import "SdefWindowController.h"
 #import "SdefSymbolBrowser.h"
@@ -134,7 +134,7 @@
       dico = AppleScriptDictionaryFromSdefDictionary([self dictionary]);
     } @catch (id exception) {
       dico = nil;
-      SKLogException(exception);
+      WBLogException(exception);
     }
     if (!dico || ![NSArchiver archiveRootObject:dico toFile:file]) {
       NSBeginAlertSheet(@"Unable to create ASDictionary!",
@@ -183,7 +183,7 @@
       data = [gen xmlDataForVersion:version];
     } @catch (id exception) {
       NSBeep();
-      SKLogException(exception);
+      WBLogException(exception);
     }
     [gen release];
   }
@@ -291,7 +291,7 @@
   // if it exists.
   creatorCodeString = [infoPlist objectForKey:@"CFBundleSignature"];
   if(creatorCodeString) {
-    creatorCode = SKUInteger(SKOSTypeFromString(creatorCodeString));
+    creatorCode = WBUInteger(WBOSTypeFromString(creatorCodeString));
   }
   
   // Then, find the matching Info.plist dictionary entry for this type.
@@ -307,7 +307,7 @@
         if(typeCodeStrings) { 
           NSString *firstTypeCodeString = [typeCodeStrings objectAtIndex:0];
           if (firstTypeCodeString) {
-            typeCode = SKUInteger(SKOSTypeFromString(firstTypeCodeString)); 
+            typeCode = WBUInteger(WBOSTypeFromString(firstTypeCodeString)); 
           }
         }
         break; 

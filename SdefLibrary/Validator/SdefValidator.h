@@ -6,9 +6,9 @@
  *  Copyright © 2006 - 2007 Shadow Lab. All rights reserved.
  */
 
-#import <ShadowKit/SKWindowController.h>
+#import WBHEADER(WBWindowController.h)
 
-@interface SdefValidator : SKWindowController {
+@interface SdefValidator : WBWindowController {
   @private
   NSUInteger sd_version;
   IBOutlet NSTableView *uiTable;

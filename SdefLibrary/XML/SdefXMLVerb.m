@@ -3,14 +3,14 @@
  *  Sdef Editor
  *
  *  Created by Rainbow Team.
- *  Copyright © 2006 - 2007 Shadow Lab. All rights reserved.
+ *  Copyright Â© 2006 - 2007 Shadow Lab. All rights reserved.
  */
 
 #import "SdefVerb.h"
 #import "SdefSuite.h"
 #import "SdefXMLNode.h"
 #import "SdefXMLBase.h"
-#import <ShadowKit/SKExtensions.h>
+#import WBHEADER(WBExtensions.h)
 #import "SdefArguments.h"
 
 @implementation SdefVerb (SdefXMLManager)

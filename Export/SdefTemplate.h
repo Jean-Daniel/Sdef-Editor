@@ -45,7 +45,7 @@ extern NSString * const StdplVariableAnchorFormat;
 /* Misc */
 extern NSString * const SdefInvalidTemplateException;
 
-@class SKTemplate;
+@class WBTemplate;
 @interface SdefTemplate : NSObject {
   NSString *sd_path;
   NSString *sd_name;

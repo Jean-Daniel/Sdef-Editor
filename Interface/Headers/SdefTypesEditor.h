@@ -3,13 +3,13 @@
  *  Sdef Editor
  *
  *  Created by Rainbow Team.
- *  Copyright © 2006 - 2007 Shadow Lab. All rights reserved.
+ *  Copyright Â© 2006 - 2007 Shadow Lab. All rights reserved.
  */
 
-#import <ShadowKit/SKWindowController.h>
+#import WBHEADER(WBWindowController.h)
 
 @class SdefTypedObject;
-@interface SdefTypesEditor : SKWindowController {
+@interface SdefTypesEditor : WBWindowController {
   NSView *sd_field;
   NSArray *sd_types;
   SdefTypedObject *sd_object;

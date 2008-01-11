@@ -7,9 +7,11 @@
  */
 
 #import "SdtplGenerator.h"
-#import <ShadowKit/SKAppKitExtensions.h>
-#import <ShadowKit/SKExtensions.h>
-#import <ShadowKit/SKTemplate.h>
+
+#import WBHEADER(WBAppKitExtensions.h)
+#import WBHEADER(WBExtensions.h)
+#import WBHEADER(WBTemplate.h)
+
 #import "SdefTemplate.h"
 
 #import "SdefVerb.h"
@@ -31,7 +33,7 @@ static NSNull *_null;
 
 static NSString *SdtplSimplifieName(NSString *name);
 static void SdtplSortArrayByName(NSMutableArray *array);
-static NSUInteger SdtplDumpSimpleBlock(SdtplGenerator *self, NSEnumerator *enume, SKTemplate *tpl, SEL description);
+static NSUInteger SdtplDumpSimpleBlock(SdtplGenerator *self, NSEnumerator *enume, WBTemplate *tpl, SEL description);
 static NSString *SdtplCopyFormatedString(SdtplGenerator *self, NSString *str, NSString *aVariable, NSString *aBlock);
 
 #pragma mark Variables
@@ -128,15 +130,15 @@ NSString * const SdtplBlockTableOfContent = @"Toc";
 
 - (NSString *)formatString:(NSString *)str forVariable:(NSString *)variable inBlock:(NSString *)block;
 #pragma mark Generators
-- (BOOL)writeDictionary:(SdefDictionary *)aDico usingTemplate:(SKTemplate *)tpl;
-- (BOOL)writeSuite:(SdefSuite *)suite usingTemplate:(SKTemplate *)tpl;
-- (BOOL)writeClass:(SdefClass *)aClass usingTemplate:(SKTemplate *)tpl;
-- (BOOL)writeVerb:(SdefVerb *)verb usingTemplate:(SKTemplate *)tpl;
-- (void)writeToc:(SdefDictionary *)dictionary usingTemplate:(SKTemplate *)tpl;
-- (BOOL)writeIndex:(SdefDictionary *)theDico usingTemplate:(SKTemplate *)tpl;
+- (BOOL)writeDictionary:(SdefDictionary *)aDico usingTemplate:(WBTemplate *)tpl;
+- (BOOL)writeSuite:(SdefSuite *)suite usingTemplate:(WBTemplate *)tpl;
+- (BOOL)writeClass:(SdefClass *)aClass usingTemplate:(WBTemplate *)tpl;
+- (BOOL)writeVerb:(SdefVerb *)verb usingTemplate:(WBTemplate *)tpl;
+- (void)writeToc:(SdefDictionary *)dictionary usingTemplate:(WBTemplate *)tpl;
+- (BOOL)writeIndex:(SdefDictionary *)theDico usingTemplate:(WBTemplate *)tpl;
 
 - (BOOL)canWriteFileAtPath:(NSString *)path;
-- (BOOL)writeTemplate:(SKTemplate *)tpl toFile:(NSString *)path representedObject:(SdefObject *)anObject;
+- (BOOL)writeTemplate:(WBTemplate *)tpl toFile:(NSString *)path representedObject:(SdefObject *)anObject;
 
 @end
 
@@ -151,12 +153,12 @@ NSString * const SdtplBlockTableOfContent = @"Toc";
   } \
 }) 
 
-SK_INLINE
+WB_INLINE
 BOOL SdtplShouldCreateLinks(struct _sd_gnFlags flags) {
   return (kSdefTemplateXMLFormat == flags.format && flags.links != 0);
 }
 
-SK_INLINE
+WB_INLINE
 NSString *SdefEscapedString(NSString *value, NSUInteger format) {
   return ((kSdefTemplateXMLFormat == format) ? [value stringByEscapingEntities:nil] : value);
 }
@@ -168,14 +170,14 @@ NSString *SdefEscapedString(NSString *value, NSUInteger format) {
   if ([SdtplGenerator class] == self) {
     _null = [NSNull null];
     [[NSUserDefaults standardUserDefaults] registerDefaults:[NSDictionary dictionaryWithObjectsAndKeys:
-      SKBool(NO), @"SdtplSortSuite",
-      SKBool(YES), @"SdtplHTMLLinks",
-      SKBool(YES), @"SdtplSortOthers",
-      SKBool(NO), @"SdtplSubclasses",
-      SKBool(YES), @"SdtplGroupEvents",
-      SKBool(NO), @"SdtplIgnoreEvents",
-      SKBool(YES), @"SdtplIgnoreRespondsTo",
-      SKInteger(kSdefTemplateCSSInline), @"SdtplCSSStyle",
+      WBBool(NO), @"SdtplSortSuite",
+      WBBool(YES), @"SdtplHTMLLinks",
+      WBBool(YES), @"SdtplSortOthers",
+      WBBool(NO), @"SdtplSubclasses",
+      WBBool(YES), @"SdtplGroupEvents",
+      WBBool(NO), @"SdtplIgnoreEvents",
+      WBBool(YES), @"SdtplIgnoreRespondsTo",
+      WBInteger(kSdefTemplateCSSInline), @"SdtplCSSStyle",
       nil]];
     NSArray *tocKey = [NSArray arrayWithObject:@"toc"];
     [self setKeys:tocKey triggerChangeNotificationsForDependentKey:@"indexToc"];
@@ -398,12 +400,12 @@ NSString *SdefEscapedString(NSString *value, NSUInteger format) {
   sd_manager = [dictionary classManager];
   
   BOOL bwrite = NO;
-  SKTemplate *root = [[sd_tpl templates] objectForKey:SdtplDefinitionDictionaryKey];
+  WBTemplate *root = [[sd_tpl templates] objectForKey:SdtplDefinitionDictionaryKey];
   @try {
     bwrite = [self writeDictionary:dictionary usingTemplate:root];
   } @catch (id exception) {
     bwrite = NO;
-    SKLogException(exception);
+    WBLogException(exception);
   }
   
   if (bwrite) {
@@ -413,7 +415,7 @@ NSString *SdefEscapedString(NSString *value, NSUInteger format) {
         @try {
           [self writeIndex:dictionary usingTemplate:root];
         } @catch (id exception) {
-          SKLogException(exception);
+          WBLogException(exception);
         }
       }
     }
@@ -447,7 +449,7 @@ NSString *SdefEscapedString(NSString *value, NSUInteger format) {
             NSString *file = [self tocFile];
             [self writeTemplate:root toFile:file representedObject:dictionary];
           } @catch (id exception) {
-            SKLogException(exception);
+            WBLogException(exception);
           }
         }
       }
@@ -745,12 +747,12 @@ NSString *SdefEscapedString(NSString *value, NSUInteger format) {
 #pragma mark -
 #pragma mark Template Generators
 #pragma mark Common
-- (void)writeReferences:(SdefObject *)anObject usingTemplate:(SKTemplate *)tpl {
+- (void)writeReferences:(SdefObject *)anObject usingTemplate:(WBTemplate *)tpl {
   /* Set Style */
   if (kSdefTemplateXMLFormat == sd_gnFlags.format) {
     if ((sd_gnFlags.css != kSdefTemplateCSSNone) && [sd_tpl selectedStyle]) {
       if (kSdefTemplateCSSInline == sd_gnFlags.css && [tpl blockWithName:SdtplBlockStyle]) {
-        SKTemplate *block = [tpl blockWithName:SdtplBlockStyle];
+        WBTemplate *block = [tpl blockWithName:SdtplBlockStyle];
         if ([block containsKey:SdtplVariableStyleSheet]) {
           NSString *style = [[NSString alloc] initWithContentsOfFile:[[sd_tpl selectedStyle] objectForKey:@"path"]];
           [block setVariable:style forKey:SdtplVariableStyleSheet];
@@ -836,7 +838,7 @@ NSString *SdefEscapedString(NSString *value, NSUInteger format) {
   return YES;
 }
 
-- (BOOL)writeTemplate:(SKTemplate *)tpl toFile:(NSString *)path representedObject:(SdefObject *)anObject {
+- (BOOL)writeTemplate:(WBTemplate *)tpl toFile:(NSString *)path representedObject:(SdefObject *)anObject {
   if (anObject) {
     [self writeReferences:anObject usingTemplate:tpl];
   }
@@ -855,7 +857,7 @@ NSString *SdefEscapedString(NSString *value, NSUInteger format) {
 }
 
 #pragma mark Dictionary
-- (BOOL)writeDictionary:(SdefDictionary *)aDico usingTemplate:(SKTemplate *)tpl {
+- (BOOL)writeDictionary:(SdefDictionary *)aDico usingTemplate:(WBTemplate *)tpl {
   /* Generate Template */
   SdtplSetVariable(tpl, @"Dictionary", SdtplVariableName, [aDico name]);
   if (SdtplShouldCreateLinks(sd_gnFlags))
@@ -874,8 +876,8 @@ NSString *SdefEscapedString(NSString *value, NSUInteger format) {
       suites = [objects objectEnumerator];
     }
     /* Search Suite block */
-    SKTemplate *suiteTpl = nil;
-    SKTemplate *suiteBlock = [tpl blockWithName:SdtplBlockSuite];
+    WBTemplate *suiteTpl = nil;
+    WBTemplate *suiteBlock = [tpl blockWithName:SdtplBlockSuite];
     if (kSdtplInline == sd_gnFlags.suites) {
       suiteTpl = suiteBlock;
     } else {
@@ -913,7 +915,7 @@ NSString *SdefEscapedString(NSString *value, NSUInteger format) {
   
   /* Create table fo Content if needed */
   if ([self dictionaryToc] && !sd_gnFlags.cancel) {
-    SKTemplate *toc = [tpl blockWithName:SdtplBlockTableOfContent];
+    WBTemplate *toc = [tpl blockWithName:SdtplBlockTableOfContent];
     if (toc) {
       [self writeToc:aDico usingTemplate:toc];
     }
@@ -930,7 +932,7 @@ NSString *SdefEscapedString(NSString *value, NSUInteger format) {
 }
 
 #pragma mark Suites
-- (BOOL)writeSuite:(SdefSuite *)suite usingTemplate:(SKTemplate *)tpl {
+- (BOOL)writeSuite:(SdefSuite *)suite usingTemplate:(WBTemplate *)tpl {
   if ([suite name]) {
     SdtplSetVariable(tpl, SdtplBlockSuite, SdtplVariableName, [suite name]);
     if (SdtplShouldCreateLinks(sd_gnFlags))
@@ -951,8 +953,8 @@ NSString *SdefEscapedString(NSString *value, NSUInteger format) {
       classes = [objects objectEnumerator];
     }
     
-    SKTemplate *classTpl = nil;
-    SKTemplate *classBlock = [tpl blockWithName:SdtplBlockClass];
+    WBTemplate *classTpl = nil;
+    WBTemplate *classBlock = [tpl blockWithName:SdtplBlockClass];
     if (kSdtplInline == sd_gnFlags.classes) {
       classTpl = classBlock;
     } else {
@@ -1014,8 +1016,8 @@ NSString *SdefEscapedString(NSString *value, NSUInteger format) {
       cmds = [objects objectEnumerator];
     }
     
-    SKTemplate *cmdTpl = nil;
-    SKTemplate *cmdBlock = [tpl blockWithName:SdtplBlockCommand];
+    WBTemplate *cmdTpl = nil;
+    WBTemplate *cmdBlock = [tpl blockWithName:SdtplBlockCommand];
     if (kSdtplInline == sd_gnFlags.commands) {
       cmdTpl = cmdBlock;
     } else {
@@ -1065,8 +1067,8 @@ NSString *SdefEscapedString(NSString *value, NSUInteger format) {
       evnts = [objects objectEnumerator];
     }
     
-    SKTemplate *evntTpl = nil;
-    SKTemplate *evntBlock = [tpl blockWithName:SdtplBlockEvent];
+    WBTemplate *evntTpl = nil;
+    WBTemplate *evntBlock = [tpl blockWithName:SdtplBlockEvent];
     if (kSdtplInline == sd_gnFlags.events) {
       evntTpl = evntBlock;
     } else {
@@ -1119,7 +1121,7 @@ NSString *SdefEscapedString(NSString *value, NSUInteger format) {
 }
 
 #pragma mark Classes
-- (void)writeElement:(SdefElement *)elt usingTemplate:(SKTemplate *)tpl {
+- (void)writeElement:(SdefElement *)elt usingTemplate:(WBTemplate *)tpl {
   if ([elt name]) {
     NSString *name = [elt name];
     if (SdtplShouldCreateLinks(sd_gnFlags))
@@ -1134,7 +1136,7 @@ NSString *SdefEscapedString(NSString *value, NSUInteger format) {
   [rights release];
 }
 
-- (void)writeProperty:(SdefProperty *)prop usingTemplate:(SKTemplate *)tpl {
+- (void)writeProperty:(SdefProperty *)prop usingTemplate:(WBTemplate *)tpl {
   if ([prop name])
     SdtplSetVariable(tpl, [tpl name], SdtplVariableName, [prop name]);
   if ([prop type]) {
@@ -1149,7 +1151,7 @@ NSString *SdefEscapedString(NSString *value, NSUInteger format) {
     SdtplSetVariable(tpl, [tpl name], SdtplVariableDescription, SdefEscapedString([prop desc], sd_gnFlags.format));
 }
 
-- (BOOL)writeClass:(SdefClass *)aClass usingTemplate:(SKTemplate *)tpl {
+- (BOOL)writeClass:(SdefClass *)aClass usingTemplate:(WBTemplate *)tpl {
   if ([aClass name]) {
     SdtplSetVariable(tpl, SdtplBlockClass, SdtplVariableName, [aClass name]);
     if (SdtplShouldCreateLinks(sd_gnFlags))
@@ -1159,7 +1161,7 @@ NSString *SdefEscapedString(NSString *value, NSUInteger format) {
     SdtplSetVariable(tpl, SdtplBlockClass, SdtplVariableDescription, SdefEscapedString([aClass desc], sd_gnFlags.format));
   /* Plural */
   if ([aClass plural]) {
-    SKTemplate *plural = [tpl blockWithName:SdtplBlockPlural];
+    WBTemplate *plural = [tpl blockWithName:SdtplBlockPlural];
     SdtplSetVariable(plural, [plural name], SdtplVariableName, [aClass plural]);
     [plural dumpBlock];
   }
@@ -1167,7 +1169,7 @@ NSString *SdefEscapedString(NSString *value, NSUInteger format) {
   if (sd_gnFlags.subclasses && [tpl blockWithName:SdtplBlockSubclasses]) {
     NSArray *subclasses = [sd_manager subclassesOfClass:aClass];
     if ([subclasses count]) {
-      SKTemplate *subclass = [tpl blockWithName:SdtplBlockSubclass];
+      WBTemplate *subclass = [tpl blockWithName:SdtplBlockSubclass];
       if (SdtplDumpSimpleBlock(self, [subclasses objectEnumerator], subclass, @selector(name)) > 0) {
         [[tpl blockWithName:SdtplBlockSubclasses] dumpBlock];
       }
@@ -1187,7 +1189,7 @@ NSString *SdefEscapedString(NSString *value, NSUInteger format) {
       elements = [objects objectEnumerator];
     }
     
-    SKTemplate *eltBlock = [tpl blockWithName:SdtplBlockElement];
+    WBTemplate *eltBlock = [tpl blockWithName:SdtplBlockElement];
     while (elt = [elements nextObject]) {
       [self writeElement:elt usingTemplate:eltBlock];
       [eltBlock dumpBlock];
@@ -1199,7 +1201,7 @@ NSString *SdefEscapedString(NSString *value, NSUInteger format) {
   /* Superclass */
   if ([aClass inherits] && [tpl blockWithName:SdtplBlockSuperclass]) {
     NSString *inherits = [aClass inherits];
-    SKTemplate *superclass = [tpl blockWithName:SdtplBlockSuperclass];
+    WBTemplate *superclass = [tpl blockWithName:SdtplBlockSuperclass];
     SdtplSetVariable(superclass, [superclass name], SdtplVariableDescription, inherits);
     if (SdtplShouldCreateLinks(sd_gnFlags))
       inherits = [self linkForType:inherits withString:inherits];
@@ -1210,7 +1212,7 @@ NSString *SdefEscapedString(NSString *value, NSUInteger format) {
   /* inner: if superclass is in Properties block, we have to dump it. */
   BOOL inner = [[[[tpl blockWithName:SdtplBlockSuperclass] parent] name] isEqualToString:SdtplBlockProperties];
   if ([[aClass properties] hasChildren] || ([aClass inherits] && inner)) {
-    SKTemplate *propBlock = [tpl blockWithName:SdtplBlockProperty];
+    WBTemplate *propBlock = [tpl blockWithName:SdtplBlockProperty];
     if (propBlock != nil) {
       SdefProperty *property;
       NSEnumerator *properties = nil;
@@ -1257,7 +1259,7 @@ NSString *SdefEscapedString(NSString *value, NSUInteger format) {
         cmds = [objects objectEnumerator];
       }
       
-      SKTemplate *cmdBlock = [tpl blockWithName:SdtplBlockRespondsToCommand];
+      WBTemplate *cmdBlock = [tpl blockWithName:SdtplBlockRespondsToCommand];
       if (SdtplDumpSimpleBlock(self, cmds, cmdBlock, @selector(name)) > 0) {
         [[tpl blockWithName:SdtplBlockRespondsToCommands] dumpBlock];
       }
@@ -1277,7 +1279,7 @@ NSString *SdefEscapedString(NSString *value, NSUInteger format) {
         evnts = [objects objectEnumerator];
       }
       
-      SKTemplate *evntBlock = [tpl blockWithName:SdtplBlockRespondsToEvent];
+      WBTemplate *evntBlock = [tpl blockWithName:SdtplBlockRespondsToEvent];
       if (SdtplDumpSimpleBlock(self, evnts, evntBlock, @selector(name)) > 0) {
         [[tpl blockWithName:SdtplBlockRespondsToEvents] dumpBlock];
       }
@@ -1299,7 +1301,7 @@ NSString *SdefEscapedString(NSString *value, NSUInteger format) {
 }
 
 #pragma mark Verb
-- (void)writeParameter:(SdefParameter *)param usingTemplate:(SKTemplate *)tpl {
+- (void)writeParameter:(SdefParameter *)param usingTemplate:(WBTemplate *)tpl {
   if ([param name])
     SdtplSetVariable(tpl, [tpl name], SdtplVariableName, [param name]);
   if ([param desc])
@@ -1318,7 +1320,7 @@ NSString *SdefEscapedString(NSString *value, NSUInteger format) {
   }
 }
 
-- (BOOL)writeVerb:(SdefVerb *)verb usingTemplate:(SKTemplate *)tpl {
+- (BOOL)writeVerb:(SdefVerb *)verb usingTemplate:(WBTemplate *)tpl {
   NSString *blockName = [verb isCommand] ? SdtplBlockCommand : SdtplBlockEvent;
   if ([verb name]) {
       SdtplSetVariable(tpl, blockName, SdtplVariableName, [verb name]);
@@ -1330,7 +1332,7 @@ NSString *SdefEscapedString(NSString *value, NSUInteger format) {
 
   /* Direct Parameter */
   if ([[verb directParameter] type]) {
-    SKTemplate *block = [tpl blockWithName:SdtplBlockDirectParameter];
+    WBTemplate *block = [tpl blockWithName:SdtplBlockDirectParameter];
     if (block) {
       SdefDirectParameter *param = [verb directParameter];
       if ([param type]) {
@@ -1353,7 +1355,7 @@ NSString *SdefEscapedString(NSString *value, NSUInteger format) {
   }
   /* Result */
   if ([[verb result] type]) {
-    SKTemplate *block = [tpl blockWithName:SdtplBlockResult];
+    WBTemplate *block = [tpl blockWithName:SdtplBlockResult];
     if (block) {
       SdefResult *result = [verb result];
       if ([result type]) {
@@ -1389,7 +1391,7 @@ NSString *SdefEscapedString(NSString *value, NSUInteger format) {
     }
     
     /* Required parameters */
-    SKTemplate *block = [tpl blockWithName:SdtplBlockRequiredParameter];
+    WBTemplate *block = [tpl blockWithName:SdtplBlockRequiredParameter];
     while (param = [params nextObject]) {
       if (![param isOptional]) {
         [self writeParameter:param usingTemplate:block];
@@ -1428,7 +1430,7 @@ NSString *SdefEscapedString(NSString *value, NSUInteger format) {
 }
 
 #pragma mark Toc
-- (void)writeToc:(SdefDictionary *)dictionary usingTemplate:(SKTemplate *)tpl {
+- (void)writeToc:(SdefDictionary *)dictionary usingTemplate:(WBTemplate *)tpl {
   SdtplSetVariable(tpl, SdtplBlockTableOfContent, SdtplVariableName, [dictionary name]);
 
   /* Suites */
@@ -1443,7 +1445,7 @@ NSString *SdefEscapedString(NSString *value, NSUInteger format) {
     suites = [sortedSuites objectEnumerator];
   }
   
-  SKTemplate *stpl = [tpl blockWithName:@"Toc-Suite"];
+  WBTemplate *stpl = [tpl blockWithName:@"Toc-Suite"];
   while (suite = [suites nextObject]) {
     NSString *name = [suite name];
     if (name) {
@@ -1465,7 +1467,7 @@ NSString *SdefEscapedString(NSString *value, NSUInteger format) {
         classes = [objects objectEnumerator];
       }
       
-      SKTemplate *ctpl = [stpl blockWithName:@"Toc-Class"];
+      WBTemplate *ctpl = [stpl blockWithName:@"Toc-Class"];
       if (SdtplDumpSimpleBlock(self, classes, ctpl, @selector(desc)) > 0) {
         [[stpl blockWithName:@"Toc-Classes"] dumpBlock];
       }
@@ -1492,7 +1494,7 @@ NSString *SdefEscapedString(NSString *value, NSUInteger format) {
         SdtplSortArrayByName(objects);
         commands = [objects objectEnumerator];
       }
-      SKTemplate *vtpl = [stpl blockWithName:@"Toc-Command"];
+      WBTemplate *vtpl = [stpl blockWithName:@"Toc-Command"];
       if (SdtplDumpSimpleBlock(self, commands, vtpl, @selector(desc)) > 0) {
         [[stpl blockWithName:@"Toc-Commands"] dumpBlock];
       }
@@ -1511,7 +1513,7 @@ NSString *SdefEscapedString(NSString *value, NSUInteger format) {
         SdtplSortArrayByName(objects);
         events = [objects objectEnumerator];
       }
-      SKTemplate *etpl = [stpl blockWithName:@"Toc-Event"];
+      WBTemplate *etpl = [stpl blockWithName:@"Toc-Event"];
       if (SdtplDumpSimpleBlock(self, events, etpl, @selector(desc)) > 0) {
         [[stpl blockWithName:@"Toc-Events"] dumpBlock];
       }
@@ -1525,9 +1527,9 @@ NSString *SdefEscapedString(NSString *value, NSUInteger format) {
 }
 
 #pragma mark Index
-- (BOOL)writeIndex:(SdefDictionary *)theDico usingTemplate:(SKTemplate *)tpl {
+- (BOOL)writeIndex:(SdefDictionary *)theDico usingTemplate:(WBTemplate *)tpl {
   if ([self indexToc]) {
-    SKTemplate *toc = [tpl blockWithName:SdtplBlockTableOfContent];
+    WBTemplate *toc = [tpl blockWithName:SdtplBlockTableOfContent];
     if (toc) {
       [self writeToc:theDico usingTemplate:toc];
     }
@@ -1539,7 +1541,7 @@ NSString *SdefEscapedString(NSString *value, NSUInteger format) {
 
 #pragma mark Toc Function
 static 
-NSUInteger SdtplDumpSimpleBlock(SdtplGenerator *self, NSEnumerator *enume, SKTemplate *tpl, SEL description) {
+NSUInteger SdtplDumpSimpleBlock(SdtplGenerator *self, NSEnumerator *enume, WBTemplate *tpl, SEL description) {
   NSUInteger dumped = 0;
   id object;
   while (object = [enume nextObject]) {

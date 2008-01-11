@@ -12,14 +12,15 @@
 #import "SdefDocument.h"
 #import "SdtplGenerator.h"
 #import "SdefWindowController.h"
-#import <ShadowKit/SKDisclosurePanel.h>
+
+#import WBHEADER(WBDisclosurePanel.h)
 
 @implementation SdtplWindow
 
 + (void)initialize {
   if ([SdtplWindow class] == self) {
     [[NSUserDefaults standardUserDefaults] registerDefaults:[NSDictionary dictionaryWithObjectsAndKeys:
-      SKInteger(0x03), @"SdtplDislosurePanel", /* 1 << 0 & 1 << 1 => the two first view are opened */
+      WBInteger(0x03), @"SdtplDislosurePanel", /* 1 << 0 & 1 << 1 => the two first view are opened */
       nil]];
   }
 }
@@ -47,7 +48,7 @@
 #pragma mark -
 - (void)awakeFromNib {
   /* Init Disclosure Panel */
-  SKDisclosurePanel *panel = (SKDisclosurePanel *)[self window];
+  WBDisclosurePanel *panel = (WBDisclosurePanel *)[self window];
   [panel setTopPadding:37];
   [panel setBottomPadding:37];
   [panel addView:generalView withLabel:@"General"];
@@ -85,7 +86,7 @@
 
 #pragma mark -
 - (IBAction)close:(id)sender {
-  NSArray *views = [(SKDisclosurePanel *)[self window] disclosureViews];
+  NSArray *views = [(WBDisclosurePanel *)[self window] disclosureViews];
   NSInteger prefs = 0;
   for (NSUInteger idx = 0; idx < [views count]; idx++) {
     BOOL state = [[views objectAtIndex:idx] isVisible] ? 1 : 0;
@@ -117,7 +118,7 @@
     @try {
       [generator writeDictionary:[sd_document dictionary] toFile:file];
     } @catch (id exception) {
-      SKLogException(exception);
+      WBLogException(exception);
     }
   }
   [self close:nil];

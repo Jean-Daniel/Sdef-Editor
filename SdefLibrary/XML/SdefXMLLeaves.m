@@ -262,7 +262,7 @@
     [self setBooleanValue:[attr caseInsensitiveCompare:@"YES"] == 0];
   } else if (attr = [attrs objectForKey:@"integer-value"]) {
     [self setValueType:kSdefValueTypeInteger];
-    [self setIntegerValue:SKIntegerValue(attr)];
+    [self setIntegerValue:WBIntegerValue(attr)];
   } else if (attr = [attrs objectForKey:@"string-value"]) {
     [self setValueType:kSdefValueTypeString];
     [self setTextValue:[attr stringByUnescapingEntities:nil]];

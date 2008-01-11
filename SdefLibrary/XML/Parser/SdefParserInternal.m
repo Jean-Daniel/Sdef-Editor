@@ -119,7 +119,6 @@ CFDictionaryRef _SdefXMLCreateDictionaryWithAttributes(xmlAttr *attr, CFStringEn
 
 - (void)abortWithError:(NSInteger)code reason:(NSString *)msg {
   sd_abort = true;
-  
 }
 
 - (CFStringEncoding)cfencoding {

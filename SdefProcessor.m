@@ -133,7 +133,7 @@
       @try {
         [input writeData:data];
       } @catch (id exception) {
-        SKLogException(exception);
+        WBLogException(exception);
       }
     }
     [input closeFile];

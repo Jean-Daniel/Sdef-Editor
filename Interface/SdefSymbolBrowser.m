@@ -7,9 +7,10 @@
  */
 
 #import "SdefSymbolBrowser.h"
-#import <ShadowKit/SKExtensions.h>
-#import <ShadowKit/SKTableDataSource.h>
-#import <ShadowKit/SKAppKitExtensions.h>
+
+#import WBHEADER(WBExtensions.h)
+#import WBHEADER(WBTableDataSource.h)
+#import WBHEADER(WBAppKitExtensions.h)
 
 #import "SdefWindowController.h"
 #import "SdefDictionary.h"
@@ -51,11 +52,11 @@ static BOOL SdefSearchFilter(NSString *search, SdefObject *object, void *ctxt);
     /* WARNING: do not handle multiple nodes notifications */
     [[[super document] notificationCenter] addObserver:self
                                               selector:@selector(didAppendChild:)
-                                                  name:SKUITreeNodeDidInsertChildNotification
+                                                  name:WBUITreeNodeDidInsertChildNotification
                                                 object:nil];
     [[[super document] notificationCenter] addObserver:self
                                               selector:@selector(willRemoveChild:)
-                                                  name:SKUITreeNodeWillRemoveChildNotification
+                                                  name:WBUITreeNodeWillRemoveChildNotification
                                                 object:nil];
   }
 }
@@ -77,31 +78,31 @@ static BOOL SdefSearchFilter(NSString *search, SdefObject *object, void *ctxt);
   id item = [[NSMenuItem alloc] initWithTitle:@"All Fields"
                                        action:@selector(limitSearch:)
                                 keyEquivalent:@""];
-  [item setRepresentedObject:SKUInteger(kSdefSearchAll)];
+  [item setRepresentedObject:WBUInteger(kSdefSearchAll)];
   [menu addItem:item];
   [item release];
   item = [[NSMenuItem alloc] initWithTitle:@"Symbol"
                                     action:@selector(limitSearch:)
                              keyEquivalent:@""];
-  [item setRepresentedObject:SKUInteger(kSdefSearchSymbol)];
+  [item setRepresentedObject:WBUInteger(kSdefSearchSymbol)];
   [menu addItem:item];
   [item release];
   item = [[NSMenuItem alloc] initWithTitle:@"Symbol Type"
                                     action:@selector(limitSearch:)
                              keyEquivalent:@""];
-  [item setRepresentedObject:SKUInteger(kSdefSearchSymbolType)];
+  [item setRepresentedObject:WBUInteger(kSdefSearchSymbolType)];
   [menu addItem:item];
   [item release];
   item = [[NSMenuItem alloc] initWithTitle:@"Code"
                                     action:@selector(limitSearch:)
                              keyEquivalent:@""];
-  [item setRepresentedObject:SKUInteger(kSdefSearchCode)];
+  [item setRepresentedObject:WBUInteger(kSdefSearchCode)];
   [menu addItem:item];
   [item release];
   item = [[NSMenuItem alloc] initWithTitle:@"Suite"
                                     action:@selector(limitSearch:)
                              keyEquivalent:@""];
-  [item setRepresentedObject:SKUInteger(kSdefSearchSuite)];
+  [item setRepresentedObject:WBUInteger(kSdefSearchSuite)];
   [menu addItem:item];
   [item release];
   
@@ -284,7 +285,7 @@ BOOL SdefSearchFilter(NSString *search, SdefObject *object, void *ctxt) {
 - (void)didAppendChild:(NSNotification *)aNotification {
   id node = [aNotification object];
   if ([self document] && ([node document] == [self document])) {
-    id child = [[aNotification userInfo] objectForKey:SKInsertedChild];
+    id child = [[aNotification userInfo] objectForKey:WBInsertedChild];
     switch ([child objectType]) {
       case kSdefSuiteType:
         [self addSuite:child];
@@ -316,7 +317,7 @@ BOOL SdefSearchFilter(NSString *search, SdefObject *object, void *ctxt) {
 - (void)willRemoveChild:(NSNotification *)aNotification {
   id node = [aNotification object];
   if ([self document] && ([node document] == [self document])) {
-    id child = [[aNotification userInfo] objectForKey:SKRemovedChild];
+    id child = [[aNotification userInfo] objectForKey:WBRemovedChild];
     switch ([child objectType]) {
       case kSdefSuiteType:
         [self removeSuite:child];

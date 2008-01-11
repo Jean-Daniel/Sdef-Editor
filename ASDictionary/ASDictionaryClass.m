@@ -68,7 +68,7 @@
       @try {
         [elt appendStringToStream:stream];
       } @catch (id exception) {
-        SKLogException(exception);
+        WBLogException(exception);
       }
     }
   }
@@ -92,7 +92,7 @@
       @try {
         [prop appendStringToStream:stream];
       } @catch (id exception) {
-        SKLogException(exception);
+        WBLogException(exception);
       }
     }
   }

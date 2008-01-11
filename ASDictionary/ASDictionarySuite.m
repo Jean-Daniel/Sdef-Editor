@@ -3,14 +3,14 @@
  *  Sdef Editor
  *
  *  Created by Rainbow Team.
- *  Copyright © 2006 - 2007 Shadow Lab. All rights reserved.
+ *  Copyright Â© 2006 - 2007 Shadow Lab. All rights reserved.
  */
 
 #include <Carbon/Carbon.h>
 
 #import "ASDictionaryObject.h"
 #import "ASDictionaryStream.h"
-#import <ShadowKit/SKFunctions.h>
+#import WBHEADER(WBFunctions.h)
 #import "SdefSuite.h"
 
 #if !__LP64__
@@ -33,7 +33,7 @@
     @try {
       [classes addObject:[object asdictionary]];
     } @catch (id exception) {
-      SKLogException(exception);
+      WBLogException(exception);
     }
   }
   if ([classes count])
@@ -46,7 +46,7 @@
     @try {
       [events addObject:[object asdictionary]];
     } @catch (id exception) {
-      SKLogException(exception);
+      WBLogException(exception);
     }
   }
   /* Events */
@@ -55,7 +55,7 @@
     @try {
       [events addObject:[object asdictionary]];
     } @catch (id exception) {
-      SKLogException(exception);
+      WBLogException(exception);
     }
   }
   if ([events count])

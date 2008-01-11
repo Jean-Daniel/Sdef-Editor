@@ -6,7 +6,7 @@
  *  Copyright © 2006 - 2007 Shadow Lab. All rights reserved.
  */
 
-#import <ShadowKit/SKUITreeNode.h>
+#import WBHEADER(WBUITreeNode.h)
 
 enum {
   kSdefUndefinedType       = 0,
@@ -46,9 +46,9 @@ typedef NSUInteger SdefVersion;
 
 #pragma mark -
 #pragma mark Publics Functions Declaration
-SK_EXPORT
+WB_EXPORT
 NSString *SdefNameFromCocoaName(NSString *cocoa);
-SK_EXPORT
+WB_EXPORT
 NSString *CocoaNameForSdefName(NSString *cocoa, BOOL isClass);
 
 @class SdefObject, SdefDictionary;
@@ -81,7 +81,7 @@ NSString *CocoaNameForSdefName(NSString *cocoa, BOOL isClass);
 @class SdefClassManager;
 @class SdefSuite, SdefCollection;
 @class SdefImplementation, SdefDocumentation, SdefComment;
-@interface SdefObject : SKUITreeNode <SdefObject, NSCopying, NSCoding> {
+@interface SdefObject : WBUITreeNode <SdefObject, NSCopying, NSCoding> {
 @protected
   struct _sd_soFlags {
     unsigned int xid:1;

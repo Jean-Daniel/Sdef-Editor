@@ -15,7 +15,7 @@
 #import "SdefDocumentation.h"
 #import "SdefImplementation.h"
 
-#import <ShadowKit/SKFunctions.h>
+#import WBHEADER(WBFunctions.h)
 
 @implementation SdefDocumentedObject
 #pragma mark Protocols Implementations
@@ -611,7 +611,7 @@ NSString *SdefTypeStringForTypes(NSArray *types) {
   return [str autorelease];
 }
 
-SK_INLINE
+WB_INLINE
 SdefType *__SdefTypeFromString(NSString *str) {
   NSUInteger location;
   SdefType *type = nil;
@@ -649,7 +649,7 @@ Boolean SdefTypeStringEqual(NSString *c1, NSString *c2) {
 
 NSString *SdefStringForOSType(OSType type) {
   char *chrs = (char *)&type;
-  NSString *str = SKStringForOSType(type);
+  NSString *str = WBStringForOSType(type);
   /* If invalid string or contains white space */
   if (!str || isspace(chrs[0]) || isspace(chrs[3])) {
     str = [NSString stringWithFormat:@"0x%.8x", type];
@@ -660,7 +660,7 @@ NSString *SdefStringForOSType(OSType type) {
 OSType SdefOSTypeFromString(NSString *string) {
   switch ([string length]) {
     case 4:
-      return SKOSTypeFromString(string);
+      return WBOSTypeFromString(string);
     case 6:
       if ([string hasPrefix:@"'"] && [string hasSuffix:@"'"])
         return NSHFSTypeCodeFromFileType(string);

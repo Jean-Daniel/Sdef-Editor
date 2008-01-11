@@ -10,6 +10,6 @@
 
 #if !__LP64__
 @class SdefDictionary;
-SK_PRIVATE
+WB_PRIVATE
 NSDictionary *AppleScriptDictionaryFromSdefDictionary(SdefDictionary *sdef);
 #endif

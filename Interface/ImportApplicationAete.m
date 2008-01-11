@@ -7,8 +7,8 @@
  */
 
 #import "ImportApplicationAete.h"
-#import <ShadowKit/SKApplication.h>
-#import <ShadowKit/SKImageUtils.h>
+#import WBHEADER(WBApplication.h)
+
 #import "AeteImporter.h"
 #import "SdefEditor.h"
 
@@ -35,7 +35,7 @@
         hidden = hidden || (value && CFBooleanGetValue(value));
         
         if (!hidden) {
-          SKApplication *appli = [[SKApplication alloc] initWithProcessSerialNumber:&psn];
+          WBApplication *appli = [[WBApplication alloc] initWithProcessSerialNumber:&psn];
           NSMenuItem *menuItem = [[NSMenuItem alloc] initWithTitle:[appli name] action:nil keyEquivalent:@""];
           NSImage *icon = [appli icon];
           [icon setScalesWhenResized:YES];
@@ -63,7 +63,7 @@
   [[self window] center];
 }
 
-- (SKApplication *)selection {
+- (WBApplication *)selection {
   return selection;
 }
 
@@ -86,7 +86,7 @@
   }
   if ([[openPanel filenames] count] == 0) return;
   id file = [[openPanel filenames] objectAtIndex:0];
-  id appli = [SKApplication applicationWithPath:file];
+  id appli = [WBApplication applicationWithPath:file];
   id item = [popup itemWithTitle:[appli name]];
   if (!item) {
     item = [[NSMenuItem alloc] initWithTitle:[appli name] action:nil keyEquivalent:@""];

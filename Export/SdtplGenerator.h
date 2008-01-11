@@ -19,7 +19,7 @@ enum {
   kSdefTemplateXMLFormat,
 };
 
-SK_PRIVATE
+WB_PRIVATE
 NSString * const SdtplBlockTableOfContent;
 
 @class SdefObject, SdefDictionary;

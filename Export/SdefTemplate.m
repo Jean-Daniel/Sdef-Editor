@@ -3,14 +3,15 @@
  *  Sdef Editor
  *
  *  Created by Rainbow Team.
- *  Copyright © 2006 - 2007 Shadow Lab. All rights reserved.
+ *  Copyright Â© 2006 - 2007 Shadow Lab. All rights reserved.
  */
 
 #import "SdefTemplate.h"
-#import <ShadowKit/SKFSFunctions.h>
 
-#import <ShadowKit/SKTemplate.h>
-#import <ShadowKit/SKXMLTemplate.h>
+#import WBHEADER(WBFSFunctions.h)
+
+#import WBHEADER(WBTemplate.h)
+#import WBHEADER(WBXMLTemplate.h)
 
 extern NSString *const SdtplBlockTableOfContent;
 
@@ -178,7 +179,7 @@ NSString * const SdtplDefinitionEventsKey = @"Events";
     return;
   } else {
     [sd_def retain];
-    Class tplClass = sd_tpFlags.html ? [SKXMLTemplate class] : [SKTemplate class];
+    Class tplClass = sd_tpFlags.html ? [WBXMLTemplate class] : [WBTemplate class];
     sd_tpls = [[NSMutableDictionary alloc] initWithCapacity:[sd_def count]];
     NSString *key;
     id keys = [sd_def keyEnumerator];
@@ -191,7 +192,7 @@ NSString * const SdtplDefinitionEventsKey = @"Events";
       NSStringEncoding ste = (cfe != kCFStringEncodingInvalidId) ? CFStringConvertEncodingToNSStringEncoding(cfe) :
         (sd_tpFlags.html ? NSUTF8StringEncoding : [NSString defaultCStringEncoding]);
       
-      SKTemplate *tpl = [[tplClass alloc] initWithContentsOfFile:
+      WBTemplate *tpl = [[tplClass alloc] initWithContentsOfFile:
         [sd_path stringByAppendingPathComponent:[tplDef objectForKey:SdtplDefinitionFileKey]] encoding:ste];
       [tpl setRemoveBlockLine:[[tplDef objectForKey:SdtplDefinitionRemoveBlockLine] boolValue]];
       [sd_tpls setObject:tpl forKey:key];
@@ -322,11 +323,20 @@ NSString * const SdtplDefinitionEventsKey = @"Events";
 #pragma mark -
 #pragma mark Private Functions Implementations
 static NSArray *SdefTemplatePaths() {
-  NSString *appPath = [[[NSBundle mainBundle] resourcePath] stringByAppendingPathComponent:@"Templates"];
-  NSString *userPath = [SKFSFindFolder(kApplicationSupportFolderType, kUserDomain, NO) stringByAppendingPathComponent:kSdefTemplateFolder];
-  NSString *locPath = [SKFSFindFolder(kApplicationSupportFolderType, kLocalDomain, NO) stringByAppendingPathComponent:kSdefTemplateFolder];
-  NSString *netPath = [SKFSFindFolder(kApplicationSupportFolderType, kNetworkDomain, NO) stringByAppendingPathComponent:kSdefTemplateFolder];
-  return [NSArray arrayWithObjects:userPath, locPath, netPath, appPath, nil]; // order: User, Library, Network and Built-in
+	NSMutableArray *paths = [NSMutableArray array];
+  NSString *path = [WBFSFindFolder(kApplicationSupportFolderType, kUserDomain, NO) stringByAppendingPathComponent:kSdefTemplateFolder];
+	if (path) [paths addObject:path];
+	
+	path = [WBFSFindFolder(kApplicationSupportFolderType, kLocalDomain, NO) stringByAppendingPathComponent:kSdefTemplateFolder];
+	if (path) [paths addObject:path];
+	
+	path = [WBFSFindFolder(kApplicationSupportFolderType, kNetworkDomain, NO) stringByAppendingPathComponent:kSdefTemplateFolder];
+	if (path) [paths addObject:path];
+	
+	path = [[[NSBundle mainBundle] resourcePath] stringByAppendingPathComponent:@"Templates"];
+	if (path) [paths addObject:path];
+	
+  return paths; // order: User, Library, Network and Built-in
 }
 
 static
@@ -342,7 +352,7 @@ NSDictionary *SdefTemplatesAtPath(NSString *path) {
         tpl = [[SdefTemplate alloc] initWithPath:[path stringByAppendingPathComponent:name]];
         [templates setObject:tpl forKey:[tpl menuName]];
       } @catch (id exception) {
-        SKCLogException(exception);
+        WBCLogException(exception);
       }
       [tpl release];
     }

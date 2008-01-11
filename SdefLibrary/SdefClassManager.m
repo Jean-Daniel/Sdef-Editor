@@ -3,13 +3,14 @@
  *  Sdef Editor
  *
  *  Created by Rainbow Team.
- *  Copyright © 2006 - 2007 Shadow Lab. All rights reserved.
+ *  Copyright Â© 2006 - 2007 Shadow Lab. All rights reserved.
  */
 
 #import "SdefClassManager.h"
 #import "SdefClass.h"
 #import "SdefSuite.h"
-#import <ShadowKit/SKFunctions.h>
+
+#import WBHEADER(WBFunctions.h)
 
 #import "SdefImplementation.h"
 #import "SdefDictionary.h"
@@ -86,11 +87,11 @@
   /* Warning do not handle multiple node manipulation */
   [[sd_document notificationCenter] addObserver:self
                                        selector:@selector(didAppendChild:)
-                                           name:SKUITreeNodeDidInsertChildNotification
+                                           name:WBUITreeNodeDidInsertChildNotification
                                          object:nil];
   [[sd_document notificationCenter] addObserver:self
                                        selector:@selector(willRemoveChild:)
-                                           name:SKUITreeNodeWillRemoveChildNotification
+                                           name:WBUITreeNodeWillRemoveChildNotification
                                          object:nil];
 }
 
@@ -284,7 +285,7 @@
 - (void)didAppendChild:(NSNotification *)aNotification {
   SdefObject *node = [aNotification object];
   if ([self containsDictionary:[node dictionary]]) {
-    id child = [[aNotification userInfo] objectForKey:SKInsertedChild];
+    id child = [[aNotification userInfo] objectForKey:WBInsertedChild];
     switch ([child objectType]) {
       case kSdefSuiteType:
         [self addSuite:child];
@@ -313,7 +314,7 @@
 - (void)willRemoveChild:(NSNotification *)aNotification {
   SdefObject *node = [aNotification object];
   if ([self containsDictionary:[node dictionary]]) {
-    id child = [[aNotification userInfo] objectForKey:SKRemovedChild];
+    id child = [[aNotification userInfo] objectForKey:WBRemovedChild];
     switch ([child objectType]) {
       case kSdefSuiteType:
         [self removeSuite:child];
@@ -340,11 +341,11 @@
 }
 
 - (void)didAddDictionary:(NSNotification *)aNotification {
-  [self addDictionary:[[aNotification userInfo] objectForKey:SKInsertedChild]];
+  [self addDictionary:[[aNotification userInfo] objectForKey:WBInsertedChild]];
 }
 
 - (void)willRemoveDictionary:(NSNotification *)aNotification {
-  [self removeDictionary:[[aNotification userInfo] objectForKey:SKRemovedChild]];
+  [self removeDictionary:[[aNotification userInfo] objectForKey:WBRemovedChild]];
 }
 
 #pragma mark -
@@ -352,9 +353,8 @@
 - (NSString *)sdefTypeForCocoaType:(NSString *)cocoaType {
   if (!cocoaType) return nil;
   
-  EqualIMP isEqual;
   SEL cmd = @selector(isEqualToString:);
-  isEqual = (EqualIMP)[cocoaType methodForSelector:cmd];
+  BOOL (*isEqual)(id, SEL, id) = (BOOL(*)(id, SEL, id))[cocoaType methodForSelector:cmd];
   
   if (isEqual(cocoaType, cmd, @"NSNumber<Bool>")) 			return @"boolean";
   if (isEqual(cocoaType, cmd, @"NSString"))  				return @"text";

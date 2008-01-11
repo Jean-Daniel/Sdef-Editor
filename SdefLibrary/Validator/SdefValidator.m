@@ -14,7 +14,7 @@
 #import "SdefDocument.h"
 #import "SdefDictionary.h"
 
-#import <ShadowKit/SKAppKitExtensions.h>
+#import WBHEADER(WBAppKitExtensions.h)
 
 @implementation SdefValidator
 

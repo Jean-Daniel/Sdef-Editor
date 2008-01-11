@@ -423,7 +423,7 @@ Boolean _SdefElementIsCollection(CFStringRef element) {
       }
     }
   } @catch (id exception) {
-    SKLogException(exception);
+    WBLogException(exception);
     [parser abortWithError:kCFXMLErrorMalformedDocument reason:[exception reason]];
   }
   return structure;
@@ -558,7 +558,7 @@ Boolean _SdefElementIsCollection(CFStringRef element) {
 #pragma mark Panther Support
 #pragma mark Misc
 /* Convert old base types */
-SK_INLINE
+WB_INLINE
 void __SdefParserUpdatePantherObject(id object) {
   if ([object isKindOfClass:[SdefTypedObject class]]) {
     NSArray *types = [object types];
@@ -595,7 +595,7 @@ void _SdefParserUpdatePantherObjects(NSArray *roots) {
   }
 }
 
-SK_INLINE
+WB_INLINE
 void __SdefParserPostProcessClass(SdefClass *cls) {
   SdefRespondsTo *cmd;
   NSEnumerator *cmds = [[cls commands] childEnumerator];
@@ -610,7 +610,7 @@ void __SdefParserPostProcessClass(SdefClass *cls) {
 }
 
 /* post process */
-SK_INLINE
+WB_INLINE
 void __SdefParserPostProcessObject(id object) {
   switch ([object objectType]) {
     case kSdefSuiteType: {

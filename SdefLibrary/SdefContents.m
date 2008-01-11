@@ -20,12 +20,12 @@
 
 - (void)encodeWithCoder:(NSCoder *)aCoder {
   [super encodeWithCoder:aCoder];
-  SKEncodeInteger(aCoder, sd_access, @"SCAccess");
+  WBEncodeInteger(aCoder, sd_access, @"SCAccess");
 }
 
 - (id)initWithCoder:(NSCoder *)aCoder {
   if (self = [super initWithCoder:aCoder]) {
-    sd_access = SKDecodeInteger(aCoder, @"SCAccess");
+    sd_access = WBDecodeInteger(aCoder, @"SCAccess");
   }
   return self;
 }

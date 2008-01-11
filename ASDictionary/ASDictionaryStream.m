@@ -15,7 +15,7 @@ static NSFont *FontForASDictionaryStyle(ASDictionaryStyle *style);
 static void ASDictionaryStyleForFont(NSFont *aFont, ASDictionaryStyle *style);
 static void ASGetStyleForASPreferences(CFStringRef str, ASDictionaryStyle *style);
 
-SK_INLINE
+WB_INLINE
 SInt16 ASFontFamilyIDForFamilyName(CFStringRef name) {
   Str255 fName;
   FMFontFamily family = -1;
@@ -24,7 +24,7 @@ SInt16 ASFontFamilyIDForFamilyName(CFStringRef name) {
   return (family > 0) ? family : kFontIDTimes;
 }
 
-SK_INLINE
+WB_INLINE
 BOOL ASDictionaryStyleEqualsStyle(ASDictionaryStyle *style1, ASDictionaryStyle *style2) {
   return style1->fontFamily == style2->fontFamily &&
   style1->fontStyle == style2->fontStyle &&
@@ -323,10 +323,10 @@ NSAttributedString *AttributedStringForASDictionaryString(NSDictionary *content)
                                                  blue:style.blue / 65535.0
                                                 alpha:1] forKey:NSForegroundColorAttributeName];
     if (style.fontStyle & underline) {
-      [attributes setObject:SKInteger(NSUnderlineStyleSingle | NSUnderlinePatternSolid) forKey:NSUnderlineStyleAttributeName];
+      [attributes setObject:WBInteger(NSUnderlineStyleSingle | NSUnderlinePatternSolid) forKey:NSUnderlineStyleAttributeName];
     }
     if (style.fontStyle & outline) {
-      [attributes setObject:SKFloat(3.0) forKey:NSStrokeWidthAttributeName];
+      [attributes setObject:WBFloat(3.0) forKey:NSStrokeWidthAttributeName];
     }
     [string setAttributes:attributes range:range];
   }

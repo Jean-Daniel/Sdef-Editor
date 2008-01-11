@@ -17,13 +17,13 @@ typedef enum {
 } SdefSearchField;
 
 @class SdefSuite;
-@class SKTableDataSource;
+@class WBTableDataSource;
 @interface SdefSymbolBrowser : NSWindowController {
   SdefSearchField sd_filter;
   NSSearchField *searchField;
   IBOutlet id symbolTable;
   IBOutlet NSDrawer *editDrawer;
-  IBOutlet SKTableDataSource *symbols;
+  IBOutlet WBTableDataSource *symbols;
 }
 
 - (void)createToolbar;

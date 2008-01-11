@@ -204,7 +204,7 @@
 
 /* Returns menu idx */
 - (id)transformedValue:(id)value {
-  NSUInteger rights = SKIntegerValue(value);
+  NSUInteger rights = WBIntegerValue(value);
   NSUInteger idx = 0;
   if (!rights || ((rights & kSdefAccessRead) && (rights & kSdefAccessWrite))) {
     idx = 0;
@@ -213,20 +213,20 @@
   } else if (rights & kSdefAccessWrite) {
     idx = 2;
   }
-  return SKUInteger(idx);
+  return WBUInteger(idx);
 }
 
 /* Returns access value */
 - (id)reverseTransformedValue:(id)value {
-  switch(SKIntegerValue(value)) {
+  switch(WBIntegerValue(value)) {
     case 0:
-      return SKUInteger(0);
+      return WBUInteger(0);
     case 1:
-      return SKUInteger(kSdefAccessRead);
+      return WBUInteger(kSdefAccessRead);
     case 2:
-      return SKUInteger(kSdefAccessWrite);
+      return WBUInteger(kSdefAccessWrite);
     default:
-      return SKUInteger(0);
+      return WBUInteger(0);
   }
 }
 
@@ -265,13 +265,13 @@
 //- (id)reverseTransformedValue:(id)value {
 //  switch([value unsignedIntValue]) {
 //    case 0:
-//      return SKUInt(0);
+//      return WBUInt(0);
 //    case 1:
-//      return SKUInt(kSdefAccessRead);
+//      return WBUInt(kSdefAccessRead);
 //    case 2:
-//      return SKUInt(kSdefAccessWrite);
+//      return WBUInt(kSdefAccessWrite);
 //    default:
-//      return SKUInt(0);
+//      return WBUInt(0);
 //  }
 //}
 

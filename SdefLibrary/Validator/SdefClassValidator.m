@@ -10,7 +10,7 @@
 #import "SdefClassManager.h"
 #import "SdefClass.h"
 
-#import <ShadowKit/SKFunctions.h>
+#import WBHEADER(WBFunctions.h)
 
 @implementation SdefClass (SdefValidator)
 

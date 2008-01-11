@@ -3,14 +3,15 @@
  *  Sdef Editor
  *
  *  Created by Rainbow Team.
- *  Copyright © 2006 - 2007 Shadow Lab. All rights reserved.
+ *  Copyright Â© 2006 - 2007 Shadow Lab. All rights reserved.
  */
 
-#import <ShadowKit/SKAppKitExtensions.h>
 #import "SdefSuiteView.h"
 #import "SdefTypedef.h"
 #import "SdefSuite.h"
 #import "SdefClass.h"
+
+#import WBHEADER(WBAppKitExtensions.h)
 
 @interface SdefTypeHasClassTransformer : NSValueTransformer {
 }
@@ -183,7 +184,7 @@
 /* Transform */
 - (id)transformedValue:(id)value {
   /* Negation because use with hidden */
-  return SKBool([value intValue] != kSdefValueType);
+  return WBBool([value intValue] != kSdefValueType);
 }
 
 /* Returns access value */

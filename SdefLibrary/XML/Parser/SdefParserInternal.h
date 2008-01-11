@@ -12,7 +12,6 @@
 @interface SdefDOMParser : NSObject {
   bool sd_abort;
   id sd_delegate;
-  xmlNodePtr sd_root;
   xmlNodePtr sd_current;
 }
 
@@ -38,15 +37,15 @@
 
 @end
 
-SK_PRIVATE
+WB_PRIVATE
 NSUInteger _SdefXMLAttributeCount(xmlNodePtr node);
 
-SK_PRIVATE
+WB_PRIVATE
 xmlAttr *_SdefXMLAttributeAtIndex(xmlNodePtr node, NSUInteger idx);
 
-SK_PRIVATE
+WB_PRIVATE
 const xmlChar *_SdefXMLAttributeGetValue(xmlAttr *attr);
 
-SK_PRIVATE
+WB_PRIVATE
 CFDictionaryRef _SdefXMLCreateDictionaryWithAttributes(xmlAttr *attr, CFStringEncoding encoding);
 

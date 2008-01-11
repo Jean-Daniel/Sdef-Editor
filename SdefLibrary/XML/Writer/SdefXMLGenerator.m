@@ -3,14 +3,14 @@
  *  Sdef Editor
  *
  *  Created by Rainbow Team.
- *  Copyright © 2006 - 2007 Shadow Lab. All rights reserved.
+ *  Copyright Â© 2006 - 2007 Shadow Lab. All rights reserved.
  */
 
 #import "SdefXMLGenerator.h"
 #import "SdefXMLNode.h"
 #import "SdefComment.h"
 #import "SdefXMLBase.h"
-#import <ShadowKit/SKExtensions.h>
+#import WBHEADER(WBExtensions.h)
 
 @implementation SdefXMLGenerator
 
@@ -40,14 +40,14 @@
   return sd_root;
 }
 - (void)setRoot:(SdefObject *)anObject {
-  SKSetterRetain(sd_root, anObject);
+  WBSetterRetain(sd_root, anObject);
 }
 
 - (void)setIgnoreMetas:(BOOL)flag {
   sd_metas = !flag;
 }
 - (void)setHeaderComment:(NSString *)comment {
-  SKSetterCopy(sd_comment, comment);
+  WBSetterCopy(sd_comment, comment);
 }
 
 #pragma mark -

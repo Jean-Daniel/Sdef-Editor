@@ -24,13 +24,13 @@
 
 @end
 
-SK_PRIVATE
+WB_PRIVATE
 BOOL SdefValidatorIsKeyword(NSString *str);
 
-SK_PRIVATE
+WB_PRIVATE
 BOOL SdefValidatorCheckCode(NSString *code);
 
-SK_PRIVATE
+WB_PRIVATE
 NSString *SdefValidatorCodeForName(NSString *name);
 
 @interface SdefObject (SdefValidator)

@@ -3,11 +3,12 @@
  *  Sdef Editor
  *
  *  Created by Rainbow Team.
- *  Copyright © 2006 - 2007 Shadow Lab. All rights reserved.
+ *  Copyright Â© 2006 - 2007 Shadow Lab. All rights reserved.
  */
 
 #import "SdefWindowController.h"
-#import <ShadowKit/SKAppKitExtensions.h>
+
+#import WBHEADER(WBAppKitExtensions.h)
 #import "SdefClassView.h"
 #import "SdefClassManager.h"
 #import "SdefContents.h"
