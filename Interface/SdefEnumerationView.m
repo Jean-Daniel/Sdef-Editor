@@ -40,7 +40,7 @@
 }
 
 //- (void)tableViewSelectionDidChange:(NSNotification *)aNotification {
-//  ShadowTrace();
+//  WBTrace();
 //  id table = [aNotification object];
 //  NSInteger row = [table selectedRow];
 //  if (row >= 0 && row < [[self object] count]) {

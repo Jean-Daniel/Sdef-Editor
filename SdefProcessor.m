@@ -7,6 +7,7 @@
  */
 
 #import "SdefProcessor.h"
+#import "SdefDocument.h"
 #import "SdefEditor.h"
 
 @implementation SdefProcessor
@@ -67,18 +68,26 @@
   
   /* Set format */
   NSMutableString *format = [NSMutableString stringWithCapacity:3];
-  if (sd_format & kSdefResourceFormat) {
-    [format appendString:@"a"];
-  }
-  if (sd_format & kSdefScriptSuiteFormat) {
-    [format appendString:@"s"];
-  }
-  if (sd_format & kSdefScriptTerminologyFormat) {
-    [format appendString:@"t"];
-  }
+  if (sd_format & kSdefResourceFormat) [format appendString:@"a"]; 
+  if (sd_format & kSdefScriptSuiteFormat) [format appendString:@"s"];
+  if (sd_format & kSdefScriptTerminologyFormat) [format appendString:@"t"];
+	/* Scripting bridge */
+	if (sd_format & kSdefScriptBridgeHeaderFormat) [format appendString:@"h"];
+  if (sd_format & kSdefScriptBridgeImplementationFormat) [format appendString:@"m"];
+	
   [args addObject:@"-f"];
   [args addObject:format];
   
+	if ((sd_format & (kSdefScriptBridgeHeaderFormat | kSdefScriptBridgeImplementationFormat)) != 0) {
+		/* append name parameter */
+		[args addObject:@"--basename"];
+		if ([sd_input isKindOfClass:[NSString class]]) {
+			[args addObject:[[sd_input lastPathComponent] stringByDeletingPathExtension]];
+		} else {
+			[args addObject:[[(SdefDocument *)sd_input dictionary] title] ? : @"MyApplication"];
+		}
+	}
+	
   /* Set Output */
   [args addObject:@"-o"];
   [args addObject:sd_output];

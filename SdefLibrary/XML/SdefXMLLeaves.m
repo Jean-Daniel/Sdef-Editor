@@ -38,7 +38,7 @@
   [NSException raise:NSInvalidArgumentException format:@"%@ does not support children", self];
 }
 - (void)addXMLComment:(NSString *)comment {
-  ShadowTrace();
+  WBTrace();
 }
 
 - (void)setXMLMetas:(NSDictionary *)metas {

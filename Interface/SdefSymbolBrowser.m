@@ -22,6 +22,10 @@
 
 static BOOL SdefSearchFilter(NSString *search, SdefObject *object, void *ctxt);
 
+@interface SdefObject (SdefBrowserExtension)
+- (NSString *)browserType;
+@end
+
 @interface SearchFieldToolbarItem : NSToolbarItem {
 }
 @end
@@ -37,7 +41,6 @@ static BOOL SdefSearchFilter(NSString *search, SdefObject *object, void *ctxt);
 }
 
 - (void)dealloc {
-  ShadowTrace();
   [self setDocument:nil];
   [searchField setTarget:nil];
   [super dealloc];
@@ -72,61 +75,39 @@ static BOOL SdefSearchFilter(NSString *search, SdefObject *object, void *ctxt);
 - (void)awakeFromNib {
   [self createToolbar];
   [self loadSymbols];
-  id menu = [[NSMenu alloc] initWithTitle:@"Search Menu"];
+  NSMenu *menu = [[NSMenu alloc] initWithTitle:@"Search Menu"];
   
   /* Search Menu Categories */
-  id item = [[NSMenuItem alloc] initWithTitle:@"All Fields"
-                                       action:@selector(limitSearch:)
-                                keyEquivalent:@""];
+  NSMenuItem *item = [menu addItemWithTitle:@"All Fields" action:@selector(limitSearch:) keyEquivalent:@""];
   [item setRepresentedObject:WBUInteger(kSdefSearchAll)];
-  [menu addItem:item];
-  [item release];
-  item = [[NSMenuItem alloc] initWithTitle:@"Symbol"
-                                    action:@selector(limitSearch:)
-                             keyEquivalent:@""];
+	[menu addItem:[NSMenuItem separatorItem]];
+	
+  item = [menu addItemWithTitle:@"Symbol" action:@selector(limitSearch:) keyEquivalent:@""];
   [item setRepresentedObject:WBUInteger(kSdefSearchSymbol)];
-  [menu addItem:item];
-  [item release];
-  item = [[NSMenuItem alloc] initWithTitle:@"Symbol Type"
-                                    action:@selector(limitSearch:)
-                             keyEquivalent:@""];
+	
+	item = [menu addItemWithTitle:@"Symbol Type" action:@selector(limitSearch:) keyEquivalent:@""];
   [item setRepresentedObject:WBUInteger(kSdefSearchSymbolType)];
-  [menu addItem:item];
-  [item release];
-  item = [[NSMenuItem alloc] initWithTitle:@"Code"
-                                    action:@selector(limitSearch:)
-                             keyEquivalent:@""];
+  
+	item = [menu addItemWithTitle:@"Code" action:@selector(limitSearch:) keyEquivalent:@""];
   [item setRepresentedObject:WBUInteger(kSdefSearchCode)];
-  [menu addItem:item];
-  [item release];
-  item = [[NSMenuItem alloc] initWithTitle:@"Suite"
-                                    action:@selector(limitSearch:)
-                             keyEquivalent:@""];
+
+	item = [menu addItemWithTitle:@"Type" action:@selector(limitSearch:) keyEquivalent:@""];
+  [item setRepresentedObject:WBUInteger(kSdefSearchType)];
+	
+	item = [menu addItemWithTitle:@"Location" action:@selector(limitSearch:) keyEquivalent:@""];
   [item setRepresentedObject:WBUInteger(kSdefSearchSuite)];
-  [menu addItem:item];
-  [item release];
   
   /* Search Menu Template */
   [menu addItem:[NSMenuItem separatorItem]];
-  item = [[NSMenuItem alloc] initWithTitle:@"Recent Searches"
-                                    action:NULL
-                             keyEquivalent:@""];
+	item = [menu addItemWithTitle:@"Recent Searches" action:NULL keyEquivalent:@""];
   [item setTag:NSSearchFieldRecentsTitleMenuItemTag];
-  [menu addItem:item];
-  [item release];
-  item = [[NSMenuItem alloc] initWithTitle:@"Recents"
-                                     action:NULL
-                              keyEquivalent:@""];
+
+	item = [menu addItemWithTitle:@"Recents" action:NULL keyEquivalent:@""];
   [item setTag:NSSearchFieldRecentsMenuItemTag];
-  [menu addItem:item];
-  [item release];
+	
   [menu addItem:[NSMenuItem separatorItem]];
-  item = [[NSMenuItem alloc] initWithTitle:@"Clear"
-                                     action:NULL
-                              keyEquivalent:@""];
+	item = [menu addItemWithTitle:@"Clear" action:NULL keyEquivalent:@""];
   [item setTag:NSSearchFieldClearRecentsMenuItemTag];
-  [menu addItem:item];
-  [item release];
   
   [[searchField cell] setSearchMenuTemplate:menu];
   [self limitSearch:[menu itemAtIndex:0]];
@@ -150,8 +131,10 @@ static BOOL SdefSearchFilter(NSString *search, SdefObject *object, void *ctxt);
   }
 }
 
-#define NSStringContains(str, substr)		([str rangeOfString:substr \
-                                                        options:NSCaseInsensitiveSearch | NSLiteralSearch].location != NSNotFound)
+WB_INLINE 
+BOOL __NSStringContains(NSString *str, NSString *substr) {
+	return str ? [str rangeOfString:substr options:NSCaseInsensitiveSearch | NSLiteralSearch].location != NSNotFound : NO;
+}
 
 #pragma mark Search Support
 BOOL SdefSearchFilter(NSString *search, SdefObject *object, void *ctxt) {
@@ -160,10 +143,11 @@ BOOL SdefSearchFilter(NSString *search, SdefObject *object, void *ctxt) {
   SdefSearchField field = *(SdefSearchField *)ctxt;
   switch (field) {
     case kSdefSearchAll:
-      return NSStringContains([object name], search) ||
-      NSStringContains([(SdefTerminologyObject *)object code], search) ||
-      NSStringContains([object objectTypeName], search) ||
-      NSStringContains([object location], search);
+      return __NSStringContains([object name], search) ||
+			__NSStringContains([(SdefTerminologyObject *)object code], search) ||
+			__NSStringContains([object objectTypeName], search) ||
+			__NSStringContains([object browserType], search) ||
+			__NSStringContains([object location], search);
     case kSdefSearchSymbol:
       str = [object name];
       break;
@@ -176,10 +160,12 @@ BOOL SdefSearchFilter(NSString *search, SdefObject *object, void *ctxt) {
     case kSdefSearchSuite:
       str = [object location];
       break;
+		case kSdefSearchType:
+			str = [object browserType];
     default:
       break;
   }
-  return str ? NSStringContains(str, search) : NO;
+  return __NSStringContains(str, search);
 }
 
 - (void)limitSearch:(id)sender {
@@ -191,7 +177,7 @@ BOOL SdefSearchFilter(NSString *search, SdefObject *object, void *ctxt) {
     NSString *label;
     if (sd_filter) {
       label = [NSString stringWithFormat:@"%@ %@", 
-        NSLocalizedString(@"SEARCH_FIELD", @"Inspector Toolbar item label"), [sender title]];
+							 NSLocalizedString(@"SEARCH_FIELD", @"Inspector Toolbar item label"), [sender title]];
     } else {
       label = NSLocalizedString(@"SEARCH_FIELD", @"Inspector Toolbar item label");
     }
@@ -224,11 +210,12 @@ BOOL SdefSearchFilter(NSString *search, SdefObject *object, void *ctxt) {
       [symbols addObjects:[item children]];
     }
   }
-  /* Classes/Property */
+  /* Classes/Element/Property */
   SdefClass *class;
   items = [[aSuite classes] childEnumerator];
   while (class = [items nextObject]) {
     [symbols addObject:class];
+		[symbols addObjects:[[class elements] children]];
     [symbols addObjects:[[class properties] children]];
   }
   /* Events/Commands/Parameters */
@@ -247,7 +234,7 @@ BOOL SdefSearchFilter(NSString *search, SdefObject *object, void *ctxt) {
 }
 
 - (void)removeSuite:(SdefSuite *)aSuite {
-//   [symbols removeObject:aSuite];
+	//   [symbols removeObject:aSuite];
   /* Enumeration/Enumerators */
   id items = [[aSuite types] childEnumerator];
   SdefObject *item;
@@ -404,3 +391,13 @@ BOOL SdefSearchFilter(NSString *search, SdefObject *object, void *ctxt) {
 }
 
 @end
+
+@implementation SdefObject (SdefBrowserExtension)
+
+- (NSString *)browserType {
+	return [self respondsToSelector:@selector(type)] ? [(id)self type] : nil;
+}
+
+@end
+
+

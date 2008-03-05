@@ -17,20 +17,20 @@ static NSString *SystemMajorVersion() {
 //  if (Gestalt(gestaltSystemVersion, &macVersion) == noErr) {
 //    return [NSString stringWithFormat:@"%x.%x", (macVersion >> 8) & 0xff, (macVersion >> 4) & 0xf];
 //  }
-  return @"10.3";
+  return @"10.5";
 }
 
 @implementation SdefExporterController
 
 + (void)initialize {
   [self setKeys:[NSArray arrayWithObjects:
-    @"resourceFormat", @"cocoaFormat", @"rsrcFormat", nil] triggerChangeNotificationsForDependentKey:@"canExport"];
+    @"resourceFormat", @"cocoaFormat", @"rsrcFormat", @"sbhFormat", @"sbmFormat", nil] triggerChangeNotificationsForDependentKey:@"canExport"];
 }
 
 - (id)init {
   if (self = [super initWithWindowNibName:@"SdefExport"]) {
-    cocoaFormat = YES;
-    resourceFormat = YES;
+    sbhFormat = YES;
+    sbmFormat = YES;
     [self setVersion:SystemMajorVersion()];
   }
   return self;
@@ -117,6 +117,9 @@ static NSString *SystemMajorVersion() {
     SdefProcessorFormat format = 0;
     if (resourceFormat || rsrcFormat) format |= kSdefResourceFormat;
     if (cocoaFormat) format |= (kSdefScriptSuiteFormat | kSdefScriptTerminologyFormat);
+		if (sbmFormat) format |= kSdefScriptBridgeImplementationFormat;
+		if (sbhFormat) format |= kSdefScriptBridgeHeaderFormat;
+
     [proc setFormat:format];
     
     [proc setVersion:sd_version ? : SystemMajorVersion()];
@@ -146,69 +149,71 @@ static NSString *SystemMajorVersion() {
   [self close];
 }
 
-- (IBAction)export:(id)sender {
-  NSOpenPanel *openPanel = [NSOpenPanel openPanel];
-  [openPanel setPrompt:NSLocalizedString(@"Choose", @"Choose an export folder Prompt.")];
-  [openPanel setMessage:NSLocalizedString(@"Choose a destination folder", @"Choose an export folder Message.")];
-  [openPanel setCanChooseFiles:NO];
-  [openPanel setCanCreateDirectories:YES];
-  [openPanel setCanChooseDirectories:YES];
-  [openPanel setAllowsMultipleSelection:NO];
-  [openPanel setTreatsFilePackagesAsDirectories:YES];
-  switch ([openPanel runModalForTypes:nil]) {
-    case NSCancelButton:
-      return;
-  }
-  if (![[openPanel filenames] count]) return;
-  
-  SdefProcessor *proc = [[SdefProcessor alloc] initWithSdefDocument:[self sdefDocument]];
-  [proc setOutput:[[openPanel filenames] objectAtIndex:0]];
-  
-  id defs = [[NSMutableArray alloc] init];
-  if ([[includes arrangedObjects] count]) {
-    id items = [[includes arrangedObjects] objectEnumerator];
-    id item;
-    while (item = [items nextObject]) {
-      [defs addObject:[item valueForKey:@"path"]];
-    }
-  }
-  if (includeCore) [defs addObject:[[NSBundle mainBundle] pathForResource:@"NSCoreSuite" ofType:@"sdef"]];
-  if (includeText) [defs addObject:[[NSBundle mainBundle] pathForResource:@"NSTextSuite" ofType:@"sdef"]];
-  
-  if ([defs count])
-    [proc setIncludes:defs];
-  [defs release];
-  
-  SdefProcessorFormat format = 0;
-  if (resourceFormat || rsrcFormat) format |= kSdefResourceFormat;
-  if (cocoaFormat) format |= (kSdefScriptSuiteFormat | kSdefScriptTerminologyFormat);
-  [proc setFormat:format];
-  
-  [proc setVersion:sd_version ? : SystemMajorVersion()];
-  @try {
-    NSString *result = [proc process];
-    if (result) {
-      NSRunAlertPanel(NSLocalizedString(@"Warning: Scripting Definition Processor says:", @"sdp return a value: message title"),
-                      result,
-                      NSLocalizedString(@"OK", @"Default Button"), nil, nil);
-    }
-    if (rsrcFormat) {
-      [self compileResourceFile:[proc output]];
-      if (!resourceFormat) {
-        [[NSFileManager defaultManager] removeFileAtPath:[[proc output] stringByAppendingPathComponent:@"Scripting.r"] handler:nil];
-      }
-    }
-  } @catch (id exception) {
-    [proc release];
-    proc = nil;
-    WBLogException(exception);
-    NSRunAlertPanel(NSLocalizedString(@"Undefined error while exporting", @"sdp exception"),
-                    NSLocalizedString(@"An Undefined error prevent exportation: %@", @"sdp exception"),
-                    NSLocalizedString(@"OK", @"Default Button"), nil, nil, exception);  
-  }
-  [proc release];
-  [self close:sender];
-}
+//- (IBAction)export:(id)sender {
+//  NSOpenPanel *openPanel = [NSOpenPanel openPanel];
+//  [openPanel setPrompt:NSLocalizedString(@"Choose", @"Choose an export folder Prompt.")];
+//  [openPanel setMessage:NSLocalizedString(@"Choose a destination folder", @"Choose an export folder Message.")];
+//  [openPanel setCanChooseFiles:NO];
+//  [openPanel setCanCreateDirectories:YES];
+//  [openPanel setCanChooseDirectories:YES];
+//  [openPanel setAllowsMultipleSelection:NO];
+//  [openPanel setTreatsFilePackagesAsDirectories:YES];
+//  switch ([openPanel runModalForTypes:nil]) {
+//    case NSCancelButton:
+//      return;
+//  }
+//  if (![[openPanel filenames] count]) return;
+//  
+//  SdefProcessor *proc = [[SdefProcessor alloc] initWithSdefDocument:[self sdefDocument]];
+//  [proc setOutput:[[openPanel filenames] objectAtIndex:0]];
+//  
+//  id defs = [[NSMutableArray alloc] init];
+//  if ([[includes arrangedObjects] count]) {
+//    id items = [[includes arrangedObjects] objectEnumerator];
+//    id item;
+//    while (item = [items nextObject]) {
+//      [defs addObject:[item valueForKey:@"path"]];
+//    }
+//  }
+//  if (includeCore) [defs addObject:[[NSBundle mainBundle] pathForResource:@"NSCoreSuite" ofType:@"sdef"]];
+//  if (includeText) [defs addObject:[[NSBundle mainBundle] pathForResource:@"NSTextSuite" ofType:@"sdef"]];
+//  
+//  if ([defs count])
+//    [proc setIncludes:defs];
+//  [defs release];
+//  
+//  SdefProcessorFormat format = 0;
+//  if (resourceFormat || rsrcFormat) format |= kSdefResourceFormat;
+//  if (cocoaFormat) format |= (kSdefScriptSuiteFormat | kSdefScriptTerminologyFormat);
+//	if (sbmFormat) format |= kSdefScriptBridgeImplementationFormat;
+//	if (sbhFormat) format |= kSdefScriptBridgeHeaderFormat;
+//  [proc setFormat:format];
+//  
+//  [proc setVersion:sd_version ? : SystemMajorVersion()];
+//  @try {
+//    NSString *result = [proc process];
+//    if (result) {
+//      NSRunAlertPanel(NSLocalizedString(@"Warning: Scripting Definition Processor says:", @"sdp return a value: message title"),
+//                      result,
+//                      NSLocalizedString(@"OK", @"Default Button"), nil, nil);
+//    }
+//    if (rsrcFormat) {
+//      [self compileResourceFile:[proc output]];
+//      if (!resourceFormat) {
+//        [[NSFileManager defaultManager] removeFileAtPath:[[proc output] stringByAppendingPathComponent:@"Scripting.r"] handler:nil];
+//      }
+//    }
+//  } @catch (id exception) {
+//    [proc release];
+//    proc = nil;
+//    WBLogException(exception);
+//    NSRunAlertPanel(NSLocalizedString(@"Undefined error while exporting", @"sdp exception"),
+//                    NSLocalizedString(@"An Undefined error prevent exportation: %@", @"sdp exception"),
+//                    NSLocalizedString(@"OK", @"Default Button"), nil, nil, exception);  
+//  }
+//  [proc release];
+//  [self close:sender];
+//}
 
 - (void)compileResourceFile:(NSString *)folder {
   NSString *resource = [folder stringByAppendingPathComponent:@"Scripting.r"];
@@ -253,7 +258,7 @@ static NSString *SystemMajorVersion() {
 }
 
 - (BOOL)canExport {
-  return resourceFormat | cocoaFormat | rsrcFormat;
+  return resourceFormat | cocoaFormat | rsrcFormat | sbhFormat | sbmFormat;
 }
 
 @end

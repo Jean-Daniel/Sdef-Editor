@@ -89,7 +89,7 @@ const OSType kCocoaSuiteDefinitionHFSType = 'ScSu';
 }
 
 - (void)showWelcome {
-  ShadowTrace();
+  WBTrace();
 }
 
 - (void)awakeFromNib {

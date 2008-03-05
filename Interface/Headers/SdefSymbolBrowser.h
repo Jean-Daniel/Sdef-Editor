@@ -11,6 +11,7 @@
 typedef enum {
   kSdefSearchAll,
   kSdefSearchCode,
+	kSdefSearchType,
   kSdefSearchSuite,
   kSdefSearchSymbol,
   kSdefSearchSymbolType

@@ -51,7 +51,7 @@ OSStatus _GetTerminologyFromAppleEvent(AppleEvent *theEvent, NSMutableArray *ter
 
   for (CFIndex idx = 1; idx <= count; idx++) {
     CFDataRef data = NULL;
-    WBAECopyNthCFDataFromDescList(&aetes, idx, typeAETE, &data);
+    WBAECopyNthCFDataFromDescList(&aetes, idx, typeAETE, NULL, &data);
     if (data) {
       [terminolgies addObject:(id)data];
       CFRelease(data);

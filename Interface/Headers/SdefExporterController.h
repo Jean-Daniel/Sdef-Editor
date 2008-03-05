@@ -6,8 +6,6 @@
  *  Copyright © 2006 - 2007 Shadow Lab. All rights reserved.
  */
 
-#import <Cocoa/Cocoa.h>
-
 @class SdefDocument;
 @interface SdefExporterController : NSWindowController {
   IBOutlet NSArrayController *includes;
@@ -16,6 +14,7 @@
   
   NSString *sd_version;
   BOOL includeCore, includeText;
+	BOOL sbhFormat, sbmFormat; // Scripting Bridge Header and Implementation files.
   BOOL resourceFormat, cocoaFormat, rsrcFormat;
 }
 

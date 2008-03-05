@@ -7,10 +7,12 @@
  */
 
 enum {
-  kSdefUndefinedFormat 			= 0,
-  kSdefResourceFormat 			= 1 << 0,
-  kSdefScriptSuiteFormat 		= 1 << 1,
-  kSdefScriptTerminologyFormat	= 1 << 2,
+  kSdefUndefinedFormat                  = 0,
+  kSdefResourceFormat                   = 1 << 0,
+  kSdefScriptSuiteFormat                = 1 << 1,
+  kSdefScriptTerminologyFormat          = 1 << 2,
+	kSdefScriptBridgeHeaderFormat         = 1 << 3,
+	kSdefScriptBridgeImplementationFormat = 1 << 4,
 };
 typedef NSUInteger SdefProcessorFormat;
 

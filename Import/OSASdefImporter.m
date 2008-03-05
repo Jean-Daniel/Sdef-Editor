@@ -50,6 +50,13 @@
     CFDataRef sdef = nil;
     if (noErr == OSACopyScriptingDefinition(&file, 0, &sdef) && sdef) {
       sd_dico = [SdefLoadDictionaryData((id)sdef, nil, NULL, self, NULL) retain];
+			if (![sd_dico title] || [[sd_dico title] isEqualToString:[[sd_dico class] defaultName]]) {
+				CFStringRef name = NULL;
+				if (noErr == LSCopyDisplayNameForRef(&file, &name) && name) {
+					[sd_dico setTitle:(NSString *)name];
+					CFRelease(name);
+				}
+			}
       CFRelease(sdef);
     }
   }

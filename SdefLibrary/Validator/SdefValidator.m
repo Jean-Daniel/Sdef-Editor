@@ -26,7 +26,7 @@
 }
 
 - (void)dealloc {
-  ShadowTrace();
+  WBTrace();
   [super dealloc];
 }
 

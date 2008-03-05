@@ -11,7 +11,7 @@
 @implementation SdefObject (AeteResource)
 
 - (NSUInteger)parseData:(Byte *)bytes {
-  ShadowTrace();
+  WBTrace();
   [NSException raise:NSInternalInconsistencyException format:@"Method must be implemented by subclasses"];
   return 0;
 }
