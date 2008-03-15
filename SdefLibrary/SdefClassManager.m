@@ -20,7 +20,17 @@
 #import "SdefVerb.h"
 
 #pragma mark -
+static NSArray *gSortByName = nil;
+
 @implementation SdefClassManager
+
++ (void)initialize {
+  if ([SdefClassManager class] == self) {
+    NSSortDescriptor *desc = [[NSSortDescriptor alloc] initWithKey:@"name" ascending:YES selector:@selector(caseInsensitiveCompare:)];
+    gSortByName = [[NSArray alloc] initWithObjects:desc, nil];
+    [desc release];
+  }
+}
 
 + (NSArray *)baseTypes {
   static NSArray *types;
@@ -98,17 +108,18 @@
 #pragma mark -
 - (void)addSuite:(SdefSuite *)aSuite {
   NSParameterAssert(nil != aSuite);
-  id classes = [[aSuite classes] children];
+  NSArray *classes = [[aSuite classes] children];
   [sd_types addObjectsFromArray:classes];
   [sd_classes addObjectsFromArray:classes];
   [sd_types addObjectsFromArray:[[aSuite types] children]];
   [sd_events addObjectsFromArray:[[aSuite events] children]];
   [sd_commands addObjectsFromArray:[[aSuite commands] children]];
+  sd_cmFlags.sortType = 1; sd_cmFlags.sortClass = 1; sd_cmFlags.sortEvent = 1; sd_cmFlags.sortCommand = 1;
 }
 
 - (void)removeSuite:(SdefSuite *)aSuite {
   NSParameterAssert(nil != aSuite);
-  id classes = [[aSuite classes] children];
+  NSArray *classes = [[aSuite classes] children];
   [sd_types removeObjectsInArray:classes];
   [sd_classes removeObjectsInArray:classes];
   [sd_types removeObjectsInArray:[[aSuite types] children]];
@@ -148,6 +159,7 @@
 - (void)addClass:(SdefClass *)aClass {
   [sd_types addObject:aClass];
   [sd_classes addObject:aClass];
+  sd_cmFlags.sortType = 1; sd_cmFlags.sortClass = 1;
 }
 
 - (void)removeClass:(SdefClass *)aClass {
@@ -164,22 +176,39 @@
     if ([item name])
       [types addObject:[item name]];
   }
+  [types sortUsingSelector:@selector(caseInsensitiveCompare:)];
   return types;
 }
 
 - (NSArray *)sdefTypes {
+  if (sd_cmFlags.sortType) {
+    [sd_types sortUsingDescriptors:gSortByName];
+    sd_cmFlags.sortType = 0;
+  }
   return sd_types;
 }
 
 - (NSArray *)classes {
+  if (sd_cmFlags.sortClass) {
+    [sd_classes sortUsingDescriptors:gSortByName];
+    sd_cmFlags.sortClass = 0;
+  }
   return sd_classes;
 }
 
 - (NSArray *)commands {
+  if (sd_cmFlags.sortCommand) {
+    [sd_commands sortUsingDescriptors:gSortByName];
+    sd_cmFlags.sortCommand = 0;
+  }
   return sd_commands;
 }
 
 - (NSArray *)events {
+  if (sd_cmFlags.sortEvent) {
+    [sd_events sortUsingDescriptors:gSortByName];
+    sd_cmFlags.sortEvent = 0;
+  }
   return sd_events;
 }
 
@@ -294,15 +323,19 @@
       case kSdefRecordType:
       case kSdefEnumerationType:
         [sd_types addObject:child];
+        sd_cmFlags.sortType = 1;
         break;
       case kSdefClassType:
         [self addClass:child];
+        sd_cmFlags.sortClass = 1;
         break;
       case kSdefVerbType:
         if ([child isCommand]) {
           [sd_commands addObject:child];
+          sd_cmFlags.sortCommand = 1;
         } else {
           [sd_events addObject:child];
+          sd_cmFlags.sortEvent = 1;
         }
         break;
       default:

@@ -14,6 +14,13 @@
 @private
   NSHashTable *sd_dicts;
   SdefDocument *sd_document;
+  struct _sd_cmFlags {
+    unsigned int sortType:1;
+    unsigned int sortClass:1;
+    unsigned int sortEvent:1;
+    unsigned int sortCommand:1;
+    unsigned int reserved:28;
+  } sd_cmFlags;
   NSMutableArray *sd_classes, *sd_commands, *sd_events, *sd_types;
 }
 

@@ -10,6 +10,13 @@
 #import "SdefDocumentation.h"
 #import "SdefDocumentationParser.h"
 
+@interface SdefDocumentationParser ()
+- (void)parser:(SdefDOMParser *)parser foundCDATA:(const xmlChar *)data;
+- (void)parser:(SdefDOMParser *)parser foundComment:(const xmlChar *)aComment;
+- (void)parser:(SdefDOMParser *)parser foundCharacters:(const xmlChar *)string;
+- (void)parser:(SdefDOMParser *)parser foundProcessingInstructionWithTarget:(const xmlChar *)target data:(const xmlChar *)data;
+@end
+
 @implementation SdefDocumentationParser
 
 - (id)init {
