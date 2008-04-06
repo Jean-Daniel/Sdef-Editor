@@ -217,8 +217,8 @@ static NSArray *gSortByName = nil;
   NSUInteger idx = [sd_types count];
   while (idx-- > 0) {
     SdefObject *type = [sd_types objectAtIndex:idx];
-    if ([[type name] isEqualToString:name])
-      return type;
+    if ([[type name] isEqualToString:name]) return type;
+    else if ([type hasID] && [[type xmlid] isEqualToString:name]) return type;
   }
   return nil;  
 }
@@ -227,7 +227,7 @@ static NSArray *gSortByName = nil;
   NSUInteger idx = [sd_classes count];
   while (idx-- > 0) {
     SdefClass *class = [sd_classes objectAtIndex:idx];
-    if ([[class name] isEqualToString:name])
+    if ([[class name] isEqualToString:name] || [[class xmlid] isEqualToString:name])
       return class;
   }
   return nil;
@@ -289,7 +289,7 @@ static NSArray *gSortByName = nil;
   NSMutableArray *classes = [NSMutableArray array];
   while (idx-- > 0) {
     SdefClass *item = [sd_classes objectAtIndex:idx];
-    if ([[item inherits] isEqualToString:[class name]])
+    if ([[item inherits] isEqualToString:[class name]] || [[item inherits] isEqualToString:[class xmlid]])
       [classes addObject:item];
   }
   return classes;
@@ -301,7 +301,7 @@ static NSArray *gSortByName = nil;
     NSUInteger idx = [sd_classes count];  
     while (idx-- > 0) {
       SdefClass *class = [sd_classes objectAtIndex:idx];
-      if (class != aClass && [[class name] isEqualToString:parent]) {
+      if (class != aClass && ([[class name] isEqualToString:parent] || [[class xmlid] isEqualToString:parent])) {
         return class;
       }
     }

@@ -1785,7 +1785,7 @@
 		85B7BC3B0BD62AED00632EE6 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CURRENT_PROJECT_VERSION = 250;
+				CURRENT_PROJECT_VERSION = 255;
 				HEADER_SEARCH_PATHS = "$(SHARED_SDK_ROOT)/usr/include/libsxml2";
 				INFOPLIST_FILE = Resources/Info.plist;
 				OTHER_LDFLAGS = "-lsxml2";
@@ -1796,7 +1796,7 @@
 		98A7CBE70855010F000D862B /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CURRENT_PROJECT_VERSION = 250;
+				CURRENT_PROJECT_VERSION = 255;
 				HEADER_SEARCH_PATHS = "$(SHARED_SDK_ROOT)/usr/include/libsxml2";
 				INFOPLIST_FILE = Resources/Info.plist;
 				OTHER_LDFLAGS = "-lsxml2";
@@ -1807,7 +1807,7 @@
 		98A7CBE80855010F000D862B /* Profile */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CURRENT_PROJECT_VERSION = 250;
+				CURRENT_PROJECT_VERSION = 255;
 				HEADER_SEARCH_PATHS = "$(SHARED_SDK_ROOT)/usr/include/libsxml2";
 				INFOPLIST_FILE = Resources/Info.plist;
 				OTHER_LDFLAGS = "-lsxml2";

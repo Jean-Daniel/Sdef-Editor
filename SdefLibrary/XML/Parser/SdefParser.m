@@ -30,7 +30,7 @@
 static 
 void _SdefParserUpdatePantherObjects(NSArray *roots);
 static
-void _SdefParserPostProcessObjects(NSArray *roots);
+void _SdefParserPostProcessObjects(NSArray *roots, SdefVersion version);
 
 enum {
   kSdefValidationErrorStatus = 'VErr',
@@ -88,16 +88,15 @@ enum {
 @end
 
 #pragma mark -
+/* computed minimum supported version */
 static
 SdefVersion SdefDocumentVersionFromParserVersion(SdefParserVersion vers) {
-  if (vers & kSdefParserVersionLeopard)
-    return kSdefLeopardVersion;
-  else if (vers & kSdefParserVersionTiger)
-    return kSdefTigerVersion;
-  else if (vers & kSdefParserVersionPanther)
-    return kSdefPantherVersion;
-  else
-    return kSdefVersionUndefined;
+  if (vers & kSdefParserVersionLeopard) return kSdefLeopardVersion;
+  if (vers & kSdefParserVersionTiger) return kSdefTigerVersion;
+  /* legacy document support */
+  if (vers & kSdefParserVersionPanther) return kSdefPantherVersion;
+  
+  return kSdefVersionUndefined;
 }
 
 static 
@@ -281,10 +280,11 @@ Boolean _SdefElementIsCollection(CFStringRef element) {
     }
     
     if ([sd_roots count] > 0) {
-      if (sd_version <= kSdefPantherVersion)
+      if (sd_version <= kSdefPantherVersion) {
         _SdefParserUpdatePantherObjects(sd_roots);
-      else 
-        _SdefParserPostProcessObjects(sd_roots);
+      } else {
+        _SdefParserPostProcessObjects(sd_roots, sd_version);
+      }
     }
   }
   return result;
@@ -611,8 +611,11 @@ void __SdefParserPostProcessClass(SdefClass *cls) {
 
 /* post process */
 WB_INLINE
-void __SdefParserPostProcessObject(id object) {
+void __SdefParserPostProcessObject(id object, SdefVersion version) {
   switch ([object objectType]) {
+    case kSdefDictionaryType: 
+      [(SdefDictionary *)object setVersion:version];
+      break;
     case kSdefSuiteType: {
       SdefClass *class;
       NSEnumerator *classes = [[object classes] childEnumerator];
@@ -630,14 +633,14 @@ void __SdefParserPostProcessObject(id object) {
 }
 
 static
-void _SdefParserPostProcessObjects(NSArray *roots) {
+void _SdefParserPostProcessObjects(NSArray *roots, SdefVersion version) {
   for (NSUInteger idx = 0; idx < [roots count]; idx++) {
     id child;
     SdefObject *root = [roots objectAtIndex:idx];
-    __SdefParserPostProcessObject(root);
+    __SdefParserPostProcessObject(root, version);
     NSEnumerator *children = [root deepChildEnumerator];
     while (child = [children nextObject]) {
-      __SdefParserPostProcessObject(child);
+      __SdefParserPostProcessObject(child, version);
     }
   }
 }

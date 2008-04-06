@@ -315,7 +315,6 @@
     }  
   }
   
-
   // If neither type nor creator code exist, use the default implementation.
   if(!(typeCode || creatorCode)) {
     return attrs;

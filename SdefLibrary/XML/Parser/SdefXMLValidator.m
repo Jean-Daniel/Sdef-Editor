@@ -342,7 +342,22 @@ CFMutableDictionaryRef sValidators = NULL;
 }
 
 - (SdefParserVersion)checkAttributes:(CFDictionaryRef)attributes forElement:(CFStringRef)element error:(NSString **)error {
-  return kSdefParserVersionAll;
+  SdefParserVersion version = sd_version;
+  if (attributes && CFDictionaryGetCount(attributes) > 0) {
+    SdefXMLElement *validator = (id)CFDictionaryGetValue(sValidators, element);
+    if (validator) {
+      NSString *attr;
+      NSEnumerator *attrs = [(id)attributes keyEnumerator];
+      while (attr = [attrs nextObject]) {
+        version &= [validator acceptAttribute:(CFStringRef)attr value:CFDictionaryGetValue(attributes, attr)];
+        if (kSdefParserVersionUnknown == version) {
+          if (error) *error = [self invalidAttribute:attr inElement:(id)element];
+          break;
+        }
+      }
+    }
+  }
+  return version;
 }
 
 - (SdefParserVersion)validateElement:(CFStringRef)element attributes:(CFDictionaryRef)attributes error:(NSString **)error {
@@ -362,7 +377,6 @@ CFMutableDictionaryRef sValidators = NULL;
       sd_version &= version;
       version = [self checkAttributes:attributes forElement:element error:error];
       if ((version & sd_version) == 0) {
-        DLog(@"Invalid attributes %@ in element %@", attributes, element);
         return kSdefParserVersionUnknown;
       } else {
         sd_version &= version;
