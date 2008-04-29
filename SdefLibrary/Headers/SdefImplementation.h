@@ -17,6 +17,7 @@
  class      NMTOKEN         #IMPLIED
  key        NMTOKEN         #IMPLIED
  method     NMTOKEN         #IMPLIED
+ insert-at-beginning %yorn; #IMPLIED
  boolean-value (YES|NO)     #IMPLIED
  integer-value NMTOKEN      #IMPLIED
  string-value  CDATA        #IMPLIED
@@ -49,6 +50,9 @@ enum {
 
 - (NSString *)method;
 - (void)setMethod:(NSString *)newMethod;
+
+- (BOOL)insertAtBeginning;
+- (void)setInsertAtBeginning:(BOOL)flag;
 
 /* value support */
 - (UInt8)valueType;

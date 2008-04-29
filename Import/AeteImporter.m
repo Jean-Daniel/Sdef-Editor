@@ -182,7 +182,7 @@ bail:
       }
     }
     if(noErr == err) {
-      ResourceCount count;
+      SInt16 count;
       /* Standard Infos */
       count = Count1Resources(kAEUserTerminology);
       sd_aetes = [[NSMutableArray alloc] initWithCapacity:count];

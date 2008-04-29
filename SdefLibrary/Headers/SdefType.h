@@ -14,6 +14,7 @@
  <!ATTLIST type
  type       %Typename;      #REQUIRED 
  list       %yorn;          #IMPLIED
+ hidden     %yorn;          #IMPLIED  ????
  >
  */
 

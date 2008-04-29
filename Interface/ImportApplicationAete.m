@@ -7,7 +7,7 @@
  */
 
 #import "ImportApplicationAete.h"
-#import WBHEADER(WBApplication.h)
+#import WBHEADER(WBAliasedApplication.h)
 
 #import "AeteImporter.h"
 #import "SdefEditor.h"
@@ -19,7 +19,7 @@
 }
 
 - (void)awakeFromNib {
-  id menu = [popup menu];
+  NSMenu *menu = [popup menu];
   
   ProcessSerialNumber psn = {kNoProcess, kNoProcess};
   CFDictionaryRef info;
@@ -35,7 +35,7 @@
         hidden = hidden || (value && CFBooleanGetValue(value));
         
         if (!hidden) {
-          WBApplication *appli = [[WBApplication alloc] initWithProcessSerialNumber:&psn];
+          WBApplication *appli = [[WBAliasedApplication alloc] initWithProcessSerialNumber:&psn];
           NSMenuItem *menuItem = [[NSMenuItem alloc] initWithTitle:[appli name] action:nil keyEquivalent:@""];
           NSImage *icon = [appli icon];
           [icon setScalesWhenResized:YES];
@@ -85,9 +85,9 @@
       return;
   }
   if ([[openPanel filenames] count] == 0) return;
-  id file = [[openPanel filenames] objectAtIndex:0];
-  id appli = [WBApplication applicationWithPath:file];
-  id item = [popup itemWithTitle:[appli name]];
+  NSString *file = [openPanel filename];
+  WBApplication *appli = [WBAliasedApplication applicationWithPath:file];
+  NSMenuItem *item = [popup itemWithTitle:[appli name]];
   if (!item) {
     item = [[NSMenuItem alloc] initWithTitle:[appli name] action:nil keyEquivalent:@""];
     NSImage *icon = [appli icon];

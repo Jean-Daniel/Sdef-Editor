@@ -147,6 +147,7 @@
 }
 
 - (void)setXMLAttributes:(NSDictionary *)attrs {
+  [super setXMLAttributes:attrs];
   NSString *attr = [attrs objectForKey:@"type"];
   if (attr)
     [self setName:[attr stringByUnescapingEntities:nil]];
@@ -229,6 +230,14 @@
         [node setAttribute:[attr stringByEscapingEntities:nil] forKey:@"method"];
       }
     }
+    /* insert-at-beginning */
+    if ([self insertAtBeginning]) {
+      if (version >= kSdefLeopardVersion) {
+        [node setAttribute:@"yes" forKey:@"insert-at-beginning"];
+      } else {
+        [node setMeta:@"yes" forKey:@"insert-at-beginning"];
+      }
+    }
     if ([self valueType] != kSdefValueTypeNone) {
       if (version >= kSdefLeopardVersion) {
         switch ([self valueType]) {
@@ -244,6 +253,17 @@
         }
       } else {
         /* warning: *-value not supported */
+        switch ([self valueType]) {
+          case kSdefValueTypeString:
+            [node setMeta:[[self textValue] stringByEscapingEntities:nil] forKey:@"string-value"];
+            break;
+          case kSdefValueTypeInteger:
+            [node setMeta:[NSString stringWithFormat:@"%ld", (long)[self integerValue]] forKey:@"integer-value"];
+            break;
+          case kSdefValueTypeBoolean:
+            [node setMeta:[self booleanValue] ? @"YES" : @"NO" forKey:@"boolean-value"];
+            break;
+        }
       }
     }
   }
@@ -266,6 +286,10 @@
   } else if (attr = [attrs objectForKey:@"string-value"]) {
     [self setValueType:kSdefValueTypeString];
     [self setTextValue:[attr stringByUnescapingEntities:nil]];
+  }
+  /* insert at beginning */
+  if (attr == [attrs objectForKey:@"insert-at-beginning"]) {
+    [self setInsertAtBeginning:[attr caseInsensitiveCompare:@"YES"]];
   }
 }
 

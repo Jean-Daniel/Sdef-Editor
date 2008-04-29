@@ -64,9 +64,11 @@ description  %Text;        #IMPLIED
 /* Just an hint. isCommand can returns something different */
 - (void)setCommand:(BOOL)flag;
 
+- (BOOL)hasResult;
 - (SdefResult *)result;
 - (void)setResult:(SdefResult *)aResult;
 
+- (BOOL)hasDirectParameter;
 - (SdefDirectParameter *)directParameter;
 - (void)setDirectParameter:(SdefDirectParameter *)aParameter;
 

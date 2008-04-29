@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 44;
+	objectVersion = 45;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -14,6 +14,7 @@
 		1B5FEC900BD8E58100F57412 /* SdefXRef.m in Sources */ = {isa = PBXBuildFile; fileRef = 1B5FEC8E0BD8E58100F57412 /* SdefXRef.m */; };
 		1B73E9CC0CD7965C00FC60B2 /* SdefParserInternal.h in Headers */ = {isa = PBXBuildFile; fileRef = 1B73E9CB0CD7965B00FC60B2 /* SdefParserInternal.h */; };
 		1B73ECA70CD7A73400FC60B2 /* SdefParserInternal.m in Sources */ = {isa = PBXBuildFile; fileRef = 1B73ECA60CD7A73400FC60B2 /* SdefParserInternal.m */; };
+		1B79542D0DA8FA1F00CC79A4 /* libsxml2.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 1B79542C0DA8FA1F00CC79A4 /* libsxml2.a */; };
 		1B877C9E0D37DDFD007A59B5 /* WBTemplate.h in Headers */ = {isa = PBXBuildFile; fileRef = 1B877C980D37DDFD007A59B5 /* WBTemplate.h */; };
 		1B877C9F0D37DDFD007A59B5 /* WBTemplate.m in Sources */ = {isa = PBXBuildFile; fileRef = 1B877C990D37DDFD007A59B5 /* WBTemplate.m */; };
 		1B877CA00D37DDFD007A59B5 /* WBTemplateParser.h in Headers */ = {isa = PBXBuildFile; fileRef = 1B877C9A0D37DDFD007A59B5 /* WBTemplateParser.h */; };
@@ -58,8 +59,6 @@
 		1B877DDC0D37E78C007A59B5 /* SdefValidator.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1B877DDA0D37E78C007A59B5 /* SdefValidator.xib */; };
 		1B877DE10D37E7A6007A59B5 /* SdefTypesEditor.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1B877DDF0D37E7A6007A59B5 /* SdefTypesEditor.xib */; };
 		1B877DE50D37E7B1007A59B5 /* SdefSymbolBrowser.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1B877DE30D37E7B1007A59B5 /* SdefSymbolBrowser.xib */; };
-		1B8AAC6C0D8156F9003E6ECF /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 1B8AAC6B0D8156F8003E6ECF /* libz.dylib */; };
-		1B8AAC6E0D815704003E6ECF /* libiconv.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 1B8AAC6D0D815704003E6ECF /* libiconv.dylib */; };
 		1B8AAC8C0D815722003E6ECF /* Carbon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1B8AAC8B0D815721003E6ECF /* Carbon.framework */; };
 		1B8AAC910D815726003E6ECF /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1B8AAC900D815725003E6ECF /* Cocoa.framework */; };
 		1B8AAC950D815729003E6ECF /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1B8AAC940D815729003E6ECF /* WebKit.framework */; };
@@ -98,6 +97,10 @@
 		1BE6A2580D37B554009361FB /* AESendThreadSafe.c in Sources */ = {isa = PBXBuildFile; fileRef = 1BE6A1940D37B50A009361FB /* AESendThreadSafe.c */; };
 		1BE6A25A0D37B554009361FB /* WBProcessFunctions.c in Sources */ = {isa = PBXBuildFile; fileRef = 1BE6A1AE0D37B50A009361FB /* WBProcessFunctions.c */; };
 		1BE6A25E0D37B554009361FB /* WBAEFunctions.c in Sources */ = {isa = PBXBuildFile; fileRef = 1BE6A1960D37B50A009361FB /* WBAEFunctions.c */; };
+		1BE6E2080DBCE19600ABAC74 /* WBAliasedApplication.h in Headers */ = {isa = PBXBuildFile; fileRef = 1BE6E2060DBCE19600ABAC74 /* WBAliasedApplication.h */; };
+		1BE6E2090DBCE19600ABAC74 /* WBAliasedApplication.m in Sources */ = {isa = PBXBuildFile; fileRef = 1BE6E2070DBCE19600ABAC74 /* WBAliasedApplication.m */; };
+		1BE6E20D0DBCE1A300ABAC74 /* WBAlias.m in Sources */ = {isa = PBXBuildFile; fileRef = 1BE6E20B0DBCE1A300ABAC74 /* WBAlias.m */; };
+		1BE6E20E0DBCE1A300ABAC74 /* WBAlias.h in Headers */ = {isa = PBXBuildFile; fileRef = 1BE6E20C0DBCE1A300ABAC74 /* WBAlias.h */; };
 		8D15AC2F0486D014006FF6A4 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 089C165FFE840EACC02AAC07 /* InfoPlist.strings */; };
 		9803414407ADC6B00052F203 /* ScriptSuiteIcon.icns in Resources */ = {isa = PBXBuildFile; fileRef = 9803414307ADC6B00052F203 /* ScriptSuiteIcon.icns */; };
 		98057B5907B50A5B00C2D3C7 /* Sdef Editor Help in Resources */ = {isa = PBXBuildFile; fileRef = 98057B2307B50A5B00C2D3C7 /* Sdef Editor Help */; };
@@ -337,6 +340,7 @@
 		1B5FEC8E0BD8E58100F57412 /* SdefXRef.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = SdefXRef.m; sourceTree = "<group>"; };
 		1B73E9CB0CD7965B00FC60B2 /* SdefParserInternal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SdefParserInternal.h; sourceTree = "<group>"; };
 		1B73ECA60CD7A73400FC60B2 /* SdefParserInternal.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SdefParserInternal.m; sourceTree = "<group>"; };
+		1B79542C0DA8FA1F00CC79A4 /* libsxml2.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libsxml2.a; path = usr/lib/libsxml2.a; sourceTree = SHARED_SDK_ROOT; };
 		1B877C980D37DDFD007A59B5 /* WBTemplate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WBTemplate.h; sourceTree = "<group>"; };
 		1B877C990D37DDFD007A59B5 /* WBTemplate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WBTemplate.m; sourceTree = "<group>"; };
 		1B877C9A0D37DDFD007A59B5 /* WBTemplateParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WBTemplateParser.h; sourceTree = "<group>"; };
@@ -363,8 +367,6 @@
 		1B877DE40D37E7B1007A59B5 /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = Resources/English.lproj/SdefSymbolBrowser.xib; sourceTree = "<group>"; };
 		1B8A29B90D391CBB001CA319 /* SArchiveKit.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = SArchiveKit.xcodeproj; path = SArchiveKit/SArchiveKit.xcodeproj; sourceTree = SHARED_SOURCES_DIR; };
 		1B8A29C30D391CC9001CA319 /* SUpdaterKit.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = SUpdaterKit.xcodeproj; path = SUpdaterKit/SUpdaterKit.xcodeproj; sourceTree = SHARED_SOURCES_DIR; };
-		1B8AAC6B0D8156F8003E6ECF /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
-		1B8AAC6D0D815704003E6ECF /* libiconv.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libiconv.dylib; path = usr/lib/libiconv.dylib; sourceTree = SDKROOT; };
 		1B8AAC8B0D815721003E6ECF /* Carbon.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Carbon.framework; path = System/Library/Frameworks/Carbon.framework; sourceTree = SDKROOT; };
 		1B8AAC900D815725003E6ECF /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
 		1B8AAC940D815729003E6ECF /* WebKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebKit.framework; path = System/Library/Frameworks/WebKit.framework; sourceTree = SDKROOT; };
@@ -422,6 +424,10 @@
 		1BE6A1E90D37B50A009361FB /* WBForwarding.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WBForwarding.h; sourceTree = "<group>"; };
 		1BE6A1EA0D37B50A009361FB /* WBKeyValueCoding.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WBKeyValueCoding.h; sourceTree = "<group>"; };
 		1BE6A1EB0D37B50A009361FB /* WBSingleton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WBSingleton.h; sourceTree = "<group>"; };
+		1BE6E2060DBCE19600ABAC74 /* WBAliasedApplication.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WBAliasedApplication.h; sourceTree = "<group>"; };
+		1BE6E2070DBCE19600ABAC74 /* WBAliasedApplication.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WBAliasedApplication.m; sourceTree = "<group>"; };
+		1BE6E20B0DBCE1A300ABAC74 /* WBAlias.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WBAlias.m; sourceTree = "<group>"; };
+		1BE6E20C0DBCE1A300ABAC74 /* WBAlias.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WBAlias.h; sourceTree = "<group>"; };
 		2A37F4C4FDCFA73011CA2CEA /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = /System/Library/Frameworks/AppKit.framework; sourceTree = "<absolute>"; };
 		2A37F4C5FDCFA73011CA2CEA /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = /System/Library/Frameworks/Foundation.framework; sourceTree = "<absolute>"; };
 		8D15AC360486D014006FF6A4 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -607,11 +613,10 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				1B8AAC6C0D8156F9003E6ECF /* libz.dylib in Frameworks */,
-				1B8AAC6E0D815704003E6ECF /* libiconv.dylib in Frameworks */,
 				1B8AAC910D815726003E6ECF /* Cocoa.framework in Frameworks */,
 				1B8AAC950D815729003E6ECF /* WebKit.framework in Frameworks */,
 				1B8AAC8C0D815722003E6ECF /* Carbon.framework in Frameworks */,
+				1B79542D0DA8FA1F00CC79A4 /* libsxml2.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -621,8 +626,7 @@
 		1058C7A6FEA54F5311CA2CBB /* Linked Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				1B8AAC6B0D8156F8003E6ECF /* libz.dylib */,
-				1B8AAC6D0D815704003E6ECF /* libiconv.dylib */,
+				1B79542C0DA8FA1F00CC79A4 /* libsxml2.a */,
 				1B8AAC900D815725003E6ECF /* Cocoa.framework */,
 				1B8AAC940D815729003E6ECF /* WebKit.framework */,
 				1B8AAC8B0D815721003E6ECF /* Carbon.framework */,
@@ -767,8 +771,12 @@
 		1BE6A17E0D37B50A009361FB /* Foundation */ = {
 			isa = PBXGroup;
 			children = (
+				1BE6E20C0DBCE1A300ABAC74 /* WBAlias.h */,
+				1BE6E20B0DBCE1A300ABAC74 /* WBAlias.m */,
 				1BE6A1830D37B50A009361FB /* WBApplication.h */,
 				1BE6A1840D37B50A009361FB /* WBApplication.m */,
+				1BE6E2060DBCE19600ABAC74 /* WBAliasedApplication.h */,
+				1BE6E2070DBCE19600ABAC74 /* WBAliasedApplication.m */,
 				1BE6A1870D37B50A009361FB /* WBExtendedTreeNode.h */,
 				1BE6A1880D37B50A009361FB /* WBExtendedTreeNode.m */,
 				1BE6A18F0D37B50A009361FB /* WBTreeNode.h */,
@@ -1309,6 +1317,8 @@
 				1B877D890D37E5BA007A59B5 /* WBTreeNode.h in Headers */,
 				1BA98BD20D7C47EA00941D63 /* WBTableDataSource.h in Headers */,
 				1BA98BD70D7C47F000941D63 /* WBTableView.h in Headers */,
+				1BE6E2080DBCE19600ABAC74 /* WBAliasedApplication.h in Headers */,
+				1BE6E20E0DBCE1A300ABAC74 /* WBAlias.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1343,7 +1353,7 @@
 		2A37F4A9FDCFA73011CA2CEA /* Project object */ = {
 			isa = PBXProject;
 			buildConfigurationList = 98A7CBEC0855010F000D862B /* Build configuration list for PBXProject "Sdef Editor" */;
-			compatibilityVersion = "Xcode 3.0";
+			compatibilityVersion = "Xcode 3.1";
 			hasScannedForEncodings = 1;
 			mainGroup = 2A37F4AAFDCFA73011CA2CEA /* SDef Editor */;
 			projectDirPath = "";
@@ -1596,6 +1606,8 @@
 				1B877D8A0D37E5BA007A59B5 /* WBTreeNode.m in Sources */,
 				1BA98BD30D7C47EA00941D63 /* WBTableDataSource.m in Sources */,
 				1BA98BD60D7C47F000941D63 /* WBTableView.m in Sources */,
+				1BE6E2090DBCE19600ABAC74 /* WBAliasedApplication.m in Sources */,
+				1BE6E20D0DBCE1A300ABAC74 /* WBAlias.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1788,7 +1800,10 @@
 				CURRENT_PROJECT_VERSION = 260;
 				HEADER_SEARCH_PATHS = "$(SHARED_SDK_ROOT)/usr/include/libsxml2";
 				INFOPLIST_FILE = Resources/Info.plist;
-				OTHER_LDFLAGS = "-lsxml2";
+				OTHER_LDFLAGS = (
+					"-lsiconv",
+					"-lsz",
+				);
 				PRODUCT_NAME = "Sdef Editor";
 			};
 			name = Release;
@@ -1799,7 +1814,10 @@
 				CURRENT_PROJECT_VERSION = 260;
 				HEADER_SEARCH_PATHS = "$(SHARED_SDK_ROOT)/usr/include/libsxml2";
 				INFOPLIST_FILE = Resources/Info.plist;
-				OTHER_LDFLAGS = "-lsxml2";
+				OTHER_LDFLAGS = (
+					"-lsiconv",
+					"-lsz",
+				);
 				PRODUCT_NAME = "Sdef Editor";
 			};
 			name = Debug;
@@ -1810,7 +1828,10 @@
 				CURRENT_PROJECT_VERSION = 260;
 				HEADER_SEARCH_PATHS = "$(SHARED_SDK_ROOT)/usr/include/libsxml2";
 				INFOPLIST_FILE = Resources/Info.plist;
-				OTHER_LDFLAGS = "-lsxml2";
+				OTHER_LDFLAGS = (
+					"-lsiconv",
+					"-lsz",
+				);
 				PRODUCT_NAME = "Sdef Editor";
 			};
 			name = Profile;

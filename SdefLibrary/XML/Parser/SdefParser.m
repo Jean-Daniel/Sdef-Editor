@@ -452,11 +452,12 @@ Boolean _SdefElementIsCollection(CFStringRef element) {
     id<SdefXMLObject> child = (id)aChild;
     id<SdefXMLObject> parent = (id)aStruct;
     //  DLog(@"=========== %@ -> %@", parent, child);
-    if (typeWildCard == [child objectType]) {
+    OSType type = [child objectType];
+    if (typeWildCard == type) {
       [(id)child setObject:parent];
-    } else if (kSdefTypeAccessor == [child objectType]) {
+    } else if (kSdefTypeAccessor == type) {
       [(id)parent addXMLAccessor:(NSString *)[(id)child style]];
-    } else if (kSdefTypeIgnore == [child objectType]) {
+    } else if (kSdefTypeIgnore == type) {
       // invalid object. skip
     } else {
       /* Handle xinclude */
@@ -479,7 +480,7 @@ Boolean _SdefElementIsCollection(CFStringRef element) {
       [self sd_addCommentsToObject:child];
       
       /* Check documentation element */
-      if (kSdefDocumentationType == [child objectType]) {
+      if (kSdefDocumentationType == type) {
         sd_docParser = [[SdefDocumentationParser alloc] initWithDocumentation:(id)child];
       }
     }
@@ -513,46 +514,6 @@ Boolean _SdefElementIsCollection(CFStringRef element) {
 }
 
 @end
-
-#pragma mark -
-#pragma mark Core Foundation Parser
-//void *SdefParserCreateStructure(CFXMLParserRef parser, CFXMLNodeRef node, void *info) {
-//  if (CFXMLNodeGetTypeCode(node) == kCFXMLNodeTypeDocument) {
-//    // handle start document
-//    return @"__document__";
-//  }
-//  
-//  SdefParser *delegate = info;
-//  return [delegate parser:parser createStructureForNode:node];
-//}
-//
-//void SdefParserAddChild(CFXMLParserRef parser, void *parent, void *child, void *info) {
-//  SdefParser *delegate = info;
-//  if (![(id)parent isEqual:@"__document__"]) {
-//    [delegate parser:parser addChild:child toStructure:parent];
-//  } else {
-//    [delegate parser:parser addChild:child toStructure:nil];
-//  }
-//}
-//
-//void SdefParserEndStructure(CFXMLParserRef parser, void *node, void *info) {
-//  if (![(id)node isEqual:@"__document__"]) {
-//    SdefParser *delegate = info;
-//    [delegate parser:parser endStructure:node];
-//  } else {
-//    // handle end of document
-//  }
-//}
-//
-//CFDataRef SdefParserResolveExternalEntity(CFXMLParserRef parser, CFXMLExternalID *extID, void *info) {
-//  ShadowCTrace();
-//  return NULL;
-//}
-///* if handleError returns true, the parser will attempt to recover */
-//Boolean SdefParserHandleError(CFXMLParserRef parser, CFXMLParserStatusCode error, void *info) {
-//  SdefParser *delegate = info;
-//  return [delegate parser:parser handleError:error];
-//}
 
 #pragma mark -
 #pragma mark Panther Support
@@ -782,6 +743,12 @@ void _SdefParserPostProcessObjects(NSArray *roots, SdefVersion version) {
 
 + (SdefObjectType)objectType {
   return kSdefTypeIgnore;
+}
+
+- (void)addXMLChild:(NSObject<SdefObject> *)node { 
+  DLog(@"Ignore add '%@' to invalid element '%@'.", 
+       [node respondsToSelector:@selector(xmlElementName)] ? [(id)node xmlElementName] : [node name],
+       [self xmlElementName]);
 }
 
 @end

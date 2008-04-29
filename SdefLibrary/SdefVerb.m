@@ -76,6 +76,9 @@
   sd_soFlags.xrefs = 1;
 }
 
+- (BOOL)hasResult {
+  return sd_result != nil;
+}
 - (SdefResult *)result {
   if (!sd_result) {
     sd_result = [[SdefResult alloc] init];
@@ -92,6 +95,9 @@
   }
 }
 
+- (BOOL)hasDirectParameter {
+  return sd_direct != nil;
+}
 - (SdefDirectParameter *)directParameter {
   if (!sd_direct) {
     sd_direct = [[SdefDirectParameter alloc] init];

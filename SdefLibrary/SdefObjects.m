@@ -568,8 +568,16 @@
 }
 
 - (NSString *)location {
+  NSString *owner = [sd_owner name];
   NSString *loc = [sd_owner location];
-  return loc ? [loc stringByAppendingFormat:@"->%@", [self objectTypeName]] : [self objectTypeName];
+  if (loc && owner) {
+    return [loc stringByAppendingFormat:@":%@->%@", owner, [self objectTypeName]];
+  } else if (loc) {
+    return [loc stringByAppendingFormat:@"->%@", [self objectTypeName]];
+  } else if (owner) {
+    return [owner stringByAppendingFormat:@"->%@", [self objectTypeName]];
+  } 
+  return [self objectTypeName];
 }
 
 - (SdefObject *)container {

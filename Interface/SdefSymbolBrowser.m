@@ -223,12 +223,16 @@ BOOL SdefSearchFilter(NSString *search, SdefObject *object, void *ctxt) {
   items = [[aSuite commands] childEnumerator];
   while (verb = [items nextObject]) {
     [symbols addObject:verb];
-    [symbols addObjects:[verb children]];
+    if ([verb hasChildren]) [symbols addObjects:[verb children]];
+//    if ([verb hasDirectParameter]) [symbols addObject:[verb directParameter]];
+//    if ([verb hasResult] && [[verb result] type]) [symbols addObject:[verb result]];
   }
   items = [[aSuite events] childEnumerator];
   while (verb = [items nextObject]) {
     [symbols addObject:verb];
-    [symbols addObjects:[verb children]];
+    if ([verb hasChildren]) [symbols addObjects:[verb children]];
+//    if ([verb hasDirectParameter]) [symbols addObject:[verb directParameter]];
+//    if ([verb hasResult] && [[verb result] type]) [symbols addObject:[verb result]];
   }
   [symbols rearrangeObjects];
 }

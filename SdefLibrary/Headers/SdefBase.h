@@ -30,9 +30,6 @@ enum {
   /* Value */
   kSdefValueType           = 'Valu',
   kSdefRecordType          = 'Reco',
-  /* Misc */
-  kSdefCocoaType           = 'Coco',
-  kSdefDocumentationType   = 'Docu',
 };
 typedef OSType SdefObjectType;
 

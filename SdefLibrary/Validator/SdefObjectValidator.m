@@ -235,7 +235,8 @@ BOOL SdefValidatorCheckCode(NSString *code) {
       SdefClassManager *manager = [self classManager];
       while (count-- > 0) {
         SdefType *type = [sd_types objectAtIndex:count];
-        if (![SdefClassManager isBaseType:[type name]] && ![manager typeWithName:[type name]])
+        [type validate:messages forVersion:vers];
+        if ([type name] && ![SdefClassManager isBaseType:[type name]] && ![manager typeWithName:[type name]])
           [messages addObject:[SdefValidatorItem warningItemWithNode:self
                                                              message:@"unknown type '%@'", [type name]]];
       }

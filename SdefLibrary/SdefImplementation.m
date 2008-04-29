@@ -93,6 +93,14 @@
   }
 }
 
+- (BOOL)insertAtBeginning {
+  return sd_slFlags.beginning;
+}
+
+- (void)setInsertAtBeginning:(BOOL)flag {
+  WBFlagSet(sd_slFlags.beginning, flag);
+}
+
 #pragma mark Value
 - (id)value {
   return sd_value;

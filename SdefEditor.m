@@ -41,7 +41,7 @@ int main(int argc, const char *argv[]) {
 
 NSString * const ScriptingDefinitionFileType = @"ScriptingDefinition";
 NSString * const ScriptingDefinitionFileUTI = @"com.apple.scripting-definition";
-;
+
 const OSType kScriptingDefinitionHFSType = 'Sdef';
 NSString * const CocoaSuiteDefinitionFileType = @"AppleScriptSuiteDefinition";
 const OSType kCocoaSuiteDefinitionHFSType = 'ScSu';

@@ -10,12 +10,15 @@
 
 /* Leaves types */
 enum {
-  kSdefTypeAtomType = 'Type',
-  kSdefSynonymType = 'Syno',
-  kSdefCommentType = 'Cmnt',
-  kSdefXrefType = 'Xref',
+  kSdefTypeAtomType      = 'Type',
+  kSdefSynonymType       = 'Syno',
+  kSdefCommentType       = 'Cmnt',
+  kSdefXrefType          = 'Xref',
   /* XInclude */
-  kSdefXIncludeType = 'XInc',
+  kSdefXIncludeType      = 'XInc',
+  
+  kSdefCocoaType         = 'Coco',
+  kSdefDocumentationType = 'Docu',
 };
 
 @interface SdefLeaf : NSObject <SdefObject, NSCopying, NSCoding> {
@@ -29,7 +32,8 @@ enum {
     unsigned int hidden:1;
     unsigned int xinclude:1;
     unsigned int editable:1;
-    unsigned int reserved:3;
+    unsigned int beginning:1; // for cocoa elements
+    unsigned int reserved:2;
   } sd_slFlags;
 }
 

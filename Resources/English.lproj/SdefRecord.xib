@@ -2,12 +2,13 @@
 <archive type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="7.02">
 	<data>
 		<int key="IBDocument.SystemTarget">1040</int>
-		<string key="IBDocument.SystemVersion">9C31</string>
-		<string key="IBDocument.InterfaceBuilderVersion">644</string>
+		<string key="IBDocument.SystemVersion">9C7010</string>
+		<string key="IBDocument.InterfaceBuilderVersion">649</string>
 		<string key="IBDocument.AppKitVersion">949.26</string>
 		<string key="IBDocument.HIToolboxVersion">352.00</string>
 		<object class="NSMutableArray" key="IBDocument.EditedObjectIDs">
 			<bool key="EncodedWithXMLCoder">YES</bool>
+			<integer value="44"/>
 		</object>
 		<object class="NSArray" key="IBDocument.PluginDependencies">
 			<bool key="EncodedWithXMLCoder">YES</bool>
@@ -25,7 +26,7 @@
 				<string key="NSClassName">NSApplication</string>
 			</object>
 			<object class="NSCustomView" id="937716270">
-				<nil key="NSNextResponder"/>
+				<reference key="NSNextResponder"/>
 				<int key="NSvFlags">274</int>
 				<object class="NSMutableArray" key="NSSubviews">
 					<bool key="EncodedWithXMLCoder">YES</bool>
@@ -109,7 +110,7 @@
 										<object class="NSBox" id="270216412">
 											<reference key="NSNextResponder" ref="123143914"/>
 											<int key="NSvFlags">266</int>
-											<string key="NSFrame">{{110, 234}, {367, 5}}</string>
+											<string key="NSFrame">{{110, 234}, {382, 5}}</string>
 											<reference key="NSSuperview" ref="123143914"/>
 											<string key="NSOffsets">{0, 0}</string>
 											<object class="NSTextFieldCell" key="NSTitleCell">
@@ -196,7 +197,7 @@
 										<object class="NSTextField" id="757190772">
 											<reference key="NSNextResponder" ref="123143914"/>
 											<int key="NSvFlags">266</int>
-											<string key="NSFrame">{{110, 327}, {367, 19}}</string>
+											<string key="NSFrame">{{110, 327}, {382, 19}}</string>
 											<reference key="NSSuperview" ref="123143914"/>
 											<bool key="NSEnabled">YES</bool>
 											<object class="NSTextFieldCell" key="NSCell" id="141087376">
@@ -229,7 +230,7 @@
 										<object class="NSTextField" id="1013985039">
 											<reference key="NSNextResponder" ref="123143914"/>
 											<int key="NSvFlags">266</int>
-											<string key="NSFrame">{{110, 245}, {367, 47}}</string>
+											<string key="NSFrame">{{110, 245}, {382, 47}}</string>
 											<reference key="NSSuperview" ref="123143914"/>
 											<bool key="NSEnabled">YES</bool>
 											<object class="NSTextFieldCell" key="NSCell" id="61215168">
@@ -246,7 +247,7 @@
 										<object class="NSTextField" id="1015168454">
 											<reference key="NSNextResponder" ref="123143914"/>
 											<int key="NSvFlags">266</int>
-											<string key="NSFrame">{{110, 209}, {367, 19}}</string>
+											<string key="NSFrame">{{110, 209}, {382, 19}}</string>
 											<reference key="NSSuperview" ref="123143914"/>
 											<bool key="NSEnabled">YES</bool>
 											<object class="NSTextFieldCell" key="NSCell" id="420864599">
@@ -648,7 +649,7 @@
 										<object class="NSTextField" id="275415876">
 											<reference key="NSNextResponder" ref="797452739"/>
 											<int key="NSvFlags">290</int>
-											<string key="NSFrame">{{110, 146}, {367, 19}}</string>
+											<string key="NSFrame">{{110, 146}, {382, 19}}</string>
 											<reference key="NSSuperview" ref="797452739"/>
 											<bool key="NSEnabled">YES</bool>
 											<object class="NSTextFieldCell" key="NSCell" id="689185575">
@@ -665,7 +666,7 @@
 										<object class="NSTextField" id="987681860">
 											<reference key="NSNextResponder" ref="797452739"/>
 											<int key="NSvFlags">290</int>
-											<string key="NSFrame">{{110, 53}, {367, 33}}</string>
+											<string key="NSFrame">{{110, 53}, {382, 33}}</string>
 											<reference key="NSSuperview" ref="797452739"/>
 											<bool key="NSEnabled">YES</bool>
 											<object class="NSTextFieldCell" key="NSCell" id="861478709">
@@ -719,7 +720,7 @@
 										<object class="NSBox" id="292544449">
 											<reference key="NSNextResponder" ref="797452739"/>
 											<int key="NSvFlags">290</int>
-											<string key="NSFrame">{{110, 42}, {367, 5}}</string>
+											<string key="NSFrame">{{110, 42}, {382, 5}}</string>
 											<reference key="NSSuperview" ref="797452739"/>
 											<string key="NSOffsets">{0, 0}</string>
 											<object class="NSTextFieldCell" key="NSTitleCell">
@@ -806,7 +807,7 @@
 										<object class="NSTextField" id="770305446">
 											<reference key="NSNextResponder" ref="797452739"/>
 											<int key="NSvFlags">290</int>
-											<string key="NSFrame">{{110, 17}, {367, 19}}</string>
+											<string key="NSFrame">{{110, 17}, {382, 19}}</string>
 											<reference key="NSSuperview" ref="797452739"/>
 											<bool key="NSEnabled">YES</bool>
 											<object class="NSTextFieldCell" key="NSCell" id="149799902">
@@ -1076,6 +1077,7 @@
 					</object>
 				</object>
 				<string key="NSFrameSize">{532, 413}</string>
+				<reference key="NSSuperview"/>
 				<string key="NSClassName">NSView</string>
 				<string key="NSExtension">NSResponder</string>
 			</object>
@@ -2776,7 +2778,6 @@
 					<string>5.IBEditorWindowLastContentRect</string>
 					<string>5.IBPluginDependency</string>
 					<string>5.ImportedFromIB2</string>
-					<string>5.lastResizeAction</string>
 					<string>57.IBPluginDependency</string>
 					<string>57.ImportedFromIB2</string>
 				</object>
@@ -2910,22 +2911,9 @@
 					<reference ref="5"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<reference ref="5"/>
-					<string>{{119, 317}, {532, 413}}</string>
+					<string>{{64, 317}, {532, 413}}</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<reference ref="5"/>
-					<object class="NSDictionary">
-						<bool key="EncodedWithXMLCoder">YES</bool>
-						<object class="NSMutableArray" key="dict.sortedKeys">
-							<bool key="EncodedWithXMLCoder">YES</bool>
-							<string>IBResizeActionFinalFrame</string>
-							<string>IBResizeActionInitialFrame</string>
-						</object>
-						<object class="NSMutableArray" key="dict.values">
-							<bool key="EncodedWithXMLCoder">YES</bool>
-							<string>{{119, 317}, {532, 413}}</string>
-							<string>{{119, 317}, {532, 413}}</string>
-						</object>
-					</object>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<reference ref="5"/>
 				</object>

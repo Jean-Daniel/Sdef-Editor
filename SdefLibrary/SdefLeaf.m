@@ -121,7 +121,13 @@
       return NSLocalizedStringFromTable(@"XML Comment", @"SdefLibrary", @"Object Type Name.");
       break;
     case kSdefXrefType:
-      return NSLocalizedStringFromTable(@"Xref", @"SdefLibrary", @"Object Type Name.");
+      return NSLocalizedStringFromTable(@"xref", @"SdefLibrary", @"Object Type Name.");
+    case kSdefXIncludeType:
+      return NSLocalizedStringFromTable(@"xinclude", @"SdefLibrary", @"Object Type Name.");
+    case kSdefCocoaType:
+      return NSLocalizedStringFromTable(@"Cocoa", @"SdefLibrary", @"Object Type Name.");
+    case kSdefDocumentationType:
+      return NSLocalizedStringFromTable(@"Documentation", @"SdefLibrary", @"Object Type Name.");
   }
   return nil;
 }
@@ -140,8 +146,16 @@
 }
 
 - (NSString *)location {
+  NSString *owner = [sd_owner name];
   NSString *loc = [sd_owner location];
-  return loc ? [loc stringByAppendingFormat:@"->%@", [self objectTypeName]] : [self objectTypeName];
+  if (loc && owner) {
+    return [loc stringByAppendingFormat:@":%@->%@", owner, [self objectTypeName]];
+  } else if (loc) {
+    return [loc stringByAppendingFormat:@"->%@", [self objectTypeName]];
+  } else if (owner) {
+    return [owner stringByAppendingFormat:@"->%@", [self objectTypeName]];
+  } 
+  return [self objectTypeName];
 }
 
 - (SdefObject *)container {

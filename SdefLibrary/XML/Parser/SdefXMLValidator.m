@@ -208,7 +208,7 @@ CFMutableDictionaryRef sValidators = NULL;
     
     /* type */
     elt = [[SdefBaseXMLElement alloc] init];
-    [elt setAttributes:CFSTR("type"), CFSTR("list"), nil];
+    [elt setAttributes:CFSTR("type"), CFSTR("list"), CFSTR("hidden"), nil]; // hidden is in man but not in DTD & iChat uses it.
     CFDictionarySetValue(sValidators, CFSTR("type"), elt);
     [elt release];
     
@@ -493,7 +493,8 @@ CFMutableDictionaryRef sValidators = NULL;
   /* type-values appear in Leopard */
   if (CFEqual(attribute, CFSTR("boolean-value")) || 
       CFEqual(attribute, CFSTR("integer-value")) ||
-      CFEqual(attribute, CFSTR("string-value"))) {
+      CFEqual(attribute, CFSTR("string-value")) ||
+      CFEqual(attribute, CFSTR("insert-at-beginning"))) {
     return kSdefParserVersionLeopard;
   }
   return [super acceptAttribute:attribute value:value];
@@ -535,7 +536,8 @@ CFMutableDictionaryRef sValidators = NULL;
   if (CFEqual(attribute, CFSTR("command"))) {
     return kSdefParserVersionLeopard;
   } else if (CFEqual(attribute, CFSTR("name"))) {
-    return kSdefParserVersionPanther | kSdefParserVersionTiger;
+    /* name is tolerate by leopard */
+    return kSdefParserVersionPanther | kSdefParserVersionTiger | kSdefParserVersionLeopard;
   } 
   return [super acceptAttribute:attribute value:value];
 }

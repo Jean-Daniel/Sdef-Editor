@@ -32,6 +32,9 @@
   if (![self name]) {
     [messages addObject:[self invalidValue:nil forAttribute:@"name"]];
   }
+  if ([self isHidden] && vers < kSdefLeopardVersion)
+    [messages addObject:[self versionRequired:kSdefLeopardVersion forAttribute:@"hidden"]];
+  
   [super validate:messages forVersion:vers];
 }
 
@@ -56,7 +59,7 @@
     [messages addObject:[SdefValidatorItem errorItemWithNode:self
                                                      message:@"at least one of 'name' and 'code' is required"]];
   }
-  if (![self code] && !SdefValidatorCheckCode([self code])) {
+  if ([self code] && !SdefValidatorCheckCode([self code])) {
     [messages addObject:[self invalidValue:[self code] forAttribute:@"code"]];
   }
   [super validate:messages forVersion:vers];
@@ -70,6 +73,8 @@
   if (vers < kSdefLeopardVersion) {
     if ([self valueType] != kSdefValueTypeNone)
       [messages addObject:[self versionRequired:kSdefLeopardVersion forAttribute:@"*-value"]];
+    if ([self insertAtBeginning])
+      [messages addObject:[self versionRequired:kSdefLeopardVersion forAttribute:@"insert-at-beginning"]];
   } else {
     switch ([self valueType]) {
       case kSdefValueTypeString:

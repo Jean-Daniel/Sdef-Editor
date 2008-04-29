@@ -197,11 +197,6 @@ NSImage *SdefImageNamed(NSString *name) {
       return NSLocalizedStringFromTable(@"Value", @"SdefLibrary", @"Object Type Name.");
     case kSdefRecordType:
       return NSLocalizedStringFromTable(@"Record", @"SdefLibrary", @"Object Type Name.");
-      /* Misc */
-    case kSdefCocoaType:
-      return NSLocalizedStringFromTable(@"Cocoa", @"SdefLibrary", @"Object Type Name.");
-    case kSdefDocumentationType:
-      return NSLocalizedStringFromTable(@"Documentation", @"SdefLibrary", @"Object Type Name.");
   }
   return nil;
 }
