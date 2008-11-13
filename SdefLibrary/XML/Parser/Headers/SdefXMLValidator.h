@@ -12,21 +12,27 @@ enum {
   kSdefParserVersionTiger   = 1 << 1,
   kSdefParserVersionLeopard = 1 << 2,
   kSdefParserVersionAll     = kSdefParserVersionPanther | kSdefParserVersionTiger | kSdefParserVersionLeopard,
+  kSdefValidatorVersionMask = 0x00ff,
+  
+  kSdefValidatorElementError   = 1 << 8,
+  kSdefValidatorAttributeError = 2 << 8,
+  kSdefValidatorErrorMask = 0xff00,
 };
-typedef NSUInteger SdefParserVersion;
+typedef NSUInteger SdefValidatorResult;
+typedef NSUInteger SdefValidatorVersion;
 
 @interface SdefXMLValidator : NSObject {
   @private
   CFMutableArrayRef sd_stack;
-  SdefParserVersion sd_version;
+  SdefValidatorVersion sd_version;
 }
 
-- (SdefParserVersion)version;
+- (SdefValidatorVersion)version;
 
 - (CFStringRef)element;
 - (void)startElement:(CFStringRef)element;
 - (void)endElement:(CFStringRef)element;
 
-- (SdefParserVersion)validateElement:(CFStringRef)element attributes:(CFDictionaryRef)attributes error:(NSString **)error;
+- (SdefValidatorResult)validateElement:(CFStringRef)element attributes:(CFDictionaryRef)attributes error:(NSString **)error;
 
 @end

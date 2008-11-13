@@ -329,10 +329,6 @@
 
 /* Begin PBXFileReference section */
 		089C1660FE840EACC02AAC07 /* English */ = {isa = PBXFileReference; fileEncoding = 10; lastKnownFileType = text.plist.strings; name = English; path = English.lproj/InfoPlist.strings; sourceTree = "<group>"; };
-		1B413B0E0CBE17790010365F /* Common.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = Common.xcconfig; sourceTree = "<group>"; };
-		1B413B0F0CBE17790010365F /* Debug.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = Debug.xcconfig; sourceTree = "<group>"; };
-		1B413B100CBE17790010365F /* Profile.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = Profile.xcconfig; sourceTree = "<group>"; };
-		1B413B110CBE17790010365F /* Release.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = Release.xcconfig; sourceTree = "<group>"; };
 		1B5ECF310CD62725007B8226 /* XInclude.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = XInclude.tiff; sourceTree = "<group>"; };
 		1B5ECF4F0CD62807007B8226 /* SdefXIncludeView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SdefXIncludeView.h; path = ../SdefXIncludeView.h; sourceTree = "<group>"; };
 		1B5ECF500CD62807007B8226 /* SdefXIncludeView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SdefXIncludeView.m; sourceTree = "<group>"; };
@@ -428,9 +424,14 @@
 		1BE6E2070DBCE19600ABAC74 /* WBAliasedApplication.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WBAliasedApplication.m; sourceTree = "<group>"; };
 		1BE6E20B0DBCE1A300ABAC74 /* WBAlias.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WBAlias.m; sourceTree = "<group>"; };
 		1BE6E20C0DBCE1A300ABAC74 /* WBAlias.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WBAlias.h; sourceTree = "<group>"; };
+		1BEC0E350ECC9D15003E0F22 /* Configuration.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = Configuration.xcconfig; sourceTree = "<group>"; };
+		1BEC0E3D0ECC9D15003E0F22 /* Tiger-Debug.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = "Tiger-Debug.xcconfig"; sourceTree = "<group>"; };
+		1BEC0E3E0ECC9D15003E0F22 /* Tiger-Profile.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = "Tiger-Profile.xcconfig"; sourceTree = "<group>"; };
+		1BEC0E3F0ECC9D15003E0F22 /* Tiger-Release.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = "Tiger-Release.xcconfig"; sourceTree = "<group>"; };
+		1BEC0F150ECC9DD6003E0F22 /* SharedPrefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SharedPrefix.pch; sourceTree = "<group>"; };
 		2A37F4C4FDCFA73011CA2CEA /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = /System/Library/Frameworks/AppKit.framework; sourceTree = "<absolute>"; };
 		2A37F4C5FDCFA73011CA2CEA /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = /System/Library/Frameworks/Foundation.framework; sourceTree = "<absolute>"; };
-		8D15AC360486D014006FF6A4 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = Info.plist; sourceTree = "<group>"; };
+		8D15AC360486D014006FF6A4 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		8D15AC370486D014006FF6A4 /* Sdef Editor.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Sdef Editor.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		9803414307ADC6B00052F203 /* ScriptSuiteIcon.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = ScriptSuiteIcon.icns; sourceTree = "<group>"; };
 		98057B2307B50A5B00C2D3C7 /* Sdef Editor Help */ = {isa = PBXFileReference; lastKnownFileType = folder; name = "Sdef Editor Help"; path = "Misc/Sdef Editor Help"; sourceTree = SOURCE_ROOT; };
@@ -613,10 +614,10 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1B79542D0DA8FA1F00CC79A4 /* libsxml2.a in Frameworks */,
 				1B8AAC910D815726003E6ECF /* Cocoa.framework in Frameworks */,
 				1B8AAC950D815729003E6ECF /* WebKit.framework in Frameworks */,
 				1B8AAC8C0D815722003E6ECF /* Carbon.framework in Frameworks */,
-				1B79542D0DA8FA1F00CC79A4 /* libsxml2.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -651,17 +652,6 @@
 			);
 			name = Products;
 			sourceTree = "<group>";
-		};
-		1B413B0D0CBE17790010365F /* Configurations */ = {
-			isa = PBXGroup;
-			children = (
-				1B413B0F0CBE17790010365F /* Debug.xcconfig */,
-				1B413B100CBE17790010365F /* Profile.xcconfig */,
-				1B413B110CBE17790010365F /* Release.xcconfig */,
-				1B413B0E0CBE17790010365F /* Common.xcconfig */,
-			);
-			path = Configurations;
-			sourceTree = SHARED_SOURCES_DIR;
 		};
 		1B877C970D37DDFD007A59B5 /* Templates */ = {
 			isa = PBXGroup;
@@ -718,21 +708,6 @@
 			);
 			name = Products;
 			sourceTree = "<group>";
-		};
-		1BE6A13B0D37B50A009361FB /* WonderBox */ = {
-			isa = PBXGroup;
-			children = (
-				1BE6A1690D37B50A009361FB /* Core */,
-				1BE6A1E70D37B50A009361FB /* Macros */,
-				1BE6A13C0D37B50A009361FB /* AppKit */,
-				1B877D270D37E4F1007A59B5 /* Interface */,
-				1BE6A1930D37B50A009361FB /* Functions */,
-				1BE6A17E0D37B50A009361FB /* Foundation */,
-				1B877C970D37DDFD007A59B5 /* Templates */,
-			);
-			name = WonderBox;
-			path = Sources;
-			sourceTree = SHADOWKIT_ROOT;
 		};
 		1BE6A13C0D37B50A009361FB /* AppKit */ = {
 			isa = PBXGroup;
@@ -813,15 +788,49 @@
 			path = Macros;
 			sourceTree = "<group>";
 		};
+		1BEC0E250ECC9D15003E0F22 /* WonderBox */ = {
+			isa = PBXGroup;
+			children = (
+				1BEC0F150ECC9DD6003E0F22 /* SharedPrefix.pch */,
+				1BEC0E2B0ECC9D15003E0F22 /* Sources */,
+				1BEC0E2F0ECC9D15003E0F22 /* xcconfigs */,
+			);
+			path = WonderBox;
+			sourceTree = "<group>";
+		};
+		1BEC0E2B0ECC9D15003E0F22 /* Sources */ = {
+			isa = PBXGroup;
+			children = (
+				1BE6A1690D37B50A009361FB /* Core */,
+				1BE6A1E70D37B50A009361FB /* Macros */,
+				1BE6A13C0D37B50A009361FB /* AppKit */,
+				1B877D270D37E4F1007A59B5 /* Interface */,
+				1BE6A1930D37B50A009361FB /* Functions */,
+				1BE6A17E0D37B50A009361FB /* Foundation */,
+				1B877C970D37DDFD007A59B5 /* Templates */,
+			);
+			path = Sources;
+			sourceTree = WONDERBOX_ROOT;
+		};
+		1BEC0E2F0ECC9D15003E0F22 /* xcconfigs */ = {
+			isa = PBXGroup;
+			children = (
+				1BEC0E350ECC9D15003E0F22 /* Configuration.xcconfig */,
+				1BEC0E3D0ECC9D15003E0F22 /* Tiger-Debug.xcconfig */,
+				1BEC0E3E0ECC9D15003E0F22 /* Tiger-Profile.xcconfig */,
+				1BEC0E3F0ECC9D15003E0F22 /* Tiger-Release.xcconfig */,
+			);
+			path = xcconfigs;
+			sourceTree = "<group>";
+		};
 		2A37F4AAFDCFA73011CA2CEA /* SDef Editor */ = {
 			isa = PBXGroup;
 			children = (
 				2A37F4ABFDCFA73011CA2CEA /* Sources */,
-				1BE6A13B0D37B50A009361FB /* WonderBox */,
 				2A37F4B8FDCFA73011CA2CEA /* Resources */,
 				2A37F4C3FDCFA73011CA2CEA /* Frameworks */,
 				19C28FB0FE9D524F11CA2CBB /* Products */,
-				1B413B0D0CBE17790010365F /* Configurations */,
+				1BEC0E250ECC9D15003E0F22 /* WonderBox */,
 				1B8A29B90D391CBB001CA319 /* SArchiveKit.xcodeproj */,
 				1B8A29C30D391CC9001CA319 /* SUpdaterKit.xcodeproj */,
 			);
@@ -1331,7 +1340,6 @@
 			buildPhases = (
 				984A8C4F07DB29CB00591F7A /* Headers */,
 				98F940A407F888FB0014708A /* Copy Templates */,
-				1B8A29AD0D391C13001CA319 /* Run Symlink frameworks */,
 				8D15AC2B0486D014006FF6A4 /* Resources */,
 				1B8A29B80D391CAA001CA319 /* Copy Frameworks */,
 				8D15AC300486D014006FF6A4 /* Sources */,
@@ -1475,27 +1483,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
-
-/* Begin PBXShellScriptBuildPhase section */
-		1B8A29AD0D391C13001CA319 /* Run Symlink frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-				"$(SHARED_SOURCES_DIR)/SArchiveKit/build/$(CONFIGURATION)/SArchiveKit.framework",
-				"$(SHARED_SOURCES_DIR)/SUpdaterKit/build/$(CONFIGURATION)/SUpdaterKit.framework",
-			);
-			name = "Run Symlink frameworks";
-			outputPaths = (
-				"$(CONFIGURATION_BUILD_DIR)/SArchiveKit.framework",
-				"$(CONFIGURATION_BUILD_DIR)/SUpdaterKit.framework",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/tcsh;
-			shellScript = "if (! -e \"${CONFIGURATION_BUILD_DIR}/SArchiveKit.framework\") then\nln -s \"${SHARED_SOURCES_DIR}/SArchiveKit/build/${CONFIGURATION}/SArchiveKit.framework\" \"${CONFIGURATION_BUILD_DIR}\"\nendif\n\nif (! -e \"${CONFIGURATION_BUILD_DIR}/SUpdaterKit.framework\") then\nln -s \"${SHARED_SOURCES_DIR}/SUpdaterKit/build/${CONFIGURATION}/SUpdaterKit.framework\" \"${CONFIGURATION_BUILD_DIR}\"\nendif";
-		};
-/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		8D15AC300486D014006FF6A4 /* Sources */ = {
@@ -1788,7 +1775,7 @@
 /* Begin XCBuildConfiguration section */
 		85B7BC3A0BD62AED00632EE6 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 1B413B110CBE17790010365F /* Release.xcconfig */;
+			baseConfigurationReference = 1BEC0E3F0ECC9D15003E0F22 /* Tiger-Release.xcconfig */;
 			buildSettings = {
 				WONDERBOX = "";
 			};
@@ -1797,9 +1784,13 @@
 		85B7BC3B0BD62AED00632EE6 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CURRENT_PROJECT_VERSION = 265;
+				CURRENT_PROJECT_VERSION = 266;
 				HEADER_SEARCH_PATHS = "$(SHARED_SDK_ROOT)/usr/include/libsxml2";
 				INFOPLIST_FILE = Resources/Info.plist;
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/../../Shared/sdk/MacOSX10.5.sdk/usr/lib\"",
+				);
 				OTHER_LDFLAGS = (
 					"-lsiconv",
 					"-lsz",
@@ -1811,9 +1802,13 @@
 		98A7CBE70855010F000D862B /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CURRENT_PROJECT_VERSION = 265;
+				CURRENT_PROJECT_VERSION = 266;
 				HEADER_SEARCH_PATHS = "$(SHARED_SDK_ROOT)/usr/include/libsxml2";
 				INFOPLIST_FILE = Resources/Info.plist;
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/../../Shared/sdk/MacOSX10.5.sdk/usr/lib\"",
+				);
 				OTHER_LDFLAGS = (
 					"-lsiconv",
 					"-lsz",
@@ -1825,9 +1820,13 @@
 		98A7CBE80855010F000D862B /* Profile */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CURRENT_PROJECT_VERSION = 265;
+				CURRENT_PROJECT_VERSION = 266;
 				HEADER_SEARCH_PATHS = "$(SHARED_SDK_ROOT)/usr/include/libsxml2";
 				INFOPLIST_FILE = Resources/Info.plist;
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/../../Shared/sdk/MacOSX10.5.sdk/usr/lib\"",
+				);
 				OTHER_LDFLAGS = (
 					"-lsiconv",
 					"-lsz",
@@ -1838,7 +1837,7 @@
 		};
 		98A7CBED0855010F000D862B /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 1B413B0F0CBE17790010365F /* Debug.xcconfig */;
+			baseConfigurationReference = 1BEC0E3D0ECC9D15003E0F22 /* Tiger-Debug.xcconfig */;
 			buildSettings = {
 				WONDERBOX = "";
 			};
@@ -1846,7 +1845,7 @@
 		};
 		98A7CBEE0855010F000D862B /* Profile */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 1B413B100CBE17790010365F /* Profile.xcconfig */;
+			baseConfigurationReference = 1BEC0E3E0ECC9D15003E0F22 /* Tiger-Profile.xcconfig */;
 			buildSettings = {
 				WONDERBOX = "";
 			};

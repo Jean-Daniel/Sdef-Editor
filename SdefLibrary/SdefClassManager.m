@@ -36,22 +36,24 @@ static NSArray *gSortByName = nil;
   static NSArray *types;
   if (nil == types) {
     types = [[NSArray allocWithZone:NSDefaultMallocZone()] initWithObjects:
-      @"any",
-      @"boolean",
-      @"date",
-      @"file",
-      @"integer",
-      @"location specifier",
-      @"missing value",
-      @"number",
-      @"specifier",
-      @"point",
-      @"real",
-      @"record",
-      @"rectangle",
-      @"text",
-      @"type",
-      nil];
+             @"any",
+             @"alias",
+             @"boolean",
+             @"date",
+             @"double integer",
+             @"file",
+             @"integer",
+             @"location specifier",
+             @"missing value",
+             @"number",
+             @"specifier",
+             @"point",
+             @"real",
+             @"record",
+             @"rectangle",
+             @"text",
+             @"type",
+             nil];
   }
   return types;
 }
@@ -469,14 +471,17 @@ static NSArray *gSortByName = nil;
     case typeSInt16:
     case typeSInt32:
     case typeUInt32:
-    case typeSInt64:
       return @"integer";
+    case typeSInt64:
+    case typeUInt64:
+      return @"double integer";
     case typeIEEE32BitFloatingPoint:
     case typeIEEE64BitFloatingPoint:
       return @"real";
     case typeWildCard:
       return @"any";
     case typeAlias:
+      return @"alias";
 #if __LP64__
     case 'fss ':
 #else
@@ -512,7 +517,7 @@ static NSArray *gSortByName = nil;
   NSEnumerator *verbs = [[[self events] arrayByAddingObjectsFromArray:[self commands]] objectEnumerator];
   while (verb = [verbs nextObject]) {
     if (SdefTypeStringEqual(aCode, [verb code])) {
-     if (!suiteCode || SdefTypeStringEqual(suiteCode, [[verb suite] code])) {
+      if (!suiteCode || SdefTypeStringEqual(suiteCode, [[verb suite] code])) {
         return verb;
       }
     }

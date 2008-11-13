@@ -11,8 +11,8 @@
 @interface SdefXMLElement : NSObject {
 }
 
-- (SdefParserVersion)acceptAttribute:(CFStringRef)attribute value:(CFStringRef)value;
-- (SdefParserVersion)acceptElement:(CFStringRef)element;
+- (SdefValidatorVersion)acceptAttribute:(CFStringRef)attribute value:(CFStringRef)value;
+- (SdefValidatorVersion)acceptElement:(CFStringRef)element;
 
 - (void)setElements:(CFStringRef)element, ...;
 - (void)setAttributes:(CFStringRef)attribute, ...;
@@ -290,7 +290,7 @@ CFMutableDictionaryRef sValidators = NULL;
   [super dealloc];
 }
 
-- (SdefParserVersion)version {
+- (SdefValidatorVersion)version {
   return sd_version;
 }
 
@@ -307,7 +307,7 @@ CFMutableDictionaryRef sValidators = NULL;
 - (void)endElement:(CFStringRef)element {
   CFStringRef last = [self element];
   if (!last || !CFEqual(element, last)) {
-    WLog(@"Invalid validator stack state");
+    WBCLogWarning("Invalid validator stack state");
   }
   if (last)
     CFArrayRemoveValueAtIndex(sd_stack, CFArrayGetCount(sd_stack) - 1);
@@ -317,7 +317,7 @@ CFMutableDictionaryRef sValidators = NULL;
   return [NSString stringWithFormat:@"unexpected attribute '%@' found in element '%@'", attribute, element];
 }
 
-- (NSString *)invalidAttribute:(CFStringRef)attribute inElement:(CFStringRef)element forVersion:(SdefParserVersion)version {
+- (NSString *)invalidAttribute:(CFStringRef)attribute inElement:(CFStringRef)element forVersion:(SdefValidatorVersion)version {
   NSString *os = @"unknown";
   switch (version) {
     case kSdefParserVersionTiger:
@@ -341,8 +341,8 @@ CFMutableDictionaryRef sValidators = NULL;
   }
 }
 
-- (SdefParserVersion)checkAttributes:(CFDictionaryRef)attributes forElement:(CFStringRef)element error:(NSString **)error {
-  SdefParserVersion version = sd_version;
+- (SdefValidatorVersion)checkAttributes:(CFDictionaryRef)attributes forElement:(CFStringRef)element error:(NSString **)error {
+  SdefValidatorVersion version = sd_version;
   if (attributes && CFDictionaryGetCount(attributes) > 0) {
     SdefXMLElement *validator = (id)CFDictionaryGetValue(sValidators, element);
     if (validator) {
@@ -360,7 +360,7 @@ CFMutableDictionaryRef sValidators = NULL;
   return version;
 }
 
-- (SdefParserVersion)validateElement:(CFStringRef)element attributes:(CFDictionaryRef)attributes error:(NSString **)error {
+- (SdefValidatorResult)validateElement:(CFStringRef)element attributes:(CFDictionaryRef)attributes error:(NSString **)error {
   if (error) *error = nil;
   SdefXMLElement *validator;
   if ([self element]) {
@@ -369,15 +369,15 @@ CFMutableDictionaryRef sValidators = NULL;
     validator = (id)CFDictionaryGetValue(sValidators, CFSTR("__sdef__"));
   }
   if (validator) {
-    SdefParserVersion version = [validator acceptElement:element];
+    SdefValidatorVersion version = [validator acceptElement:element];
     if ((version & sd_version) == 0) {
       if (error) *error = [self invalidElementError:element];
-      return kSdefParserVersionUnknown;
+      return kSdefParserVersionUnknown | kSdefValidatorElementError;
     } else {
       sd_version &= version;
       version = [self checkAttributes:attributes forElement:element error:error];
       if ((version & sd_version) == 0) {
-        return kSdefParserVersionUnknown;
+        return kSdefParserVersionUnknown | kSdefValidatorAttributeError;
       } else {
         sd_version &= version;
       }
@@ -408,10 +408,10 @@ CFMutableDictionaryRef sValidators = NULL;
   [NSException raise:NSInvalidArgumentException format:@"Invalid receiver"];
 }
 
-- (SdefParserVersion)acceptAttribute:(CFStringRef)attribute value:(CFStringRef)value {
+- (SdefValidatorVersion)acceptAttribute:(CFStringRef)attribute value:(CFStringRef)value {
   return kSdefParserVersionUnknown;
 }
-- (SdefParserVersion)acceptElement:(CFStringRef)element {
+- (SdefValidatorVersion)acceptElement:(CFStringRef)element {
   if (CFEqual(element, CFSTR("include")))
     return kSdefParserVersionLeopard;
   
@@ -460,12 +460,12 @@ CFMutableDictionaryRef sValidators = NULL;
   [super dealloc];
 }
 
-- (SdefParserVersion)acceptAttribute:(CFStringRef)attribute value:(CFStringRef)value {
+- (SdefValidatorVersion)acceptAttribute:(CFStringRef)attribute value:(CFStringRef)value {
   if (sd_attributes && CFSetContainsValue(sd_attributes, attribute))
     return CFEqual(attribute, CFSTR("id")) ? kSdefParserVersionLeopard : kSdefParserVersionAll;
   return [super acceptAttribute:attribute value:value];
 }
-- (SdefParserVersion)acceptElement:(CFStringRef)element {
+- (SdefValidatorVersion)acceptElement:(CFStringRef)element {
   if (sd_elements) {
     if (CFSetContainsValue(sd_elements, element)) {
       if (CFEqual(element, CFSTR("type"))) {
@@ -489,7 +489,7 @@ CFMutableDictionaryRef sValidators = NULL;
 #pragma mark -
 @implementation SdefXMLCocoa
 
-- (SdefParserVersion)acceptAttribute:(CFStringRef)attribute value:(CFStringRef)value {
+- (SdefValidatorVersion)acceptAttribute:(CFStringRef)attribute value:(CFStringRef)value {
   /* type-values appear in Leopard */
   if (CFEqual(attribute, CFSTR("boolean-value")) || 
       CFEqual(attribute, CFSTR("integer-value")) ||
@@ -505,7 +505,7 @@ CFMutableDictionaryRef sValidators = NULL;
 
 @implementation SdefXMLEnumeration
 
-- (SdefParserVersion)acceptAttribute:(CFStringRef)attribute value:(CFStringRef)value {
+- (SdefValidatorVersion)acceptAttribute:(CFStringRef)attribute value:(CFStringRef)value {
   /* inline appears in Tiger */
   if (CFEqual(attribute, CFSTR("inline"))) {
     return kSdefParserVersionTiger | kSdefParserVersionLeopard;
@@ -517,7 +517,7 @@ CFMutableDictionaryRef sValidators = NULL;
 
 @implementation SdefXMLProperty
 
-- (SdefParserVersion)acceptAttribute:(CFStringRef)attribute value:(CFStringRef)value {
+- (SdefValidatorVersion)acceptAttribute:(CFStringRef)attribute value:(CFStringRef)value {
   /* in-properties replace not-in-properties in Tiger */
   if (CFEqual(attribute, CFSTR("in-properties"))) {
     return kSdefParserVersionTiger | kSdefParserVersionLeopard;
@@ -531,7 +531,7 @@ CFMutableDictionaryRef sValidators = NULL;
 
 @implementation SdefXMLRespondsTo
 
-- (SdefParserVersion)acceptAttribute:(CFStringRef)attribute value:(CFStringRef)value {
+- (SdefValidatorVersion)acceptAttribute:(CFStringRef)attribute value:(CFStringRef)value {
   /* command replace name in Leopard */
   if (CFEqual(attribute, CFSTR("command"))) {
     return kSdefParserVersionLeopard;
@@ -547,7 +547,7 @@ CFMutableDictionaryRef sValidators = NULL;
 #pragma mark -
 @implementation SdefXMLClass
 
-- (SdefParserVersion)acceptElement:(CFStringRef)element {
+- (SdefValidatorVersion)acceptElement:(CFStringRef)element {
   if (CFEqual(element, CFSTR("element")) ||
       CFEqual(element, CFSTR("property")) ||
       CFEqual(element, CFSTR("responds-to"))) {
@@ -568,7 +568,7 @@ CFMutableDictionaryRef sValidators = NULL;
 
 @implementation SdefXMLSuite
 
-- (SdefParserVersion)acceptElement:(CFStringRef)element {
+- (SdefValidatorVersion)acceptElement:(CFStringRef)element {
   if (CFEqual(element, CFSTR("enumeration")) ||
       CFEqual(element, CFSTR("record-type")) ||
       CFEqual(element, CFSTR("value-type")) ||

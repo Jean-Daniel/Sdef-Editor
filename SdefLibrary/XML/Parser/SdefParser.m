@@ -90,7 +90,7 @@ enum {
 #pragma mark -
 /* computed minimum supported version */
 static
-SdefVersion SdefDocumentVersionFromParserVersion(SdefParserVersion vers) {
+SdefVersion SdefDocumentVersionFromParserVersion(SdefValidatorVersion vers) {
   if (vers & kSdefParserVersionLeopard) return kSdefLeopardVersion;
   if (vers & kSdefParserVersionTiger) return kSdefTigerVersion;
   /* legacy document support */
@@ -256,13 +256,13 @@ Boolean _SdefElementIsCollection(CFStringRef element) {
       /* correct doc if needed */
       if (!xmlSearchNs(document, xmlDocGetRootElement(document), (const xmlChar *)"xi")) {
         /* xmlns:xi="http://www.w3.org/2001/XInclude" */
-        xmlNsPtr ns = xmlNewNs(xmlDocGetRootElement(document), (const xmlChar *)"http://www.w3.org/2001/XInclude", (const xmlChar *)"xi");
+        xmlNsPtr ns = xmlNewNs(xmlDocGetRootElement(document), (const xmlChar *)XINCLUDE_NS, (const xmlChar *)"xi");
         _SdefSetIncludeNamespace(xmlDocGetRootElement(document), ns);
       }
       
       /* process xincludes */
       if (xmlXIncludeProcessFlags(document, flags) < 0) {
-        WCLog("xinclude processing failed.");
+        WBCLogWarning("xinclude processing failed.");
       }
       
       result = [self parseFragment:xmlDocGetRootElement(document) parent:nil base:baseURL];
@@ -297,28 +297,32 @@ Boolean _SdefElementIsCollection(CFStringRef element) {
 #pragma mark -
 - (void)parser:(SdefDOMParser *)parser handleComment:(const xmlChar *)aComment {
   CFStringRef cmt = CFStringCreateWithCString(kCFAllocatorDefault, (const char *)aComment, [parser cfencoding]);
-  if (CFStringHasPrefix(cmt, CFSTR(" @"))) {
-    CFRange start, end;
-    if (CFStringFindWithOptions(cmt, CFSTR("("), 
-                                CFRangeMake(0, CFStringGetLength(cmt)), 0, &start) &&
-        CFStringFindWithOptions(cmt, CFSTR(")"), 
-                                CFRangeMake(0, CFStringGetLength(cmt)), kCFCompareBackwards, &end) &&
-        (start.location + start.length) < end.location) {
-      CFStringRef key = NULL, value = NULL;
-      key = CFStringCreateWithSubstring(kCFAllocatorDefault, cmt, CFRangeMake(2, start.location - 2));
-      start.location += start.length;
-      value = CFStringCreateWithSubstring(kCFAllocatorDefault, cmt, CFRangeMake(start.location, end.location - start.location));
-      if (key && value)
-        CFDictionarySetValue(sd_metas, key, value);
-      if (key) CFRelease(key);
-      if (value) CFRelease(value);
-      
-      return;
+  if (cmt) {
+    if (CFStringHasPrefix(cmt, CFSTR(" @"))) {
+      CFRange start, end;
+      if (CFStringFindWithOptions(cmt, CFSTR("("), 
+                                  CFRangeMake(0, CFStringGetLength(cmt)), 0, &start) &&
+          CFStringFindWithOptions(cmt, CFSTR(")"), 
+                                  CFRangeMake(0, CFStringGetLength(cmt)), kCFCompareBackwards, &end) &&
+          (start.location + start.length) < end.location) {
+        CFStringRef key = NULL, value = NULL;
+        key = CFStringCreateWithSubstring(kCFAllocatorDefault, cmt, CFRangeMake(2, start.location - 2));
+        start.location += start.length;
+        value = CFStringCreateWithSubstring(kCFAllocatorDefault, cmt, CFRangeMake(start.location, end.location - start.location));
+        if (key && value)
+          CFDictionarySetValue(sd_metas, key, value);
+        if (key) CFRelease(key);
+        if (value) CFRelease(value);
+        
+        CFRelease(cmt);
+        return;
+      }
     }
-  } 
-  /* else */
-  [sd_comments addObject:(id)cmt];
-  CFRelease(cmt);
+    /* else */
+    [sd_comments addObject:(id)cmt];
+    CFRelease(cmt);
+  }
+
 }
 
 - (id)parser:(SdefDOMParser *)parser createStructureForElement:(xmlNodePtr)element {
@@ -327,25 +331,37 @@ Boolean _SdefElementIsCollection(CFStringRef element) {
   
   CFStringRef name = CFStringCreateWithCString(kCFAllocatorDefault, (const char *)element->name, [parser cfencoding]);
   CFDictionaryRef attrs = _SdefXMLCreateDictionaryWithAttributes(element->properties, [parser cfencoding]);
-  SdefParserVersion version = [sd_validator validateElement:name attributes:attrs error:&error];
+  SdefValidatorResult result = [sd_validator validateElement:name attributes:attrs error:&error];
   /* include should not be append to the validator stack */
   if (!CFEqual(name, CFSTR("include")))
     [sd_validator startElement:name];
 
-  if (kSdefParserVersionUnknown == version) {
+  if (kSdefParserVersionUnknown == (result & kSdefValidatorVersionMask)) {
+    bool skipObject = true;
     NSString *reason = [NSString stringWithFormat:@"Parser validation error line %ld: %@ (%@, %@)", 
       (long)[parser line], error, name, attrs];
     NSDictionary *info = [NSDictionary dictionaryWithObjectsAndKeys:
       reason, NSLocalizedDescriptionKey, error, NSUnderlyingErrorKey, nil];
     NSError *anError = [NSError errorWithDomain:NSXMLParserErrorDomain code:NSXMLParserInternalError userInfo:info];
     if ([sd_delegate sdefParser:self shouldIgnoreValidationError:anError isFatal:NO]) {
-      object = [[SdefInvalidElementPlaceholder alloc] initWithElementName:(id)name];
+      /* check if this is an attribute error or an element error */
+      switch (result & kSdefValidatorErrorMask) {
+        case kSdefValidatorAttributeError:
+          skipObject = false;
+          break;
+        case kSdefValidatorElementError:
+        default:
+          object = [[SdefInvalidElementPlaceholder alloc] initWithElementName:(id)name];
+          break;
+      }
     } else {
       [parser abortWithError:kSdefValidationErrorStatus reason:@""];
     }
-    if (attrs) CFRelease(attrs);
-    CFRelease(name);
-    return object;
+    if (skipObject) {
+      if (attrs) CFRelease(attrs);
+      CFRelease(name);
+      return object;
+    }
   }
   
   Class class = _SdefGetObjectClassForElement(name);
@@ -373,7 +389,9 @@ Boolean _SdefElementIsCollection(CFStringRef element) {
 #pragma mark Parser Core
 - (void *)parser:(SdefDOMParser *)parser createStructureForNode:(xmlNodePtr)node {
   void *structure = NULL;
+#if !defined(__clang__)
   @try {
+#endif
     if (sd_docParser) {
       structure = [sd_docParser parser:parser createStructureForNode:node];
     } else {
@@ -422,10 +440,12 @@ Boolean _SdefElementIsCollection(CFStringRef element) {
           break;
       }
     }
+#if !defined(__clang__)
   } @catch (id exception) {
     WBLogException(exception);
     [parser abortWithError:kCFXMLErrorMalformedDocument reason:[exception reason]];
   }
+#endif
   return structure;
 }
 

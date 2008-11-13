@@ -161,7 +161,7 @@
   if (sd_html > 0) {
     CFStringAppendCString(sd_content, (const char *)data, [parser cfencoding]);
   } else {
-    WLog(@"Encounter a CDData block outside html element");
+    WBCLogWarning("Encounter a CDData block outside html element");
   }
 }
 

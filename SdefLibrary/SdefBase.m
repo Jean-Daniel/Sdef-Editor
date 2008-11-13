@@ -244,7 +244,7 @@ NSImage *SdefImageNamed(NSString *name) {
 - (BOOL)isRemovable {
   if ([self parent] && ![[self parent] isEditable])
     return NO;
-  return sd_soFlags.removable;
+  return sd_soFlags.removable && !sd_soFlags.xinclude;
 }
 - (void)setRemovable:(BOOL)removable {
   WBFlagSet(sd_soFlags.removable, removable);
@@ -270,7 +270,7 @@ NSImage *SdefImageNamed(NSString *name) {
 - (void)setXrefs:(NSArray *)xrefs {
   // does nothing.
   if (![self hasXrefs])
-    WLog(@"Try to set xrefs on a invalid item %@", self);
+    WBLogWarning(@"Try to set xrefs on a invalid item %@", self);
 }
 
 - (BOOL)hasXInclude {

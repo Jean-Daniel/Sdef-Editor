@@ -367,7 +367,7 @@
         }
       }
     }
-    return CocoaNameForSdefName([self name], NO);
+    return CocoaNameForSdefName(name, NO);
   }
   return [[self impl] key];
 }

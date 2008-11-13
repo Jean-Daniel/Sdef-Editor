@@ -200,7 +200,7 @@
         [self updateChangeCount:NSChangeDone];
       }
     } else {
-      if (!*outError)
+      if (!outError)
         *outError = [NSError errorWithDomain:NSCocoaErrorDomain code:NSFileReadCorruptFileError userInfo:nil];
     }
   } else if (outError) {

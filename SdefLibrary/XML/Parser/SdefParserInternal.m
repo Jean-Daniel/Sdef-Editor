@@ -8,6 +8,7 @@
  */
 
 #include "SdefParserInternal.h"
+#include <libxml/xinclude.h>
 
 NSUInteger _SdefXMLAttributeCount(xmlNodePtr node) {
   NSUInteger count = 0;
@@ -38,14 +39,20 @@ CFDictionaryRef _SdefXMLCreateDictionaryWithAttributes(xmlAttr *attr, CFStringEn
                                                           &kCFTypeDictionaryKeyCallBacks, &kCFTypeDictionaryValueCallBacks);
   do {
     if (attr->name) {
-      const xmlChar *value = _SdefXMLAttributeGetValue(attr);
-      if (value) {
-        CFStringRef val = CFStringCreateWithCString(kCFAllocatorDefault, (const char *)value, encoding);
-        CFStringRef name = CFStringCreateWithCString(kCFAllocatorDefault, (const char *)attr->name, encoding);
-        if (val && name)
-          CFDictionarySetValue(dict, name, val);
-        if (name) CFRelease(name);
-        if (val) CFRelease(val);
+      /* ignore xml:base attributes (added by xinclude parser) */
+      if (!attr->ns || !attr->ns->href || !attr->ns->prefix || 
+          (0 != xmlStrcasecmp(attr->ns->href, XML_XML_NAMESPACE) || 0 != xmlStrcasecmp(attr->name, (const xmlChar *)"base"))) {
+        const xmlChar *value = _SdefXMLAttributeGetValue(attr);
+        if (value) {
+          CFStringRef val = CFStringCreateWithCString(kCFAllocatorDefault, (const char *)value, encoding);
+          CFStringRef name = CFStringCreateWithCString(kCFAllocatorDefault, (const char *)attr->name, encoding);
+          if (val && name)
+            CFDictionarySetValue(dict, name, val);
+            if (name) CFRelease(name);
+          if (val) CFRelease(val);
+        }
+      } else {
+        DLog(@"Ignore attribute: %s:%s", attr->ns->prefix, attr->name);
       }
     }
     attr = attr->next;

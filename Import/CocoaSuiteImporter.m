@@ -56,7 +56,7 @@ NSDictionary *_CocoaScriptingFindTerminology(NSString *base, NSString *name) {
       
       switch([openPanel runModalForTypes:[NSArray arrayWithObjects:@"scriptTerminology", nil]]) {
         case NSOKButton:
-          file = ([[openPanel filenames] count]) ? [[openPanel filenames] objectAtIndex:0] : nil;
+          file = [openPanel filename];
           break;
         case NSCancelButton:
           search = NO;
@@ -64,9 +64,10 @@ NSDictionary *_CocoaScriptingFindTerminology(NSString *base, NSString *name) {
       }
       if (file && search) {
         dterm = [[NSDictionary alloc] initWithContentsOfFile:file];
-        if (!dterm) {
+        if (!dterm) 
           NSRunAlertPanel(@"Invalid or not matching script terminology", @"You must provide a valid terminology: %@", @"OK", nil, nil, name);
-        }
+        else
+          break;
       }
     } while (search);
   }

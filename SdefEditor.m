@@ -66,6 +66,8 @@ const OSType kCocoaSuiteDefinitionHFSType = 'ScSu';
     if ([ctrl respondsToSelector:@selector(setAutosavingDelay:)]) {
       [ctrl setAutosavingDelay:60];
     }
+    [ctrl release];
+    
     [[NSUserDefaults standardUserDefaults] registerDefaults:[NSDictionary dictionaryWithObjectsAndKeys:
       WBBool(YES), @"SdefOpenAtStartup",
       WBBool(YES), @"SdefAutoSelectItem",
@@ -166,6 +168,8 @@ const OSType kCocoaSuiteDefinitionHFSType = 'ScSu';
     }
   }
 }
+
+
 
 - (IBAction)openSdefReference:(id)sender {
   
@@ -297,16 +301,12 @@ const OSType kCocoaSuiteDefinitionHFSType = 'ScSu';
       [appli launch];
     }
     AeteImporter *aete = nil;
-    switch ([appli idType]) {
-      case kWBApplicationOSType:
-        aete = [[AeteImporter alloc] initWithApplicationSignature:[appli signature]]; 
-        break;
-      case kWBApplicationBundleIdentifier:
-        aete = [[AeteImporter alloc] initWithApplicationBundleIdentifier:[appli identifier]];
-        break;
-      default:
-        aete = nil;
-    }
+    NSString *bid = [appli bundleIdentifier];
+    if (bid)
+      aete = [[AeteImporter alloc] initWithApplicationBundleIdentifier:bid];
+    else
+      aete = [[AeteImporter alloc] initWithApplicationSignature:[appli signature]];
+    
     if (aete) {
       [self importWithImporter:aete];
       [aete release];
