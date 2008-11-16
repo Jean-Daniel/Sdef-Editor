@@ -476,7 +476,7 @@ Boolean _SdefElementIsCollection(CFStringRef element) {
     if (typeWildCard == type) {
       [(id)child setObject:parent];
     } else if (kSdefTypeAccessor == type) {
-      [(id)parent addXMLAccessor:(NSString *)[(id)child style]];
+      [(id)parent addXMLAccessor:[(SdefAccessorPlaceholder *)child style]];
     } else if (kSdefTypeIgnore == type) {
       // invalid object. skip
     } else {

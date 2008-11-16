@@ -113,7 +113,7 @@ NSDictionary *_CocoaScriptingFindTerminology(NSString *base, NSString *name) {
 
 #pragma mark -
 #pragma mark Importer
-static NSArray *ASKStandardsSuites() {
+static NSArray *ASKStandardsSuites(void) {
   static NSArray *asksuites = nil;
   if (!asksuites) {
     asksuites = [[NSArray alloc] initWithObjects:

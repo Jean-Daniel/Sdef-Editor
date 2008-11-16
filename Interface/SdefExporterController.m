@@ -12,7 +12,7 @@
 #import "SdefDocument.h"
 #import "SdefEditor.h"
 
-static NSString *SystemMajorVersion() {
+static NSString *SystemMajorVersion(void) {
 //  SInt32 macVersion;
 //  if (Gestalt(gestaltSystemVersion, &macVersion) == noErr) {
 //    return [NSString stringWithFormat:@"%x.%x", (macVersion >> 8) & 0xff, (macVersion >> 4) & 0xf];
