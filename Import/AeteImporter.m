@@ -8,8 +8,8 @@
 
 #import "AeteImporter.h"
 
-#import WBHEADER(WBExtensions.h)
 #import WBHEADER(WBFSFunctions.h)
+#import WBHEADER(NSData+WonderBox.h)
 
 #import "SdefSuite.h"
 #import "SdefClass.h"
@@ -123,7 +123,7 @@ bail:
 
 - (id)initWithApplicationSignature:(OSType)signature {
   AEDesc target;
-  OSStatus err = WBAECreateTargetWithSignature(signature, NO, &target);
+  OSStatus err = WBAECreateTargetWithSignature(signature, &target);
   if (noErr == err) {
     self = [self _initWithTarget:&target];
   } else {
@@ -147,7 +147,7 @@ bail:
 
 - (id)initWithApplicationBundleIdentifier:(NSString *)identifier {
   AEDesc target;
-  OSStatus err = WBAECreateTargetWithBundleID((CFStringRef)identifier, NO, &target);
+  OSStatus err = WBAECreateTargetWithBundleID((CFStringRef)identifier, &target);
   if (noErr == err) {
     self = [self _initWithTarget:&target];
   } else {

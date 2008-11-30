@@ -10,8 +10,6 @@
 #import "SdefClass.h"
 #import "SdefSuite.h"
 
-#import WBHEADER(WBFunctions.h)
-
 #import "SdefImplementation.h"
 #import "SdefDictionary.h"
 #import "SdefDocument.h"

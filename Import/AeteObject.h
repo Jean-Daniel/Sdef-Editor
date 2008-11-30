@@ -7,7 +7,6 @@
  */
 
 #import "SdefBase.h"
-#import WBHEADER(WBFunctions.h)
 
 @interface SdefObject (AeteResource)
 

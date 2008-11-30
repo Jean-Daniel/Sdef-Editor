@@ -8,7 +8,6 @@
 
 #import "SdefXMLBase.h"
 #import "SdefXMLNode.h"
-#import WBHEADER(WBExtensions.h)
 
 #import "SdefComment.h"
 

@@ -9,7 +9,6 @@
 #import "ASDictionaryObject.h"
 #import "SdefClassManager.h"
 #import "SdefDocument.h"
-#import WBHEADER(WBExtensions.h)
 
 @implementation SdefObject (ASDictionary)
 

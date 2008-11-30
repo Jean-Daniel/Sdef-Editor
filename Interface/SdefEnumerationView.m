@@ -9,7 +9,7 @@
 #import "SdefEnumerationView.h"
 #import "SdefTypedef.h"
 
-#import WBHEADER(WBAppKitExtensions.h)
+#import WBHEADER(NSArrayController+WonderBox.h)
 
 @interface SdefEnumerationInlineTransformer : NSValueTransformer {
 }

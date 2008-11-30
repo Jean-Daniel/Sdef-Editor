@@ -10,7 +10,6 @@
 
 #import "ASDictionaryObject.h"
 #import "ASDictionaryStream.h"
-#import WBHEADER(WBFunctions.h)
 #import "SdefSuite.h"
 
 #if !__LP64__

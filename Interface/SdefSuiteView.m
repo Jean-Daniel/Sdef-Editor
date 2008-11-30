@@ -11,7 +11,7 @@
 #import "SdefSuite.h"
 #import "SdefClass.h"
 
-#import WBHEADER(WBAppKitExtensions.h)
+#import WBHEADER(NSArrayController+WonderBox.h)
 
 @interface SdefTypeHasClassTransformer : NSValueTransformer {
 }

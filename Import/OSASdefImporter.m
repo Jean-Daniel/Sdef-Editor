@@ -8,7 +8,6 @@
 
 #import "OSASdefImporter.h"
 
-#import WBHEADER(WBExtensions.h)
 #import WBHEADER(WBFSFunctions.h)
 
 #include <Carbon/Carbon.h>

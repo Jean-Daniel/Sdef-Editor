@@ -10,8 +10,6 @@
 #import "SdefClassManager.h"
 #import "SdefClass.h"
 
-#import WBHEADER(WBFunctions.h)
-
 @implementation SdefClass (SdefValidator)
 
 - (BOOL)validateCode { return ![self isExtension]; }

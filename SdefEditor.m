@@ -8,7 +8,6 @@
 
 #import "SdefEditor.h"
 
-#import WBHEADER(WBFunctions.h)
 #import WBHEADER(WBLSFunctions.h)
 #import WBHEADER(WBApplication.h)
 

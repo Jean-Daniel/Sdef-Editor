@@ -14,7 +14,7 @@
 #import "SdefDocument.h"
 #import "SdefDictionary.h"
 
-#import WBHEADER(WBAppKitExtensions.h)
+#import WBHEADER(NSArrayController+WonderBox.h)
 
 @implementation SdefValidator
 

@@ -8,9 +8,8 @@
 
 #import "SdefSymbolBrowser.h"
 
-#import WBHEADER(WBExtensions.h)
 #import WBHEADER(WBTableDataSource.h)
-#import WBHEADER(WBAppKitExtensions.h)
+#import WBHEADER(NSArrayController+WonderBox.h)
 
 #import "SdefWindowController.h"
 #import "SdefDictionary.h"

@@ -11,8 +11,6 @@
 #import "SdefVerb.h"
 #import "SdefArguments.h"
 
-#import WBHEADER(WBExtensions.h)
-
 #if !__LP64__
 
 @interface SdefDirectParameter (ASDictionary)

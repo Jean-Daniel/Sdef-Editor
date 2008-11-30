@@ -9,8 +9,6 @@
 #import "SdefArguments.h"
 #import "SdefDocument.h"
 
-#import WBHEADER(WBExtensions.h)
-
 @implementation SdefDirectParameter
 - (id)copyWithZone:(NSZone *)aZone {
   SdefDirectParameter *copy = [super copyWithZone:aZone];

@@ -15,7 +15,7 @@
 #import "SdefDocumentation.h"
 #import "SdefImplementation.h"
 
-#import WBHEADER(WBFunctions.h)
+#import WBHEADER(WonderBoxFunctions.h)
 
 @implementation SdefDocumentedObject
 #pragma mark Protocols Implementations

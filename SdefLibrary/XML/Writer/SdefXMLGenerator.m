@@ -10,7 +10,6 @@
 #import "SdefXMLNode.h"
 #import "SdefComment.h"
 #import "SdefXMLBase.h"
-#import WBHEADER(WBExtensions.h)
 
 @implementation SdefXMLGenerator
 

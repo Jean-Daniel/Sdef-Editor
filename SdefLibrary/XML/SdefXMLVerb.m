@@ -10,7 +10,6 @@
 #import "SdefSuite.h"
 #import "SdefXMLNode.h"
 #import "SdefXMLBase.h"
-#import WBHEADER(WBExtensions.h)
 #import "SdefArguments.h"
 
 @implementation SdefVerb (SdefXMLManager)

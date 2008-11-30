@@ -8,7 +8,9 @@
 
 #import "SdefWindowController.h"
 
-#import WBHEADER(WBAppKitExtensions.h)
+#import WBHEADER(NSTabView+WonderBox.h)
+#import WBHEADER(NSArrayController+WonderBox.h)
+
 #import "SdefClassView.h"
 #import "SdefClassManager.h"
 #import "SdefContents.h"

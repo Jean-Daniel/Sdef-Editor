@@ -10,7 +10,7 @@
 #import "SdefVerb.h"
 #import "SdefArguments.h"
 
-#import WBHEADER(WBAppKitExtensions.h)
+#import WBHEADER(NSArrayController+WonderBox.h)
 
 @implementation SdefVerbView
 

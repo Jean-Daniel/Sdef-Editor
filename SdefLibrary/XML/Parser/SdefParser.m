@@ -389,9 +389,7 @@ Boolean _SdefElementIsCollection(CFStringRef element) {
 #pragma mark Parser Core
 - (void *)parser:(SdefDOMParser *)parser createStructureForNode:(xmlNodePtr)node {
   void *structure = NULL;
-#if !defined(__clang__)
   @try {
-#endif
     if (sd_docParser) {
       structure = [sd_docParser parser:parser createStructureForNode:node];
     } else {
@@ -440,12 +438,10 @@ Boolean _SdefElementIsCollection(CFStringRef element) {
           break;
       }
     }
-#if !defined(__clang__)
   } @catch (id exception) {
     WBLogException(exception);
     [parser abortWithError:kCFXMLErrorMalformedDocument reason:[exception reason]];
   }
-#endif
   return structure;
 }
 

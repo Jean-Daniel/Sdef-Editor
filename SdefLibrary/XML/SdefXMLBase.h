@@ -11,7 +11,7 @@
 #import "SdefClass.h"
 #import "SdefSynonym.h"
 
-#import WBHEADER(WBExtensions.h)
+#import WBHEADER(NSString+WonderBox.h)
 
 @class SdefXMLNode;
 

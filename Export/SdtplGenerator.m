@@ -8,9 +8,9 @@
 
 #import "SdtplGenerator.h"
 
-#import WBHEADER(WBAppKitExtensions.h)
-#import WBHEADER(WBExtensions.h)
 #import WBHEADER(WBTemplate.h)
+#import WBHEADER(NSAlert+WonderBox.h)
+#import WBHEADER(NSString+WonderBox.h)
 
 #import "SdefTemplate.h"
 

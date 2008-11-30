@@ -9,6 +9,8 @@
 #import "AeteObject.h"
 #import "SdefClass.h"
 
+#import WBHEADER(WonderBoxFunctions.h)
+
 @implementation SdefClass (AeteResource)
 
 - (NSUInteger)parseData:(Byte *)data {

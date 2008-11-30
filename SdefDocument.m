@@ -9,7 +9,7 @@
 #import "SdefDocument.h"
 #import "SdefEditor.h"
 
-#import WBHEADER(WBFunctions.h)
+#import WBHEADER(WonderBoxFunctions.h)
 
 #import "SdefWindowController.h"
 #import "SdefSymbolBrowser.h"

@@ -10,8 +10,7 @@
 #import "SdefViewController.h"
 
 #import WBHEADER(WBSplitView.h)
-#import WBHEADER(WBFunctions.h)
-#import WBHEADER(WBAppKitExtensions.h)
+#import WBHEADER(WonderBoxFunctions.h)
 #import WBHEADER(WBOutlineViewController.h)
 
 #import "SdefVerb.h"
