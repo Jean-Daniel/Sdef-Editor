@@ -7,8 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		1B5D8AD40EE2F3DC00BD1EAF /* WonderBoxFunctions.h in Headers */ = {isa = PBXBuildFile; fileRef = 1B5D8AD20EE2F3DC00BD1EAF /* WonderBoxFunctions.h */; };
-		1B5D8AD50EE2F3DC00BD1EAF /* WonderBoxFunctions.m in Sources */ = {isa = PBXBuildFile; fileRef = 1B5D8AD30EE2F3DC00BD1EAF /* WonderBoxFunctions.m */; };
+		1B5D8AD40EE2F3DC00BD1EAF /* WBFunctions.h in Headers */ = {isa = PBXBuildFile; fileRef = 1B5D8AD20EE2F3DC00BD1EAF /* WBFunctions.h */; };
+		1B5D8AD50EE2F3DC00BD1EAF /* WBFunctions.m in Sources */ = {isa = PBXBuildFile; fileRef = 1B5D8AD30EE2F3DC00BD1EAF /* WBFunctions.m */; };
 		1B5D8AF50EE2F43300BD1EAF /* NSArrayController+WonderBox.m in Sources */ = {isa = PBXBuildFile; fileRef = 1B5D8AE20EE2F42F00BD1EAF /* NSArrayController+WonderBox.m */; };
 		1B5D8AF60EE2F43400BD1EAF /* NSArrayController+WonderBox.h in Headers */ = {isa = PBXBuildFile; fileRef = 1B5D8AE10EE2F42F00BD1EAF /* NSArrayController+WonderBox.h */; };
 		1B5D8AFA0EE2F45300BD1EAF /* WBGeometry.h in Headers */ = {isa = PBXBuildFile; fileRef = 1B5D8AF80EE2F45300BD1EAF /* WBGeometry.h */; };
@@ -94,6 +94,7 @@
 		1BCF18290D244B85009CCAFB /* SdefExport.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1BCF18270D244B85009CCAFB /* SdefExport.xib */; };
 		1BCF182D0D244C0E009CCAFB /* SdefInspector.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1BCF182B0D244C0E009CCAFB /* SdefInspector.xib */; };
 		1BCF18310D244C44009CCAFB /* Preferences.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1BCF182F0D244C44009CCAFB /* Preferences.xib */; };
+		1BDDBEFD0FACBB8B00EECDEE /* ASDictionary.m in Sources */ = {isa = PBXBuildFile; fileRef = 98F47BD607D141690097C497 /* ASDictionary.m */; };
 		1BE05BAD0BDD1F2800334FBF /* SdefTypeValidator.m in Sources */ = {isa = PBXBuildFile; fileRef = 1BE05BAC0BDD1F2800334FBF /* SdefTypeValidator.m */; };
 		1BE05C0A0BDD21EB00334FBF /* SdefLeavesValidator.m in Sources */ = {isa = PBXBuildFile; fileRef = 1BE05C090BDD21EB00334FBF /* SdefLeavesValidator.m */; };
 		1BE6A22E0D37B554009361FB /* WBProcessFunctions.h in Headers */ = {isa = PBXBuildFile; fileRef = 1BE6A1AF0D37B50A009361FB /* WBProcessFunctions.h */; };
@@ -214,7 +215,6 @@
 		98B5625408317C670067D99C /* AeteObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 98A05A1C07AD0956008D897D /* AeteObject.m */; };
 		98B5625508317C690067D99C /* AeteObject.h in Headers */ = {isa = PBXBuildFile; fileRef = 98A05A1B07AD0956008D897D /* AeteObject.h */; };
 		98B5625808317CA40067D99C /* ASDictionary.h in Headers */ = {isa = PBXBuildFile; fileRef = 984A8C8B07DB29FF00591F7A /* ASDictionary.h */; };
-		98B5625908317CA50067D99C /* ASDictionary.m in Sources */ = {isa = PBXBuildFile; fileRef = 98F47BD607D141690097C497 /* ASDictionary.m */; };
 		98B5625A08317CA60067D99C /* ASDictionaryClass.m in Sources */ = {isa = PBXBuildFile; fileRef = 982CCAEF07D25F2000EE7474 /* ASDictionaryClass.m */; };
 		98B5625B08317CA70067D99C /* ASDictionaryObject.h in Headers */ = {isa = PBXBuildFile; fileRef = 984A8C8C07DB29FF00591F7A /* ASDictionaryObject.h */; };
 		98B5625C08317CA70067D99C /* ASDictionaryObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 98D3A17107D1D67100AC085D /* ASDictionaryObject.m */; };
@@ -295,8 +295,8 @@
 
 /* Begin PBXFileReference section */
 		089C1660FE840EACC02AAC07 /* English */ = {isa = PBXFileReference; fileEncoding = 10; lastKnownFileType = text.plist.strings; name = English; path = English.lproj/InfoPlist.strings; sourceTree = "<group>"; };
-		1B5D8AD20EE2F3DC00BD1EAF /* WonderBoxFunctions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WonderBoxFunctions.h; sourceTree = "<group>"; };
-		1B5D8AD30EE2F3DC00BD1EAF /* WonderBoxFunctions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WonderBoxFunctions.m; sourceTree = "<group>"; };
+		1B5D8AD20EE2F3DC00BD1EAF /* WBFunctions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WBFunctions.h; sourceTree = "<group>"; };
+		1B5D8AD30EE2F3DC00BD1EAF /* WBFunctions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WBFunctions.m; sourceTree = "<group>"; };
 		1B5D8ADF0EE2F42F00BD1EAF /* NSAlert+WonderBox.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSAlert+WonderBox.h"; sourceTree = "<group>"; };
 		1B5D8AE00EE2F42F00BD1EAF /* NSAlert+WonderBox.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSAlert+WonderBox.m"; sourceTree = "<group>"; };
 		1B5D8AE10EE2F42F00BD1EAF /* NSArrayController+WonderBox.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSArrayController+WonderBox.h"; sourceTree = "<group>"; };
@@ -352,8 +352,8 @@
 		1BA98BD40D7C47F000941D63 /* WBTableView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WBTableView.m; sourceTree = "<group>"; };
 		1BA98BD50D7C47F000941D63 /* WBTableView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WBTableView.h; sourceTree = "<group>"; };
 		1BAB193A0ED0613C00DE77C3 /* SharedPrefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SharedPrefix.pch; sourceTree = "<group>"; };
-		1BAB19530ED0613C00DE77C3 /* DebugTiger32.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = DebugTiger32.xcconfig; sourceTree = "<group>"; };
-		1BAB19570ED0613C00DE77C3 /* ReleaseTiger32.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = ReleaseTiger32.xcconfig; sourceTree = "<group>"; };
+		1BAB19530ED0613C00DE77C3 /* Leopard_Debug.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = Leopard_Debug.xcconfig; sourceTree = "<group>"; };
+		1BAB19570ED0613C00DE77C3 /* Leopard_Release.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = Leopard_Release.xcconfig; sourceTree = "<group>"; };
 		1BADAC840D8BE1A30006EB32 /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = English.lproj/SdefVerb.xib; sourceTree = "<group>"; };
 		1BADAC8C0D8BE2250006EB32 /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = English.lproj/SdefSuite.xib; sourceTree = "<group>"; };
 		1BADAC900D8BE2D60006EB32 /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = English.lproj/SdefClass.xib; sourceTree = "<group>"; };
@@ -706,8 +706,8 @@
 		1BAB194F0ED0613C00DE77C3 /* wonderbox */ = {
 			isa = PBXGroup;
 			children = (
-				1BAB19530ED0613C00DE77C3 /* DebugTiger32.xcconfig */,
-				1BAB19570ED0613C00DE77C3 /* ReleaseTiger32.xcconfig */,
+				1BAB19530ED0613C00DE77C3 /* Leopard_Debug.xcconfig */,
+				1BAB19570ED0613C00DE77C3 /* Leopard_Release.xcconfig */,
 			);
 			path = wonderbox;
 			sourceTree = "<group>";
@@ -763,8 +763,8 @@
 				1BE6A1A90D37B50A009361FB /* WBLSFunctions.m */,
 				1BE6A1AE0D37B50A009361FB /* WBProcessFunctions.c */,
 				1BE6A1AF0D37B50A009361FB /* WBProcessFunctions.h */,
-				1B5D8AD20EE2F3DC00BD1EAF /* WonderBoxFunctions.h */,
-				1B5D8AD30EE2F3DC00BD1EAF /* WonderBoxFunctions.m */,
+				1B5D8AD20EE2F3DC00BD1EAF /* WBFunctions.h */,
+				1B5D8AD30EE2F3DC00BD1EAF /* WBFunctions.m */,
 			);
 			path = Functions;
 			sourceTree = "<group>";
@@ -816,10 +816,10 @@
 				981A834A07CFBDAC007AC495 /* ASDictionary */,
 				98D3A8C4079EC8670049A8FC /* SdefEditor.h */,
 				98D3A8C5079EC8670049A8FC /* SdefEditor.m */,
-				98168DD307A27735002B893D /* SdefProcessor.h */,
-				98168DD407A27735002B893D /* SdefProcessor.m */,
 				9875805D07886E6F0038C05B /* SdefDocument.h */,
 				9875805E07886E6F0038C05B /* SdefDocument.m */,
+				98168DD307A27735002B893D /* SdefProcessor.h */,
+				98168DD407A27735002B893D /* SdefProcessor.m */,
 			);
 			name = Sources;
 			sourceTree = "<group>";
@@ -1292,7 +1292,7 @@
 				1BA98BD70D7C47F000941D63 /* WBTableView.h in Headers */,
 				1BE6E2080DBCE19600ABAC74 /* WBAliasedApplication.h in Headers */,
 				1BE6E20E0DBCE1A300ABAC74 /* WBAlias.h in Headers */,
-				1B5D8AD40EE2F3DC00BD1EAF /* WonderBoxFunctions.h in Headers */,
+				1B5D8AD40EE2F3DC00BD1EAF /* WBFunctions.h in Headers */,
 				1B5D8AF60EE2F43400BD1EAF /* NSArrayController+WonderBox.h in Headers */,
 				1B5D8AFA0EE2F45300BD1EAF /* WBGeometry.h in Headers */,
 				1B5D8B1E0EE2F55700BD1EAF /* NSTabView+WonderBox.h in Headers */,
@@ -1473,7 +1473,6 @@
 				9862E04B08317A0800ED1608 /* CocoaObject.m in Sources */,
 				9862E04C08317A0A00ED1608 /* CocoaEnumeration.m in Sources */,
 				98B5625408317C670067D99C /* AeteObject.m in Sources */,
-				98B5625908317CA50067D99C /* ASDictionary.m in Sources */,
 				98B5625A08317CA60067D99C /* ASDictionaryClass.m in Sources */,
 				98B5625C08317CA70067D99C /* ASDictionaryObject.m in Sources */,
 				98B5625E08317CA90067D99C /* ASDictionaryStream.m in Sources */,
@@ -1521,7 +1520,7 @@
 				1BA98BD60D7C47F000941D63 /* WBTableView.m in Sources */,
 				1BE6E2090DBCE19600ABAC74 /* WBAliasedApplication.m in Sources */,
 				1BE6E20D0DBCE1A300ABAC74 /* WBAlias.m in Sources */,
-				1B5D8AD50EE2F3DC00BD1EAF /* WonderBoxFunctions.m in Sources */,
+				1B5D8AD50EE2F3DC00BD1EAF /* WBFunctions.m in Sources */,
 				1B5D8AF50EE2F43300BD1EAF /* NSArrayController+WonderBox.m in Sources */,
 				1B5D8AFB0EE2F45300BD1EAF /* WBGeometry.m in Sources */,
 				1B5D8B1F0EE2F55900BD1EAF /* NSTabView+WonderBox.m in Sources */,
@@ -1530,6 +1529,7 @@
 				1B5D8B500EE2F5D900BD1EAF /* NSData+WonderBox.m in Sources */,
 				1B5D8B730EE2F68F00BD1EAF /* NSImage+WonderBox.m in Sources */,
 				1B5D8B750EE2F68F00BD1EAF /* NSTableView+WonderBox.m in Sources */,
+				1BDDBEFD0FACBB8B00EECDEE /* ASDictionary.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1710,8 +1710,9 @@
 /* Begin XCBuildConfiguration section */
 		85B7BC3A0BD62AED00632EE6 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 1BAB19570ED0613C00DE77C3 /* ReleaseTiger32.xcconfig */;
+			baseConfigurationReference = 1BAB19570ED0613C00DE77C3 /* Leopard_Release.xcconfig */;
 			buildSettings = {
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				WONDERBOX = "";
 			};
 			name = Release;
@@ -1720,13 +1721,9 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CURRENT_PROJECT_VERSION = 266;
-				HEADER_SEARCH_PATHS = "$(SHARED_SDK_ROOT)/usr/include/libsxml2";
+				HEADER_SEARCH_PATHS = /usr/include/libxml2;
 				INFOPLIST_FILE = Resources/Info.plist;
-				OTHER_LDFLAGS = (
-					"-lsxml2",
-					"-liconv.10.4",
-					"-lz.10.4",
-				);
+				OTHER_LDFLAGS = "-lxml2";
 				PRODUCT_NAME = "Sdef Editor";
 			};
 			name = Release;
@@ -1735,21 +1732,18 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CURRENT_PROJECT_VERSION = 266;
-				HEADER_SEARCH_PATHS = "$(SHARED_SDK_ROOT)/usr/include/libsxml2";
+				HEADER_SEARCH_PATHS = /usr/include/libxml2;
 				INFOPLIST_FILE = Resources/Info.plist;
-				OTHER_LDFLAGS = (
-					"-lsxml2",
-					"-liconv.10.4",
-					"-lz.10.4",
-				);
+				OTHER_LDFLAGS = "-lxml2";
 				PRODUCT_NAME = "Sdef Editor";
 			};
 			name = Debug;
 		};
 		98A7CBED0855010F000D862B /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 1BAB19530ED0613C00DE77C3 /* DebugTiger32.xcconfig */;
+			baseConfigurationReference = 1BAB19530ED0613C00DE77C3 /* Leopard_Debug.xcconfig */;
 			buildSettings = {
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				WONDERBOX = "";
 			};
 			name = Debug;

@@ -10,7 +10,7 @@
 #import "SdefVerb.h"
 #import "SdefArguments.h"
 
-#import WBHEADER(WonderBoxFunctions.h)
+#import WBHEADER(WBFunctions.h)
 
 @implementation SdefVerb (AeteResource)
 

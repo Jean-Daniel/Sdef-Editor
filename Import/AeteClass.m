@@ -9,7 +9,7 @@
 #import "AeteObject.h"
 #import "SdefClass.h"
 
-#import WBHEADER(WonderBoxFunctions.h)
+#import WBHEADER(WBFunctions.h)
 
 @implementation SdefClass (AeteResource)
 

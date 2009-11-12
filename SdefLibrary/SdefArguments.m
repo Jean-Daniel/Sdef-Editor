@@ -41,7 +41,7 @@
 
 - (void)sdefInit {
   [super sdefInit];
-  [self setLeaf:YES];
+  [self setIsLeaf:YES];
 }
 
 - (void)dealloc {
@@ -95,7 +95,7 @@
 
 - (void)sdefInit {
   [super sdefInit];
-  [self setLeaf:YES];
+  [self setIsLeaf:YES];
 }
 
 - (void)dealloc {
@@ -150,7 +150,7 @@
 
 - (void)sdefInit {
   [super sdefInit];
-  [self setLeaf:YES];
+  [self setIsLeaf:YES];
 }
 
 - (void)dealloc {

@@ -324,13 +324,13 @@ NSString * const SdtplDefinitionEventsKey = @"Events";
 #pragma mark Private Functions Implementations
 static NSArray *SdefTemplatePaths(void) {
 	NSMutableArray *paths = [NSMutableArray array];
-  NSString *path = [WBFSFindFolder(kApplicationSupportFolderType, kUserDomain, NO) stringByAppendingPathComponent:kSdefTemplateFolder];
+  NSString *path = [[WBFSFindFolder(kApplicationSupportFolderType, kUserDomain, NO) path] stringByAppendingPathComponent:kSdefTemplateFolder];
 	if (path) [paths addObject:path];
 	
-	path = [WBFSFindFolder(kApplicationSupportFolderType, kLocalDomain, NO) stringByAppendingPathComponent:kSdefTemplateFolder];
+	path = [[WBFSFindFolder(kApplicationSupportFolderType, kLocalDomain, NO) path] stringByAppendingPathComponent:kSdefTemplateFolder];
 	if (path) [paths addObject:path];
 	
-	path = [WBFSFindFolder(kApplicationSupportFolderType, kNetworkDomain, NO) stringByAppendingPathComponent:kSdefTemplateFolder];
+	path = [[WBFSFindFolder(kApplicationSupportFolderType, kNetworkDomain, NO) path] stringByAppendingPathComponent:kSdefTemplateFolder];
 	if (path) [paths addObject:path];
 	
 	path = [[[NSBundle mainBundle] resourcePath] stringByAppendingPathComponent:@"Templates"];

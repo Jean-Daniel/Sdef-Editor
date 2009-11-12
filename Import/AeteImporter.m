@@ -37,10 +37,10 @@ OSStatus _GetTerminologyFromAppleEvent(AppleEvent *theEvent, NSMutableArray *ter
   long count = 0;
   AEDescList aetes = WBAEEmptyDesc();
   
-  OSStatus err = WBAESetStandardAttributes(theEvent);
-  require_noerr(err, bail);
+//  OSStatus err = WBAESetStandardAttributes(theEvent);
+//  require_noerr(err, bail);
   
-  err = WBAEAddSInt32(theEvent, keyDirectObject, 0);
+  OSStatus err = WBAEAddSInt32(theEvent, keyDirectObject, 0);
   require_noerr(err, bail);
   
   err = WBAESendEventReturnAEDescList(theEvent, &aetes);

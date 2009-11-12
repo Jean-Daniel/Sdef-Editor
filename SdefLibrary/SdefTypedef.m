@@ -96,7 +96,7 @@
 
 - (void)sdefInit {
   [super sdefInit];
-  [self setLeaf:YES];
+  [self setIsLeaf:YES];
   sd_soFlags.hasDocumentation = 0;
 }
 
@@ -135,7 +135,7 @@
 
 - (void)sdefInit {
   [super sdefInit];
-  [self setLeaf:YES];
+  [self setIsLeaf:YES];
   sd_soFlags.xid = 1;
   sd_soFlags.xrefs = 1;
 }

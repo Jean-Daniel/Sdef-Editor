@@ -9,8 +9,8 @@
 #import "SdefWindowController.h"
 #import "SdefViewController.h"
 
+#import WBHEADER(WBFunctions.h)
 #import WBHEADER(WBSplitView.h)
-#import WBHEADER(WonderBoxFunctions.h)
 #import WBHEADER(WBOutlineViewController.h)
 
 #import "SdefVerb.h"
