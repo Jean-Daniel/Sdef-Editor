@@ -6,7 +6,7 @@
  *  Copyright © 2006 - 2007 Shadow Lab. All rights reserved.
  */
 
-#import WBHEADER(WBUITreeNode.h)
+#import <WonderBox/WBUITreeNode.h>
 
 enum {
   kSdefUndefinedType       = 0,

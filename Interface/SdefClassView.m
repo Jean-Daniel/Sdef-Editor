@@ -8,8 +8,8 @@
 
 #import "SdefWindowController.h"
 
-#import WBHEADER(NSTabView+WonderBox.h)
-#import WBHEADER(NSArrayController+WonderBox.h)
+#import <WonderBox/NSTabView+WonderBox.h>
+#import <WonderBox/NSArrayController+WonderBox.h>
 
 #import "SdefClassView.h"
 #import "SdefClassManager.h"

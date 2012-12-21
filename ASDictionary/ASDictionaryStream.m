@@ -15,7 +15,11 @@ static NSFont *FontForASDictionaryStyle(ASDictionaryStyle *style);
 static void ASDictionaryStyleForFont(NSFont *aFont, ASDictionaryStyle *style);
 static void ASGetStyleForASPreferences(CFStringRef str, ASDictionaryStyle *style);
 
-WB_INLINE
+enum {
+  kFontIDTimes = 20
+};
+
+SPX_INLINE
 SInt16 ASFontFamilyIDForFamilyName(CFStringRef name) {
   Str255 fName;
   FMFontFamily family = -1;
@@ -24,7 +28,7 @@ SInt16 ASFontFamilyIDForFamilyName(CFStringRef name) {
   return (family > 0) ? family : kFontIDTimes;
 }
 
-WB_INLINE
+SPX_INLINE
 BOOL ASDictionaryStyleEqualsStyle(ASDictionaryStyle *style1, ASDictionaryStyle *style2) {
   return style1->fontFamily == style2->fontFamily &&
   style1->fontStyle == style2->fontStyle &&
@@ -232,7 +236,7 @@ static ASDictionaryStyle stdStyles[4];
     }
     ASDictionaryStyle *previous = nil;
     if ([as_styles length] > sizeof(ASDictionaryStyle)) {
-      previous = ([as_styles mutableBytes] + [as_styles length] - sizeof(ASDictionaryStyle));
+      previous = (ASDictionaryStyle *)((uint8_t *)[as_styles mutableBytes] + [as_styles length] - sizeof(ASDictionaryStyle));
     }
     if (!previous || !ASDictionaryStyleEqualsStyle(&as_style, previous)) {
       [as_styles appendBytes:&as_style length:sizeof(ASDictionaryStyle)];
@@ -321,10 +325,10 @@ NSAttributedString *AttributedStringForASDictionaryString(NSDictionary *content)
                                                  blue:style.blue / 65535.0
                                                 alpha:1] forKey:NSForegroundColorAttributeName];
     if (style.fontStyle & underline) {
-      [attributes setObject:WBInteger(NSUnderlineStyleSingle | NSUnderlinePatternSolid) forKey:NSUnderlineStyleAttributeName];
+      [attributes setObject:SPXInteger(NSUnderlineStyleSingle | NSUnderlinePatternSolid) forKey:NSUnderlineStyleAttributeName];
     }
     if (style.fontStyle & outline) {
-      [attributes setObject:WBFloat(3.0) forKey:NSStrokeWidthAttributeName];
+      [attributes setObject:SPXFloat(3.f) forKey:NSStrokeWidthAttributeName];
     }
     [string setAttributes:attributes range:range];
   }

@@ -22,6 +22,7 @@
 - (NSView *)sdefView;
 
 - (IBAction)editType:(id)sender;
+- (IBAction)revealInTree:(id)sender;
 
 - (id)object;
 - (id)editedObject:(id)sender;

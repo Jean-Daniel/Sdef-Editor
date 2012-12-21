@@ -307,7 +307,7 @@ CFMutableDictionaryRef sValidators = NULL;
 - (void)endElement:(CFStringRef)element {
   CFStringRef last = [self element];
   if (!last || !CFEqual(element, last)) {
-    WBCLogWarning("Invalid validator stack state");
+    spx_log_warning("Invalid validator stack state");
   }
   if (last)
     CFArrayRemoveValueAtIndex(sd_stack, CFArrayGetCount(sd_stack) - 1);
@@ -384,7 +384,7 @@ CFMutableDictionaryRef sValidators = NULL;
     }
   } else {
     sd_version = kSdefParserVersionUnknown;
-    DLog(@"Invalid validator for element '%@' !", [self element]);
+    SPXDebug(@"Invalid validator for element '%@' !", [self element]);
   }
 
   return sd_version;

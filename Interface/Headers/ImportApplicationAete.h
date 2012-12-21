@@ -6,7 +6,7 @@
  *  Copyright © 2006 - 2007 Shadow Lab. All rights reserved.
  */
 
-#import WBHEADER(WBWindowController.h)
+#import <WonderBox/WBWindowController.h>
 
 @class WBApplication;
 @interface ImportApplicationAete : WBWindowController {

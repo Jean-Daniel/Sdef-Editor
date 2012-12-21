@@ -223,7 +223,7 @@ NSImage *SdefImageNamed(NSString *name) {
 }
 
 - (void)setEditable:(BOOL)flag recursive:(BOOL)recu {
-  WBFlagSet(sd_soFlags.editable, flag);
+  SPXFlagSet(sd_soFlags.editable, flag);
   
   if (recu) {
     SdefObject *node;
@@ -238,7 +238,7 @@ NSImage *SdefImageNamed(NSString *name) {
   return sd_soFlags.xinclude;
 }
 - (void)setXIncluded:(BOOL)flag {
-  WBFlagSet(sd_soFlags.xinclude, flag);
+  SPXFlagSet(sd_soFlags.xinclude, flag);
 }
 
 - (BOOL)isRemovable {
@@ -247,7 +247,7 @@ NSImage *SdefImageNamed(NSString *name) {
   return sd_soFlags.removable && !sd_soFlags.xinclude;
 }
 - (void)setRemovable:(BOOL)removable {
-  WBFlagSet(sd_soFlags.removable, removable);
+  SPXFlagSet(sd_soFlags.removable, removable);
 }
 
 #pragma mark Optionals Children & Attributes
@@ -270,7 +270,7 @@ NSImage *SdefImageNamed(NSString *name) {
 - (void)setXrefs:(NSArray *)xrefs {
   // does nothing.
   if (![self hasXrefs])
-    WBLogWarning(@"Try to set xrefs on a invalid item %@", self);
+    SPXLogWarning(@"Try to set xrefs on a invalid item %@", self);
 }
 
 - (BOOL)hasXInclude {

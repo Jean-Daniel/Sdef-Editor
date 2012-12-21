@@ -15,7 +15,7 @@
 #import "SdefDocumentation.h"
 #import "SdefImplementation.h"
 
-#import WBHEADER(WBFunctions.h)
+#import <WonderBox/WBFunctions.h>
 
 @implementation SdefDocumentedObject
 #pragma mark Protocols Implementations
@@ -660,7 +660,7 @@ NSString *SdefStringForOSType(OSType type) {
   NSString *str = WBStringForOSType(type);
   /* If invalid string or contains white space */
   if (!str || isspace(chrs[0]) || isspace(chrs[3])) {
-    str = [NSString stringWithFormat:@"0x%.8x", type];
+    str = [NSString stringWithFormat:@"0x%.8x", (unsigned int)type];
   }
   return str;
 }

@@ -25,7 +25,7 @@
   [aCoder encodeObject:sd_key forKey:@"SIKey"];
   [aCoder encodeObject:sd_class forKey:@"SIClass"];
   [aCoder encodeObject:sd_value forKey:@"SIValue"];
-  WBEncodeInteger(aCoder, sd_vtype, @"SIValueType");
+  [aCoder encodeInteger:sd_vtype forKey:@"SIValueType"];
   [aCoder encodeObject:sd_method forKey:@"SIMethod"];
 }
 
@@ -39,7 +39,7 @@
     sd_key = [[aCoder decodeObjectForKey:@"SIKey"] retain];
     sd_class = [[aCoder decodeObjectForKey:@"SIClass"] retain];
     sd_value = [[aCoder decodeObjectForKey:@"SIValue"] retain];
-    sd_vtype = (UInt8)WBDecodeInteger(aCoder, @"SIValueType");
+    sd_vtype = (UInt8)[aCoder decodeIntegerForKey:@"SIValueType"];
     sd_method = [[aCoder decodeObjectForKey:@"SIMethod"] retain];
   }
   return self;
@@ -98,7 +98,7 @@
 }
 
 - (void)setInsertAtBeginning:(BOOL)flag {
-  WBFlagSet(sd_slFlags.beginning, flag);
+  SPXFlagSet(sd_slFlags.beginning, flag);
 }
 
 #pragma mark Value
@@ -137,21 +137,21 @@
         break;
       case kSdefValueTypeInteger:
         if (!sd_value || [sd_value isKindOfClass:[NSString class]])
-          [self setValue:WBInteger(WBIntegerValue(sd_value))];
+          [self setValue:SPXInteger([sd_value integerValue])];
         else
-          [self setValue:WBInteger(0)];
+          [self setValue:SPXInteger(0)];
         break;
       case kSdefValueTypeBoolean:
         if ([sd_value isKindOfClass:[NSString class]]) {
           if (NSOrderedSame == [sd_value caseInsensitiveCompare:@"yes"] ||
               NSOrderedSame == [sd_value caseInsensitiveCompare:@"true"] ||
-              WBIntegerValue(sd_value)) {
-            [self setValue:WBBool(YES)];
+              [sd_value integerValue]) {
+            [self setValue:SPXBool(YES)];
           } else {
-            [self setValue:WBBool(NO)];
+            [self setValue:SPXBool(NO)];
           }
         } else {
-          [self setValue:WBBool(NO)];
+          [self setValue:SPXBool(NO)];
         }
         break;
     }
@@ -168,11 +168,11 @@
 }
 
 - (NSInteger)integerValue {
-  return sd_vtype == kSdefValueTypeInteger ? WBIntegerValue(sd_value) : 0;
+  return sd_vtype == kSdefValueTypeInteger ? [sd_value integerValue] : 0;
 }
 - (void)setIntegerValue:(NSInteger)value {
   [[[self undoManager] prepareWithInvocationTarget:self] setIntegerValue:[self integerValue]];
-  [self setValue:WBInteger(value)];
+  [self setValue:SPXInteger(value)];
 }
 
 - (BOOL)booleanValue {
@@ -180,7 +180,7 @@
 }
 - (void)setBooleanValue:(BOOL)value {
   [[[self undoManager] prepareWithInvocationTarget:self] setBooleanValue:[self booleanValue]];
-  [self setValue:WBBool(value)];
+  [self setValue:SPXBool(value)];
 }
 
 @end

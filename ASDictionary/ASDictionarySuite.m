@@ -32,7 +32,7 @@
     @try {
       [classes addObject:[object asdictionary]];
     } @catch (id exception) {
-      WBLogException(exception);
+      SPXLogException(exception);
     }
   }
   if ([classes count])
@@ -45,7 +45,7 @@
     @try {
       [events addObject:[object asdictionary]];
     } @catch (id exception) {
-      WBLogException(exception);
+      SPXLogException(exception);
     }
   }
   /* Events */
@@ -54,7 +54,7 @@
     @try {
       [events addObject:[object asdictionary]];
     } @catch (id exception) {
-      WBLogException(exception);
+      SPXLogException(exception);
     }
   }
   if ([events count])

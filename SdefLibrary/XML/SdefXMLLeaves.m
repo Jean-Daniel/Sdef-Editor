@@ -38,7 +38,7 @@
   [NSException raise:NSInvalidArgumentException format:@"%@ does not support children", self];
 }
 - (void)addXMLComment:(NSString *)comment {
-  WBTrace();
+  SPXTrace();
 }
 
 - (void)setXMLMetas:(NSDictionary *)metas {
@@ -282,7 +282,7 @@
     [self setBooleanValue:[attr caseInsensitiveCompare:@"YES"] == 0];
   } else if (attr = [attrs objectForKey:@"integer-value"]) {
     [self setValueType:kSdefValueTypeInteger];
-    [self setIntegerValue:WBIntegerValue(attr)];
+    [self setIntegerValue:[attr integerValue]];
   } else if (attr = [attrs objectForKey:@"string-value"]) {
     [self setValueType:kSdefValueTypeString];
     [self setTextValue:[attr stringByUnescapingEntities:nil]];

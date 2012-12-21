@@ -37,15 +37,15 @@
 
 @end
 
-WB_PRIVATE
+SPX_PRIVATE
 NSUInteger _SdefXMLAttributeCount(xmlNodePtr node);
 
-WB_PRIVATE
+SPX_PRIVATE
 xmlAttr *_SdefXMLAttributeAtIndex(xmlNodePtr node, NSUInteger idx);
 
-WB_PRIVATE
+SPX_PRIVATE
 const xmlChar *_SdefXMLAttributeGetValue(xmlAttr *attr);
 
-WB_PRIVATE
+SPX_PRIVATE
 CFDictionaryRef _SdefXMLCreateDictionaryWithAttributes(xmlAttr *attr, CFStringEncoding encoding);
 

@@ -139,7 +139,7 @@ static NSString *SystemMajorVersion(void) {
     } @catch (id exception) {
       [proc release];
       proc = nil;
-      WBLogException(exception);
+      SPXLogException(exception);
       NSRunAlertPanel(NSLocalizedString(@"Undefined error while exporting", @"sdp exception"),
                       NSLocalizedString(@"An Undefined error prevent exportation: %@", @"sdp exception"),
                       NSLocalizedString(@"OK", @"Default Button"), nil, nil, exception);  
@@ -206,7 +206,7 @@ static NSString *SystemMajorVersion(void) {
 //  } @catch (id exception) {
 //    [proc release];
 //    proc = nil;
-//    WBLogException(exception);
+//    SPXLogException(exception);
 //    NSRunAlertPanel(NSLocalizedString(@"Undefined error while exporting", @"sdp exception"),
 //                    NSLocalizedString(@"An Undefined error prevent exportation: %@", @"sdp exception"),
 //                    NSLocalizedString(@"OK", @"Default Button"), nil, nil, exception);  

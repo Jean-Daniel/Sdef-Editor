@@ -9,7 +9,7 @@
 #import "SdefEnumerationView.h"
 #import "SdefTypedef.h"
 
-#import WBHEADER(NSArrayController+WonderBox.h)
+#import <WonderBox/NSArrayController+WonderBox.h>
 
 @interface SdefEnumerationInlineTransformer : NSValueTransformer {
 }
@@ -89,13 +89,13 @@
 
 /* Transform */
 - (id)transformedValue:(id)value {
-  NSInteger inlin = WBIntegerValue(value);
+  NSInteger inlin = [value integerValue];
   return (kSdefInlineAll == inlin) ? nil : value;
 }
 
 /* Returns access value */
 - (id)reverseTransformedValue:(id)value {
-  return (value) ? value : WBInteger(kSdefInlineAll);
+  return (value) ? value : SPXInteger(kSdefInlineAll);
 }
 
 @end

@@ -142,7 +142,7 @@
       @try {
         [input writeData:data];
       } @catch (id exception) {
-        WBLogException(exception);
+        SPXLogException(exception);
       }
     }
     [input closeFile];

@@ -7,7 +7,7 @@
  */
 
 #import "ImportApplicationAete.h"
-#import WBHEADER(WBAliasedApplication.h)
+#import <WonderBox/WBAliasedApplication.h>
 
 #import "AeteImporter.h"
 #import "SdefEditor.h"

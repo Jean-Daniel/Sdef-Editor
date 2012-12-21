@@ -14,7 +14,7 @@
 #import "SdefDocument.h"
 #import "SdefDictionary.h"
 
-#import WBHEADER(NSArrayController+WonderBox.h)
+#import <WonderBox/NSArrayController+WonderBox.h>
 
 @implementation SdefValidator
 
@@ -26,7 +26,7 @@
 }
 
 - (void)dealloc {
-  WBTrace();
+  SPXTrace();
   [super dealloc];
 }
 

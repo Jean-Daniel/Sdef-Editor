@@ -45,7 +45,7 @@
 - (void)setTarget:(NSString *)target {
   if (target != sd_target) {
     [[self undoManager] registerUndoWithTarget:self selector:_cmd object:sd_target];
-    WBSetterCopy(sd_target, target);
+    SPXSetterCopy(sd_target, target);
   }
 }
 

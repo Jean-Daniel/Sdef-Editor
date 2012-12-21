@@ -8,10 +8,10 @@
 
 #import "SdefTemplate.h"
 
-#import WBHEADER(WBFSFunctions.h)
+#import <WonderBox/WBFSFunctions.h>
 
-#import WBHEADER(WBTemplate.h)
-#import WBHEADER(WBXMLTemplate.h)
+#import <WonderBox/WBTemplate.h>
+#import <WonderBox/WBXMLTemplate.h>
 
 extern NSString *const SdtplBlockTableOfContent;
 
@@ -352,7 +352,7 @@ NSDictionary *SdefTemplatesAtPath(NSString *path) {
         tpl = [[SdefTemplate alloc] initWithPath:[path stringByAppendingPathComponent:name]];
         [templates setObject:tpl forKey:[tpl menuName]];
       } @catch (id exception) {
-        WBCLogException(exception);
+        SPXCLogException(exception);
       }
       [tpl release];
     }

@@ -161,7 +161,7 @@
   if (sd_html > 0) {
     CFStringAppendCString(sd_content, (const char *)data, [parser cfencoding]);
   } else {
-    WBCLogWarning("Encounter a CDData block outside html element");
+    spx_log_warning("Encounter a CDData block outside html element");
   }
 }
 
@@ -197,10 +197,10 @@
 //      break;
 //    case XML_DTD_NODE:
 //    case XML_DOCUMENT_TYPE_NODE:
-//      DLog(@"Data Type ID: kCFXMLNodeTypeDocumentType (%s)", node->content);
+//      SPXDebug(@"Data Type ID: kCFXMLNodeTypeDocumentType (%s)", node->content);
 //      break;
     default:
-      DLog(@"Unknown Data Type ID: %ld (%s)", (long)node->type, node->name);
+      SPXDebug(@"Unknown Data Type ID: %ld (%s)", (long)node->type, node->name);
   }
   return structure;
 }

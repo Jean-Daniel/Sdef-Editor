@@ -9,9 +9,9 @@
 @class SdefObject, SdefDictionary, SdefClassManager;
 @class SdefWindowController, SdefSymbolBrowser, SdefValidator;
 
-WB_PRIVATE 
+SPX_PRIVATE
 SdefDictionary *SdefLoadDictionary(NSURL *file, NSInteger *version, id delegate, NSError **error);
-WB_PRIVATE
+SPX_PRIVATE
 SdefDictionary *SdefLoadDictionaryData(NSData *data, NSURL *base, NSInteger *version, id delegate, NSError **error);
 
 @interface SdefDocument : NSDocument {

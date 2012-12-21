@@ -15,7 +15,7 @@
 #import "SdefClassManager.h"
 #import "SdefDocumentation.h"
 
-#import WBHEADER(WBFunctions.h)
+#import <WonderBox/WBFunctions.h>
 
 WB_INLINE 
 NSString *SystemVersionForSdefVersion(SdefVersion vers) {

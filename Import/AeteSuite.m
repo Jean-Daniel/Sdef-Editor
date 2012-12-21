@@ -13,7 +13,7 @@
 
 #import "AeteObject.h"
 
-#import WBHEADER(WBFunctions.h)
+#import <WonderBox/WBFunctions.h>
 
 @implementation SdefSuite (AeteResource)
 

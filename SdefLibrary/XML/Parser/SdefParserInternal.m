@@ -52,7 +52,7 @@ CFDictionaryRef _SdefXMLCreateDictionaryWithAttributes(xmlAttr *attr, CFStringEn
           if (val) CFRelease(val);
         }
       } else {
-        DLog(@"Ignore attribute: %s:%s", attr->ns->prefix, attr->name);
+        SPXDebug(@"Ignore attribute: %s:%s", attr->ns->prefix, attr->name);
       }
     }
     attr = attr->next;

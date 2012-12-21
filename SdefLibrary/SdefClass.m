@@ -239,14 +239,14 @@
 
 - (void)encodeWithCoder:(NSCoder *)aCoder {
   [super encodeWithCoder:aCoder];
-  WBEncodeInteger(aCoder, sd_access, @"SEAccess");
-  WBEncodeInteger(aCoder, sd_accessors, @"SEAccessors");
+  [aCoder encodeInteger:sd_access  forKey:@"SEAccess"];
+  [aCoder encodeInteger:sd_accessors forKey:@"SEAccessors"];
 }
 
 - (id)initWithCoder:(NSCoder *)aCoder {
   if (self = [super initWithCoder:aCoder]) {
-    sd_access = WBDecodeInteger(aCoder, @"SEAccess");
-    sd_accessors = WBDecodeInteger(aCoder, @"SEAccessors");
+    sd_access = [aCoder decodeIntegerForKey:@"SEAccess"];
+    sd_accessors = [aCoder decodeIntegerForKey:@"SEAccessors"];
   }
   return self;
 }
@@ -385,12 +385,12 @@
 
 - (void)encodeWithCoder:(NSCoder *)aCoder {
   [super encodeWithCoder:aCoder];
-  WBEncodeInteger(aCoder, sd_access, @"SPAccess");
+  [aCoder encodeInteger:sd_access forKey:@"SPAccess"];
 }
 
 - (id)initWithCoder:(NSCoder *)aCoder {
   if (self = [super initWithCoder:aCoder]) {
-    sd_access = WBDecodeInteger(aCoder, @"SPAccess");
+    sd_access = [aCoder decodeIntegerForKey:@"SPAccess"];
   }
   return self;
 }

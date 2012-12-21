@@ -86,14 +86,14 @@
   return sd_slFlags.editable && !sd_slFlags.xinclude;
 }
 - (void)setEditable:(BOOL)flag {
-  WBFlagSet(sd_slFlags.editable, flag);
+  SPXFlagSet(sd_slFlags.editable, flag);
 }
 
 - (BOOL)isXIncluded {
   return sd_slFlags.xinclude;
 }
 - (void)setXIncluded:(BOOL)flag {
-  WBFlagSet(sd_slFlags.xinclude, flag);
+  SPXFlagSet(sd_slFlags.xinclude, flag);
 }
 
 - (BOOL)isHidden {
@@ -119,7 +119,6 @@
       return NSLocalizedStringFromTable(@"Synonym", @"SdefLibrary", @"Object Type Name.");
     case kSdefCommentType:
       return NSLocalizedStringFromTable(@"XML Comment", @"SdefLibrary", @"Object Type Name.");
-      break;
     case kSdefXrefType:
       return NSLocalizedStringFromTable(@"xref", @"SdefLibrary", @"Object Type Name.");
     case kSdefXIncludeType:

@@ -8,7 +8,7 @@
 
 #import "OSASdefImporter.h"
 
-#import WBHEADER(WBFSFunctions.h)
+#import <WonderBox/WBFSFunctions.h>
 
 #include <Carbon/Carbon.h>
 

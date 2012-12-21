@@ -8,8 +8,8 @@
 
 #import "SdefSymbolBrowser.h"
 
-#import WBHEADER(WBTableDataSource.h)
-#import WBHEADER(NSArrayController+WonderBox.h)
+#import <WonderBox/WBTableDataSource.h>
+#import <WonderBox/NSArrayController+WonderBox.h>
 
 #import "SdefWindowController.h"
 #import "SdefDictionary.h"
@@ -78,23 +78,23 @@ static BOOL SdefSearchFilter(NSString *search, SdefObject *object, void *ctxt);
   
   /* Search Menu Categories */
   NSMenuItem *item = [menu addItemWithTitle:@"All Fields" action:@selector(limitSearch:) keyEquivalent:@""];
-  [item setRepresentedObject:WBUInteger(kSdefSearchAll)];
+  [item setRepresentedObject:SPXUInteger(kSdefSearchAll)];
 	[menu addItem:[NSMenuItem separatorItem]];
 	
   item = [menu addItemWithTitle:@"Symbol" action:@selector(limitSearch:) keyEquivalent:@""];
-  [item setRepresentedObject:WBUInteger(kSdefSearchSymbol)];
+  [item setRepresentedObject:SPXUInteger(kSdefSearchSymbol)];
 	
 	item = [menu addItemWithTitle:@"Symbol Type" action:@selector(limitSearch:) keyEquivalent:@""];
-  [item setRepresentedObject:WBUInteger(kSdefSearchSymbolType)];
+  [item setRepresentedObject:SPXUInteger(kSdefSearchSymbolType)];
   
 	item = [menu addItemWithTitle:@"Code" action:@selector(limitSearch:) keyEquivalent:@""];
-  [item setRepresentedObject:WBUInteger(kSdefSearchCode)];
+  [item setRepresentedObject:SPXUInteger(kSdefSearchCode)];
 
 	item = [menu addItemWithTitle:@"Type" action:@selector(limitSearch:) keyEquivalent:@""];
-  [item setRepresentedObject:WBUInteger(kSdefSearchType)];
+  [item setRepresentedObject:SPXUInteger(kSdefSearchType)];
 	
 	item = [menu addItemWithTitle:@"Location" action:@selector(limitSearch:) keyEquivalent:@""];
-  [item setRepresentedObject:WBUInteger(kSdefSearchSuite)];
+  [item setRepresentedObject:SPXUInteger(kSdefSearchSuite)];
   
   /* Search Menu Template */
   [menu addItem:[NSMenuItem separatorItem]];
@@ -130,7 +130,7 @@ static BOOL SdefSearchFilter(NSString *search, SdefObject *object, void *ctxt);
   }
 }
 
-WB_INLINE 
+SPX_INLINE
 BOOL __NSStringContains(NSString *str, NSString *substr) {
 	return str ? [str rangeOfString:substr options:NSCaseInsensitiveSearch | NSLiteralSearch].location != NSNotFound : NO;
 }

@@ -8,8 +8,9 @@
 
 #import "AeteImporter.h"
 
-#import WBHEADER(WBFSFunctions.h)
-#import WBHEADER(NSData+WonderBox.h)
+#import <WonderBox/WBFSFunctions.h>
+#import <WonderBox/WBAEFunctions.h>
+#import <WonderBox/NSData+WonderBox.h>
 
 #import "SdefSuite.h"
 #import "SdefClass.h"
@@ -18,7 +19,7 @@
 #import "SdefClassManager.h"
 
 #import "AeteObject.h"
-#import WBHEADER(WBAEFunctions.h)
+
 #include <Carbon/Carbon.h>
 
 struct AeteHeader {
@@ -262,7 +263,7 @@ bail:
         [suite release];
       }
     } @catch (id exception) {
-      WBLogException(exception);
+      SPXLogException(exception);
       [suites removeAllObjects];
       return NO;
     }

@@ -67,7 +67,7 @@
   return suite ? [self parent] == [suite commands] : !sd_soFlags.event;
 }
 - (void)setCommand:(BOOL)flag {
-  WBFlagSet(sd_soFlags.event, !flag);
+  SPXFlagSet(sd_soFlags.event, !flag);
 }
 
 - (void)sdefInit {

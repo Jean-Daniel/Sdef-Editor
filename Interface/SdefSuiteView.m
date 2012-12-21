@@ -11,7 +11,7 @@
 #import "SdefSuite.h"
 #import "SdefClass.h"
 
-#import WBHEADER(NSArrayController+WonderBox.h)
+#import <WonderBox/NSArrayController+WonderBox.h>
 
 @interface SdefTypeHasClassTransformer : NSValueTransformer {
 }
@@ -184,7 +184,7 @@
 /* Transform */
 - (id)transformedValue:(id)value {
   /* Negation because use with hidden */
-  return WBBool([value intValue] != kSdefValueType);
+  return SPXBool([value intValue] != kSdefValueType);
 }
 
 /* Returns access value */

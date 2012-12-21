@@ -9,9 +9,9 @@
 #import "SdefWindowController.h"
 #import "SdefViewController.h"
 
-#import WBHEADER(WBFunctions.h)
-#import WBHEADER(WBSplitView.h)
-#import WBHEADER(WBOutlineViewController.h)
+#import <WonderBox/WBFunctions.h>
+#import <WonderBox/WBSplitView.h>
+#import <WonderBox/WBOutlineViewController.h>
 
 #import "SdefVerb.h"
 #import "SdefClass.h"
@@ -439,7 +439,7 @@ static inline BOOL SdefEditorExistsForItem(SdefObject *item) {
       @try {
         destination = [(SdefSuite *)[selection firstParentOfType:kSdefSuiteType] valueForKey:str];
       } @catch (id exception) {
-        WBLogException(exception);
+        SPXLogException(exception);
         destination = nil;
       }
     }
@@ -460,7 +460,7 @@ static inline BOOL SdefEditorExistsForItem(SdefObject *item) {
       @try {
         destination = [(SdefClass *)[selection firstParentOfType:kSdefClassType] valueForKey:str];
       } @catch (id exception) {
-        WBLogException(exception);
+        SPXLogException(exception);
         destination = nil;
       }
     }
@@ -485,7 +485,7 @@ static inline BOOL SdefEditorExistsForItem(SdefObject *item) {
         @try {
           destination = [suite valueForKey:str];
         } @catch (id exception) {
-          WBLogException(exception);
+          SPXLogException(exception);
           destination = nil;
         }
       }
@@ -497,7 +497,7 @@ static inline BOOL SdefEditorExistsForItem(SdefObject *item) {
         @try {
           destination = [class valueForKey:str];
         } @catch (id exception) {
-          WBLogException(exception);
+          SPXLogException(exception);
           destination = nil;
         }
       }

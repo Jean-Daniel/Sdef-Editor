@@ -1,0 +1,411 @@
+<?xml version="1.0"?>
+<!DOCTYPE dictionary SYSTEM "file://localhost/System/Library/DTDs/sdef.dtd">
+<dictionary>
+	<suite name="AppleScript Suite" code="ascr" description="Standard terms for AppleScript" hidden="yes">
+		<class name="boolean" code="bool"/>
+		<class name="integer" code="long"/>
+		<class name="real" code="doub"/>
+		<class name="number" code="nmbr"/>
+		<class name="list" code="list"/>
+		<class name="linked list" code="llst"/>
+		<class name="vector" code="vect"/>
+		<class name="record" code="reco"/>
+		<class name="item" code="cobj"/>
+		<class name="script" code="scpt"/>
+		<class name="list or record" code="lr  " description="a list or record"/>
+		<class name="list or text" code="ls  " description="a list or text"/>
+		<class name="number or text" code="ns  " description="a number or text"/>
+		<class name="alias or text" code="sf  " description="an alias or text"/>
+		<class name="list, record or text" code="lrs " description="a list, record or text"/>
+		<class name="number or date" code="nd  " description="a number or date"/>
+		<class name="number, date or text" code="nds " description="a number, date or text"/>
+		<class name="class" code="pcls" inherits="type class" plural="classes"/>
+		<class name="event" code="evnt"/>
+		<class name="property" code="prop" plural="properties"/>
+		<class name="constant" code="enum"/>
+		<class name="preposition" code="prep"/>
+		<class name="reference form" code="kfrm"/>
+		<class name="handler" code="hand"/>
+		<class name="data" code="rdat" description="an AppleScript raw data object"/>
+		<class name="text" code="TEXT" description="text">
+			<synonym code="itxt"/>
+			<synonym code="STXT"/>
+			<synonym code="utxt"/>
+			<synonym code="utf8"/>
+			<synonym code="sutx"/>
+			<synonym code="encs"/>
+			<synonym code="cstr"/>
+			<synonym code="pstr"/>
+		</class>
+		<class name="character" code="cha "/>
+		<class name="text item" code="citm"/>
+		<class name="writing code" code="psct" description="codes that identify the language and script system"/>
+		<class name="writing code info" code="citl"/>
+		<class name="missing value" code="msng"/>
+		<class name="reference" code="obj "/>
+		<class name="any" code="****" description="any class or reference"/>
+		<class name="type class" code="type" description="the name of a particular class (or any four-character code)"/>
+		<class name="RGB color" code="cRGB"/>
+		<class name="picture" code="PICT"/>
+		<class name="sound" code="snd "/>
+		<class name="version" code="vers" description="a version value"/>
+		<class name="file specification" code="fss "/>
+		<class name="file" code="file"/>
+		<class name="alias" code="alis" plural="aliases"/>
+		<class name="machine" code="mach"/>
+		<class name="keystroke" code="kprs"/>
+		<class name="seconds" code="scnd" description="more than one second"/>
+		<class name="date" code="ldt "/>
+		<class name="month" code="mnth"/>
+		<class name="January" code="jan " description="the month of January"/>
+		<class name="February" code="feb " description="the month of February"/>
+		<class name="March" code="mar " description="the month of March"/>
+		<class name="April" code="apr " description="the month of April"/>
+		<class name="May" code="may " description="the month of May"/>
+		<class name="June" code="jun " description="the month of June"/>
+		<class name="July" code="jul " description="the month of July"/>
+		<class name="August" code="aug " description="the month of August"/>
+		<class name="September" code="sep " description="the month of September"/>
+		<class name="October" code="oct " description="the month of October"/>
+		<class name="November" code="nov " description="the month of November"/>
+		<class name="December" code="dec " description="the month of December"/>
+		<class name="weekday" code="wkdy"/>
+		<class name="Sunday" code="sun " description="Sunday"/>
+		<class name="Monday" code="mon " description="Monday"/>
+		<class name="Tuesday" code="tue " description="Tuesday"/>
+		<class name="Wednesday" code="wed " description="Wednesday"/>
+		<class name="Thursday" code="thu " description="Thursday"/>
+		<class name="Friday" code="fri " description="Friday"/>
+		<class name="Saturday" code="sat " description="Saturday"/>
+		<class name="meters" code="metr" description="a distance measurement in SI meters"/>
+		<class name="inches" code="inch" description="a distance measurement in Imperial inches"/>
+		<class name="feet" code="feet" description="a distance measurement in Imperial feet"/>
+		<class name="yards" code="yard" description="a distance measurement in Imperial yards"/>
+		<class name="miles" code="mile" description="a distance measurement in Imperial miles"/>
+		<class name="kilometers" code="kmtr" description="a distance measurement in SI kilometers"/>
+		<class name="centimeters" code="cmtr" description="a distance measurement in SI centimeters"/>
+		<class name="square meters" code="sqrm" description="an area measurement in SI square meters"/>
+		<class name="square feet" code="sqft" description="an area measurement in Imperial square feet"/>
+		<class name="square yards" code="sqyd" description="an area measurement in Imperial square yards"/>
+		<class name="square miles" code="sqmi" description="an area measurement in Imperial square miles"/>
+		<class name="square kilometers" code="sqkm" description="an area measurement in SI square kilometers"/>
+		<class name="liters" code="litr" description="a volume measurement in SI liters"/>
+		<class name="gallons" code="galn" description="a volume measurement in Imperial gallons"/>
+		<class name="quarts" code="qrts" description="a volume measurement in Imperial quarts"/>
+		<class name="cubic meters" code="cmet" description="a volume measurement in SI cubic meters"/>
+		<class name="cubic centimeters" code="ccmt" description="a volume measurement in SI cubic centimeters"/>
+		<class name="cubic feet" code="cfet" description="a volume measurement in Imperial cubic feet"/>
+		<class name="cubic inches" code="cuin" description="a volume measurement in Imperial cubic inches"/>
+		<class name="cubic yards" code="cyrd" description="a distance measurement in Imperial cubic yards"/>
+		<class name="kilograms" code="kgrm" description="a mass measurement in SI kilograms"/>
+		<class name="grams" code="gram" description="a mass measurement in SI meters"/>
+		<class name="ounces" code="ozs " description="a weight measurement in SI meters"/>
+		<class name="pounds" code="lbs " description="a weight measurement in SI meters"/>
+		<class name="degrees Celsius" code="degc" description="a temperature measurement in SI degrees Celsius"/>
+		<class name="degrees Fahrenheit" code="degf" description="a temperature measurement in degrees Fahrenheit"/>
+		<class name="degrees Kelvin" code="degk" description="a temperature measurement in degrees Kelvin"/>
+		<class name="upper case" code="case" description="Text with lower case converted to upper case"/>
+		<class name="application" code="capp"/>
+		<enumeration name="cons" code="cons">
+			<enumerator name="case" code="case" description="case"/>
+			<enumerator name="diacriticals" code="diac" description="diacriticals"/>
+			<enumerator name="white space" code="whit" description="white space"/>
+			<enumerator name="hyphens" code="hyph" description="hyphens"/>
+			<enumerator name="expansion" code="expa" description="expansion"/>
+			<enumerator name="punctuation" code="punc" description="punctuation"/>
+			<enumerator name="numeric strings" code="nume" description="numeric strings"/>
+			<enumerator name="application responses" code="rmte" description="remote event replies"/>
+		</enumeration>
+		<enumeration name="boov" code="boov">
+			<enumerator name="true" code="true" description="the true boolean value"/>
+			<enumerator name="false" code="fals" description="the false boolean value"/>
+		</enumeration>
+		<enumeration name="misc" code="misc">
+			<enumerator name="current application" code="cura" description="the current application"/>
+		</enumeration>
+		<enumeration name="eMds" code="eMds">
+			<enumerator name="option down" code="Kopt"/>
+			<enumerator name="command down" code="Kcmd"/>
+			<enumerator name="control down" code="Kctl"/>
+			<enumerator name="shift down" code="Ksft"/>
+			<enumerator name="caps lock down" code="Kclk"/>
+		</enumeration>
+		<enumeration name="ekst" code="ekst">
+			<enumerator name="escape key" code="0x6b733500"/>  <!-- ks5\0 -->
+			<enumerator name="delete key" code="0x6b733300"/>  <!-- ks3\0 -->
+			<enumerator name="tab key" code="0x6b733000"/>  <!-- ks0\0 -->
+			<enumerator name="return key" code="0x6b732400"/>  <!-- ks$\0 -->
+			<enumerator name="clear key" code="0x6b734700"/>  <!-- ksG\0 -->
+			<enumerator name="enter key" code="0x6b734c00"/>  <!-- ksL\0 -->
+			<enumerator name="up arrow key" code="0x6b737e00"/>  <!-- ks~\0 -->
+			<enumerator name="down arrow key" code="0x6b737d00"/>  <!-- ks}\0 -->
+			<enumerator name="left arrow key" code="0x6b737b00"/>  <!-- ks{\0 -->
+			<enumerator name="right arrow key" code="0x6b737c00"/>  <!-- ks|\0 -->
+			<enumerator name="help key" code="0x6b737200"/>  <!-- ksr\0 -->
+			<enumerator name="home key" code="0x6b737300"/>  <!-- kss\0 -->
+			<enumerator name="page up key" code="0x6b737400"/>  <!-- kst\0 -->
+			<enumerator name="page down key" code="0x6b737900"/>  <!-- ksy\0 -->
+			<enumerator name="forward del key" code="0x6b737500"/>  <!-- ksu\0 -->
+			<enumerator name="end key" code="0x6b737700"/>  <!-- ksw\0 -->
+			<enumerator name="F1 key" code="0x6b737a00"/>  <!-- ksz\0 -->
+			<enumerator name="F2 key" code="0x6b737800"/>  <!-- ksx\0 -->
+			<enumerator name="F3 key" code="0x6b736300"/>  <!-- ksc\0 -->
+			<enumerator name="F4 key" code="0x6b737600"/>  <!-- ksv\0 -->
+			<enumerator name="F5 key" code="0x6b736000"/>  <!-- ks`\0 -->
+			<enumerator name="F6 key" code="0x6b736100"/>  <!-- ksa\0 -->
+			<enumerator name="F7 key" code="0x6b736200"/>  <!-- ksb\0 -->
+			<enumerator name="F8 key" code="0x6b736400"/>  <!-- ksd\0 -->
+			<enumerator name="F9 key" code="0x6b736500"/>  <!-- kse\0 -->
+			<enumerator name="F10 key" code="0x6b736d00"/>  <!-- ksm\0 -->
+			<enumerator name="F11 key" code="0x6b736700"/>  <!-- ksg\0 -->
+			<enumerator name="F12 key" code="0x6b736f00"/>  <!-- kso\0 -->
+			<enumerator name="F13 key" code="0x6b736900"/>  <!-- ksi\0 -->
+			<enumerator name="F14 key" code="0x6b736b00"/>  <!-- ksk\0 -->
+			<enumerator name="F15 key" code="0x6b737100"/>  <!-- ksq\0 -->
+		</enumeration>
+	</suite>
+	<suite name="Standard Suite" code="core" description="Common terms for most applications" hidden="yes">
+		<class name="application" code="capp"/>
+		<class name="document" code="docu"/>
+		<class name="file" code="file"/>
+		<class name="alias" code="alis" plural="aliases"/>
+		<class name="selection-object" code="csel" description="A way to refer to the state of the current of the selection.  Use the &#x2018;select&#x2019; command to make a new selection."/>
+		<class name="window" code="cwin"/>
+		<class name="insertion point" code="cins"/>
+		<enumeration name="savo" code="savo">
+			<enumerator name="yes" code="yes " description="Save objects now"/>
+			<enumerator name="no" code="no  " description="Do not save objects"/>
+			<enumerator name="ask" code="ask " description="Ask the user whether to save"/>
+		</enumeration>
+		<enumeration name="kfrm" code="kfrm">
+			<enumerator name="index" code="indx" description="keyform designating indexed access"/>
+			<enumerator name="named" code="name" description="keyform designating named access"/>
+			<enumerator name="id" code="ID  " description="keyform designating access by unique identifier"/>
+		</enumeration>
+		<enumeration name="styl" code="styl">
+			<enumerator name="plain" code="plan" description="Plain"/>
+			<enumerator name="bold" code="bold" description="Bold"/>
+			<enumerator name="italic" code="ital" description="Italic"/>
+			<enumerator name="outline" code="outl" description="Outline"/>
+			<enumerator name="shadow" code="shad" description="Shadow"/>
+			<enumerator name="underline" code="undl" description="Underline"/>
+			<enumerator name="superscript" code="spsc" description="Superscript"/>
+			<enumerator name="subscript" code="sbsc" description="Subscript"/>
+			<enumerator name="strikethrough" code="strk" description="Strikethrough"/>
+			<enumerator name="small caps" code="smcp" description="Small caps"/>
+			<enumerator name="all caps" code="alcp" description="All capital letters"/>
+			<enumerator name="all lowercase" code="lowc" description="Lowercase"/>
+			<enumerator name="condensed" code="cond" description="Condensed"/>
+			<enumerator name="expanded" code="pexp" description="Expanded"/>
+			<enumerator name="hidden" code="hidn" description="Hidden"/>
+		</enumeration>
+	</suite>
+	<suite name="Text Suite" code="TEXT" description="A set of basic classes for text processing" hidden="yes">
+		<class name="character" code="cha " description="A character" inherits="text"/>
+		<class name="line" code="clin" inherits="text"/>
+		<class name="paragraph" code="cpar" inherits="text"/>
+		<class plural="text" name="text" code="ctxt" description="Text"/>
+		<class name="text flow" code="cflo" inherits="text"/>
+		<class name="text style info" code="tsty"/>
+		<class name="word" code="cwor" inherits="text"/>
+		<enumeration name="just" code="just">
+			<enumerator name="left" code="left" description="Align with left margin"/>
+			<enumerator name="right" code="rght" description="Align with right margin"/>
+			<enumerator name="center" code="cent" description="Align with center"/>
+			<enumerator name="full" code="full" description="Align with both left and right margins"/>
+		</enumeration>
+		<enumeration name="styl" code="styl">
+			<enumerator name="plain" code="plan" description="Plain"/>
+			<enumerator name="bold" code="bold" description="Bold"/>
+			<enumerator name="italic" code="ital" description="Italic"/>
+			<enumerator name="outline" code="outl" description="Outline"/>
+			<enumerator name="shadow" code="shad" description="Shadow"/>
+			<enumerator name="underline" code="undl" description="Underline"/>
+			<enumerator name="superscript" code="spsc" description="Superscript"/>
+			<enumerator name="subscript" code="sbsc" description="Subscript"/>
+			<enumerator name="strikethrough" code="strk" description="Strikethrough"/>
+			<enumerator name="small caps" code="smcp" description="Small caps"/>
+			<enumerator name="all caps" code="alcp" description="All capital letters"/>
+			<enumerator name="all lowercase" code="lowc" description="Lowercase"/>
+			<enumerator name="condensed" code="cond" description="Condensed"/>
+			<enumerator name="expanded" code="pexp" description="Expanded"/>
+			<enumerator name="hidden" code="hidn" description="Hidden"/>
+		</enumeration>
+	</suite>
+	<suite name="QuickDraw Graphics Suite" code="qdrw" description="A set of basic classes for graphics" hidden="yes">
+		<class name="arc" code="carc"/>
+		<class name="drawing area" code="cdrw"/>
+		<class name="graphic line" code="glin"/>
+		<class name="graphic object" code="cgob"/>
+		<class name="graphic shape" code="cgsh"/>
+		<class name="graphic text" code="cgtx" description="A series of characters within a drawing area"/>
+		<class name="graphic group" code="cpic"/>
+		<class name="oval" code="covl"/>
+		<class name="pixel" code="cpxl"/>
+		<class name="pixel map" code="cpix"/>
+		<class name="polygon" code="cpgn"/>
+		<class name="rectangle" code="crec"/>
+		<class name="rounded rectangle" code="crrc"/>
+		<enumeration name="tran" code="tran">
+			<enumerator name="copy pixels" code="cpy "/>
+			<enumerator name="not copy pixels" code="ncpy"/>
+			<enumerator name="or pixels" code="or  "/>
+			<enumerator name="not or pixels" code="ntor"/>
+			<enumerator name="bic pixels" code="bic "/>
+			<enumerator name="not bic pixels" code="nbic"/>
+			<enumerator name="xor pixels" code="xor "/>
+			<enumerator name="not xor pixels" code="nxor"/>
+			<enumerator name="add over pixels" code="addo"/>
+			<enumerator name="add pin pixels" code="addp"/>
+			<enumerator name="sub over pixels" code="subo"/>
+			<enumerator name="sub pin pixels" code="subp"/>
+			<enumerator name="ad max pixels" code="admx"/>
+			<enumerator name="ad min pixels" code="admn"/>
+			<enumerator name="blend pixels" code="blnd"/>
+		</enumeration>
+		<enumeration name="arro" code="arro">
+			<enumerator name="no arrow" code="arno" description="No arrow on line"/>
+			<enumerator name="arrow at start" code="arst" description="Arrow at start of line"/>
+			<enumerator name="arrow at end" code="aren" description="Arrow at end of line"/>
+			<enumerator name="arrow at both ends" code="arbo" description="Arrow at both the start and the end of the line"/>
+		</enumeration>
+	</suite>
+	<suite name="QuickDraw Graphics Supplemental Suite" code="qdsp" description="Defines transformations of graphic objects" hidden="yes">
+		<class name="drawing area" code="cdrw"/>
+		<class name="graphic group" code="cpic"/>
+	</suite>
+	<suite name="Table Suite" code="tbls" description="Classes for manipulating tables" hidden="yes">
+		<class name="cell" code="ccel"/>
+		<class name="column" code="ccol"/>
+		<class name="row" code="crow"/>
+		<class name="table" code="ctbl"/>
+		<enumeration name="prtn" code="prtn">
+			<enumerator name="read only" code="nmod" description="Can&#x2019;t change values or formulas"/>
+			<enumerator name="formulas protected" code="fpro" description="Can changes values but not formulas"/>
+			<enumerator name="read/write" code="modf" description="Can change values and formulas"/>
+		</enumeration>
+	</suite>
+	<suite name="Macintosh Connectivity Classes" code="macc" description="Classes relating to Apple Macintosh personal computer connectivity" hidden="yes">
+		<class name="device specification" code="cdev"/>
+		<class name="address specification" code="cadr"/>
+		<class name="ADB address" code="cadb" inherits="address specification" plural="ADB addresses"/>
+		<class name="AppleTalk address" code="cat " inherits="address specification" plural="AppleTalk addresses"/>
+		<class name="bus slot" code="cbus" inherits="address specification"/>
+		<class name="Ethernet address" code="cen " inherits="address specification" plural="Ethernet addresses"/>
+		<class name="FireWire address" code="cfw " inherits="address specification" plural="FireWire addresses"/>
+		<class name="IP address" code="cip " inherits="address specification" plural="IP addresses"/>
+		<class name="LocalTalk address" code="clt " inherits="address specification" plural="LocalTalk addresses"/>
+		<class name="SCSI address" code="cscs" inherits="address specification" plural="SCSI addresses"/>
+		<class name="Token Ring address" code="ctok" inherits="address specification" plural="Token Ring addresses"/>
+		<class name="USB address" code="cusb" inherits="address specification" plural="USB Addresses"/>
+		<enumeration name="edvt" code="edvt">
+			<enumerator name="hard disk drive" code="ehd "/>
+			<enumerator name="floppy disk drive" code="efd "/>
+			<enumerator name="CD ROM drive" code="ecd "/>
+			<enumerator name="DVD drive" code="edvd"/>
+			<enumerator name="storage device" code="edst"/>
+			<enumerator name="keyboard" code="ekbd"/>
+			<enumerator name="mouse" code="emou"/>
+			<enumerator name="trackball" code="etrk"/>
+			<enumerator name="trackpad" code="edtp"/>
+			<enumerator name="pointing device" code="edpd"/>
+			<enumerator name="video monitor" code="edvm"/>
+			<enumerator name="LCD display" code="edlc"/>
+			<enumerator name="display" code="edds"/>
+			<enumerator name="modem" code="edmm"/>
+			<enumerator name="PC card" code="ecpc"/>
+			<enumerator name="PCI card" code="edpi"/>
+			<enumerator name="NuBus card" code="ednb"/>
+			<enumerator name="printer" code="edpr"/>
+			<enumerator name="speakers" code="edsp"/>
+			<enumerator name="microphone" code="ecmi"/>
+		</enumeration>
+		<enumeration name="econ" code="econ">
+			<enumerator name="ADB" code="eadb"/>
+			<enumerator name="printer port" code="ecpp"/>
+			<enumerator name="modem port" code="ecmp"/>
+			<enumerator name="modem printer port" code="empp"/>
+			<enumerator name="LocalTalk" code="eclt"/>
+			<enumerator name="Ethernet" code="ecen"/>
+			<enumerator name="Token Ring" code="etok"/>
+			<enumerator name="SCSI" code="ecsc"/>
+			<enumerator name="USB" code="ecus"/>
+			<enumerator name="FireWire" code="ecfw"/>
+			<enumerator name="infrared" code="ecir"/>
+			<enumerator name="PC card" code="ecpc"/>
+			<enumerator name="PCI bus" code="ecpi"/>
+			<enumerator name="NuBus" code="enub"/>
+			<enumerator name="PDS slot" code="ecpd"/>
+			<enumerator name="Comm slot" code="eccm"/>
+			<enumerator name="monitor out" code="ecmn"/>
+			<enumerator name="video out" code="ecvo"/>
+			<enumerator name="video in" code="ecvi"/>
+			<enumerator name="audio out" code="ecao"/>
+			<enumerator name="audio line in" code="ecai"/>
+			<enumerator name="audio line out" code="ecal"/>
+			<enumerator name="microphone" code="ecmi"/>
+		</enumeration>
+		<enumeration name="epro" code="epro">
+			<enumerator name="serial" code="epsr"/>
+			<enumerator name="AppleTalk" code="epat"/>
+			<enumerator name="IP" code="epip"/>
+			<enumerator name="SCSI" code="ecsc"/>
+			<enumerator name="ADB" code="eadb"/>
+			<enumerator name="FireWire" code="ecfw"/>
+			<enumerator name="IrDA" code="epir"/>
+			<enumerator name="IRTalk" code="epit"/>
+			<enumerator name="USB" code="ecus"/>
+			<enumerator name="PC card" code="ecpc"/>
+			<enumerator name="PCI bus" code="ecpi"/>
+			<enumerator name="NuBus" code="enub"/>
+			<enumerator name="bus" code="ebus"/>
+			<enumerator name="Macintosh video" code="epmv"/>
+			<enumerator name="SVGA" code="epsg"/>
+			<enumerator name="S video" code="epsv"/>
+			<enumerator name="analog audio" code="epau"/>
+			<enumerator name="digital audio" code="epda"/>
+			<enumerator name="PostScript" code="epps"/>
+		</enumeration>
+	</suite>
+	<suite name="Type Names Suite" code="tpnm" description="Terminology for Registry data types" hidden="yes">
+		<class name="type class info" code="gcli" description="information about properties and elements of a class"/>
+		<class name="type event info" code="evin" description="information about an event"/>
+		<class name="rectangle" code="qdrt" description="bounding rectangle"/>
+		<class name="point" code="QDpt" description="point coordinates"/>
+		<class name="fixed" code="fixd" description="a real number"/>
+		<class name="location reference" code="insl"/>
+		<class name="application dictionary" code="aete"/>
+		<class name="color table" code="clrt"/>
+		<class name="dash style" code="tdas"/>
+		<class name="double integer" code="comp"/>
+		<class name="extended real" code="exte"/>
+		<class name="fixed point" code="fpnt"/>
+		<class name="fixed rectangle" code="frct"/>
+		<class name="long fixed" code="lfxd"/>
+		<class name="long fixed point" code="lfpt"/>
+		<class name="long fixed rectangle" code="lfrc"/>
+		<class name="long point" code="lpnt"/>
+		<class name="long rectangle" code="lrct"/>
+		<class name="machine location" code="mLoc"/>
+		<class name="menu" code="cmnu"/>
+		<class name="menu item" code="cmen"/>
+		<class name="null" code="null"/>
+		<class name="pixel map record" code="tpmm"/>
+		<class name="PostScript picture" code="EPS "/>
+		<class name="RGB16 color" code="tr16"/>
+		<class name="RGB96 color" code="tr96"/>
+		<class name="small integer" code="shor"/>
+		<class name="small real" code="sing"/>
+		<class name="system dictionary" code="aeut"/>
+		<class name="rotation" code="trot"/>
+		<class name="scrap styles" code="styl"/>
+		<class name="TIFF picture" code="TIFF"/>
+		<class name="unsigned integer" code="magn"/>
+		<class name="type property info" code="pinf"/>
+		<class name="type element info" code="elin"/>
+		<class name="type parameter info" code="pmin"/>
+		<class name="type suite info" code="suin"/>
+		<class name="JPEG picture" code="JPEG"/>
+		<class name="GIF picture" code="GIFf"/>
+	</suite>
+</dictionary>

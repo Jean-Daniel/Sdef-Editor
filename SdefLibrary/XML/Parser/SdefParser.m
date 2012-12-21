@@ -262,7 +262,7 @@ Boolean _SdefElementIsCollection(CFStringRef element) {
       
       /* process xincludes */
       if (xmlXIncludeProcessFlags(document, flags) < 0) {
-        WBCLogWarning("xinclude processing failed.");
+        spx_log_warning("xinclude processing failed.");
       }
       
       result = [self parseFragment:xmlDocGetRootElement(document) parent:nil base:baseURL];
@@ -401,45 +401,45 @@ Boolean _SdefElementIsCollection(CFStringRef element) {
           structure = [self parser:parser createStructureForElement:node];
           break;
         case XML_PI_NODE:
-          DLog(@"Encounter processing instruction: %s", node->name);
+          SPXDebug(@"Encounter processing instruction: %s", node->name);
           break;
         case XML_COMMENT_NODE:
           [self parser:parser handleComment:node->content];
           break;
         case XML_TEXT_NODE:
           /* probably white-space: skip it */
-          //DLog(@"Data Type ID: kCFXMLNodeTypeText (%s)", node->content);
+          //SPXDebug(@"Data Type ID: kCFXMLNodeTypeText (%s)", node->content);
           break;
         case XML_CDATA_SECTION_NODE:
-          DLog(@"Data Type ID: kCFXMLDataTypeCDATASection (%s)", node->content);
+          SPXDebug(@"Data Type ID: kCFXMLDataTypeCDATASection (%s)", node->content);
           break;
         case XML_ENTITY_REF_NODE:
-          DLog(@"Data Type ID: kCFXMLNodeTypeEntityReference (%s)", node->name);
+          SPXDebug(@"Data Type ID: kCFXMLNodeTypeEntityReference (%s)", node->name);
           break;
         case XML_DTD_NODE:
         case XML_DOCUMENT_TYPE_NODE:
-          DLog(@"Data Type ID: kCFXMLNodeTypeDocumentType (%s)", node->name);
+          SPXDebug(@"Data Type ID: kCFXMLNodeTypeDocumentType (%s)", node->name);
           break;
         case XML_XINCLUDE_START:
-          DLog(@"******* Start xinclude *******");
+          SPXDebug(@"******* Start xinclude *******");
           structure = [self parser:parser createStructureForElement:node];
           [sd_xincludes addObject:structure];
           [(id)structure release];
           break;
         case XML_XINCLUDE_END:
-          DLog(@"******* End xinclude *******");
+          SPXDebug(@"******* End xinclude *******");
           [sd_xincludes removeLastObject];
           break;
 //        case kCFXMLNodeTypeWhitespace:
 //          /* Ignore white space */
 //          break;
         default:
-          DLog(@"Unknown Data Type ID: %ld (%s)", (long)node->type, node->name);
+          SPXDebug(@"Unknown Data Type ID: %ld (%s)", (long)node->type, node->name);
           break;
       }
     }
   } @catch (id exception) {
-    WBLogException(exception);
+    SPXLogException(exception);
     [parser abortWithError:kCFXMLErrorMalformedDocument reason:[exception reason]];
   }
   return structure;
@@ -467,7 +467,7 @@ Boolean _SdefElementIsCollection(CFStringRef element) {
   } else {
     id<SdefXMLObject> child = (id)aChild;
     id<SdefXMLObject> parent = (id)aStruct;
-    //  DLog(@"=========== %@ -> %@", parent, child);
+    //  SPXDebug(@"=========== %@ -> %@", parent, child);
     OSType type = [child objectType];
     if (typeWildCard == type) {
       [(id)child setObject:parent];
@@ -481,7 +481,7 @@ Boolean _SdefElementIsCollection(CFStringRef element) {
         [child setXIncluded:YES];
         SdefXInclude *include = [sd_xincludes lastObject];
         if ((id)[include owner] == parent) {
-          DLog(@"add include root: %@", child);
+          SPXDebug(@"add include root: %@", child);
         } 
       }
       
@@ -762,7 +762,7 @@ void _SdefParserPostProcessObjects(NSArray *roots, SdefVersion version) {
 }
 
 - (void)addXMLChild:(NSObject<SdefObject> *)node { 
-  DLog(@"Ignore add '%@' to invalid element '%@'.", 
+  SPXDebug(@"Ignore add '%@' to invalid element '%@'.",
        [node respondsToSelector:@selector(xmlElementName)] ? [(id)node xmlElementName] : [node name],
        [self xmlElementName]);
 }

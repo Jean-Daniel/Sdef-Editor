@@ -8,9 +8,9 @@
 
 #import "SdtplGenerator.h"
 
-#import WBHEADER(WBTemplate.h)
-#import WBHEADER(NSAlert+WonderBox.h)
-#import WBHEADER(NSString+WonderBox.h)
+#import <WonderBox/WBTemplate.h>
+#import <WonderBox/NSAlert+WonderBox.h>
+#import <WonderBox/NSString+WonderBox.h>
 
 #import "SdefTemplate.h"
 
@@ -170,14 +170,14 @@ NSString *SdefEscapedString(NSString *value, NSUInteger format) {
   if ([SdtplGenerator class] == self) {
     _null = [NSNull null];
     [[NSUserDefaults standardUserDefaults] registerDefaults:[NSDictionary dictionaryWithObjectsAndKeys:
-      WBBool(NO), @"SdtplSortSuite",
-      WBBool(YES), @"SdtplHTMLLinks",
-      WBBool(YES), @"SdtplSortOthers",
-      WBBool(NO), @"SdtplSubclasses",
-      WBBool(YES), @"SdtplGroupEvents",
-      WBBool(NO), @"SdtplIgnoreEvents",
-      WBBool(YES), @"SdtplIgnoreRespondsTo",
-      WBInteger(kSdefTemplateCSSInline), @"SdtplCSSStyle",
+      SPXBool(NO), @"SdtplSortSuite",
+      SPXBool(YES), @"SdtplHTMLLinks",
+      SPXBool(YES), @"SdtplSortOthers",
+      SPXBool(NO), @"SdtplSubclasses",
+      SPXBool(YES), @"SdtplGroupEvents",
+      SPXBool(NO), @"SdtplIgnoreEvents",
+      SPXBool(YES), @"SdtplIgnoreRespondsTo",
+      SPXInteger(kSdefTemplateCSSInline), @"SdtplCSSStyle",
       nil]];
     NSArray *tocKey = [NSArray arrayWithObject:@"toc"];
     [self setKeys:tocKey triggerChangeNotificationsForDependentKey:@"indexToc"];
@@ -405,7 +405,7 @@ NSString *SdefEscapedString(NSString *value, NSUInteger format) {
     bwrite = [self writeDictionary:dictionary usingTemplate:root];
   } @catch (id exception) {
     bwrite = NO;
-    WBLogException(exception);
+    SPXLogException(exception);
   }
   
   if (bwrite) {
@@ -415,7 +415,7 @@ NSString *SdefEscapedString(NSString *value, NSUInteger format) {
         @try {
           [self writeIndex:dictionary usingTemplate:root];
         } @catch (id exception) {
-          WBLogException(exception);
+          SPXLogException(exception);
         }
       }
     }
@@ -449,7 +449,7 @@ NSString *SdefEscapedString(NSString *value, NSUInteger format) {
             NSString *file = [self tocFile];
             [self writeTemplate:root toFile:file representedObject:dictionary];
           } @catch (id exception) {
-            WBLogException(exception);
+            SPXLogException(exception);
           }
         }
       }
@@ -809,7 +809,7 @@ NSString *SdefEscapedString(NSString *value, NSUInteger format) {
   BOOL isDir;
   if ([[NSFileManager defaultManager] fileExistsAtPath:path isDirectory:&isDir]) {
     if (kSdefTemplateFileSkip == sd_gnFlags.existingFile ) {
-      DLog(@"Skip File %@", path);
+      SPXDebug(@"Skip File %@", path);
       return NO;
     } else if (kSdefTemplateFileAsk == sd_gnFlags.existingFile) {
       NSAlert *alert = [NSAlert alertWithMessageText:@"File already exist!"

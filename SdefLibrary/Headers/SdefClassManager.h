@@ -6,7 +6,7 @@
  *  Copyright © 2006 - 2007 Shadow Lab. All rights reserved.
  */
 
-#import WBHEADER(WBTreeNode.h)
+#import <WonderBox/WBTreeNode.h>
 
 @class SdefValue, SdefRecord, SdefEnumeration;
 @class SdefSuite, SdefObject, SdefClass, SdefVerb, SdefDocument, SdefDictionary;

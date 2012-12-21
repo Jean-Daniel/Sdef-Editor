@@ -8,8 +8,8 @@
 
 #import "SdefEditor.h"
 
-#import WBHEADER(WBLSFunctions.h)
-#import WBHEADER(WBApplication.h)
+#import <WonderBox/WBLSFunctions.h>
+#import <WonderBox/WBApplication.h>
 
 #import "SdefSuite.h"
 #import "Preferences.h"
@@ -33,7 +33,6 @@ enum {
 int main(int argc, const char *argv[]) {
 #if defined (DEBUG)  
   NSDebugEnabled = YES;
-  NSHangOnUncaughtException = YES;
 #endif
   return NSApplicationMain(argc, argv);
 }
@@ -68,16 +67,16 @@ const OSType kCocoaSuiteDefinitionHFSType = 'ScSu';
     [ctrl release];
     
     [[NSUserDefaults standardUserDefaults] registerDefaults:[NSDictionary dictionaryWithObjectsAndKeys:
-      WBBool(YES), @"SdefOpenAtStartup",
-      WBBool(YES), @"SdefAutoSelectItem",
+      SPXBool(YES), @"SdefOpenAtStartup",
+      SPXBool(YES), @"SdefAutoSelectItem",
       sdp, @"SdefSdpToolPath",
       rez, @"SdefRezToolPath",
       nil]];
     [NSApp setDelegate:self];
 #if defined (DEBUG)
     [[NSUserDefaults standardUserDefaults] registerDefaults:[NSDictionary dictionaryWithObjectsAndKeys:
-      WBBool(YES), @"SdefDebugMenu",
-      WBBool(YES), @"SdefPantherExportEnabled",
+      SPXBool(YES), @"SdefDebugMenu",
+      SPXBool(YES), @"SdefPantherExportEnabled",
       // @"YES", @"NSShowNonLocalizedStrings",
       // @"NO", @"NSShowAllViews",
       // @"6", @"NSDragManagerLogLevel",
@@ -90,7 +89,7 @@ const OSType kCocoaSuiteDefinitionHFSType = 'ScSu';
 }
 
 - (void)showWelcome {
-  WBTrace();
+  SPXTrace();
 }
 
 - (void)awakeFromNib {
@@ -227,7 +226,7 @@ const OSType kCocoaSuiteDefinitionHFSType = 'ScSu';
       NSRunAlertPanel(@"Importation failed!", @"Sdef Editor cannot import this file. Is it in a valid format?", @"OK", nil, nil);
     }
   } @catch (id exception) {
-    WBLogException(exception);
+    SPXLogException(exception);
     NSBeep();
   }
 }

@@ -13,14 +13,14 @@
 #import "SdtplGenerator.h"
 #import "SdefWindowController.h"
 
-#import WBHEADER(WBDisclosurePanel.h)
+#import "WBDisclosurePanel.h"
 
 @implementation SdtplWindow
 
 + (void)initialize {
   if ([SdtplWindow class] == self) {
     [[NSUserDefaults standardUserDefaults] registerDefaults:[NSDictionary dictionaryWithObjectsAndKeys:
-      WBInteger(0x03), @"SdtplDislosurePanel", /* 1 << 0 & 1 << 1 => the two first view are opened */
+      SPXInteger(0x03), @"SdtplDislosurePanel", /* 1 << 0 & 1 << 1 => the two first view are opened */
       nil]];
   }
 }
@@ -118,7 +118,7 @@
     @try {
       [generator writeDictionary:[sd_document dictionary] toFile:file];
     } @catch (id exception) {
-      WBLogException(exception);
+      SPXLogException(exception);
     }
   }
   [self close:nil];

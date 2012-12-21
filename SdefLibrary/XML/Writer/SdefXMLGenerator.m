@@ -39,14 +39,14 @@
   return sd_root;
 }
 - (void)setRoot:(SdefObject *)anObject {
-  WBSetterRetain(sd_root, anObject);
+  SPXSetterRetain(sd_root, anObject);
 }
 
 - (void)setIgnoreMetas:(BOOL)flag {
   sd_metas = !flag;
 }
 - (void)setHeaderComment:(NSString *)comment {
-  WBSetterCopy(sd_comment, comment);
+  SPXSetterCopy(sd_comment, comment);
 }
 
 #pragma mark -

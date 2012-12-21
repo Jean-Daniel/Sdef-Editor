@@ -52,14 +52,14 @@
   return sd_href;
 }
 - (void)setHref:(NSString *)aRef {
-  WBSetterCopy(sd_href, aRef);
+  SPXSetterCopy(sd_href, aRef);
 }
 
 - (NSString *)pointer {
   return sd_pointer;
 }
 - (void)setPointer:(NSString *)aPointer {
-  WBSetterCopy(sd_pointer, aPointer);
+  SPXSetterCopy(sd_pointer, aPointer);
 }
 
 #pragma mark -

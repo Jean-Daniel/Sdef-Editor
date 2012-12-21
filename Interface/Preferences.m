@@ -28,14 +28,14 @@
   return sdp;
 }
 - (void)setSdp:(NSString *)newSdp {
-	WBSetterCopy(sdp, newSdp);
+	SPXSetterCopy(sdp, newSdp);
 }
 
 - (NSString *)rez {
   return rez;
 }
 - (void)setRez:(NSString *)newRez {
-	WBSetterCopy(rez, newRez);
+	SPXSetterCopy(rez, newRez);
 }
 
 #pragma mark -
