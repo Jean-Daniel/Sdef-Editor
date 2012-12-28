@@ -6,13 +6,14 @@
  *  Copyright © 2006 - 2007 Shadow Lab. All rights reserved.
  */
 
+@protocol SdefParserDelegate;
 @class SdefObject, SdefDictionary, SdefClassManager;
 @class SdefWindowController, SdefSymbolBrowser, SdefValidator;
 
 SPX_PRIVATE
-SdefDictionary *SdefLoadDictionary(NSURL *file, NSInteger *version, id delegate, NSError **error);
+SdefDictionary *SdefLoadDictionary(NSURL *file, NSInteger *version, id<SdefParserDelegate> delegate, NSError **error);
 SPX_PRIVATE
-SdefDictionary *SdefLoadDictionaryData(NSData *data, NSURL *base, NSInteger *version, id delegate, NSError **error);
+SdefDictionary *SdefLoadDictionaryData(NSData *data, NSURL *base, NSInteger *version, id<SdefParserDelegate> delegate, NSError **error);
 
 @interface SdefDocument : NSDocument {
 @private

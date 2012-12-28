@@ -39,9 +39,6 @@
 }
 
 #pragma mark -
-+ (void)initialize {
-  [self setKeys:[NSArray arrayWithObject:@"name"] triggerChangeNotificationsForDependentKey:@"title"];
-}
 
 - (void)sdefInit {
   [super sdefInit];
@@ -67,6 +64,10 @@
 }
 
 #pragma mark -
++ (NSSet *)keyPathsForValuesAffectingTitle {
+  return [NSSet setWithObject:@"name"];
+}
+
 - (NSString *)title {
   return [self name];
 }

@@ -21,6 +21,9 @@
 #import "SdefDocument.h"
 #import "SdefDictionary.h"
 
+#import "SdefEditor.h"
+#import "SdefTypesEditor.h"
+
 #define IsObjectOwner(item)		 		[item findRoot] == [sd_tree root]
 
 static

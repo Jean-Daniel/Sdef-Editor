@@ -29,6 +29,10 @@ enum {
   kSdefTemplateFileReplace	= 2,
 };
 
+@interface NSObject (SilentWarning_)
+- (void)writeAccessorsStringToStream:(id)stream;
+@end
+
 static NSNull *_null;
 
 static NSString *SdtplSimplifieName(NSString *name);
@@ -179,11 +183,6 @@ NSString *SdefEscapedString(NSString *value, NSUInteger format) {
       SPXBool(YES), @"SdtplIgnoreRespondsTo",
       SPXInteger(kSdefTemplateCSSInline), @"SdtplCSSStyle",
       nil]];
-    NSArray *tocKey = [NSArray arrayWithObject:@"toc"];
-    [self setKeys:tocKey triggerChangeNotificationsForDependentKey:@"indexToc"];
-    [self setKeys:tocKey triggerChangeNotificationsForDependentKey:@"externalToc"];
-    [self setKeys:tocKey triggerChangeNotificationsForDependentKey:@"dictionaryToc"];
-    [self setKeys:[NSArray arrayWithObject:@"css"] triggerChangeNotificationsForDependentKey:@"externalCss"];
   }
 }
 
@@ -249,17 +248,26 @@ NSString *SdefEscapedString(NSString *value, NSUInteger format) {
 - (void)setToc:(NSUInteger)toc {
   sd_gnFlags.toc = toc;
 }
++ (NSSet *)keyPathsForValuesAffectingIndexToc {
+  return [NSSet setWithObject:@"toc"];
+}
 - (BOOL)indexToc {
   return (sd_gnFlags.toc & kSdefTemplateTOCIndex) != 0;
 }
 - (void)setIndexToc:(BOOL)flag {
   sd_gnFlags.toc = (flag) ? sd_gnFlags.toc | kSdefTemplateTOCIndex : sd_gnFlags.toc & ~kSdefTemplateTOCIndex;
 }
++ (NSSet *)keyPathsForValuesAffectingExternalToc {
+  return [NSSet setWithObject:@"toc"];
+}
 - (BOOL)externalToc {
   return (sd_gnFlags.toc & kSdefTemplateTOCExternal) != 0;
 }
 - (void)setExternalToc:(BOOL)flag {
   sd_gnFlags.toc = (flag) ? sd_gnFlags.toc | kSdefTemplateTOCExternal : sd_gnFlags.toc & ~kSdefTemplateTOCExternal;
+}
++ (NSSet *)keyPathsForValuesAffectingDictionaryToc {
+  return [NSSet setWithObject:@"toc"];
 }
 - (BOOL)dictionaryToc {
   return (sd_gnFlags.toc & kSdefTemplateTOCDictionary) != 0;
@@ -273,6 +281,9 @@ NSString *SdefEscapedString(NSString *value, NSUInteger format) {
 }
 - (void)setCss:(NSUInteger)css {
   sd_gnFlags.css = css;
+}
++ (NSSet *)keyPathsForValuesAffectingExternalCss {
+  return [NSSet setWithObject:@"css"];
 }
 - (BOOL)externalCss {
   return (sd_gnFlags.css & kSdefTemplateCSSExternal) != 0;
@@ -427,8 +438,8 @@ NSString *SdefEscapedString(NSString *value, NSUInteger format) {
         NSString *dest = [sd_base stringByAppendingPathComponent:[self cssFile]];
         if (src && dest) {
           if ([self canWriteFileAtPath:dest]) {
-            [[NSFileManager defaultManager] removeFileAtPath:dest handler:nil];
-            [[NSFileManager defaultManager] copyPath:src toPath:dest handler:nil];
+            [[NSFileManager defaultManager] removeItemAtPath:dest error:NULL];
+            [[NSFileManager defaultManager] copyItemAtPath:src toPath:dest error:NULL];
           }
         }
       }
@@ -462,7 +473,7 @@ NSString *SdefEscapedString(NSString *value, NSUInteger format) {
     NSFileManager *manager = [NSFileManager defaultManager];
     NSEnumerator *files = [sd_cancel objectEnumerator];
     while (file = [files nextObject]) {
-      [manager removeFileAtPath:file handler:nil];
+      [manager removeItemAtPath:file error:NULL];
     }
   }
   
@@ -754,7 +765,7 @@ NSString *SdefEscapedString(NSString *value, NSUInteger format) {
       if (kSdefTemplateCSSInline == sd_gnFlags.css && [tpl blockWithName:SdtplBlockStyle]) {
         WBTemplate *block = [tpl blockWithName:SdtplBlockStyle];
         if ([block containsKey:SdtplVariableStyleSheet]) {
-          NSString *style = [[NSString alloc] initWithContentsOfFile:[[sd_tpl selectedStyle] objectForKey:@"path"]];
+          NSString *style = [[NSString alloc] initWithContentsOfFile:[[sd_tpl selectedStyle] objectForKey:@"path"] encoding:NSUTF8StringEncoding error:NULL];
           [block setVariable:style forKey:SdtplVariableStyleSheet];
           [style release];
           [block dumpBlock];
@@ -847,7 +858,7 @@ NSString *SdefEscapedString(NSString *value, NSUInteger format) {
   }
   /* File exists already checked */
   if ([path isEqualToString:sd_path]) {
-    [[NSFileManager defaultManager] removeFileAtPath:path handler:nil];
+    [[NSFileManager defaultManager] removeItemAtPath:path error:NULL];
   }
   if ([self canWriteFileAtPath:path] && [tpl writeToFile:path atomically:YES andReset:YES]) {
     [sd_cancel addObject:path];

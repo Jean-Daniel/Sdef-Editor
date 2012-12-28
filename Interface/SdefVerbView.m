@@ -14,9 +14,8 @@
 
 @implementation SdefVerbView
 
-+ (void)initialize {
-  [super initialize];
-  [self setKeys:[NSArray arrayWithObject:@"object"] triggerChangeNotificationsForDependentKey:@"verbLabel"];
++ (NSSet *)keyPathsForValuesAffectingVerbLabel {
+  return [NSSet setWithObject:@"object"];
 }
 
 - (NSString *)verbLabel {

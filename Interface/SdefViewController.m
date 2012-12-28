@@ -21,11 +21,6 @@
     [NSValueTransformer setValueTransformer:[SdefAccessTransformer transformer] forName:@"SdefAccessTransformer"];
     [NSValueTransformer setValueTransformer:[SdefObjectNameTransformer transformer] forName:@"SdefObjectNameTransformer"];
   }
-  [self setKeys:[NSArray arrayWithObject:@"object"] triggerChangeNotificationsForDependentKey:@"document"];
-  [self setKeys:[NSArray arrayWithObject:@"object"] triggerChangeNotificationsForDependentKey:@"types"];
-  [self setKeys:[NSArray arrayWithObject:@"object"] triggerChangeNotificationsForDependentKey:@"classes"];
-  [self setKeys:[NSArray arrayWithObject:@"object"] triggerChangeNotificationsForDependentKey:@"commands"];
-  [self setKeys:[NSArray arrayWithObject:@"object"] triggerChangeNotificationsForDependentKey:@"events"];
 }
 
 + (BOOL)automaticallyNotifiesObserversForKey:(NSString *)key {
@@ -111,6 +106,9 @@
 
 #pragma mark -
 #pragma mark Document accessor
++ (NSSet *)keyPathsForValuesAffectingDocument {
+  return [NSSet setWithObject:@"object"];
+}
 - (SdefDocument *)document {
   return [[self object] document];
 }
@@ -119,6 +117,9 @@
   return [[self object] classManager];
 }
 
++ (NSSet *)keyPathsForValuesAffectingTypes {
+  return [NSSet setWithObject:@"object"];
+}
 - (NSArray *)types {
   if (!sd_types) {
     sd_types = [[self classManager] types];
@@ -127,14 +128,23 @@
   return sd_types;
 }
 
++ (NSSet *)keyPathsForValuesAffectingClasses {
+  return [NSSet setWithObject:@"object"];
+}
 - (NSArray *)classes {
   return [[self classManager] classes];
 }
 
++ (NSSet *)keyPathsForValuesAffectingCommands {
+  return [NSSet setWithObject:@"object"];
+}
 - (NSArray *)commands {
   return [[self classManager] commands];
 }
 
++ (NSSet *)keyPathsForValuesAffectingEvents {
+  return [NSSet setWithObject:@"object"];
+}
 - (NSArray *)events {
   return [[self classManager] events];
 }
@@ -158,24 +168,20 @@
   return [[[self alloc] init] autorelease];
 }
 
-// information that can be used to analyze available transformer instances (especially used inside Interface Builder)
-// class of the "output" objects, as returned by transformedValue:
 + (Class)transformedValueClass {
   return [NSColor class];
 }
 
-// flag indicating whether transformation is read-only or not
 + (BOOL)allowsReverseTransformation {
   return NO;
 }
 
-/* Returns menu idx */
 - (id)transformedValue:(id)value {
   static NSColor *color = nil;
   if (!color) {
     color = [[NSColor colorWithCalibratedRed:.5 green:.5 blue:.75 alpha:1] retain];
   }
-  return ([value respondsToSelector:@selector(hasCutomType:)] && [value hasCustomType]) ? color : [NSColor blackColor];
+  return ([value respondsToSelector:@selector(hasCustomType)] && [value hasCustomType]) ? color : [NSColor blackColor];
 }
 
 /* Returns access value */

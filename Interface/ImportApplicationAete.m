@@ -80,13 +80,15 @@
   [openPanel setCanChooseDirectories:NO];
   [openPanel setAllowsMultipleSelection:NO];
   [openPanel setTreatsFilePackagesAsDirectories:NO];
-  switch ([openPanel runModalForTypes:[NSArray arrayWithObjects:@"app", NSFileTypeForHFSTypeCode('APPL'), nil]]) {
+  [openPanel setAllowedFileTypes:[NSArray arrayWithObjects:@"app", kUTTypeApplication, nil]];
+  switch ([openPanel runModal]) {
     case NSCancelButton:
       return;
   }
-  if ([[openPanel filenames] count] == 0) return;
-  NSString *file = [openPanel filename];
-  WBApplication *appli = [WBAliasedApplication applicationWithPath:file];
+  if ([[openPanel URLs] count] == 0)
+    return;
+  NSURL *file = [openPanel URL];
+  WBApplication *appli = [WBAliasedApplication applicationWithPath:[file path]];
   NSMenuItem *item = [popup itemWithTitle:[appli name]];
   if (!item) {
     item = [[NSMenuItem alloc] initWithTitle:[appli name] action:nil keyEquivalent:@""];

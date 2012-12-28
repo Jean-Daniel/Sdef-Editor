@@ -19,6 +19,22 @@ enum {
   kFontIDTimes = 20
 };
 
+#if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_7
+// Not in 10.7SDK
+extern FMFontFamily FMGetFontFamilyFromName(ConstStr255Param iName);
+extern OSErr FetchFontInfo(SInt16      fontID,
+                           SInt16      fontSize,
+                           SInt16      fontStyle,
+                           FontInfo *  info);
+extern OSStatus FMGetFontFamilyInstanceFromFont(FMFont iFont,
+                                                FMFontFamily *oFontFamily,
+                                                FMFontStyle *oStyle);
+extern OSStatus FMGetFontFromFontFamilyInstance(FMFontFamily   iFontFamily,
+                                                FMFontStyle    iStyle,
+                                                FMFont *       oFont,
+                                                FMFontStyle *  oIntrinsicStyle);
+#endif
+
 SPX_INLINE
 SInt16 ASFontFamilyIDForFamilyName(CFStringRef name) {
   Str255 fName;

@@ -118,6 +118,8 @@ Boolean _SdefElementIsCollection(CFStringRef element) {
 #pragma mark -
 @implementation SdefParser
 
+@synthesize delegate = sd_delegate;
+
 + (void)initialize {
   if ([SdefParser class] == self) {
     xmlInitParser();
@@ -190,15 +192,6 @@ Boolean _SdefElementIsCollection(CFStringRef element) {
   if (sd_metas) CFDictionaryRemoveAllValues(sd_metas);
 }
 
-- (NSInteger)line {
-  return sd_parser ? [(id)sd_parser line] : -1;
-  //return sd_parser ? CFXMLParserGetLineNumber(sd_parser) : -1;
-}
-- (NSInteger)location {
-  return sd_parser ? [(id)sd_parser location] : -1;
-  //return sd_parser ? CFXMLParserGetLocation(sd_parser) : -1;
-}
-
 - (NSArray *)objects {
   return sd_roots;
 }
@@ -211,14 +204,6 @@ Boolean _SdefElementIsCollection(CFStringRef element) {
     return [object objectType] == kSdefDictionaryType ? object : nil;
   }
   return nil;
-}
-
-- (id)delegate {
-  return sd_delegate;
-}
-- (void)setDelegate:(id)delegate {
-  NSParameterAssert(!delegate || [delegate respondsToSelector:@selector(sdefParser:shouldIgnoreValidationError:isFatal:)]);
-  sd_delegate = delegate;
 }
 
 - (BOOL)parseFragment:(xmlNodePtr)aNode parent:(NSString *)parent base:(NSURL *)anURL {

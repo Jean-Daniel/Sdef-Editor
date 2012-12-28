@@ -12,8 +12,9 @@
 
 #if !__LP64__
 
-@interface SdefElement (ASDictionary) 
+@interface SdefElement (ASDictionary)
 - (void)appendStringToStream:(ASDictionaryStream *)stream;
+- (void)writeAccessorsStringToStream:(id)stream;
 @end
 
 @interface SdefProperty (ASDictionary) 

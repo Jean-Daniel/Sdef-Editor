@@ -9,11 +9,11 @@
 
 #import "SdefBase.h"
 
+@protocol SdefParserDelegate;
 @class SdefXMLValidator, SdefDocumentationParser;
 @interface SdefParser : NSObject {
-  id sd_delegate;
+  id<SdefParserDelegate> sd_delegate;
   
-  void *sd_parser;
   SdefVersion sd_version;
   NSMutableArray *sd_comments;
   NSMutableArray *sd_xincludes;
@@ -27,11 +27,7 @@
   SdefDocumentationParser *sd_docParser;
 }
 
-- (id)delegate;
-- (void)setDelegate:(id)delegate;
-
-- (NSInteger)line;
-- (NSInteger)location;
+@property(nonatomic, assign) id<SdefParserDelegate> delegate;
 
 - (NSArray *)objects;
 - (SdefVersion)sdefVersion;
@@ -42,7 +38,7 @@
 
 @end
 
-@interface NSObject (SdefParserDelegate)
+@protocol SdefParserDelegate
 - (BOOL)sdefParser:(SdefParser *)parser shouldIgnoreValidationError:(NSError *)error isFatal:(BOOL)fatal;
 @end
 

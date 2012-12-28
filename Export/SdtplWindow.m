@@ -103,26 +103,21 @@
   NSSavePanel *panel = [NSSavePanel savePanel];
   [panel setCanSelectHiddenExtension:YES];
   [panel setTitle:@"Create Dictionary"];
-  [panel setRequiredFileType:[sd_template extension]];
-  [panel beginSheetForDirectory:nil
-                           file:[[sd_document displayName] stringByDeletingPathExtension]
-                 modalForWindow:[[sd_document documentWindow] window]
-                  modalDelegate:self
-                 didEndSelector:@selector(exportPanelDidEnd:result:context:)
-                    contextInfo:nil];
-}
-
-- (void)exportPanelDidEnd:(NSSavePanel *)aPanel result:(unsigned)code context:(void *)ctxt {
-  if (NSOKButton == code) {
-    NSString *file = [aPanel filename];
-    @try {
-      [generator writeDictionary:[sd_document dictionary] toFile:file];
-    } @catch (id exception) {
-      SPXLogException(exception);
-    }
-  }
-  [self close:nil];
-  [self autorelease];
+  [panel setAllowedFileTypes:[NSArray arrayWithObject:[sd_template extension]]];
+  [panel setNameFieldStringValue:[[sd_document displayName] stringByDeletingPathExtension]];
+  [panel beginSheetModalForWindow:[[sd_document documentWindow] window]
+                completionHandler:^(NSInteger result) {
+                  if (NSOKButton == result) {
+                    NSURL *file = [panel URL];
+                    @try {
+                      [generator writeDictionary:[sd_document dictionary] toFile:[file path]];
+                    } @catch (id exception) {
+                      SPXLogException(exception);
+                    }
+                  }
+                  [self close:nil];
+                  [self autorelease];
+                }];
 }
 
 - (SdefTemplate *)selectedTemplate {
@@ -156,15 +151,15 @@
   if ([openPanel runModalForDirectory:nil
                                  file:nil
                                 types:[NSArray arrayWithObject:@"sdtpl"]] == NSOKButton) {
-    id file = [[openPanel filenames] objectAtIndex:0];
-    id tpl = [[SdefTemplate alloc] initWithPath:file];
+    NSString *file = [[openPanel filenames] objectAtIndex:0];
+    SdefTemplate *tpl = [[SdefTemplate alloc] initWithPath:file];
     if (tpl) {
       if ([[templates itemAtIndex:0] tag] == 0) {
         [[templates menu] insertItem:[NSMenuItem separatorItem] atIndex:0];
       }
-      id item = [[NSMenuItem alloc] initWithTitle:[tpl menuName]
-                                           action:nil
-                                    keyEquivalent:@""];
+      NSMenuItem *item = [[NSMenuItem alloc] initWithTitle:[tpl menuName]
+                                                    action:nil
+                                             keyEquivalent:@""];
       [item setRepresentedObject:tpl];
       [item setTag:1];
       [[templates menu] insertItem:item atIndex:0];

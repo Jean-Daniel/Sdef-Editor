@@ -35,6 +35,8 @@
 - (SdefDocument *)document;
 - (SdefClassManager *)classManager;
 
+- (void)documentWillClose:(SdefDocument *)aDocument;
+
 @end
 
 @interface SdefTypeButton : NSButton {

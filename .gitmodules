@@ -1,0 +1,6 @@
+[submodule "hadron"]
+	path = hadron
+	url = git@github.com:Jean-Daniel/hadron.git
+[submodule "WonderBox"]
+	path = WonderBox
+	url = git@github.com:Jean-Daniel/WonderBox.git

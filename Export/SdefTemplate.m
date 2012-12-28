@@ -342,7 +342,7 @@ static NSArray *SdefTemplatePaths(void) {
 static
 NSDictionary *SdefTemplatesAtPath(NSString *path) {
   NSMutableDictionary *templates = [NSMutableDictionary dictionary];
-  NSArray *names = [[NSFileManager defaultManager] directoryContentsAtPath:path];
+  NSArray *names = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:path error:NULL];
   NSUInteger idx = [names count];
   while (idx-- > 0) {
     NSString *name = [names objectAtIndex:idx];

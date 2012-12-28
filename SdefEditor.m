@@ -250,14 +250,15 @@ const OSType kCocoaSuiteDefinitionHFSType = 'ScSu';
   [openPanel setCanChooseDirectories:NO];
   [openPanel setAllowsMultipleSelection:NO];
   [openPanel setTreatsFilePackagesAsDirectories:YES];
-  switch([openPanel runModalForTypes:[NSArray arrayWithObject:@"scriptSuite"]]) {
+  [openPanel setAllowedFileTypes:[NSArray arrayWithObject:@"scriptSuite"]];
+  switch([openPanel runModal]) {
     case NSCancelButton:
       return;
   }
-  if (![[openPanel filenames] count]) return;
+  if (![[openPanel URLs] count]) return;
   
-  NSString *file = [[openPanel filenames] objectAtIndex:0];
-  [self importCocoaScriptFile:file];
+  NSURL *file = [[openPanel URLs] objectAtIndex:0];
+  [self importCocoaScriptFile:[file path]];
 }
 
 - (IBAction)importAete:(id)sender {
@@ -269,14 +270,14 @@ const OSType kCocoaSuiteDefinitionHFSType = 'ScSu';
   [openPanel setCanChooseDirectories:NO];
   [openPanel setAllowsMultipleSelection:NO];
   [openPanel setTreatsFilePackagesAsDirectories:YES];
-  switch([openPanel runModalForTypes:nil]) {
+  switch([openPanel runModal]) {
     case NSCancelButton:
       return;
   }
-  if (![[openPanel filenames] count]) return;
+  if (![[openPanel URLs] count]) return;
   
-  NSString *file = [[openPanel filenames] objectAtIndex:0];
-  AeteImporter *aete = [[AeteImporter alloc] initWithContentsOfFile:file];
+  NSURL *file = [[openPanel URLs] objectAtIndex:0];
+  AeteImporter *aete = [[AeteImporter alloc] initWithContentsOfFile:[file path]];
   [self importWithImporter:aete];
   [aete release];
 }

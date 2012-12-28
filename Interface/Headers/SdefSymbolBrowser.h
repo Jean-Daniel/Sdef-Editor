@@ -19,7 +19,7 @@ typedef enum {
 
 @class SdefSuite;
 @class WBTableDataSource;
-@interface SdefSymbolBrowser : NSWindowController {
+@interface SdefSymbolBrowser : NSWindowController <NSToolbarDelegate> {
   SdefSearchField sd_filter;
   NSSearchField *searchField;
   IBOutlet id symbolTable;

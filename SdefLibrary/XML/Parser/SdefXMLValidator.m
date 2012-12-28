@@ -395,12 +395,6 @@ CFMutableDictionaryRef sValidators = NULL;
 #pragma mark -
 @implementation SdefXMLElement
 
-+ (void)initialize {
-  if ([SdefXMLElement class] == self) {
-
-  }
-}
-
 - (void)setElements:(CFStringRef)attribute, ... {
   [NSException raise:NSInvalidArgumentException format:@"Invalid receiver"];
 }

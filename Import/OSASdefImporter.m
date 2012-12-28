@@ -12,10 +12,14 @@
 
 #include <Carbon/Carbon.h>
 
+#import "SdefParser.h"
 #import "SdefDocument.h"
 #import "SdefDictionary.h"
 
-@class SdefParser;
+@interface OSASdefImporter () <SdefParserDelegate>
+
+@end
+
 @implementation OSASdefImporter
 
 - (id)initWithFile:(NSString *)file {

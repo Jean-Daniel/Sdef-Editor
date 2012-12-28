@@ -398,7 +398,7 @@ BOOL SdefSearchFilter(NSString *search, SdefObject *object, void *ctxt) {
 @implementation SdefObject (SdefBrowserExtension)
 
 - (NSString *)browserType {
-	return [self respondsToSelector:@selector(type)] ? [(id)self type] : nil;
+	return [self respondsToSelector:@selector(type)] ? [(SdefTypedObject *)self type] : nil;
 }
 
 @end

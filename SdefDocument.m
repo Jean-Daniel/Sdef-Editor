@@ -26,6 +26,10 @@
 
 #import "ASDictionary.h"
 
+@interface SdefDocument () <SdefParserDelegate>
+
+@end
+
 @implementation SdefDocument
 
 - (id)initWithType:(NSString *)typeName error:(NSError **)outError {
@@ -116,34 +120,30 @@
 - (IBAction)exportASDictionary:(id)sender {
   NSSavePanel *panel = [NSSavePanel savePanel];
   [panel setCanSelectHiddenExtension:YES];
-  [panel setRequiredFileType:@"asdictionary"];
   [panel setTitle:@"Create AppleScript Dictionary."];
-  [panel beginSheetForDirectory:nil
-                           file:[[self displayName] stringByDeletingPathExtension]
-                 modalForWindow:[[self documentWindow] window]
-                  modalDelegate:self
-                 didEndSelector:@selector(exportASDictionary:returnCode:context:)
-                    contextInfo:nil];
+  [panel setAllowedFileTypes:[NSArray arrayWithObject:@"asdictionary"]];
+  [panel setNameFieldStringValue:[[self displayName] stringByDeletingPathExtension]];
+  [panel beginSheetModalForWindow:[[self documentWindow] window]
+                completionHandler:^(NSInteger result) {
+                  NSURL *file;
+                  if ((result == NSOKButton) && (file = [panel URL])) {
+                    NSDictionary *dico = nil;
+                    @try {
+                      dico = AppleScriptDictionaryFromSdefDictionary([self dictionary]);
+                    } @catch (id exception) {
+                      dico = nil;
+                      SPXLogException(exception);
+                    }
+                    if (!dico || ![NSArchiver archiveRootObject:dico toFile:[file path]]) {
+                      NSBeginAlertSheet(@"Unable to create ASDictionary!",
+                                        @"OK", nil, nil,
+                                        [[self documentWindow] window],
+                                        nil, nil, nil, nil, @"An unknow error prevent creation.");
+                    }
+                  }
+                }];
 }
 
-- (void)exportASDictionary:(NSSavePanel *)aPanel returnCode:(int)result context:(id)ctxt {
-  NSString *file;
-  if ((result == NSOKButton) && (file = [aPanel filename])) {
-    NSDictionary *dico = nil;
-    @try {
-      dico = AppleScriptDictionaryFromSdefDictionary([self dictionary]);
-    } @catch (id exception) {
-      dico = nil;
-      SPXLogException(exception);
-    }
-    if (!dico || ![NSArchiver archiveRootObject:dico toFile:file]) {
-      NSBeginAlertSheet(@"Unable to create ASDictionary!",
-                        @"OK", nil, nil,
-                        [[self documentWindow] window],
-                        nil, nil, nil, nil, @"An unknow error prevent creation.");
-    }
-  }
-}
 #endif
 
 - (IBAction)exportUsingTemplate:(id)sender {
@@ -332,14 +332,14 @@
 @end
 
 #pragma mark -
-SdefDictionary *SdefLoadDictionary(NSURL *file, NSInteger *version, id delegate, NSError **error) {
+SdefDictionary *SdefLoadDictionary(NSURL *file, NSInteger *version, id<SdefParserDelegate> delegate, NSError **error) {
   //NSData *data = [[NSData alloc] initWithContentsOfURL:file];
   SdefDictionary *dictionary = SdefLoadDictionaryData(nil, file, version, delegate, error);
   //[data release];
   return dictionary;
 }
 
-SdefDictionary *SdefLoadDictionaryData(NSData *data, NSURL *base, NSInteger *version, id delegate, NSError **error) {
+SdefDictionary *SdefLoadDictionaryData(NSData *data, NSURL *base, NSInteger *version, id<SdefParserDelegate> delegate, NSError **error) {
   SdefDictionary *result = nil;
   if (data || base) {
     SdefParser *parser = [[SdefParser alloc] init];

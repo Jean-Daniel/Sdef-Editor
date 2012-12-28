@@ -63,6 +63,8 @@ extern NSString * const SdefInvalidTemplateException;
 
 + (NSDictionary *)findAllTemplates;
 
+- (id)initWithPath:(NSString *)aPath;
+
 - (NSString *)path;
 - (void)setPath:(NSString *)path;
 

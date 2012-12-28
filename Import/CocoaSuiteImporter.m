@@ -53,10 +53,10 @@ NSDictionary *_CocoaScriptingFindTerminology(NSString *base, NSString *name) {
       [openPanel setCanChooseDirectories:NO];
       [openPanel setAllowsMultipleSelection:NO];
       [openPanel setTreatsFilePackagesAsDirectories:YES];
-      
-      switch([openPanel runModalForTypes:[NSArray arrayWithObjects:@"scriptTerminology", nil]]) {
+      [openPanel setAllowedFileTypes:[NSArray arrayWithObjects:@"scriptTerminology", nil]];
+      switch([openPanel runModal]) {
         case NSOKButton:
-          file = [openPanel filename];
+          file = [[openPanel URL] path];
           break;
         case NSCancelButton:
           search = NO;
@@ -179,10 +179,10 @@ static NSArray *ASKStandardsSuites(void) {
     [openPanel setCanChooseDirectories:NO];
     [openPanel setAllowsMultipleSelection:NO];
     [openPanel setTreatsFilePackagesAsDirectories:YES];
-    
-    switch([openPanel runModalForTypes:[NSArray arrayWithObjects:@"scriptSuite", nil]]) {
+    [openPanel setAllowedFileTypes:[NSArray arrayWithObjects:@"scriptSuite", nil]];
+    switch([openPanel runModal]) {
       case NSOKButton:
-        file = ([[openPanel filenames] count]) ? [[openPanel filenames] objectAtIndex:0] : nil;
+        file = ([[openPanel URLs] count]) ? [[openPanel URLs] objectAtIndex:0] : nil;
         break;
     }
     if (file) {

@@ -22,11 +22,6 @@ static NSString *SystemMajorVersion(void) {
 
 @implementation SdefExporterController
 
-+ (void)initialize {
-  [self setKeys:[NSArray arrayWithObjects:
-    @"resourceFormat", @"cocoaFormat", @"rsrcFormat", @"sbhFormat", @"sbmFormat", nil] triggerChangeNotificationsForDependentKey:@"canExport"];
-}
-
 - (id)init {
   if (self = [super initWithWindowNibName:@"SdefExport"]) {
     sbhFormat = YES;
@@ -80,73 +75,66 @@ static NSString *SystemMajorVersion(void) {
   [openPanel setCanChooseDirectories:YES];
   [openPanel setAllowsMultipleSelection:NO];
   [openPanel setTreatsFilePackagesAsDirectories:YES];
-  [openPanel beginSheetForDirectory:nil
-                               file:nil
-                              types:nil
-                     modalForWindow:[[sd_document documentWindow] window]
-                      modalDelegate:self 
-                     didEndSelector:@selector(openPanelDidEnd:resultCode:context:)
-                        contextInfo:nil];
+  [openPanel beginSheetModalForWindow:[[sd_document documentWindow] window]
+                    completionHandler:^(NSInteger code) {
+                      if ((code == NSOKButton) && ([[openPanel URLs] count] > 0)) {
+                        SdefProcessor *proc = [[SdefProcessor alloc] initWithSdefDocument:[self sdefDocument]];
+                        [proc setOutput:[[[openPanel URLs] objectAtIndex:0] path]];
+                        
+                        NSMutableArray *defs = [[NSMutableArray alloc] init];
+                        if ([[includes arrangedObjects] count]) {
+                          id item;
+                          id items = [[includes arrangedObjects] objectEnumerator];
+                          while (item = [items nextObject]) {
+                            [defs addObject:[item valueForKey:@"path"]];
+                          }
+                        }
+                        if (includeCore) [defs addObject:[[NSBundle mainBundle] pathForResource:@"NSCoreSuite" ofType:@"sdef"]];
+                        if (includeText) [defs addObject:[[NSBundle mainBundle] pathForResource:@"NSTextSuite" ofType:@"sdef"]];
+                        
+                        if ([defs count])
+                          [proc setIncludes:defs];
+                        [defs release];
+                        
+                        SdefProcessorFormat format = 0;
+                        if (resourceFormat || rsrcFormat) format |= kSdefResourceFormat;
+                        if (cocoaFormat) format |= (kSdefScriptSuiteFormat | kSdefScriptTerminologyFormat);
+                        if (sbmFormat) format |= kSdefScriptBridgeImplementationFormat;
+                        if (sbhFormat) format |= kSdefScriptBridgeHeaderFormat;
+                        
+                        [proc setFormat:format];
+                        
+                        [proc setVersion:sd_version ? : SystemMajorVersion()];
+                        @try {
+                          NSString *result = [proc process];
+                          if (result) {
+                            NSRunAlertPanel(NSLocalizedString(@"Warning: Scripting Definition Processor says:", @"sdp return a value: message title"),
+                                            result,
+                                            NSLocalizedString(@"OK", @"Default Button"), nil, nil);
+                          }
+                          if (rsrcFormat) {
+                            [self compileResourceFile:[proc output]];
+                            if (!resourceFormat) {
+                              [[NSFileManager defaultManager] removeItemAtPath:[[proc output] stringByAppendingPathComponent:@"Scripting.r"] error:NULL];
+                            }
+                          }
+                        } @catch (id exception) {
+                          [proc release];
+                          proc = nil;
+                          SPXLogException(exception);
+                          NSRunAlertPanel(NSLocalizedString(@"Undefined error while exporting", @"sdp exception"),
+                                          NSLocalizedString(@"An Undefined error prevent exportation: %@", @"sdp exception"),
+                                          NSLocalizedString(@"OK", @"Default Button"), nil, nil, exception);  
+                        }
+                        [proc release];
+                      }
+                      [self close];
+                    }];
 }
 
 - (void)close {
   [controller setContent:nil];
   [super close];
-}
-
-- (void)openPanelDidEnd:(NSOpenPanel *)openPanel resultCode:(unsigned)code context:(id)ctxt {
-  if ((code == NSOKButton) && ([[openPanel filenames] count] > 0)) {    
-    SdefProcessor *proc = [[SdefProcessor alloc] initWithSdefDocument:[self sdefDocument]];
-    [proc setOutput:[[openPanel filenames] objectAtIndex:0]];
-    
-    NSMutableArray *defs = [[NSMutableArray alloc] init];
-    if ([[includes arrangedObjects] count]) {
-      id item;
-      id items = [[includes arrangedObjects] objectEnumerator];
-      while (item = [items nextObject]) {
-        [defs addObject:[item valueForKey:@"path"]];
-      }
-    }
-    if (includeCore) [defs addObject:[[NSBundle mainBundle] pathForResource:@"NSCoreSuite" ofType:@"sdef"]];
-    if (includeText) [defs addObject:[[NSBundle mainBundle] pathForResource:@"NSTextSuite" ofType:@"sdef"]];
-    
-    if ([defs count])
-      [proc setIncludes:defs];
-    [defs release];
-    
-    SdefProcessorFormat format = 0;
-    if (resourceFormat || rsrcFormat) format |= kSdefResourceFormat;
-    if (cocoaFormat) format |= (kSdefScriptSuiteFormat | kSdefScriptTerminologyFormat);
-		if (sbmFormat) format |= kSdefScriptBridgeImplementationFormat;
-		if (sbhFormat) format |= kSdefScriptBridgeHeaderFormat;
-
-    [proc setFormat:format];
-    
-    [proc setVersion:sd_version ? : SystemMajorVersion()];
-    @try {
-      NSString *result = [proc process];
-      if (result) {
-        NSRunAlertPanel(NSLocalizedString(@"Warning: Scripting Definition Processor says:", @"sdp return a value: message title"),
-                        result,
-                        NSLocalizedString(@"OK", @"Default Button"), nil, nil);
-      }
-      if (rsrcFormat) {
-        [self compileResourceFile:[proc output]];
-        if (!resourceFormat) {
-          [[NSFileManager defaultManager] removeFileAtPath:[[proc output] stringByAppendingPathComponent:@"Scripting.r"] handler:nil];
-        }
-      }
-    } @catch (id exception) {
-      [proc release];
-      proc = nil;
-      SPXLogException(exception);
-      NSRunAlertPanel(NSLocalizedString(@"Undefined error while exporting", @"sdp exception"),
-                      NSLocalizedString(@"An Undefined error prevent exportation: %@", @"sdp exception"),
-                      NSLocalizedString(@"OK", @"Default Button"), nil, nil, exception);  
-    }
-    [proc release];
-  }
-  [self close];
 }
 
 //- (IBAction)export:(id)sender {
@@ -241,20 +229,25 @@ static NSString *SystemMajorVersion(void) {
   [openPanel setCanChooseDirectories:NO];
   [openPanel setAllowsMultipleSelection:YES];
   [openPanel setTreatsFilePackagesAsDirectories:YES];
-  switch ([openPanel runModalForTypes:[NSArray arrayWithObjects:@"sdef", NSFileTypeForHFSTypeCode(kScriptingDefinitionHFSType), nil]]) {
+  [openPanel setAllowedFileTypes:[NSArray arrayWithObjects:@"sdef", ScriptingDefinitionFileUTI,
+                                  NSFileTypeForHFSTypeCode(kScriptingDefinitionHFSType), nil]];
+  switch ([openPanel runModal]) {
     case NSCancelButton:
       return;
   }
-  id file;
-  id files = [[openPanel filenames] objectEnumerator];
-  while (file = [files nextObject]) {
-    id dico = [[NSDictionary alloc] initWithObjectsAndKeys:
-      file, @"path",
-      [[NSFileManager defaultManager] displayNameAtPath:file], @"name",
-      [[NSWorkspace sharedWorkspace] iconForFile:file], @"icon", nil];
+  for (NSURL *file in [openPanel URLs]) {
+    NSString *path = [file path];
+    NSDictionary *dico = [[NSDictionary alloc] initWithObjectsAndKeys:
+                          path, @"path",
+                          [[NSFileManager defaultManager] displayNameAtPath:path], @"name",
+                          [[NSWorkspace sharedWorkspace] iconForFile:path], @"icon", nil];
     [includes addObject:dico];
     [dico release];
   }
+}
+
++ (NSSet *)keyPathsForValuesAffectingCanExport {
+  return [NSSet setWithObjects:@"resourceFormat", @"cocoaFormat", @"rsrcFormat", @"sbhFormat", @"sbmFormat", nil];
 }
 
 - (BOOL)canExport {

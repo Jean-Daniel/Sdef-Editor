@@ -218,15 +218,23 @@
 #pragma mark -
 @implementation SdefElement
 
+static NSSet *sAccessorSet = nil;
+static NSSet *sAccessorPropertiesSet = nil;
+
 + (void)initialize {
-  [self setKeys:[NSArray arrayWithObject:@"name"] triggerChangeNotificationsForDependentKey:@"type"];
-  id accessors = [NSArray arrayWithObject:@"accessors"]; 
-  [self setKeys:accessors triggerChangeNotificationsForDependentKey:@"accIndex"];
-  [self setKeys:accessors triggerChangeNotificationsForDependentKey:@"accId"];
-  [self setKeys:accessors triggerChangeNotificationsForDependentKey:@"accName"];
-  [self setKeys:accessors triggerChangeNotificationsForDependentKey:@"accRange"];
-  [self setKeys:accessors triggerChangeNotificationsForDependentKey:@"accRelative"];
-  [self setKeys:accessors triggerChangeNotificationsForDependentKey:@"accTest"];
+  if ([SdefElement class] == self) {
+    sAccessorSet = [NSSet setWithObject:@"accessors"];
+    sAccessorPropertiesSet = [NSSet setWithObjects:
+                              @"accIndex", @"accId", @"accName",
+                              @"accRange", @"accRelative", @"accTest",
+                              nil];
+  }
+}
+
++ (NSSet *)keyPathsForValuesAffectingValueForKey:(NSString *)key {
+  if ([sAccessorPropertiesSet containsObject:key])
+    return sAccessorSet;
+  return nil;
 }
 
 #pragma mark Protocols Implementations
@@ -274,6 +282,10 @@
 }
 
 #pragma mark -
++ (NSSet *)keyPathsForValuesAffectingType {
+  return [NSSet setWithObject:@"name"];
+}
+
 - (NSString *)type {
   return [self name];
 }

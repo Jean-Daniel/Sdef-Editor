@@ -20,4 +20,3 @@
 - (NSString *)asDictionaryTypeForType:(NSString *)type isList:(BOOL *)list;
 
 @end
-
