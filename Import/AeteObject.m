@@ -11,9 +11,7 @@
 @implementation SdefObject (AeteResource)
 
 - (NSUInteger)parseData:(Byte *)bytes {
-  SPXTrace();
-  [NSException raise:NSInternalInconsistencyException format:@"Method must be implemented by subclasses"];
-  return 0;
+  SPXAbstractMethodException();
 }
 
 @end
