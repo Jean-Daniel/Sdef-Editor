@@ -30,8 +30,6 @@
 		1B3556C316844E9E005D0D0A /* WBTemplateParser.h in Headers */ = {isa = PBXBuildFile; fileRef = 1B35567816844B6F005D0D0A /* WBTemplateParser.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		1B3556C416844EA2005D0D0A /* WBXMLTemplate.h in Headers */ = {isa = PBXBuildFile; fileRef = 1B35567A16844B6F005D0D0A /* WBXMLTemplate.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		1B3556C516844EEB005D0D0A /* NSTabView+WonderBox.h in Headers */ = {isa = PBXBuildFile; fileRef = 1B35559416844B6F005D0D0A /* NSTabView+WonderBox.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		1B3556C816844F24005D0D0A /* WBDisclosurePanel.h in Headers */ = {isa = PBXBuildFile; fileRef = 1B3556C616844F24005D0D0A /* WBDisclosurePanel.h */; };
-		1B3556C916844F24005D0D0A /* WBDisclosurePanel.m in Sources */ = {isa = PBXBuildFile; fileRef = 1B3556C716844F24005D0D0A /* WBDisclosurePanel.m */; };
 		1B39DEBF16845F830048F1E9 /* WBFunctions.m in Sources */ = {isa = PBXBuildFile; fileRef = 1B3555F116844B6F005D0D0A /* WBFunctions.m */; };
 		1B39DEC116845F980048F1E9 /* WBFSFunctions.m in Sources */ = {isa = PBXBuildFile; fileRef = 1B3555EF16844B6F005D0D0A /* WBFSFunctions.m */; };
 		1B39DEC216845FA00048F1E9 /* WBAEFunctions.c in Sources */ = {isa = PBXBuildFile; fileRef = 1B3555E616844B6F005D0D0A /* WBAEFunctions.c */; };
@@ -59,7 +57,6 @@
 		1B39DEDB168461930048F1E9 /* WBProcessFunctions.h in Headers */ = {isa = PBXBuildFile; fileRef = 1B35560316844B6F005D0D0A /* WBProcessFunctions.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		1B39DEDC168461950048F1E9 /* WBProcessFunctions.c in Sources */ = {isa = PBXBuildFile; fileRef = 1B35560216844B6F005D0D0A /* WBProcessFunctions.c */; };
 		1B39DEDD168461A70048F1E9 /* WBLSFunctions.m in Sources */ = {isa = PBXBuildFile; fileRef = 1B3555FD16844B6F005D0D0A /* WBLSFunctions.m */; };
-		1B39DEDF1684620D0048F1E9 /* WBDisclosureView.m in Sources */ = {isa = PBXBuildFile; fileRef = 1B39DEDE1684620D0048F1E9 /* WBDisclosureView.m */; };
 		1B39DEE01684624A0048F1E9 /* WBOutlineView.m in Sources */ = {isa = PBXBuildFile; fileRef = 1B35559F16844B6F005D0D0A /* WBOutlineView.m */; };
 		1B39DEE1168462520048F1E9 /* WBTextFieldCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 1B35563B16844B6F005D0D0A /* WBTextFieldCell.m */; };
 		1B39DEE2168462550048F1E9 /* WBImageAndTextCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 1B35562F16844B6F005D0D0A /* WBImageAndTextCell.m */; };
@@ -96,6 +93,20 @@
 		1BADACA70D8BE3B80006EB32 /* SdefDictionary.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1BADACA50D8BE3B80006EB32 /* SdefDictionary.xib */; };
 		1BADACAB0D8BE3DA0006EB32 /* SdefEnumeration.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1BADACA90D8BE3DA0006EB32 /* SdefEnumeration.xib */; };
 		1BB1E2280BE26E5300EEB652 /* SdefEditor.m in Sources */ = {isa = PBXBuildFile; fileRef = 98D3A8C5079EC8670049A8FC /* SdefEditor.m */; };
+		1BB675E1168EE1EB00B06EFA /* WBCollapseView.m in Sources */ = {isa = PBXBuildFile; fileRef = 1BB675DB168EE1EB00B06EFA /* WBCollapseView.m */; };
+		1BB675E3168EE1EB00B06EFA /* WBCollapseViewInternal.m in Sources */ = {isa = PBXBuildFile; fileRef = 1BB675DD168EE1EB00B06EFA /* WBCollapseViewInternal.m */; };
+		1BB675E5168EE1EB00B06EFA /* WBCollapseViewItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 1BB675DF168EE1EB00B06EFA /* WBCollapseViewItem.m */; };
+		1BB675E7168EE1F200B06EFA /* WBCollapseView.h in Headers */ = {isa = PBXBuildFile; fileRef = 1BB675DA168EE1EB00B06EFA /* WBCollapseView.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		1BB675E9168EE1F200B06EFA /* WBCollapseViewItem.h in Headers */ = {isa = PBXBuildFile; fileRef = 1BB675DE168EE1EB00B06EFA /* WBCollapseViewItem.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		1BB675EB168EE21C00B06EFA /* WBCollapseViewInternal.h in Headers */ = {isa = PBXBuildFile; fileRef = 1BB675DC168EE1EB00B06EFA /* WBCollapseViewInternal.h */; };
+		1BB675EF168EE24100B06EFA /* WBGradient.m in Sources */ = {isa = PBXBuildFile; fileRef = 1BB675ED168EE24100B06EFA /* WBGradient.m */; };
+		1BB675F0168EE24300B06EFA /* WBGradient.h in Headers */ = {isa = PBXBuildFile; fileRef = 1BB675EC168EE24100B06EFA /* WBGradient.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		1BB675F4168EE25C00B06EFA /* WBInterpolationFunction.m in Sources */ = {isa = PBXBuildFile; fileRef = 1BB675F2168EE25C00B06EFA /* WBInterpolationFunction.m */; };
+		1BB675F5168EE26500B06EFA /* WBInterpolationFunction.h in Headers */ = {isa = PBXBuildFile; fileRef = 1BB675F1168EE25C00B06EFA /* WBInterpolationFunction.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		1BB675F9168EE29200B06EFA /* WBCGFunctions.h in Headers */ = {isa = PBXBuildFile; fileRef = 1BB675F6168EE29200B06EFA /* WBCGFunctions.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		1BB675FA168EE29200B06EFA /* WBCGFunctions.m in Sources */ = {isa = PBXBuildFile; fileRef = 1BB675F7168EE29200B06EFA /* WBCGFunctions.m */; };
+		1BB675FB168EE29200B06EFA /* WBCGFunctions.m in Sources */ = {isa = PBXBuildFile; fileRef = 1BB675F7168EE29200B06EFA /* WBCGFunctions.m */; };
+		1BB67602168EE2AA00B06EFA /* WBClassCluster.h in Headers */ = {isa = PBXBuildFile; fileRef = 1BB675FD168EE2A500B06EFA /* WBClassCluster.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		1BC332C60CD894C3009109F0 /* SdefXInclude.h in Headers */ = {isa = PBXBuildFile; fileRef = 1BC332C40CD894C3009109F0 /* SdefXInclude.h */; };
 		1BC332C70CD894C3009109F0 /* SdefXInclude.m in Sources */ = {isa = PBXBuildFile; fileRef = 1BC332C50CD894C3009109F0 /* SdefXInclude.m */; };
 		1BCF18250D244AD2009CCAFB /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1BCF18230D244AD2009CCAFB /* MainMenu.xib */; };
@@ -397,9 +408,6 @@
 		1B35567A16844B6F005D0D0A /* WBXMLTemplate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WBXMLTemplate.h; sourceTree = "<group>"; };
 		1B35567B16844B6F005D0D0A /* WBXMLTemplate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WBXMLTemplate.m; sourceTree = "<group>"; };
 		1B35567C16844B6F005D0D0A /* WBBase.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WBBase.h; sourceTree = "<group>"; };
-		1B3556C616844F24005D0D0A /* WBDisclosurePanel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WBDisclosurePanel.h; sourceTree = "<group>"; };
-		1B3556C716844F24005D0D0A /* WBDisclosurePanel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WBDisclosurePanel.m; sourceTree = "<group>"; };
-		1B39DEDE1684620D0048F1E9 /* WBDisclosureView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WBDisclosureView.m; sourceTree = "<group>"; };
 		1B39DEE61684628E0048F1E9 /* WBGeometry.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WBGeometry.h; sourceTree = "<group>"; };
 		1B39DEE71684628F0048F1E9 /* WBGeometry.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WBGeometry.m; sourceTree = "<group>"; };
 		1B39DEF1168462BA0048F1E9 /* WBHSplitBar.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = WBHSplitBar.tiff; sourceTree = "<group>"; };
@@ -429,6 +437,23 @@
 		1BADACA10D8BE3740006EB32 /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = English.lproj/SdefRecord.xib; sourceTree = "<group>"; };
 		1BADACA60D8BE3B80006EB32 /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = English.lproj/SdefDictionary.xib; sourceTree = "<group>"; };
 		1BADACAA0D8BE3DA0006EB32 /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = English.lproj/SdefEnumeration.xib; sourceTree = "<group>"; };
+		1BB675DA168EE1EB00B06EFA /* WBCollapseView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WBCollapseView.h; sourceTree = "<group>"; };
+		1BB675DB168EE1EB00B06EFA /* WBCollapseView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WBCollapseView.m; sourceTree = "<group>"; };
+		1BB675DC168EE1EB00B06EFA /* WBCollapseViewInternal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WBCollapseViewInternal.h; sourceTree = "<group>"; };
+		1BB675DD168EE1EB00B06EFA /* WBCollapseViewInternal.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WBCollapseViewInternal.m; sourceTree = "<group>"; };
+		1BB675DE168EE1EB00B06EFA /* WBCollapseViewItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WBCollapseViewItem.h; sourceTree = "<group>"; };
+		1BB675DF168EE1EB00B06EFA /* WBCollapseViewItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WBCollapseViewItem.m; sourceTree = "<group>"; };
+		1BB675EC168EE24100B06EFA /* WBGradient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WBGradient.h; sourceTree = "<group>"; };
+		1BB675ED168EE24100B06EFA /* WBGradient.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WBGradient.m; sourceTree = "<group>"; };
+		1BB675F1168EE25C00B06EFA /* WBInterpolationFunction.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WBInterpolationFunction.h; sourceTree = "<group>"; };
+		1BB675F2168EE25C00B06EFA /* WBInterpolationFunction.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WBInterpolationFunction.m; sourceTree = "<group>"; };
+		1BB675F6168EE29200B06EFA /* WBCGFunctions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WBCGFunctions.h; sourceTree = "<group>"; };
+		1BB675F7168EE29200B06EFA /* WBCGFunctions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WBCGFunctions.m; sourceTree = "<group>"; };
+		1BB675FD168EE2A500B06EFA /* WBClassCluster.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WBClassCluster.h; sourceTree = "<group>"; };
+		1BB675FE168EE2A500B06EFA /* WBForwarding.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WBForwarding.h; sourceTree = "<group>"; };
+		1BB675FF168EE2A500B06EFA /* WBKeyValueCoding.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WBKeyValueCoding.h; sourceTree = "<group>"; };
+		1BB67600168EE2A500B06EFA /* WBScope.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WBScope.h; sourceTree = "<group>"; };
+		1BB67601168EE2A500B06EFA /* WBSingleton.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WBSingleton.h; sourceTree = "<group>"; };
 		1BC332C40CD894C3009109F0 /* SdefXInclude.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = SdefXInclude.h; sourceTree = "<group>"; };
 		1BC332C50CD894C3009109F0 /* SdefXInclude.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = SdefXInclude.m; sourceTree = "<group>"; };
 		1BCF18240D244AD2009CCAFB /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = English.lproj/MainMenu.xib; sourceTree = "<group>"; };
@@ -697,9 +722,11 @@
 			children = (
 				1B35567C16844B6F005D0D0A /* WBBase.h */,
 				1B35558216844B6F005D0D0A /* AppKit */,
+				1BB675D9168EE1EB00B06EFA /* CollapseView */,
 				1B3555B816844B6F005D0D0A /* Foundation */,
 				1B3555E516844B6F005D0D0A /* Functions */,
 				1B35561316844B6F005D0D0A /* Interface */,
+				1BB675FC168EE2A500B06EFA /* Macros */,
 				1B35567516844B6F005D0D0A /* Templates */,
 			);
 			name = WonderBox;
@@ -769,6 +796,8 @@
 				1B3555CC16844B6F005D0D0A /* WBAliasedApplication.m */,
 				1B3555D316844B6F005D0D0A /* WBExtendedTreeNode.h */,
 				1B3555D416844B6F005D0D0A /* WBExtendedTreeNode.m */,
+				1BB675F1168EE25C00B06EFA /* WBInterpolationFunction.h */,
+				1BB675F2168EE25C00B06EFA /* WBInterpolationFunction.m */,
 				1B3555E116844B6F005D0D0A /* WBTreeNode.h */,
 				1B3555E216844B6F005D0D0A /* WBTreeNode.m */,
 			);
@@ -803,6 +832,8 @@
 				1B39DEE71684628F0048F1E9 /* WBGeometry.m */,
 				1B3555E616844B6F005D0D0A /* WBAEFunctions.c */,
 				1B3555E716844B6F005D0D0A /* WBAEFunctions.h */,
+				1BB675F6168EE29200B06EFA /* WBCGFunctions.h */,
+				1BB675F7168EE29200B06EFA /* WBCGFunctions.m */,
 				1B3555EC16844B6F005D0D0A /* WBFinderSuite.c */,
 				1B3555ED16844B6F005D0D0A /* WBFinderSuite.h */,
 				1B3555EE16844B6F005D0D0A /* WBFSFunctions.h */,
@@ -821,6 +852,8 @@
 			isa = PBXGroup;
 			children = (
 				1B39DEEA168462B90048F1E9 /* Resources */,
+				1BB675EC168EE24100B06EFA /* WBGradient.h */,
+				1BB675ED168EE24100B06EFA /* WBGradient.m */,
 				1B35563416844B6F005D0D0A /* WBSplitview.h */,
 				1B35563516844B6F005D0D0A /* WBSplitview.m */,
 				1B35563A16844B6F005D0D0A /* WBTextFieldCell.h */,
@@ -852,6 +885,31 @@
 				1B39DEF5168462BA0048F1E9 /* WBVSplitBar.tiff */,
 			);
 			path = Resources;
+			sourceTree = "<group>";
+		};
+		1BB675D9168EE1EB00B06EFA /* CollapseView */ = {
+			isa = PBXGroup;
+			children = (
+				1BB675DA168EE1EB00B06EFA /* WBCollapseView.h */,
+				1BB675DB168EE1EB00B06EFA /* WBCollapseView.m */,
+				1BB675DE168EE1EB00B06EFA /* WBCollapseViewItem.h */,
+				1BB675DF168EE1EB00B06EFA /* WBCollapseViewItem.m */,
+				1BB675DC168EE1EB00B06EFA /* WBCollapseViewInternal.h */,
+				1BB675DD168EE1EB00B06EFA /* WBCollapseViewInternal.m */,
+			);
+			path = CollapseView;
+			sourceTree = "<group>";
+		};
+		1BB675FC168EE2A500B06EFA /* Macros */ = {
+			isa = PBXGroup;
+			children = (
+				1BB675FD168EE2A500B06EFA /* WBClassCluster.h */,
+				1BB675FE168EE2A500B06EFA /* WBForwarding.h */,
+				1BB675FF168EE2A500B06EFA /* WBKeyValueCoding.h */,
+				1BB67600168EE2A500B06EFA /* WBScope.h */,
+				1BB67601168EE2A500B06EFA /* WBSingleton.h */,
+			);
+			path = Macros;
 			sourceTree = "<group>";
 		};
 		2A37F4AAFDCFA73011CA2CEA /* SDef Editor */ = {
@@ -1123,9 +1181,6 @@
 		98B88EE307934CE50058F599 /* Interface */ = {
 			isa = PBXGroup;
 			children = (
-				1B3556C616844F24005D0D0A /* WBDisclosurePanel.h */,
-				1B39DEDE1684620D0048F1E9 /* WBDisclosureView.m */,
-				1B3556C716844F24005D0D0A /* WBDisclosurePanel.m */,
 				9863FF0A079DF709000EDF96 /* Headers */,
 				98F2D33107B2D42400F2EEC2 /* Preferences.m */,
 				98D1B0290BDB57D2007B3293 /* SdefToolbar.m */,
@@ -1304,6 +1359,12 @@
 				1B3556AA16844C04005D0D0A /* WBExtendedTreeNode.h in Headers */,
 				1B3556BC16844DEB005D0D0A /* WBOutlineViewController.h in Headers */,
 				1B3556B716844D9B005D0D0A /* NSArrayController+WonderBox.h in Headers */,
+				1BB675E7168EE1F200B06EFA /* WBCollapseView.h in Headers */,
+				1BB675E9168EE1F200B06EFA /* WBCollapseViewItem.h in Headers */,
+				1BB675F0168EE24300B06EFA /* WBGradient.h in Headers */,
+				1BB675F5168EE26500B06EFA /* WBInterpolationFunction.h in Headers */,
+				1BB675F9168EE29200B06EFA /* WBCGFunctions.h in Headers */,
+				1BB67602168EE2AA00B06EFA /* WBClassCluster.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1368,7 +1429,7 @@
 				1B5ECF510CD62807007B8226 /* SdefXIncludeView.h in Headers */,
 				1B73E9CC0CD7965C00FC60B2 /* SdefParserInternal.h in Headers */,
 				1BC332C60CD894C3009109F0 /* SdefXInclude.h in Headers */,
-				1B3556C816844F24005D0D0A /* WBDisclosurePanel.h in Headers */,
+				1BB675EB168EE21C00B06EFA /* WBCollapseViewInternal.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1520,6 +1581,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1BB675FB168EE29200B06EFA /* WBCGFunctions.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1606,7 +1668,6 @@
 				1B73ECA70CD7A73400FC60B2 /* SdefParserInternal.m in Sources */,
 				1BC332C70CD894C3009109F0 /* SdefXInclude.m in Sources */,
 				1BDDBEFD0FACBB8B00EECDEE /* ASDictionary.m in Sources */,
-				1B3556C916844F24005D0D0A /* WBDisclosurePanel.m in Sources */,
 				1B39DEBF16845F830048F1E9 /* WBFunctions.m in Sources */,
 				1B39DEC116845F980048F1E9 /* WBFSFunctions.m in Sources */,
 				1B39DEC216845FA00048F1E9 /* WBAEFunctions.c in Sources */,
@@ -1631,11 +1692,16 @@
 				1B39DED9168461780048F1E9 /* WBExtendedTreeNode.m in Sources */,
 				1B39DEDC168461950048F1E9 /* WBProcessFunctions.c in Sources */,
 				1B39DEDD168461A70048F1E9 /* WBLSFunctions.m in Sources */,
-				1B39DEDF1684620D0048F1E9 /* WBDisclosureView.m in Sources */,
 				1B39DEE01684624A0048F1E9 /* WBOutlineView.m in Sources */,
 				1B39DEE1168462520048F1E9 /* WBTextFieldCell.m in Sources */,
 				1B39DEE2168462550048F1E9 /* WBImageAndTextCell.m in Sources */,
 				1B39DEE8168462940048F1E9 /* WBGeometry.m in Sources */,
+				1BB675E1168EE1EB00B06EFA /* WBCollapseView.m in Sources */,
+				1BB675E3168EE1EB00B06EFA /* WBCollapseViewInternal.m in Sources */,
+				1BB675E5168EE1EB00B06EFA /* WBCollapseViewItem.m in Sources */,
+				1BB675EF168EE24100B06EFA /* WBGradient.m in Sources */,
+				1BB675F4168EE25C00B06EFA /* WBInterpolationFunction.m in Sources */,
+				1BB675FA168EE29200B06EFA /* WBCGFunctions.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

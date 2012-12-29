@@ -13,7 +13,12 @@
 #import "SdtplGenerator.h"
 #import "SdefWindowController.h"
 
-#import "WBDisclosurePanel.h"
+#import <WonderBox/WBCollapseView.h>
+#import <WonderBox/WBCollapseViewItem.h>
+
+@interface SdtplWindow () <WBCollapseViewDelegate>
+
+@end
 
 @implementation SdtplWindow
 
@@ -48,49 +53,86 @@
 #pragma mark -
 - (void)awakeFromNib {
   /* Init Disclosure Panel */
-  WBDisclosurePanel *panel = (WBDisclosurePanel *)[self window];
-  [panel setTopPadding:37];
-  [panel setBottomPadding:37];
-  [panel addView:generalView withLabel:@"General"];
-  [panel addView:tocView withLabel:@"Table Of Content"];
-  [panel addView:htmlView withLabel:@"HTML Options"];
-  [panel addView:infoView withLabel:@"Description"];
+  WBCollapseViewItem *item = [[WBCollapseViewItem alloc] initWithView:generalView identifier:@"general"];
+  item.title = @"General";
+  [collapseView addItem:[item autorelease]];
+
+  item = [[WBCollapseViewItem alloc] initWithView:tocView identifier:@"toc"];
+  item.title = @"Table Of Content";
+  [collapseView addItem:[item autorelease]];
+
+  item = [[WBCollapseViewItem alloc] initWithView:htmlView identifier:@"options"];
+  item.title = @"HTML Options";
+  [collapseView addItem:[item autorelease]];
+
+  item = [[WBCollapseViewItem alloc] initWithView:infoView identifier:@"description"];
+  item.title = @"Description";
+  [collapseView addItem:[item autorelease]];
+
+  NSScrollView *scroll = [collapseView enclosingScrollView];
+  // 10.6 compat
+  if ([scroll respondsToSelector:@selector(setHorizontalScrollElasticity:)]) {
+    [scroll setHorizontalScrollElasticity:NSScrollElasticityNone];
+    [scroll setVerticalScrollElasticity:NSScrollElasticityNone];
+  }
+
+  // Patch responder chain before collasping view
+  [self.window recalculateKeyViewLoop];
   
-  NSArray *views = [panel disclosureViews];
   NSUInteger prefs = [[NSUserDefaults standardUserDefaults] integerForKey:@"SdtplDislosurePanel"];
-  for (NSUInteger idx = 0; idx < [views count]; idx++) {
-    [[views objectAtIndex:idx] setVisible:(prefs & (1 << idx))];
+  NSUInteger itemIdx = 0;
+  for (item in collapseView) {
+    item.animates = NO;
+    [item setExpanded:(prefs & (1 << itemIdx++)) != 0];
   }
   
+  NSRect size = [collapseView bounds];
+  NSRect scrollsize = [[collapseView enclosingScrollView] bounds];
+  CGFloat delta = scrollsize.size.height - size.size.height;
+  NSRect frame = [self.window frame];
+  frame.origin.y += delta;
+  frame.size.height -= delta;
+  [self.window setFrame:frame display:NO animate:NO];
+
   /* Init Templates Menu */
   NSArray *tpls = [[SdefTemplate findAllTemplates] allValues];
   NSSortDescriptor *sort = [[NSSortDescriptor alloc] initWithKey:@"displayName" ascending:YES selector:@selector(caseInsensitiveCompare:)];
   NSArray *sorts = [[NSArray alloc] initWithObjects:sort, nil];
   [sort release];
   
-  
   tpls = [tpls sortedArrayUsingDescriptors:sorts];
   [sorts release];
   NSUInteger idx = [tpls count];
   while (idx-- > 0) {
     SdefTemplate *tpl = [tpls objectAtIndex:idx];
-    NSMenuItem *item = [[NSMenuItem alloc] initWithTitle:[tpl menuName] action:nil keyEquivalent:@""];
-    [item setRepresentedObject:tpl];
-    [[templates menu] insertItem:item atIndex:0];
-    [item release];
+    NSMenuItem *menuItem = [[NSMenuItem alloc] initWithTitle:[tpl menuName] action:nil keyEquivalent:@""];
+    [menuItem setRepresentedObject:tpl];
+    [[templates menu] insertItem:menuItem atIndex:0];
+    [menuItem release];
   }
   
   [templates selectItemAtIndex:0];
   [self changeTemplate:templates];
 }
 
+- (void)collapseView:(WBCollapseView *)aView didSetExpanded:(BOOL)expanded forItem:(WBCollapseViewItem *)anItem {
+  NSRect size = [collapseView bounds];
+  NSRect scrollsize = [[collapseView enclosingScrollView] bounds];
+
+  CGFloat delta = scrollsize.size.height - size.size.height;
+  NSRect frame = [self.window frame];
+  frame.origin.y += delta;
+  frame.size.height -= delta;
+  [self.window setFrame:frame display:YES animate:NO];
+}
+
 #pragma mark -
 - (IBAction)close:(id)sender {
-  NSArray *views = [(WBDisclosurePanel *)[self window] disclosureViews];
   NSInteger prefs = 0;
-  for (NSUInteger idx = 0; idx < [views count]; idx++) {
-    BOOL state = [[views objectAtIndex:idx] isVisible] ? 1 : 0;
-    prefs |= (state << idx);
+  NSUInteger itemIdx = 0;
+  for (WBCollapseViewItem *item in collapseView) {
+    BOOL state = [item isExpanded] ? 1 : 0;
+    prefs |= (state << itemIdx++);
   }
   [[NSUserDefaults standardUserDefaults] setInteger:prefs forKey:@"SdtplDislosurePanel"];
   [super close:sender];
