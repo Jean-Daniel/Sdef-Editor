@@ -1,2 +1,4 @@
 
 #include "../hadron/xcconfigs/compiler/clang.xcconfig"
+
+HADRON_PATH = hadron

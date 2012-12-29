@@ -78,7 +78,7 @@ NSDictionary *_CocoaScriptingFindTerminology(NSString *base, NSString *name) {
   if (self = [super init]) {
     BOOL ok = NO;
     sd_roots = [[NSMutableArray alloc] init];
-    [sd_roots addObject:[[file stringByDeletingLastPathComponent] retain]];
+    [sd_roots addObject:[file stringByDeletingLastPathComponent]];
     NSDictionary *dsuite = [NSDictionary dictionaryWithContentsOfFile:file];
     if (dsuite) {
       NSString *name = [dsuite objectForKey:@"Name"];

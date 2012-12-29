@@ -153,7 +153,7 @@
   if (win) {
     [NSApp beginSheet:[exporter window]
        modalForWindow:win
-        modalDelegate:nil 
+        modalDelegate:nil
        didEndSelector:nil
           contextInfo:nil];
   }
@@ -192,7 +192,7 @@
 
 - (BOOL)readFromURL:(NSURL *)absoluteURL ofType:(NSString *)typeName error:(NSError **)outError {
   if ([typeName isEqualToString:ScriptingDefinitionFileType] || [typeName isEqualToString:ScriptingDefinitionFileUTI]) {
-    NSInteger version;
+    NSInteger version = 0;
     [self setDictionary:SdefLoadDictionary(absoluteURL, &version, self, outError)];
     if ([self dictionary] != nil) {
       if (version < kSdefTigerVersion) {

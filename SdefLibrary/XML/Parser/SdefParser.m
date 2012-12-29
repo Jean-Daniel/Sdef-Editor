@@ -310,7 +310,7 @@ Boolean _SdefElementIsCollection(CFStringRef element) {
 
 }
 
-- (id)parser:(SdefDOMParser *)parser createStructureForElement:(xmlNodePtr)element {
+- (id)parser:(SdefDOMParser *)parser createStructureForElement:(xmlNodePtr)element NS_RETURNS_RETAINED {
   NSString *error = nil;
   id<SdefXMLObject> object = nil;
   
