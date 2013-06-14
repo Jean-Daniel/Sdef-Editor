@@ -121,7 +121,7 @@ NSImage *SdefImageNamed(NSString *name) {
        (parent = [self firstParentOfType:kSdefEnumerationType]) || 
        (parent = [self firstParentOfType:kSdefVerbType])) && parent != self) {
     return [NSString stringWithFormat:@"%@:%@", [[self suite] name], [parent name]];
-  } else if (parent = (id)[self suite]){
+  } else if ((parent = (id)[self suite])){
     return [parent name];
   } else {
     return [self name];

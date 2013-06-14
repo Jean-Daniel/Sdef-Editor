@@ -67,16 +67,16 @@ const OSType kCocoaSuiteDefinitionHFSType = 'ScSu';
     [ctrl release];
     
     [[NSUserDefaults standardUserDefaults] registerDefaults:[NSDictionary dictionaryWithObjectsAndKeys:
-      SPXBool(YES), @"SdefOpenAtStartup",
-      SPXBool(YES), @"SdefAutoSelectItem",
+      @(YES), @"SdefOpenAtStartup",
+      @(YES), @"SdefAutoSelectItem",
       sdp, @"SdefSdpToolPath",
       rez, @"SdefRezToolPath",
       nil]];
     [NSApp setDelegate:self];
 #if defined (DEBUG)
     [[NSUserDefaults standardUserDefaults] registerDefaults:[NSDictionary dictionaryWithObjectsAndKeys:
-      SPXBool(YES), @"SdefDebugMenu",
-      SPXBool(YES), @"SdefPantherExportEnabled",
+      @(YES), @"SdefDebugMenu",
+      @(YES), @"SdefPantherExportEnabled",
       // @"YES", @"NSShowNonLocalizedStrings",
       // @"NO", @"NSShowAllViews",
       // @"6", @"NSDragManagerLogLevel",

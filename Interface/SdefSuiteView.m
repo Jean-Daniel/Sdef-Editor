@@ -184,7 +184,7 @@
 /* Transform */
 - (id)transformedValue:(id)value {
   /* Negation because use with hidden */
-  return SPXBool([value intValue] != kSdefValueType);
+  return @([value intValue] != kSdefValueType);
 }
 
 /* Returns access value */

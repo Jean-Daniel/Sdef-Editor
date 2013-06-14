@@ -219,20 +219,20 @@
   } else if (rights & kSdefAccessWrite) {
     idx = 2;
   }
-  return SPXUInteger(idx);
+  return @(idx);
 }
 
 /* Returns access value */
 - (id)reverseTransformedValue:(id)value {
   switch([value integerValue]) {
     case 0:
-      return SPXUInteger(0);
+      return @(0);
     case 1:
-      return SPXUInteger(kSdefAccessRead);
+      return @(kSdefAccessRead);
     case 2:
-      return SPXUInteger(kSdefAccessWrite);
+      return @(kSdefAccessWrite);
     default:
-      return SPXUInteger(0);
+      return @(0);
   }
 }
 

@@ -341,10 +341,10 @@ NSAttributedString *AttributedStringForASDictionaryString(NSDictionary *content)
                                                  blue:style.blue / 65535.0
                                                 alpha:1] forKey:NSForegroundColorAttributeName];
     if (style.fontStyle & underline) {
-      [attributes setObject:SPXInteger(NSUnderlineStyleSingle | NSUnderlinePatternSolid) forKey:NSUnderlineStyleAttributeName];
+      [attributes setObject:@(NSUnderlineStyleSingle | NSUnderlinePatternSolid) forKey:NSUnderlineStyleAttributeName];
     }
     if (style.fontStyle & outline) {
-      [attributes setObject:SPXFloat(3.f) forKey:NSStrokeWidthAttributeName];
+      [attributes setObject:@(3.f) forKey:NSStrokeWidthAttributeName];
     }
     [string setAttributes:attributes range:range];
   }

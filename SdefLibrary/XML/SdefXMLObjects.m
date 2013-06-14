@@ -17,8 +17,8 @@
 @implementation SdefDocumentedObject (SdefXMLManager)
 #pragma mark XML Generation
 - (SdefXMLNode *)xmlNodeForVersion:(SdefVersion)version {
-  SdefXMLNode *node = nil;
-  if (node = [super xmlNodeForVersion:version]) {
+  SdefXMLNode *node = [super xmlNodeForVersion:version];
+  if (node) {
     if ([self hasDocumentation]) {
       SdefXMLNode *documentation = [sd_documentation xmlNodeForVersion:version];
       if (documentation) {
@@ -50,8 +50,8 @@
 @implementation SdefImplementedObject (SdefXMLManager)
 #pragma mark XML Generation
 - (SdefXMLNode *)xmlNodeForVersion:(SdefVersion)version {
-  SdefXMLNode *node = nil;
-  if (node = [super xmlNodeForVersion:version]) {
+  SdefXMLNode *node = [super xmlNodeForVersion:version];
+  if (node) {
     if (sd_impl) {
       SdefXMLNode *impl = [[self impl] xmlNodeForVersion:version];
       if (impl) {
@@ -88,8 +88,8 @@
 
 #pragma mark XML Generation
 - (SdefXMLNode *)xmlNodeForVersion:(SdefVersion)version {
-  SdefXMLNode *node = nil;
-  if (node = [super xmlNodeForVersion:version]) {
+  SdefXMLNode *node = [super xmlNodeForVersion:version];
+  if (node) {
     NSString *attr = [self name];
     if (attr)
       [node setAttribute:[attr stringByEscapingEntities:nil] forKey:@"name"];
@@ -234,8 +234,8 @@
 @implementation SdefTypedObject (SdefXMLManager)
 #pragma mark XML Generation
 - (SdefXMLNode *)xmlNodeForVersion:(SdefVersion)version {
-  SdefXMLNode *node = nil;
-  if (node = [super xmlNodeForVersion:version]) {
+  SdefXMLNode *node = [super xmlNodeForVersion:version];
+  if (node) {
     if (version == kSdefPantherVersion) {
       if ([self hasType]) {
         NSArray *types = [self types];

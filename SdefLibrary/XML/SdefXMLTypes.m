@@ -19,8 +19,8 @@
 }
 
 - (SdefXMLNode *)xmlNodeForVersion:(SdefVersion)version {
-  SdefXMLNode *node;
-  if (node = [super xmlNodeForVersion:version]) {
+  SdefXMLNode *node = [super xmlNodeForVersion:version];
+  if (node) {
     if (version >= kSdefTigerVersion && [self inlineValue] != kSdefInlineAll)
       [node setAttribute:[NSString stringWithFormat:@"%li", (long)[self inlineValue]] forKey:@"inline"];
   }
@@ -56,8 +56,8 @@
 @implementation SdefEnumerator (SdefXMLManager)
 #pragma mark XML Generation
 - (SdefXMLNode *)xmlNodeForVersion:(SdefVersion)version {
-  SdefXMLNode *node;
-  if (node = [super xmlNodeForVersion:version]) {
+  SdefXMLNode *node = [super xmlNodeForVersion:version];
+  if (node) {
     /* cocoa *-value */
     if ([[self impl] valueType] != kSdefValueTypeNone) {
       if (version < kSdefLeopardVersion) {

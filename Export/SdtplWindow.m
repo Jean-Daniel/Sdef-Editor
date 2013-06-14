@@ -25,7 +25,7 @@
 + (void)initialize {
   if ([SdtplWindow class] == self) {
     [[NSUserDefaults standardUserDefaults] registerDefaults:[NSDictionary dictionaryWithObjectsAndKeys:
-      SPXInteger(0x03), @"SdtplDislosurePanel", /* 1 << 0 & 1 << 1 => the two first view are opened */
+      @(0x03), @"SdtplDislosurePanel", /* 1 << 0 & 1 << 1 => the two first view are opened */
       nil]];
   }
 }

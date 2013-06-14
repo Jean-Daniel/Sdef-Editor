@@ -20,8 +20,8 @@
   return nil;
 }
 - (SdefXMLNode *)xmlNodeForVersion:(SdefVersion)version {
-  SdefXMLNode *node;
-  if (node = [SdefXMLNode nodeWithElementName:[self xmlElementName]]) {
+  SdefXMLNode *node = [SdefXMLNode nodeWithElementName:[self xmlElementName]];
+  if (node) {
     /* Hidden */
     if ([self isHidden]) {
       if (version >= kSdefTigerVersion)
@@ -60,8 +60,8 @@
 }
 
 - (SdefXMLNode *)xmlNodeForVersion:(SdefVersion)version {
-  SdefXMLNode *node;
-  if (node = [super xmlNodeForVersion:version]) {
+  SdefXMLNode *node = [super xmlNodeForVersion:version];
+  if (node) {
     /* Code */
     NSString *attr = [self code];
     if (attr) [node setAttribute:[attr stringByEscapingEntities:nil] forKey:@"code"];
@@ -105,7 +105,7 @@
 - (SdefXMLNode *)xmlNodeForVersion:(SdefVersion)version {
   SdefXMLNode *node = nil;
   if ([self target] && version >= kSdefLeopardVersion) {
-    if (node = [super xmlNodeForVersion:version]) {
+    if ((node = [super xmlNodeForVersion:version])) {
       [node setEmpty:YES];
       /* Code */
       NSString *attr = [self target];
@@ -135,7 +135,7 @@
 - (SdefXMLNode *)xmlNodeForVersion:(SdefVersion)version {
   SdefXMLNode *node = nil;
   if ([self name] && version >= kSdefTigerVersion) {
-    if (node = [super xmlNodeForVersion:version]) {
+    if ((node = [super xmlNodeForVersion:version])) {
       [node setEmpty:YES];
       [node setAttribute:[[self name] stringByEscapingEntities:nil] forKey:@"type"];
       if ([self isList]) {
@@ -167,7 +167,7 @@
 - (SdefXMLNode *)xmlNodeForVersion:(SdefVersion)version {
   SdefXMLNode *node = nil;
   if (sd_content != nil) {
-    if (node = [super xmlNodeForVersion:version]) {
+    if ((node = [super xmlNodeForVersion:version])) {
       if (version >= kSdefTigerVersion && [self isHtml]) {
         SdefXMLNode *html = [[SdefXMLNode alloc] initWithElementName:@"html"];
         [html setContent:sd_content];
@@ -193,8 +193,8 @@
 @implementation SdefImplementation (SdefXMLManager)
 #pragma mark XML Generation
 - (SdefXMLNode *)xmlNodeForVersion:(SdefVersion)version {
-  SdefXMLNode *node;
-  if (node = [super xmlNodeForVersion:version]) {
+  SdefXMLNode *node = [super xmlNodeForVersion:version];
+  if (node) {
     [node setEmpty:YES];
     NSString *attr = [self name];
     if (attr && [attr length] > 0)
@@ -277,13 +277,13 @@
 #pragma mark Parsing
 - (void)sd_setXMLValue:(NSDictionary *)attrs {
   NSString *attr;
-  if (attr = [attrs objectForKey:@"boolean-value"]) {
+  if ((attr = [attrs objectForKey:@"boolean-value"])) {
     [self setValueType:kSdefValueTypeBoolean];
     [self setBooleanValue:[attr caseInsensitiveCompare:@"YES"] == 0];
-  } else if (attr = [attrs objectForKey:@"integer-value"]) {
+  } else if ((attr = [attrs objectForKey:@"integer-value"])) {
     [self setValueType:kSdefValueTypeInteger];
     [self setIntegerValue:[attr integerValue]];
-  } else if (attr = [attrs objectForKey:@"string-value"]) {
+  } else if ((attr = [attrs objectForKey:@"string-value"])) {
     [self setValueType:kSdefValueTypeString];
     [self setTextValue:[attr stringByUnescapingEntities:nil]];
   }
@@ -319,7 +319,7 @@
 - (SdefXMLNode *)xmlNodeForVersion:(SdefVersion)version {
   SdefXMLNode *node = nil;
   if (version >= kSdefLeopardVersion) {
-    if (node = [super xmlNodeForVersion:version]) {
+    if ((node = [super xmlNodeForVersion:version])) {
       [node setEmpty:YES];
       /* href */
       NSString *attr = [self href];

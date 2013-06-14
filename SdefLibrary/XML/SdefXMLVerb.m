@@ -15,8 +15,8 @@
 @implementation SdefVerb (SdefXMLManager)
 #pragma mark XML Generation
 - (SdefXMLNode *)xmlNodeForVersion:(SdefVersion)version {
-  SdefXMLNode *node;
-  if (node = [super xmlNodeForVersion:version]) {
+  SdefXMLNode *node = [super xmlNodeForVersion:version];
+  if (node) {
     SdefXMLNode *childNode = nil;
     /* Insert before parameters */
     NSUInteger idx = [node count] - [self count];
@@ -100,8 +100,8 @@
 @implementation SdefParameter (SdefXMLManager)
 #pragma mark XML Generation
 - (SdefXMLNode *)xmlNodeForVersion:(SdefVersion)version {
-  SdefXMLNode *node;
-  if (node = [super xmlNodeForVersion:version]) {
+  SdefXMLNode *node = [super xmlNodeForVersion:version];
+  if (node) {
     if ([self isOptional]) {
       if (version >= kSdefTigerVersion) {
         [node setAttribute:@"yes" forKey:@"optional"];

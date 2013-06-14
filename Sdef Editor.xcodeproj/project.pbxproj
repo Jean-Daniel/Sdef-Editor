@@ -63,7 +63,6 @@
 		1B39DEE3168462640048F1E9 /* WBImageAndTextCell.h in Headers */ = {isa = PBXBuildFile; fileRef = 1B35562E16844B6F005D0D0A /* WBImageAndTextCell.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		1B39DEE4168462680048F1E9 /* WBTextFieldCell.h in Headers */ = {isa = PBXBuildFile; fileRef = 1B35563A16844B6F005D0D0A /* WBTextFieldCell.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		1B39DEE51684626F0048F1E9 /* WBOutlineView.h in Headers */ = {isa = PBXBuildFile; fileRef = 1B35559E16844B6F005D0D0A /* WBOutlineView.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		1B39DEE8168462940048F1E9 /* WBGeometry.m in Sources */ = {isa = PBXBuildFile; fileRef = 1B39DEE71684628F0048F1E9 /* WBGeometry.m */; };
 		1B39DEE9168462970048F1E9 /* WBGeometry.h in Headers */ = {isa = PBXBuildFile; fileRef = 1B39DEE61684628E0048F1E9 /* WBGeometry.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		1B39DEF6168462C80048F1E9 /* WBHSplitBar.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 1B39DEF1168462BA0048F1E9 /* WBHSplitBar.tiff */; };
 		1B39DEF7168462C80048F1E9 /* WBSplitDot.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 1B39DEF3168462BA0048F1E9 /* WBSplitDot.tiff */; };
@@ -75,6 +74,8 @@
 		1B5FEC900BD8E58100F57412 /* SdefXRef.m in Sources */ = {isa = PBXBuildFile; fileRef = 1B5FEC8E0BD8E58100F57412 /* SdefXRef.m */; };
 		1B73E9CC0CD7965C00FC60B2 /* SdefParserInternal.h in Headers */ = {isa = PBXBuildFile; fileRef = 1B73E9CB0CD7965B00FC60B2 /* SdefParserInternal.h */; };
 		1B73ECA70CD7A73400FC60B2 /* SdefParserInternal.m in Sources */ = {isa = PBXBuildFile; fileRef = 1B73ECA60CD7A73400FC60B2 /* SdefParserInternal.m */; };
+		1B814DD6176BA39F0060B7F8 /* WBCGFunctions.mm in Sources */ = {isa = PBXBuildFile; fileRef = 1BB675F7168EE29200B06EFA /* WBCGFunctions.mm */; };
+		1B814DD7176BA3A60060B7F8 /* WBGeometry.m in Sources */ = {isa = PBXBuildFile; fileRef = 1B39DEE71684628F0048F1E9 /* WBGeometry.m */; };
 		1B877DB30D37E685007A59B5 /* SdefDocument.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1B877DB10D37E685007A59B5 /* SdefDocument.xib */; };
 		1B877DB80D37E6A2007A59B5 /* SdefImporterWarning.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1B877DB60D37E6A2007A59B5 /* SdefImporterWarning.xib */; };
 		1B877DC70D37E719007A59B5 /* ImportApplicationSdef.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1B877DC50D37E719007A59B5 /* ImportApplicationSdef.xib */; };
@@ -104,8 +105,6 @@
 		1BB675F4168EE25C00B06EFA /* WBInterpolationFunction.m in Sources */ = {isa = PBXBuildFile; fileRef = 1BB675F2168EE25C00B06EFA /* WBInterpolationFunction.m */; };
 		1BB675F5168EE26500B06EFA /* WBInterpolationFunction.h in Headers */ = {isa = PBXBuildFile; fileRef = 1BB675F1168EE25C00B06EFA /* WBInterpolationFunction.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		1BB675F9168EE29200B06EFA /* WBCGFunctions.h in Headers */ = {isa = PBXBuildFile; fileRef = 1BB675F6168EE29200B06EFA /* WBCGFunctions.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		1BB675FA168EE29200B06EFA /* WBCGFunctions.m in Sources */ = {isa = PBXBuildFile; fileRef = 1BB675F7168EE29200B06EFA /* WBCGFunctions.m */; };
-		1BB675FB168EE29200B06EFA /* WBCGFunctions.m in Sources */ = {isa = PBXBuildFile; fileRef = 1BB675F7168EE29200B06EFA /* WBCGFunctions.m */; };
 		1BB67602168EE2AA00B06EFA /* WBClassCluster.h in Headers */ = {isa = PBXBuildFile; fileRef = 1BB675FD168EE2A500B06EFA /* WBClassCluster.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		1BC332C60CD894C3009109F0 /* SdefXInclude.h in Headers */ = {isa = PBXBuildFile; fileRef = 1BC332C40CD894C3009109F0 /* SdefXInclude.h */; };
 		1BC332C70CD894C3009109F0 /* SdefXInclude.m in Sources */ = {isa = PBXBuildFile; fileRef = 1BC332C50CD894C3009109F0 /* SdefXInclude.m */; };
@@ -448,7 +447,7 @@
 		1BB675F1168EE25C00B06EFA /* WBInterpolationFunction.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WBInterpolationFunction.h; sourceTree = "<group>"; };
 		1BB675F2168EE25C00B06EFA /* WBInterpolationFunction.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WBInterpolationFunction.m; sourceTree = "<group>"; };
 		1BB675F6168EE29200B06EFA /* WBCGFunctions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WBCGFunctions.h; sourceTree = "<group>"; };
-		1BB675F7168EE29200B06EFA /* WBCGFunctions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WBCGFunctions.m; sourceTree = "<group>"; };
+		1BB675F7168EE29200B06EFA /* WBCGFunctions.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = WBCGFunctions.mm; sourceTree = "<group>"; };
 		1BB675FD168EE2A500B06EFA /* WBClassCluster.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WBClassCluster.h; sourceTree = "<group>"; };
 		1BB675FE168EE2A500B06EFA /* WBForwarding.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WBForwarding.h; sourceTree = "<group>"; };
 		1BB675FF168EE2A500B06EFA /* WBKeyValueCoding.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WBKeyValueCoding.h; sourceTree = "<group>"; };
@@ -833,7 +832,7 @@
 				1B3555E616844B6F005D0D0A /* WBAEFunctions.c */,
 				1B3555E716844B6F005D0D0A /* WBAEFunctions.h */,
 				1BB675F6168EE29200B06EFA /* WBCGFunctions.h */,
-				1BB675F7168EE29200B06EFA /* WBCGFunctions.m */,
+				1BB675F7168EE29200B06EFA /* WBCGFunctions.mm */,
 				1B3555EC16844B6F005D0D0A /* WBFinderSuite.c */,
 				1B3555ED16844B6F005D0D0A /* WBFinderSuite.h */,
 				1B3555EE16844B6F005D0D0A /* WBFSFunctions.h */,
@@ -1581,7 +1580,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				1BB675FB168EE29200B06EFA /* WBCGFunctions.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1695,13 +1693,13 @@
 				1B39DEE01684624A0048F1E9 /* WBOutlineView.m in Sources */,
 				1B39DEE1168462520048F1E9 /* WBTextFieldCell.m in Sources */,
 				1B39DEE2168462550048F1E9 /* WBImageAndTextCell.m in Sources */,
-				1B39DEE8168462940048F1E9 /* WBGeometry.m in Sources */,
 				1BB675E1168EE1EB00B06EFA /* WBCollapseView.m in Sources */,
 				1BB675E3168EE1EB00B06EFA /* WBCollapseViewInternal.m in Sources */,
 				1BB675E5168EE1EB00B06EFA /* WBCollapseViewItem.m in Sources */,
 				1BB675EF168EE24100B06EFA /* WBGradient.m in Sources */,
 				1BB675F4168EE25C00B06EFA /* WBInterpolationFunction.m in Sources */,
-				1BB675FA168EE29200B06EFA /* WBCGFunctions.m in Sources */,
+				1B814DD6176BA39F0060B7F8 /* WBCGFunctions.mm in Sources */,
+				1B814DD7176BA3A60060B7F8 /* WBGeometry.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1916,6 +1914,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 1B35555E16844A90005D0D0A /* release.xcconfig */;
 			buildSettings = {
+				CLANG_CXX_LANGUAGE_STANDARD = "c++0x";
 				WONDERBOX = "";
 			};
 			name = Release;
@@ -1948,6 +1947,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 1B35555C16844A90005D0D0A /* debug.xcconfig */;
 			buildSettings = {
+				CLANG_CXX_LANGUAGE_STANDARD = "c++0x";
 				WONDERBOX = "";
 			};
 			name = Debug;

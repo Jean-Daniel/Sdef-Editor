@@ -291,7 +291,7 @@
   // if it exists.
   creatorCodeString = [infoPlist objectForKey:@"CFBundleSignature"];
   if(creatorCodeString) {
-    creatorCode = SPXUInteger(WBOSTypeFromString(creatorCodeString));
+    creatorCode = @(WBOSTypeFromString(creatorCodeString));
   }
   
   // Then, find the matching Info.plist dictionary entry for this type.
@@ -307,7 +307,7 @@
         if(typeCodeStrings) { 
           NSString *firstTypeCodeString = [typeCodeStrings objectAtIndex:0];
           if (firstTypeCodeString) {
-            typeCode = SPXUInteger(WBOSTypeFromString(firstTypeCodeString));
+            typeCode = @(WBOSTypeFromString(firstTypeCodeString));
           }
         }
         break; 

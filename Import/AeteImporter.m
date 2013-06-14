@@ -64,7 +64,7 @@ bail:
   return err;
 }
 
-- (id)_initWithTarget:(AEDesc *)target {
+- (id)_initWithTarget:(AEDesc *)target NS_METHOD_FAMILY(init) {
   if (self = [super init]) {
     AppleEvent theEvent = {typeNull, nil};
     sd_aetes = [[NSMutableArray alloc] init];

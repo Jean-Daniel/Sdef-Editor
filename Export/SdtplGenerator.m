@@ -174,14 +174,14 @@ NSString *SdefEscapedString(NSString *value, NSUInteger format) {
   if ([SdtplGenerator class] == self) {
     _null = [NSNull null];
     [[NSUserDefaults standardUserDefaults] registerDefaults:[NSDictionary dictionaryWithObjectsAndKeys:
-      SPXBool(NO), @"SdtplSortSuite",
-      SPXBool(YES), @"SdtplHTMLLinks",
-      SPXBool(YES), @"SdtplSortOthers",
-      SPXBool(NO), @"SdtplSubclasses",
-      SPXBool(YES), @"SdtplGroupEvents",
-      SPXBool(NO), @"SdtplIgnoreEvents",
-      SPXBool(YES), @"SdtplIgnoreRespondsTo",
-      SPXInteger(kSdefTemplateCSSInline), @"SdtplCSSStyle",
+      @(NO), @"SdtplSortSuite",
+      @(YES), @"SdtplHTMLLinks",
+      @(YES), @"SdtplSortOthers",
+      @(NO), @"SdtplSubclasses",
+      @(YES), @"SdtplGroupEvents",
+      @(NO), @"SdtplIgnoreEvents",
+      @(YES), @"SdtplIgnoreRespondsTo",
+      @(kSdefTemplateCSSInline), @"SdtplCSSStyle",
       nil]];
   }
 }
@@ -791,7 +791,7 @@ NSString *SdefEscapedString(NSString *value, NSUInteger format) {
   }
   /* Dictionary Links */
   SdefObject *obj = nil;
-  if (obj = [anObject dictionary]) {
+  if ((obj = [anObject dictionary])) {
     SdtplSetVariable(tpl, nil, SdtplVariableDictionaryFile, [self fileForObject:obj]);
     NSString *name = [obj name];
     if (name) {
@@ -803,7 +803,7 @@ NSString *SdefEscapedString(NSString *value, NSUInteger format) {
     }
   }
   /* Suite Links */
-  if (obj = [anObject suite]) {
+  if ((obj = [anObject suite])) {
     SdtplSetVariable(tpl, nil, SdtplVariableSuiteFile, [self fileForObject:obj]);
     NSString *name = [obj name];
     if (name) {

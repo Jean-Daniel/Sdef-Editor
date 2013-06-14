@@ -78,23 +78,23 @@ static BOOL SdefSearchFilter(NSString *search, SdefObject *object, void *ctxt);
   
   /* Search Menu Categories */
   NSMenuItem *item = [menu addItemWithTitle:@"All Fields" action:@selector(limitSearch:) keyEquivalent:@""];
-  [item setRepresentedObject:SPXUInteger(kSdefSearchAll)];
+  [item setRepresentedObject:@(kSdefSearchAll)];
 	[menu addItem:[NSMenuItem separatorItem]];
 	
   item = [menu addItemWithTitle:@"Symbol" action:@selector(limitSearch:) keyEquivalent:@""];
-  [item setRepresentedObject:SPXUInteger(kSdefSearchSymbol)];
+  [item setRepresentedObject:@(kSdefSearchSymbol)];
 	
 	item = [menu addItemWithTitle:@"Symbol Type" action:@selector(limitSearch:) keyEquivalent:@""];
-  [item setRepresentedObject:SPXUInteger(kSdefSearchSymbolType)];
+  [item setRepresentedObject:@(kSdefSearchSymbolType)];
   
 	item = [menu addItemWithTitle:@"Code" action:@selector(limitSearch:) keyEquivalent:@""];
-  [item setRepresentedObject:SPXUInteger(kSdefSearchCode)];
+  [item setRepresentedObject:@(kSdefSearchCode)];
 
 	item = [menu addItemWithTitle:@"Type" action:@selector(limitSearch:) keyEquivalent:@""];
-  [item setRepresentedObject:SPXUInteger(kSdefSearchType)];
+  [item setRepresentedObject:@(kSdefSearchType)];
 	
 	item = [menu addItemWithTitle:@"Location" action:@selector(limitSearch:) keyEquivalent:@""];
-  [item setRepresentedObject:SPXUInteger(kSdefSearchSuite)];
+  [item setRepresentedObject:@(kSdefSearchSuite)];
   
   /* Search Menu Template */
   [menu addItem:[NSMenuItem separatorItem]];

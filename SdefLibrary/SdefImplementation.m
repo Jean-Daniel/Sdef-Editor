@@ -137,21 +137,21 @@
         break;
       case kSdefValueTypeInteger:
         if (!sd_value || [sd_value isKindOfClass:[NSString class]])
-          [self setValue:SPXInteger([sd_value integerValue])];
+          [self setValue:@([sd_value integerValue])];
         else
-          [self setValue:SPXInteger(0)];
+          [self setValue:@(0)];
         break;
       case kSdefValueTypeBoolean:
         if ([sd_value isKindOfClass:[NSString class]]) {
           if (NSOrderedSame == [sd_value caseInsensitiveCompare:@"yes"] ||
               NSOrderedSame == [sd_value caseInsensitiveCompare:@"true"] ||
               [sd_value integerValue]) {
-            [self setValue:SPXBool(YES)];
+            [self setValue:@(YES)];
           } else {
-            [self setValue:SPXBool(NO)];
+            [self setValue:@(NO)];
           }
         } else {
-          [self setValue:SPXBool(NO)];
+          [self setValue:@(NO)];
         }
         break;
     }
@@ -172,7 +172,7 @@
 }
 - (void)setIntegerValue:(NSInteger)value {
   [[[self undoManager] prepareWithInvocationTarget:self] setIntegerValue:[self integerValue]];
-  [self setValue:SPXInteger(value)];
+  [self setValue:@(value)];
 }
 
 - (BOOL)booleanValue {
@@ -180,7 +180,7 @@
 }
 - (void)setBooleanValue:(BOOL)value {
   [[[self undoManager] prepareWithInvocationTarget:self] setBooleanValue:[self booleanValue]];
-  [self setValue:SPXBool(value)];
+  [self setValue:@(value)];
 }
 
 @end

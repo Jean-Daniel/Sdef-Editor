@@ -95,7 +95,7 @@
 
 /* Returns access value */
 - (id)reverseTransformedValue:(id)value {
-  return (value) ? value : SPXInteger(kSdefInlineAll);
+  return (value) ? value : @(kSdefInlineAll);
 }
 
 @end

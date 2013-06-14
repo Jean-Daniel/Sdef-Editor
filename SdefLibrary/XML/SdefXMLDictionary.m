@@ -27,8 +27,8 @@
 }
 
 - (SdefXMLNode *)xmlNodeForVersion:(SdefVersion)version {
-  SdefXMLNode *node = nil;
-  if (node = [super xmlNodeForVersion:version]) {
+  SdefXMLNode *node = [super xmlNodeForVersion:version];
+  if (node) {
     if ([self name]) [node setAttribute:[[self name] stringByEscapingEntities:nil] forKey:@"title"];
     switch (version) {
       case kSdefLeopardVersion: {
