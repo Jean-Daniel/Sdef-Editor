@@ -14,13 +14,11 @@
  <!ELEMENT html ANY>
 */
 @interface SdefDocumentation : SdefLeaf <NSCopying, NSCoding> {
-  id sd_content;
+  NSString *_content;
 }
 
-- (BOOL)isHtml;
-- (void)setHtml:(BOOL)html;
+@property(nonatomic, copy) NSString *content;
 
-- (NSString *)content;
-- (void)setContent:(NSString *)newContent;
+@property(nonatomic, getter=isHtml) BOOL html;
 
 @end

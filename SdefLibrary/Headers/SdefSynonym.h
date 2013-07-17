@@ -12,23 +12,21 @@
  <!-- SYNONYMS -->
  <!ELEMENT synonym ((%implementation;)?)>
  <!ATTLIST synonym
+ %common.attrib;
  name       %Term;          #IMPLIED
  code       %OSType;		 #IMPLIED
- hidden     %yorn;          #IMPLIED 
+ hidden     %yorn;          #IMPLIED
  >
  <!-- at least one of "name" and "code" is required. -->
  */
 
 @class SdefImplementation;
 @interface SdefSynonym : SdefLeaf <NSCopying, NSCoding> {
-  NSString *sd_code;
-  SdefImplementation *sd_impl; 
+  NSString *_code;
+  SdefImplementation *_impl;
 }
 
-- (NSString *)code;
-- (void)setCode:(NSString *)code;
-
-- (SdefImplementation *)impl;
-- (void)setImpl:(SdefImplementation *)anImpl;
+@property(nonatomic, copy) NSString *code;
+@property(nonatomic, retain) SdefImplementation *impl;
 
 @end

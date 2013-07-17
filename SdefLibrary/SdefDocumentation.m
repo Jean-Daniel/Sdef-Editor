@@ -11,21 +11,24 @@
 #import "SdefDocument.h"
 
 @implementation SdefDocumentation
+
+@synthesize content = _content;
+
 #pragma mark Protocols Implementations
 - (id)copyWithZone:(NSZone *)aZone {
   SdefDocumentation *copy = [super copyWithZone:aZone];
-  copy->sd_content = [sd_content copyWithZone:aZone];
+  copy->_content = [_content copyWithZone:aZone];
   return copy;
 }
 
 - (void)encodeWithCoder:(NSCoder *)aCoder {
   [super encodeWithCoder:aCoder];
-  [aCoder encodeObject:sd_content forKey:@"SDContent"];
+  [aCoder encodeObject:_content forKey:@"SDContent"];
 }
 
 - (id)initWithCoder:(NSCoder *)aCoder {
   if (self = [super initWithCoder:aCoder]) {
-    sd_content = [[aCoder decodeObjectForKey:@"SDContent"] retain];
+    _content = [[aCoder decodeObjectForKey:@"SDContent"] retain];
   }
   return self;
 }
@@ -50,7 +53,7 @@
 }
 
 - (void)dealloc {
-  [sd_content release];
+  [_content release];
   [super dealloc];
 }
 
@@ -67,14 +70,11 @@
   }
 }
 
-- (NSString *)content {
-  return sd_content;
-}
 - (void)setContent:(NSString *)newContent {
-  if (sd_content != newContent) {
-    [[self undoManager] registerUndoWithTarget:self selector:_cmd object:sd_content];
-    [sd_content release];
-    sd_content = [newContent retain];
+  if (_content != newContent) {
+    [[self undoManager] registerUndoWithTarget:self selector:_cmd object:_content];
+    [_content release];
+    _content = [newContent copy];
   }
 }
 

@@ -11,21 +11,24 @@
 #import "SdefDocument.h"
 
 @implementation SdefContents
+
+@synthesize access = _access;
+
 #pragma mark Protocols Implementations
 - (id)copyWithZone:(NSZone *)aZone {
   SdefContents *copy = [super copyWithZone:aZone];
-  copy->sd_access = sd_access;
+  copy->_access = _access;
   return copy;
 }
 
 - (void)encodeWithCoder:(NSCoder *)aCoder {
   [super encodeWithCoder:aCoder];
-  [aCoder encodeInteger:sd_access forKey:@"SCAccess"];
+  [aCoder encodeInt32:_access forKey:@"SCAccess"];
 }
 
 - (id)initWithCoder:(NSCoder *)aCoder {
   if (self = [super initWithCoder:aCoder]) {
-    sd_access = [aCoder decodeIntegerForKey:@"SCAccess"];
+    _access = [aCoder decodeInt32ForKey:@"SCAccess"];
   }
   return self;
 }
@@ -50,12 +53,9 @@
   [self setRemovable:NO];
 }
 
-- (NSUInteger)access {
-  return sd_access;
-}
-- (void)setAccess:(NSUInteger)newAccess {
-  [[[self undoManager] prepareWithInvocationTarget:self] setAccess:sd_access];
-  sd_access = newAccess;
+- (void)setAccess:(uint32_t)newAccess {
+  [[[self undoManager] prepareWithInvocationTarget:self] setAccess:_access];
+  _access = newAccess;
 }
 
 @end

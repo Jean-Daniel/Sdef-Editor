@@ -20,12 +20,16 @@
 WB_INLINE 
 NSString *SystemVersionForSdefVersion(SdefVersion vers) {
   switch (vers) {
+    case kSdefVersionUndefined:
+      return nil;
     case kSdefTigerVersion:
       return @"10.4 (Tiger)";
     case kSdefPantherVersion:
       return @"10.3 (Panther)";
     case kSdefLeopardVersion:
       return @"10.5 (Leopard)";
+    case kSdefMountainLionVersion:
+      return @"10.8 (Mountain Lion)";
   }
   return nil;
 }
@@ -138,7 +142,7 @@ NSString *SdefValidatorCodeForName(NSString *name) {
 @implementation SdefDocumentedObject (SdefValidator)
 
 - (void)validate:(NSMutableArray *)messages forVersion:(SdefVersion)vers {
-  if (sd_documentation && [sd_documentation isHtml]) {
+  if (sd_documentation && sd_documentation.html) {
     if (vers <kSdefTigerVersion) {
       SdefValidatorItem *error = [SdefValidatorItem errorItemWithNode:(NSObject<SdefObject> *)self 
                                                               message:@"html documentation is not supported in Panther Sdef files."];

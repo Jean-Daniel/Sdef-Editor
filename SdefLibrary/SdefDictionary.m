@@ -14,26 +14,28 @@
 #import "SdefDocumentation.h"
 
 @implementation SdefDictionary
+
+@synthesize version = _version;
+@synthesize document = _document;
+
 #pragma mark Protocols Implementations
 - (id)copyWithZone:(NSZone *)aZone {
   SdefDictionary *copy = [super copyWithZone:aZone];
-  copy->sd_document = nil;
-  copy->sd_xincludes = [sd_xincludes copy];
+  copy->_document = nil;
   return copy;
 }
 
 - (void)encodeWithCoder:(NSCoder *)aCoder {
   [super encodeWithCoder:aCoder];
-  [aCoder encodeInteger:sd_version forKey:@"SDVersion"];
+  [aCoder encodeInteger:_version forKey:@"SDVersion"];
   //[aCoder encodeObject:sd_xincludes forKey:@"SDXIncludes"];
-  [aCoder encodeConditionalObject:sd_document forKey:@"SDDocument"];
+  [aCoder encodeConditionalObject:_document forKey:@"SDDocument"];
 }
 
 - (id)initWithCoder:(NSCoder *)aCoder {
   if (self = [super initWithCoder:aCoder]) {
-    sd_version = [aCoder decodeIntegerForKey:@"SDVersion"];
-    sd_document = [aCoder decodeObjectForKey:@"SDDocument"];
-    //sd_xincludes = [[aCoder decodeObjectForKey:@"SDXIncludes"] retain];
+    _version = [aCoder decodeIntegerForKey:@"SDVersion"];
+    _document = [aCoder decodeObjectForKey:@"SDDocument"];
   }
   return self;
 }
@@ -42,12 +44,7 @@
 
 - (void)sdefInit {
   [super sdefInit];
-  sd_version = kSdefLeopardVersion;
-}
-
-- (void)dealloc {
-  [sd_xincludes release];
-  [super dealloc];
+  _version = kSdefMountainLionVersion;
 }
 
 #pragma mark -
@@ -75,30 +72,16 @@
   [self setName:newTitle];
 }
 
-- (SdefDocument *)document {
-  return sd_document;
-}
-- (void)setDocument:(SdefDocument *)document {
-  sd_document = document;
-}
-
 - (SdefClassManager *)classManager {
-  return [sd_document classManager];
+  return [_document classManager];
 }
 
 - (NSNotificationCenter *)notificationCenter {
-  return [sd_document notificationCenter];
+  return [_document notificationCenter];
 }
 
 - (NSArray *)suites {
   return [self children];
-}
-
-- (SdefVersion)version {
-  return sd_version;
-}
-- (void)setVersion:(SdefVersion)vers {
-  sd_version = vers;
 }
 
 @end

@@ -30,17 +30,12 @@
   SdefXMLNode *node = [super xmlNodeForVersion:version];
   if (node) {
     if ([self name]) [node setAttribute:[[self name] stringByEscapingEntities:nil] forKey:@"title"];
-    switch (version) {
-      case kSdefLeopardVersion:
-      case kSdefMountainLionVersion: {
-        //[node setMeta:@"10.5" forKey:@"version"];
-        if ([self sd_usesXInclude])
-          [node setAttribute:@"http://www.w3.org/2003/XInclude" forKey:@"xmlns:xi"];
-      }
-        break;
-      case kSdefTigerVersion: 
-        [node setMeta:@"10.4" forKey:@"version"];
-        break;
+    if (version > kSdefLeopardVersion) {
+      //[node setMeta:@"10.5" forKey:@"version"];
+      if ([self sd_usesXInclude])
+        [node setAttribute:@"http://www.w3.org/2003/XInclude" forKey:@"xmlns:xi"];
+    } else if (version == kSdefTigerVersion) {
+      [node setMeta:@"10.4" forKey:@"version"];
     }
   }
   return node;

@@ -116,9 +116,7 @@
     /* xrefs */
     if ([self hasXrefs] && [sd_xrefs count] > 0) {
       if (version >= kSdefLeopardVersion) {
-        SdefXRef *xref;
-        NSEnumerator *items = [sd_xrefs objectEnumerator];
-        while (xref = [items nextObject]) {
+        for (SdefXRef *xref in sd_xrefs) {
           SdefXMLNode *xNode = [xref xmlNodeForVersion:version];
           if (xNode) {
             [node appendChild:xNode];
@@ -126,11 +124,9 @@
         }
       } else {
         /* warning: xref not supported in Tiger. */
-        SdefXRef *xref;
-        NSEnumerator *items = [sd_xrefs objectEnumerator];
         NSMutableString *meta = [[NSMutableString alloc] init];
         [meta appendString:@"0:"];
-        while (xref = [items nextObject]) {
+        for (SdefXRef *xref in sd_xrefs) {
           if ([xref target]) {
             [meta appendString:[xref target]];
             [meta appendString:xref.hidden ? @",1," : @",0,"];
@@ -146,9 +142,7 @@
     
     /* synonyms */
     if ([self hasSynonyms] && sd_synonyms) {
-      SdefSynonym *synonym;
-      NSEnumerator *items = [sd_synonyms objectEnumerator];
-      while (synonym = [items nextObject]) {
+      for (SdefSynonym *synonym in sd_synonyms) {
         SdefXMLNode *synNode = [synonym xmlNodeForVersion:version];
         if (synNode) {
           [node appendChild:synNode];
@@ -265,9 +259,7 @@
       }
     } else {
       if ([self hasCustomType]) {
-        SdefType *type;
-        NSEnumerator *types = [[self types] objectEnumerator];
-        while (type = [types nextObject]) {
+        for (SdefType *type in [self types]) {
           SdefXMLNode *typeNode = [type xmlNodeForVersion:version];
           if (typeNode) {
             [node appendChild:typeNode];

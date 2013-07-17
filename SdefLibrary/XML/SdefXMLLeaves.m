@@ -70,8 +70,8 @@
     if (attr) [node setAttribute:[attr stringByEscapingEntities:nil] forKey:@"name"];
 
     /* Implementation */
-    if (sd_impl) {
-      SdefXMLNode *implNode = [sd_impl xmlNodeForVersion:version];
+    if (_impl) {
+      SdefXMLNode *implNode = [_impl xmlNodeForVersion:version];
       if (implNode) {
         [node prependChild:implNode];
       }
@@ -166,17 +166,17 @@
 #pragma mark XML Generation
 - (SdefXMLNode *)xmlNodeForVersion:(SdefVersion)version {
   SdefXMLNode *node = nil;
-  if (sd_content != nil) {
+  if (_content != nil) {
     if ((node = [super xmlNodeForVersion:version])) {
-      if (version >= kSdefTigerVersion && [self isHtml]) {
+      if (version >= kSdefTigerVersion && self.html) {
         SdefXMLNode *html = [[SdefXMLNode alloc] initWithElementName:@"html"];
-        [html setContent:sd_content];
+        [html setContent:_content];
         /* Tiger also support CDData */
         [html setCDData:YES];
         [node appendChild:html];
         [html release];
       } else {
-        [node setContent:[sd_content stringByEscapingEntities:nil]];
+        [node setContent:[_content stringByEscapingEntities:nil]];
       }
     }
   }
@@ -200,7 +200,7 @@
     if (attr && [attr length] > 0)
       [node setAttribute:[attr stringByEscapingEntities:nil] forKey:@"name"];
     
-    attr = [self sdClass];
+    attr = self.objectClass;
     if (attr && [attr length] > 0)
       [node setAttribute:[attr stringByEscapingEntities:nil] forKey:@"class"];
     
@@ -303,7 +303,7 @@
   [self setKey:[[attrs objectForKey:@"key"] stringByUnescapingEntities:nil]];
   [self setName:[[attrs objectForKey:@"name"] stringByUnescapingEntities:nil]];
   [self setMethod:[[attrs objectForKey:@"method"] stringByUnescapingEntities:nil]];
-  [self setSdClass:[[attrs objectForKey:@"class"] stringByUnescapingEntities:nil]];
+  self.objectClass = [[attrs objectForKey:@"class"] stringByUnescapingEntities:nil];
   
   [self sd_setXMLValue:attrs];
 }

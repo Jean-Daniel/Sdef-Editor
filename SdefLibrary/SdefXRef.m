@@ -10,20 +10,22 @@
 
 @implementation SdefXRef
 
+@synthesize target = _target;
+
 - (id)copyWithZone:(NSZone *)aZone {
   SdefXRef *copy = [super copyWithZone:aZone];
-  copy->sd_target = [sd_target copyWithZone:aZone];
+  copy->_target = [_target copyWithZone:aZone];
   return copy;
 }
 
 - (void)encodeWithCoder:(NSCoder *)aCoder {
   [super encodeWithCoder:aCoder];
-  [aCoder encodeObject:sd_target forKey:@"SXTarget"];
+  [aCoder encodeObject:_target forKey:@"SXTarget"];
 }
 
 - (id)initWithCoder:(NSCoder *)aCoder {
   if (self = [super initWithCoder:aCoder]) {
-    sd_target = [[aCoder decodeObjectForKey:@"SXTarget"] retain];
+    _target = [[aCoder decodeObjectForKey:@"SXTarget"] retain];
   }
   return self;
 }
@@ -34,18 +36,15 @@
 }
 
 - (void)dealloc {
-  [sd_target release];
+  [_target release];
   [super dealloc];
 }
 
 #pragma mark -
-- (NSString *)target {
-  return sd_target;
-}
 - (void)setTarget:(NSString *)target {
-  if (target != sd_target) {
-    [[self undoManager] registerUndoWithTarget:self selector:_cmd object:sd_target];
-    SPXSetterCopy(sd_target, target);
+  if (target != _target) {
+    [[self undoManager] registerUndoWithTarget:self selector:_cmd object:_target];
+    SPXSetterCopy(_target, target);
   }
 }
 

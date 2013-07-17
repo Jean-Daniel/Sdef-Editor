@@ -30,10 +30,10 @@
   }
   
   /* should be a simple type */
-  if (sd_type) {
-    if ([sd_type rangeOfString:@"list of "].location != NSNotFound ||
-        [sd_type rangeOfString:@"|"].location != NSNotFound) {
-      [messages addObject:[self invalidValue:sd_type forAttribute:@"type"]];
+  if (_type) {
+    if ([_type rangeOfString:@"list of "].location != NSNotFound ||
+        [_type rangeOfString:@"|"].location != NSNotFound) {
+      [messages addObject:[self invalidValue:_type forAttribute:@"type"]];
     }
   }
   
@@ -43,16 +43,16 @@
   }
   
   /* contents */
-  if (sd_contents) {
-    [sd_contents validate:messages forVersion:vers];
+  if (_contents) {
+    [_contents validate:messages forVersion:vers];
   }
   
   /* super class */
-  if (sd_inherits) {
+  if (_inherits) {
     SdefClassManager *manager = [self classManager];
-    if (manager && ![manager classWithName:sd_inherits]) {
+    if (manager && ![manager classWithName:_inherits]) {
       [messages addObject:[SdefValidatorItem warningItemWithNode:self
-                                                         message:@"super class '%@' not found", sd_inherits]];
+                                                         message:@"super class '%@' not found", _inherits]];
     }
   }
   
@@ -66,7 +66,7 @@
 @implementation SdefElement (SdefValidator)
 
 - (void)validate:(NSMutableArray *)messages forVersion:(SdefVersion)vers {
-//  if (sd_accessors && sd_accessors != 0x3f) {
+//  if (_accessors && _accessors != 0x3f) {
 //    [messages addObject:[SdefValidatorItem noteItemWithNode:self message:@"using accessors but cocoa scripting ignores them"]];
 //  }
   

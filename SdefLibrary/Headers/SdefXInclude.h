@@ -9,18 +9,15 @@
 #import "SdefLeaf.h"
 
 @interface SdefXInclude : SdefLeaf <NSCopying, NSCoding> {
-  @private
-  NSString *sd_href;
-  NSString *sd_pointer;
+@private
+  NSString *_href;
+  NSString *_pointer;
   
-  NSMutableArray *sd_nodes;
+  NSMutableArray *_nodes;
 }
 
-- (NSString *)href;
-- (void)setHref:(NSString *)aRef;
-
-- (NSString *)pointer;
-- (void)setPointer:(NSString *)aPointer;
+@property(nonatomic, copy) NSString *href;
+@property(nonatomic, copy) NSString *pointer;
 
 @end
 

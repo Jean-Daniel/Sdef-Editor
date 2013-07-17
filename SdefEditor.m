@@ -204,9 +204,7 @@ const OSType kCocoaSuiteDefinitionHFSType = 'ScSu';
       } else if ([suites count]) {
         [[doc dictionary] removeAllChildren];
         
-        SdefSuite *suite;
-        NSEnumerator *items = [suites objectEnumerator];
-        while (suite = [items nextObject]) {
+        for (SdefSuite *suite in suites) {
           [[doc dictionary] appendChild:suite];
         }
         [[doc undoManager] removeAllActions];

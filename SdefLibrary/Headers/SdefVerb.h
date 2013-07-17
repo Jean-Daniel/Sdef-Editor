@@ -9,67 +9,71 @@
 #import "SdefObjects.h"
 
 /*
-<!-- VERBS (COMMANDS OR EVENTS) -->
-<!ELEMENT command ((%implementation;)?, synonym*, direct-parameter?, parameter*, result?, documentation*, xref*)>
-<!ATTLIST command
-name       %Verbname;      #REQUIRED
-id         ID              #IMPLIED
-code       %EventCode;     #REQUIRED 
-description  %Text;        #IMPLIED
-hidden     %yorn;          #IMPLIED 
->
+ <!-- VERBS (COMMANDS OR EVENTS) -->
+ <!ELEMENT command ((%implementation;)?, access-group*, synonym*, direct-parameter?, parameter*, result?, documentation*, xref*)>
+ <!ATTLIST command
+ %common.attrib;
+ name       %Verbname;      #REQUIRED
+ id         ID              #IMPLIED
+ code       %EventCode;     #REQUIRED
+ description  %Text;        #IMPLIED
+ hidden     %yorn;          #IMPLIED
+ >
 
-<!ELEMENT event ((%implementation;)?, synonym*, documentation*, direct-parameter?, (documentation | parameter)*, result?, documentation*, xref*)>
-<!ATTLIST event
-name       %Verbname;      #REQUIRED
-id         ID              #IMPLIED
-code       %EventCode;     #REQUIRED 
-description  %Text;        #IMPLIED
-hidden     %yorn;          #IMPLIED 
->
+ <!ELEMENT event ((%implementation;)?, synonym*, documentation*, direct-parameter?, (documentation | parameter)*, result?, documentation*, xref*)>
+ <!ATTLIST event
+ %common.attrib;
+ name       %Verbname;      #REQUIRED
+ id         ID              #IMPLIED
+ code       %EventCode;     #REQUIRED
+ description  %Text;        #IMPLIED
+ hidden     %yorn;          #IMPLIED
+ >
 
-<!ELEMENT direct-parameter (type*)>
-<!ATTLIST direct-parameter
-type       %Typename;      #IMPLIED 
-optional   %yorn;          #IMPLIED 
-description  %Text;        #IMPLIED 
->
+ <!ELEMENT direct-parameter (type*)>
+ <!ATTLIST direct-parameter
+ %common.attrib;
+ type       %Typename;      #IMPLIED
+ optional   %yorn;          #IMPLIED
+ requires-access %rw;       #IMPLIED
+ description  %Text;        #IMPLIED
+ >
 
-<!ELEMENT result (type*)>
-<!ATTLIST result
-type       %Typename;      #IMPLIED 
-description  %Text;        #IMPLIED 
->
+ <!ELEMENT result (type*)>
+ <!ATTLIST result
+ %common.attrib;
+ type       %Typename;      #IMPLIED
+ description  %Text;        #IMPLIED
+ >
 
-<!ELEMENT parameter ((%implementation;)?, (type*))>
-<!ATTLIST parameter
-name       %Term;          #REQUIRED
-code       %OSType;        #REQUIRED 
-hidden     %yorn;          #IMPLIED 
-type       %Typename;      #IMPLIED 
-optional   %yorn;          #IMPLIED 
-description  %Text;        #IMPLIED 
->
+ <!ELEMENT parameter ((%implementation;)?, (type*))>
+ <!ATTLIST parameter
+ %common.attrib;
+ name       %Term;          #REQUIRED
+ code       %OSType;        #REQUIRED
+ hidden     %yorn;          #IMPLIED
+ type       %Typename;      #IMPLIED
+ optional   %yorn;          #IMPLIED
+ requires-access %rw;       #IMPLIED
+ description  %Text;        #IMPLIED
+ >
  */
 
 @class SdefDocumentation, SdefDirectParameter, SdefResult;
 @interface SdefVerb : SdefTerminologyObject <NSCopying, NSCoding> {
   @private
-  SdefResult *sd_result;
-  SdefDirectParameter *sd_direct;
+  SdefResult *_result;
+  SdefDirectParameter *_direct;
   // Code into verb are split into class & ID that are two concat four char codes (i.e. eavtquit).
 }
 
-- (BOOL)isCommand;
-/* Just an hint. isCommand can returns something different */
-- (void)setCommand:(BOOL)flag;
+/* -isCommand may returns something different that what was set by setComment: */
+@property(nonatomic, getter = isCommand) BOOL command;
 
 - (BOOL)hasResult;
-- (SdefResult *)result;
-- (void)setResult:(SdefResult *)aResult;
+@property(nonatomic, retain) SdefResult *result;
 
 - (BOOL)hasDirectParameter;
-- (SdefDirectParameter *)directParameter;
-- (void)setDirectParameter:(SdefDirectParameter *)aParameter;
+@property(nonatomic, retain) SdefDirectParameter *directParameter;
 
 @end

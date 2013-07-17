@@ -11,8 +11,7 @@
 @interface SdefParameter : SdefTypedObject <NSCopying, NSCoding> {
 }
 
-- (BOOL)isOptional;
-- (void)setOptional:(BOOL)flag;
+@property(nonatomic, getter = isOptional) BOOL optional;
 
 @end
 
@@ -21,8 +20,7 @@
 
 }
 
-- (BOOL)isOptional;
-- (void)setOptional:(BOOL)flag;
+@property(nonatomic, getter = isOptional) BOOL optional;
 
 @end
 

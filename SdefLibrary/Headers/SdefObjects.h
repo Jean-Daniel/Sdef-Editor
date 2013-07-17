@@ -97,26 +97,25 @@
 
 @end
 
-WB_PRIVATE
+SPX_PRIVATE
 NSString *SdefStringForOSType(OSType type);
-WB_PRIVATE
+SPX_PRIVATE
 OSType SdefOSTypeFromString(NSString *string);
-WB_PRIVATE
+SPX_PRIVATE
 Boolean SdefTypeStringEqual(NSString *c1, NSString *c2);
 
-WB_PRIVATE
+SPX_PRIVATE
 NSArray *SdefTypesForTypeString(NSString *type);
-WB_PRIVATE
+SPX_PRIVATE
 NSString *SdefTypeStringForTypes(NSArray *types);
 
 #pragma mark -
 @interface SdefTypedOrphanObject : SdefTypedObject <NSCopying, NSCoding> {
 @private
-  NSObject<SdefObject> *sd_owner;
+  NSObject<SdefObject> *_owner;
 }
 
-- (NSObject<SdefObject> *)owner;
-- (void)setOwner:(NSObject<SdefObject> *)anObject;
+@property(nonatomic, assign) id<SdefObject> owner;
 
 - (id<SdefObject>)firstParentOfType:(SdefObjectType)aType;
 

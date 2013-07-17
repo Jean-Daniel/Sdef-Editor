@@ -36,8 +36,8 @@
       [messages addObject:[self invalidValue:code forAttribute:@"code"]];
   }
   
-  [sd_direct validate:messages forVersion:vers];
-  [sd_result validate:messages forVersion:vers];
+  [_direct validate:messages forVersion:vers];
+  [_result validate:messages forVersion:vers];
   
   [super validate:messages forVersion:vers];
 }

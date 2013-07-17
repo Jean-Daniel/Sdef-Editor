@@ -638,10 +638,10 @@ void _SdefParserPostProcessObjects(NSArray *roots, SdefVersion version) {
 - (NSImage *)icon { return nil; }
 - (NSString *)name { return nil; }
 
-- (BOOL)editable { return YES; }
+- (BOOL)isEditable { return YES; }
 - (void)setEditable:(BOOL)flag {}
 
-- (BOOL)imported { return NO; }
+- (BOOL)isImported { return NO; }
 - (void)setImported:(BOOL)flag {}
 
 - (SdefObject *)container { return nil; }

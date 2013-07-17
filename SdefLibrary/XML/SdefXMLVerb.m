@@ -21,16 +21,16 @@
     /* Insert before parameters */
     NSUInteger idx = [node count] - [self count];
     /* Direct Parameter */
-    if (sd_direct) {
-      childNode = [sd_direct xmlNodeForVersion:version];
+    if (_direct) {
+      childNode = [_direct xmlNodeForVersion:version];
       if (childNode) {
         [node insertChild:childNode atIndex:idx];
       }
     }
     
     /* Result */
-    if (sd_result) {
-      childNode = [sd_result xmlNodeForVersion:version];
+    if (_result) {
+      childNode = [_result xmlNodeForVersion:version];
       if (childNode) {
         [node appendChild:childNode];
       }

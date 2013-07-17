@@ -233,9 +233,7 @@ static NSArray *ASKStandardsSuites(void) {
     /* Check responds-to */
     NSDictionary *responds = [dictionary objectForKey:@"SupportedCommands"];
     if (responds) {
-      NSString *key;
-      NSEnumerator *keys = [responds keyEnumerator];
-      while (key = [keys nextObject]) {
+      for (NSString *key in responds) {
         NSString *suite = nil;
         if (_CocoaScriptingDecomposeName(key, &suite) && suite) {
           if (![sd_cache containsObject:suite])

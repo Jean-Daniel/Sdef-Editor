@@ -249,9 +249,9 @@ static inline BOOL SdefEditorExistsForItem(SdefObject *item) {
 }
 
 
- - (void)outlineView:(NSOutlineView *)outlineView willDisplayCell:(id)cell forTableColumn:(NSTableColumn *)tableColumn item:(id)item {
+ - (void)outlineView:(NSOutlineView *)outlineView willDisplayCell:(id)cell forTableColumn:(NSTableColumn *)tableColumn item:(id<SdefObject>)item {
    if ([[tableColumn identifier] isEqualToString:@"_item"]) {
-     if ([item isEditable]) {
+     if (item.editable) {
        [cell setTextColor:[NSColor controlTextColor]];
      } else if ([outlineView rowForItem:item] == [outlineView selectedRow]) {
        [cell setTextColor:([[self window] firstResponder] == outlineView) ? [NSColor selectedControlTextColor] : [NSColor blackColor]];
@@ -286,8 +286,8 @@ static inline BOOL SdefEditorExistsForItem(SdefObject *item) {
   sd_remove = NO;
 }
 
-- (BOOL)outlineView:(NSOutlineView *)outlineView shouldEditTableColumn:(NSTableColumn *)tableColumn item:(id)item {
-  return [item isEditable] && [item objectType] != kSdefCollectionType;
+- (BOOL)outlineView:(NSOutlineView *)outlineView shouldEditTableColumn:(NSTableColumn *)tableColumn item:(id<SdefObject>)item {
+  return item.editable && [item objectType] != kSdefCollectionType;
 }
 
 - (void)tabView:(NSTabView *)tabView willSelectTabViewItem:(NSTabViewItem *)tabViewItem {
@@ -338,7 +338,7 @@ static inline BOOL SdefEditorExistsForItem(SdefObject *item) {
 #pragma mark Copy/Paste
 - (BOOL)validateMenuItem:(NSMenuItem *)anItem {
   SEL action = [anItem action];
-  id selection = [self selection];
+  SdefObject *selection = [self selection];
   if (action == @selector(copy:) || action == @selector(cut:)) {
     switch ([selection objectType]) {
       case kSdefUndefinedType:
@@ -352,11 +352,11 @@ static inline BOOL SdefEditorExistsForItem(SdefObject *item) {
     }
   }
   if (action == @selector(delete:) || action == @selector(cut:)) {
-    if (![selection isRemovable] || [(SdefDocument *)[self document] dictionary] == selection)
+    if (!selection.removable || [(SdefDocument *)[self document] dictionary] == selection)
       return NO;
   }
   if (action == @selector(paste:)) {
-    if (![selection isEditable] || ![[[NSPasteboard generalPasteboard] types] containsObject:SdefTreePboardType])
+    if (!selection.editable || ![[[NSPasteboard generalPasteboard] types] containsObject:SdefTreePboardType])
       return NO;
   }
   return YES;
@@ -544,8 +544,8 @@ static inline BOOL SdefEditorExistsForItem(SdefObject *item) {
 #pragma mark -
 #pragma mark Drag & Drop
 - (BOOL)outlineView:(NSOutlineView *)outlineView writeItems:(NSArray *)items toPasteboard:(NSPasteboard *)pboard {
-  id selection = [items objectAtIndex:0];
-  if (selection != [self root] && [selection objectType] != kSdefCollectionType && [selection isEditable]) {
+  SdefObject *selection = [items objectAtIndex:0];
+  if (selection != [self root] && [selection objectType] != kSdefCollectionType && selection.editable) {
     [pboard declareTypes:[NSArray arrayWithObject:SdefObjectDragType] owner:self];
     id value = [NSData dataWithBytes:&selection length:sizeof(id)];
     [pboard setData:value forType:SdefObjectDragType];

@@ -346,9 +346,7 @@ CFMutableDictionaryRef sValidators = NULL;
   if (attributes && CFDictionaryGetCount(attributes) > 0) {
     SdefXMLElement *validator = (id)CFDictionaryGetValue(sValidators, element);
     if (validator) {
-      NSString *attr;
-      NSEnumerator *attrs = [(id)attributes keyEnumerator];
-      while (attr = [attrs nextObject]) {
+      for (NSString *attr in SPXCFToNSDictionary(attributes)) {
         version &= [validator acceptAttribute:(CFStringRef)attr value:CFDictionaryGetValue(attributes, attr)];
         if (kSdefParserVersionUnknown == version) {
           if (error) *error = [self invalidAttribute:attr inElement:(id)element];

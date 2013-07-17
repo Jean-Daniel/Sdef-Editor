@@ -118,7 +118,7 @@
   if ((1 << kAEUTPlural) & *val) {
     [self setName:@"<Plural>"];
   }
-  NSUInteger perm = kSdefAccessRead;
+  uint32_t perm = kSdefAccessRead;
   if ((1 << kAEUTReadWrite) & *val) {
     perm |= kSdefAccessWrite;
   }

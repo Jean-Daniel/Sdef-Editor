@@ -9,21 +9,24 @@
 #import "SdefTypedef.h"
 
 @implementation SdefEnumeration
+
+@synthesize inlineValue = _inline;
+
 #pragma mark Protocols Implementations
 - (id)copyWithZone:(NSZone *)aZone {
   SdefEnumeration *copy = [super copyWithZone:aZone];
-  copy->sd_inline = sd_inline;
+  copy->_inline = _inline;
   return copy;
 }
 
 - (void)encodeWithCoder:(NSCoder *)aCoder {
   [super encodeWithCoder:aCoder];
-  [aCoder encodeInteger:sd_inline forKey:@"SEInline"];
+  [aCoder encodeInt32:_inline forKey:@"SEInline"];
 }
 
 - (id)initWithCoder:(NSCoder *)aCoder {
   if (self = [super initWithCoder:aCoder]) {
-    sd_inline = [aCoder decodeIntegerForKey:@"SEInline"];
+    _inline = [aCoder decodeInt32ForKey:@"SEInline"];
   }
   return self;
 }
@@ -45,19 +48,15 @@
   [super sdefInit];
   sd_soFlags.xid = 1;
   sd_soFlags.xrefs = 1;
-  sd_inline = kSdefInlineAll;
+  _inline = kSdefInlineAll;
 }
 
 #pragma mark Inline
-- (NSInteger)inlineValue {
-  return sd_inline;
-}
-
-- (void)setInlineValue:(NSInteger)value {
-  if (value != sd_inline) {
-    [[[self undoManager] prepareWithInvocationTarget:self] setInlineValue:sd_inline];
+- (void)setInlineValue:(int32_t)value {
+  if (value != _inline) {
+    [[[self undoManager] prepareWithInvocationTarget:self] setInlineValue:_inline];
     [[self undoManager] setActionName:@"Change Inline"];
-    sd_inline = value;
+    _inline = value;
   }
 }
 

@@ -30,6 +30,18 @@ typedef NS_ENUM(OSType, SdefObjectType) {
   /* Value */
   kSdefValueType           = 'Valu',
   kSdefRecordType          = 'Reco',
+
+  /* Leaves types */
+  kSdefAccessGroupType   = 'Agpr',
+  kSdefTypeAtomType      = 'Type',
+  kSdefSynonymType       = 'Syno',
+  kSdefCommentType       = 'Cmnt',
+  kSdefXrefType          = 'Xref',
+  /* XInclude */
+  kSdefXIncludeType      = 'XInc',
+
+  kSdefCocoaType         = 'Coco',
+  kSdefDocumentationType = 'Docu',
 };
 
 typedef NS_ENUM(NSUInteger, SdefVersion) {
@@ -47,8 +59,11 @@ NSString *SdefNameFromCocoaName(NSString *cocoa);
 WB_EXPORT
 NSString *CocoaNameForSdefName(NSString *cocoa, BOOL isClass);
 
+WB_EXPORT
+NSString *SdefObjectTypeName(SdefObjectType type);
+
 @class SdefObject, SdefDictionary;
-@protocol SdefObject 
+@protocol SdefObject <NSObject>
 
 + (SdefObjectType)objectType;
 - (SdefObjectType)objectType;
@@ -62,8 +77,8 @@ NSString *CocoaNameForSdefName(NSString *cocoa, BOOL isClass);
 - (NSImage *)icon;
 - (NSString *)name;
 
-@property(nonatomic) BOOL editable;
-@property(nonatomic) BOOL imported; // xinclude reference
+@property(nonatomic, getter = isEditable) BOOL editable;
+@property(nonatomic, getter = isImported) BOOL imported; // xinclude reference
 
 - (SdefObject *)container;
 - (id<SdefObject>)firstParentOfType:(SdefObjectType)aType;
@@ -124,12 +139,9 @@ NSString *CocoaNameForSdefName(NSString *cocoa, BOOL isClass);
 @property(nonatomic) BOOL hidden;
 
 #pragma mark Flags
-@property(nonatomic) BOOL editable;
 - (void)setEditable:(BOOL)flag recursive:(BOOL)recu;
 
-@property(nonatomic) BOOL removable;
-
-@property(nonatomic) BOOL imported;
+@property(nonatomic, getter = isRemovable) BOOL removable;
 
 #pragma mark XRefs
 - (BOOL)hasID;

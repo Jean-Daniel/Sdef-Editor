@@ -29,7 +29,7 @@
     [self setCode:[suite objectForKey:@"AppleEventCode"]];
     [self setInherits:[suite objectForKey:@"Superclass"]];
     
-    [[self impl] setSdClass:name];
+    [self impl].objectClass = name;
     
     /* Properties & Contents */
     NSString *content = [suite objectForKey:@"DefaultSubcontainerAttribute"];
@@ -39,9 +39,7 @@
     NSMutableDictionary *termItems = [[NSMutableDictionary alloc] initWithDictionary:[terminology objectForKey:@"Attributes"]];
     [termItems addEntriesFromDictionary:[terminology objectForKey:@"ToOneRelationships"]];
     
-    NSString *key;
-    NSEnumerator *keys = [suiteItems keyEnumerator];
-    while (key = [keys nextObject]) {
+    for (NSString *key in suiteItems) {
       bool isContents = false;
       NSDictionary *pterm = [termItems objectForKey:key];
       NSDictionary *psuite = [suiteItems objectForKey:key];
@@ -73,8 +71,7 @@
     
     /* Elements */
     suiteItems = [suite objectForKey:@"ToManyRelationships"];
-    keys = [suiteItems keyEnumerator];
-    while (key = [keys nextObject]) {
+    for (NSString *key in suiteItems) {
       SdefElement *element = [[SdefElement allocWithZone:[self zone]] initWithName:key
                                                                              suite:[suiteItems objectForKey:key]
                                                                     andTerminology:nil];
@@ -85,8 +82,7 @@
     }
     
     suiteItems = [suite objectForKey:@"SupportedCommands"];
-    keys = [suiteItems keyEnumerator];
-    while (key = [keys nextObject]) {
+    for (NSString *key in suiteItems) {
       SdefRespondsTo *cmd = [[SdefRespondsTo allocWithZone:[self zone]] initWithName:key
                                                            suite:suiteItems
                                                   andTerminology:nil];
@@ -122,7 +118,7 @@
     [self setDesc:[terminology objectForKey:@"Description"]];
     
     /* Access */
-    NSUInteger rights = kSdefAccessRead | kSdefAccessWrite;
+    uint32_t rights = kSdefAccessRead | kSdefAccessWrite;
     if ([[suite objectForKey:@"ReadOnly"] isEqualToString:@"YES"]) {
       rights = kSdefAccessRead;
     }
@@ -152,7 +148,7 @@
     [self setDesc:[terminology objectForKey:@"Description"]];
     
     /* Access */
-    NSUInteger rights = kSdefAccessRead | kSdefAccessWrite;
+    uint32_t rights = kSdefAccessRead | kSdefAccessWrite;
     if ([[suite objectForKey:@"ReadOnly"] isEqualToString:@"YES"]) {
       rights = kSdefAccessRead;
     }
@@ -174,7 +170,7 @@
     [self setCode:[suite objectForKey:@"AppleEventCode"]];
     
     /* Access */
-    NSUInteger rights = kSdefAccessRead | kSdefAccessWrite;
+    uint32_t rights = kSdefAccessRead | kSdefAccessWrite;
     if ([[suite objectForKey:@"ReadOnly"] isEqualToString:@"YES"]) {
       rights = kSdefAccessRead;
     }

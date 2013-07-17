@@ -12,6 +12,7 @@
 @implementation SdefLeaf
 
 @synthesize name = _name;
+@synthesize owner = _owner;
 
 #pragma mark Protocols Implementations
 - (id)copyWithZone:(NSZone *)aZone {
@@ -22,7 +23,7 @@
 
 - (void)encodeWithCoder:(NSCoder *)aCoder {
   [aCoder encodeObject:_name forKey:@"STName"];
-  [aCoder encodeConditionalObject:sd_owner forKey:@"STOwner"];
+  [aCoder encodeConditionalObject:_owner forKey:@"STOwner"];
   [aCoder encodeBytes:(Byte *)&sd_slFlags length:sizeof(sd_slFlags) forKey:@"STFlags"];
 }
 
@@ -33,7 +34,7 @@
     memcpy(&sd_slFlags, buffer, length);
     
     _name = [[aCoder decodeObjectForKey:@"STName"] retain];
-    sd_owner = [aCoder decodeObjectForKey:@"STOwner"];
+    _owner = [aCoder decodeObjectForKey:@"STOwner"];
   }
   return self;
 }
@@ -81,21 +82,21 @@
   }
 }
 
-- (BOOL)editable {
+- (BOOL)isEditable {
   return sd_slFlags.editable && !sd_slFlags.xinclude;
 }
 - (void)setEditable:(BOOL)flag {
   SPXFlagSet(sd_slFlags.editable, flag);
 }
 
-- (BOOL)imported {
+- (BOOL)isImported {
   return sd_slFlags.xinclude;
 }
 - (void)setImported:(BOOL)flag {
   SPXFlagSet(sd_slFlags.xinclude, flag);
 }
 
-- (BOOL)hidden {
+- (BOOL)isHidden {
   return sd_slFlags.hidden;
 }
 - (void)setHidden:(BOOL)flag {
@@ -111,41 +112,21 @@
 }
 
 - (NSString *)objectTypeName {
-  switch ([self objectType]) {
-    case kSdefTypeAtomType:
-      return NSLocalizedStringFromTable(@"Type", @"SdefLibrary", @"Object Type Name.");
-    case kSdefSynonymType:
-      return NSLocalizedStringFromTable(@"Synonym", @"SdefLibrary", @"Object Type Name.");
-    case kSdefCommentType:
-      return NSLocalizedStringFromTable(@"XML Comment", @"SdefLibrary", @"Object Type Name.");
-    case kSdefXrefType:
-      return NSLocalizedStringFromTable(@"xref", @"SdefLibrary", @"Object Type Name.");
-    case kSdefXIncludeType:
-      return NSLocalizedStringFromTable(@"xinclude", @"SdefLibrary", @"Object Type Name.");
-    case kSdefCocoaType:
-      return NSLocalizedStringFromTable(@"Cocoa", @"SdefLibrary", @"Object Type Name.");
-    case kSdefDocumentationType:
-      return NSLocalizedStringFromTable(@"Documentation", @"SdefLibrary", @"Object Type Name.");
-  }
-  return nil;
+  return SdefObjectTypeName(self.objectType);
 }
 
 #pragma mark Owner
 /* Note: should copy change in SdefTypedOrphanObject */
-- (NSObject<SdefObject> *)owner {
-  return sd_owner;
-}
-
-- (void)setOwner:(NSObject<SdefObject> *)anObject {
-  sd_owner = anObject;
+//- (void)setOwner:(NSObject<SdefObject> *)anObject {
+//  sd_owner = anObject;
   /* inherited flags */
 //  if (sd_owner)
 //    [self setEditable:[sd_owner isEditable]];
-}
+//}
 
 - (NSString *)location {
-  NSString *owner = [sd_owner name];
-  NSString *loc = [sd_owner location];
+  NSString *owner = [_owner name];
+  NSString *loc = [_owner location];
   if (loc && owner) {
     return [loc stringByAppendingFormat:@":%@->%@", owner, [self objectTypeName]];
   } else if (loc) {
@@ -157,20 +138,20 @@
 }
 
 - (SdefObject *)container {
-  return [sd_owner container];
+  return [_owner container];
 }
 
 - (SdefDictionary *)dictionary {
-  return [sd_owner dictionary];
+  return [_owner dictionary];
 }
 
 - (NSUndoManager *)undoManager {
-  return [sd_owner undoManager];
+  return [_owner undoManager];
 }
 
 /* Needed to be owner of an orphan object (like SdefImplementation) */
 - (id<SdefObject>)firstParentOfType:(SdefObjectType)aType {
-  return [sd_owner firstParentOfType:aType];
+  return [_owner firstParentOfType:aType];
 }
 
 @end

@@ -33,25 +33,24 @@ static NSArray *gSortByName = nil;
 + (NSArray *)baseTypes {
   static NSArray *types;
   if (nil == types) {
-    types = [[NSArray allocWithZone:NSDefaultMallocZone()] initWithObjects:
-             @"any",
-             @"alias",
-             @"boolean",
-             @"date",
-             @"double integer",
-             @"file",
-             @"integer",
-             @"location specifier",
-             @"missing value",
-             @"number",
-             @"specifier",
-             @"point",
-             @"real",
-             @"record",
-             @"rectangle",
-             @"text",
-             @"type",
-             nil];
+    types = @[ @"any",
+               @"alias",
+               @"boolean",
+               @"date",
+               @"double integer",
+               @"file",
+               @"integer",
+               @"location specifier",
+               @"missing value",
+               @"number",
+               @"specifier",
+               @"point",
+               @"real",
+               @"record",
+               @"rectangle",
+               @"text",
+               @"type" ];
+    [types retain];
   }
   return types;
 }
@@ -135,9 +134,7 @@ static NSArray *gSortByName = nil;
   if (!sd_dicts)
     sd_dicts = NSCreateHashTable(NSNonRetainedObjectHashCallBacks, 0);
   if (!NSHashGet(sd_dicts, aDico)) {
-    SdefSuite *suite;
-    NSEnumerator *suites = [aDico childEnumerator];
-    while (suite = [suites nextObject]) {
+    for (SdefSuite *suite in [aDico childEnumerator]) {
       [self addSuite:suite];
     }
     NSHashInsert(sd_dicts, aDico);
@@ -146,9 +143,7 @@ static NSArray *gSortByName = nil;
 
 - (void)removeDictionary:(SdefDictionary *)aDico {
   if (NSHashGet(sd_dicts, aDico)) {
-    SdefSuite *suite;
-    NSEnumerator *suites = [aDico childEnumerator];
-    while (suite = [suites nextObject]) {
+    for (SdefSuite *suite in [aDico childEnumerator]) {
       [self removeSuite:suite];
     }
     NSHashRemove(sd_dicts, aDico);
@@ -214,19 +209,15 @@ static NSArray *gSortByName = nil;
 
 #pragma mark -
 - (id)typeWithName:(NSString *)name {
-  NSUInteger idx = [sd_types count];
-  while (idx-- > 0) {
-    SdefObject *type = [sd_types objectAtIndex:idx];
+  for (SdefObject *type in sd_types) {
     if ([[type name] isEqualToString:name]) return type;
     else if ([type hasID] && [[type xmlid] isEqualToString:name]) return type;
   }
-  return nil;  
+  return nil;
 }
 
 - (SdefClass *)classWithName:(NSString *)name {
-  NSUInteger idx = [sd_classes count];
-  while (idx-- > 0) {
-    SdefClass *class = [sd_classes objectAtIndex:idx];
+  for (SdefClass *class in sd_classes) {
     if ([[class name] isEqualToString:name] || [[class xmlid] isEqualToString:name])
       return class;
   }
@@ -234,9 +225,7 @@ static NSArray *gSortByName = nil;
 }
 
 - (id)typeWithName:(NSString *)name class:(Class)class {
-  NSUInteger idx = [sd_types count];
-  while (idx-- > 0) {
-    SdefObject *type = [sd_types objectAtIndex:idx];
+  for (SdefObject *type in sd_types) {
     if ([type isMemberOfClass:class] && [[type name] isEqualToString:name])
       return type;
   }
@@ -263,10 +252,8 @@ static NSArray *gSortByName = nil;
 }
 
 - (SdefVerb *)commandWithIdentifier:(NSString *)identifier {
-  NSUInteger idx = [sd_commands count];
-  while (idx-- > 0) {
-    SdefVerb *cmd = [sd_commands objectAtIndex:idx];
-    if ([[cmd name] isEqualToString:identifier] || 
+  for (SdefVerb *cmd in sd_commands) {
+    if ([[cmd name] isEqualToString:identifier] ||
         [[cmd xmlid] isEqualToString:identifier])
       return cmd;
   }
@@ -274,10 +261,8 @@ static NSArray *gSortByName = nil;
 }
 
 - (SdefVerb *)eventWithIdentifier:(NSString *)identifier {
-  NSUInteger idx = [sd_events count];
-  while (idx-- > 0) {
-    SdefVerb *event = [sd_events objectAtIndex:idx];
-    if ([[event name] isEqualToString:identifier] || 
+  for (SdefVerb *event in sd_events) {
+    if ([[event name] isEqualToString:identifier] ||
         [[event xmlid] isEqualToString:identifier])
       return event;
   }
@@ -285,10 +270,8 @@ static NSArray *gSortByName = nil;
 }
 
 - (NSArray *)subclassesOfClass:(SdefClass *)class {
-  NSUInteger idx = [sd_classes count];
   NSMutableArray *classes = [NSMutableArray array];
-  while (idx-- > 0) {
-    SdefClass *item = [sd_classes objectAtIndex:idx];
+  for (SdefClass *item in sd_classes) {
     if ([[item inherits] isEqualToString:[class name]] || [[item inherits] isEqualToString:[class xmlid]])
       [classes addObject:item];
   }
@@ -298,9 +281,7 @@ static NSArray *gSortByName = nil;
 - (SdefClass *)superClassOfClass:(SdefClass *)aClass {
   NSString *parent = [aClass inherits];
   if (parent) {
-    NSUInteger idx = [sd_classes count];  
-    while (idx-- > 0) {
-      SdefClass *class = [sd_classes objectAtIndex:idx];
+    for (SdefClass *class in sd_classes) {
       if (class != aClass && ([[class name] isEqualToString:parent] || [[class xmlid] isEqualToString:parent])) {
         return class;
       }
@@ -383,36 +364,40 @@ static NSArray *gSortByName = nil;
 
 #pragma mark -
 #pragma mark Cocoa to Sdef
-- (NSString *)sdefTypeForCocoaType:(NSString *)cocoaType {
-  if (!cocoaType) return nil;
-  
-  SEL cmd = @selector(isEqualToString:);
-  BOOL (*isEqual)(id, SEL, id) = (BOOL(*)(id, SEL, id))[cocoaType methodForSelector:cmd];
-  
-  if (isEqual(cocoaType, cmd, @"NSNumber<Bool>")) 			return @"boolean";
-  if (isEqual(cocoaType, cmd, @"NSString"))  				return @"text";
-  if (isEqual(cocoaType, cmd, @"NSNumber<Int>")) 			return @"integer";
-  if (isEqual(cocoaType, cmd, @"NSNumber")) 				return @"number";
-  if (isEqual(cocoaType, cmd, @"NSObject")) 				return @"any";
-  if (isEqual(cocoaType, cmd, @"NSString<FilePath>"))  		return @"file";
-  if (isEqual(cocoaType, cmd, @"NSNumber<Float>")) 			return @"real";
-  if (isEqual(cocoaType, cmd, @"NSNumber<Double>")) 		return @"real";
-  if (isEqual(cocoaType, cmd, @"NSDate"))					return @"date";
-  if (isEqual(cocoaType, cmd, @"NSNumber<TypeCode>"))		return @"type";
-  if (isEqual(cocoaType, cmd, @"NSDictionary"))				return @"record";
-  if (isEqual(cocoaType, cmd, @"NSScriptObjectSpecifier")) 	return @"specifier";
-  if (isEqual(cocoaType, cmd, @"NSData<QDPoint>"))			return @"point";
-  if (isEqual(cocoaType, cmd, @"NSPositionalSpecifier")) 	return @"location specifier";
-  if (isEqual(cocoaType, cmd, @"NSData<QDRect>"))			return @"rectangle";
-  if (isEqual(cocoaType, cmd, @"NSArray"))					return @"list of any";
-  
-  return nil;
+static inline
+NSDictionary *sdefTypeMap() {
+  static NSDictionary *sMap = nil;
+  if (!sMap) {
+    sMap = @{
+             @"NSNumber<Bool>"          : @"boolean",
+             @"NSString"                : @"text",
+             @"NSNumber<Int>"           : @"integer",
+             @"NSNumber"                : @"number",
+             @"NSObject"                : @"any",
+             @"NSString<FilePath>"      : @"file",
+             @"NSNumber<Float>"         : @"real",
+             @"NSNumber<Double>"        : @"real",
+             @"NSDate"                  : @"date",
+             @"NSNumber<TypeCode>"      : @"type",
+             @"NSDictionary"            : @"record",
+             @"NSScriptObjectSpecifier" : @"specifier",
+             @"NSData<QDPoint>"         : @"point",
+             @"NSPositionalSpecifier"   : @"location specifier",
+             @"NSData<QDRect>"          : @"rectangle",
+             @"NSArray"                 : @"list of any"
+             };
+    [sMap retain];
+  }
+  return sMap;
 }
 
-- (SdefVerb *)verbWithCocoaName:(NSString *)cocoaName inSuite:(NSString *)suite {
-  SdefVerb *verb;
-  NSEnumerator *verbs = [[[self events] arrayByAddingObjectsFromArray:[self commands]] objectEnumerator];
-  while (verb = [verbs nextObject]) {
+- (NSString *)sdefTypeForCocoaType:(NSString *)cocoaType {
+  return cocoaType ? [sdefTypeMap() objectForKey:cocoaType] : nil;
+}
+
+static inline
+SdefVerb *verbWithCocoaName(NSString *cocoaName, NSString *suite, id<NSFastEnumeration> collection) {
+  for (SdefVerb *verb in collection) {
     if ([cocoaName isEqualToString:[verb cocoaName]]) {
       if (!suite || [suite isEqualToString:[[verb suite] cocoaName]]) {
         return verb;
@@ -422,13 +407,18 @@ static NSArray *gSortByName = nil;
   return nil;
 }
 
+- (SdefVerb *)verbWithCocoaName:(NSString *)cocoaName inSuite:(NSString *)suite {
+  SdefVerb *verb = verbWithCocoaName(cocoaName, suite, [self commands]);
+  if (!verb)
+    verb = verbWithCocoaName(cocoaName, suite, [self events]);
+  return verb;
+}
+
 - (SdefObject *)sdefTypeWithCocoaType:(NSString *)cocoaType inSuite:(NSString *)suite {
-  SdefEnumeration *enume;
-  NSEnumerator *enums = [sd_types objectEnumerator];
-  while (enume = [enums nextObject]) {
-    if ([cocoaType isEqualToString:[enume cocoaName]]) {
-      if (!suite || [suite isEqualToString:[[enume suite] cocoaName]]) {
-        return enume;
+  for (SdefImplementedObject *type in sd_types) {
+    if ([cocoaType isEqualToString:[type cocoaName]]) {
+      if (!suite || [suite isEqualToString:[[type suite] cocoaName]]) {
+        return type;
       }
     }
   }
@@ -436,9 +426,7 @@ static NSArray *gSortByName = nil;
 }
 
 - (SdefClass *)sdefClassWithCocoaClass:(NSString *)cocoaClass inSuite:(NSString *)suite {
-  SdefClass *class;
-  NSEnumerator *classes = [[self classes] objectEnumerator];
-  while (class = [classes nextObject]) {
+  for (SdefClass *class in [self classes]) {
     if ([cocoaClass isEqualToString:[class cocoaClass]]) {
       if (!suite || [suite isEqualToString:[[class suite] cocoaName]]) {
         return class;
@@ -510,10 +498,9 @@ static NSArray *gSortByName = nil;
   return nil;
 }
 
-- (SdefVerb *)verbWithCode:(NSString *)aCode inSuite:(NSString *)suiteCode {
-  SdefVerb *verb;
-  NSEnumerator *verbs = [[[self events] arrayByAddingObjectsFromArray:[self commands]] objectEnumerator];
-  while (verb = [verbs nextObject]) {
+static inline
+SdefVerb *verbWithCode(NSString *aCode, NSString *suiteCode, id<NSFastEnumeration> collection) {
+  for (SdefVerb *verb in collection) {
     if (SdefTypeStringEqual(aCode, [verb code])) {
       if (!suiteCode || SdefTypeStringEqual(suiteCode, [[verb suite] code])) {
         return verb;
@@ -523,10 +510,15 @@ static NSArray *gSortByName = nil;
   return nil;
 }
 
+- (SdefVerb *)verbWithCode:(NSString *)aCode inSuite:(NSString *)suiteCode {
+  SdefVerb *verb = verbWithCode(aCode, suiteCode, [self commands]);
+  if (!verb)
+    verb = verbWithCode(aCode, suiteCode, [self events]);
+  return verb;
+}
+
 - (SdefClass *)sdefClassWithCode:(NSString *)aCode inSuite:(NSString *)suiteCode {
-  SdefClass *class;
-  NSEnumerator *classes = [[self classes] objectEnumerator];
-  while (class = [classes nextObject]) {
+  for (SdefClass *class in [self classes]) {
     if (SdefTypeStringEqual(aCode, [class code])) {
       if (!suiteCode || SdefTypeStringEqual(suiteCode, [[class suite] code])) {
         return class;
@@ -537,9 +529,7 @@ static NSArray *gSortByName = nil;
 }
 
 - (SdefObject *)sdefTypeWithCode:(NSString *)aCode inSuite:(NSString *)suiteCode {
-  NSUInteger idx = [sd_types count];
-  while (idx-- > 0) {
-    SdefTerminologyObject *object = [sd_types objectAtIndex:idx];
+  for (SdefTerminologyObject *object in sd_types) {
     if (SdefTypeStringEqual(aCode, [object code])) {
       if (!suiteCode || SdefTypeStringEqual(suiteCode, [[object suite] code])) {
         return object;

@@ -16,10 +16,10 @@
 static
 NSString *SdefXMLAccessStringFromFlag(NSUInteger flag);
 static
-NSUInteger SdefXMLAccessFlagFromString(NSString *str);
+uint32_t SdefXMLAccessFlagFromString(NSString *str);
 
 static
-NSUInteger SdefXMLAccessorFlagFromString(NSString *str);
+uint32_t SdefXMLAccessorFlagFromString(NSString *str);
 static
 NSArray *SdefXMLAccessorStringsFromFlag(NSUInteger flag);
 
@@ -67,8 +67,8 @@ NSArray *SdefXMLAccessorStringsFromFlag(NSUInteger flag);
   }
   
   /* contents */
-  if (sd_contents) {
-    SdefXMLNode *contents = [sd_contents xmlNodeForVersion:version];
+  if (_contents) {
+    SdefXMLNode *contents = [_contents xmlNodeForVersion:version];
     if (contents) {
       if ([[[node firstChild] elementName] isEqualToString:@"documentation"]) {
         [node insertChild:contents atIndex:1];
@@ -278,8 +278,8 @@ NSString *SdefXMLAccessStringFromFlag(NSUInteger flag) {
   return str;
 }
 
-NSUInteger SdefXMLAccessFlagFromString(NSString *str) {
-  NSUInteger flag = 0;
+uint32_t SdefXMLAccessFlagFromString(NSString *str) {
+  uint32_t flag = 0;
   if (str && [str rangeOfString:@"r"].location != NSNotFound) {
     flag |= kSdefAccessRead;
   }
@@ -300,8 +300,8 @@ NSArray *SdefXMLAccessorStringsFromFlag(NSUInteger flag) {
   return strings;
 }
 
-NSUInteger SdefXMLAccessorFlagFromString(NSString *str) {
-  NSUInteger flag = 0;
+uint32_t SdefXMLAccessorFlagFromString(NSString *str) {
+  uint32_t flag = 0;
   if (str && [str rangeOfString:@"index"].location != NSNotFound) {
     flag |= kSdefAccessorIndex;
   } else if (str && [str rangeOfString:@"name"].location != NSNotFound) {

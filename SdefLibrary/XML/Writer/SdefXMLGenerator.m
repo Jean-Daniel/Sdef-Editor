@@ -187,9 +187,7 @@
 
 - (void)insertMetas:(NSDictionary *)metas wsbefore:(BOOL)flag {
   if (sd_metas && metas && [metas count] > 0) {
-    NSString *key;
-    NSEnumerator *iter = [metas keyEnumerator];
-    while (key = [iter nextObject]) {
+    for (NSString *key in metas) {
       if (flag)
         [self insertWhiteSpace];
       if ([self insertComment:[NSString stringWithFormat:@" @%@(%@) ", key, [metas objectForKey:key]]]) {
@@ -208,9 +206,7 @@
     [self insertMetas:[node metas] wsbefore:NO];
     
     /* Insert comments */
-    SdefComment *comment;
-    NSEnumerator *comments = [[node comments] objectEnumerator];
-    while (comment = [comments nextObject]) {
+    for (SdefComment *comment in [node comments]) {
       if ([self insertComment:[comment value]])
         [self insertWhiteSpace];
     }

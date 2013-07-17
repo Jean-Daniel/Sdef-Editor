@@ -9,14 +9,13 @@
 #import "SdefLeaf.h"
 
 @interface SdefComment : SdefLeaf <NSCopying, NSCoding> {
-  NSString *sd_value;
+  NSString *_value;
 }
 
 + (id)commentWithString:(NSString *)aString;
 - (id)initWithString:(NSString *)aString;
 
-- (NSString *)value;
-- (void)setValue:(NSString *)value;
+@property(nonatomic, copy) NSString *value;
 
 @end
 

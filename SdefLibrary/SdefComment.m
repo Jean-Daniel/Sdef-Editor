@@ -10,21 +10,24 @@
 
 
 @implementation SdefComment
+
+@synthesize value = _value;
+
 #pragma mark Protocols Implementations
 - (id)copyWithZone:(NSZone *)aZone {
   SdefComment *copy = [super copyWithZone:aZone];
-  copy->sd_value = [sd_value copyWithZone:aZone];
+  copy->_value = [_value copyWithZone:aZone];
   return copy;
 }
 
 - (void)encodeWithCoder:(NSCoder *)aCoder {
   [super encodeWithCoder:aCoder];
-  [aCoder encodeObject:sd_value forKey:@"SCValue"];
+  [aCoder encodeObject:_value forKey:@"SCValue"];
 }
 
 - (id)initWithCoder:(NSCoder *)aCoder {
   if (self = [super initWithCoder:aCoder]) {
-    sd_value = [[aCoder decodeObjectForKey:@"SCValue"] retain];
+    _value = [[aCoder decodeObjectForKey:@"SCValue"] retain];
   }
   return self;
 }
@@ -50,7 +53,7 @@
 }
 
 - (void)dealloc {
-  [sd_value release];
+  [_value release];
   [super dealloc];
 }
 
@@ -59,15 +62,12 @@
   return NSLocalizedStringFromTable(@"comment", @"SdefLibrary", @"Comment item name");
 }
 
-- (NSString *)value {
-  return sd_value;
-}
-- (void)setValue:(NSString *)value {
-  if (sd_value != value) {
-    //[[self undoManager] registerUndoWithTarget:self selector:_cmd object:sd_value];
-    [sd_value release];
-    sd_value = [value retain];
-  }
-}
+//- (void)setValue:(NSString *)value {
+//  if (_value != value) {
+//    //[[self undoManager] registerUndoWithTarget:self selector:_cmd object:sd_value];
+//    [_value release];
+//    _value = [value copy];
+//  }
+//}
 
 @end

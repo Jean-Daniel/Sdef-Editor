@@ -111,9 +111,7 @@
 }
 
 - (void)addAttributesFromDictionary:(NSDictionary *)dict {
-  NSString *key;
-  NSEnumerator *keys = [dict keyEnumerator];
-  while (key = [keys nextObject]) {
+  for (NSString *key in dict) {
     [self setAttribute:[dict objectForKey:key] forKey:key];
   }
 }

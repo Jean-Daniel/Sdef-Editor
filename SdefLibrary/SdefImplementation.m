@@ -9,24 +9,36 @@
 #import "SdefImplementation.h"
 #import "SdefDocument.h"
 
+@interface SdefImplementation ()
+@property(nonatomic, copy) id value;
+@end
+
 @implementation SdefImplementation
+
+@synthesize key = _key;
+@synthesize method = _method;
+@synthesize objectClass = _class;
+
+@synthesize value = _value;
+@synthesize valueType = _vtype;
+
 #pragma mark Protocols Implementations
 - (id)copyWithZone:(NSZone *)aZone {
   SdefImplementation *copy = [super copyWithZone:aZone];
-  copy->sd_key = [sd_key copyWithZone:aZone];
-  copy->sd_class = [sd_class copyWithZone:aZone];
-  copy->sd_value = [sd_value copyWithZone:aZone];
-  copy->sd_method = [sd_method copyWithZone:aZone];
+  copy->_key = [_key copyWithZone:aZone];
+  copy->_class = [_class copyWithZone:aZone];
+  copy->_value = [_value copyWithZone:aZone];
+  copy->_method = [_method copyWithZone:aZone];
   return copy;
 }
 
 - (void)encodeWithCoder:(NSCoder *)aCoder {
   [super encodeWithCoder:aCoder];
-  [aCoder encodeObject:sd_key forKey:@"SIKey"];
-  [aCoder encodeObject:sd_class forKey:@"SIClass"];
-  [aCoder encodeObject:sd_value forKey:@"SIValue"];
-  [aCoder encodeInteger:sd_vtype forKey:@"SIValueType"];
-  [aCoder encodeObject:sd_method forKey:@"SIMethod"];
+  [aCoder encodeObject:_key forKey:@"SIKey"];
+  [aCoder encodeObject:_class forKey:@"SIClass"];
+  [aCoder encodeObject:_value forKey:@"SIValue"];
+  [aCoder encodeInteger:_vtype forKey:@"SIValueType"];
+  [aCoder encodeObject:_method forKey:@"SIMethod"];
 }
 
 #pragma mark -
@@ -36,60 +48,48 @@
 
 - (id)initWithCoder:(NSCoder *)aCoder {
   if (self = [super initWithCoder:aCoder]) {
-    sd_key = [[aCoder decodeObjectForKey:@"SIKey"] retain];
-    sd_class = [[aCoder decodeObjectForKey:@"SIClass"] retain];
-    sd_value = [[aCoder decodeObjectForKey:@"SIValue"] retain];
-    sd_vtype = (UInt8)[aCoder decodeIntegerForKey:@"SIValueType"];
-    sd_method = [[aCoder decodeObjectForKey:@"SIMethod"] retain];
+    _key = [[aCoder decodeObjectForKey:@"SIKey"] retain];
+    _class = [[aCoder decodeObjectForKey:@"SIClass"] retain];
+    _value = [[aCoder decodeObjectForKey:@"SIValue"] retain];
+    _vtype = (UInt8)[aCoder decodeIntegerForKey:@"SIValueType"];
+    _method = [[aCoder decodeObjectForKey:@"SIMethod"] retain];
   }
   return self;
 }
 
 - (void)dealloc {
-  [sd_key release];
-  [sd_class release];
-  [sd_value release];
-  [sd_method release];
+  [_key release];
+  [_class release];
+  [_value release];
+  [_method release];
   [super dealloc];
 }
 
 - (NSString *)description {
-  return [NSString stringWithFormat:@"<%@ %p> {name: %@, key:%@, class:%@ , method:%@}",
+  return [NSString stringWithFormat:@"<%@ %p> { name: %@, key:%@, class:%@ , method:%@ }",
     NSStringFromClass([self class]), self,
-    [self name], [self key], [self sdClass], [self method]];
+    [self name], [self key], self.objectClass, [self method]];
 }
 
 #pragma mark -
-- (NSString *)sdClass {
-  return sd_class;
-}
-- (void)setSdClass:(NSString *)newSdClass {
-  if (sd_class != newSdClass) {
-    [[self undoManager] registerUndoWithTarget:self selector:_cmd object:sd_class];
-    [sd_class release];
-    sd_class = [newSdClass copy];
+- (void)setObjectClass:(NSString *)newSdClass {
+  if (_class != newSdClass) {
+    [[self undoManager] registerUndoWithTarget:self selector:_cmd object:_class];
+    SPXSetterCopy(_class, newSdClass);
   }
 }
 
-- (NSString *)key {
-  return sd_key;
-}
 - (void)setKey:(NSString *)newKey {
-  if (sd_key != newKey) {
-    [[self undoManager] registerUndoWithTarget:self selector:_cmd object:sd_key];
-    [sd_key release];
-    sd_key = [newKey copy];
+  if (_key != newKey) {
+    [[self undoManager] registerUndoWithTarget:self selector:_cmd object:_key];
+    SPXSetterCopy(_key, newKey);
   }
 }
 
-- (NSString *)method {
-  return sd_method;
-}
 - (void)setMethod:(NSString *)newMethod {
-  if (sd_method != newMethod) {
-    [[self undoManager] registerUndoWithTarget:self selector:_cmd object:sd_method];
-    [sd_method release];
-    sd_method = [newMethod copy];
+  if (_method != newMethod) {
+    [[self undoManager] registerUndoWithTarget:self selector:_cmd object:_method];
+    SPXSetterCopy(_method, newMethod);
   }
 }
 
@@ -102,22 +102,9 @@
 }
 
 #pragma mark Value
-- (id)value {
-  return sd_value;
-}
-- (void)setValue:(id)aValue {
-  if (sd_value != aValue) {
-    [sd_value release];
-    sd_value = [aValue copy];    
-  }
-}
-
-- (UInt8)valueType {
-  return sd_vtype;
-}
 - (void)setValueType:(UInt8)aType {
-  if (sd_vtype != aType) {
-    [[[self undoManager] prepareWithInvocationTarget:self] setValueType:sd_vtype];
+  if (_vtype != aType) {
+    [[[self undoManager] prepareWithInvocationTarget:self] setValueType:_vtype];
     NSString *key;
     switch (aType) {
       case kSdefValueTypeString: key = @"textValue"; break;
@@ -126,26 +113,26 @@
       default: key = @"value"; break;
     }
     [self willChangeValueForKey:key];
-    sd_vtype = aType;
+    _vtype = aType;
     /* Cast */
-    switch (sd_vtype) { // target type
+    switch (_vtype) { // target type
       case kSdefValueTypeString:
-        if ([sd_value isKindOfClass:[NSNumber class]])
-          [self setValue:[sd_value stringValue]];
+        if ([_value isKindOfClass:[NSNumber class]])
+          [self setValue:[_value stringValue]];
         else
           [self setValue:@""];
         break;
       case kSdefValueTypeInteger:
-        if (!sd_value || [sd_value isKindOfClass:[NSString class]])
-          [self setValue:@([sd_value integerValue])];
+        if (!_value || [_value isKindOfClass:[NSString class]])
+          [self setValue:@([_value integerValue])];
         else
           [self setValue:@(0)];
         break;
       case kSdefValueTypeBoolean:
-        if ([sd_value isKindOfClass:[NSString class]]) {
-          if (NSOrderedSame == [sd_value caseInsensitiveCompare:@"yes"] ||
-              NSOrderedSame == [sd_value caseInsensitiveCompare:@"true"] ||
-              [sd_value integerValue]) {
+        if ([_value isKindOfClass:[NSString class]]) {
+          if (NSOrderedSame == [_value caseInsensitiveCompare:@"yes"] ||
+              NSOrderedSame == [_value caseInsensitiveCompare:@"true"] ||
+              [_value integerValue]) {
             [self setValue:@(YES)];
           } else {
             [self setValue:@(NO)];
@@ -160,7 +147,7 @@
 }
 
 - (NSString *)textValue {
-  return sd_vtype == kSdefValueTypeString ? sd_value : nil;
+  return _vtype == kSdefValueTypeString ? _value : nil;
 }
 - (void)setTextValue:(NSString *)value {
   [[self undoManager] registerUndoWithTarget:self selector:_cmd object:[self textValue]];
@@ -168,7 +155,7 @@
 }
 
 - (NSInteger)integerValue {
-  return sd_vtype == kSdefValueTypeInteger ? [sd_value integerValue] : 0;
+  return _vtype == kSdefValueTypeInteger ? [_value integerValue] : 0;
 }
 - (void)setIntegerValue:(NSInteger)value {
   [[[self undoManager] prepareWithInvocationTarget:self] setIntegerValue:[self integerValue]];
@@ -176,7 +163,7 @@
 }
 
 - (BOOL)booleanValue {
-  return sd_vtype == kSdefValueTypeBoolean ? [sd_value boolValue] : NO;
+  return _vtype == kSdefValueTypeBoolean ? [_value boolValue] : NO;
 }
 - (void)setBooleanValue:(BOOL)value {
   [[[self undoManager] prepareWithInvocationTarget:self] setBooleanValue:[self booleanValue]];

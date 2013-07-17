@@ -9,19 +9,19 @@
 #import "SdefLeaf.h"
 
 /* 
-<!ELEMENT xref EMPTY>
-<!ATTLIST xref
-target     CDATA           #REQUIRED
-hidden     %yorn;          #IMPLIED 
->
+ <!ELEMENT xref EMPTY>
+ <!ATTLIST xref
+ %common.attrib;
+ target     CDATA           #REQUIRED
+ hidden     %yorn;          #IMPLIED
+ >
 */
 
 @interface SdefXRef : SdefLeaf <NSCopying, NSCoding> {
-  @private
-  NSString *sd_target;
+@private
+  NSString *_target;
 }
 
-- (NSString *)target;
-- (void)setTarget:(NSString *)target;
+@property(nonatomic, copy) NSString *target;
 
 @end

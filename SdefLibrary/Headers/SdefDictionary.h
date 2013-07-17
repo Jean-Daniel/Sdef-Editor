@@ -12,29 +12,27 @@
  <!-- DICTIONARY (ROOT ELEMENT) -->
  <!ELEMENT dictionary (documentation*, suite+)>
  <!ATTLIST dictionary
- title      CDATA           #IMPLIED 
+ %common.attrib;
+ title      CDATA           #IMPLIED
  >
 */
 
 @class SdefDocument, SdefClassManager;
 @interface SdefDictionary : SdefDocumentedObject <NSCopying, NSCoding> {
 @private
-  SdefVersion sd_version;
-  SdefDocument *sd_document;
-  
-  NSMutableDictionary *sd_xincludes;
+  SdefVersion _version;
+  SdefDocument *_document;
 }
 
-- (NSString *)title;
-- (void)setTitle:(NSString *)newTitle;
+@property(nonatomic, assign) SdefDocument *document; // TODO: remove layer violation
 
-- (NSArray *)suites;
-- (SdefDocument *)document;
-- (void)setDocument:(SdefDocument *)document;
+@property(nonatomic) SdefVersion version;
 
 - (SdefClassManager *)classManager;
 
-- (SdefVersion)version;
-- (void)setVersion:(SdefVersion)vers;
+// Sdef properties
+@property(nonatomic, copy) NSString *title;
+
+- (NSArray *)suites;
 
 @end

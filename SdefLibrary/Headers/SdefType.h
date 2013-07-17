@@ -12,9 +12,10 @@
  <!-- TYPES -->
  <!ELEMENT type EMPTY>
  <!ATTLIST type
- type       %Typename;      #REQUIRED 
+ %common.attrib;
+ type       %Typename;      #REQUIRED
  list       %yorn;          #IMPLIED
- hidden     %yorn;          #IMPLIED  ????
+ hidden     %yorn;          #IMPLIED
  >
  */
 
@@ -22,7 +23,6 @@
 
 }
 
-- (BOOL)isList;
-- (void)setList:(BOOL)list;
+@property(nonatomic, getter = isList) BOOL list;
 
 @end

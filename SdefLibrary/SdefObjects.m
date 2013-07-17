@@ -154,7 +154,7 @@
 }
 
 - (NSString *)cocoaClass {
-  return ([[self impl] sdClass]) ? : CocoaNameForSdefName([self name], YES);
+  return [self impl].objectClass ? : CocoaNameForSdefName([self name], YES);
 }
 
 - (NSString *)cocoaMethod {
@@ -219,9 +219,7 @@
 
 - (void)setEditable:(BOOL)flag recursive:(BOOL)recu {
   if (recu) {
-    SdefObject *item;
-    NSEnumerator *items = [sd_synonyms objectEnumerator];
-    while (item = [items nextObject]) {
+    for (SdefObject *item in sd_synonyms) {
       [item setEditable:flag recursive:recu];
     }
   }
@@ -535,41 +533,40 @@
 
 #pragma mark -
 @implementation SdefTypedOrphanObject
+
+@synthesize owner = _owner;
+
 #pragma mark Protocols Implementations
 - (id)copyWithZone:(NSZone *)aZone {
   SdefTypedOrphanObject *copy = [super copyWithZone:aZone];
-  copy->sd_owner = nil;
+  copy->_owner = nil;
   return copy;
 }
 
 - (void)encodeWithCoder:(NSCoder *)aCoder {
   [super encodeWithCoder:aCoder];
-  [aCoder encodeConditionalObject:sd_owner forKey:@"SOOwner"];
+  [aCoder encodeConditionalObject:_owner forKey:@"SOOwner"];
 }
 
 - (id)initWithCoder:(NSCoder *)aCoder {
   if (self = [super initWithCoder:aCoder]) {
-    sd_owner = [aCoder decodeObjectForKey:@"SOOwner"];
+    _owner = [aCoder decodeObjectForKey:@"SOOwner"];
   }
   return self;
 }
 
 #pragma mark Owner
-/* Note: should copy change in SdefLeaf */
-- (NSObject<SdefObject> *)owner {
-  return sd_owner;
-}
-
-- (void)setOwner:(NSObject<SdefObject> *)anObject {
-  sd_owner = anObject;
+/* Note: Must be keeped in sync with SdefLeaf */
+//- (void)setOwner:(NSObject<SdefObject> *)anObject {
+//  sd_owner = anObject;
   /* inherited flags */
 //  if (sd_owner)
 //    [self setEditable:[sd_owner isEditable]];
-}
+//}
 
 - (NSString *)location {
-  NSString *owner = [sd_owner name];
-  NSString *loc = [sd_owner location];
+  NSString *owner = [_owner name];
+  NSString *loc = [_owner location];
   if (loc && owner) {
     return [loc stringByAppendingFormat:@":%@->%@", owner, [self objectTypeName]];
   } else if (loc) {
@@ -581,20 +578,20 @@
 }
 
 - (SdefObject *)container {
-  return [sd_owner container];
+  return [_owner container];
 }
 
 - (SdefDictionary *)dictionary {
-  return [sd_owner dictionary];
+  return [_owner dictionary];
 }
 
 - (NSUndoManager *)undoManager {
-  return [sd_owner undoManager];
+  return [_owner undoManager];
 }
 
 /* Needed to be owner of an orphan object (like SdefImplementation) */
 - (id<SdefObject>)firstParentOfType:(SdefObjectType)aType {
-  return [sd_owner firstParentOfType:aType];
+  return [_owner firstParentOfType:aType];
 }
 
 @end
@@ -635,10 +632,8 @@ SdefType *__SdefTypeFromString(NSString *str) {
 NSArray *SdefTypesForTypeString(NSString *aType) {
   NSArray *types = nil;
   if ([aType rangeOfString:@"|"].location != NSNotFound) {
-    NSString *str;
     NSMutableArray *mtypes = [[NSMutableArray alloc] init];
-    NSEnumerator *strings = [[aType componentsSeparatedByString:@"|"] objectEnumerator];
-    while (str = [strings nextObject]) {
+    for (NSString *str in [aType componentsSeparatedByString:@"|"]) {
       [mtypes addObject:__SdefTypeFromString(str)];
     }
     types = mtypes;

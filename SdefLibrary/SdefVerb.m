@@ -10,26 +10,30 @@
 #import "SdefArguments.h"
 
 @implementation SdefVerb
+
+@synthesize result = _result;
+@synthesize directParameter = _direct;
+
 #pragma mark Protocols Implementations
 - (id)copyWithZone:(NSZone *)aZone {
   SdefVerb *copy = [super copyWithZone:aZone];
-  copy->sd_result = [sd_result copyWithZone:aZone];
-  [copy->sd_result setOwner:copy];
-  copy->sd_direct = [sd_direct copyWithZone:aZone];
-  [copy->sd_direct setOwner:copy];
+  copy->_result = [_result copyWithZone:aZone];
+  [copy->_result setOwner:copy];
+  copy->_direct = [_direct copyWithZone:aZone];
+  [copy->_direct setOwner:copy];
   return copy;
 }
 
 - (void)encodeWithCoder:(NSCoder *)aCoder {
   [super encodeWithCoder:aCoder];
-  [aCoder encodeObject:sd_result forKey:@"SVResult"];
-  [aCoder encodeObject:sd_direct forKey:@"SVDirectParameter"];
+  [aCoder encodeObject:_result forKey:@"SVResult"];
+  [aCoder encodeObject:_direct forKey:@"SVDirectParameter"];
 }
 
 - (id)initWithCoder:(NSCoder *)aCoder {
   if (self = [super initWithCoder:aCoder]) {
-    sd_result = [[aCoder decodeObjectForKey:@"SVResult"] retain];
-    sd_direct = [[aCoder decodeObjectForKey:@"SVDirectParameter"] retain];
+    _result = [[aCoder decodeObjectForKey:@"SVResult"] retain];
+    _direct = [[aCoder decodeObjectForKey:@"SVDirectParameter"] retain];
   }
   return self;
 }
@@ -54,10 +58,10 @@
 }
 
 - (void)dealloc {
-  [sd_result setOwner:nil];
-  [sd_result release];
-  [sd_direct setOwner:nil];
-  [sd_direct release];
+  [_result setOwner:nil];
+  [_result release];
+  [_direct setOwner:nil];
+  [_direct release];
   [super dealloc];
 }
 #pragma mark -
@@ -77,40 +81,40 @@
 }
 
 - (BOOL)hasResult {
-  return sd_result != nil;
+  return _result != nil;
 }
 - (SdefResult *)result {
-  if (!sd_result) {
-    sd_result = [[SdefResult alloc] init];
-    [sd_result setOwner:self];
+  if (!_result) {
+    _result = [[SdefResult alloc] init];
+    [_result setOwner:self];
   }
-  return sd_result;
+  return _result;
 }
 - (void)setResult:(SdefResult *)aResult {
-  if (sd_result != aResult) {
-    [sd_result setOwner:nil];
-    [sd_result release];
-    sd_result = [aResult retain];
-    [sd_result setOwner:self];
+  if (_result != aResult) {
+    [_result setOwner:nil];
+    [_result release];
+    _result = [aResult retain];
+    [_result setOwner:self];
   }
 }
 
 - (BOOL)hasDirectParameter {
-  return sd_direct != nil;
+  return _direct != nil;
 }
 - (SdefDirectParameter *)directParameter {
-  if (!sd_direct) {
-    sd_direct = [[SdefDirectParameter alloc] init];
-    [sd_direct setOwner:self];
+  if (!_direct) {
+    _direct = [[SdefDirectParameter alloc] init];
+    [_direct setOwner:self];
   }
-  return sd_direct;
+  return _direct;
 }
 - (void)setDirectParameter:(SdefDirectParameter *)aParameter {
-  if (sd_direct != aParameter) {
-    [sd_direct setOwner:nil];
-    [sd_direct release];
-    sd_direct = [aParameter retain];
-    [sd_direct setOwner:self];
+  if (_direct != aParameter) {
+    [_direct setOwner:nil];
+    [_direct release];
+    _direct = [aParameter retain];
+    [_direct setOwner:self];
   }
 }
 

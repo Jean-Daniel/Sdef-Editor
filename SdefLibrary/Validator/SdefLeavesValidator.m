@@ -17,7 +17,7 @@
 @implementation SdefXRef (SdefValidator)
 
 - (void)validate:(NSMutableArray *)messages forVersion:(SdefVersion)vers {
-  if (!sd_target) {
+  if (!_target) {
     [messages addObject:[self invalidValue:nil forAttribute:@"target"]];
   }
   [super validate:messages forVersion:vers];
@@ -43,7 +43,7 @@
 @implementation SdefComment (SdefValidator)
 
 - (void)validate:(NSMutableArray *)messages forVersion:(SdefVersion)vers {
-  if (sd_value && [sd_value rangeOfString:@"--"].location != NSNotFound) {
+  if (_value && [_value rangeOfString:@"--"].location != NSNotFound) {
     [messages addObject:[SdefValidatorItem errorItemWithNode:self
                                                      message:@"Invalid character sequence '--' found in comment"]];
   }

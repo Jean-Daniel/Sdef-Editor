@@ -9,23 +9,23 @@
 #import "SdefObjects.h"
 
 /*
-<!-- contents -->
-<!ELEMENT contents ((%implementation;)?, (type*))>
-<!ATTLIST contents
-name       %Classname;     #IMPLIED
-code       %OSType;        #IMPLIED 
-type       %Typename;      #IMPLIED
-access     (r | w | rw)    "rw"     
-hidden     %yorn;          #IMPLIED 
-description  %Text;        #IMPLIED 
->
+ <!-- contents -->
+ <!ELEMENT contents ((%implementation;)?, access-group*, (type*))>
+ <!ATTLIST contents
+ %common.attrib;
+ name       %Term;          #IMPLIED
+ code       %OSType;        #IMPLIED
+ type       %Typename;      #IMPLIED
+ access     %rw;            #IMPLIED
+ hidden     %yorn;          #IMPLIED
+ description  %Text;        #IMPLIED
+ >
 */
 
 @interface SdefContents : SdefTypedOrphanObject <NSCopying, NSCoding> {
-  NSUInteger sd_access;
+  uint32_t _access;
 }
 
-- (NSUInteger)access;
-- (void)setAccess:(NSUInteger)newAccess;
+@property(nonatomic) uint32_t access;
 
 @end

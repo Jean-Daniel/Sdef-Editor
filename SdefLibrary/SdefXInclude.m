@@ -11,31 +11,35 @@
 #import "SdefParser.h"
 
 @implementation SdefXInclude
+
+@synthesize href = _href;
+@synthesize pointer = _pointer;
+
 #pragma mark Protocols Implementations
 - (id)copyWithZone:(NSZone *)aZone {
   SdefXInclude *copy = [super copyWithZone:aZone];
-  copy->sd_href = [sd_href copyWithZone:aZone];
-  copy->sd_pointer = [sd_pointer copyWithZone:aZone];
+  copy->_href = [_href copyWithZone:aZone];
+  copy->_pointer = [_pointer copyWithZone:aZone];
   return copy;
 }
 
 - (void)encodeWithCoder:(NSCoder *)aCoder {
   [super encodeWithCoder:aCoder];
-  [aCoder encodeObject:sd_href forKey:@"SXIncludeHRef"];
-  [aCoder encodeObject:sd_pointer forKey:@"SXIncludePointer"];
+  [aCoder encodeObject:_href forKey:@"SXIncludeHRef"];
+  [aCoder encodeObject:_pointer forKey:@"SXIncludePointer"];
 }
 
 - (id)initWithCoder:(NSCoder *)aCoder {
   if (self = [super initWithCoder:aCoder]) {
-    sd_href = [[aCoder decodeObjectForKey:@"SXIncludeHRef"] retain];
-    sd_pointer = [[aCoder decodeObjectForKey:@"SXIncludePointer"] retain];
+    _href = [[aCoder decodeObjectForKey:@"SXIncludeHRef"] retain];
+    _pointer = [[aCoder decodeObjectForKey:@"SXIncludePointer"] retain];
   }
   return self;
 }
 
 - (void)dealloc {
-  [sd_pointer release];
-  [sd_href release];
+  [_pointer release];
+  [_href release];
   [super dealloc];
 }
 
@@ -46,20 +50,6 @@
 
 + (NSString *)defaultIconName {
   return @"XInclude";
-}
-
-- (NSString *)href {
-  return sd_href;
-}
-- (void)setHref:(NSString *)aRef {
-  SPXSetterCopy(sd_href, aRef);
-}
-
-- (NSString *)pointer {
-  return sd_pointer;
-}
-- (void)setPointer:(NSString *)aPointer {
-  SPXSetterCopy(sd_pointer, aPointer);
 }
 
 #pragma mark -

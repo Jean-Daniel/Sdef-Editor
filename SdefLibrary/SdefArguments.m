@@ -44,10 +44,6 @@
   [self setIsLeaf:YES];
 }
 
-- (void)dealloc {
-  [super dealloc];
-}
-
 #pragma mark -
 - (BOOL)isOptional {
   return sd_soFlags.optional;
@@ -96,10 +92,6 @@
 - (void)sdefInit {
   [super sdefInit];
   [self setIsLeaf:YES];
-}
-
-- (void)dealloc {
-  [super dealloc];
 }
 
 #pragma mark -
@@ -151,10 +143,6 @@
 - (void)sdefInit {
   [super sdefInit];
   [self setIsLeaf:YES];
-}
-
-- (void)dealloc {
-  [super dealloc];
 }
 
 @end

@@ -10,12 +10,13 @@
 
 /*
  <!-- SUITES -->
- <!ELEMENT suite ((%implementation;)?, (class | class-extension | command | documentation | enumeration | event | record-type | value-type)+)>
+ <!ELEMENT suite ((%implementation;)?, access-group*, (class | class-extension | command | documentation | enumeration | event | record-type | value-type)+)>
  <!ATTLIST suite
+ %common.attrib;
  name       CDATA           #REQUIRED
- code       %OSType;        #REQUIRED 
+ code       %OSType;        #REQUIRED
  description  %Text;        #IMPLIED
- hidden     %yorn;          #IMPLIED 
+ hidden     %yorn;          #IMPLIED
  >
 */
 

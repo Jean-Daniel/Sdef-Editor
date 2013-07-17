@@ -9,10 +9,10 @@
 #import "SdefLeaf.h"
 
 /*
- <!-- IMPLEMENTATION ELEMENTS -->
  <!ENTITY % implementation "(cocoa)">
  <!ELEMENT cocoa EMPTY>
  <!ATTLIST cocoa
+ %common.attrib;
  name       NMTOKEN         #IMPLIED
  class      NMTOKEN         #IMPLIED
  key        NMTOKEN         #IMPLIED
@@ -34,37 +34,27 @@ enum {
 @class SdefDocument;
 @interface SdefImplementation : SdefLeaf <NSCopying, NSCoding> {
 @private
-  id sd_value;
-  UInt8 sd_vtype; /* value type */
+  id _value;
+  UInt8 _vtype; /* value type */
   
-  NSString *sd_key;
-  NSString *sd_class;
-  NSString *sd_method;
+  NSString *_key;
+  NSString *_class;
+  NSString *_method;
 }
 
-- (NSString *)sdClass;
-- (void)setSdClass:(NSString *)newSdClass;
+@property(nonatomic, copy) NSString *objectClass;
 
-- (NSString *)key;
-- (void)setKey:(NSString *)newKey;
+@property(nonatomic, copy) NSString *key;
 
-- (NSString *)method;
-- (void)setMethod:(NSString *)newMethod;
+@property(nonatomic, copy) NSString *method;
 
-- (BOOL)insertAtBeginning;
-- (void)setInsertAtBeginning:(BOOL)flag;
+@property(nonatomic) BOOL insertAtBeginning;
 
 /* value support */
-- (UInt8)valueType;
-- (void)setValueType:(UInt8)aType;
+@property(nonatomic) uint8_t valueType;
 
-- (NSString *)textValue;
-- (void)setTextValue:(NSString *)value;
-
-- (NSInteger)integerValue;
-- (void)setIntegerValue:(NSInteger)value;
-
-- (BOOL)booleanValue;
-- (void)setBooleanValue:(BOOL)value;
+@property(nonatomic) BOOL booleanValue;
+@property(nonatomic) NSInteger integerValue;
+@property(nonatomic, copy) NSString *textValue;
 
 @end

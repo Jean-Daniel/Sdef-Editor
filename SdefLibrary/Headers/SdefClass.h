@@ -9,75 +9,71 @@
 #import "SdefObjects.h"
 
 /*
-<!-- CLASSES -->
-<!ENTITY % class-contents "(contents | documentation | element | property | responds-to | synonym | xref)">
-<!ELEMENT class ((%implementation;)?, (%class-contents;)*)>
-<!-- not quite accurate; there can be at most one contents element. -->
-<!ATTLIST class
-name       %Term;          #REQUIRED
-id         ID              #IMPLIED
-code       %OSType;        #REQUIRED 
-hidden     %yorn;          #IMPLIED 
-plural     %Term;          #IMPLIED 
-inherits   %Classname;     #IMPLIED 
-description  %Text;        #IMPLIED 
->
+ <!-- CLASSES -->
+ <!ENTITY % class-contents "(contents | documentation | element | property | responds-to | synonym | xref)">
+ <!ELEMENT class ((%implementation;)?, access-group*, (%class-contents;)*)>
+ <!-- not quite accurate; there can be at most one contents element. -->
+ <!ATTLIST class
+ %common.attrib;
+ name       %Term;          #REQUIRED
+ id         ID              #IMPLIED
+ code       %OSType;        #REQUIRED
+ hidden     %yorn;          #IMPLIED
+ plural     %Term;          #IMPLIED
+ inherits   %Classname;     #IMPLIED
+ description  %Text;        #IMPLIED
+ >
 
-<!-- contents -->
-<!ELEMENT contents ((%implementation;)?, (type*))>
-<!ATTLIST contents
-name       %Term;          #IMPLIED
-code       %OSType;        #IMPLIED 
-type       %Typename;      #IMPLIED
-access     (r | w | rw)    "rw"     
-hidden     %yorn;          #IMPLIED 
-description  %Text;        #IMPLIED 
->
+ <!-- element access -->
+ <!ELEMENT element ((%implementation;)?, access-group*, accessor*)>
+ <!ATTLIST element
+ %common.attrib;
+ type       %Typename;      #REQUIRED
+ access     %rw;            #IMPLIED
+ hidden     %yorn;          #IMPLIED
+ description  %Text;        #IMPLIED
+ >
 
-<!-- element access -->
-<!ELEMENT element ((%implementation;)?, accessor*)>
-<!ATTLIST element
-type       %Typename;      #REQUIRED
-access     (r | w | rw)    "rw"     
-hidden     %yorn;          #IMPLIED 
-description  %Text;        #IMPLIED 
->
+ <!ENTITY % accessor-type "(index | name | id | range | relative | test)">
+ <!ELEMENT accessor EMPTY>
+ <!ATTLIST accessor
+ %common.attrib;
+ style      %accessor-type;  #REQUIRED
+ >
 
-<!ENTITY % accessor-type "(index | name | id | range | relative | test)">
-<!ELEMENT accessor EMPTY>
-<!ATTLIST accessor
-style      %accessor-type;  #REQUIRED
->
+ <!-- properties -->
+ <!ELEMENT property ((%implementation;)?, access-group*, (type | synonym | documentation)*)>
+ <!ATTLIST property
+ %common.attrib;
+ name       %Term;          #REQUIRED
+ code       %OSType;        #REQUIRED
+ hidden     %yorn;          #IMPLIED
+ type       %Typename;      #IMPLIED
+ access     %rw;            #IMPLIED
+ in-properties  %yorn;      #IMPLIED
+ description  %Text;        #IMPLIED
+ >
 
-<!-- properties -->
-<!ELEMENT property ((%implementation;)?, (type | synonym | documentation)*)>
-<!ATTLIST property
-name       %Term;          #REQUIRED
-code       %OSType;        #REQUIRED 
-hidden     %yorn;          #IMPLIED 
-type       %Typename;      #IMPLIED 
-access     (r | w | rw)    "rw"     
-in-properties  %yorn;      #IMPLIED 
-description  %Text;        #IMPLIED 
->
+ <!-- supported verbs -->
+ <!ELEMENT responds-to ((%implementation;)?, access-group*)>
+ <!ATTLIST responds-to
+ %common.attrib;
+ command    %Verbname;      #REQUIRED
+ hidden     %yorn;          #IMPLIED
 
-<!-- supported verbs -->
-<!ELEMENT responds-to ((%implementation;)?)>
-<!ATTLIST responds-to
-command    %Verbname;      #REQUIRED
-hidden     %yorn;          #IMPLIED 
+ name       %Verbname;      #IMPLIED
+ >
+ <!-- "name" is now "command"; "name" is still defined for backward compatibility. -->
 
-name       %Verbname;      #IMPLIED
->
-<!-- "name" is now "command"; "name" is still defined for backward compatibility. -->
-
-<!-- class extensions -->
-<!ELEMENT class-extension ((%implementation;)?, (%class-contents;)*)>
-<!ATTLIST class-extension
-extends    %Classname;     #REQUIRED
-hidden     %yorn;          #IMPLIED 
-description  %Text;        #IMPLIED 
->
+ <!-- class extensions -->
+ <!ELEMENT class-extension ((%implementation;)?, access-group*, (%class-contents;)*)>
+ <!ATTLIST class-extension
+ %common.attrib;
+ id         ID              #IMPLIED
+ extends    %Classname;     #REQUIRED
+ hidden     %yorn;          #IMPLIED
+ description  %Text;        #IMPLIED
+ >
  
 */
 
@@ -99,63 +95,57 @@ enum {
 @class SdefDocumentation, SdefContents;
 @interface SdefClass : SdefTerminologyObject <NSCopying, NSCoding> {
   @private
-  SdefContents *sd_contents;
-  BOOL sd_extension;
+  BOOL _extension;
+  SdefContents *_contents;
   /* Attributes */
-  NSString *sd_type;
-  NSString *sd_plural; 
-  NSString *sd_inherits;
+  NSString *_type;
+  NSString *_plural;
+  NSString *_inherits;
 }
 
-- (SdefContents *)contents;
-- (void)setContents:(SdefContents *)contents;
+@property(nonatomic, retain) SdefContents *contents;
 
 - (SdefCollection *)properties;
 - (SdefCollection *)elements;
 - (SdefCollection *)commands;
 - (SdefCollection *)events;
 
-- (NSString *)plural;
-- (void)setPlural:(NSString *)newPlural;
+@property(nonatomic, copy) NSString *type;
+@property(nonatomic, copy) NSString *plural;
+@property(nonatomic, copy) NSString *inherits;
 
-- (NSString *)type;
-- (void)setType:(NSString *)aType;
-
-- (NSString *)inherits;
-- (void)setInherits:(NSString *)newInherits;
-
-- (BOOL)isExtension;
-- (void)setExtension:(BOOL)extension;
+@property(nonatomic, getter = isExtension) BOOL extension;
 
 @end
 
 @interface SdefElement : SdefTerminologyObject <NSCopying, NSCoding> {
-  NSUInteger sd_accessors; /* index | name | id | range | relative | test */
+  uint32_t _accessors; /* index | name | id | range | relative | test */
   
   /* Attributs */
-  NSUInteger sd_access; /* ( kSdefAccessRead | kSdefAccessWrite ) */
+  uint32_t _access; /* ( kSdefAccessRead | kSdefAccessWrite ) */
 }
 
-- (NSString *)type;
-- (void)setType:(NSString *)aType;
+@property(nonatomic, copy) NSString *type;
 
-- (NSUInteger)access;
-- (void)setAccess:(NSUInteger)newAccess;
-
-- (NSUInteger)accessors;
-- (void)setAccessors:(NSUInteger)accessors;
+@property(nonatomic) uint32_t access;
+@property(nonatomic) uint32_t accessors;
 
 #pragma mark Accessors
 - (BOOL)accIndex;
 - (void)setAccIndex:(BOOL)flag;
+
 - (BOOL)accId;
 - (void)setAccId:(BOOL)flag;
+
 - (BOOL)accName;
 - (void)setAccName:(BOOL)flag;
+
 - (BOOL)accRange;
 - (void)setAccRange:(BOOL)flag;
+
 - (BOOL)accRelative;
 - (void)setAccRelative:(BOOL)flag;
+
 - (BOOL)accTest;
 - (void)setAccTest:(BOOL)flag;
 
@@ -163,14 +153,12 @@ enum {
 
 #pragma mark -
 @interface SdefProperty : SdefTypedObject <NSCopying, NSCoding> {
-  NSUInteger sd_access;
+  uint32_t _access;
 }
 
-- (NSUInteger)access;
-- (void)setAccess:(NSUInteger)newAccess;
+@property(nonatomic) uint32_t access;
 
-- (BOOL)isNotInProperties;
-- (void)setNotInProperties:(BOOL)flag;
+@property(nonatomic, getter = isNotInProperties) BOOL notInProperties;
 
 @end
 

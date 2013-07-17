@@ -8,24 +8,10 @@
 
 #import "SdefBase.h"
 
-/* Leaves types */
-enum {
-  kSdefAccessGroupType   = 'Agpr',
-  kSdefTypeAtomType      = 'Type',
-  kSdefSynonymType       = 'Syno',
-  kSdefCommentType       = 'Cmnt',
-  kSdefXrefType          = 'Xref',
-  /* XInclude */
-  kSdefXIncludeType      = 'XInc',
-  
-  kSdefCocoaType         = 'Coco',
-  kSdefDocumentationType = 'Docu',
-};
-
 @interface SdefLeaf : NSObject <SdefObject, NSCopying, NSCoding> {
 @private
   NSString *_name;
-  NSObject<SdefObject> *sd_owner;
+  NSObject<SdefObject> *_owner;
 @protected
   struct _sd_slFlags {
     unsigned int list:1;
@@ -49,10 +35,9 @@ enum {
 
 @property(nonatomic, copy) NSString *name;
 
-@property(nonatomic) BOOL hidden;
+@property(nonatomic, getter=isHidden) BOOL hidden;
 
-- (NSObject<SdefObject> *)owner;
-- (void)setOwner:(NSObject<SdefObject> *)anObject;
+@property(nonatomic, assign) NSObject<SdefObject> *owner;
 
 - (SdefDictionary *)dictionary;
 - (id<SdefObject>)firstParentOfType:(SdefObjectType)aType;

@@ -13,31 +13,40 @@
 #import "SdefDocumentation.h"
 
 @implementation SdefClass
+
+@synthesize contents = _contents;
+
+@synthesize type = _type;
+@synthesize plural = _plural;
+@synthesize inherits = _inherits;
+
+@synthesize extension = _extension;
+
 #pragma mark Protocols Implementations
 - (id)copyWithZone:(NSZone *)aZone {
   SdefClass *copy = [super copyWithZone:aZone];
-  copy->sd_type = [sd_type copyWithZone:aZone];
-  copy->sd_plural = [sd_plural copyWithZone:aZone];
-  copy->sd_inherits = [sd_inherits copyWithZone:aZone];
-  copy->sd_contents = [sd_contents copyWithZone:aZone];
-  [copy->sd_contents setOwner:copy];
+  copy->_type = [_type copyWithZone:aZone];
+  copy->_plural = [_plural copyWithZone:aZone];
+  copy->_inherits = [_inherits copyWithZone:aZone];
+  copy->_contents = [_contents copyWithZone:aZone];
+  [copy->_contents setOwner:copy];
   return copy;
 }
 
 - (void)encodeWithCoder:(NSCoder *)aCoder {
   [super encodeWithCoder:aCoder];
-  [aCoder encodeObject:sd_type forKey:@"SCType"];
-  [aCoder encodeObject:sd_plural forKey:@"SCPlural"];
-  [aCoder encodeObject:sd_inherits forKey:@"SCInherits"];
-  [aCoder encodeObject:sd_contents forKey:@"SCContents"];
+  [aCoder encodeObject:_type forKey:@"SCType"];
+  [aCoder encodeObject:_plural forKey:@"SCPlural"];
+  [aCoder encodeObject:_inherits forKey:@"SCInherits"];
+  [aCoder encodeObject:_contents forKey:@"SCContents"];
 }
 
 - (id)initWithCoder:(NSCoder *)aCoder {
   if (self = [super initWithCoder:aCoder]) {
-    sd_type = [[aCoder decodeObjectForKey:@"SCType"] retain];
-    sd_plural = [[aCoder decodeObjectForKey:@"SCPlural"] retain];
-    sd_inherits = [[aCoder decodeObjectForKey:@"SCInherits"] retain];
-    sd_contents = [[aCoder decodeObjectForKey:@"SCContents"] retain];
+    _type = [[aCoder decodeObjectForKey:@"SCType"] retain];
+    _plural = [[aCoder decodeObjectForKey:@"SCPlural"] retain];
+    _inherits = [[aCoder decodeObjectForKey:@"SCInherits"] retain];
+    _contents = [[aCoder decodeObjectForKey:@"SCContents"] retain];
   }
   return self;
 }
@@ -56,10 +65,10 @@
 }
 
 - (void)dealloc {
-  [sd_contents setOwner:nil];
-  [sd_plural release];
-  [sd_inherits release];
-  [sd_contents release];
+  [_contents setOwner:nil];
+  [_plural release];
+  [_inherits release];
+  [_contents release];
   [super dealloc];
 }
 
@@ -96,7 +105,7 @@
 
 - (void)setEditable:(BOOL)flag recursive:(BOOL)recu {
   if (recu) {
-    [sd_contents setEditable:flag];
+    [_contents setEditable:flag];
   }
   [super setEditable:flag recursive:recu];
 }
@@ -119,63 +128,52 @@
   }
 }
 
-- (BOOL)isExtension {
-  return sd_extension;
-}
 - (void)setExtension:(BOOL)extension {
-  if (extension != sd_extension) {
+  if (extension != _extension) {
     [self willChangeValueForKey:@"name"];
-    [[[self undoManager] prepareWithInvocationTarget:self] setExtension:sd_extension];
+    [[[self undoManager] prepareWithInvocationTarget:self] setExtension:_extension];
     
-    /* should be before sd_extension = ... to avoid multi notifications */
+    /* should be before _extension = ... to avoid multi notifications */
     if (extension && ![self inherits] && [self name])
       [self setInherits:[self name]];
     
-    sd_extension = extension;
+    _extension = extension;
     [self didChangeValueForKey:@"name"];
-    [self setIcon:[NSImage imageNamed:sd_extension ? @"Class-Extension" : @"Class"]];
+    [self setIcon:[NSImage imageNamed:_extension ? @"Class-Extension" : @"Class"]];
     /* Nasty: should notify outline view controller */
     [[self notificationCenter] postNotificationName:WBUITreeNodeDidChangeNameNotification object:self];
   }
 }
 
 - (SdefContents *)contents {
-  if (!sd_contents)
+  if (!_contents)
     [self setContents:[[[SdefContents alloc] init] autorelease]];
   
-  return sd_contents;
+  return _contents;
 }
 - (void)setContents:(SdefContents *)contents {
-  if (sd_contents != contents) {
-    [sd_contents setOwner:nil];
-    [sd_contents release];
-    sd_contents = [contents retain];
-    [sd_contents setOwner:self];
+  if (_contents != contents) {
+    [_contents setOwner:nil];
+    [_contents release];
+    _contents = [contents retain];
+    [_contents setOwner:self];
   }
 }
 
-- (NSString *)plural {
-  return sd_plural;
-}
 - (void)setPlural:(NSString *)newPlural {
-  if (sd_plural != newPlural) {
-    [[self undoManager] registerUndoWithTarget:self selector:_cmd object:sd_plural];
-    [sd_plural release];
-    sd_plural = [newPlural copyWithZone:[self zone]];
+  if (_plural != newPlural) {
+    [[self undoManager] registerUndoWithTarget:self selector:_cmd object:_plural];
+    SPXSetterCopy(_plural, newPlural);
   }
 }
 
-- (NSString *)inherits {
-  return sd_inherits;
-}
 - (void)setInherits:(NSString *)newInherits {
-  if (sd_inherits != newInherits) {
+  if (_inherits != newInherits) {
     if ([self isExtension])
       [self willChangeValueForKey:@"name"];
     
-    [[self undoManager] registerUndoWithTarget:self selector:_cmd object:sd_inherits];
-    [sd_inherits release];
-    sd_inherits = [newInherits copyWithZone:[self zone]];
+    [[self undoManager] registerUndoWithTarget:self selector:_cmd object:_inherits];
+    SPXSetterCopy(_inherits, newInherits);
     
     if ([self isExtension]) {
       [self didChangeValueForKey:@"name"];
@@ -185,17 +183,12 @@
   }
 }
 
-- (NSString *)type {
-  return sd_type;
-}
 - (void)setType:(NSString *)type {
-  if (sd_type != type) {
-    [[self undoManager] registerUndoWithTarget:self selector:_cmd object:sd_type];
-    [sd_type release];
-    sd_type = [type copyWithZone:[self zone]];
+  if (_type != type) {
+    [[self undoManager] registerUndoWithTarget:self selector:_cmd object:_type];
+    SPXSetterCopy(_type, type);
   }
 }
-
 
 - (SdefCollection *)elements {
   return [self childAtIndex:0];
@@ -217,6 +210,9 @@
 
 #pragma mark -
 @implementation SdefElement
+
+@synthesize access = _access;
+@synthesize accessors = _accessors;
 
 static NSSet *sAccessorSet = nil;
 static NSSet *sAccessorPropertiesSet = nil;
@@ -240,21 +236,21 @@ static NSSet *sAccessorPropertiesSet = nil;
 #pragma mark Protocols Implementations
 - (id)copyWithZone:(NSZone *)aZone {
   SdefElement *copy = [super copyWithZone:aZone];
-  copy->sd_access = sd_access;
-  copy->sd_accessors = sd_accessors;
+  copy->_access = _access;
+  copy->_accessors = _accessors;
   return copy;
 }
 
 - (void)encodeWithCoder:(NSCoder *)aCoder {
   [super encodeWithCoder:aCoder];
-  [aCoder encodeInteger:sd_access  forKey:@"SEAccess"];
-  [aCoder encodeInteger:sd_accessors forKey:@"SEAccessors"];
+  [aCoder encodeInt32:_access forKey:@"SEAccess"];
+  [aCoder encodeInt32:_accessors forKey:@"SEAccessors"];
 }
 
 - (id)initWithCoder:(NSCoder *)aCoder {
   if (self = [super initWithCoder:aCoder]) {
-    sd_access = [aCoder decodeIntegerForKey:@"SEAccess"];
-    sd_accessors = [aCoder decodeIntegerForKey:@"SEAccessors"];
+    _access = [aCoder decodeInt32ForKey:@"SEAccess"];
+    _accessors = [aCoder decodeInt32ForKey:@"SEAccessors"];
   }
   return self;
 }
@@ -289,37 +285,28 @@ static NSSet *sAccessorPropertiesSet = nil;
 - (NSString *)type {
   return [self name];
 }
-
 - (void)setType:(NSString *)type {
   [super setName:type];
 }
 
-- (NSUInteger)access {
-  return sd_access;
-}
-
-- (void)setAccess:(NSUInteger)newAccess {
-  if (sd_access != newAccess) {
-    [[[self undoManager] prepareWithInvocationTarget:self] setAccess:sd_access];
-    sd_access = newAccess;
+- (void)setAccess:(uint32_t)newAccess {
+  if (_access != newAccess) {
+    [[[self undoManager] prepareWithInvocationTarget:self] setAccess:_access];
+    _access = newAccess;
   }
 }
 
-- (NSUInteger)accessors {
-  return sd_accessors;
-}
-
-- (void)setAccessors:(NSUInteger)accessors {
-  if (sd_accessors != accessors) {
-    [[[self undoManager] prepareWithInvocationTarget:self] setAccessors:sd_accessors];
-    sd_accessors = accessors;
+- (void)setAccessors:(uint32_t)accessors {
+  if (_accessors != accessors) {
+    [[[self undoManager] prepareWithInvocationTarget:self] setAccessors:_accessors];
+    _accessors = accessors;
   }
 }
 
 #pragma mark -
 #pragma mark Accessors KVC
 - (BOOL)accIndex {
-  return sd_accessors & kSdefAccessorIndex;
+  return _accessors & kSdefAccessorIndex;
 }
 - (void)setAccIndex:(BOOL)flag {
   if (flag) [self setAccessors:[self accessors] | kSdefAccessorIndex];
@@ -327,7 +314,7 @@ static NSSet *sAccessorPropertiesSet = nil;
 }
 
 - (BOOL)accId {
-  return sd_accessors & kSdefAccessorID;
+  return (_accessors & kSdefAccessorID) != 0;
 }
 - (void)setAccId:(BOOL)flag {
   if (flag) [self setAccessors:[self accessors] | kSdefAccessorID];
@@ -335,7 +322,7 @@ static NSSet *sAccessorPropertiesSet = nil;
 }
 
 - (BOOL)accName {
-  return sd_accessors & kSdefAccessorName;
+  return (_accessors & kSdefAccessorName) != 0;
 }
 - (void)setAccName:(BOOL)flag {
   if (flag) [self setAccessors:[self accessors] | kSdefAccessorName];
@@ -343,7 +330,7 @@ static NSSet *sAccessorPropertiesSet = nil;
 }
 
 - (BOOL)accRange {
-  return sd_accessors & kSdefAccessorRange;
+  return (_accessors & kSdefAccessorRange) != 0;
 }
 - (void)setAccRange:(BOOL)flag {
   if (flag) [self setAccessors:[self accessors] | kSdefAccessorRange];
@@ -351,7 +338,7 @@ static NSSet *sAccessorPropertiesSet = nil;
 }
 
 - (BOOL)accRelative {
-  return sd_accessors & kSdefAccessorRelative;
+  return (_accessors & kSdefAccessorRelative) != 0;
 }
 - (void)setAccRelative:(BOOL)flag {
   if (flag) [self setAccessors:[self accessors] | kSdefAccessorRelative];
@@ -359,7 +346,7 @@ static NSSet *sAccessorPropertiesSet = nil;
 }
 
 - (BOOL)accTest {
-  return sd_accessors & kSdefAccessorTest;
+  return (_accessors & kSdefAccessorTest) != 0;
 }
 - (void)setAccTest:(BOOL)flag {
   if (flag) [self setAccessors:[self accessors] | kSdefAccessorTest];
@@ -388,21 +375,24 @@ static NSSet *sAccessorPropertiesSet = nil;
 
 #pragma mark -
 @implementation SdefProperty
+
+@synthesize access = _access;
+
 #pragma mark Protocols Implementations
 - (id)copyWithZone:(NSZone *)aZone {
   SdefProperty *copy = [super copyWithZone:aZone];
-  copy->sd_access = sd_access;
+  copy->_access = _access;
   return copy;
 }
 
 - (void)encodeWithCoder:(NSCoder *)aCoder {
   [super encodeWithCoder:aCoder];
-  [aCoder encodeInteger:sd_access forKey:@"SPAccess"];
+  [aCoder encodeInteger:_access forKey:@"SPAccess"];
 }
 
 - (id)initWithCoder:(NSCoder *)aCoder {
   if (self = [super initWithCoder:aCoder]) {
-    sd_access = [aCoder decodeIntegerForKey:@"SPAccess"];
+    _access = [aCoder decodeInt32ForKey:@"SPAccess"];
   }
   return self;
 }
@@ -425,17 +415,10 @@ static NSSet *sAccessorPropertiesSet = nil;
   [self setIsLeaf:YES];
 }
 
-- (void)dealloc {
-  [super dealloc];
-}
-
 #pragma mark -
-- (NSUInteger)access {
-  return sd_access;
-}
-- (void)setAccess:(NSUInteger)newAccess {
-  [[[self undoManager] prepareWithInvocationTarget:self] setAccess:sd_access];
-  sd_access = newAccess;
+- (void)setAccess:(uint32_t)newAccess {
+  [[[self undoManager] prepareWithInvocationTarget:self] setAccess:_access];
+  _access = newAccess;
 }
 
 - (BOOL)isNotInProperties {
