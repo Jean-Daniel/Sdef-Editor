@@ -95,7 +95,7 @@ bail:
 }
 
 - (id)initWithSystemSuites {
-  if (self = [self _initWithTarget:NULL]) {
+  if ((self = [self _initWithTarget:NULL])) {
     ComponentInstance cpnt;
     OSStatus err = OpenADefaultComponent(kOSAComponentType, kOSAGenericScriptingComponentSubtype, &cpnt);
     if (noErr == err) {

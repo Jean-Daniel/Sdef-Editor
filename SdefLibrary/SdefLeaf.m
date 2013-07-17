@@ -10,15 +10,18 @@
 #import "SdefBase.h"
 
 @implementation SdefLeaf
+
+@synthesize name = _name;
+
 #pragma mark Protocols Implementations
 - (id)copyWithZone:(NSZone *)aZone {
   SdefLeaf *copy = (SdefLeaf *)NSCopyObject(self, 0, aZone);
-  copy->sd_name = [sd_name copyWithZone:aZone];
+  copy->_name = [_name copyWithZone:aZone];
   return copy;
 }
 
 - (void)encodeWithCoder:(NSCoder *)aCoder {
-  [aCoder encodeObject:sd_name forKey:@"STName"];
+  [aCoder encodeObject:_name forKey:@"STName"];
   [aCoder encodeConditionalObject:sd_owner forKey:@"STOwner"];
   [aCoder encodeBytes:(Byte *)&sd_slFlags length:sizeof(sd_slFlags) forKey:@"STFlags"];
 }
@@ -29,7 +32,7 @@
     const uint8_t *buffer = [aCoder decodeBytesForKey:@"STFlags" returnedLength:&length];
     memcpy(&sd_slFlags, buffer, length);
     
-    sd_name = [[aCoder decodeObjectForKey:@"STName"] retain];
+    _name = [[aCoder decodeObjectForKey:@"STName"] retain];
     sd_owner = [aCoder decodeObjectForKey:@"STOwner"];
   }
   return self;
@@ -51,13 +54,13 @@
 }
 
 - (void)dealloc {
-  [sd_name release];
+  [_name release];
   [super dealloc];
 }
 
 - (NSString *)description {
   return [NSString stringWithFormat:@"<%@ %p> {name=%@}", 
-    NSStringFromClass([self class]), self, sd_name];
+    NSStringFromClass([self class]), self, _name];
 }
 
 #pragma mark -
@@ -65,38 +68,34 @@
   return [NSImage imageNamed:@"Misc"];
 }
 
-- (NSString *)name {
-  return sd_name;
-}
-
 - (void)setName:(NSString *)newName {
-  if (sd_name != newName) {
+  if (_name != newName) {
     NSUndoManager *undo = [self undoManager];
     if (undo) {
-      [undo registerUndoWithTarget:self selector:_cmd object:sd_name];
+      [undo registerUndoWithTarget:self selector:_cmd object:_name];
       [undo setActionName:NSLocalizedStringFromTable(@"Change Name", @"SdefLibrary", @"Undo Action: change name.")];
     }
-    [sd_name release];
-    sd_name = [newName stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
-    [sd_name retain];
+    [_name release];
+    _name = [newName stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+    [_name retain];
   }
 }
 
-- (BOOL)isEditable {
+- (BOOL)editable {
   return sd_slFlags.editable && !sd_slFlags.xinclude;
 }
 - (void)setEditable:(BOOL)flag {
   SPXFlagSet(sd_slFlags.editable, flag);
 }
 
-- (BOOL)isXIncluded {
+- (BOOL)imported {
   return sd_slFlags.xinclude;
 }
-- (void)setXIncluded:(BOOL)flag {
+- (void)setImported:(BOOL)flag {
   SPXFlagSet(sd_slFlags.xinclude, flag);
 }
 
-- (BOOL)isHidden {
+- (BOOL)hidden {
   return sd_slFlags.hidden;
 }
 - (void)setHidden:(BOOL)flag {

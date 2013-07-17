@@ -8,7 +8,7 @@
 
 #import <WonderBox/WBUITreeNode.h>
 
-enum {
+typedef NS_ENUM(OSType, SdefObjectType) {
   kSdefUndefinedType       = 0,
   kSdefDictionaryType      = 'Dico',
   kSdefSuiteType           = 'Suit',
@@ -31,15 +31,14 @@ enum {
   kSdefValueType           = 'Valu',
   kSdefRecordType          = 'Reco',
 };
-typedef OSType SdefObjectType;
 
-enum {
+typedef NS_ENUM(NSUInteger, SdefVersion) {
   kSdefVersionUndefined = 0,
   kSdefPantherVersion   = 1,
   kSdefTigerVersion     = 2,
   kSdefLeopardVersion   = 3,
+  kSdefMountainLionVersion   = 4,
 };
-typedef NSUInteger SdefVersion;
 
 #pragma mark -
 #pragma mark Publics Functions Declaration
@@ -63,11 +62,8 @@ NSString *CocoaNameForSdefName(NSString *cocoa, BOOL isClass);
 - (NSImage *)icon;
 - (NSString *)name;
 
-- (BOOL)isEditable;
-- (void)setEditable:(BOOL)flag;
-
-- (BOOL)isXIncluded;
-- (void)setXIncluded:(BOOL)flag;
+@property(nonatomic) BOOL editable;
+@property(nonatomic) BOOL imported; // xinclude reference
 
 - (SdefObject *)container;
 - (id<SdefObject>)firstParentOfType:(SdefObjectType)aType;
@@ -95,8 +91,8 @@ NSString *CocoaNameForSdefName(NSString *cocoa, BOOL isClass);
     unsigned int hasImplementation:1;
     unsigned int reserved:4;
   } sd_soFlags;
-  @private
-    NSMutableArray *sd_comments;
+@private
+  NSMutableArray *sd_comments;
   NSMutableArray *sd_includes;
 }
 
@@ -125,53 +121,42 @@ NSString *CocoaNameForSdefName(NSString *cocoa, BOOL isClass);
 - (NSString *)objectTypeName;
 
 #pragma mark Accessors
-- (BOOL)isHidden;
-- (void)setHidden:(BOOL)isHidden;
+@property(nonatomic) BOOL hidden;
 
 #pragma mark Flags
-- (BOOL)isEditable;
-- (void)setEditable:(BOOL)flag;
+@property(nonatomic) BOOL editable;
 - (void)setEditable:(BOOL)flag recursive:(BOOL)recu;
 
-- (BOOL)isRemovable;
-- (void)setRemovable:(BOOL)removable;
+@property(nonatomic) BOOL removable;
 
-- (BOOL)isXIncluded;
-- (void)setXIncluded:(BOOL)flag;
+@property(nonatomic) BOOL imported;
 
 #pragma mark XRefs
 - (BOOL)hasID;
-- (NSString *)xmlid;
-- (void)setXmlid:(NSString *)xmlid;
+@property(nonatomic, copy) NSString *xmlid;
 
 - (BOOL)hasXrefs;
-- (NSMutableArray *)xrefs;
-- (void)setXrefs:(NSArray *)xrefs;
+@property(nonatomic, copy) NSArray *xrefs;
 
 #pragma mark Documentation
 - (BOOL)hasDocumentation;
-- (SdefDocumentation *)documentation;
-- (void)setDocumentation:(SdefDocumentation *)doc;
+@property(nonatomic, retain) SdefDocumentation *documentation;
 
 #pragma mark Synonyms
 - (BOOL)hasSynonyms;
-- (NSMutableArray *)synonyms;
-- (void)setSynonyms:(NSArray *)newSynonyms;
+@property(nonatomic, copy) NSArray *synonyms;
 
 #pragma mark Implementation
 - (BOOL)hasImplementation;
-- (SdefImplementation *)impl;
-- (void)setImpl:(SdefImplementation *)newImpl;
+@property(nonatomic, retain) SdefImplementation *impl;
 
 #pragma mark Comments
-- (NSMutableArray *)comments;
-- (void)setComments:(NSArray *)comments;
-
+@property(nonatomic, copy) NSArray *comments;
 - (void)addComment:(SdefComment *)comment;
 
 #pragma mark XInclude
 - (BOOL)hasXInclude;
-- (NSMutableArray *)xincludes;
+- (NSArray *)xincludes;
 - (void)addXInclude:(id)xinclude;
 /* returns YES if contains at least one xinclude element */
 - (BOOL)containsXInclude;

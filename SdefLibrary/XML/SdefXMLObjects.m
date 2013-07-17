@@ -133,7 +133,7 @@
         while (xref = [items nextObject]) {
           if ([xref target]) {
             [meta appendString:[xref target]];
-            [meta appendString:[xref isHidden] ? @",1," : @",0,"];
+            [meta appendString:xref.hidden ? @",1," : @",0,"];
           }
         }
         if ([meta length] > 2) {
@@ -175,7 +175,7 @@
       NSScanner *scanner = [[NSScanner alloc] initWithString:xrefs];
       
       NSInteger version = 0;
-      BOOL ok = [scanner scanInt:&version];
+      BOOL ok = [scanner scanInteger:&version];
       if (ok) 
         ok = [scanner scanString:@":" intoString:NULL];
       if (ok) {
@@ -184,7 +184,7 @@
           NSString *target;
           ok = [scanner scanUpToString:@"," intoString:&target];
           if (ok) ok = [scanner scanString:@"," intoString:NULL];
-          if (ok) ok = [scanner scanInt:&hidden];
+          if (ok) ok = [scanner scanInteger:&hidden];
           if (ok) {
             SdefXRef *ref = [[SdefXRef alloc] init];
             [ref setTarget:target];

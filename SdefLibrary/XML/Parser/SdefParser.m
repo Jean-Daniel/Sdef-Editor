@@ -463,7 +463,7 @@ Boolean _SdefElementIsCollection(CFStringRef element) {
     } else {
       /* Handle xinclude */
       if ([sd_xincludes count] > 0) {
-        [child setXIncluded:YES];
+        child.imported = YES;
         SdefXInclude *include = [sd_xincludes lastObject];
         if ((id)[include owner] == parent) {
           SPXDebug(@"add include root: %@", child);
@@ -638,11 +638,11 @@ void _SdefParserPostProcessObjects(NSArray *roots, SdefVersion version) {
 - (NSImage *)icon { return nil; }
 - (NSString *)name { return nil; }
 
-- (BOOL)isEditable { return YES; }
+- (BOOL)editable { return YES; }
 - (void)setEditable:(BOOL)flag {}
 
-- (BOOL)isXIncluded { return NO; }
-- (void)setXIncluded:(BOOL)flag {}
+- (BOOL)imported { return NO; }
+- (void)setImported:(BOOL)flag {}
 
 - (SdefObject *)container { return nil; }
 - (SdefDictionary *)dictionary { return nil; }

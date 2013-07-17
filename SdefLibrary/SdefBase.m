@@ -202,7 +202,7 @@ NSImage *SdefImageNamed(NSString *name) {
 }
 
 #pragma mark -
-- (BOOL)isHidden {
+- (BOOL)hidden {
   return sd_soFlags.hidden;
 }
 
@@ -215,7 +215,7 @@ NSImage *SdefImageNamed(NSString *name) {
   }
 }
 
-- (BOOL)isEditable {
+- (BOOL)editable {
   return sd_soFlags.editable && !sd_soFlags.xinclude;
 }
 - (void)setEditable:(BOOL)flag {
@@ -234,14 +234,14 @@ NSImage *SdefImageNamed(NSString *name) {
   }
 }
 
-- (BOOL)isXIncluded {
+- (BOOL)imported {
   return sd_soFlags.xinclude;
 }
-- (void)setXIncluded:(BOOL)flag {
+- (void)setImported:(BOOL)flag {
   SPXFlagSet(sd_soFlags.xinclude, flag);
 }
 
-- (BOOL)isRemovable {
+- (BOOL)removable {
   if ([self parent] && ![[self parent] isEditable])
     return NO;
   return sd_soFlags.removable && !sd_soFlags.xinclude;
@@ -276,14 +276,18 @@ NSImage *SdefImageNamed(NSString *name) {
 - (BOOL)hasXInclude {
   return YES;
 }
-- (NSMutableArray *)xincludes {
-  if (!sd_includes)
-    sd_includes = [[NSMutableArray alloc] init];
-  return sd_includes;
+static inline
+NSMutableArray *xincludes(SdefObject *self) {
+  if (!self->sd_includes)
+    self->sd_includes = [[NSMutableArray alloc] init];
+  return self->sd_includes;
+}
+- (NSArray *)xincludes {
+  return xincludes(self);
 }
 - (void)addXInclude:(id)xinclude {
   [xinclude setOwner:self];
-  [[self xincludes] addObject:xinclude];
+  [xincludes(self) addObject:xinclude];
 }
 - (BOOL)containsXInclude {
   return sd_includes && [sd_includes count] > 0;
@@ -318,26 +322,28 @@ NSImage *SdefImageNamed(NSString *name) {
   return sd_comments && [sd_comments count] > 0;
 }
 
-- (NSMutableArray *)comments {
-  if (!sd_comments) {
-    sd_comments = [[NSMutableArray allocWithZone:[self zone]] init];
-  }
-  return sd_comments;
+static inline
+NSMutableArray *comments(SdefObject *self) {
+  if (!self->sd_comments)
+    self->sd_comments = [[NSMutableArray alloc] init];
+  return self->sd_comments;
 }
-- (void)setComments:(NSArray *)comments {
-  if (sd_comments != comments) {
+- (NSArray *)comments {
+  return comments(self);
+}
+- (void)setComments:(NSArray *)cmts {
+  if (sd_comments != cmts) {
     [sd_comments removeAllObjects];
-    for (NSUInteger idx = 0; idx < [comments count]; idx++) {
-      SdefComment *cmnt = [comments objectAtIndex:idx];
-      [[self comments] addObject:cmnt];
+    for (NSUInteger idx = 0; idx < [cmts count]; idx++) {
+      SdefComment *cmnt = [cmts objectAtIndex:idx];
+      [comments(self) addObject:cmnt];
       [cmnt setOwner:self];
     }
   }
 }
 
-
 - (void)addComment:(SdefComment *)comment {
-  [[self comments] addObject:comment];
+  [comments(self) addObject:comment];
   [comment setOwner:self];
 }
 - (void)removeCommentAtIndex:(NSUInteger)anIndex {
@@ -413,7 +419,7 @@ NSImage *SdefImageNamed(NSString *name) {
 - (void)setElementName:(NSString *)aName {
   if (sd_elementName != aName) {
     [sd_elementName release];
-    sd_elementName = [aName copyWithZone:[self zone]];
+    sd_elementName = [aName copy];
   }
 }
 

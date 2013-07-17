@@ -1,6 +1,8 @@
 [submodule "hadron"]
 	path = hadron
 	url = git@github.com:Jean-Daniel/hadron.git
+	branch = master
 [submodule "WonderBox"]
 	path = WonderBox
 	url = git@github.com:Jean-Daniel/WonderBox.git
+	branch = master

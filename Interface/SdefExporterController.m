@@ -109,8 +109,8 @@ static NSString *SystemMajorVersion(void) {
                           NSString *result = [proc process];
                           if (result) {
                             NSRunAlertPanel(NSLocalizedString(@"Warning: Scripting Definition Processor says:", @"sdp return a value: message title"),
-                                            result,
-                                            NSLocalizedString(@"OK", @"Default Button"), nil, nil);
+                                            @"%@",
+                                            NSLocalizedString(@"OK", @"Default Button"), nil, nil, result);
                           }
                           if (rsrcFormat) {
                             [self compileResourceFile:[proc output]];

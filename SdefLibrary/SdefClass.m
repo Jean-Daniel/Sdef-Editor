@@ -223,11 +223,11 @@ static NSSet *sAccessorPropertiesSet = nil;
 
 + (void)initialize {
   if ([SdefElement class] == self) {
-    sAccessorSet = [NSSet setWithObject:@"accessors"];
-    sAccessorPropertiesSet = [NSSet setWithObjects:
+    sAccessorSet = [[NSSet setWithObject:@"accessors"] retain];
+    sAccessorPropertiesSet = [[NSSet setWithObjects:
                               @"accIndex", @"accId", @"accName",
                               @"accRange", @"accRelative", @"accTest",
-                              nil];
+                              nil] retain];
   }
 }
 

@@ -208,7 +208,7 @@
 - (NSString *)description {
   return [NSString stringWithFormat:@"<%@ %p> {name:\"%@\" code:'%@' hidden:%@}",
     NSStringFromClass([self class]), self,
-    [self name], [self code], [self isHidden] ? @"YES" : @"NO"];
+    [self name], [self code], self.hidden ? @"YES" : @"NO"];
 }
 
 #pragma mark -

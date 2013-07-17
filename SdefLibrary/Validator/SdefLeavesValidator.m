@@ -32,7 +32,7 @@
   if (![self name]) {
     [messages addObject:[self invalidValue:nil forAttribute:@"name"]];
   }
-  if ([self isHidden] && vers < kSdefLeopardVersion)
+  if (self.hidden && vers < kSdefLeopardVersion)
     [messages addObject:[self versionRequired:kSdefLeopardVersion forAttribute:@"hidden"]];
   
   [super validate:messages forVersion:vers];

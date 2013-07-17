@@ -22,7 +22,7 @@
       [node setComments:[self comments]];
     
     /* Hidden */
-    if ([self isHidden]) {
+    if (self.hidden) {
       if (version >= kSdefTigerVersion)
         [node setAttribute:@"yes" forKey:@"hidden"];
       else
@@ -43,7 +43,7 @@
     SdefObject *child = nil;
     NSEnumerator *children = [self childEnumerator];
     while (child = [children nextObject]) {
-      if (![child isXIncluded]) {
+      if (!child.imported) {
         SdefXMLNode *childNode = [child xmlNodeForVersion:version];
         if (childNode) {
           NSAssert1([childNode isList] || [childNode elementName], @"%@ return an invalid node", child);

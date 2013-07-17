@@ -10,6 +10,7 @@
 
 /* Leaves types */
 enum {
+  kSdefAccessGroupType   = 'Agpr',
   kSdefTypeAtomType      = 'Type',
   kSdefSynonymType       = 'Syno',
   kSdefCommentType       = 'Cmnt',
@@ -23,7 +24,7 @@ enum {
 
 @interface SdefLeaf : NSObject <SdefObject, NSCopying, NSCoding> {
 @private
-  NSString *sd_name;
+  NSString *_name;
   NSObject<SdefObject> *sd_owner;
 @protected
   struct _sd_slFlags {
@@ -46,17 +47,9 @@ enum {
 
 - (NSImage *)icon;
 
-- (NSString *)name;
-- (void)setName:(NSString *)newName;
+@property(nonatomic, copy) NSString *name;
 
-- (BOOL)isHidden;
-- (void)setHidden:(BOOL)flag;
-
-- (BOOL)isEditable;
-- (void)setEditable:(BOOL)flag;
-
-- (BOOL)isXIncluded;
-- (void)setXIncluded:(BOOL)flag;
+@property(nonatomic) BOOL hidden;
 
 - (NSObject<SdefObject> *)owner;
 - (void)setOwner:(NSObject<SdefObject> *)anObject;

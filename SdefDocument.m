@@ -195,12 +195,12 @@
     NSInteger version = 0;
     [self setDictionary:SdefLoadDictionary(absoluteURL, &version, self, outError)];
     if ([self dictionary] != nil) {
-      if (version < kSdefTigerVersion) {
+      if (version >= 0 && (NSUInteger)version < kSdefTigerVersion) {
         /* Warning: using deprecated useless format */
         [self updateChangeCount:NSChangeDone];
       }
     } else {
-      if (!outError)
+      if (outError)
         *outError = [NSError errorWithDomain:NSCocoaErrorDomain code:NSFileReadCorruptFileError userInfo:nil];
     }
   } else if (outError) {

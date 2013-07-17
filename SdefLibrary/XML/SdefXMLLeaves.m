@@ -23,7 +23,7 @@
   SdefXMLNode *node = [SdefXMLNode nodeWithElementName:[self xmlElementName]];
   if (node) {
     /* Hidden */
-    if ([self isHidden]) {
+    if (self.hidden) {
       if (version >= kSdefTigerVersion)
         [node setAttribute:@"yes" forKey:@"hidden"];
       else
@@ -47,7 +47,7 @@
 - (void)setXMLAttributes:(NSDictionary *)attrs {
   NSString *hidden = [attrs objectForKey:@"hidden"];
   if (hidden && ![hidden isEqualToString:@"no"]) {
-    [self setHidden:YES];
+    self.hidden = YES;
   }
 }
 
