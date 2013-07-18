@@ -57,8 +57,8 @@ const OSType kCocoaSuiteDefinitionHFSType = 'ScSu';
 - (id)init {
   if (self = [super init]) {
 		/* Assume we are using Xcode 2.5 or later */
-    NSString *sdp = @"/Developer/usr/bin/sdp";
-		NSString *rez = @"/Developer/usr/bin/Rez";
+//    NSString *sdp = @"/Developer/usr/bin/sdp";
+//		NSString *rez = @"/Developer/usr/bin/Rez";
     /* Initialize custom controller */
     SdefDocumentController *ctrl = [[SdefDocumentController alloc] init];
     if ([ctrl respondsToSelector:@selector(setAutosavingDelay:)]) {
@@ -66,23 +66,23 @@ const OSType kCocoaSuiteDefinitionHFSType = 'ScSu';
     }
     [ctrl release];
     
-    [[NSUserDefaults standardUserDefaults] registerDefaults:[NSDictionary dictionaryWithObjectsAndKeys:
-      @(YES), @"SdefOpenAtStartup",
-      @(YES), @"SdefAutoSelectItem",
-      sdp, @"SdefSdpToolPath",
-      rez, @"SdefRezToolPath",
-      nil]];
+    [[NSUserDefaults standardUserDefaults] registerDefaults:@{
+     @"SdefOpenAtStartup" : @(YES),
+     @"SdefAutoSelectItem" : @(YES),
+//      sdp, @"SdefSdpToolPath",
+//      rez, @"SdefRezToolPath",
+     }];
     [NSApp setDelegate:self];
 #if defined (DEBUG)
-    [[NSUserDefaults standardUserDefaults] registerDefaults:[NSDictionary dictionaryWithObjectsAndKeys:
-      @(YES), @"SdefDebugMenu",
-      @(YES), @"SdefPantherExportEnabled",
-      // @"YES", @"NSShowNonLocalizedStrings",
+    [[NSUserDefaults standardUserDefaults] registerDefaults:@{
+     @"SdefDebugMenu" : @(YES),
+     @"SdefPantherExportEnabled" : @(YES),
+     // @"YES", @"NSShowNonLocalizedStrings",
       // @"NO", @"NSShowAllViews",
       // @"6", @"NSDragManagerLogLevel",
       // @"YES", @"NSShowNonLocalizableStrings",
       // @"1", @"NSScriptingDebugLogLevel",
-      nil]];
+     }];
 #endif
   } 
   return self;

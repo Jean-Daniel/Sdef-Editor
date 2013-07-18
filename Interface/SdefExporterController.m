@@ -7,6 +7,8 @@
  */
 
 #import "SdefExporterController.h"
+
+#import "SdefLogWindowController.h"
 #import "SdefWindowController.h"
 #import "SdefProcessor.h"
 #import "SdefDocument.h"
@@ -108,9 +110,15 @@ static NSString *SystemMajorVersion(void) {
                         @try {
                           NSString *result = [proc process];
                           if (result) {
-                            NSRunAlertPanel(NSLocalizedString(@"Warning: Scripting Definition Processor says:", @"sdp return a value: message title"),
-                                            @"%@",
-                                            NSLocalizedString(@"OK", @"Default Button"), nil, nil, result);
+                            // TODO: use custom log window
+                            SdefLogWindowController *ctrl = [[SdefLogWindowController alloc] init];
+                            [ctrl setText:result];
+                            [[ctrl window] center];
+                            [[ctrl window] makeKeyAndOrderFront:nil];
+
+//                            NSRunAlertPanel(NSLocalizedString(@"Warning: Scripting Definition Processor says:", @"sdp return a value: message title"),
+//                                            @"%@",
+//                                            NSLocalizedString(@"OK", @"Default Button"), nil, nil, result);
                           }
                           if (rsrcFormat) {
                             [self compileResourceFile:[proc output]];
@@ -212,11 +220,22 @@ static NSString *SystemMajorVersion(void) {
   NSString *dest = [folder stringByAppendingPathComponent:@"Scripting.rsrc"];
   // The path to the binary is the first argument that was passed in
 	rezTool = [[NSUserDefaults standardUserDefaults] stringForKey:@"SdefRezToolPath"];
-	if (![[NSFileManager defaultManager] fileExistsAtPath:rezTool]) {
+	if (rezTool && ![[NSFileManager defaultManager] fileExistsAtPath:rezTool]) {
 		NSRunAlertPanel(@"Rez not found", @"Set the Rez tool path in Sdef Editor Preferences", @"OK", nil, nil);
 	} else {
-		NSTask *rez = [NSTask launchedTaskWithLaunchPath:rezTool
-																					 arguments:[NSArray arrayWithObjects:resource, @"-o", dest, @"-useDF", nil]];
+
+		NSTask *rez = [[[NSTask alloc] init] autorelease];
+    NSMutableArray *args = [NSMutableArray array];
+    if (rezTool) {
+      [rez setLaunchPath:rezTool];
+    } else {
+      [rez setLaunchPath:@"xcrun"];
+      [args addObject:@"Rez"];
+    }
+    [args addObjectsFromArray:@[resource, @"-o", dest, @"-useDF"]];
+    [rez setArguments:args];
+
+    [rez launch];
 		[rez waitUntilExit];
 	}
 }

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <archive type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="8.00">
 	<data>
-		<int key="IBDocument.SystemTarget">1070</int>
+		<int key="IBDocument.SystemTarget">1060</int>
 		<string key="IBDocument.SystemVersion">12E55</string>
 		<string key="IBDocument.InterfaceBuilderVersion">3084</string>
 		<string key="IBDocument.AppKitVersion">1187.39</string>
@@ -54,7 +54,7 @@
 				<nil key="NSUserInterfaceItemIdentifier"/>
 				<string key="NSWindowContentMinSize">{500, 430}</string>
 				<object class="NSView" key="NSWindowView" id="757159556">
-					<reference key="NSNextResponder"/>
+					<nil key="NSNextResponder"/>
 					<int key="NSvFlags">256</int>
 					<array class="NSMutableArray" key="NSSubviews">
 						<object class="NSSplitView" id="694552713">
@@ -74,7 +74,7 @@
 													<int key="NSvFlags">4352</int>
 													<string key="NSFrameSize">{161, 419}</string>
 													<reference key="NSSuperview" ref="167793082"/>
-													<reference key="NSNextKeyView" ref="402751061"/>
+													<reference key="NSNextKeyView" ref="195829433"/>
 													<bool key="NSEnabled">YES</bool>
 													<bool key="NSAllowsLogicalLayoutDirection">NO</bool>
 													<bool key="NSControlAllowsExpansionToolTips">YES</bool>
@@ -226,7 +226,7 @@
 									</array>
 									<string key="NSFrameSize">{163, 437}</string>
 									<reference key="NSSuperview" ref="694552713"/>
-									<reference key="NSNextKeyView" ref="195829433"/>
+									<reference key="NSNextKeyView" ref="167793082"/>
 									<int key="NSsFlags">133682</int>
 									<reference key="NSVScroller" ref="305988782"/>
 									<reference key="NSHScroller" ref="195829433"/>
@@ -242,7 +242,6 @@
 									<int key="NSvFlags">274</int>
 									<string key="NSFrame">{{172, 0}, {473, 437}}</string>
 									<reference key="NSSuperview" ref="694552713"/>
-									<reference key="NSNextKeyView" ref="423788138"/>
 									<array class="NSMutableArray" key="NSTabViewItems">
 										<object class="NSTabViewItem" id="420970726">
 											<string key="NSIdentifier">Dico</string>
@@ -250,7 +249,6 @@
 												<nil key="NSNextResponder"/>
 												<int key="NSvFlags">256</int>
 												<string key="NSFrameSize">{473, 437}</string>
-												<reference key="NSNextKeyView"/>
 											</object>
 											<string key="NSLabel">Dico</string>
 											<object class="NSColor" key="NSColor" id="248720719">
@@ -267,7 +265,6 @@
 												<nil key="NSNextResponder"/>
 												<int key="NSvFlags">256</int>
 												<string key="NSFrameSize">{473, 437}</string>
-												<reference key="NSNextKeyView"/>
 											</object>
 											<string key="NSLabel">Suite</string>
 											<reference key="NSColor" ref="248720719"/>
@@ -280,7 +277,6 @@
 												<int key="NSvFlags">256</int>
 												<string key="NSFrameSize">{473, 437}</string>
 												<reference key="NSSuperview" ref="402751061"/>
-												<reference key="NSNextKeyView"/>
 											</object>
 											<string key="NSLabel">Class</string>
 											<reference key="NSColor" ref="248720719"/>
@@ -292,7 +288,6 @@
 												<nil key="NSNextResponder"/>
 												<int key="NSvFlags">256</int>
 												<string key="NSFrameSize">{473, 437}</string>
-												<reference key="NSNextKeyView"/>
 											</object>
 											<string key="NSLabel">Records</string>
 											<reference key="NSColor" ref="248720719"/>
@@ -304,7 +299,6 @@
 												<nil key="NSNextResponder"/>
 												<int key="NSvFlags">256</int>
 												<string key="NSFrameSize">{473, 437}</string>
-												<reference key="NSNextKeyView"/>
 											</object>
 											<string key="NSLabel">Verb</string>
 											<reference key="NSColor" ref="248720719"/>
@@ -316,7 +310,6 @@
 												<nil key="NSNextResponder"/>
 												<int key="NSvFlags">256</int>
 												<string key="NSFrameSize">{473, 437}</string>
-												<reference key="NSNextKeyView"/>
 											</object>
 											<string key="NSLabel">Enumeration</string>
 											<reference key="NSColor" ref="248720719"/>
@@ -328,7 +321,6 @@
 												<nil key="NSNextResponder"/>
 												<int key="NSvFlags">256</int>
 												<string key="NSFrameSize">{473, 437}</string>
-												<reference key="NSNextKeyView"/>
 											</object>
 											<string key="NSLabel">Synonym</string>
 											<reference key="NSColor" ref="248720719"/>
@@ -355,7 +347,6 @@
 						</object>
 					</array>
 					<string key="NSFrameSize">{645, 436}</string>
-					<reference key="NSSuperview"/>
 					<reference key="NSNextKeyView" ref="694552713"/>
 				</object>
 				<string key="NSScreenRect">{{0, 0}, {1440, 878}}</string>
@@ -759,7 +750,7 @@
 		<string key="IBDocument.TargetRuntimeIdentifier">IBCocoaFramework</string>
 		<object class="NSMutableDictionary" key="IBDocument.PluginDeclaredDependencies">
 			<string key="NS.key.0">com.apple.InterfaceBuilder.CocoaPlugin.macosx</string>
-			<real value="1070" key="NS.object.0"/>
+			<real value="1060" key="NS.object.0"/>
 		</object>
 		<object class="NSMutableDictionary" key="IBDocument.PluginDeclaredDevelopmentDependencies">
 			<string key="NS.key.0">com.apple.InterfaceBuilder.CocoaPlugin.InterfaceBuilder3</string>

@@ -97,6 +97,9 @@
 		1BADACA70D8BE3B80006EB32 /* SdefDictionary.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1BADACA50D8BE3B80006EB32 /* SdefDictionary.xib */; };
 		1BADACAB0D8BE3DA0006EB32 /* SdefEnumeration.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1BADACA90D8BE3DA0006EB32 /* SdefEnumeration.xib */; };
 		1BB1E2280BE26E5300EEB652 /* SdefEditor.m in Sources */ = {isa = PBXBuildFile; fileRef = 98D3A8C5079EC8670049A8FC /* SdefEditor.m */; };
+		1BB5C6C71798357C004058BA /* SdefLogWindowController.h in Headers */ = {isa = PBXBuildFile; fileRef = 1BB5C6C41798357C004058BA /* SdefLogWindowController.h */; };
+		1BB5C6C81798357C004058BA /* SdefLogWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1BB5C6C51798357C004058BA /* SdefLogWindowController.m */; };
+		1BB5C6C91798357C004058BA /* SdefLogWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1BB5C6C61798357C004058BA /* SdefLogWindow.xib */; };
 		1BB675E1168EE1EB00B06EFA /* WBCollapseView.m in Sources */ = {isa = PBXBuildFile; fileRef = 1BB675DB168EE1EB00B06EFA /* WBCollapseView.m */; };
 		1BB675E3168EE1EB00B06EFA /* WBCollapseViewInternal.m in Sources */ = {isa = PBXBuildFile; fileRef = 1BB675DD168EE1EB00B06EFA /* WBCollapseViewInternal.m */; };
 		1BB675E5168EE1EB00B06EFA /* WBCollapseViewItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 1BB675DF168EE1EB00B06EFA /* WBCollapseViewItem.m */; };
@@ -442,6 +445,9 @@
 		1BADACA10D8BE3740006EB32 /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = English.lproj/SdefRecord.xib; sourceTree = "<group>"; };
 		1BADACA60D8BE3B80006EB32 /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = English.lproj/SdefDictionary.xib; sourceTree = "<group>"; };
 		1BADACAA0D8BE3DA0006EB32 /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = English.lproj/SdefEnumeration.xib; sourceTree = "<group>"; };
+		1BB5C6C41798357C004058BA /* SdefLogWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SdefLogWindowController.h; sourceTree = "<group>"; };
+		1BB5C6C51798357C004058BA /* SdefLogWindowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SdefLogWindowController.m; sourceTree = "<group>"; };
+		1BB5C6C61798357C004058BA /* SdefLogWindow.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SdefLogWindow.xib; sourceTree = "<group>"; };
 		1BB675DA168EE1EB00B06EFA /* WBCollapseView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WBCollapseView.h; sourceTree = "<group>"; };
 		1BB675DB168EE1EB00B06EFA /* WBCollapseView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WBCollapseView.m; sourceTree = "<group>"; };
 		1BB675DC168EE1EB00B06EFA /* WBCollapseViewInternal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WBCollapseViewInternal.h; sourceTree = "<group>"; };
@@ -1199,6 +1205,9 @@
 				98298DBC07AE817D00F09708 /* ImportApplicationAete.m */,
 				98168DBA07A26C9C002B893D /* SdefExporterController.m */,
 				98EF19CD078B20720073D736 /* Sdef Views */,
+				1BB5C6C61798357C004058BA /* SdefLogWindow.xib */,
+				1BB5C6C41798357C004058BA /* SdefLogWindowController.h */,
+				1BB5C6C51798357C004058BA /* SdefLogWindowController.m */,
 			);
 			path = Interface;
 			sourceTree = "<group>";
@@ -1439,6 +1448,7 @@
 				1BC332C60CD894C3009109F0 /* SdefXInclude.h in Headers */,
 				1BB675EB168EE21C00B06EFA /* WBCollapseViewInternal.h in Headers */,
 				1B86FF4E1797F1EC007C25DC /* SdefAccessGroup.h in Headers */,
+				1BB5C6C71798357C004058BA /* SdefLogWindowController.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1580,6 +1590,7 @@
 				1B39DEF6168462C80048F1E9 /* WBHSplitBar.tiff in Resources */,
 				1B39DEF7168462C80048F1E9 /* WBSplitDot.tiff in Resources */,
 				1B39DEF8168462C80048F1E9 /* WBVSplitBar.tiff in Resources */,
+				1BB5C6C91798357C004058BA /* SdefLogWindow.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1712,6 +1723,7 @@
 				1B814DD7176BA3A60060B7F8 /* WBGeometry.m in Sources */,
 				1B86FF521797F1F9007C25DC /* SdefAccessGroup.m in Sources */,
 				1B86FF561797F95D007C25DC /* SdefXMLAccessGroup.m in Sources */,
+				1BB5C6C81798357C004058BA /* SdefLogWindowController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -9,15 +9,12 @@
 #import <WonderBox/WBWindowController.h>
 
 @interface Preferences : WBWindowController {
-  NSString *sdp;
-  NSString *rez;
+@private
+  NSString *_sdp;
+  NSString *_rez;
 }
 
-- (NSString *)sdp;
-- (void)setSdp:(NSString *)newSdp;
-
-- (NSString *)rez;
-- (void)setRez:(NSString *)newRez;
-
+@property(nonatomic, copy) NSString *sdp;
+@property(nonatomic, copy) NSString *rez;
 
 @end

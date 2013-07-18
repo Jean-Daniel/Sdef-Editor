@@ -10,6 +10,9 @@
 
 @implementation Preferences
 
+@synthesize sdp = _sdp;
+@synthesize rez = _rez;
+
 - (id)init {
   if (self = [super init]) {
     [self setSdp:[[NSUserDefaults standardUserDefaults] stringForKey:@"SdefSdpToolPath"]];
@@ -19,23 +22,9 @@
 }
 
 - (void)dealloc {
-  [sdp release];
-  [rez release];
+  [_sdp release];
+  [_rez release];
   [super dealloc];
-}
-
-- (NSString *)sdp {
-  return sdp;
-}
-- (void)setSdp:(NSString *)newSdp {
-	SPXSetterCopy(sdp, newSdp);
-}
-
-- (NSString *)rez {
-  return rez;
-}
-- (void)setRez:(NSString *)newRez {
-	SPXSetterCopy(rez, newRez);
 }
 
 #pragma mark -
