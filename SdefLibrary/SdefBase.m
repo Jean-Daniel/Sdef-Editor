@@ -56,7 +56,7 @@ NSImage *SdefImageNamed(NSString *name) {
 
 #pragma mark -
 + (SdefObjectType)objectType {
-  return kSdefUndefinedType;
+  return kSdefType_Undefined;
 }
 
 + (NSString *)defaultName {
@@ -108,18 +108,18 @@ NSImage *SdefImageNamed(NSString *name) {
 }
 
 - (SdefSuite *)suite {
-  return (id)[self firstParentOfType:kSdefSuiteType];
+  return (id)[self firstParentOfType:kSdefType_Suite];
 }
 - (SdefDictionary *)dictionary {
-  return (id)[self firstParentOfType:kSdefDictionaryType];
+  return (id)[self firstParentOfType:kSdefType_Dictionary];
 }
 
 - (NSString *)location {
   id<SdefObject> parent;
   /* If parent is a Class or an Enumeration and parent != self */
-  if (((parent = [self firstParentOfType:kSdefClassType]) ||
-       (parent = [self firstParentOfType:kSdefEnumerationType]) || 
-       (parent = [self firstParentOfType:kSdefVerbType])) && parent != self) {
+  if (((parent = [self firstParentOfType:kSdefType_Class]) ||
+       (parent = [self firstParentOfType:kSdefType_Enumeration]) ||
+       (parent = [self firstParentOfType:kSdefType_Command])) && parent != self) {
     return [NSString stringWithFormat:@"%@:%@", [[self suite] name], [parent name]];
   } else if ((parent = (id)[self suite])){
     return [parent name];
@@ -347,7 +347,7 @@ NSMutableArray *comments(SdefObject *self) {
 
 #pragma mark -
 + (SdefObjectType)objectType {
-  return kSdefCollectionType;
+  return kSdefType_Collection;
 }
 
 + (NSString *)defaultIconName {
@@ -379,61 +379,61 @@ NSMutableArray *comments(SdefObject *self) {
 #pragma mark Publics Functions
 NSString *SdefObjectTypeName(SdefObjectType type) {
   switch (type) {
-    case kSdefUndefinedType:
+    case kSdefType_Undefined:
       return NSLocalizedStringFromTable(@"Undefined", @"SdefLibrary", @"Object Type Name.");
-    case kSdefDictionaryType:
+    case kSdefType_Dictionary:
       return NSLocalizedStringFromTable(@"Dictionary", @"SdefLibrary", @"Object Type Name.");
-    case kSdefSuiteType:
+    case kSdefType_Suite:
       return NSLocalizedStringFromTable(@"Suite", @"SdefLibrary", @"Object Type Name.");
-    case kSdefCollectionType:
+    case kSdefType_Collection:
       return NSLocalizedStringFromTable(@"Collection", @"SdefLibrary", @"Object Type Name.");
       /* Class */
-    case kSdefClassType:
+    case kSdefType_Class:
       return NSLocalizedStringFromTable(@"Class", @"SdefLibrary", @"Object Type Name.");
-    case kSdefContentsType:
+    case kSdefType_Contents:
       return NSLocalizedStringFromTable(@"Contents", @"SdefLibrary", @"Object Type Name.");
-    case kSdefPropertyType:
+    case kSdefType_Property:
       return NSLocalizedStringFromTable(@"Property", @"SdefLibrary", @"Object Type Name.");
-    case kSdefElementType:
+    case kSdefType_Element:
       return NSLocalizedStringFromTable(@"Element", @"SdefLibrary", @"Object Type Name.");
-    case kSdefRespondsToType:
+    case kSdefType_RespondsTo:
       return NSLocalizedStringFromTable(@"Responds To", @"SdefLibrary", @"Object Type Name.");
       /* Verbs */
-    case kSdefVerbType:
+    case kSdefType_Command:
       return NSLocalizedStringFromTable(@"Verb", @"SdefLibrary", @"Object Type Name.");
-    case kSdefParameterType:
+    case kSdefType_Parameter:
       return NSLocalizedStringFromTable(@"Parameter", @"SdefLibrary", @"Object Type Name.");
-    case kSdefDirectParameterType:
+    case kSdefType_DirectParameter:
       return NSLocalizedStringFromTable(@"Direct Parameter", @"SdefLibrary", @"Object Type Name.");
-    case kSdefResultType:
+    case kSdefType_Result:
       return NSLocalizedStringFromTable(@"Result", @"SdefLibrary", @"Object Type Name.");
       /* Enumeration */
-    case kSdefEnumerationType:
+    case kSdefType_Enumeration:
       return NSLocalizedStringFromTable(@"Enumeration", @"SdefLibrary", @"Object Type Name.");
-    case kSdefEnumeratorType:
+    case kSdefType_Enumerator:
       return NSLocalizedStringFromTable(@"Enumerator", @"SdefLibrary", @"Object Type Name.");
       /* Value */
-    case kSdefValueType:
+    case kSdefType_ValueType:
       return NSLocalizedStringFromTable(@"Value", @"SdefLibrary", @"Object Type Name.");
-    case kSdefRecordType:
+    case kSdefType_RecordType:
       return NSLocalizedStringFromTable(@"Record", @"SdefLibrary", @"Object Type Name.");
 
       /* Leaves */
-    case kSdefAccessGroupType:
+    case kSdefType_AccessGroup:
       return NSLocalizedStringFromTable(@"Access Group", @"SdefLibrary", @"Object Type Name.");
-    case kSdefTypeAtomType:
+    case kSdefType_Type:
       return NSLocalizedStringFromTable(@"Type", @"SdefLibrary", @"Object Type Name.");
-    case kSdefSynonymType:
+    case kSdefType_Synonym:
       return NSLocalizedStringFromTable(@"Synonym", @"SdefLibrary", @"Object Type Name.");
-    case kSdefCommentType:
+    case kSdefType_Comment:
       return NSLocalizedStringFromTable(@"XML Comment", @"SdefLibrary", @"Object Type Name.");
-    case kSdefXrefType:
+    case kSdefType_XRef:
       return NSLocalizedStringFromTable(@"xref", @"SdefLibrary", @"Object Type Name.");
-    case kSdefXIncludeType:
+    case kSdefType_XInclude:
       return NSLocalizedStringFromTable(@"xinclude", @"SdefLibrary", @"Object Type Name.");
-    case kSdefCocoaType:
+    case kSdefType_Implementation:
       return NSLocalizedStringFromTable(@"Cocoa", @"SdefLibrary", @"Object Type Name.");
-    case kSdefDocumentationType:
+    case kSdefType_Documentation:
       return NSLocalizedStringFromTable(@"Documentation", @"SdefLibrary", @"Object Type Name.");
   }
   return nil;

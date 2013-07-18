@@ -297,20 +297,20 @@ static NSArray *gSortByName = nil;
   if ([self containsDictionary:[node dictionary]]) {
     id child = [[aNotification userInfo] objectForKey:WBInsertedChild];
     switch ([child objectType]) {
-      case kSdefSuiteType:
+      case kSdefType_Suite:
         [self addSuite:child];
         break;
-      case kSdefValueType:
-      case kSdefRecordType:
-      case kSdefEnumerationType:
+      case kSdefType_ValueType:
+      case kSdefType_RecordType:
+      case kSdefType_Enumeration:
         [sd_types addObject:child];
         sd_cmFlags.sortType = 1;
         break;
-      case kSdefClassType:
+      case kSdefType_Class:
         [self addClass:child];
         sd_cmFlags.sortClass = 1;
         break;
-      case kSdefVerbType:
+      case kSdefType_Command:
         if ([child isCommand]) {
           [sd_commands addObject:child];
           sd_cmFlags.sortCommand = 1;
@@ -330,18 +330,18 @@ static NSArray *gSortByName = nil;
   if ([self containsDictionary:[node dictionary]]) {
     id child = [[aNotification userInfo] objectForKey:WBRemovedChild];
     switch ([child objectType]) {
-      case kSdefSuiteType:
+      case kSdefType_Suite:
         [self removeSuite:child];
         break;
-      case kSdefValueType:
-      case kSdefRecordType:
-      case kSdefEnumerationType:
+      case kSdefType_ValueType:
+      case kSdefType_RecordType:
+      case kSdefType_Enumeration:
         [sd_types removeObject:child];
         break;
-      case kSdefClassType:
+      case kSdefType_Class:
         [self removeClass:child];
         break;
-      case kSdefVerbType:
+      case kSdefType_Command:
         if ([child isCommand]) {
           [sd_commands removeObject:child];
         } else {

@@ -46,13 +46,13 @@
 #pragma mark Parsing
 - (void)addXMLChild:(id<SdefObject>)child {
   switch ([child objectType]) {
-    case kSdefResultType:
+    case kSdefType_Result:
       [self setResult:(SdefResult *)child];
       break;
-    case kSdefParameterType:
+    case kSdefType_Parameter:
       [self appendChild:(SdefParameter *)child];
       break;
-    case kSdefDirectParameterType:
+    case kSdefType_DirectParameter:
       [self setDirectParameter:(SdefDirectParameter *)child];
       break;
     default:

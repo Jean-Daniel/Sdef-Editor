@@ -40,7 +40,7 @@
 
 #pragma mark -
 + (SdefObjectType)objectType {
-  return kSdefVerbType;
+  return kSdefType_Command;
 }
 
 - (NSString *)objectTypeName {

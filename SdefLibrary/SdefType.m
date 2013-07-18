@@ -28,7 +28,7 @@
 
 #pragma mark -
 + (SdefObjectType)objectType {
-  return kSdefTypeAtomType;
+  return kSdefType_Type;
 }
 
 - (NSString *)description {

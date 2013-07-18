@@ -32,7 +32,7 @@
 
 #pragma mark -
 + (SdefObjectType)objectType {
-  return kSdefXrefType;
+  return kSdefType_XRef;
 }
 
 - (void)dealloc {

@@ -40,7 +40,7 @@
 }
 
 + (SdefObjectType)objectType {
-  return kSdefUndefinedType;
+  return kSdefType_Undefined;
 }
 
 - (id)init {

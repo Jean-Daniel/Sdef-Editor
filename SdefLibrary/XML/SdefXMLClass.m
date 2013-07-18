@@ -103,20 +103,20 @@ NSArray *SdefXMLAccessorStringsFromFlag(NSUInteger flag);
 
 - (void)addXMLChild:(id<SdefObject>)child {
   switch ([child objectType]) {
-    case kSdefContentsType:
+    case kSdefType_Contents:
       [self setContents:(SdefContents *)child];
       break;
-    case kSdefPropertyType:
+    case kSdefType_Property:
       [[self properties] appendChild:(SdefProperty *)child];
       break;
-    case kSdefElementType:
+    case kSdefType_Element:
       [[self elements] appendChild:(SdefElement *)child];
       break;
-    case kSdefRespondsToType:
+    case kSdefType_RespondsTo:
       [[self commands] appendChild:(SdefRespondsTo *)child];
       break;
       /* Undocumented type element support */
-    case kSdefTypeAtomType:
+    case kSdefType_Type:
       [self setType:[child name]];
       break;
     default:

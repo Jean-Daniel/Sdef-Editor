@@ -142,7 +142,7 @@ SdefXMLElement *_Element(Class cls, NSString *name, ...) {
      ATTLIST:@"type", @"description", nil];
     
     /* parameter (+synonym) */
-    [ELEMENT(@"parameter", SdefXMLElement, @"cocoa", @"type", nil) // should we support @"synonym". It is not in the DTD ?
+    [ELEMENT(@"parameter", SdefXMLElement, @"cocoa", @"type", @"synonym", nil) // should we support @"synonym". It is not in the DTD, but sdef(5) says parameter is a terminology element ?
      ATTLIST:@"name", @"code", @"hidden", @"type", @"optional", @"requires-access", @"description", nil];
     
     /* class (custom) */
@@ -188,8 +188,8 @@ SdefXMLElement *_Element(Class cls, NSString *name, ...) {
     [ELEMENT(@"record-type", SdefXMLElement, @"cocoa", @"synonym", @"documentation", @"property", @"xref", nil)
      ATTLIST:@"name", @"id", @"code", @"hidden", @"plural", @"description", nil];
 
-    /* enumeration (custom, +synonym) */
-    [ELEMENT(@"enumeration", SdefXMLEnumeration, @"cocoa", @"documentation", @"enumerator", @"xref", nil) // @"synonym"
+    /* enumeration (custom) */
+    [ELEMENT(@"enumeration", SdefXMLEnumeration, @"cocoa", @"documentation", @"enumerator", @"xref", nil)
      ATTLIST:@"name", @"id", @"code", @"hidden", @"description", nil];
     // 10.4: inline
     

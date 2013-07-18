@@ -206,12 +206,12 @@
     
     /* Key and method was change for Property and Element*/
     if (kSdefPantherVersion == version) {
-      if ([[self owner] objectType] == kSdefPropertyType ||
-          [[self owner] objectType] == kSdefElementType ||
-          [[self owner] objectType] == kSdefContentsType) {
+      if ([[self owner] objectType] == kSdefType_Property ||
+          [[self owner] objectType] == kSdefType_Element ||
+          [[self owner] objectType] == kSdefType_Contents) {
         attr = [self key];
         /* responds-to should allows empty command */
-        if ([[self owner] objectType] == kSdefRespondsToType) {
+        if ([[self owner] objectType] == kSdefType_RespondsTo) {
           [node setAttribute:attr ? [attr stringByEscapingEntities:nil] : @"" forKey:@"method"]; 
         } else if (attr && [attr length] > 0) {
           [node setAttribute:[attr stringByEscapingEntities:nil] forKey:@"method"];
@@ -224,7 +224,7 @@
       
       attr = [self method];
       /* responds-to should allows empty command */
-      if ([[self owner] objectType] == kSdefRespondsToType) {
+      if ([[self owner] objectType] == kSdefType_RespondsTo) {
         [node setAttribute:attr ? [attr stringByEscapingEntities:nil] : @"" forKey:@"method"]; 
       } else if (attr && [attr length] > 0) {
         [node setAttribute:[attr stringByEscapingEntities:nil] forKey:@"method"];

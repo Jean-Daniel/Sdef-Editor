@@ -208,7 +208,7 @@ Boolean _SdefElementIsCollection(CFStringRef element) {
 - (SdefDictionary *)dictionary {
   if ([sd_roots count] == 1) {
     SdefDictionary *object = [sd_roots objectAtIndex:0];
-    return [object objectType] == kSdefDictionaryType ? object : nil;
+    return [object objectType] == kSdefType_Dictionary ? object : nil;
   }
   return nil;
 }
@@ -488,7 +488,7 @@ Boolean _SdefElementIsCollection(CFStringRef element) {
       [self sd_addCommentsToObject:child];
       
       /* Check documentation element */
-      if (kSdefDocumentationType == type) {
+      if (kSdefType_Documentation == type) {
         sd_docParser = [[SdefDocumentationParser alloc] initWithDocumentation:(id)child];
       }
     }
@@ -582,10 +582,10 @@ void __SdefParserPostProcessClass(SdefClass *cls) {
 WB_INLINE
 void __SdefParserPostProcessObject(id object, SdefVersion version) {
   switch ([object objectType]) {
-    case kSdefDictionaryType: 
+    case kSdefType_Dictionary:
       [(SdefDictionary *)object setVersion:version];
       break;
-    case kSdefSuiteType: {
+    case kSdefType_Suite: {
       SdefClass *class;
       NSEnumerator *classes = [[object classes] childEnumerator];
       while (class = [classes nextObject]) {
@@ -593,7 +593,7 @@ void __SdefParserPostProcessObject(id object, SdefVersion version) {
       }
     }
       break;
-    case kSdefClassType:
+    case kSdefType_Class:
       __SdefParserPostProcessClass(object);
       break;
     default:

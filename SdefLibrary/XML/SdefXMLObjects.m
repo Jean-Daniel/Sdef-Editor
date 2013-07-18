@@ -33,7 +33,7 @@
 #pragma mark XML Parsing
 - (void)addXMLChild:(id<SdefObject>)node {
   switch ([node objectType]) {
-    case kSdefDocumentationType:
+    case kSdefType_Documentation:
       if ([self hasDocumentation]) {
         [self setDocumentation:(SdefDocumentation *)node];
       }
@@ -71,11 +71,11 @@
 #pragma mark XML Parsing
 - (void)addXMLChild:(id<SdefObject>)node {
   switch ([node objectType]) {
-    case kSdefCocoaType:
+    case kSdefType_Implementation:
       if (self.hasImplementation)
         self.impl = (SdefImplementation *)node;
       break;
-    case kSdefAccessGroupType:
+    case kSdefType_AccessGroup:
       if (self.hasAccessGroup)
         self.accessGroup = (SdefAccessGroup *)node;
       break;
@@ -91,7 +91,7 @@
 @implementation SdefTerminologyObject (SdefXMLManager)
 
 - (NSUInteger)sdefCodeLength {
-  return [self objectType] == kSdefVerbType ? 8 : 4;
+  return [self objectType] == kSdefType_Command ? 8 : 4;
 }
 
 #pragma mark XML Generation
@@ -214,12 +214,12 @@
 
 - (void)addXMLChild:(id<SdefObject>)node {
   switch ([node objectType]) {
-    case kSdefSynonymType:
+    case kSdefType_Synonym:
       if ([self hasSynonyms]) {
         [self addSynonym:(SdefSynonym *)node];
       }
       break;
-    case kSdefXrefType:
+    case kSdefType_XRef:
       if ([self hasXrefs]) {
         [self addXRef:(SdefXRef *)node];
       }
@@ -292,7 +292,7 @@
 
 - (void)addXMLChild:(id<SdefObject>)child {
   switch ([child objectType]) {
-    case kSdefTypeAtomType:
+    case kSdefType_Type:
       [self addType:(SdefType *)child];
       break;
     default:

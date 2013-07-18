@@ -19,15 +19,15 @@
 #pragma mark XML Parser
 - (void)addXMLChild:(id<SdefObject>)child {
   switch ([child objectType]) {
-    case kSdefValueType:
-    case kSdefRecordType:
-    case kSdefEnumerationType:
+    case kSdefType_ValueType:
+    case kSdefType_RecordType:
+    case kSdefType_Enumeration:
       [[self types] appendChild:(id)child];
       break;
-    case kSdefClassType:
+    case kSdefType_Class:
       [[self classes] appendChild:(id)child];
       break;
-    case kSdefVerbType: {
+    case kSdefType_Command: {
       SdefVerb *verb = (SdefVerb *)child;
       if ([verb isCommand]) {
         [[self commands] appendChild:verb];

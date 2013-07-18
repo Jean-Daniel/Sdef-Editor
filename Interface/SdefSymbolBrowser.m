@@ -202,8 +202,8 @@ BOOL SdefSearchFilter(NSString *search, SdefObject *object, void *ctxt) {
   SdefObject *item;
   NSEnumerator *items = [[aSuite types] childEnumerator];
   while (item = [items nextObject]) {
-    if (kSdefValueType == [item objectType] ||
-        kSdefRecordType == [item objectType]) {
+    if (kSdefType_ValueType == [item objectType] ||
+        kSdefType_RecordType == [item objectType]) {
       [symbols addObject:item];
     } else {
       [symbols addObjects:[item children]];
@@ -242,8 +242,8 @@ BOOL SdefSearchFilter(NSString *search, SdefObject *object, void *ctxt) {
   id items = [[aSuite types] childEnumerator];
   SdefObject *item;
   while (item = [items nextObject]) {
-    if (kSdefValueType == [item objectType] ||
-        kSdefRecordType == [item objectType]) {
+    if (kSdefType_ValueType == [item objectType] ||
+        kSdefType_RecordType == [item objectType]) {
       [symbols removeObject:item];
     } else {
       [symbols removeObjects:[item children]];
@@ -277,24 +277,24 @@ BOOL SdefSearchFilter(NSString *search, SdefObject *object, void *ctxt) {
   if ([self document] && ([node document] == [self document])) {
     id child = [[aNotification userInfo] objectForKey:WBInsertedChild];
     switch ([child objectType]) {
-      case kSdefSuiteType:
+      case kSdefType_Suite:
         [self addSuite:child];
         break;
-      case kSdefClassType:
+      case kSdefType_Class:
         [symbols addObject:child];
         [symbols addObjects:[[(SdefClass *)child properties] children]];
         [symbols rearrangeObjects];
         break;
-      case kSdefVerbType:
+      case kSdefType_Command:
         [symbols addObject:child];
-      case kSdefEnumerationType:
+      case kSdefType_Enumeration:
         [symbols addObjects:[child children]];
         [symbols rearrangeObjects];
         break;
         /* Leaves */
-      case kSdefEnumeratorType:
-      case kSdefPropertyType:
-      case kSdefParameterType:
+      case kSdefType_Enumerator:
+      case kSdefType_Property:
+      case kSdefType_Parameter:
         [symbols addObject:child];
         [symbols rearrangeObjects];
         break;
@@ -309,22 +309,22 @@ BOOL SdefSearchFilter(NSString *search, SdefObject *object, void *ctxt) {
   if ([self document] && ([node document] == [self document])) {
     id child = [[aNotification userInfo] objectForKey:WBRemovedChild];
     switch ([child objectType]) {
-      case kSdefSuiteType:
+      case kSdefType_Suite:
         [self removeSuite:child];
         break;
-      case kSdefClassType:
+      case kSdefType_Class:
         [symbols removeObjects:[[(SdefClass *)child properties] children]];
         [symbols removeObject:child];
         break;
-      case kSdefVerbType:
+      case kSdefType_Command:
         [symbols removeObject:child];
-      case kSdefEnumerationType:
+      case kSdefType_Enumeration:
         [symbols removeObjects:[child children]];
         break;
         /* Leaves */
-      case kSdefEnumeratorType:
-      case kSdefPropertyType:
-      case kSdefParameterType:
+      case kSdefType_Enumerator:
+      case kSdefType_Property:
+      case kSdefType_Parameter:
         [symbols removeObject:child];
         break;
       default:

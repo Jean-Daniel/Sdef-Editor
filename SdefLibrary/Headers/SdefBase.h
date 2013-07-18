@@ -8,48 +8,53 @@
 
 #import <WonderBox/WBUITreeNode.h>
 
-typedef NS_ENUM(OSType, SdefObjectType) {
-  kSdefUndefinedType       = 0,
-  kSdefDictionaryType      = 'Dico',
-  kSdefSuiteType           = 'Suit',
-  kSdefCollectionType      = 'Cole',
-  /* Class */
-  kSdefClassType           = 'Clas',
-  kSdefContentsType        = 'Cont',
-  kSdefPropertyType        = 'Prop',
-  kSdefElementType         = 'Elmt',
-  kSdefRespondsToType      = 'ReTo',
-  /* Verbs */
-  kSdefVerbType            = 'Verb',
-  kSdefParameterType       = 'Para',
-  kSdefDirectParameterType = 'DiPa',
-  kSdefResultType          = 'Resu',
-  /* Enumeration */
-  kSdefEnumerationType     = 'Enum',
-  kSdefEnumeratorType      = 'Enor',
-  /* Value */
-  kSdefValueType           = 'Valu',
-  kSdefRecordType          = 'Reco',
+typedef NS_ENUM(uint32_t, SdefObjectType) {
+  kSdefType_Undefined = 0,
 
-  /* Leaves types */
-  kSdefAccessGroupType   = 'Agpr',
-  kSdefTypeAtomType      = 'Type',
-  kSdefSynonymType       = 'Syno',
-  kSdefCommentType       = 'Cmnt',
-  kSdefXrefType          = 'Xref',
-  /* XInclude */
-  kSdefXIncludeType      = 'XInc',
+  kSdefType_Dictionary = 'Dico',
+  kSdefType_Suite = 'Suit',
+  // Top level Objects
+  kSdefType_Class = 'Clas', // + class extension
+  kSdefType_Command = 'Verb', // + event
+  kSdefType_ValueType = 'Valu',
+  kSdefType_RecordType = 'Reco',
+  kSdefType_Enumeration = 'Enum',
 
-  kSdefCocoaType         = 'Coco',
-  kSdefDocumentationType = 'Docu',
+  // Enumeration
+  kSdefType_Enumerator = 'Enor',
+
+  // Class Objects
+  kSdefType_Element = 'Elmt',
+  kSdefType_Property = 'Prop',
+  kSdefType_Contents = 'Cont',
+  kSdefType_RespondsTo = 'ReTo',
+
+  // Command Objects
+  kSdefType_DirectParameter = 'DiPa',
+  kSdefType_Parameter = 'Para',
+  kSdefType_Result = 'Resu',
+
+  // Common Objects
+  kSdefType_XInclude = 'XInc', // xinclude reference (href + pointer)
+
+  kSdefType_Type = 'Type', // type element used wherever a type attribute is allowed
+  kSdefType_XRef = 'Xref',
+  kSdefType_Synonym = 'Syno',
+  kSdefType_AccessGroup = 'Agpr',
+  kSdefType_Documentation = 'Docu',
+  kSdefType_Implementation = 'Coco', // Cocoa element
+
+  // internal type. to be removed.
+  kSdefType_Comment = 'Cmnt',
+  kSdefType_Collection = 'Cole',
 };
 
 typedef NS_ENUM(NSUInteger, SdefVersion) {
-  kSdefVersionUndefined = 0,
-  kSdefPantherVersion   = 1,
-  kSdefTigerVersion     = 2,
-  kSdefLeopardVersion   = 3,
-  kSdefMountainLionVersion   = 4,
+  kSdefVersionUndefined    = 0,
+  kSdefPantherVersion      = 1,
+  kSdefTigerVersion        = 2,
+  kSdefLeopardVersion      = 3,
+  kSdefMountainLionVersion = 4,
 };
 
 #pragma mark -

@@ -607,9 +607,9 @@ NSString *SdefEscapedString(NSString *value, NSUInteger format) {
 - (NSString *)fileForObject:(SdefObject *)anObject {
   id file = NSMapGet(sd_files, anObject);
   if (!file) {
-    int flag = kSdefUndefinedType;
+    int flag = kSdefType_Undefined;
     switch ([anObject objectType]) {
-      case kSdefDictionaryType:
+      case kSdefType_Dictionary:
         if (!sd_gnFlags.index) {
           file = [sd_path lastPathComponent];
           break;
@@ -622,7 +622,7 @@ NSString *SdefEscapedString(NSString *value, NSUInteger format) {
           }
         }
         break;
-      case kSdefSuiteType:
+      case kSdefType_Suite:
         /* Si les suites ne sont pas dans un fichier a part */
         switch (sd_gnFlags.suites) {
           case kSdtplInline:
@@ -637,7 +637,7 @@ NSString *SdefEscapedString(NSString *value, NSUInteger format) {
         }
         break;
       /* Suite children */
-      case kSdefClassType:
+      case kSdefType_Class:
         switch (sd_gnFlags.classes) {
           case kSdtplInline:
             return [self fileForObject:[anObject suite]];
@@ -652,7 +652,7 @@ NSString *SdefEscapedString(NSString *value, NSUInteger format) {
             break;
         }
         break;
-      case kSdefVerbType:
+      case kSdefType_Command:
         flag = ([(SdefVerb *)anObject isCommand]) ? sd_gnFlags.commands : sd_gnFlags.events;
         switch (flag) {
           case kSdtplInline:
@@ -691,14 +691,14 @@ NSString *SdefEscapedString(NSString *value, NSUInteger format) {
   id anchor = NSMapGet(sd_anchors, anObject);
   if (!anchor) {
     switch ([anObject objectType]) {
-      case kSdefDictionaryType:
+      case kSdefType_Dictionary:
         anchor = [NSString stringWithFormat:@"%@", SdtplSimplifieName([anObject name])];
         break;
-      case kSdefSuiteType:
+      case kSdefType_Suite:
         anchor = [NSString stringWithFormat:@"Suite_%@", SdtplSimplifieName([anObject name])];
         break;
-      case kSdefClassType:
-      case kSdefVerbType:
+      case kSdefType_Class:
+      case kSdefType_Command:
         anchor = [NSString stringWithFormat:@"%@_%@", SdtplSimplifieName([[anObject suite] name]), SdtplSimplifieName([anObject name])];
         break;
       default:
@@ -736,7 +736,7 @@ NSString *SdefEscapedString(NSString *value, NSUInteger format) {
 - (NSString *)linkForObject:(SdefObject *)anObject withString:(NSString *)aString {
   NSString *alink = aString;
   if (anObject) {
-    if ([anObject objectType] == kSdefRespondsToType) {
+    if ([anObject objectType] == kSdefType_RespondsTo) {
       alink = [self linkForVerb:[anObject name] withString:[anObject name]];
     } else {
       NSString *file = [self fileForObject:anObject];

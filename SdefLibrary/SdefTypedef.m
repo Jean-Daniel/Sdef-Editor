@@ -33,7 +33,7 @@
 
 #pragma mark Values
 + (SdefObjectType)objectType {
-  return kSdefEnumerationType;
+  return kSdefType_Enumeration;
 }
 
 + (NSString *)defaultName {
@@ -84,7 +84,7 @@
 
 #pragma mark Values
 + (SdefObjectType)objectType {
-  return kSdefEnumeratorType;
+  return kSdefType_Enumerator;
 }
 
 + (NSString *)defaultName {
@@ -123,7 +123,7 @@
 
 #pragma mark Values
 + (SdefObjectType)objectType {
-  return kSdefValueType;
+  return kSdefType_ValueType;
 }
 
 + (NSString *)defaultName {
@@ -164,7 +164,7 @@
 
 #pragma mark Values
 + (SdefObjectType)objectType {
-  return kSdefRecordType;
+  return kSdefType_RecordType;
 }
 
 + (NSString *)defaultName {

@@ -41,15 +41,15 @@ NSString * const SdefDictionarySelectionDidChangeNotification = @"SdefDictionary
 
 static inline BOOL SdefEditorExistsForItem(SdefObject *item) {
   switch ([item objectType]) {
-    case kSdefDictionaryType:
-    case kSdefSuiteType:
+    case kSdefType_Dictionary:
+    case kSdefType_Suite:
       /* Class */
-    case kSdefClassType:
+    case kSdefType_Class:
       /* Verbs */
-    case kSdefVerbType:
+    case kSdefType_Command:
       /* Enumeration */
-    case kSdefRecordType:
-    case kSdefEnumerationType:
+    case kSdefType_RecordType:
+    case kSdefType_Enumeration:
       return YES;
     default:
       return NO;
@@ -102,7 +102,7 @@ static inline BOOL SdefEditorExistsForItem(SdefObject *item) {
   while (item && !SdefEditorExistsForItem(item)) {
     item = [item parent];
   }
-  if (item && ([item objectType] != kSdefUndefinedType)) {
+  if (item && ([item objectType] != kSdefType_Undefined)) {
     return [sd_viewControllers objectForKey:WBStringForOSType([item objectType])];
   }
   return nil;
@@ -230,7 +230,7 @@ static inline BOOL SdefEditorExistsForItem(SdefObject *item) {
   while (item && !SdefEditorExistsForItem(item)) {
     item = [item parent];
   }
-  if (item && ([item objectType] != kSdefUndefinedType)) {
+  if (item && ([item objectType] != kSdefType_Undefined)) {
     NSString *str = WBStringForOSType([item objectType]);
     NSUInteger idx = [inspector indexOfTabViewItemWithIdentifier:str];
     NSAssert1(idx != NSNotFound, @"Unable to find tab item for identifier \"%@\"", str);
@@ -287,7 +287,7 @@ static inline BOOL SdefEditorExistsForItem(SdefObject *item) {
 }
 
 - (BOOL)outlineView:(NSOutlineView *)outlineView shouldEditTableColumn:(NSTableColumn *)tableColumn item:(id<SdefObject>)item {
-  return item.editable && [item objectType] != kSdefCollectionType;
+  return item.editable && [item objectType] != kSdefType_Collection;
 }
 
 - (void)tabView:(NSTabView *)tabView willSelectTabViewItem:(NSTabViewItem *)tabViewItem {
@@ -297,27 +297,27 @@ static inline BOOL SdefEditorExistsForItem(SdefObject *item) {
     id class = nil;
     id nibName = nil;
     switch (WBOSTypeFromString(key)) {
-      case kSdefDictionaryType:
+      case kSdefType_Dictionary:
         class = @"SdefDictionaryView";
         nibName = @"SdefDictionary";
         break;
-      case kSdefClassType:
+      case kSdefType_Class:
         class = @"SdefClassView";
         nibName = @"SdefClass";
         break;
-      case kSdefSuiteType:
+      case kSdefType_Suite:
         class = @"SdefSuiteView";
         nibName = @"SdefSuite";
         break;
-      case kSdefRecordType:
+      case kSdefType_RecordType:
         class = @"SdefRecordView";
         nibName = @"SdefRecord";
         break;
-      case kSdefEnumerationType:
+      case kSdefType_Enumeration:
         class = @"SdefEnumerationView";
         nibName = @"SdefEnumeration";
         break;
-      case kSdefVerbType:
+      case kSdefType_Command:
         class = @"SdefVerbView";
         nibName = @"SdefVerb";
         break;
@@ -341,10 +341,10 @@ static inline BOOL SdefEditorExistsForItem(SdefObject *item) {
   SdefObject *selection = [self selection];
   if (action == @selector(copy:) || action == @selector(cut:)) {
     switch ([selection objectType]) {
-      case kSdefUndefinedType:
-      case kSdefDictionaryType:
+      case kSdefType_Undefined:
+      case kSdefType_Dictionary:
         return NO;
-      case kSdefCollectionType:
+      case kSdefType_Collection:
         if ([selection count] == 0)
           return NO;
       default:
@@ -366,26 +366,26 @@ static inline BOOL SdefEditorExistsForItem(SdefObject *item) {
   SdefObject *selection = [self selection];
   NSPasteboard *pboard = [NSPasteboard generalPasteboard];
   switch ([selection objectType]) {
-    case kSdefUndefinedType:
-    case kSdefDictionaryType:
+    case kSdefType_Undefined:
+    case kSdefType_Dictionary:
       NSBeep();
       break;
     default:
       [pboard declareTypes:[NSArray arrayWithObjects:SdefTreePboardType, SdefInfoPboardType, NSStringPboardType, nil] owner:nil];
-      if ([selection objectType] == kSdefRespondsToType || 
-          ([selection objectType] == kSdefCollectionType && [(SdefCollection *)selection acceptsObjectType:kSdefRespondsToType])) {
+      if ([selection objectType] == kSdefType_RespondsTo ||
+          ([selection objectType] == kSdefType_Collection && [(SdefCollection *)selection acceptsObjectType:kSdefType_RespondsTo])) {
         id str = nil;
-        SdefClass *class = (SdefClass *)[selection firstParentOfType:kSdefClassType];
+        SdefClass *class = (SdefClass *)[selection firstParentOfType:kSdefType_Class];
         if ([selection parent] == [class commands] || selection == [class commands]) {
           str = @"commands";
         } else if ([selection parent] == [class events] || selection == [class events]) {
           str = @"events";
         }
         [pboard setString:str forType:SdefInfoPboardType];
-      } else if ([selection objectType] == kSdefVerbType || 
-                 ([selection objectType] == kSdefCollectionType && [(SdefCollection *)selection acceptsObjectType:kSdefVerbType])) {
+      } else if ([selection objectType] == kSdefType_Command ||
+                 ([selection objectType] == kSdefType_Collection && [(SdefCollection *)selection acceptsObjectType:kSdefType_Command])) {
         id str = nil;
-        SdefSuite *suite = (SdefSuite *)[selection firstParentOfType:kSdefSuiteType];
+        SdefSuite *suite = (SdefSuite *)[selection firstParentOfType:kSdefType_Suite];
         if ([selection parent] == [suite commands] || selection == [suite commands]) {
           str = @"commands";
         } else if ([selection parent] == [suite events] || selection == [suite events]) {
@@ -420,27 +420,27 @@ static inline BOOL SdefEditorExistsForItem(SdefObject *item) {
   
   id destination = nil;
   switch ([tree objectType]) {
-    case kSdefUndefinedType:
-    case kSdefDictionaryType:
+    case kSdefType_Undefined:
+    case kSdefType_Dictionary:
       NSBeep();
       break;
-    case kSdefSuiteType:
-      destination = [selection firstParentOfType:kSdefDictionaryType];
+    case kSdefType_Suite:
+      destination = [selection firstParentOfType:kSdefType_Dictionary];
       break;
       /* 4 main types */
-    case kSdefValueType:
-    case kSdefRecordType:
-    case kSdefEnumerationType:
-      destination = [(SdefSuite *)[selection firstParentOfType:kSdefSuiteType] types];
+    case kSdefType_ValueType:
+    case kSdefType_RecordType:
+    case kSdefType_Enumeration:
+      destination = [(SdefSuite *)[selection firstParentOfType:kSdefType_Suite] types];
       break;
-    case kSdefClassType:
-      destination = [(SdefSuite *)[selection firstParentOfType:kSdefSuiteType] classes];
+    case kSdefType_Class:
+      destination = [(SdefSuite *)[selection firstParentOfType:kSdefType_Suite] classes];
       break;
-    case kSdefVerbType:
+    case kSdefType_Command:
     {
       id str = [pboard stringForType:SdefInfoPboardType];
       @try {
-        destination = [(SdefSuite *)[selection firstParentOfType:kSdefSuiteType] valueForKey:str];
+        destination = [(SdefSuite *)[selection firstParentOfType:kSdefType_Suite] valueForKey:str];
       } @catch (id exception) {
         SPXLogException(exception);
         destination = nil;
@@ -448,20 +448,20 @@ static inline BOOL SdefEditorExistsForItem(SdefObject *item) {
     }
       break;
       /* 4 Class content type */
-    case kSdefElementType:
-      destination = [(SdefClass *)[selection firstParentOfType:kSdefClassType] elements];
+    case kSdefType_Element:
+      destination = [(SdefClass *)[selection firstParentOfType:kSdefType_Class] elements];
       break;
-    case kSdefPropertyType:
-      destination = [(SdefClass *)[selection firstParentOfType:kSdefClassType] properties];
+    case kSdefType_Property:
+      destination = [(SdefClass *)[selection firstParentOfType:kSdefType_Class] properties];
       if (!destination) {
-        destination = [selection firstParentOfType:kSdefRecordType];
+        destination = [selection firstParentOfType:kSdefType_RecordType];
       }
       break;
-    case kSdefRespondsToType:
+    case kSdefType_RespondsTo:
     {
       id str = [pboard stringForType:SdefInfoPboardType];
       @try {
-        destination = [(SdefClass *)[selection firstParentOfType:kSdefClassType] valueForKey:str];
+        destination = [(SdefClass *)[selection firstParentOfType:kSdefType_Class] valueForKey:str];
       } @catch (id exception) {
         SPXLogException(exception);
         destination = nil;
@@ -469,16 +469,16 @@ static inline BOOL SdefEditorExistsForItem(SdefObject *item) {
     }
       break;
       /* Misc */
-    case kSdefEnumeratorType:
-      destination = [selection firstParentOfType:kSdefEnumerationType];
+    case kSdefType_Enumerator:
+      destination = [selection firstParentOfType:kSdefType_Enumeration];
       break;
-    case kSdefParameterType:
-      destination = [selection firstParentOfType:kSdefVerbType];
+    case kSdefType_Parameter:
+      destination = [selection firstParentOfType:kSdefType_Command];
       break;
-    case kSdefCollectionType:
+    case kSdefType_Collection:
     {
-      SdefSuite *suite = (SdefSuite *)[selection firstParentOfType:kSdefSuiteType];
-      SdefClass *class = (SdefClass *)[selection firstParentOfType:kSdefClassType];
+      SdefSuite *suite = (SdefSuite *)[selection firstParentOfType:kSdefType_Suite];
+      SdefClass *class = (SdefClass *)[selection firstParentOfType:kSdefType_Class];
       SdefObjectType type = [[(SdefCollection *)tree contentType] objectType];
       if ([[suite types] acceptsObjectType:type]) destination = [suite types];
       else if ([[suite classes] acceptsObjectType:type]) destination = [suite classes];
@@ -510,7 +510,7 @@ static inline BOOL SdefEditorExistsForItem(SdefObject *item) {
       break;
   }
   if (destination) {
-    if ([tree objectType] == kSdefCollectionType) {
+    if ([tree objectType] == kSdefType_Collection) {
       id child;
       id children = [tree childEnumerator];
       while (child = [children nextObject]) {
@@ -545,7 +545,7 @@ static inline BOOL SdefEditorExistsForItem(SdefObject *item) {
 #pragma mark Drag & Drop
 - (BOOL)outlineView:(NSOutlineView *)outlineView writeItems:(NSArray *)items toPasteboard:(NSPasteboard *)pboard {
   SdefObject *selection = [items objectAtIndex:0];
-  if (selection != [self root] && [selection objectType] != kSdefCollectionType && selection.editable) {
+  if (selection != [self root] && [selection objectType] != kSdefType_Collection && selection.editable) {
     [pboard declareTypes:[NSArray arrayWithObject:SdefObjectDragType] owner:self];
     id value = [NSData dataWithBytes:&selection length:sizeof(id)];
     [pboard setData:value forType:SdefObjectDragType];
@@ -571,16 +571,16 @@ static inline BOOL SdefEditorExistsForItem(SdefObject *item) {
   
   SdefObjectType srcType = [[object parent] objectType];  
   
-  if ([object objectType] == kSdefPropertyType) {
+  if ([object objectType] == kSdefType_Property) {
     /* refuse if not record and not a collection that accept it */
-    if ([item objectType] != kSdefRecordType && 
-        ([item objectType] != kSdefCollectionType || ![item acceptsObjectType:kSdefPropertyType]))
+    if ([item objectType] != kSdefType_RecordType &&
+        ([item objectType] != kSdefType_Collection || ![item acceptsObjectType:kSdefType_Property]))
       return NSDragOperationNone;
   } else {    
     if (srcType != [item objectType]) {
       return NSDragOperationNone;
     }
-    if (srcType == kSdefCollectionType && ![item acceptsObjectType:[object objectType]]) {
+    if (srcType == kSdefType_Collection && ![item acceptsObjectType:[object objectType]]) {
       return NSDragOperationNone;
     }
   }

@@ -34,7 +34,7 @@
 
 #pragma mark -
 + (SdefObjectType)objectType {
-  return kSdefCommentType;
+  return kSdefType_Comment;
 }
 
 + (id)commentWithString:(NSString *)aString {

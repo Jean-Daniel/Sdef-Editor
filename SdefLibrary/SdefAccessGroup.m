@@ -32,7 +32,7 @@
 
 #pragma mark -
 + (SdefObjectType)objectType {
-  return kSdefAccessGroupType;
+  return kSdefType_AccessGroup;
 }
 
 #pragma mark -

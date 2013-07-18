@@ -35,7 +35,7 @@
 
 #pragma mark -
 + (SdefObjectType)objectType {
-  return kSdefContentsType;
+  return kSdefType_Contents;
 }
 
 + (NSString *)defaultIconName {

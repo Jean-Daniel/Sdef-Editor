@@ -35,7 +35,7 @@
 
 #pragma mark -
 + (SdefObjectType)objectType {
-  return kSdefDocumentationType;
+  return kSdefType_Documentation;
 }
 
 + (NSString *)defaultName {

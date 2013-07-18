@@ -63,7 +63,7 @@
 #pragma mark XML Parsing
 - (void)addXMLChild:(id<SdefObject>)child {
   switch ([child objectType]) {
-    case kSdefXIncludeType:
+    case kSdefType_XInclude:
       [self addXInclude:child];
       break;
     default:

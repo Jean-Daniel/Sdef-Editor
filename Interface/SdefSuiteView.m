@@ -51,21 +51,21 @@
     
     item = [[NSMenuItem alloc] initWithTitle:@"Value" action:@selector(newType:) keyEquivalent:@""];
     [item setImage:[NSImage imageNamed:[SdefValue defaultIconName]]];
-    [item setTag:kSdefValueType];
+    [item setTag:kSdefType_ValueType];
     [sd_typeMenu addItem:item];
     [item setTarget:self];
     [item release];
     
     item = [[NSMenuItem alloc] initWithTitle:@"Record" action:@selector(newType:) keyEquivalent:@""];
     [item setImage:[NSImage imageNamed:[SdefRecord defaultIconName]]];
-    [item setTag:kSdefRecordType];
+    [item setTag:kSdefType_RecordType];
     [sd_typeMenu addItem:item];
     [item setTarget:self];
     [item release];
     
     item = [[NSMenuItem alloc] initWithTitle:@"Enumeration" action:@selector(newType:) keyEquivalent:@""];
     [item setImage:[NSImage imageNamed:[SdefEnumeration defaultIconName]]];
-    [item setTag:kSdefEnumerationType];
+    [item setTag:kSdefType_Enumeration];
     [sd_typeMenu addItem:item];
     [item setTarget:self];
     [item release];
@@ -88,13 +88,13 @@
 - (IBAction)newType:(id)sender {
   Class class = Nil;
   switch ([sender tag]) {
-    case kSdefValueType:
+    case kSdefType_ValueType:
       class = [SdefValue class];
       break;
-    case kSdefRecordType:
+    case kSdefType_RecordType:
       class = [SdefRecord class];
       break;
-    case kSdefEnumerationType:
+    case kSdefType_Enumeration:
       class = [SdefEnumeration class];
       break;
   }
@@ -155,7 +155,7 @@
   if (idx != NSNotFound)
     [tab selectTabViewItemAtIndex:idx];
   /* Value specific behaviour */
-  if ([anObject objectType] == kSdefValueType) {
+  if ([anObject objectType] == kSdefType_ValueType) {
     [types setSelectedObject:anObject];
     [tab selectTabViewItemAtIndex:1];
   }
@@ -184,7 +184,7 @@
 /* Transform */
 - (id)transformedValue:(id)value {
   /* Negation because use with hidden */
-  return @([value intValue] != kSdefValueType);
+  return @([value intValue] != kSdefType_ValueType);
 }
 
 /* Returns access value */

@@ -41,7 +41,7 @@
 
 - (void)addXMLChild:(id<SdefObject>)child {
   switch ([child objectType]) {
-    case kSdefEnumeratorType:
+    case kSdefType_Enumerator:
       [self appendChild:(SdefEnumerator *)child];
       break;
     default:
@@ -116,7 +116,7 @@
 
 - (void)addXMLChild:(id<SdefObject>)child {
   switch ([child objectType]) {
-    case kSdefPropertyType:
+    case kSdefType_Property:
       [self appendChild:(SdefProperty *)child];
       break;
     default:

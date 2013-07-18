@@ -53,7 +53,7 @@
 
 #pragma mark -
 + (SdefObjectType)objectType {
-  return kSdefClassType;
+  return kSdefType_Class;
 }
 
 + (NSString *)defaultName {
@@ -258,7 +258,7 @@ static NSSet *sAccessorPropertiesSet = nil;
 
 #pragma mark -
 + (SdefObjectType)objectType {
-  return kSdefElementType;
+  return kSdefType_Element;
 }
 
 + (NSString *)defaultName {
@@ -400,7 +400,7 @@ static NSSet *sAccessorPropertiesSet = nil;
 
 #pragma mark -
 + (SdefObjectType)objectType {
-  return kSdefPropertyType;
+  return kSdefType_Property;
 }
 
 + (NSString *)defaultName {
@@ -455,7 +455,7 @@ static NSSet *sAccessorPropertiesSet = nil;
 
 #pragma mark -
 + (SdefObjectType)objectType {
-  return kSdefRespondsToType;
+  return kSdefType_RespondsTo;
 }
 
 + (NSString *)defaultName {

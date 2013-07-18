@@ -33,7 +33,7 @@
 
 #pragma mark -
 + (SdefObjectType)objectType {
-  return kSdefDirectParameterType;
+  return kSdefType_DirectParameter;
 }
 
 + (NSString *)defaultName {
@@ -97,7 +97,7 @@
 
 #pragma mark -
 + (SdefObjectType)objectType {
-  return kSdefParameterType;
+  return kSdefType_Parameter;
 }
 
 + (NSString *)defaultName {
@@ -154,7 +154,7 @@
 
 #pragma mark -
 + (SdefObjectType)objectType {
-  return kSdefResultType;
+  return kSdefType_Result;
 }
 
 + (NSString *)defaultName {

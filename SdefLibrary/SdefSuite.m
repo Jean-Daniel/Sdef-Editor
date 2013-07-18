@@ -32,7 +32,7 @@
 
 #pragma mark -
 + (SdefObjectType)objectType {
-  return kSdefSuiteType;
+  return kSdefType_Suite;
 }
 
 + (NSString *)defaultName {
@@ -115,7 +115,7 @@
 
 #pragma mark -
 - (BOOL)acceptsObjectType:(SdefObjectType)aType {
-  return (aType == kSdefValueType) || (aType == kSdefRecordType) || (aType == kSdefEnumerationType);
+  return (aType == kSdefType_ValueType) || (aType == kSdefType_RecordType) || (aType == kSdefType_Enumeration);
 }
 
 @end

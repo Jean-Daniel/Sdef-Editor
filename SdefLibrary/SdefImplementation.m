@@ -43,7 +43,7 @@
 
 #pragma mark -
 + (SdefObjectType)objectType {
-  return kSdefCocoaType;
+  return kSdefType_Implementation;
 }
 
 - (id)initWithCoder:(NSCoder *)aCoder {

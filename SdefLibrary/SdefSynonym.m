@@ -39,7 +39,7 @@
 
 #pragma mark -
 + (SdefObjectType)objectType {
-  return kSdefSynonymType;
+  return kSdefType_Synonym;
 }
 
 - (void)dealloc {

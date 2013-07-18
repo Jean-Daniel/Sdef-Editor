@@ -64,7 +64,7 @@
 
 - (void)addXMLChild:(id<SdefObject>)child {
   switch ([child objectType]) {
-    case kSdefSuiteType:
+    case kSdefType_Suite:
       [self appendChild:(SdefSuite *)child];
       break;
     default:

@@ -49,7 +49,7 @@
 
 #pragma mark -
 + (SdefObjectType)objectType {
-  return kSdefDictionaryType;
+  return kSdefType_Dictionary;
 }
 
 + (NSString *)defaultName {
