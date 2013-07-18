@@ -27,7 +27,7 @@
     NSString *sdefName = SdefNameFromCocoaName(name);
     if (![sdefName isEqualToString:[self name]])
       [[self impl] setName:name];
-    [self impl].objectClass = [suite objectForKey:@"CommandClass"];
+    [self impl].className = [suite objectForKey:@"CommandClass"];
     
     /* Result */
     if ([(NSString *)[suite objectForKey:@"Type"] length])

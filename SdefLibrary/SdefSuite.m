@@ -31,11 +31,6 @@
 }
 
 #pragma mark -
-- (void)dealloc {
-  [super dealloc];
-}
-
-#pragma mark -
 + (SdefObjectType)objectType {
   return kSdefSuiteType;
 }
@@ -55,6 +50,7 @@
 - (void)sdefInit {
   [super sdefInit];
   sd_soFlags.hasSynonyms = 0;
+  sd_soFlags.hasAccessGroup = 1;
   
   SdefCollection *child = [[SdefTypeCollection alloc] initWithName:NSLocalizedStringFromTable(@"Types", @"SdefLibrary", @"Types Collection default name")];
   [child setContentType:[SdefEnumeration class]];

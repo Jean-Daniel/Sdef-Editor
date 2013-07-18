@@ -12,6 +12,7 @@
 #import "SdefXRef.h"
 #import "SdefSynonym.h"
 #import "SdefDocument.h"
+#import "SdefAccessGroup.h"
 #import "SdefDocumentation.h"
 #import "SdefImplementation.h"
 
@@ -93,22 +94,28 @@
   SdefImplementedObject *copy = [super copyWithZone:aZone];
   copy->sd_impl = [sd_impl copyWithZone:aZone];
   [copy->sd_impl setOwner:copy];
+  copy->_accessGroup = [_accessGroup copyWithZone:aZone];
+  [copy->_accessGroup setOwner:copy];
   return copy;
 }
 
 - (void)encodeWithCoder:(NSCoder *)aCoder {
   [super encodeWithCoder:aCoder];
   [aCoder encodeObject:sd_impl forKey:@"STImplementation"];
+  [aCoder encodeObject:_accessGroup forKey:@"STAccessGroup"];
 }
 
 - (id)initWithCoder:(NSCoder *)aCoder {
   if (self = [super initWithCoder:aCoder]) {
     sd_impl = [[aCoder decodeObjectForKey:@"STImplementation"] retain];
+    _accessGroup = [[aCoder decodeObjectForKey:@"STAccessGroup"] retain];
   }
   return self;
 }
 
 - (void)dealloc {
+  [_accessGroup setOwner:nil];
+  [_accessGroup release];
   [sd_impl setOwner:nil];
   [sd_impl release];
   [super dealloc];
@@ -125,6 +132,23 @@
     [sd_impl setEditable:flag];
   }
   [super setEditable:flag recursive:recu];
+}
+
+- (SdefAccessGroup *)accessGroup {
+  if (!_accessGroup && sd_soFlags.hasAccessGroup) {
+    SdefAccessGroup *group = [[SdefAccessGroup alloc] init];
+    self.accessGroup = group;
+    [group release];
+  }
+  return _accessGroup;
+}
+
+- (void)setAccessGroup:(SdefAccessGroup *)accessGroup {
+  if (_accessGroup != accessGroup) {
+    [_accessGroup setOwner:nil];
+    SPXSetterRetain(_accessGroup, accessGroup);
+    [_accessGroup setOwner:self];
+  }
 }
 
 - (SdefImplementation *)impl {
@@ -154,7 +178,7 @@
 }
 
 - (NSString *)cocoaClass {
-  return [self impl].objectClass ? : CocoaNameForSdefName([self name], YES);
+  return [self impl].className ? : CocoaNameForSdefName([self name], YES);
 }
 
 - (NSString *)cocoaMethod {

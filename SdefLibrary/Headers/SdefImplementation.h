@@ -42,7 +42,7 @@ enum {
   NSString *_method;
 }
 
-@property(nonatomic, copy) NSString *objectClass;
+@property(nonatomic, copy) NSString *className;
 
 @property(nonatomic, copy) NSString *key;
 

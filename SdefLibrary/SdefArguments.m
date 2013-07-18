@@ -10,17 +10,23 @@
 #import "SdefDocument.h"
 
 @implementation SdefDirectParameter
+
+@synthesize requiresAccess = _requiresAccess;
+
 - (id)copyWithZone:(NSZone *)aZone {
   SdefDirectParameter *copy = [super copyWithZone:aZone];
+  copy->_requiresAccess = _requiresAccess;
   return copy;
 }
 
 - (void)encodeWithCoder:(NSCoder *)aCoder {
   [super encodeWithCoder:aCoder];
+  [aCoder encodeInt32:_requiresAccess forKey:@"SDPRequiresAccess"];
 }
 
 - (id)initWithCoder:(NSCoder *)aCoder {
   if (self = [super initWithCoder:aCoder]) {
+    _requiresAccess = [aCoder decodeInt32ForKey:@"SDPRequiresAccess"];
   }
   return self;
 }
@@ -57,21 +63,34 @@
   }
 }
 
+- (void)setRequiresAccess:(uint32_t)requiresAccess {
+  if (_requiresAccess != requiresAccess) {
+    [[[[self document] undoManager] prepareWithInvocationTarget:self] setRequiresAccess:_requiresAccess];
+    _requiresAccess = requiresAccess;
+  }
+}
+
 @end
 
 #pragma mark -
 @implementation SdefParameter
+
+@synthesize requiresAccess = _requiresAccess;
+
 - (id)copyWithZone:(NSZone *)aZone {
   SdefParameter *copy = [super copyWithZone:aZone];
+  copy->_requiresAccess = _requiresAccess;
   return copy;
 }
 
 - (void)encodeWithCoder:(NSCoder *)aCoder {
   [super encodeWithCoder:aCoder];
+  [aCoder encodeInt32:_requiresAccess forKey:@"SPRequiresAccess"];
 }
 
 - (id)initWithCoder:(NSCoder *)aCoder {
   if (self = [super initWithCoder:aCoder]) {
+    _requiresAccess = [aCoder decodeInt32ForKey:@"SPRequiresAccess"];
   }
   return self;
 }
@@ -104,6 +123,13 @@
   if (sd_soFlags.optional != newOptional) {
     [[[[self document] undoManager] prepareWithInvocationTarget:self] setOptional:sd_soFlags.optional];
     sd_soFlags.optional = newOptional;
+  }
+}
+
+- (void)setRequiresAccess:(uint32_t)requiresAccess {
+  if (_requiresAccess != requiresAccess) {
+    [[[[self document] undoManager] prepareWithInvocationTarget:self] setRequiresAccess:_requiresAccess];
+    _requiresAccess = requiresAccess;
   }
 }
 

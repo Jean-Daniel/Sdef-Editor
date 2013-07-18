@@ -29,7 +29,7 @@
     [self setCode:[suite objectForKey:@"AppleEventCode"]];
     [self setInherits:[suite objectForKey:@"Superclass"]];
     
-    [self impl].objectClass = name;
+    [self impl].className = name;
     
     /* Properties & Contents */
     NSString *content = [suite objectForKey:@"DefaultSubcontainerAttribute"];

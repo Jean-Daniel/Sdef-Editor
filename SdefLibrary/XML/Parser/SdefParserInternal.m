@@ -35,21 +35,25 @@ const xmlChar *_SdefXMLAttributeGetValue(xmlAttr *attr) {
 CFDictionaryRef _SdefXMLCreateDictionaryWithAttributes(xmlAttr *attr, CFStringEncoding encoding) {
   if (!attr) return NULL;
   
-  CFMutableDictionaryRef dict = CFDictionaryCreateMutable(kCFAllocatorDefault, 0, 
-                                                          &kCFTypeDictionaryKeyCallBacks, &kCFTypeDictionaryValueCallBacks);
+  CFMutableDictionaryRef dict = NULL;
   do {
     if (attr->name) {
       /* ignore xml:base attributes (added by xinclude parser) */
-      if (!attr->ns || !attr->ns->href || !attr->ns->prefix || 
+      if (!attr->ns || !attr->ns->href || !attr->ns->prefix ||
           (0 != xmlStrcasecmp(attr->ns->href, XML_XML_NAMESPACE) || 0 != xmlStrcasecmp(attr->name, (const xmlChar *)"base"))) {
         const xmlChar *value = _SdefXMLAttributeGetValue(attr);
         if (value) {
           CFStringRef val = CFStringCreateWithCString(kCFAllocatorDefault, (const char *)value, encoding);
           CFStringRef name = CFStringCreateWithCString(kCFAllocatorDefault, (const char *)attr->name, encoding);
-          if (val && name)
+          if (val && name) {
+            if (!dict)
+              dict = CFDictionaryCreateMutable(kCFAllocatorDefault, 0,
+                                               &kCFCopyStringDictionaryKeyCallBacks,
+                                               &kCFTypeDictionaryValueCallBacks);
             CFDictionarySetValue(dict, name, val);
-            if (name) CFRelease(name);
-          if (val) CFRelease(val);
+          }
+          SPXCFRelease(name);
+          SPXCFRelease(val);
         }
       } else {
         SPXDebug(@"Ignore attribute: %s:%s", attr->ns->prefix, attr->name);
@@ -58,10 +62,6 @@ CFDictionaryRef _SdefXMLCreateDictionaryWithAttributes(xmlAttr *attr, CFStringEn
     attr = attr->next;
   } while (attr);
   
-  if (!CFDictionaryGetCount(dict)) {
-    CFRelease(dict);
-    dict = NULL;
-  }
   return dict;
 }
 
@@ -96,7 +96,7 @@ CFDictionaryRef _SdefXMLCreateDictionaryWithAttributes(xmlAttr *attr, CFStringEn
       /* end empty element */
       if (elt)
         [sd_delegate parser:self endStructure:elt];
-      
+
       xmlNodePtr sibling = NULL;
       /* Tant qu'on est pas a la racine, et qu'on a pas trouvé de voisin */
       while (sd_current && sd_current != root && !(sibling = sd_current->next)) {

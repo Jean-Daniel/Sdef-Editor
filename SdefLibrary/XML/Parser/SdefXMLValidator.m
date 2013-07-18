@@ -9,49 +9,42 @@
 #import "SdefXMLValidator.h"
 
 @interface SdefXMLElement : NSObject {
+  CFSetRef _elements;
+  CFSetRef _attributes;
 }
 
-- (SdefValidatorVersion)acceptAttribute:(CFStringRef)attribute value:(CFStringRef)value;
-- (SdefValidatorVersion)acceptElement:(CFStringRef)element;
-
-- (void)setElements:(CFStringRef)element, ...;
-- (void)setAttributes:(CFStringRef)attribute, ...;
-
-@end
-
-@interface SdefBaseXMLElement : SdefXMLElement {
-  CFSetRef sd_elements;
-  CFSetRef sd_attributes;
-}
-
-- (void)setElements:(CFStringRef)element, ...;
-- (void)setAttributes:(CFStringRef)attribute, ...;
+- (id)initWithElements:(CFStringRef *)attribute count:(NSUInteger)cnt;
 
 /* Return Leopard if attributes contains 'id' */
 /* Return Leopard if element contains 'xref' */
+- (SdefValidatorVersion)acceptAttribute:(CFStringRef)attribute value:(CFStringRef)value;
+- (SdefValidatorVersion)acceptElement:(CFStringRef)element;
+
+- (instancetype)ATTLIST:(NSString *)attribute, ... SPX_REQUIRES_NIL_TERMINATION;
+
 @end
 
-@interface SdefXMLClass : SdefBaseXMLElement {
+@interface SdefXMLClass : SdefXMLElement {
 }
 @end
 
-@interface SdefXMLCocoa : SdefBaseXMLElement {
+@interface SdefXMLCocoa : SdefXMLElement {
 }
 @end
 
-@interface SdefXMLEnumeration : SdefBaseXMLElement {
+@interface SdefXMLEnumeration : SdefXMLElement {
 }
 @end
 
-@interface SdefXMLProperty : SdefBaseXMLElement {
+@interface SdefXMLProperty : SdefXMLElement {
 }
 @end
 
-@interface SdefXMLRespondsTo : SdefBaseXMLElement {
+@interface SdefXMLRespondsTo : SdefXMLElement {
 }
 @end
 
-@interface SdefXMLSuite : SdefBaseXMLElement {
+@interface SdefXMLSuite : SdefXMLElement {
 }
 @end
 
@@ -60,220 +53,164 @@
 static 
 CFMutableDictionaryRef sValidators = NULL;
 
+static inline SPX_REQUIRES_NIL_TERMINATION
+SdefXMLElement *_Element(Class cls, NSString *name, ...) {
+  NSInteger idx = -1;
+  CFStringRef items[32];
+
+  va_list ap;
+  va_start(ap, name);
+  do {
+    idx++;
+    assert(idx < 32);
+    items[idx] = va_arg(ap, CFStringRef);
+  } while (items[idx]);
+  va_end(ap);
+
+  SdefXMLElement *elt = [[cls alloc] initWithElements:items count:idx];
+  CFDictionarySetValue(sValidators, SPXNSToCFString(name), elt);
+  [elt release];
+
+  return elt;
+}
+
+#define EMPTY nil
+#define ELEMENT(name, cls, ...) _Element([cls class], name, ##__VA_ARGS__)
+
 + (void)initialize {
   if ([SdefXMLValidator class] == self) {
-    SdefXMLElement *elt;
-    
     sValidators = CFDictionaryCreateMutable(kCFAllocatorDefault, 0, 
-                                            &kCFTypeDictionaryKeyCallBacks, &kCFTypeDictionaryValueCallBacks);
+                                            &kCFCopyStringDictionaryKeyCallBacks,
+                                            &kCFTypeDictionaryValueCallBacks);
+
+    /* xinclude: base on W3C Working Draft 10 November 2003 */
+    [ELEMENT(@"include", SdefXMLElement, EMPTY)
+     ATTLIST:@"href", @"parse", @"xpointer", @"encoding",
+     @"accept", @"accept-charset", @"accept-language", nil];
     
     /* root */
-    elt = [[SdefBaseXMLElement alloc] init];
-    [elt setElements:CFSTR("dictionary"), nil];
-    CFDictionarySetValue(sValidators, CFSTR("__sdef__"), elt);
-    [elt release];
+    ELEMENT(@"__sdef__", SdefXMLElement, @"dictionary", nil);
     
-    /* accessor */
-    elt = [[SdefBaseXMLElement alloc] init];
-    [elt setAttributes:CFSTR("style"), nil];
-    CFDictionarySetValue(sValidators, CFSTR("accessor"), elt);
-    [elt release];
-    
-    /* class (custom) */
-    elt = [[SdefXMLClass alloc] init];
-    [elt setElements:CFSTR("contents"), CFSTR("documentation"), CFSTR("synonym"), CFSTR("xref"), CFSTR("cocoa"), nil];
-    [elt setAttributes:CFSTR("name"), CFSTR("code"), CFSTR("hidden"), CFSTR("description"),
-      CFSTR("id"), CFSTR("inherits"), CFSTR("plural"), nil];
-    CFDictionarySetValue(sValidators, CFSTR("class"), elt);
-    [elt release];
-    
-    /* class-extension (+id) */
-    elt = [[SdefBaseXMLElement alloc] init];
-    [elt setElements:CFSTR("contents"), CFSTR("element"), CFSTR("property"), CFSTR("responds-to"),
-      CFSTR("documentation"), CFSTR("synonym"), CFSTR("xref"), CFSTR("cocoa"), CFSTR("type") /* not in DTD */, nil];
-    [elt setAttributes:CFSTR("extends"), CFSTR("description"), CFSTR("hidden"), CFSTR("id"), nil];
-    CFDictionarySetValue(sValidators, CFSTR("class-extension"), elt);
-    [elt release];
-    
-    /* cocoa (custom) */
-    elt = [[SdefXMLCocoa alloc] init];
-    [elt setAttributes:CFSTR("class"), CFSTR("key"), CFSTR("method"), CFSTR("name"), nil];
-    CFDictionarySetValue(sValidators, CFSTR("cocoa"), elt);
-    [elt release];
-    
-    /* command/event */
-    elt = [[SdefBaseXMLElement alloc] init];
-    [elt setElements:CFSTR("cocoa"), CFSTR("synonym"), CFSTR("documentation"),
-      CFSTR("direct-parameter"), CFSTR("parameter"), CFSTR("result"), CFSTR("xref"), nil];
-    [elt setAttributes:CFSTR("name"), CFSTR("code"), CFSTR("description"), CFSTR("hidden"), CFSTR("id"), nil];
-    CFDictionarySetValue(sValidators, CFSTR("command"), elt);
-    CFDictionarySetValue(sValidators, CFSTR("event"), elt);
-    [elt release];
-    
-    /* contents */
-    elt = [[SdefBaseXMLElement alloc] init];
-    [elt setElements:CFSTR("cocoa"), CFSTR("type"), nil];
-    [elt setAttributes:CFSTR("name"), CFSTR("code"), CFSTR("description"), CFSTR("hidden"), 
-      CFSTR("type"), CFSTR("access"), nil];
-    CFDictionarySetValue(sValidators, CFSTR("contents"), elt);
-    [elt release];
+    // In the order they are declared in the DTD (for convenience)
     
     /* dictionary */
-    elt = [[SdefBaseXMLElement alloc] init];
-    [elt setElements:CFSTR("documentation"), CFSTR("suite"), nil];
-    [elt setAttributes:CFSTR("title"), nil];
-    CFDictionarySetValue(sValidators, CFSTR("dictionary"), elt);
-    [elt release];
-    
-    /* direct-parameter */
-    elt = [[SdefBaseXMLElement alloc] init];
-    [elt setElements:CFSTR("type"), nil];
-    [elt setAttributes:CFSTR("type"), CFSTR("description"), CFSTR("optional"), nil];
-    CFDictionarySetValue(sValidators, CFSTR("direct-parameter"), elt);
-    [elt release];
-    
-    /* element */
-    elt = [[SdefBaseXMLElement alloc] init];
-    [elt setElements:CFSTR("cocoa"), CFSTR("accessor"), nil];
-    [elt setAttributes:CFSTR("type"), CFSTR("description"), CFSTR("hidden"), CFSTR("access"), nil];
-    CFDictionarySetValue(sValidators, CFSTR("element"), elt);
-    [elt release];
-    
-    /* enumeration (custom, +synonym) */
-    elt = [[SdefXMLEnumeration alloc] init];
-    [elt setAttributes:CFSTR("name"), CFSTR("code"), CFSTR("hidden"), CFSTR("description"), CFSTR("id"), nil];
-    [elt setElements:CFSTR("cocoa"), CFSTR("documentation"), CFSTR("synonym"), 
-      CFSTR("enumerator"), CFSTR("xref"), nil];
-    CFDictionarySetValue(sValidators, CFSTR("enumeration"), elt);
-    [elt release];
-    
-    /* enumerator */
-    elt = [[SdefBaseXMLElement alloc] init];
-    [elt setElements:CFSTR("cocoa"), CFSTR("synonym"), CFSTR("documentation"), nil];
-    [elt setAttributes:CFSTR("name"), CFSTR("code"), CFSTR("description"), CFSTR("hidden"), nil];
-    CFDictionarySetValue(sValidators, CFSTR("enumerator"), elt);
-    [elt release];
-    
-    /* parameter (+synonym) */
-    elt = [[SdefBaseXMLElement alloc] init];
-    [elt setElements:CFSTR("cocoa"), CFSTR("type"), CFSTR("synonym"), nil];
-    [elt setAttributes:CFSTR("name"), CFSTR("code"), CFSTR("description"), CFSTR("hidden"),
-      CFSTR("type"), CFSTR("optional"), nil];
-    CFDictionarySetValue(sValidators, CFSTR("parameter"), elt);
-    [elt release];
-    
-    /* property (custom) */
-    elt = [[SdefXMLProperty alloc] init];
-    [elt setElements:CFSTR("cocoa"), CFSTR("type"), CFSTR("synonym"), CFSTR("documentation"), nil];
-    [elt setAttributes:CFSTR("name"), CFSTR("code"), CFSTR("hidden"), CFSTR("description"), 
-      CFSTR("type"), CFSTR("access"),  nil];
-    CFDictionarySetValue(sValidators, CFSTR("property"), elt);
-    [elt release];
-    
-    /* record-type (+id) */
-    elt = [[SdefBaseXMLElement alloc] init];
-    [elt setElements:CFSTR("cocoa"), CFSTR("synonym"), CFSTR("documentation"),
-      CFSTR("property"), CFSTR("xref"), nil];
-    [elt setAttributes:CFSTR("name"), CFSTR("code"), CFSTR("description"), CFSTR("hidden"), CFSTR("id"), nil];
-    CFDictionarySetValue(sValidators, CFSTR("record-type"), elt);
-    [elt release];
-    
-    /* result */
-    elt = [[SdefBaseXMLElement alloc] init];
-    [elt setElements:CFSTR("type"), nil];
-    [elt setAttributes:CFSTR("type"), CFSTR("description"), nil];
-    CFDictionarySetValue(sValidators, CFSTR("result"), elt);
-    [elt release];
-    
-    /* responds-to (custom) */
-    elt = [[SdefXMLRespondsTo alloc] init];
-    [elt setElements:CFSTR("cocoa"), nil];
-    [elt setAttributes:CFSTR("hidden"), nil];
-    CFDictionarySetValue(sValidators, CFSTR("responds-to"), elt);
-    [elt release];
-    
-    /* suite (custom) */
-    elt = [[SdefXMLSuite alloc] init];
-    [elt setAttributes:CFSTR("name"), CFSTR("code"), CFSTR("hidden"), CFSTR("description"), nil];
-    [elt setElements:CFSTR("cocoa"), CFSTR("documentation"), nil];
-    CFDictionarySetValue(sValidators, CFSTR("suite"), elt);
-    [elt release];
-    
-    /* synonym */
-    elt = [[SdefBaseXMLElement alloc] init];
-    [elt setElements:CFSTR("cocoa"), nil];
-    [elt setAttributes:CFSTR("name"), CFSTR("code"), CFSTR("hidden"), nil];
-    CFDictionarySetValue(sValidators, CFSTR("synonym"), elt);
-    [elt release];
-    
-    /* type */
-    elt = [[SdefBaseXMLElement alloc] init];
-    [elt setAttributes:CFSTR("type"), CFSTR("list"), CFSTR("hidden"), nil]; // hidden is in man but not in DTD & iChat uses it.
-    CFDictionarySetValue(sValidators, CFSTR("type"), elt);
-    [elt release];
-    
-    /* value-type (+id) */
-    elt = [[SdefBaseXMLElement alloc] init];
-    [elt setElements:CFSTR("cocoa"), CFSTR("synonym"), CFSTR("documentation"), CFSTR("xref"), nil];
-    [elt setAttributes:CFSTR("name"), CFSTR("code"), CFSTR("description"), CFSTR("hidden"), CFSTR("plural"), CFSTR("id"), nil];
-    CFDictionarySetValue(sValidators, CFSTR("value-type"), elt);
-    [elt release];
+    [ELEMENT(@"dictionary", SdefXMLElement, @"documentation", @"suite", nil)
+     ATTLIST:@"title", nil];
     
     /* xref */
-    elt = [[SdefBaseXMLElement alloc] init];
-    [elt setAttributes:CFSTR("target"), CFSTR("hidden"), nil];
-    CFDictionarySetValue(sValidators, CFSTR("xref"), elt);
-    [elt release];
+    [ELEMENT(@"xref", SdefXMLElement, EMPTY)
+     ATTLIST:@"target", @"hidden", nil];
     
-    /* xinclude */
-    elt = [[SdefBaseXMLElement alloc] init];
-    /* base on W3C Working Draft 10 November 2003 */
-    [elt setAttributes:CFSTR("href"), CFSTR("parse"), CFSTR("xpointer"), CFSTR("encoding"), 
-      CFSTR("accept"), CFSTR("accept-charset"), CFSTR("accept-language"), nil];
-    CFDictionarySetValue(sValidators, CFSTR("include"), elt);
-    [elt release];
+    /* access-group */
+    [ELEMENT(@"access-group", SdefXMLElement, EMPTY)
+     ATTLIST:@"identifier", @"access", nil];
+    
+    /* cocoa (custom) */
+    [ELEMENT(@"cocoa", SdefXMLCocoa, EMPTY)
+     ATTLIST:@"class", @"key", @"method", @"name", nil];
+    // insert-at-beginning, boolean-value, integer-value, string-value
+    
+    /* suite (custom) */
+    [ELEMENT(@"suite", SdefXMLSuite, @"cocoa", @"access-group", @"documentation", nil)
+     // class | class-extension | command | enumeration | event | record-type | value-type
+     ATTLIST:@"name", @"code", @"description", @"hidden", nil];
+    
+    /* synonym */
+    [ELEMENT(@"synonym", SdefXMLElement, @"cocoa", nil)
+     ATTLIST:@"name", @"code", @"hidden", nil];
+    
+    /* type */
+    [ELEMENT(@"type", SdefXMLElement, EMPTY)
+     ATTLIST:@"type", @"list", @"hidden", nil];
+    
+    /* command/event */
+    SdefXMLElement *cmd =
+    [ELEMENT(@"command", SdefXMLElement,
+             @"cocoa", @"access-group", @"synonym",
+             @"direct-parameter", @"parameter", @"result",
+             @"documentation", @"xref", nil)
+     ATTLIST:@"name", @"id", @"code", @"description", @"hidden", nil];
+    // Ditto for event
+    CFDictionarySetValue(sValidators, CFSTR("event"), cmd);
+    
+    /* direct-parameter */
+    [ELEMENT(@"direct-parameter", SdefXMLElement, @"type", nil)
+     ATTLIST:@"type", @"optional", @"requires-access", @"description", nil];
+    
+    /* result */
+    [ELEMENT(@"result", SdefXMLElement, @"type", nil)
+     ATTLIST:@"type", @"description", nil];
+    
+    /* parameter (+synonym) */
+    [ELEMENT(@"parameter", SdefXMLElement, @"cocoa", @"type", nil) // should we support @"synonym". It is not in the DTD ?
+     ATTLIST:@"name", @"code", @"hidden", @"type", @"optional", @"requires-access", @"description", nil];
+    
+    /* class (custom) */
+    [ELEMENT(@"class", SdefXMLClass, @"cocoa", @"access-group", @"contents", @"documentation", @"synonym", @"xref", nil)
+     // 10.4: element, property, responds-to
+     ATTLIST:@"name", @"id", @"code", @"hidden", @"plural", @"inherits", @"description", nil];
+    
+    /* contents */
+    [ELEMENT(@"contents", SdefXMLElement, @"cocoa", @"access-group", @"type", nil)
+     ATTLIST:@"name", @"code", @"type", @"access", @"hidden", @"description", nil];
+    
+    /* element */
+    [ELEMENT(@"element", SdefXMLElement, @"cocoa", @"access-group", @"accessor", nil)
+     ATTLIST:@"type", @"access", @"hidden", @"description", nil];
+    
+    /* accessor */
+    [ELEMENT(@"accessor", SdefXMLElement, EMPTY)
+     ATTLIST:@"style", nil];
+    
+    /* property (custom) */
+    [ELEMENT(@"property", SdefXMLProperty, @"cocoa", @"access-group", @"type", @"synonym", @"documentation", nil)
+     ATTLIST:@"name", @"code", @"hidden", @"type", @"access", @"description",  nil];
+    // 10.4: not-in-properties
+    // 10.5: in-properties
+    
+    /* responds-to (custom) */
+    [ELEMENT(@"responds-to", SdefXMLRespondsTo, @"cocoa", @"access-group", nil)
+     ATTLIST:@"hidden", nil];
+    // 10.4: name
+    // 10.5: command
+    
+    /* class-extension (+id) */
+    [ELEMENT(@"class-extension", SdefXMLElement, @"cocoa", @"access-group",
+             @"contents", @"documentation", @"element", @"property", @"responds-to",
+             @"synonym", @"xref", @"type" /* not in DTD */, nil)
+     ATTLIST:@"id", @"extends", @"hidden", @"description", nil];
+    
+    /* value-type (+id) */
+    [ELEMENT(@"value-type", SdefXMLElement, @"cocoa", @"synonym", @"documentation", @"xref", nil)
+     ATTLIST:@"name", @"id", @"code", @"hidden", @"plural", @"description", nil];
+    
+    /* record-type (+id) */
+    [ELEMENT(@"record-type", SdefXMLElement, @"cocoa", @"synonym", @"documentation", @"property", @"xref", nil)
+     ATTLIST:@"name", @"id", @"code", @"hidden", @"plural", @"description", nil];
+
+    /* enumeration (custom, +synonym) */
+    [ELEMENT(@"enumeration", SdefXMLEnumeration, @"cocoa", @"documentation", @"enumerator", @"xref", nil) // @"synonym"
+     ATTLIST:@"name", @"id", @"code", @"hidden", @"description", nil];
+    // 10.4: inline
+    
+    /* enumerator */
+    [ELEMENT(@"enumerator", SdefXMLElement, @"cocoa", @"synonym", @"documentation", nil)
+     ATTLIST:@"name", @"code", @"hidden", @"description", nil];
     
     /* ~~~~~~~~~~~~~~ Panther collections ~~~~~~~~~~~~~~ */
-    elt = [[SdefBaseXMLElement alloc] init];
-    [elt setElements:CFSTR("enumeration"), nil];
-    CFDictionarySetValue(sValidators, CFSTR("types"), elt);
-    [elt release];
-    elt = [[SdefBaseXMLElement alloc] init];
-    [elt setElements:CFSTR("synonym"), nil];
-    CFDictionarySetValue(sValidators, CFSTR("synonyms"), elt);
-    [elt release];
+    ELEMENT(@"types", SdefXMLElement, @"enumeration", nil);
+    ELEMENT(@"synonyms", SdefXMLElement, @"synonym", nil);
     
     /* Class */
-    elt = [[SdefBaseXMLElement alloc] init];
-    [elt setElements:CFSTR("class"), nil];
-    CFDictionarySetValue(sValidators, CFSTR("classes"), elt);
-    [elt release];
-    elt = [[SdefBaseXMLElement alloc] init];
-    [elt setElements:CFSTR("element"), nil];
-    CFDictionarySetValue(sValidators, CFSTR("elements"), elt);
-    [elt release];
-    elt = [[SdefBaseXMLElement alloc] init];
-    [elt setElements:CFSTR("property"), nil];
-    CFDictionarySetValue(sValidators, CFSTR("properties"), elt);
-    [elt release];
-    elt = [[SdefBaseXMLElement alloc] init];
-    [elt setElements:CFSTR("responds-to"), nil];
-    CFDictionarySetValue(sValidators, CFSTR("responds-to-commands"), elt);
-    [elt release];
-    elt = [[SdefBaseXMLElement alloc] init];
-    [elt setElements:CFSTR("responds-to"), nil];
-    CFDictionarySetValue(sValidators, CFSTR("responds-to-events"), elt);
-    [elt release];
+    ELEMENT(@"classes", SdefXMLElement, @"class", nil);
+    ELEMENT(@"elements", SdefXMLElement, @"element", nil);
+    ELEMENT(@"properties", SdefXMLElement, @"property", nil);
+    ELEMENT(@"responds-to-commands", SdefXMLElement, @"responds-to", nil);
+    ELEMENT(@"responds-to-events", SdefXMLElement, @"responds-to", nil);
     
     /* Verbs */
-    elt = [[SdefBaseXMLElement alloc] init];
-    [elt setElements:CFSTR("command"), nil];
-    CFDictionarySetValue(sValidators, CFSTR("commands"), elt);
-    [elt release];
-    elt = [[SdefBaseXMLElement alloc] init];
-    [elt setElements:CFSTR("event"), nil];
-    CFDictionarySetValue(sValidators, CFSTR("events"), elt);
-    [elt release];
+    ELEMENT(@"commands", SdefXMLElement, @"command", nil);
+    ELEMENT(@"events", SdefXMLElement, @"event", nil);
   }
 }
 
@@ -329,7 +266,7 @@ CFMutableDictionaryRef sValidators = NULL;
     case kSdefParserVersionLeopard:
       os = @"Leopard";
       break;
-    case kSdefParserVersionMoutainLion:
+    case kSdefParserVersionMountainLion:
       os = @"Moutain Lion";
       break;
   }
@@ -396,34 +333,21 @@ CFMutableDictionaryRef sValidators = NULL;
 #pragma mark -
 @implementation SdefXMLElement
 
-- (void)setElements:(CFStringRef)attribute, ... {
-  [NSException raise:NSInvalidArgumentException format:@"Invalid receiver"];
-}
-- (void)setAttributes:(CFStringRef)attribute, ... {
-  [NSException raise:NSInvalidArgumentException format:@"Invalid receiver"];
-}
-
-- (SdefValidatorVersion)acceptAttribute:(CFStringRef)attribute value:(CFStringRef)value {
-  return kSdefParserVersionUnknown;
-}
-- (SdefValidatorVersion)acceptElement:(CFStringRef)element {
-  if (CFEqual(element, CFSTR("include")))
-    return kSdefParserVersionLeopard;
-  
-  return kSdefParserVersionUnknown;
+- (id)initWithElements:(CFStringRef *)elements count:(NSUInteger)cnt {
+  if (self = [super init]) {
+    if (cnt > 0)
+      _elements = CFSetCreate(kCFAllocatorDefault, (const void **)elements, cnt, &kCFTypeSetCallBacks);
+  }
+  return self;
 }
 
-@end
-
-@implementation SdefBaseXMLElement
-
-- (void)setElements:(CFStringRef)element, ... {
+- (instancetype)ATTLIST:(NSString *)name, ... {
   CFStringRef items[32];
-  items[0] = element;
+  items[0] = SPXNSToCFString(name);
   
   va_list ap;
   CFIndex idx = 0;
-  va_start(ap, element);
+  va_start(ap, name);
   do {
     idx++;
     assert(idx < 32);
@@ -431,54 +355,47 @@ CFMutableDictionaryRef sValidators = NULL;
   } while (items[idx]);
   va_end(ap);
   
-  sd_elements = CFSetCreate(kCFAllocatorDefault, (const void **)items, idx, &kCFTypeSetCallBacks);
-}
-
-- (void)setAttributes:(CFStringRef)attribute, ... {
-  CFStringRef items[32];
-  items[0] = attribute;
-  
-  va_list ap;
-  CFIndex idx = 0;
-  va_start(ap, attribute);
-  do {
-    idx++;
-    assert(idx < 32);
-    items[idx] = va_arg(ap, CFStringRef);
-  } while (items[idx]);
-  va_end(ap);
-  
-  sd_attributes = CFSetCreate(kCFAllocatorDefault, (const void **)items, idx, &kCFTypeSetCallBacks);
+  _attributes = CFSetCreate(kCFAllocatorDefault, (const void **)items, idx, &kCFTypeSetCallBacks);
+  return self;
 }
 
 - (void)dealloc {
-  if (sd_elements) CFRelease(sd_elements);
-  if (sd_attributes) CFRelease(sd_attributes);
+  SPXCFRelease(_attributes);
+  SPXCFRelease(_elements);
   [super dealloc];
 }
 
 - (SdefValidatorVersion)acceptAttribute:(CFStringRef)attribute value:(CFStringRef)value {
-  if (sd_attributes && CFSetContainsValue(sd_attributes, attribute))
-    return CFEqual(attribute, CFSTR("id")) ? kSdefParserVersionLeopard : kSdefParserVersionAll;
-  return [super acceptAttribute:attribute value:value];
+  if (_attributes && CFSetContainsValue(_attributes, attribute)) {
+    if (CFEqual(attribute, CFSTR("requires-access"))) {
+      return kSdefParserVersionMountainLionAndLater;
+    }
+    return CFEqual(attribute, CFSTR("id")) ? kSdefParserVersionLeopardAndLater : kSdefParserVersionAll;
+  }
+  return kSdefParserVersionUnknown;
 }
 - (SdefValidatorVersion)acceptElement:(CFStringRef)element {
-  if (sd_elements) {
-    if (CFSetContainsValue(sd_elements, element)) {
+  if (_elements) {
+    if (CFSetContainsValue(_elements, element)) {
       if (CFEqual(element, CFSTR("type"))) {
         /* type element is for Tiger and above */
-        return kSdefParserVersionTiger | kSdefParserVersionLeopard;
+        return kSdefParserVersionTigerAndLater;
       } else if (CFEqual(element, CFSTR("xref")) || CFEqual(element, CFSTR("include"))) {
-        return kSdefParserVersionLeopard;
+        return kSdefParserVersionLeopardAndLater;
+      } else if (CFEqual(element, CFSTR("access-group"))) {
+        return kSdefParserVersionMountainLionAndLater;
       } else {
         return kSdefParserVersionAll;
       }
-    } else if (CFEqual(element, CFSTR("synonyms")) && CFSetContainsValue(sd_elements, CFSTR("synonym"))) {
+    } else if (CFEqual(element, CFSTR("synonyms")) && CFSetContainsValue(_elements, CFSTR("synonym"))) {
       /* special synonyms case */ 
       return kSdefParserVersionPanther;
     }
   }
-  return [super acceptElement:element];
+  if (CFEqual(element, CFSTR("include")))
+    return kSdefParserVersionLeopardAndLater;
+
+  return kSdefParserVersionUnknown;
 }
 
 @end
@@ -492,7 +409,7 @@ CFMutableDictionaryRef sValidators = NULL;
       CFEqual(attribute, CFSTR("integer-value")) ||
       CFEqual(attribute, CFSTR("string-value")) ||
       CFEqual(attribute, CFSTR("insert-at-beginning"))) {
-    return kSdefParserVersionLeopard;
+    return kSdefParserVersionLeopardAndLater;
   }
   return [super acceptAttribute:attribute value:value];
 }
@@ -505,7 +422,7 @@ CFMutableDictionaryRef sValidators = NULL;
 - (SdefValidatorVersion)acceptAttribute:(CFStringRef)attribute value:(CFStringRef)value {
   /* inline appears in Tiger */
   if (CFEqual(attribute, CFSTR("inline"))) {
-    return kSdefParserVersionTiger | kSdefParserVersionLeopard;
+    return kSdefParserVersionTigerAndLater;
   }
   return [super acceptAttribute:attribute value:value];
 }
@@ -517,7 +434,7 @@ CFMutableDictionaryRef sValidators = NULL;
 - (SdefValidatorVersion)acceptAttribute:(CFStringRef)attribute value:(CFStringRef)value {
   /* in-properties replace not-in-properties in Tiger */
   if (CFEqual(attribute, CFSTR("in-properties"))) {
-    return kSdefParserVersionTiger | kSdefParserVersionLeopard;
+    return kSdefParserVersionTigerAndLater;
   } else if (CFEqual(attribute, CFSTR("not-in-properties"))) {
     return kSdefParserVersionPanther;
   } 
@@ -531,10 +448,10 @@ CFMutableDictionaryRef sValidators = NULL;
 - (SdefValidatorVersion)acceptAttribute:(CFStringRef)attribute value:(CFStringRef)value {
   /* command replace name in Leopard */
   if (CFEqual(attribute, CFSTR("command"))) {
-    return kSdefParserVersionLeopard;
+    return kSdefParserVersionLeopardAndLater;
   } else if (CFEqual(attribute, CFSTR("name"))) {
-    /* name is tolerate by leopard */
-    return kSdefParserVersionPanther | kSdefParserVersionTiger | kSdefParserVersionLeopard;
+    /* name is supported for compatibility but should not be use is recent suites */
+    return kSdefParserVersionAll;
   } 
   return [super acceptAttribute:attribute value:value];
 }
@@ -548,7 +465,7 @@ CFMutableDictionaryRef sValidators = NULL;
   if (CFEqual(element, CFSTR("element")) ||
       CFEqual(element, CFSTR("property")) ||
       CFEqual(element, CFSTR("responds-to"))) {
-    return kSdefParserVersionTiger | kSdefParserVersionLeopard;
+    return kSdefParserVersionTigerAndLater;
   } else if (CFEqual(element, CFSTR("elements")) ||
              CFEqual(element, CFSTR("properties")) ||
              CFEqual(element, CFSTR("responds-to-commands")) ||
@@ -572,9 +489,9 @@ CFMutableDictionaryRef sValidators = NULL;
       CFEqual(element, CFSTR("command")) ||
       CFEqual(element, CFSTR("class")) ||
       CFEqual(element, CFSTR("event"))) {
-    return kSdefParserVersionTiger | kSdefParserVersionLeopard;
+    return kSdefParserVersionTigerAndLater;
   } else if (CFEqual(element, CFSTR("class-extension"))) {
-    return kSdefParserVersionTiger | kSdefParserVersionLeopard; /* kSdefParserVersionLeopard; */
+    return kSdefParserVersionTigerAndLater;
   } else if (CFEqual(element, CFSTR("types")) ||
              CFEqual(element, CFSTR("classes")) ||
              CFEqual(element, CFSTR("commands")) ||

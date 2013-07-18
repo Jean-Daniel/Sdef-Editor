@@ -76,6 +76,9 @@
 		1B73ECA70CD7A73400FC60B2 /* SdefParserInternal.m in Sources */ = {isa = PBXBuildFile; fileRef = 1B73ECA60CD7A73400FC60B2 /* SdefParserInternal.m */; };
 		1B814DD6176BA39F0060B7F8 /* WBCGFunctions.mm in Sources */ = {isa = PBXBuildFile; fileRef = 1BB675F7168EE29200B06EFA /* WBCGFunctions.mm */; };
 		1B814DD7176BA3A60060B7F8 /* WBGeometry.m in Sources */ = {isa = PBXBuildFile; fileRef = 1B39DEE71684628F0048F1E9 /* WBGeometry.m */; };
+		1B86FF4E1797F1EC007C25DC /* SdefAccessGroup.h in Headers */ = {isa = PBXBuildFile; fileRef = 1B86FF4D1797F1EC007C25DC /* SdefAccessGroup.h */; };
+		1B86FF521797F1F9007C25DC /* SdefAccessGroup.m in Sources */ = {isa = PBXBuildFile; fileRef = 1B86FF501797F1F9007C25DC /* SdefAccessGroup.m */; };
+		1B86FF561797F95D007C25DC /* SdefXMLAccessGroup.m in Sources */ = {isa = PBXBuildFile; fileRef = 1B86FF541797F95D007C25DC /* SdefXMLAccessGroup.m */; };
 		1B877DB30D37E685007A59B5 /* SdefDocument.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1B877DB10D37E685007A59B5 /* SdefDocument.xib */; };
 		1B877DB80D37E6A2007A59B5 /* SdefImporterWarning.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1B877DB60D37E6A2007A59B5 /* SdefImporterWarning.xib */; };
 		1B877DC70D37E719007A59B5 /* ImportApplicationSdef.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1B877DC50D37E719007A59B5 /* ImportApplicationSdef.xib */; };
@@ -419,6 +422,9 @@
 		1B5FEC8E0BD8E58100F57412 /* SdefXRef.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = SdefXRef.m; sourceTree = "<group>"; };
 		1B73E9CB0CD7965B00FC60B2 /* SdefParserInternal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = SdefParserInternal.h; sourceTree = "<group>"; };
 		1B73ECA60CD7A73400FC60B2 /* SdefParserInternal.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = SdefParserInternal.m; sourceTree = "<group>"; };
+		1B86FF4D1797F1EC007C25DC /* SdefAccessGroup.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SdefAccessGroup.h; sourceTree = "<group>"; };
+		1B86FF501797F1F9007C25DC /* SdefAccessGroup.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SdefAccessGroup.m; sourceTree = "<group>"; };
+		1B86FF541797F95D007C25DC /* SdefXMLAccessGroup.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SdefXMLAccessGroup.m; sourceTree = "<group>"; };
 		1B877DB20D37E685007A59B5 /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = English.lproj/SdefDocument.xib; sourceTree = "<group>"; };
 		1B877DB70D37E6A2007A59B5 /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = English.lproj/SdefImporterWarning.xib; sourceTree = "<group>"; };
 		1B877DC60D37E719007A59B5 /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = English.lproj/ImportApplicationSdef.xib; sourceTree = "<group>"; };
@@ -1050,8 +1056,9 @@
 				1B5FEC8D0BD8E58100F57412 /* SdefXRef.h */,
 				98CCA8F9082FEEF5002A37E2 /* SdefType.h */,
 				1BC332C40CD894C3009109F0 /* SdefXInclude.h */,
-				98D3A9DB079EF4B50049A8FC /* SdefComment.h */,
 				9875801F078864330038C05B /* SdefSynonym.h */,
+				98D3A9DB079EF4B50049A8FC /* SdefComment.h */,
+				1B86FF4D1797F1EC007C25DC /* SdefAccessGroup.h */,
 				98758032078865170038C05B /* SdefDocumentation.h */,
 				9875802E078864F40038C05B /* SdefImplementation.h */,
 			);
@@ -1152,6 +1159,7 @@
 				1BC332C50CD894C3009109F0 /* SdefXInclude.m */,
 				98758020078864330038C05B /* SdefSynonym.m */,
 				98D3A9DC079EF4B50049A8FC /* SdefComment.m */,
+				1B86FF501797F1F9007C25DC /* SdefAccessGroup.m */,
 				98758033078865170038C05B /* SdefDocumentation.m */,
 				9875802F078864F40038C05B /* SdefImplementation.m */,
 			);
@@ -1172,6 +1180,7 @@
 				983A83380BDA8425006C77F6 /* SdefXMLLeaves.m */,
 				984A4C050830100200D062BB /* SdefXMLObjects.m */,
 				989B7E1B07B04264004251EA /* SdefXMLDictionary.m */,
+				1B86FF541797F95D007C25DC /* SdefXMLAccessGroup.m */,
 			);
 			name = "XML Support";
 			path = XML;
@@ -1429,6 +1438,7 @@
 				1B73E9CC0CD7965C00FC60B2 /* SdefParserInternal.h in Headers */,
 				1BC332C60CD894C3009109F0 /* SdefXInclude.h in Headers */,
 				1BB675EB168EE21C00B06EFA /* WBCollapseViewInternal.h in Headers */,
+				1B86FF4E1797F1EC007C25DC /* SdefAccessGroup.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1700,6 +1710,8 @@
 				1BB675F4168EE25C00B06EFA /* WBInterpolationFunction.m in Sources */,
 				1B814DD6176BA39F0060B7F8 /* WBCGFunctions.mm in Sources */,
 				1B814DD7176BA3A60060B7F8 /* WBGeometry.m in Sources */,
+				1B86FF521797F1F9007C25DC /* SdefAccessGroup.m in Sources */,
+				1B86FF561797F95D007C25DC /* SdefXMLAccessGroup.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -16,9 +16,11 @@
 @end
 
 #pragma mark -
+@class SdefAccessGroup;
 @interface SdefImplementedObject : SdefDocumentedObject <NSCopying, NSCoding> {
 @private
   SdefImplementation *sd_impl;
+  SdefAccessGroup *_accessGroup;
 }
 
 - (NSString *)cocoaKey;

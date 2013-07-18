@@ -9,17 +9,22 @@
 #import "SdefObjects.h"
 
 @interface SdefParameter : SdefTypedObject <NSCopying, NSCoding> {
+@private
+  uint32_t _requiresAccess;
 }
 
+@property(nonatomic) uint32_t requiresAccess;
 @property(nonatomic, getter = isOptional) BOOL optional;
 
 @end
 
 #pragma mark -
 @interface SdefDirectParameter : SdefTypedOrphanObject <NSCopying, NSCoding> {
-
+@private
+  uint32_t _requiresAccess;
 }
 
+@property(nonatomic) uint32_t requiresAccess;
 @property(nonatomic, getter = isOptional) BOOL optional;
 
 @end

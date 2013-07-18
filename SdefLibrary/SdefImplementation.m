@@ -17,7 +17,7 @@
 
 @synthesize key = _key;
 @synthesize method = _method;
-@synthesize objectClass = _class;
+@synthesize className = _class;
 
 @synthesize value = _value;
 @synthesize valueType = _vtype;
@@ -68,11 +68,11 @@
 - (NSString *)description {
   return [NSString stringWithFormat:@"<%@ %p> { name: %@, key:%@, class:%@ , method:%@ }",
     NSStringFromClass([self class]), self,
-    [self name], [self key], self.objectClass, [self method]];
+    [self name], [self key], self.className, [self method]];
 }
 
 #pragma mark -
-- (void)setObjectClass:(NSString *)newSdClass {
+- (void)setClassName:(NSString *)newSdClass {
   if (_class != newSdClass) {
     [[self undoManager] registerUndoWithTarget:self selector:_cmd object:_class];
     SPXSetterCopy(_class, newSdClass);

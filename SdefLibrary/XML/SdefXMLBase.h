@@ -60,3 +60,25 @@
 @interface SdefElement (SdefXMLManager)
 - (void)addXMLAccessor:(NSString *)style;
 @end
+
+static inline
+NSString *SdefXMLAccessStringFromFlag(NSUInteger flag) {
+  id str = nil;
+  if (flag == (kSdefAccessRead | kSdefAccessWrite)) str = @"rw";
+  else if (flag == kSdefAccessRead) str = @"r";
+  else if (flag == kSdefAccessWrite) str = @"w";
+  return str;
+}
+
+static inline
+uint32_t SdefXMLAccessFlagFromString(NSString *str) {
+  uint32_t flag = 0;
+  if (str && [str rangeOfString:@"r"].location != NSNotFound) {
+    flag |= kSdefAccessRead;
+  }
+  if (str && [str rangeOfString:@"w"].location != NSNotFound) {
+    flag |= kSdefAccessWrite;
+  }
+  return flag;
+}
+

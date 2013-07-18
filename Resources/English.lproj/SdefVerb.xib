@@ -1636,7 +1636,7 @@
 					<string>impl.name</string>
 					<string>code</string>
 					<string>children</string>
-					<string>impl.sdClass</string>
+					<string>impl.className</string>
 					<string>xmlid</string>
 				</array>
 				<string key="NSObjectClassName">SdefVerb</string>
@@ -2600,15 +2600,15 @@
 				</object>
 				<object class="IBConnectionRecord">
 					<object class="IBBindingConnection" key="connection">
-						<string key="label">value: selection.impl.sdClass</string>
+						<string key="label">value: selection.impl.className</string>
 						<reference key="source" ref="459516386"/>
 						<reference key="destination" ref="905725965"/>
 						<object class="NSNibBindingConnector" key="connector">
 							<reference key="NSSource" ref="459516386"/>
 							<reference key="NSDestination" ref="905725965"/>
-							<string key="NSLabel">value: selection.impl.sdClass</string>
+							<string key="NSLabel">value: selection.impl.className</string>
 							<string key="NSBinding">value</string>
-							<string key="NSKeyPath">selection.impl.sdClass</string>
+							<string key="NSKeyPath">selection.impl.className</string>
 							<object class="NSDictionary" key="NSOptions">
 								<string key="NS.key.0">NSNullPlaceholder</string>
 								<string key="NS.object.0">NSScriptCommand</string>

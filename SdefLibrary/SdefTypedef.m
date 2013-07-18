@@ -48,6 +48,8 @@
   [super sdefInit];
   sd_soFlags.xid = 1;
   sd_soFlags.xrefs = 1;
+  sd_soFlags.hasAccessGroup = 1;
+
   _inline = kSdefInlineAll;
 }
 
@@ -137,6 +139,7 @@
   [self setIsLeaf:YES];
   sd_soFlags.xid = 1;
   sd_soFlags.xrefs = 1;
+  sd_soFlags.hasAccessGroup = 1;
 }
 
 @end
@@ -176,6 +179,7 @@
   [super sdefInit];
   sd_soFlags.xid = 1;
   sd_soFlags.xrefs = 1;
+  sd_soFlags.hasAccessGroup = 1;
 }
 
 @end

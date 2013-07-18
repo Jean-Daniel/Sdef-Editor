@@ -14,11 +14,6 @@
 #import "SdefClass.h"
 
 static
-NSString *SdefXMLAccessStringFromFlag(NSUInteger flag);
-static
-uint32_t SdefXMLAccessFlagFromString(NSString *str);
-
-static
 uint32_t SdefXMLAccessorFlagFromString(NSString *str);
 static
 NSArray *SdefXMLAccessorStringsFromFlag(NSUInteger flag);
@@ -269,25 +264,6 @@ NSArray *SdefXMLAccessorStringsFromFlag(NSUInteger flag);
 }
 
 @end
-
-NSString *SdefXMLAccessStringFromFlag(NSUInteger flag) {
-  id str = nil;
-  if (flag == (kSdefAccessRead | kSdefAccessWrite)) str = @"rw";
-  else if (flag == kSdefAccessRead) str = @"r";
-  else if (flag == kSdefAccessWrite) str = @"w";
-  return str;
-}
-
-uint32_t SdefXMLAccessFlagFromString(NSString *str) {
-  uint32_t flag = 0;
-  if (str && [str rangeOfString:@"r"].location != NSNotFound) {
-    flag |= kSdefAccessRead;
-  }
-  if (str && [str rangeOfString:@"w"].location != NSNotFound) {
-    flag |= kSdefAccessWrite;
-  }
-  return flag;
-}
 
 NSArray *SdefXMLAccessorStringsFromFlag(NSUInteger flag) {
   NSMutableArray *strings = [NSMutableArray array];

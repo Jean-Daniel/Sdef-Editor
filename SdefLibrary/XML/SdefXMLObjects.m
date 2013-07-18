@@ -54,10 +54,15 @@
   if (node) {
     if (sd_impl) {
       SdefXMLNode *impl = [[self impl] xmlNodeForVersion:version];
-      if (impl) {
+      if (impl)
         [node prependChild:impl];
-      }
     }
+    if (_accessGroup) {
+      SdefXMLNode *access = [_accessGroup xmlNodeForVersion:version];
+      if (access)
+        [node prependChild:access];
+    }
+
     [node setEmpty:![node hasChildren]];
   }
   return node;
@@ -67,9 +72,12 @@
 - (void)addXMLChild:(id<SdefObject>)node {
   switch ([node objectType]) {
     case kSdefCocoaType:
-      if ([self hasImplementation]) {
-        [self setImpl:(SdefImplementation *)node];
-      }
+      if (self.hasImplementation)
+        self.impl = (SdefImplementation *)node;
+      break;
+    case kSdefAccessGroupType:
+      if (self.hasAccessGroup)
+        self.accessGroup = (SdefAccessGroup *)node;
       break;
     default:
       [super addXMLChild:node];

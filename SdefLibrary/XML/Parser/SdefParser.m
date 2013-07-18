@@ -20,6 +20,7 @@
 #import "SdefContents.h"
 #import "SdefArguments.h"
 #import "SdefDictionary.h"
+#import "SdefAccessGroup.h"
 #import "SdefClassManager.h"
 #import "SdefDocumentation.h"
 #import "SdefImplementation.h"
@@ -90,6 +91,7 @@ enum {
 /* computed minimum supported version */
 static
 SdefVersion SdefDocumentVersionFromParserVersion(SdefValidatorVersion vers) {
+  if (vers & kSdefParserVersionMountainLion) return kSdefMountainLionVersion;
   if (vers & kSdefParserVersionLeopard) return kSdefLeopardVersion;
   if (vers & kSdefParserVersionTiger) return kSdefTigerVersion;
   /* legacy document support */
@@ -156,7 +158,8 @@ Boolean _SdefElementIsCollection(CFStringRef element) {
                         @"enumeration" : [SdefEnumeration class],
                         @"enumerator" : [SdefEnumerator class],
                         /* XInclude */
-                        @"include" : [SdefXInclude class]
+                        @"include" : [SdefXInclude class],
+                        @"access-group" : [SdefAccessGroup class]
                         };
     [sSdefElementMap retain];
   }

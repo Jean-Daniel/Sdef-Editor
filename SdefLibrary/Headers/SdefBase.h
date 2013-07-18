@@ -86,6 +86,7 @@ NSString *SdefObjectTypeName(SdefObjectType type);
 @end
 
 @class SdefDocument;
+@class SdefAccessGroup;
 @class SdefClassManager;
 @class SdefSuite, SdefCollection;
 @class SdefImplementation, SdefDocumentation, SdefComment;
@@ -101,10 +102,11 @@ NSString *SdefObjectTypeName(SdefObjectType type);
     unsigned int editable:1;
     unsigned int removable:1;
     unsigned int hasSynonyms:1;
+    unsigned int hasAccessGroup:1;
     unsigned int notinproperties:1;
     unsigned int hasDocumentation:1;
     unsigned int hasImplementation:1;
-    unsigned int reserved:4;
+    unsigned int reserved:3;
   } sd_soFlags;
 @private
   NSMutableArray *sd_comments;
@@ -150,17 +152,18 @@ NSString *SdefObjectTypeName(SdefObjectType type);
 - (BOOL)hasXrefs;
 @property(nonatomic, copy) NSArray *xrefs;
 
-#pragma mark Documentation
 - (BOOL)hasDocumentation;
 @property(nonatomic, retain) SdefDocumentation *documentation;
 
-#pragma mark Synonyms
 - (BOOL)hasSynonyms;
 @property(nonatomic, copy) NSArray *synonyms;
 
-#pragma mark Implementation
+- (BOOL)hasAccessGroup;
+@property(nonatomic, retain) SdefAccessGroup *accessGroup;
+
 - (BOOL)hasImplementation;
 @property(nonatomic, retain) SdefImplementation *impl;
+
 
 #pragma mark Comments
 @property(nonatomic, copy) NSArray *comments;

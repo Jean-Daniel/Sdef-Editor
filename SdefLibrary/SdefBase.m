@@ -184,7 +184,6 @@ NSImage *SdefImageNamed(NSString *name) {
 
 - (void)setEditable:(BOOL)flag recursive:(BOOL)recu {
   SPXFlagSet(sd_soFlags.editable, flag);
-  
   if (recu) {
     SdefObject *node;
     NSEnumerator *nodes = [self childEnumerator];
@@ -264,17 +263,19 @@ NSMutableArray *xincludes(SdefObject *self) {
 - (BOOL)hasSynonyms {
   return sd_soFlags.hasSynonyms;
 }
-- (NSMutableArray *)synonyms {
-  return nil;
-}
+- (NSMutableArray *)synonyms { return nil; }
 - (void)setSynonyms:(NSArray *)synonyms {}
+
+- (BOOL)hasAccessGroup {
+  return sd_soFlags.hasAccessGroup;
+}
+- (SdefAccessGroup *)accessGroup { return nil; }
+- (void)setAccessGroup:(SdefAccessGroup *)accessGroup {}
 
 - (BOOL)hasImplementation {
   return sd_soFlags.hasImplementation;
 }
-- (SdefImplementation *)impl {
-  return nil;
-}
+- (SdefImplementation *)impl { return nil; }
 - (void)setImpl:(SdefImplementation *)impl {}
 
 #pragma mark Comments

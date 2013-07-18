@@ -78,6 +78,7 @@
   [super sdefInit];
   sd_soFlags.xid = 1;
   sd_soFlags.xrefs = 1;
+  sd_soFlags.hasAccessGroup = 1;
 }
 
 - (BOOL)hasResult {

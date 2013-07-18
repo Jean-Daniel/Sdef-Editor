@@ -76,6 +76,13 @@
         [node setAttribute:@"optional" forKey:@"optional"];
       }
     }
+    if (_requiresAccess) {
+      if (version >= kSdefMountainLionVersion) {
+        [node setAttribute:SdefXMLAccessStringFromFlag(_requiresAccess) forKey:@"requires-access"];
+      } else {
+        // TODO: set meta
+      }
+    }
     [node setEmpty:YES];
   }
   return node;
@@ -93,6 +100,7 @@
   if (optional && ![optional isEqualToString:@"no"]) {
     [self setOptional:YES];
   }
+  _requiresAccess = SdefXMLAccessFlagFromString([attrs objectForKey:@"requires-access"]);
 }
 
 @end
@@ -107,6 +115,13 @@
         [node setAttribute:@"yes" forKey:@"optional"];
       } else {
         [node setAttribute:@"optional" forKey:@"optional"];
+      }
+    }
+    if (_requiresAccess) {
+      if (version >= kSdefMountainLionVersion) {
+        [node setAttribute:SdefXMLAccessStringFromFlag(_requiresAccess) forKey:@"requires-access"];
+      } else {
+        // TODO: set meta
       }
     }
   }
@@ -126,6 +141,7 @@
   if (optional && ![optional isEqualToString:@"no"]) {
     [self setOptional:YES];
   }
+  _requiresAccess = SdefXMLAccessFlagFromString([attrs objectForKey:@"requires-access"]);
 }
 
 @end

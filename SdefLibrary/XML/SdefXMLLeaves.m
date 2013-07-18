@@ -200,7 +200,7 @@
     if (attr && [attr length] > 0)
       [node setAttribute:[attr stringByEscapingEntities:nil] forKey:@"name"];
     
-    attr = self.objectClass;
+    attr = self.className;
     if (attr && [attr length] > 0)
       [node setAttribute:[attr stringByEscapingEntities:nil] forKey:@"class"];
     
@@ -303,7 +303,7 @@
   [self setKey:[[attrs objectForKey:@"key"] stringByUnescapingEntities:nil]];
   [self setName:[[attrs objectForKey:@"name"] stringByUnescapingEntities:nil]];
   [self setMethod:[[attrs objectForKey:@"method"] stringByUnescapingEntities:nil]];
-  self.objectClass = [[attrs objectForKey:@"class"] stringByUnescapingEntities:nil];
+  self.className = [[attrs objectForKey:@"class"] stringByUnescapingEntities:nil];
   
   [self sd_setXMLValue:attrs];
 }
