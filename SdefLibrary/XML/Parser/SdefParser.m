@@ -36,7 +36,6 @@ enum {
   kSdefValidationErrorStatus = 'VErr',
 };
 
-
 static 
 void _SdefSetIncludeNamespace(xmlNodePtr a_node, xmlNsPtr ns) {
   for (xmlNode *cur_node = a_node; cur_node; cur_node = cur_node->next) {
@@ -49,7 +48,7 @@ void _SdefSetIncludeNamespace(xmlNodePtr a_node, xmlNsPtr ns) {
 }
 
 @interface SdefXMLPlaceholder : NSObject <SdefXMLObject> {
-  @private
+@private
   NSString *sd_name;
 }
 
@@ -61,7 +60,7 @@ enum {
   kSdefTypeAccessor = 'Aces',
 };
 @interface SdefAccessorPlaceholder : SdefXMLPlaceholder {
-  @private
+@private
   NSString *sd_style;
 }
 
@@ -70,7 +69,7 @@ enum {
 @end
 
 @interface SdefCollectionPlaceholder : SdefXMLPlaceholder {
-  @private
+@private
   id<SdefXMLObject> sd_object;
 }
 
@@ -100,10 +99,10 @@ SdefVersion SdefDocumentVersionFromParserVersion(SdefValidatorVersion vers) {
 }
 
 static 
-CFMutableDictionaryRef sSdefElementMap = NULL;
+NSDictionary *sSdefElementMap = nil;
 static
 Class _SdefGetObjectClassForElement(CFStringRef element) {
-  return (Class)CFDictionaryGetValue(sSdefElementMap, element);
+  return [sSdefElementMap objectForKey:SPXCFToNSString(element)];
 }
 
 /* Check if it is a Panther collection */
@@ -124,41 +123,42 @@ Boolean _SdefElementIsCollection(CFStringRef element) {
   if ([SdefParser class] == self) {
     xmlInitParser();
     
-    sSdefElementMap = CFDictionaryCreateMutable(kCFAllocatorDefault, 0, 
-                                                &kCFTypeDictionaryKeyCallBacks, &kCFTypeDictionaryValueCallBacks);
-    /* Base */
-    CFDictionaryAddValue(sSdefElementMap, CFSTR("dictionary"), [SdefDictionary class]);
-    CFDictionaryAddValue(sSdefElementMap, CFSTR("suite"), [SdefSuite class]);
-    
-    /* Commons */
-    CFDictionaryAddValue(sSdefElementMap, CFSTR("documentation"), [SdefDocumentation class]);
-    CFDictionaryAddValue(sSdefElementMap, CFSTR("synonym"), [SdefSynonym class]);
-    CFDictionaryAddValue(sSdefElementMap, CFSTR("cocoa"), [SdefImplementation class]);
-    CFDictionaryAddValue(sSdefElementMap, CFSTR("type"), [SdefType class]);
-    CFDictionaryAddValue(sSdefElementMap, CFSTR("xref"), [SdefXRef class]);
+    sSdefElementMap = @{
+                        /* Base */
+                        @"dictionary" : [SdefDictionary class],
+                        @"suite" : [SdefSuite class],
 
-    /* Verbs */
-    CFDictionaryAddValue(sSdefElementMap, CFSTR("command"), [SdefVerb class]);
-//    CFDictionaryAddValue(sSdefElementMap, CFSTR("event"), [SdefVerb class]);
-    CFDictionaryAddValue(sSdefElementMap, CFSTR("direct-parameter"), [SdefDirectParameter class]);
-    CFDictionaryAddValue(sSdefElementMap, CFSTR("parameter"), [SdefParameter class]);
-    CFDictionaryAddValue(sSdefElementMap, CFSTR("result"), [SdefResult class]);
+                        /* Commons */
+                        @"documentation" : [SdefDocumentation class],
+                        @"synonym" : [SdefSynonym class],
+                        @"cocoa" : [SdefImplementation class],
+                        @"type" : [SdefType class],
+                        @"xref" : [SdefXRef class],
 
-    /* Class */
-    CFDictionaryAddValue(sSdefElementMap, CFSTR("class"), [SdefClass class]);
-//    CFDictionaryAddValue(sSdefElementMap, CFSTR("class-extension"), [SdefClass class]);
-    CFDictionaryAddValue(sSdefElementMap, CFSTR("contents"), [SdefContents class]);
-    CFDictionaryAddValue(sSdefElementMap, CFSTR("element"), [SdefElement class]);
-    CFDictionaryAddValue(sSdefElementMap, CFSTR("accessor"), [SdefAccessorPlaceholder class]);
-    CFDictionaryAddValue(sSdefElementMap, CFSTR("property"), [SdefProperty class]);
-    CFDictionaryAddValue(sSdefElementMap, CFSTR("responds-to"), [SdefRespondsTo class]);
-    /* Types */
-    CFDictionaryAddValue(sSdefElementMap, CFSTR("value-type"), [SdefValue class]);
-    CFDictionaryAddValue(sSdefElementMap, CFSTR("record-type"), [SdefRecord class]);
-    CFDictionaryAddValue(sSdefElementMap, CFSTR("enumeration"), [SdefEnumeration class]);
-    CFDictionaryAddValue(sSdefElementMap, CFSTR("enumerator"), [SdefEnumerator class]);
-    /* XInclude */
-    CFDictionaryAddValue(sSdefElementMap, CFSTR("include"), [SdefXInclude class]);
+                        /* Verbs */
+                        @"command" : [SdefVerb class],
+                        //    @"event" : [SdefVerb class],
+                        @"direct-parameter" : [SdefDirectParameter class],
+                        @"parameter" : [SdefParameter class],
+                        @"result" : [SdefResult class],
+
+                        /* Class */
+                        @"class" : [SdefClass class],
+                        //    @"class-extension" : [SdefClass class],
+                        @"contents" : [SdefContents class],
+                        @"element" : [SdefElement class],
+                        @"accessor" : [SdefAccessorPlaceholder class],
+                        @"property" : [SdefProperty class],
+                        @"responds-to" : [SdefRespondsTo class],
+                        /* Types */
+                        @"value-type" : [SdefValue class],
+                        @"record-type" : [SdefRecord class],
+                        @"enumeration" : [SdefEnumeration class],
+                        @"enumerator" : [SdefEnumerator class],
+                        /* XInclude */
+                        @"include" : [SdefXInclude class]
+                        };
+    [sSdefElementMap retain];
   }
 }
 
@@ -167,13 +167,16 @@ Boolean _SdefElementIsCollection(CFStringRef element) {
   if (self = [super init]) {
     sd_comments = [[NSMutableArray alloc] init];
     sd_xincludes = [[NSMutableArray alloc] init];
-    sd_metas = CFDictionaryCreateMutable(kCFAllocatorDefault, 0, &kCFTypeDictionaryKeyCallBacks, &kCFTypeDictionaryValueCallBacks);
+    sd_metas = CFDictionaryCreateMutable(kCFAllocatorDefault, 0,
+                                         &kCFCopyStringDictionaryKeyCallBacks,
+                                         &kCFTypeDictionaryValueCallBacks);
   }
   return self;
 }
 
 - (void)dealloc {
-  if (sd_metas) CFRelease(sd_metas);
+  if (sd_metas)
+    CFRelease(sd_metas);
   [sd_roots release];
   [sd_comments release];
   [sd_xincludes release];
@@ -189,7 +192,8 @@ Boolean _SdefElementIsCollection(CFStringRef element) {
   [sd_comments removeAllObjects];
   [sd_xincludes removeAllObjects];
   sd_version = kSdefParserVersionUnknown;
-  if (sd_metas) CFDictionaryRemoveAllValues(sd_metas);
+  if (sd_metas)
+    CFDictionaryRemoveAllValues(sd_metas);
 }
 
 - (NSArray *)objects {
@@ -322,11 +326,11 @@ Boolean _SdefElementIsCollection(CFStringRef element) {
     [sd_validator startElement:name];
 
   if (kSdefParserVersionUnknown == (result & kSdefValidatorVersionMask)) {
-    bool skipObject = true;
+    BOOL skipObject = YES;
     NSString *reason = [NSString stringWithFormat:@"Parser validation error line %ld: %@ (%@, %@)", 
       (long)[parser line], error, name, attrs];
-    NSDictionary *info = [NSDictionary dictionaryWithObjectsAndKeys:
-      reason, NSLocalizedDescriptionKey, error, NSUnderlyingErrorKey, nil];
+    NSDictionary *info = @{ NSUnderlyingErrorKey : error,
+                            NSLocalizedDescriptionKey : reason };
     NSError *anError = [NSError errorWithDomain:NSXMLParserErrorDomain code:NSXMLParserInternalError userInfo:info];
     if ([sd_delegate sdefParser:self shouldIgnoreValidationError:anError isFatal:NO]) {
       /* check if this is an attribute error or an element error */
@@ -433,15 +437,15 @@ Boolean _SdefElementIsCollection(CFStringRef element) {
 - (void)sd_addCommentsToObject:(id<SdefXMLObject>)object {
   if ([sd_comments count]) {
     if (object) {
-      for (NSUInteger i = 0; i < [sd_comments count]; i++) {
+      for (NSString *comment in sd_comments) {
         /* parse meta */
-        [object addXMLComment:[sd_comments objectAtIndex:i]];
+        [object addXMLComment:comment];
       }
     }
     [sd_comments removeAllObjects];
   }
   if (sd_metas && CFDictionaryGetCount(sd_metas) > 0) {
-    [object setXMLMetas:(id)sd_metas];
+    [object setXMLMetas:SPXCFToNSDictionary(sd_metas)];
     CFDictionaryRemoveAllValues(sd_metas);
   }
 }

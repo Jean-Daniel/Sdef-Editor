@@ -318,24 +318,28 @@ NSMutableArray *comments(SdefObject *self) {
 
 #pragma mark -
 @implementation SdefCollection
+
+@synthesize contentType = _contentType;
+@synthesize elementName = _elementName;
+
 #pragma mark Protocols Implementations
 - (id)copyWithZone:(NSZone *)aZone {
   SdefCollection *copy = [super copyWithZone:aZone];
-  copy->sd_contentType = sd_contentType;
-  copy->sd_elementName = [sd_elementName copyWithZone:aZone];
+  copy->_contentType = _contentType;
+  copy->_elementName = [_elementName copyWithZone:aZone];
   return copy;
 }
 
 - (void)encodeWithCoder:(NSCoder *)aCoder {
   [super encodeWithCoder:aCoder];
-  [aCoder encodeObject:sd_elementName forKey:@"SCElementName"];
-  [aCoder encodeObject:NSStringFromClass(sd_contentType) forKey:@"SCContentType"];
+  [aCoder encodeObject:_elementName forKey:@"SCElementName"];
+  [aCoder encodeObject:NSStringFromClass(_contentType) forKey:@"SCContentType"];
 }
 
 - (id)initWithCoder:(NSCoder *)aCoder {
   if (self = [super initWithCoder:aCoder]) {
-    sd_elementName = [[aCoder decodeObjectForKey:@"SCElementName"] retain];
-    sd_contentType = NSClassFromString([aCoder decodeObjectForKey:@"SCContentType"]);
+    _elementName = [[aCoder decodeObjectForKey:@"SCElementName"] retain];
+    _contentType = NSClassFromString([aCoder decodeObjectForKey:@"SCContentType"]);
   }
   return self;
 }
@@ -355,7 +359,7 @@ NSMutableArray *comments(SdefObject *self) {
 }
 
 - (void)dealloc {
-  [sd_elementName release];
+  [_elementName release];
   [super dealloc];
 }
 
@@ -364,27 +368,8 @@ NSMutableArray *comments(SdefObject *self) {
   return NO;
 }
 
-- (Class)contentType {
-  return sd_contentType;
-}
-- (void)setContentType:(Class)newContentType {
-  if (sd_contentType != newContentType) {
-    sd_contentType = newContentType;
-  }
-}
-
-- (NSString *)elementName {
-  return sd_elementName;
-}
-- (void)setElementName:(NSString *)aName {
-  if (sd_elementName != aName) {
-    [sd_elementName release];
-    sd_elementName = [aName copy];
-  }
-}
-
 - (BOOL)acceptsObjectType:(SdefObjectType)aType {
-  return sd_contentType ? [sd_contentType objectType] == aType : NO;
+  return _contentType ? [_contentType objectType] == aType : NO;
 }
 
 @end

@@ -329,6 +329,9 @@ CFMutableDictionaryRef sValidators = NULL;
     case kSdefParserVersionLeopard:
       os = @"Leopard";
       break;
+    case kSdefParserVersionMoutainLion:
+      os = @"Moutain Lion";
+      break;
   }
   return [NSString stringWithFormat:@"unexpected attribute '%@' found in element '%@' for %@ sdef format.", attribute, element, os];
 }
@@ -423,6 +426,7 @@ CFMutableDictionaryRef sValidators = NULL;
   va_start(ap, element);
   do {
     idx++;
+    assert(idx < 32);
     items[idx] = va_arg(ap, CFStringRef);
   } while (items[idx]);
   va_end(ap);
@@ -439,6 +443,7 @@ CFMutableDictionaryRef sValidators = NULL;
   va_start(ap, attribute);
   do {
     idx++;
+    assert(idx < 32);
     items[idx] = va_arg(ap, CFStringRef);
   } while (items[idx]);
   va_end(ap);

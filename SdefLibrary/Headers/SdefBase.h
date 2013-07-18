@@ -178,15 +178,12 @@ NSString *SdefObjectTypeName(SdefObjectType type);
 #pragma mark -
 @interface SdefCollection : SdefObject <NSCopying, NSCoding> {
   @private
-  Class sd_contentType;
-  NSString *sd_elementName;
+  Class _contentType;
+  NSString *_elementName;
 }
 
-- (Class)contentType;
-- (void)setContentType:(Class)newContentType;
-
-- (NSString *)elementName;
-- (void)setElementName:(NSString *)aName;
+@property(nonatomic, assign) Class contentType;
+@property(nonatomic, copy) NSString *elementName;
 
 - (BOOL)acceptsObjectType:(SdefObjectType)aType;
 @end
