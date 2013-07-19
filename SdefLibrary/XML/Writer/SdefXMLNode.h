@@ -9,13 +9,13 @@
 #import <WonderBox/WBTreeNode.h>
 
 @interface SdefXMLNode : WBTreeNode {
-  BOOL sd_list;
-  BOOL sd_empty;
-  BOOL sd_cddata;
-  NSString *sd_name;
+  BOOL _list;
+  BOOL _empty;
+  BOOL _cddata;
+  NSString *_name;
   NSMutableArray *sd_attrKeys, *sd_attrValues;
   
-  NSString * sd_content;
+  NSString *_content;
   NSMutableArray *sd_comments;
   NSMutableDictionary *sd_metas;
   NSMutableDictionary *sd_postmetas;
@@ -24,17 +24,12 @@
 + (id)nodeWithElementName:(NSString *)aName;
 - (id)initWithElementName:(NSString *)name;
 
-- (BOOL)isList;
-- (void)setList:(BOOL)flag;
+@property(nonatomic, copy) NSString *elementName;
+@property(nonatomic, copy) NSString *content;
 
-- (BOOL)isEmpty;
-- (void)setEmpty:(BOOL)flag;
-
-- (BOOL)isCDData;
-- (void)setCDData:(BOOL)flag;
-
-- (NSString *)elementName;
-- (void)setElementName:(NSString *)aName;
+@property(nonatomic, getter = isList) BOOL list;
+@property(nonatomic, getter = isEmpty) BOOL empty;
+@property(nonatomic, getter = isCDData) BOOL CDData;
 
 - (NSUInteger)attributeCount;
 
@@ -46,9 +41,6 @@
 - (void)addAttributesFromDictionary:(NSDictionary *)dict;
 - (void)removeAttributeForKey:(NSString *)key;
 - (void)removeAllAttributes;
-
-- (NSString *)content;
-- (void)setContent:(NSString *)aContent;
 
 - (NSArray *)comments;
 - (void)setComments:(NSArray *)comments;

@@ -10,6 +10,13 @@
 
 @implementation SdefXMLNode
 
+@synthesize content = _content;
+@synthesize elementName = _name;
+
+@synthesize list = _list;
+@synthesize empty = _empty;
+@synthesize CDData = _cddata;
+
 + (id)nodeWithElementName:(NSString *)aName {
   return [[[self alloc] initWithElementName:aName] autorelease];
 }
@@ -30,9 +37,9 @@
 }
 
 - (void)dealloc {
-  [sd_name release];
+  [_name release];
   [sd_metas release];
-  [sd_content release];
+  [_content release];
   [sd_comments release];
   [sd_attrKeys release];
   [sd_postmetas release];
@@ -42,43 +49,12 @@
 
 - (NSString *)description {
   return [NSString stringWithFormat:@"<%@ %p> {element:%@ attributes:%@}",
-    NSStringFromClass([self class]), self,
-    sd_name, sd_attrKeys];
+    NSStringFromClass([self class]), self, _name, sd_attrKeys];
 }
 
 #pragma mark -
-- (BOOL)isList {
-  return sd_list;
-}
-
-- (void)setList:(BOOL)flag {
-  sd_list = flag;
-}
-
 - (BOOL)isEmpty {
   return ![self hasChildren] && ![self content] && 0 == [sd_postmetas count];
-}
-- (void)setEmpty:(BOOL)flag {
-  if (sd_empty != flag) {
-    sd_empty = flag;
-  }
-}
-
-- (BOOL)isCDData {
-  return sd_cddata;
-}
-- (void)setCDData:(BOOL)flag {
-  sd_cddata = flag;
-}
-
-- (NSString *)elementName {
-  return sd_name;
-}
-- (void)setElementName:(NSString *)aName {
-  if (sd_name != aName) {
-    [sd_name release];
-    sd_name = [aName copy];
-  }
 }
 
 - (NSUInteger)attributeCount {
@@ -127,17 +103,6 @@
 - (void)removeAllAttributes {
   [sd_attrKeys removeAllObjects];
   [sd_attrValues removeAllObjects];
-}
-
-- (NSString *)content {
-  return sd_content;
-}
-
-- (void)setContent:(NSString *)newContent {
-  if (sd_content != newContent) {
-    [sd_content release];
-    sd_content = [newContent copy];
-  }
 }
 
 - (NSArray *)comments {
