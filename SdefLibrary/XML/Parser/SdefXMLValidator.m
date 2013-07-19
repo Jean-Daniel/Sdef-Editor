@@ -54,7 +54,7 @@ static
 CFMutableDictionaryRef sValidators = NULL;
 
 static inline SPX_REQUIRES_NIL_TERMINATION
-SdefXMLElement *_Element(Class cls, NSString *name, ...) {
+SdefXMLElement *_ELEMENT(Class cls, NSString *name, ...) {
   NSInteger idx = -1;
   CFStringRef items[32];
 
@@ -73,9 +73,8 @@ SdefXMLElement *_Element(Class cls, NSString *name, ...) {
 
   return elt;
 }
-
+#define ELEMENT(name, cls, ...) _ELEMENT([cls class], name, ##__VA_ARGS__)
 #define EMPTY nil
-#define ELEMENT(name, cls, ...) _Element([cls class], name, ##__VA_ARGS__)
 
 + (void)initialize {
   if ([SdefXMLValidator class] == self) {
@@ -131,7 +130,7 @@ SdefXMLElement *_Element(Class cls, NSString *name, ...) {
              @"documentation", @"xref", nil)
      ATTLIST:@"name", @"id", @"code", @"description", @"hidden", nil];
     // Ditto for event
-    CFDictionarySetValue(sValidators, CFSTR("event"), cmd);
+    CFDictionarySetValue(sValidators, @"event", cmd);
     
     /* direct-parameter */
     [ELEMENT(@"direct-parameter", SdefXMLElement, @"type", nil)
@@ -141,8 +140,8 @@ SdefXMLElement *_Element(Class cls, NSString *name, ...) {
     [ELEMENT(@"result", SdefXMLElement, @"type", nil)
      ATTLIST:@"type", @"description", nil];
     
-    /* parameter (+synonym) */
-    [ELEMENT(@"parameter", SdefXMLElement, @"cocoa", @"type", @"synonym", nil) // should we support @"synonym". It is not in the DTD, but sdef(5) says parameter is a terminology element ?
+    /* parameter (+synonym, +documentation) */
+    [ELEMENT(@"parameter", SdefXMLElement, @"cocoa", @"type", @"synonym", @"documentation", nil) // @"synonym" is not in the DTD, but sdef(5) says parameter is a terminology element ?
      ATTLIST:@"name", @"code", @"hidden", @"type", @"optional", @"requires-access", @"description", nil];
     
     /* class (custom) */
@@ -150,8 +149,8 @@ SdefXMLElement *_Element(Class cls, NSString *name, ...) {
      // 10.4: element, property, responds-to
      ATTLIST:@"name", @"id", @"code", @"hidden", @"plural", @"inherits", @"description", nil];
     
-    /* contents */
-    [ELEMENT(@"contents", SdefXMLElement, @"cocoa", @"access-group", @"type", nil)
+    /* contents (+synonym, +documentation) */
+    [ELEMENT(@"contents", SdefXMLElement, @"cocoa", @"access-group", @"type", @"synonym", @"documentation", nil)
      ATTLIST:@"name", @"code", @"type", @"access", @"hidden", @"description", nil];
     
     /* element */
@@ -304,7 +303,7 @@ SdefXMLElement *_Element(Class cls, NSString *name, ...) {
   if ([self element]) {
     validator = (id)CFDictionaryGetValue(sValidators, [self element]);
   } else {
-    validator = (id)CFDictionaryGetValue(sValidators, CFSTR("__sdef__"));
+    validator = (id)CFDictionaryGetValue(sValidators, @"__sdef__");
   }
   if (validator) {
     SdefValidatorVersion version = [validator acceptElement:element];
