@@ -418,6 +418,7 @@
 		1B39DEF1168462BA0048F1E9 /* WBHSplitBar.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = WBHSplitBar.tiff; sourceTree = "<group>"; };
 		1B39DEF3168462BA0048F1E9 /* WBSplitDot.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = WBSplitDot.tiff; sourceTree = "<group>"; };
 		1B39DEF5168462BA0048F1E9 /* WBVSplitBar.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = WBVSplitBar.tiff; sourceTree = "<group>"; };
+		1B4D28E61796CA3D0017CCA3 /* CocoaStandard.sdef */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = CocoaStandard.sdef; sourceTree = "<group>"; };
 		1B5ECF310CD62725007B8226 /* XInclude.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = XInclude.tiff; sourceTree = "<group>"; };
 		1B5ECF4F0CD62807007B8226 /* SdefXIncludeView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; name = SdefXIncludeView.h; path = ../SdefXIncludeView.h; sourceTree = "<group>"; };
 		1B5ECF500CD62807007B8226 /* SdefXIncludeView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = SdefXIncludeView.m; sourceTree = "<group>"; };
@@ -972,6 +973,7 @@
 				98168E0007A29025002B893D /* NSCoreSuite.sdef */,
 				98168E0407A29036002B893D /* NSTextSuite.sdef */,
 				98E3176D0840B5B0003EC9D5 /* AppleScriptKit.sdef */,
+				1B4D28E61796CA3D0017CCA3 /* CocoaStandard.sdef */,
 				98F940B407F889560014708A /* Templates */,
 				98EA0B8B078C883E00ECCB4B /* Sdef Tabs */,
 				1BCF18230D244AD2009CCAFB /* MainMenu.xib */,
@@ -1938,7 +1940,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 1B35555E16844A90005D0D0A /* release.xcconfig */;
 			buildSettings = {
-				CLANG_CXX_LANGUAGE_STANDARD = "c++0x";
+				CLANG_WARN_DOCUMENTATION_COMMENTS = NO;
 				WONDERBOX = "";
 			};
 			name = Release;
@@ -1971,7 +1973,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 1B35555C16844A90005D0D0A /* debug.xcconfig */;
 			buildSettings = {
-				CLANG_CXX_LANGUAGE_STANDARD = "c++0x";
+				CLANG_WARN_DOCUMENTATION_COMMENTS = NO;
 				WONDERBOX = "";
 			};
 			name = Debug;
