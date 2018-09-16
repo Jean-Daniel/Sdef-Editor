@@ -18,30 +18,10 @@
 
 @implementation SdefImporter
 
-- (void)dealloc {
-  [suites release];
-  [manager release];
-  [sd_warnings release];
-  [super dealloc];
-}
-
 - (void)prepareImport {
-  if (sd_warnings) {
-    [sd_warnings release];
-    sd_warnings = nil;
-  }
   sd_warnings = [[NSMutableArray alloc] init];
-  
-  if (manager) {
-    [manager release];
-    manager = nil;
-  }
-
-  if (suites) {
-    [suites release];
-    suites = nil;
-  }
   suites = [[NSMutableArray alloc] init];
+  manager = nil;
 }
 
 - (BOOL)import {
@@ -66,11 +46,9 @@
         [manager addSuite:[suites objectAtIndex:idx]];
       }
       [self postProcess];
-      [manager release];
       manager = nil;
     }
     if ([sd_warnings count] == 0) {
-      [sd_warnings release];
       sd_warnings = nil;
     }
   }

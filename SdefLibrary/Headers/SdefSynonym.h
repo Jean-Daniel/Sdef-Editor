@@ -22,7 +22,7 @@
 
 @class SdefImplementation;
 @interface SdefSynonym : SdefLeaf <NSCopying, NSCoding> {
-  NSString *_code;
+@private
   SdefImplementation *_impl;
 }
 

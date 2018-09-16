@@ -32,10 +32,10 @@ const xmlChar *_SdefXMLAttributeGetValue(xmlAttr *attr) {
   return attr && attr->children ? attr->children->content : NULL;
 }
 
-CFDictionaryRef _SdefXMLCreateDictionaryWithAttributes(xmlAttr *attr, CFStringEncoding encoding) {
+NSDictionary *_SdefXMLCreateDictionaryWithAttributes(xmlAttr *attr, NSStringEncoding encoding) {
   if (!attr) return NULL;
   
-  CFMutableDictionaryRef dict = NULL;
+  NSMutableDictionary *dict = NULL;
   do {
     if (attr->name) {
       /* ignore xml:base attributes (added by xinclude parser) */
@@ -43,17 +43,13 @@ CFDictionaryRef _SdefXMLCreateDictionaryWithAttributes(xmlAttr *attr, CFStringEn
           (0 != xmlStrcasecmp(attr->ns->href, XML_XML_NAMESPACE) || 0 != xmlStrcasecmp(attr->name, (const xmlChar *)"base"))) {
         const xmlChar *value = _SdefXMLAttributeGetValue(attr);
         if (value) {
-          CFStringRef val = CFStringCreateWithCString(kCFAllocatorDefault, (const char *)value, encoding);
-          CFStringRef name = CFStringCreateWithCString(kCFAllocatorDefault, (const char *)attr->name, encoding);
+          NSString *val = [NSString stringWithCString:(const char *)value encoding:encoding];
+          NSString *name = [NSString stringWithCString:(const char *)attr->name encoding:encoding];
           if (val && name) {
             if (!dict)
-              dict = CFDictionaryCreateMutable(kCFAllocatorDefault, 0,
-                                               &kCFCopyStringDictionaryKeyCallBacks,
-                                               &kCFTypeDictionaryValueCallBacks);
-            CFDictionarySetValue(dict, name, val);
+              dict = [[NSMutableDictionary alloc] init];
+            dict[name] = val;
           }
-          SPXCFRelease(name);
-          SPXCFRelease(val);
         }
       } else {
         SPXDebug(@"Ignore attribute: %s:%s", attr->ns->prefix, attr->name);
@@ -82,7 +78,7 @@ CFDictionaryRef _SdefXMLCreateDictionaryWithAttributes(xmlAttr *attr, CFStringEn
   NSMutableArray *stack = [[NSMutableArray alloc] init];
   do {
     /* Process node */
-    id elt = [sd_delegate parser:self createStructureForNode:sd_current];
+    SdefXMLStructure elt = [sd_delegate parser:self createStructureForNode:sd_current];
     
     if (elt) 
       [sd_delegate parser:self addChild:elt toStructure:[stack lastObject]];
@@ -112,7 +108,6 @@ CFDictionaryRef _SdefXMLCreateDictionaryWithAttributes(xmlAttr *attr, CFStringEn
     }
   } while(sd_current && !sd_abort);
   sd_current = NULL;
-  [stack release];
   
   return !sd_abort;
 }
@@ -128,11 +123,7 @@ CFDictionaryRef _SdefXMLCreateDictionaryWithAttributes(xmlAttr *attr, CFStringEn
   sd_abort = true;
 }
 
-- (CFStringEncoding)cfencoding {
-  return kCFStringEncodingUTF8;
-}
-
-- (NSStringEncoding)nsencoding {
+- (NSStringEncoding)encoding {
   return NSUTF8StringEncoding;
 }
 

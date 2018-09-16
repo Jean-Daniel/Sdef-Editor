@@ -94,13 +94,10 @@ enum {
 /* class, property, and contents */
 @class SdefDocumentation, SdefContents;
 @interface SdefClass : SdefTerminologyObject <NSCopying, NSCoding> {
-  @private
-  BOOL _extension;
-  SdefContents *_contents;
-  /* Attributes */
+@private
   NSString *_type;
-  NSString *_plural;
   NSString *_inherits;
+  SdefContents *_contents;
 }
 
 @property(nonatomic, retain) SdefContents *contents;
@@ -118,17 +115,12 @@ enum {
 
 @end
 
-@interface SdefElement : SdefTerminologyObject <NSCopying, NSCoding> {
-  uint32_t _accessors; /* index | name | id | range | relative | test */
-  
-  /* Attributs */
-  uint32_t _access; /* ( kSdefAccessRead | kSdefAccessWrite ) */
-}
+@interface SdefElement : SdefTerminologyObject <NSCopying, NSCoding>
 
 @property(nonatomic, copy) NSString *type;
 
-@property(nonatomic) uint32_t access;
-@property(nonatomic) uint32_t accessors;
+@property(nonatomic) uint32_t access; /* ( kSdefAccessRead | kSdefAccessWrite ) */
+@property(nonatomic) uint32_t accessors; /* index | name | id | range | relative | test */
 
 #pragma mark Accessors
 - (BOOL)accIndex;
@@ -152,9 +144,7 @@ enum {
 @end
 
 #pragma mark -
-@interface SdefProperty : SdefTypedObject <NSCopying, NSCoding> {
-  uint32_t _access;
-}
+@interface SdefProperty : SdefTypedObject <NSCopying, NSCoding>
 
 @property(nonatomic) uint32_t access;
 

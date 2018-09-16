@@ -22,17 +22,11 @@
 
 @implementation OSASdefImporter
 
-- (id)initWithFile:(NSString *)file {
+- (id)initWithURL:(NSURL *)url {
   if (self = [super init]) {
-    sd_path = [file copy];
+    sd_url = url;
   }
   return self;
-}
-
-- (void)dealloc {
-  [sd_dico release];
-  [sd_path release];
-  [super dealloc];
 }
 
 - (SdefDictionary *)sdefDictionary {
@@ -43,21 +37,16 @@
 #pragma mark -
 #pragma mark Parsing
 - (BOOL)import {
-  if (sd_dico) {
-    [sd_dico release];
-    sd_dico = nil;
-  }
-  
-  FSRef file;
-  if (sd_path && [sd_path getFSRef:&file]) {
+  sd_dico = nil;
+
+  if (sd_url) {
     CFDataRef sdef = nil;
-    if (noErr == OSACopyScriptingDefinition(&file, 0, &sdef) && sdef) {
-      sd_dico = [SdefLoadDictionaryData((id)sdef, nil, NULL, self, NULL) retain];
+    if (noErr == OSACopyScriptingDefinitionFromURL(SPXNSToCFURL(sd_url), 0, &sdef) && sdef) {
+      sd_dico = SdefLoadDictionaryData(SPXCFToNSData(sdef), nil, NULL, self, NULL);
 			if (![sd_dico title] || [[sd_dico title] isEqualToString:[[sd_dico class] defaultName]]) {
-				CFStringRef name = NULL;
-				if (noErr == LSCopyDisplayNameForRef(&file, &name) && name) {
-					[sd_dico setTitle:(NSString *)name];
-					CFRelease(name);
+				NSString *name = NULL;
+				if ([sd_url getResourceValue:&name forKey:NSURLLocalizedNameKey error:NULL]) {
+					[sd_dico setTitle:name];
 				}
 			}
       CFRelease(sdef);

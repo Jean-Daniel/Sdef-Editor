@@ -103,17 +103,19 @@ SdefVersion SdefDocumentVersionFromParserVersion(SdefValidatorVersion vers) {
 static 
 NSDictionary *sSdefElementMap = nil;
 static
-Class _SdefGetObjectClassForElement(CFStringRef element) {
-  return [sSdefElementMap objectForKey:SPXCFToNSString(element)];
+Class _SdefGetObjectClassForElement(NSString *element) {
+  return sSdefElementMap[element];
 }
 
 /* Check if it is a Panther collection */
 static
-Boolean _SdefElementIsCollection(CFStringRef element) {
-  return CFEqual(CFSTR("types"), element) || CFEqual(CFSTR("synonyms"), element) ||
-  CFEqual(CFSTR("classes"), element) || CFEqual(CFSTR("elements"), element) ||
-  CFEqual(CFSTR("properties"), element) || CFEqual(CFSTR("responds-to-commands"), element) ||
-  CFEqual(CFSTR("responds-to-events"), element) || CFEqual(CFSTR("commands"), element) || CFEqual(CFSTR("events"), element);
+Boolean _SdefElementIsCollection(NSString *element) {
+  static NSSet *sCollection = nil;
+  if (!sCollection)
+    sCollection = [NSSet setWithObjects: @"types", @"synonyms",
+                   @"classes", @"elements", @"properties",
+                   @"responds-to-commands", @"responds-to-events", @"commands", @"events", nil];
+  return [sCollection containsObject:element];
 }
 
 #pragma mark -
@@ -161,7 +163,6 @@ Boolean _SdefElementIsCollection(CFStringRef element) {
                         @"include" : [SdefXInclude class],
                         @"access-group" : [SdefAccessGroup class]
                         };
-    [sSdefElementMap retain];
   }
 }
 
@@ -170,33 +171,19 @@ Boolean _SdefElementIsCollection(CFStringRef element) {
   if (self = [super init]) {
     sd_comments = [[NSMutableArray alloc] init];
     sd_xincludes = [[NSMutableArray alloc] init];
-    sd_metas = CFDictionaryCreateMutable(kCFAllocatorDefault, 0,
-                                         &kCFCopyStringDictionaryKeyCallBacks,
-                                         &kCFTypeDictionaryValueCallBacks);
+    sd_metas = [[NSMutableDictionary alloc] init];
   }
   return self;
 }
 
-- (void)dealloc {
-  if (sd_metas)
-    CFRelease(sd_metas);
-  [sd_roots release];
-  [sd_comments release];
-  [sd_xincludes release];
-  [sd_validator release];
-  [sd_docParser release];
-  [super dealloc];
-}
-
 #pragma mark -
 - (void)reset {
-  [sd_roots release];
   sd_roots = nil;
   [sd_comments removeAllObjects];
   [sd_xincludes removeAllObjects];
   sd_version = kSdefParserVersionUnknown;
   if (sd_metas)
-    CFDictionaryRemoveAllValues(sd_metas);
+    [sd_metas removeAllObjects];
 }
 
 - (NSArray *)objects {
@@ -215,19 +202,18 @@ Boolean _SdefElementIsCollection(CFStringRef element) {
 
 - (BOOL)parseFragment:(xmlNodePtr)aNode parent:(NSString *)parent base:(NSURL *)anURL {
   if (parent)
-    [sd_validator startElement:(CFStringRef)parent];
+    [sd_validator startElement:parent];
 
   SdefDOMParser *parser = [[SdefDOMParser alloc] initWithDelegate:self];
   BOOL ok = [parser parse:aNode];
-  [parser release];
   
   if (parent)
-    [sd_validator endElement:(CFStringRef)parent];
+    [sd_validator endElement:parent];
   
   return ok;
 }
 
-- (BOOL)parseData:(NSData *)sdefData base:(NSURL *)baseURL error:(NSError **)outError {
+- (BOOL)parseData:(NSData *)sdefData base:(NSURL *)baseURL error:(NSError * __autoreleasing *)outError {
   [self reset];
   BOOL result = NO;
   if (outError) *outError = nil;
@@ -260,7 +246,6 @@ Boolean _SdefElementIsCollection(CFStringRef element) {
       result = [self parseFragment:xmlDocGetRootElement(document) parent:nil base:baseURL];
       sd_version = SdefDocumentVersionFromParserVersion([sd_validator version]);
       if (document) xmlFreeDoc(document);
-      [sd_validator release];
       sd_validator = nil;
     } else if (outError) {
       xmlErrorPtr error = xmlGetLastError();
@@ -282,50 +267,42 @@ Boolean _SdefElementIsCollection(CFStringRef element) {
   return result;
 }
 
-- (BOOL)parseContentsOfURL:(NSURL *)anURL error:(NSError **)outError {
+- (BOOL)parseContentsOfURL:(NSURL *)anURL error:(NSError * __autoreleasing *)outError {
   return [self parseData:nil base:anURL error:outError];
 }
 
 #pragma mark -
 - (void)parser:(SdefDOMParser *)parser handleComment:(const xmlChar *)aComment {
-  CFStringRef cmt = CFStringCreateWithCString(kCFAllocatorDefault, (const char *)aComment, [parser cfencoding]);
-  if (cmt) {
-    if (CFStringHasPrefix(cmt, CFSTR(" @"))) {
-      CFRange start, end;
-      if (CFStringFindWithOptions(cmt, CFSTR("("), 
-                                  CFRangeMake(0, CFStringGetLength(cmt)), 0, &start) &&
-          CFStringFindWithOptions(cmt, CFSTR(")"), 
-                                  CFRangeMake(0, CFStringGetLength(cmt)), kCFCompareBackwards, &end) &&
-          (start.location + start.length) < end.location) {
-        CFStringRef key = NULL, value = NULL;
-        key = CFStringCreateWithSubstring(kCFAllocatorDefault, cmt, CFRangeMake(2, start.location - 2));
-        start.location += start.length;
-        value = CFStringCreateWithSubstring(kCFAllocatorDefault, cmt, CFRangeMake(start.location, end.location - start.location));
-        if (key && value)
-          CFDictionarySetValue(sd_metas, key, value);
-        if (key) CFRelease(key);
-        if (value) CFRelease(value);
-        
-        CFRelease(cmt);
-        return;
-      }
-    }
-    /* else */
-    [sd_comments addObject:(id)cmt];
-    CFRelease(cmt);
-  }
+  NSString *cmt = [NSString stringWithCString:(const char *)aComment encoding:[parser encoding]];
+  if (!cmt)
+    return;
 
+  if ([cmt hasPrefix:@" @"]) {
+    NSRange start = [cmt rangeOfString:@"("];
+    NSRange end = [cmt rangeOfString:@")" options:NSBackwardsSearch];
+    if (start.location != NSNotFound && end.location != NSNotFound && (start.location + start.length) < end.location) {
+      NSString *key = NULL, *value = NULL;
+      key = [cmt substringWithRange:NSMakeRange(2, start.location - 2)];
+      start.location += start.length;
+      value = [cmt substringWithRange:NSMakeRange(start.location, end.location - start.location)];
+      if (key && value)
+        sd_metas[key] = value;
+      return;
+    }
+  }
+  /* else */
+  [sd_comments addObject:cmt];
 }
 
-- (id)parser:(SdefDOMParser *)parser createStructureForElement:(xmlNodePtr)element NS_RETURNS_RETAINED {
+- (SdefXMLStructure)parser:(SdefDOMParser *)parser createStructureForElement:(xmlNodePtr)element {
   NSString *error = nil;
   id<SdefXMLObject> object = nil;
   
-  CFStringRef name = CFStringCreateWithCString(kCFAllocatorDefault, (const char *)element->name, [parser cfencoding]);
-  CFDictionaryRef attrs = _SdefXMLCreateDictionaryWithAttributes(element->properties, [parser cfencoding]);
+  NSString *name = [NSString stringWithCString:(const char *)element->name encoding:[parser encoding]];
+  NSDictionary *attrs = _SdefXMLCreateDictionaryWithAttributes(element->properties, [parser encoding]);
   SdefValidatorResult result = [sd_validator validateElement:name attributes:attrs error:&error];
   /* include should not be append to the validator stack */
-  if (!CFEqual(name, CFSTR("include")))
+  if (![name isEqualToString:@"include"])
     [sd_validator startElement:name];
 
   if (kSdefParserVersionUnknown == (result & kSdefValidatorVersionMask)) {
@@ -349,38 +326,33 @@ Boolean _SdefElementIsCollection(CFStringRef element) {
     } else {
       [parser abortWithError:kSdefValidationErrorStatus reason:@""];
     }
-    if (skipObject) {
-      if (attrs) CFRelease(attrs);
-      CFRelease(name);
+    if (skipObject)
       return object;
-    }
   }
   
   Class class = _SdefGetObjectClassForElement(name);
   if (class) {
     object = [[class alloc] init];
-  } else if (CFEqual(CFSTR("class-extension"), name)) {
+  } else if ([name isEqualToString:@"class-extension"]) {
     object = [[SdefClass alloc] init];
     [(SdefClass *)object setExtension:YES];
-  } else if (CFEqual(CFSTR("event"), name)) {
+  } else if ([name isEqualToString:@"event"]) {
     object = [[SdefVerb alloc] init];
     [(SdefVerb *)object setCommand:NO];
   } else if (_SdefElementIsCollection(name)) {
-    object = [[SdefCollectionPlaceholder alloc] initWithElementName:(id)name];
+    object = [[SdefCollectionPlaceholder alloc] initWithElementName:name];
   }
   
   if (object) {
-    if (attrs && CFDictionaryGetCount(attrs) > 0)
-      [object setXMLAttributes:(id)attrs];
+    if (attrs && attrs.count > 0)
+      [object setXMLAttributes:attrs];
   }
-  if (attrs) CFRelease(attrs);
-  CFRelease(name);
   return object;
 }
 
 #pragma mark Parser Core
-- (void *)parser:(SdefDOMParser *)parser createStructureForNode:(xmlNodePtr)node {
-  void *structure = NULL;
+- (SdefXMLStructure)parser:(SdefDOMParser *)parser createStructureForNode:(xmlNodePtr)node {
+  SdefXMLStructure structure = nil;
   @try {
     if (sd_docParser) {
       structure = [sd_docParser parser:parser createStructureForNode:node];
@@ -416,7 +388,6 @@ Boolean _SdefElementIsCollection(CFStringRef element) {
           SPXDebug(@"******* Start xinclude *******");
           structure = [self parser:parser createStructureForElement:node];
           [sd_xincludes addObject:structure];
-          [(id)structure release];
           break;
         case XML_XINCLUDE_END:
           SPXDebug(@"******* End xinclude *******");
@@ -447,13 +418,13 @@ Boolean _SdefElementIsCollection(CFStringRef element) {
     }
     [sd_comments removeAllObjects];
   }
-  if (sd_metas && CFDictionaryGetCount(sd_metas) > 0) {
-    [object setXMLMetas:SPXCFToNSDictionary(sd_metas)];
-    CFDictionaryRemoveAllValues(sd_metas);
+  if (sd_metas && sd_metas.count > 0) {
+    [object setXMLMetas:sd_metas];
+    [sd_metas removeAllObjects];
   }
 }
 
-- (void)parser:(SdefDOMParser *)parser addChild:(void *)aChild toStructure:(void *)aStruct {
+- (void)parser:(SdefDOMParser *)parser addChild:(SdefXMLStructure)aChild toStructure:(SdefXMLStructure)aStruct {
   if (sd_docParser) {
     [sd_docParser parser:parser addChild:aChild toStructure:aStruct];
   } else {
@@ -495,29 +466,26 @@ Boolean _SdefElementIsCollection(CFStringRef element) {
   }
 }
 
-- (void)parser:(SdefDOMParser *)parser endStructure:(void *)structure {
+- (void)parser:(SdefDOMParser *)parser endStructure:(SdefXMLStructure)structure {
   if (sd_docParser) {
-    if ([(id)structure isKindOfClass:[SdefDocumentation class]]) {
+    if ([structure isKindOfClass:[SdefDocumentation class]]) {
       [sd_docParser close];
-      [sd_docParser release];
       sd_docParser = nil; 
       
-      [sd_validator endElement:CFSTR("documentation")];
+      [sd_validator endElement:@"documentation"];
     } else {
       [sd_docParser parser:parser endStructure:structure];
     }
-  } else if (![[(id)structure xmlElementName] isEqualToString:@"xi:include"]) {
+  } else if (![[structure xmlElementName] isEqualToString:@"xi:include"]) {
     /* handle special case where class become class extension */
-    if ([(id)[sd_validator element] isEqualToString:@"class"] &&
-        [[(id)structure xmlElementName] isEqualToString:@"class-extension"])
-      [sd_validator endElement:CFSTR("class")]; 
+    if ([[sd_validator element] isEqualToString:@"class"] &&
+        [[structure xmlElementName] isEqualToString:@"class-extension"])
+      [sd_validator endElement:@"class"];
     else 
-      [sd_validator endElement:(CFStringRef)[(id)structure xmlElementName]]; 
+      [sd_validator endElement:[structure xmlElementName]];
     
     /* Handle comments */
-    [self sd_addCommentsToObject:(id)structure];
-    
-    [(id)structure release];
+    [self sd_addCommentsToObject:structure];
   }
 }
 
@@ -570,31 +538,29 @@ void __SdefParserPostProcessClass(SdefClass *cls) {
   NSEnumerator *cmds = [[cls commands] childEnumerator];
   while (cmd = [cmds nextObject]) {
     if ([[cmd classManager] eventWithIdentifier:[cmd name]]) {
-      [cmd retain];
-      [cmd remove];
+      [cmd remove]; // FIXME: check if this does not release cmd
       [[cls events] appendChild:cmd];
-      [cmd release];
     }
   }
 }
 
 /* post process */
 WB_INLINE
-void __SdefParserPostProcessObject(id object, SdefVersion version) {
+void __SdefParserPostProcessObject(SdefObject *object, SdefVersion version) {
   switch ([object objectType]) {
     case kSdefType_Dictionary:
       [(SdefDictionary *)object setVersion:version];
       break;
     case kSdefType_Suite: {
       SdefClass *class;
-      NSEnumerator *classes = [[object classes] childEnumerator];
+      NSEnumerator *classes = [[(SdefSuite *)object classes] childEnumerator];
       while (class = [classes nextObject]) {
         __SdefParserPostProcessClass(class);
       }
     }
       break;
     case kSdefType_Class:
-      __SdefParserPostProcessClass(object);
+      __SdefParserPostProcessClass((SdefClass *)object);
       break;
     default:
       break;
@@ -624,14 +590,9 @@ void _SdefParserPostProcessObjects(NSArray *roots, SdefVersion version) {
 
 - (id)initWithElementName:(NSString *)name {
   if (self = [super init]) {
-    sd_name = [name retain];
+    sd_name = name;
   }
   return self;
-}
-
-- (void)dealloc {
-  [sd_name release];
-  [super dealloc];
 }
 
 #pragma mark -
@@ -732,17 +693,12 @@ void _SdefParserPostProcessObjects(NSArray *roots, SdefVersion version) {
   return [super initWithElementName:@"accessor"];
 }
 
-- (void)dealloc {
-  [sd_style release];
-  [super dealloc];
-}
-
 - (NSString *)style {
   return sd_style;
 }
 
 - (void)setXMLAttributes:(NSDictionary *)attrs { 
-  sd_style = [[attrs objectForKey:@"style"] retain];
+  sd_style = [attrs objectForKey:@"style"];
 }
 
 @end

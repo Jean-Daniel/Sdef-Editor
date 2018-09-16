@@ -33,11 +33,6 @@ static NSString *SystemMajorVersion(void) {
   return self;
 }
 
-- (void)dealloc {
-  [sd_version release];
-  [super dealloc];
-}
-
 #pragma mark -
 
 - (NSString *)version {
@@ -46,8 +41,7 @@ static NSString *SystemMajorVersion(void) {
 
 - (void)setVersion:(NSString *)version {
   if (sd_version != version) {
-    [sd_version release];
-    sd_version = [version retain];
+    sd_version = version;
   }
 }
 
@@ -96,7 +90,6 @@ static NSString *SystemMajorVersion(void) {
                         
                         if ([defs count])
                           [proc setIncludes:defs];
-                        [defs release];
                         
                         SdefProcessorFormat format = 0;
                         if (resourceFormat || rsrcFormat) format |= kSdefResourceFormat;
@@ -127,14 +120,12 @@ static NSString *SystemMajorVersion(void) {
                             }
                           }
                         } @catch (id exception) {
-                          [proc release];
                           proc = nil;
                           SPXLogException(exception);
                           NSRunAlertPanel(NSLocalizedString(@"Undefined error while exporting", @"sdp exception"),
                                           NSLocalizedString(@"An Undefined error prevent exportation: %@", @"sdp exception"),
                                           NSLocalizedString(@"OK", @"Default Button"), nil, nil, exception);  
                         }
-                        [proc release];
                       }
                       [self close];
                     }];
@@ -224,7 +215,7 @@ static NSString *SystemMajorVersion(void) {
 		NSRunAlertPanel(@"Rez not found", @"Set the Rez tool path in Sdef Editor Preferences", @"OK", nil, nil);
 	} else {
 
-		NSTask *rez = [[[NSTask alloc] init] autorelease];
+		NSTask *rez = [[NSTask alloc] init];
     NSMutableArray *args = [NSMutableArray array];
     if (rezTool) {
       [rez setLaunchPath:rezTool];
@@ -256,12 +247,12 @@ static NSString *SystemMajorVersion(void) {
   }
   for (NSURL *file in [openPanel URLs]) {
     NSString *path = [file path];
-    NSDictionary *dico = [[NSDictionary alloc] initWithObjectsAndKeys:
-                          path, @"path",
-                          [[NSFileManager defaultManager] displayNameAtPath:path], @"name",
-                          [[NSWorkspace sharedWorkspace] iconForFile:path], @"icon", nil];
+    NSDictionary *dico = @{
+                           @"path": path,
+                           @"name": [NSFileManager.defaultManager displayNameAtPath:path],
+                           @"icon": [NSWorkspace.sharedWorkspace iconForFile:path]
+                           };
     [includes addObject:dico];
-    [dico release];
   }
 }
 

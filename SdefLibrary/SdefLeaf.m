@@ -16,24 +16,24 @@
 
 #pragma mark Protocols Implementations
 - (id)copyWithZone:(NSZone *)aZone {
-  SdefLeaf *copy = (SdefLeaf *)NSCopyObject(self, 0, aZone);
-  copy->_name = [_name copyWithZone:aZone];
+  SdefLeaf *copy = [[SdefLeaf alloc] initWithName:self.name];
+  copy->_slFlags = _slFlags;
   return copy;
 }
 
 - (void)encodeWithCoder:(NSCoder *)aCoder {
   [aCoder encodeObject:_name forKey:@"STName"];
   [aCoder encodeConditionalObject:_owner forKey:@"STOwner"];
-  [aCoder encodeBytes:(Byte *)&sd_slFlags length:sizeof(sd_slFlags) forKey:@"STFlags"];
+  [aCoder encodeBytes:(Byte *)&_slFlags length:sizeof(_slFlags) forKey:@"STFlags"];
 }
 
 - (id)initWithCoder:(NSCoder *)aCoder {
   if (self = [super init]) {
     NSUInteger length;
     const uint8_t *buffer = [aCoder decodeBytesForKey:@"STFlags" returnedLength:&length];
-    memcpy(&sd_slFlags, buffer, length);
+    memcpy(&_slFlags, buffer, length);
     
-    _name = [[aCoder decodeObjectForKey:@"STName"] retain];
+    _name = [aCoder decodeObjectForKey:@"STName"];
     _owner = [aCoder decodeObjectForKey:@"STOwner"];
   }
   return self;
@@ -54,11 +54,6 @@
   return self;
 }
 
-- (void)dealloc {
-  [_name release];
-  [super dealloc];
-}
-
 - (NSString *)description {
   return [NSString stringWithFormat:@"<%@ %p> {name=%@}", 
     NSStringFromClass([self class]), self, _name];
@@ -76,34 +71,32 @@
       [undo registerUndoWithTarget:self selector:_cmd object:_name];
       [undo setActionName:NSLocalizedStringFromTable(@"Change Name", @"SdefLibrary", @"Undo Action: change name.")];
     }
-    [_name release];
     _name = [newName stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
-    [_name retain];
   }
 }
 
 - (BOOL)isEditable {
-  return sd_slFlags.editable && !sd_slFlags.xinclude;
+  return _slFlags.editable && !_slFlags.xinclude;
 }
 - (void)setEditable:(BOOL)flag {
-  SPXFlagSet(sd_slFlags.editable, flag);
+  SPXFlagSet(_slFlags.editable, flag);
 }
 
 - (BOOL)isImported {
-  return sd_slFlags.xinclude;
+  return _slFlags.xinclude;
 }
 - (void)setImported:(BOOL)flag {
-  SPXFlagSet(sd_slFlags.xinclude, flag);
+  SPXFlagSet(_slFlags.xinclude, flag);
 }
 
 - (BOOL)isHidden {
-  return sd_slFlags.hidden;
+  return _slFlags.hidden;
 }
 - (void)setHidden:(BOOL)flag {
   flag = flag ? 1 : 0;
-  if (flag != sd_slFlags.hidden) {
-    [[[self undoManager] prepareWithInvocationTarget:self] setHidden:sd_slFlags.hidden];
-    sd_slFlags.hidden = flag;
+  if (flag != _slFlags.hidden) {
+    [[[self undoManager] prepareWithInvocationTarget:self] setHidden:_slFlags.hidden];
+    _slFlags.hidden = flag;
   }
 }
 

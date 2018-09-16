@@ -18,11 +18,7 @@
 */
 
 @class SdefDocument, SdefClassManager;
-@interface SdefDictionary : SdefDocumentedObject <NSCopying, NSCoding> {
-@private
-  SdefVersion _version;
-  SdefDocument *_document;
-}
+@interface SdefDictionary : SdefDocumentedObject <NSCopying, NSCoding>
 
 @property(nonatomic, assign) SdefDocument *document; // TODO: remove layer violation
 

@@ -48,21 +48,13 @@
 
 - (id)initWithCoder:(NSCoder *)aCoder {
   if (self = [super initWithCoder:aCoder]) {
-    _key = [[aCoder decodeObjectForKey:@"SIKey"] retain];
-    _class = [[aCoder decodeObjectForKey:@"SIClass"] retain];
-    _value = [[aCoder decodeObjectForKey:@"SIValue"] retain];
+    _key = [aCoder decodeObjectForKey:@"SIKey"];
+    _class = [aCoder decodeObjectForKey:@"SIClass"];
+    _value = [aCoder decodeObjectForKey:@"SIValue"];
     _vtype = (UInt8)[aCoder decodeIntegerForKey:@"SIValueType"];
-    _method = [[aCoder decodeObjectForKey:@"SIMethod"] retain];
+    _method = [aCoder decodeObjectForKey:@"SIMethod"];
   }
   return self;
-}
-
-- (void)dealloc {
-  [_key release];
-  [_class release];
-  [_value release];
-  [_method release];
-  [super dealloc];
 }
 
 - (NSString *)description {
@@ -94,11 +86,11 @@
 }
 
 - (BOOL)insertAtBeginning {
-  return sd_slFlags.beginning;
+  return _slFlags.beginning;
 }
 
 - (void)setInsertAtBeginning:(BOOL)flag {
-  SPXFlagSet(sd_slFlags.beginning, flag);
+  SPXFlagSet(_slFlags.beginning, flag);
 }
 
 #pragma mark Value

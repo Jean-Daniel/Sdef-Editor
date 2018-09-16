@@ -33,8 +33,6 @@ enum {
 - (void)writeAccessorsStringToStream:(id)stream;
 @end
 
-static NSNull *_null;
-
 static NSString *SdtplSimplifieName(NSString *name);
 static void SdtplSortArrayByName(NSMutableArray *array);
 static NSUInteger SdtplDumpSimpleBlock(SdtplGenerator *self, NSEnumerator *enume, WBTemplate *tpl, SEL description);
@@ -153,7 +151,6 @@ NSString * const SdtplBlockTableOfContent = @"Toc";
   if ([tpl containsKey:name] && (__value = value)) { \
     NSString *__varStr = SdtplCopyFormatedString(self, __value, name, block); \
     [tpl setVariable:__varStr forKey:name]; \
-    [__varStr release]; \
   } \
 }) 
 
@@ -172,7 +169,6 @@ NSString *SdefEscapedString(NSString *value, NSUInteger format) {
 
 + (void)initialize {
   if ([SdtplGenerator class] == self) {
-    _null = [NSNull null];
     [[NSUserDefaults standardUserDefaults] registerDefaults:[NSDictionary dictionaryWithObjectsAndKeys:
       @(NO), @"SdtplSortSuite",
       @(YES), @"SdtplHTMLLinks",
@@ -228,14 +224,8 @@ NSString *SdefEscapedString(NSString *value, NSUInteger format) {
 }
 
 - (void)dealloc {
-  [self savePreferences];
-  [sd_tpl release];
-  [sd_path release];
-  [sd_base release];
-  [sd_tocFile release];
-  [sd_cssFile release];
+  [self savePreferences];;
   [self releaseCache];
-  [super dealloc];
 }
 
 #pragma mark -
@@ -294,8 +284,7 @@ NSString *SdefEscapedString(NSString *value, NSUInteger format) {
 }
 - (void)setTocFile:(NSString *)aFile {
   if (sd_tocFile != aFile) {
-    [sd_tocFile release];
-    sd_tocFile = [aFile retain];
+    sd_tocFile = aFile;
   }
 }
 - (NSString *)cssFile {
@@ -303,8 +292,7 @@ NSString *SdefEscapedString(NSString *value, NSUInteger format) {
 }
 - (void)setCssFile:(NSString *)aFile {
   if (sd_cssFile != aFile) {
-    [sd_cssFile release];
-    sd_cssFile = [aFile retain];
+    sd_cssFile = aFile;
   }
 }
 
@@ -373,8 +361,7 @@ NSString *SdefEscapedString(NSString *value, NSUInteger format) {
 - (void)setTemplate:(SdefTemplate *)aTemplate {
   if (aTemplate != sd_tpl) {
     [self willChangeValueForKey:@"tocFile"];
-    [sd_tpl release];
-    sd_tpl = [aTemplate retain];
+    sd_tpl = aTemplate;
     [self didChangeValueForKey:@"tocFile"];
     if (sd_tpl) {
       sd_gnFlags.format = [sd_tpl isHtml] ? kSdefTemplateXMLFormat : kSdefTemplateDefaultFormat;
@@ -399,96 +386,93 @@ NSString *SdefEscapedString(NSString *value, NSUInteger format) {
 #pragma mark -
 #pragma mark API
 - (BOOL)writeDictionary:(SdefDictionary *)aDico toFile:(NSString *)aFile {
-  NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-  [self initCache];
-  
-  sd_path = [aFile retain];
-  sd_base = [[aFile stringByDeletingLastPathComponent] retain];
-  
-  sd_link = NSMapGet(sd_formats, @"Links");
-  
-  SdefDictionary *dictionary = [aDico retain];
-  sd_manager = [dictionary classManager];
-  
-  BOOL bwrite = NO;
-  WBTemplate *root = [[sd_tpl templates] objectForKey:SdtplDefinitionDictionaryKey];
-  @try {
-    bwrite = [self writeDictionary:dictionary usingTemplate:root];
-  } @catch (id exception) {
-    bwrite = NO;
-    SPXLogException(exception);
-  }
-  
-  if (bwrite) {
-    if (!sd_gnFlags.cancel) {
-      root = [[sd_tpl templates] objectForKey:SdtplDefinitionIndexKey];
-      if (root) {
-        @try {
-          [self writeIndex:dictionary usingTemplate:root];
-        } @catch (id exception) {
-          SPXLogException(exception);
-        }
-      }
+  @autoreleasepool {
+    [self initCache];
+
+    sd_path = aFile;
+    sd_base = [aFile stringByDeletingLastPathComponent];
+
+    sd_link = sd_formats[@"Links"];
+
+    SdefDictionary *dictionary = aDico;
+    sd_manager = [dictionary classManager];
+
+    BOOL bwrite = NO;
+    WBTemplate *root = [[sd_tpl templates] objectForKey:SdtplDefinitionDictionaryKey];
+    @try {
+      bwrite = [self writeDictionary:dictionary usingTemplate:root];
+    } @catch (id exception) {
+      bwrite = NO;
+      SPXLogException(exception);
     }
-    
-    if (!sd_gnFlags.cancel) {
-      /* Create css file if needed */
-      if (kSdefTemplateXMLFormat == sd_gnFlags.format && kSdefTemplateCSSExternal == sd_gnFlags.css) {
-        NSString *src = [[sd_tpl selectedStyle] objectForKey:@"path"];
-        NSString *dest = [sd_base stringByAppendingPathComponent:[self cssFile]];
-        if (src && dest) {
-          if ([self canWriteFileAtPath:dest]) {
-            [[NSFileManager defaultManager] removeItemAtPath:dest error:NULL];
-            [[NSFileManager defaultManager] copyItemAtPath:src toPath:dest error:NULL];
-          }
-        }
-      }
-    }
-    
-    if (!sd_gnFlags.cancel) {
-      /* TOC must be in last position because it may change sd_link and flush cache. */
-      if ([self externalToc]) {
-        root = [[sd_tpl templates] objectForKey:SdtplDefinitionTocKey];
+
+    if (bwrite) {
+      if (!sd_gnFlags.cancel) {
+        root = [[sd_tpl templates] objectForKey:SdtplDefinitionIndexKey];
         if (root) {
-          NSString *alink = NSMapGet(sd_formats, @"Toc-Links");
-          if (alink && ![alink isEqualToString:sd_link]) {
-            sd_link = alink;
-            NSResetMapTable(sd_links);
-          }
           @try {
-            [self writeToc:dictionary usingTemplate:root];
-            NSString *file = [self tocFile];
-            [self writeTemplate:root toFile:file representedObject:dictionary];
+            [self writeIndex:dictionary usingTemplate:root];
           } @catch (id exception) {
             SPXLogException(exception);
           }
         }
       }
+
+      if (!sd_gnFlags.cancel) {
+        /* Create css file if needed */
+        if (kSdefTemplateXMLFormat == sd_gnFlags.format && kSdefTemplateCSSExternal == sd_gnFlags.css) {
+          NSString *src = [[sd_tpl selectedStyle] objectForKey:@"path"];
+          NSString *dest = [sd_base stringByAppendingPathComponent:[self cssFile]];
+          if (src && dest) {
+            if ([self canWriteFileAtPath:dest]) {
+              [[NSFileManager defaultManager] removeItemAtPath:dest error:NULL];
+              [[NSFileManager defaultManager] copyItemAtPath:src toPath:dest error:NULL];
+            }
+          }
+        }
+      }
+
+      if (!sd_gnFlags.cancel) {
+        /* TOC must be in last position because it may change sd_link and flush cache. */
+        if ([self externalToc]) {
+          root = [[sd_tpl templates] objectForKey:SdtplDefinitionTocKey];
+          if (root) {
+            NSString *alink = sd_formats[@"Toc-Links"];
+            if (alink && ![alink isEqualToString:sd_link]) {
+              sd_link = alink;
+              NSResetMapTable(sd_links);
+            }
+            @try {
+              [self writeToc:dictionary usingTemplate:root];
+              NSString *file = [self tocFile];
+              [self writeTemplate:root toFile:file representedObject:dictionary];
+            } @catch (id exception) {
+              SPXLogException(exception);
+            }
+          }
+        }
+      }
     }
-  }
-  
-  /* Delete generated files */
-  if (sd_gnFlags.cancel) {
-    NSString *file;
-    NSFileManager *manager = [NSFileManager defaultManager];
-    NSEnumerator *files = [sd_cancel objectEnumerator];
-    while (file = [files nextObject]) {
-      [manager removeItemAtPath:file error:NULL];
+
+    /* Delete generated files */
+    if (sd_gnFlags.cancel) {
+      NSString *file;
+      NSFileManager *manager = [NSFileManager defaultManager];
+      NSEnumerator *files = [sd_cancel objectEnumerator];
+      while (file = [files nextObject]) {
+        [manager removeItemAtPath:file error:NULL];
+      }
     }
+
+    /* Release resources */
+    sd_manager = nil;
+    sd_path = nil;
+    sd_base = nil;
+    sd_link = nil;
+    [self releaseCache];
+
+    return bwrite;
   }
-  
-  /* Release resources */
-  [dictionary release];
-  sd_manager = nil;
-  [sd_path release];
-  sd_path = nil;
-  [sd_base release];
-  sd_base = nil;
-  sd_link = nil;
-  [self releaseCache];
-  
-  [pool release];
-  return bwrite;
 }
 
 #pragma mark -
@@ -498,11 +482,10 @@ NSString *SdefEscapedString(NSString *value, NSUInteger format) {
     [self _sdtplAddFormatString:format inBlock:SdtplBlockOptionalParameter forVariable:variable];
     [self _sdtplAddFormatString:format inBlock:SdtplBlockRequiredParameter forVariable:variable];
   } else {
-    NSMutableDictionary *block = NSMapGet(sd_formats, blockName);
+    NSMutableDictionary *block = sd_formats[blockName];
     if (!block) {
       block = [[NSMutableDictionary alloc] init];
-      NSMapInsert(sd_formats, blockName, block);
-      [block release];
+      sd_formats[blockName] = block;
     }
     [block setValue:format forKey:variable];
   }
@@ -510,7 +493,7 @@ NSString *SdefEscapedString(NSString *value, NSUInteger format) {
 
 - (void)initCache {
   if (sd_tpl) {
-    sd_formats = NSCreateMapTable(NSObjectMapKeyCallBacks, NSObjectMapValueCallBacks, 0);
+    sd_formats = [[NSMutableDictionary alloc] init];
     NSDictionary *formats = [sd_tpl formats];
     NSString *key;
     sd_gnFlags.useBlockFormat = 0;
@@ -518,7 +501,7 @@ NSString *SdefEscapedString(NSString *value, NSUInteger format) {
     while (key = [keys nextObject]) {
       NSUInteger separator = [key rangeOfString:@"."].location;
       if (NSNotFound == separator) {
-        NSMapInsert(sd_formats, key, [formats objectForKey:key]);
+        sd_formats[key] = [formats objectForKey:key];
       } else {
         sd_gnFlags.useBlockFormat = 1;
         [self _sdtplAddFormatString:[formats objectForKey:key]
@@ -528,9 +511,9 @@ NSString *SdefEscapedString(NSString *value, NSUInteger format) {
     }
     
     /* Use retain instead of copy for key (faster) */
-    sd_links = NSCreateMapTable(NSObjectMapKeyCallBacks, NSObjectMapValueCallBacks, 0);
-    sd_files = NSCreateMapTable(NSObjectMapKeyCallBacks, NSObjectMapValueCallBacks, 0);
-    sd_anchors = NSCreateMapTable(NSObjectMapKeyCallBacks, NSObjectMapValueCallBacks, 0);
+    sd_links = [NSMapTable strongToStrongObjectsMapTable];
+    sd_files = [NSMapTable strongToStrongObjectsMapTable];
+    sd_anchors = [NSMapTable strongToStrongObjectsMapTable];
     
     sd_cancel = [[NSMutableSet alloc] init];
       
@@ -566,13 +549,12 @@ NSString *SdefEscapedString(NSString *value, NSUInteger format) {
 
 - (void)releaseCache {
   sd_link = nil;
-  if (sd_formats) { NSFreeMapTable(sd_formats); sd_formats = nil; }
+  sd_formats = nil;
   
-  if (sd_links) { NSFreeMapTable(sd_links); sd_links = nil; }
-  if (sd_files) { NSFreeMapTable(sd_files); sd_files = nil; }
-  if (sd_anchors) { NSFreeMapTable(sd_anchors); sd_anchors = nil; }
-  
-  [sd_cancel release];
+  sd_links = nil;
+  sd_files = nil;
+  sd_anchors = nil;
+
   sd_cancel = nil;
   
   sd_gnFlags.suites = kSdtplInline;
@@ -585,7 +567,7 @@ NSString *SdefEscapedString(NSString *value, NSUInteger format) {
 - (NSString *)formatString:(NSString *)str forVariable:(NSString *)aVariable inBlock:(NSString *)aBlock {
   NSString *format = nil;
   if (sd_gnFlags.useBlockFormat && (aBlock != nil)) {
-    NSDictionary *block = NSMapGet(sd_formats, aBlock);
+    NSDictionary *block = sd_formats[aBlock];
     /* Search var in block */
     if (block) {
       format = [block objectForKey:aVariable];
@@ -593,7 +575,7 @@ NSString *SdefEscapedString(NSString *value, NSUInteger format) {
   }
   /* If var not found in Block */
   if (!format) {
-    format = NSMapGet(sd_formats, aVariable);
+    format = sd_formats[aVariable];
   }
   if (format) {
     return ([format rangeOfString:@"%@"].location != NSNotFound) ? [NSString stringWithFormat:format, str] : format;
@@ -603,9 +585,12 @@ NSString *SdefEscapedString(NSString *value, NSUInteger format) {
 
 #pragma mark -
 #pragma mark References Generator
+
+static NSString * const _kNullPlaceholder = @"__null__";
+
 #pragma mark Files
 - (NSString *)fileForObject:(SdefObject *)anObject {
-  id file = NSMapGet(sd_files, anObject);
+  NSString *file = [sd_files objectForKey:anObject];
   if (!file) {
     int flag = kSdefType_Undefined;
     switch ([anObject objectType]) {
@@ -670,25 +655,25 @@ NSString *SdefEscapedString(NSString *value, NSUInteger format) {
         }
         break;
       default:
-        file = _null;
+        file = _kNullPlaceholder;
     }
-    NSMapInsert(sd_files, anObject, file);
+    [sd_files setObject:file forKey:anObject];
   }
-  return (file != _null) ? file : nil;
+  return (file != _kNullPlaceholder) ? file : nil;
 }
 
 #pragma mark Anchors
 - (NSString *)anchorForObject:(SdefObject *)obj {
   NSString *name = [self anchorNameForObject:obj];
   if (name) {
-    NSString *anchor = NSMapGet(sd_formats, @"AnchorFormat");
+    NSString *anchor = sd_formats[@"AnchorFormat"];
     return [NSString stringWithFormat:anchor, name];
   }
   return nil;
 }
 
 - (NSString *)anchorNameForObject:(SdefObject *)anObject {
-  id anchor = NSMapGet(sd_anchors, anObject);
+  NSString *anchor = [sd_anchors objectForKey:anObject];
   if (!anchor) {
     switch ([anObject objectType]) {
       case kSdefType_Dictionary:
@@ -702,33 +687,33 @@ NSString *SdefEscapedString(NSString *value, NSUInteger format) {
         anchor = [NSString stringWithFormat:@"%@_%@", SdtplSimplifieName([[anObject suite] name]), SdtplSimplifieName([anObject name])];
         break;
       default:
-        anchor = _null;
+        anchor = _kNullPlaceholder;
     }
-    NSMapInsert(sd_anchors, anObject, anchor);
+    [sd_anchors setObject:anchor forKey:anObject];
   }
-  return (_null == anchor) ? nil : anchor;
+  return (anchor != _kNullPlaceholder) ? anchor : nil;
 }
 
 #pragma mark Links
 - (NSString *)linkForType:(NSString *)aType withString:(NSString *)aString {
-  id alink = NSMapGet(sd_links, aType);
+  NSString *alink = [sd_links objectForKey:aType];
   if (!alink) {
     alink = aString;
     if (![SdefClassManager isBaseType:aType]) {
       SdefClass *class = [sd_manager classWithName:aType];
       alink = [self linkForObject:class withString:aString];
     }
-    NSMapInsert(sd_links, aType, alink);
+    [sd_links setObject:alink forKey:aType];
   }
   return alink;
 }
 
 - (NSString *)linkForVerb:(NSString *)aVerb withString:(NSString *)aString {
-  NSString *alink = NSMapGet(sd_links, aVerb);
+  NSString *alink = [sd_links objectForKey:aVerb];
   if (!alink) {
     SdefObject *object = [sd_manager verbWithIdentifier:aVerb];
     alink = [self linkForObject:object withString:aString];
-    NSMapInsert(sd_links, aVerb, alink);
+    [sd_links setObject:alink forKey:aVerb];
   }
   return alink;
 }
@@ -747,10 +732,10 @@ NSString *SdefEscapedString(NSString *value, NSUInteger format) {
 }
 
 - (NSString *)linkForDictionary:(SdefDictionary *)dictionary withString:(NSString *)aString {
-  NSString *alink = NSMapGet(sd_links, dictionary);
+  NSString *alink = [sd_links objectForKey:dictionary];
   if (!alink) {
     alink = [self linkForObject:dictionary withString:aString];
-    NSMapInsert(sd_links, dictionary, alink);
+    [sd_links setObject:alink forKey:dictionary];
   }
   return alink;
 }
@@ -767,7 +752,6 @@ NSString *SdefEscapedString(NSString *value, NSUInteger format) {
         if ([block containsKey:SdtplVariableStyleSheet]) {
           NSString *style = [[NSString alloc] initWithContentsOfFile:[[sd_tpl selectedStyle] objectForKey:@"path"] encoding:NSUTF8StringEncoding error:NULL];
           [block setVariable:style forKey:SdtplVariableStyleSheet];
-          [style release];
           [block dumpBlock];
         }
       } else if (kSdefTemplateCSSExternal == sd_gnFlags.css) {
@@ -829,12 +813,13 @@ NSString *SdefEscapedString(NSString *value, NSUInteger format) {
                                          otherButton:@"Cancel"
                            informativeTextWithFormat:@"An file named \"%@\" already exists in the choosen location. Do you want to replace it with the new one?",
         [path lastPathComponent]];
-      NSButton *all = [alert addUserDefaultCheckBoxWithTitle:@"Apply to all" andKey:nil];
-      [all setFrameOrigin:NSMakePoint(12, 20)];
+      alert.showsSuppressionButton = YES;
+      NSButton *all = alert.suppressionButton;
+      all.title = @"Apply to all";
       switch ([alert runModal]) {
         case NSAlertAlternateReturn:
-          if ([all state] == NSOnState) {
-			sd_gnFlags.existingFile = kSdefTemplateFileSkip;
+          if (all.state == NSOnState) {
+            sd_gnFlags.existingFile = kSdefTemplateFileSkip;
           }
           return NO;
         case NSAlertOtherReturn:
@@ -842,7 +827,7 @@ NSString *SdefEscapedString(NSString *value, NSUInteger format) {
           return NO;
       }
       if ([all state] == NSOnState) {
-		sd_gnFlags.existingFile = kSdefTemplateFileReplace;
+        sd_gnFlags.existingFile = kSdefTemplateFileReplace;
       }
     }
   }
@@ -921,7 +906,6 @@ NSString *SdefEscapedString(NSString *value, NSUInteger format) {
           break;
       }
     }
-    [objects release];
   }
   
   /* Create table fo Content if needed */
@@ -998,7 +982,6 @@ NSString *SdefEscapedString(NSString *value, NSUInteger format) {
           break;
       }
     }
-    [objects release];
   }
   if (sd_gnFlags.cancel) return NO;
   
@@ -1061,7 +1044,6 @@ NSString *SdefEscapedString(NSString *value, NSUInteger format) {
           break;
       }
     }
-    [objects release];
   }
   if (sd_gnFlags.cancel) return NO;
   
@@ -1112,7 +1094,6 @@ NSString *SdefEscapedString(NSString *value, NSUInteger format) {
           break;
       }
     }
-    [objects release];
   }
   
   BOOL ok = YES;
@@ -1144,7 +1125,6 @@ NSString *SdefEscapedString(NSString *value, NSUInteger format) {
   NSMutableString *rights = [[NSMutableString alloc] init];
   [elt performSelector:@selector(writeAccessorsStringToStream:) withObject:rights];
   SdtplSetVariable(tpl, [tpl name], SdtplVariableAccessors, rights);
-  [rights release];
 }
 
 - (void)writeProperty:(SdefProperty *)prop usingTemplate:(WBTemplate *)tpl {
@@ -1207,7 +1187,6 @@ NSString *SdefEscapedString(NSString *value, NSUInteger format) {
     }
     /* require to generate block */
     [[tpl blockWithName:SdtplBlockElements] dumpBlock];
-    [objects release];
   }
   /* Superclass */
   if ([aClass inherits] && [tpl blockWithName:SdtplBlockSuperclass]) {
@@ -1240,7 +1219,6 @@ NSString *SdefEscapedString(NSString *value, NSUInteger format) {
         [self writeProperty:property usingTemplate:propBlock];
         [propBlock dumpBlock];
       }
-      [objects release];
     }
     /* require to generate block */
     [[tpl blockWithName:SdtplBlockProperties] dumpBlock];
@@ -1275,7 +1253,6 @@ NSString *SdefEscapedString(NSString *value, NSUInteger format) {
         [[tpl blockWithName:SdtplBlockRespondsToCommands] dumpBlock];
       }
     }
-    [objects release];
     objects = nil;
     
     /* Events */
@@ -1294,8 +1271,6 @@ NSString *SdefEscapedString(NSString *value, NSUInteger format) {
       if (SdtplDumpSimpleBlock(self, evnts, evntBlock, @selector(name)) > 0) {
         [[tpl blockWithName:SdtplBlockRespondsToEvents] dumpBlock];
       }
-
-      [objects release];
     }
   }
   
@@ -1424,7 +1399,6 @@ NSString *SdefEscapedString(NSString *value, NSUInteger format) {
       }
     }
     [[tpl blockWithName:SdtplBlockParameters] dumpBlock];
-    [objects release];
   }
   
   BOOL ok = YES;
@@ -1483,7 +1457,6 @@ NSString *SdefEscapedString(NSString *value, NSUInteger format) {
         [[stpl blockWithName:@"Toc-Classes"] dumpBlock];
       }
     }
-    [objects release];
     objects = nil;
     
     /* Group Command and events if needed */
@@ -1510,7 +1483,6 @@ NSString *SdefEscapedString(NSString *value, NSUInteger format) {
         [[stpl blockWithName:@"Toc-Commands"] dumpBlock];
       }
     }
-    [objects release];
     objects = nil;
     
     /* Events */
@@ -1529,12 +1501,10 @@ NSString *SdefEscapedString(NSString *value, NSUInteger format) {
         [[stpl blockWithName:@"Toc-Events"] dumpBlock];
       }
     }
-    [objects release];
     objects = nil;
     
     [stpl dumpBlock];
   }
-  [sortedSuites release];
 }
 
 #pragma mark Index
@@ -1576,7 +1546,7 @@ NSUInteger SdtplDumpSimpleBlock(SdtplGenerator *self, NSEnumerator *enume, WBTem
 static NSString *SdtplCopyFormatedString(SdtplGenerator *self, NSString *str, NSString *aVariable, NSString *aBlock) {
   NSString *format = nil;
   if (self->sd_gnFlags.useBlockFormat && (aBlock != nil)) {
-    NSDictionary *block = NSMapGet(self->sd_formats, aBlock);
+    NSDictionary *block = self->sd_formats[aBlock];
     /* Search var in block */
     if (block) {
       format = [block objectForKey:aVariable];
@@ -1584,12 +1554,12 @@ static NSString *SdtplCopyFormatedString(SdtplGenerator *self, NSString *str, NS
   }
   /* If var not found in Block */
   if (!format) {
-    format = NSMapGet(self->sd_formats, aVariable);
+    format = self->sd_formats[aVariable];
   }
   if (format) {
-    return ([format rangeOfString:@"%@"].location != NSNotFound) ? [[NSString alloc] initWithFormat:format, str] : [format retain];
+    return ([format rangeOfString:@"%@"].location != NSNotFound) ? [[NSString alloc] initWithFormat:format, str] : format;
   }
-  return [str retain];
+  return str;
 }
 
 @end
@@ -1601,8 +1571,7 @@ void SdtplSortArrayByName(NSMutableArray *array) {
   static NSArray *SdtplSortDescriptors = nil;
   if (!SdtplSortDescriptors) {
     NSSortDescriptor *desc = [[NSSortDescriptor alloc] initWithKey:@"name" ascending:YES selector:@selector(caseInsensitiveCompare:)];
-    SdtplSortDescriptors = [[NSArray alloc] initWithObjects:desc, nil];
-    [desc release];
+    SdtplSortDescriptors = @[desc];
   }
   [array sortUsingDescriptors:SdtplSortDescriptors];
 }
@@ -1611,6 +1580,6 @@ static NSString *SdtplSimplifieName(NSString *name) {
   NSData *data = [name dataUsingEncoding:NSASCIIStringEncoding allowLossyConversion:YES];
   NSMutableString *simple = [[NSMutableString alloc] initWithData:data encoding:NSASCIIStringEncoding];
   [simple replaceOccurrencesOfString:@" " withString:@"_" options:NSLiteralSearch range:NSMakeRange(0, [simple length])];  
-  return [simple autorelease];
+  return simple;
 }
 

@@ -25,7 +25,7 @@
 
 - (id)initWithCoder:(NSCoder *)aCoder {
   if (self = [super initWithCoder:aCoder]) {
-    _target = [[aCoder decodeObjectForKey:@"SXTarget"] retain];
+    _target = [aCoder decodeObjectForKey:@"SXTarget"];
   }
   return self;
 }
@@ -33,11 +33,6 @@
 #pragma mark -
 + (SdefObjectType)objectType {
   return kSdefType_XRef;
-}
-
-- (void)dealloc {
-  [_target release];
-  [super dealloc];
 }
 
 #pragma mark -

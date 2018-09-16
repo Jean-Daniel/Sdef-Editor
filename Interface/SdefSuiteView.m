@@ -28,11 +28,6 @@
   }
 }
 
-- (void)dealloc {
-  [sd_typeMenu release];
-  [super dealloc];
-}
-
 - (void)awakeFromNib {
   [typeTable setTarget:self];
   [typeTable setDoubleAction:@selector(revealType:)];
@@ -54,21 +49,18 @@
     [item setTag:kSdefType_ValueType];
     [sd_typeMenu addItem:item];
     [item setTarget:self];
-    [item release];
     
     item = [[NSMenuItem alloc] initWithTitle:@"Record" action:@selector(newType:) keyEquivalent:@""];
     [item setImage:[NSImage imageNamed:[SdefRecord defaultIconName]]];
     [item setTag:kSdefType_RecordType];
     [sd_typeMenu addItem:item];
     [item setTarget:self];
-    [item release];
     
     item = [[NSMenuItem alloc] initWithTitle:@"Enumeration" action:@selector(newType:) keyEquivalent:@""];
     [item setImage:[NSImage imageNamed:[SdefEnumeration defaultIconName]]];
     [item setTag:kSdefType_Enumeration];
     [sd_typeMenu addItem:item];
     [item setTarget:self];
-    [item release];
   }
   return sd_typeMenu;
 }
@@ -104,7 +96,6 @@
   }
   id item = [[class alloc] init];
   [types addObject:item];
-  [item release];
 }
 
 - (void)revealType:(id)sender {
@@ -167,7 +158,7 @@
 @implementation SdefTypeHasClassTransformer
 
 + (id)transformer {
-  return [[[self alloc] init] autorelease];
+  return [[self alloc] init];
 }
 
 // information that can be used to analyze available transformer instances (especially used inside Interface Builder)

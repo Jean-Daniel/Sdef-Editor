@@ -25,8 +25,7 @@ static NSArray *gSortByName = nil;
 + (void)initialize {
   if ([SdefClassManager class] == self) {
     NSSortDescriptor *desc = [[NSSortDescriptor alloc] initWithKey:@"name" ascending:YES selector:@selector(caseInsensitiveCompare:)];
-    gSortByName = [[NSArray alloc] initWithObjects:desc, nil];
-    [desc release];
+    gSortByName = @[desc];
   }
 }
 
@@ -50,7 +49,6 @@ static NSArray *gSortByName = nil;
                @"rectangle",
                @"text",
                @"type" ];
-    [types retain];
   }
   return types;
 }
@@ -61,15 +59,15 @@ static NSArray *gSortByName = nil;
 
 - (id)init {
   if (self = [super init]) {
-    sd_types = [[NSMutableArray allocWithZone:[self zone]] init];
-    sd_events = [[NSMutableArray allocWithZone:[self zone]] init];
-    sd_classes = [[NSMutableArray allocWithZone:[self zone]] init];
-    sd_commands = [[NSMutableArray allocWithZone:[self zone]] init];
+    sd_types = [[NSMutableArray alloc] init];
+    sd_events = [[NSMutableArray alloc] init];
+    sd_classes = [[NSMutableArray alloc] init];
+    sd_commands = [[NSMutableArray alloc] init];
   }
   return self;
 }
 
-- (id)initWithDocument:(SdefDocument *)aDocument {
+- (instancetype)initWithDocument:(SdefDocument *)aDocument {
   if (self = [self init]) {
     [self setDocument:aDocument];
   }
@@ -78,16 +76,10 @@ static NSArray *gSortByName = nil;
 
 - (void)dealloc {
   [[NSNotificationCenter defaultCenter] removeObserver:self];
-  
   if (sd_dicts) {
     NSFreeHashTable(sd_dicts);
     sd_dicts = nil;
   }
-  [sd_types release];
-  [sd_events release];
-  [sd_classes release];
-  [sd_commands release];
-  [super dealloc];
 }
 
 - (void)setDocument:(SdefDocument *)aDocument {
@@ -127,26 +119,26 @@ static NSArray *gSortByName = nil;
 }
 
 - (BOOL)containsDictionary:(SdefDictionary *)aDict {
-  return sd_dicts && aDict && (NSHashGet(sd_dicts, aDict) != nil);
+  return sd_dicts && aDict && [sd_dicts containsObject:aDict];
 }
 
 - (void)addDictionary:(SdefDictionary *)aDico {
-  if (!sd_dicts)
-    sd_dicts = NSCreateHashTable(NSNonRetainedObjectHashCallBacks, 0);
-  if (!NSHashGet(sd_dicts, aDico)) {
+  if (!sd_dicts) // unretained object (FIXME: is it needed ?)
+    sd_dicts = [NSHashTable hashTableWithOptions:NSPointerFunctionsOpaqueMemory | NSPointerFunctionsObjectPersonality];
+  if (![sd_dicts containsObject:aDico]) {
     for (SdefSuite *suite in [aDico childEnumerator]) {
       [self addSuite:suite];
     }
-    NSHashInsert(sd_dicts, aDico);
+    [sd_dicts addObject:aDico];
   }
 }
 
 - (void)removeDictionary:(SdefDictionary *)aDico {
-  if (NSHashGet(sd_dicts, aDico)) {
+  if ([sd_dicts containsObject:aDico]) {
     for (SdefSuite *suite in [aDico childEnumerator]) {
       [self removeSuite:suite];
     }
-    NSHashRemove(sd_dicts, aDico);
+    [sd_dicts removeObject:aDico];
   }
 }
 
@@ -386,7 +378,6 @@ NSDictionary *sdefTypeMap() {
              @"NSData<QDRect>"          : @"rectangle",
              @"NSArray"                 : @"list of any"
              };
-    [sMap retain];
   }
   return sMap;
 }

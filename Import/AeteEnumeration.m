@@ -27,10 +27,9 @@
   bytes += 2;
   if (*val > 0) {
 	for (NSUInteger idx = 0; idx < *val; idx++) {
-      SdefEnumerator *enumerator = [[SdefEnumerator allocWithZone:[self zone]] init];
+      SdefEnumerator *enumerator = [[SdefEnumerator alloc] init];
       bytes += [enumerator parseData:bytes];
       [self appendChild:enumerator];
-      [enumerator release];
     }
   }
   
@@ -50,7 +49,7 @@
   StringPtr pStr = (StringPtr)bytes;
   length = StrLength(pStr);
   CFStringRef str = (length) ? CFStringCreateWithPascalString(kCFAllocatorDefault, pStr, kCFStringEncodingMacRoman) : nil;
-  [self setName:(id)str];
+  [self setName:SPXCFToNSString(str)];
   bytes += length + 1;
   if (str) CFRelease(str);
   
@@ -66,7 +65,7 @@
   pStr = (StringPtr)bytes;
   length = StrLength(pStr);
   str = (length) ? CFStringCreateWithPascalString(kCFAllocatorDefault, pStr, kCFStringEncodingMacRoman) : nil;
-  [self setDesc:(id)str];
+  [self setDesc:SPXCFToNSString(str)];
   bytes += length + 1;
   if (str) CFRelease(str);
   

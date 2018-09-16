@@ -12,11 +12,6 @@
 
 @implementation SdefTypesEditor
 
-- (void)dealloc {
-  [sd_types release];
-  [super dealloc];
-}
-
 #pragma mark -
 - (IBAction)close:(id)sender {
   [sd_object willChangeValueForKey:@"type"];
@@ -41,7 +36,6 @@
 - (NSArray *)types {
   if (!sd_types) {
     sd_types = [[sd_object classManager] types];
-    [sd_types retain];
   }
   return sd_types;
 }

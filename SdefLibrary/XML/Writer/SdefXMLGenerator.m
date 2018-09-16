@@ -28,10 +28,8 @@
 }
 
 - (void)dealloc {
-  if (sd_doc) { CFRelease(sd_doc); sd_doc = nil; }
-  [sd_root release];
-  [sd_comment release];
-  [super dealloc];
+  if (sd_doc)
+    CFRelease(sd_doc);
 }
 
 #pragma mark -
@@ -70,8 +68,8 @@
   NSParameterAssert(name != nil);
   NSParameterAssert([keys count] == [values count]);
   CFXMLElementInfo infos;
-  infos.attributes = (CFDictionaryRef)[[NSDictionary alloc] initWithObjects:values forKeys:keys];
-  infos.attributeOrder = (CFArrayRef)keys;
+  infos.attributes = SPXCFDictionaryBridgingRetain([[NSDictionary alloc] initWithObjects:values forKeys:keys]);
+  infos.attributeOrder = SPXNSToCFArray(keys);
   infos.isEmpty = flag;
   
   CFXMLNodeRef node = CFXMLNodeCreate(kCFAllocatorDefault, kCFXMLNodeTypeElement, (CFStringRef)name, &infos, kCFXMLNodeCurrentVersion);
@@ -81,7 +79,7 @@
     sd_indent++;
   } 
   CFRelease(node);
-  [(id)infos.attributes release];
+  CFRelease(infos.attributes);
   return tree;
 }
 
@@ -90,7 +88,7 @@
     NSMutableString *mstr = [str mutableCopy];
     [mstr replaceOccurrencesOfString:@"]]>" withString:@"]]&gt;" 
                              options:0 range:NSMakeRange(0, [mstr length])];
-    str = [mstr autorelease];
+    str = mstr;
   }
   CFXMLNodeRef node = CFXMLNodeCreate(kCFAllocatorDefault, kCFXMLNodeTypeCDATASection, (CFStringRef)str, NULL, kCFXMLNodeCurrentVersion);
   CFXMLTreeRef tree = [self appendNode:node];
@@ -113,20 +111,19 @@
     if ([comment length]) {
       /* '--' is not allow in XML comments. And a comment must not end with '-' */
       if ([str rangeOfString:@"--"].location != NSNotFound || [str hasSuffix:@"-"]) {
-        str = [str mutableCopy];
+        NSMutableString *mstr = [str mutableCopy];
         do {
-          [(id)str replaceOccurrencesOfString:@"--" withString:@"-" 
-                                      options:NSLiteralSearch range:NSMakeRange(0, [str length])];
-        } while ([str rangeOfString:@"--"].location != NSNotFound);
-        if ([str hasSuffix:@"-"])
-          [(id)str appendString:@" "];
-        [str autorelease];
+          [mstr replaceOccurrencesOfString:@"--" withString:@"-"
+                                   options:NSLiteralSearch range:NSMakeRange(0, [str length])];
+        } while ([mstr rangeOfString:@"--"].location != NSNotFound);
+        if ([mstr hasSuffix:@"-"])
+          [mstr appendString:@" "];
+        str = mstr;
       }
       CFXMLNodeRef node = CFXMLNodeCreate(kCFAllocatorDefault, kCFXMLNodeTypeComment, (CFStringRef)str, NULL, kCFXMLNodeCurrentVersion);
       tree  = [self appendNode:node];
       CFRelease(node);
     }
-    [comment release];
   }
   return tree;
 }
@@ -139,7 +136,6 @@
       [str appendString:@"\t"];
     }
     [self insertTextNode:str];
-    [str release];
   }
 }
 
@@ -248,7 +244,7 @@
   
   [self appendXMLNode:[sd_root xmlNodeForVersion:version]];
   CFDataRef xml = CFXMLTreeCreateXMLData(kCFAllocatorDefault, sd_doc);
-  return [(id)xml autorelease];
+  return SPXCFDataBridgingRelease(xml);
 }
 
 @end

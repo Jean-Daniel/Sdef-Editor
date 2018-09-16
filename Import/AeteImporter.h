@@ -16,7 +16,6 @@
 - (id)initWithSystemSuites;
 - (id)initWithFSRef:(FSRef *)aRef;
 - (id)initWithContentsOfFile:(NSString *)aFile;
-- (id)initWithApplicationSignature:(OSType)signature;
 - (id)initWithApplicationBundleIdentifier:(NSString *)identifier;
 
 @end

@@ -32,17 +32,16 @@
 
 @implementation SdefDocument
 
-- (id)initWithType:(NSString *)typeName error:(NSError **)outError {
+- (id)initWithType:(NSString *)typeName error:(NSError * __autoreleasing *)outError {
   if (self = [super initWithType:typeName error:outError]) {
     SdefDictionary *dictionary = [[SdefDictionary alloc] init];
     [dictionary appendChild:[SdefSuite node]];
     [self setDictionary:dictionary];
-    [dictionary release];
   }
   return self;
 }
 
-- (id)initWithContentsOfURL:(NSURL *)absoluteURL ofType:(NSString *)typeName error:(NSError **)outError {
+- (id)initWithContentsOfURL:(NSURL *)absoluteURL ofType:(NSString *)typeName error:(NSError * __autoreleasing *)outError {
   if (self = [super initWithContentsOfURL:absoluteURL ofType:typeName error:outError]) {
     
   }
@@ -50,11 +49,7 @@
 }
 
 - (void)dealloc {
-  [sd_center release];
-  [sd_manager release];
   [sd_dictionary setDocument:nil];
-  [sd_dictionary release];
-  [super dealloc];
 }
 
 #pragma mark -
@@ -87,7 +82,6 @@
   if (!browser) {
     browser = [[SdefSymbolBrowser alloc] init];
     [self addWindowController:browser];
-    [browser release];
   }
   [browser showWindow:sender];
 }
@@ -97,7 +91,6 @@
   if (!validator) {
     validator = [[SdefValidator alloc] init];
     [self addWindowController:validator];
-    [validator release];
   }
   [validator showWindow:sender];
 }
@@ -106,14 +99,10 @@
 - (IBAction)exportTerminology:(id)sender {
   SdefExporterController *exporter = [[SdefExporterController alloc] init];
   [exporter setSdefDocument:self];
-  [NSApp beginSheet:[exporter window]
-     modalForWindow:[[[self windowControllers] objectAtIndex:0] window]
-      modalDelegate:self
-     didEndSelector:@selector(exportSheetDidEnd:returnCode:context:)
-        contextInfo:nil];
-}
-- (void)exportSheetDidEnd:(NSWindow *)aWindow returnCode:(int)resut context:(id)ctxt {
-  [[aWindow windowController] autorelease];
+  [self.windowForSheet beginSheet:exporter.window completionHandler:^(NSModalResponse returnCode) {
+    // not needed but help us to keep a strong ref on exporter (is it needed ?)
+    [exporter close];
+  }];
 }
 
 #if !__LP64__
@@ -150,13 +139,8 @@
   SdtplWindow *exporter = [[SdtplWindow alloc] initWithDocument:self];
   [exporter setReleasedWhenClosed:YES];
   NSWindow *win = [[self documentWindow] window];
-  if (win) {
-    [NSApp beginSheet:[exporter window]
-       modalForWindow:win
-        modalDelegate:nil
-       didEndSelector:nil
-          contextInfo:nil];
-  }
+  if (win)
+    [win beginSheet:exporter.window completionHandler:NULL];
 }
 
 #pragma mark -
@@ -165,10 +149,9 @@
   SdefWindowController *controller = [[SdefWindowController alloc] init];
   [controller setShouldCloseDocument:YES];
   [self addWindowController:controller];
-  [controller release];
 }
 
-- (NSData *)dataOfType:(NSString *)typeName error:(NSError **)outError {
+- (NSData *)dataOfType:(NSString *)typeName error:(NSError * __autoreleasing *)outError {
   *outError = nil;
   NSData *data = nil;
   SdefVersion version = 0;
@@ -185,12 +168,11 @@
       NSBeep();
       SPXLogException(exception);
     }
-    [gen release];
   }
   return data;
 }
 
-- (BOOL)readFromURL:(NSURL *)absoluteURL ofType:(NSString *)typeName error:(NSError **)outError {
+- (BOOL)readFromURL:(NSURL *)absoluteURL ofType:(NSString *)typeName error:(NSError * __autoreleasing *)outError {
   if ([typeName isEqualToString:ScriptingDefinitionFileType] || [typeName isEqualToString:ScriptingDefinitionFileUTI]) {
     NSInteger version = 0;
     [self setDictionary:SdefLoadDictionary(absoluteURL, &version, self, outError)];
@@ -241,9 +223,8 @@
   if (sd_dictionary != newDictionary) {
     [sd_dictionary setDocument:nil];
     if (sd_manager) [sd_manager removeDictionary:sd_dictionary];
-    
-    [sd_dictionary release];
-    sd_dictionary = [newDictionary retain];
+
+    sd_dictionary = newDictionary;
     
     [sd_dictionary setDocument:self];
     if (sd_manager) [sd_manager addDictionary:sd_dictionary];
@@ -258,7 +239,7 @@
 
 - (SdefClassManager *)classManager {
   if (!sd_manager) {
-    sd_manager = [(SdefClassManager *)[SdefClassManager allocWithZone:[self zone]] initWithDocument:self];
+    sd_manager = [[SdefClassManager alloc] initWithDocument:self];
     if (sd_dictionary)
       [sd_manager addDictionary:sd_dictionary];
   }
@@ -276,7 +257,7 @@
                                       ofType:(NSString *)typeName
                             forSaveOperation:(NSSaveOperationType)saveOperation
                          originalContentsURL:(NSURL *)absoluteOriginalContentsURL 
-                                       error:(NSError **)outError {
+                                       error:(NSError * __autoreleasing *)outError {
   NSDictionary *infoPlist = [[NSBundle mainBundle] infoDictionary];
   NSArray *documentTypes;
   NSString *creatorCodeString;
@@ -321,7 +302,7 @@
   }
   
   // Otherwise, add the type and/or creator to the dictionary.
-  NSMutableDictionary *newAttrs = [[attrs mutableCopy] autorelease];
+  NSMutableDictionary *newAttrs = [attrs mutableCopy];
   if(typeCode)
     [newAttrs setObject:typeCode forKey:NSFileHFSTypeCode];
   if(creatorCode)
@@ -345,10 +326,9 @@ SdefDictionary *SdefLoadDictionaryData(NSData *data, NSURL *base, NSInteger *ver
     SdefParser *parser = [[SdefParser alloc] init];
     [parser setDelegate:delegate];
     if ([parser parseData:data base:base error:error]) {
-      result = [[parser dictionary] retain];
+      result = [parser dictionary];
       if (version) *version = [parser sdefVersion];
     }
-    [parser release];
   }
-  return result ? [result autorelease] : nil;
+  return result;
 }

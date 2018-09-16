@@ -47,13 +47,11 @@
     id keys = [argsTerm keyEnumerator];
     id key;
     while (key = [keys nextObject]) {
-      id param = [[SdefParameter allocWithZone:[self zone]] initWithName:key
+      id param = [[SdefParameter alloc] initWithName:key
                                                suite:[args objectForKey:key]
                                       andTerminology:[argsTerm objectForKey:key]];
-      if (param) {
+      if (param)
         [self appendChild:param];
-        [param release];
-      }
     }    
   }
   return self;

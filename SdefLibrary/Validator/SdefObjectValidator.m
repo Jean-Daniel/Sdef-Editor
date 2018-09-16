@@ -9,11 +9,13 @@
 #import "SdefValidatorBase.h"
 
 #import "SdefLeaf.h"
+#import "SdefType.h"
 #import "SdefSuite.h"
 #import "SdefObjects.h"
 #import "SdefDictionary.h"
 #import "SdefClassManager.h"
 #import "SdefDocumentation.h"
+#import "SdefImplementation.h"
 
 #import <WonderBox/WBFunctions.h>
 

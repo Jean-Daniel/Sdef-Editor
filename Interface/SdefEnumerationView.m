@@ -73,7 +73,7 @@
 @implementation SdefEnumerationInlineTransformer
 
 + (id)transformer {
-  return [[[self alloc] init] autorelease];
+  return [[self alloc] init];
 }
 
 // information that can be used to analyze available transformer instances (especially used inside Interface Builder)

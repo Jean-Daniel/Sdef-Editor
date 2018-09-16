@@ -25,11 +25,6 @@
   return self;
 }
 
-- (void)dealloc {
-  SPXTrace();
-  [super dealloc];
-}
-
 #pragma mark -
 - (void)awakeFromNib {
   sd_version = [[(SdefDocument *)[self document] dictionary] version];
@@ -47,7 +42,7 @@
     row = [uiTable selectedRow];
   }
   if (row >= 0) {
-    SdefValidatorItem *item = [ibMessages objectAtIndex:row];
+    SdefValidatorItem *item = [ibMessages objectAtArrangedObjectIndex:row];
     [[[self document] documentWindow] setSelection:[[item object] container]];
     [[[self document] documentWindow] showWindow:sender];
   }
@@ -58,7 +53,6 @@
   NSMutableArray *messages = [[NSMutableArray alloc] init];
   [dict validate:messages forVersion:sd_version];
   [ibMessages setContent:messages];
-  [messages release];
 }
 
 - (IBAction)changeVersion:(id)sender {
@@ -82,7 +76,7 @@
 - (id)initWithLevel:(UInt8)level node:(NSObject<SdefObject> *)node message:(NSString *)message args:(va_list)args {
   if (self = [super init]) {
     sd_level = level;
-    sd_object = [node retain];
+    sd_object = node;
     sd_message = [[NSString alloc] initWithFormat:message arguments:args];
   }
   return self;
@@ -91,29 +85,23 @@
 + (id)noteItemWithNode:(NSObject<SdefObject> *)aNode message:(NSString *)msg, ... {
   va_list args;
   va_start(args, msg);
-  id item = [[[self alloc] initWithLevel:1 node:aNode message:msg args:args] autorelease];
+  id item = [[self alloc] initWithLevel:1 node:aNode message:msg args:args];
   va_end(args);
   return item;
 }
 + (id)errorItemWithNode:(NSObject<SdefObject> *)aNode message:(NSString *)msg, ... {
   va_list args;
   va_start(args, msg);
-  id item = [[[self alloc] initWithLevel:3 node:aNode message:msg args:args] autorelease];
+  id item = [[self alloc] initWithLevel:3 node:aNode message:msg args:args];
   va_end(args);
   return item;
 }
 + (id)warningItemWithNode:(NSObject<SdefObject> *)aNode message:(NSString *)msg, ... {
   va_list args;
   va_start(args, msg);
-  id item = [[[self alloc] initWithLevel:2 node:aNode message:msg args:args] autorelease];
+  id item = [[self alloc] initWithLevel:2 node:aNode message:msg args:args];
   va_end(args);
   return item;
-}
-
-- (void)dealloc {
-  [sd_object release];
-  [sd_message release];
-  [super dealloc];
 }
 
 #pragma mark -

@@ -14,11 +14,10 @@
 @synthesize elementName = _name;
 
 @synthesize list = _list;
-@synthesize empty = _empty;
 @synthesize CDData = _cddata;
 
 + (id)nodeWithElementName:(NSString *)aName {
-  return [[[self alloc] initWithElementName:aName] autorelease];
+  return [[self alloc] initWithElementName:aName];
 }
 
 - (id)init {
@@ -36,17 +35,6 @@
   return self;
 }
 
-- (void)dealloc {
-  [_name release];
-  [sd_metas release];
-  [_content release];
-  [sd_comments release];
-  [sd_attrKeys release];
-  [sd_postmetas release];
-  [sd_attrValues release];
-  [super dealloc];
-}
-
 - (NSString *)description {
   return [NSString stringWithFormat:@"<%@ %p> {element:%@ attributes:%@}",
     NSStringFromClass([self class]), self, _name, sd_attrKeys];
@@ -54,6 +42,8 @@
 
 #pragma mark -
 - (BOOL)isEmpty {
+  if (_empty)
+    return YES;
   return ![self hasChildren] && ![self content] && 0 == [sd_postmetas count];
 }
 
@@ -111,7 +101,6 @@
 
 - (void)setComments:(NSArray *)comments {
   if (sd_comments != comments) {
-    [sd_comments release];
     sd_comments = [comments mutableCopy];
   }
 }
@@ -126,7 +115,6 @@
 - (void)removeCommentAtIndex:(NSUInteger)anIndex {
   [sd_comments removeObjectAtIndex:anIndex];
   if (sd_comments && [sd_comments count] == 0) {
-    [sd_comments release];
     sd_comments = nil;
   }
 }

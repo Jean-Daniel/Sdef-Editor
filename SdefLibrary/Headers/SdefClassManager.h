@@ -26,7 +26,7 @@
 
 + (BOOL)isBaseType:(NSString *)type;
 
-- (id)initWithDocument:(SdefDocument *)aDocument;
+- (instancetype)initWithDocument:(SdefDocument *)aDocument;
 
 - (void)setDocument:(SdefDocument *)aDoc;
 

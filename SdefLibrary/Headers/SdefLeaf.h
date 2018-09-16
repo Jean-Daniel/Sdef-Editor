@@ -11,7 +11,6 @@
 @interface SdefLeaf : NSObject <SdefObject, NSCopying, NSCoding> {
 @private
   NSString *_name;
-  NSObject<SdefObject> *_owner;
 @protected
   struct _sd_slFlags {
     unsigned int list:1;
@@ -21,7 +20,7 @@
     unsigned int editable:1;
     unsigned int beginning:1; // for cocoa elements
     unsigned int reserved:2;
-  } sd_slFlags;
+  } _slFlags;
 }
 
 - (id)init;

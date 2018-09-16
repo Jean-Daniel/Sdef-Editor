@@ -9,10 +9,10 @@
 #import "SdefImporter.h"
 
 @interface OSASdefImporter : SdefImporter {
-  NSString *sd_path;
+  NSURL *sd_url;
   SdefDictionary *sd_dico;
 }
 
-- (id)initWithFile:(NSString *)file;
+- (id)initWithURL:(NSURL *)url;
 
 @end

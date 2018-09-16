@@ -10,9 +10,6 @@
 
 @interface SdefXInclude : SdefLeaf <NSCopying, NSCoding> {
 @private
-  NSString *_href;
-  NSString *_pointer;
-  
   NSMutableArray *_nodes;
 }
 

@@ -7,6 +7,7 @@
  */
 
 #import "SdefVerb.h"
+#import "SdefSuite.h"
 #import "SdefArguments.h"
 
 @implementation SdefVerb
@@ -32,8 +33,8 @@
 
 - (id)initWithCoder:(NSCoder *)aCoder {
   if (self = [super initWithCoder:aCoder]) {
-    _result = [[aCoder decodeObjectForKey:@"SVResult"] retain];
-    _direct = [[aCoder decodeObjectForKey:@"SVDirectParameter"] retain];
+    _result = [aCoder decodeObjectForKey:@"SVResult"];
+    _direct = [aCoder decodeObjectForKey:@"SVDirectParameter"];
   }
   return self;
 }
@@ -59,10 +60,7 @@
 
 - (void)dealloc {
   [_result setOwner:nil];
-  [_result release];
   [_direct setOwner:nil];
-  [_direct release];
-  [super dealloc];
 }
 #pragma mark -
 
@@ -94,8 +92,7 @@
 - (void)setResult:(SdefResult *)aResult {
   if (_result != aResult) {
     [_result setOwner:nil];
-    [_result release];
-    _result = [aResult retain];
+    _result = aResult;
     [_result setOwner:self];
   }
 }
@@ -113,8 +110,7 @@
 - (void)setDirectParameter:(SdefDirectParameter *)aParameter {
   if (_direct != aParameter) {
     [_direct setOwner:nil];
-    [_direct release];
-    _direct = [aParameter retain];
+    _direct = aParameter;
     [_direct setOwner:self];
   }
 }

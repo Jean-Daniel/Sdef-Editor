@@ -10,7 +10,6 @@
 
 @interface SdefXMLNode : WBTreeNode {
   BOOL _list;
-  BOOL _empty;
   BOOL _cddata;
   NSString *_name;
   NSMutableArray *sd_attrKeys, *sd_attrValues;

@@ -11,6 +11,7 @@
 #import "SdefDocument.h"
 #import "SdefClassManager.h"
 #import "SdefDocumentation.h"
+#import "SdefImplementation.h"
 
 @implementation SdefClass
 
@@ -43,10 +44,10 @@
 
 - (id)initWithCoder:(NSCoder *)aCoder {
   if (self = [super initWithCoder:aCoder]) {
-    _type = [[aCoder decodeObjectForKey:@"SCType"] retain];
-    _plural = [[aCoder decodeObjectForKey:@"SCPlural"] retain];
-    _inherits = [[aCoder decodeObjectForKey:@"SCInherits"] retain];
-    _contents = [[aCoder decodeObjectForKey:@"SCContents"] retain];
+    _type = [aCoder decodeObjectForKey:@"SCType"];
+    _plural = [aCoder decodeObjectForKey:@"SCPlural"];
+    _inherits = [aCoder decodeObjectForKey:@"SCInherits"];
+    _contents = [aCoder decodeObjectForKey:@"SCContents"];
   }
   return self;
 }
@@ -66,10 +67,6 @@
 
 - (void)dealloc {
   [_contents setOwner:nil];
-  [_plural release];
-  [_inherits release];
-  [_contents release];
-  [super dealloc];
 }
 
 - (void)sdefInit {
@@ -77,31 +74,26 @@
   sd_soFlags.xid = 1;
   sd_soFlags.xrefs = 1;
   sd_soFlags.hasAccessGroup = 1;
-  
-  NSZone *zone = [self zone];
-  SdefCollection *child = [[SdefCollection allocWithZone:zone] initWithName:NSLocalizedStringFromTable(@"Elements", @"SdefLibrary", @"Elements collection default name")];
+
+  SdefCollection *child = [[SdefCollection alloc] initWithName:NSLocalizedStringFromTable(@"Elements", @"SdefLibrary", @"Elements collection default name")];
   [child setContentType:[SdefElement class]];
   [child setElementName:@"elements"];
   [self appendChild:child];
-  [child release];
   
-  child = [[SdefCollection allocWithZone:zone] initWithName:NSLocalizedStringFromTable(@"Properties", @"SdefLibrary", @"Properties collection default name")];
+  child = [[SdefCollection alloc] initWithName:NSLocalizedStringFromTable(@"Properties", @"SdefLibrary", @"Properties collection default name")];
   [child setContentType:[SdefProperty class]];
   [child setElementName:@"properties"];
   [self appendChild:child];
-  [child release];
   
-  child = [[SdefCollection allocWithZone:zone] initWithName:NSLocalizedStringFromTable(@"Resp. to Cmds", @"SdefLibrary", @"Responds to Commands collection default name")];
+  child = [[SdefCollection alloc] initWithName:NSLocalizedStringFromTable(@"Resp. to Cmds", @"SdefLibrary", @"Responds to Commands collection default name")];
   [child setContentType:[SdefRespondsTo class]];
   [child setElementName:@"responds-to-commands"];
   [self appendChild:child];
-  [child release];
   
-  child = [[SdefCollection allocWithZone:zone] initWithName:NSLocalizedStringFromTable(@"Resp. to Events", @"SdefLibrary", @"Responds to Events collection default name")];
+  child = [[SdefCollection alloc] initWithName:NSLocalizedStringFromTable(@"Resp. to Events", @"SdefLibrary", @"Responds to Events collection default name")];
   [child setContentType:[SdefRespondsTo class]];
   [child setElementName:@"responds-to-events"];
   [self appendChild:child];
-  [child release];
 }
 
 - (void)setEditable:(BOOL)flag recursive:(BOOL)recu {
@@ -148,15 +140,14 @@
 
 - (SdefContents *)contents {
   if (!_contents)
-    [self setContents:[[[SdefContents alloc] init] autorelease]];
+    [self setContents:[[SdefContents alloc] init]];
   
   return _contents;
 }
 - (void)setContents:(SdefContents *)contents {
   if (_contents != contents) {
     [_contents setOwner:nil];
-    [_contents release];
-    _contents = [contents retain];
+    _contents = contents;
     [_contents setOwner:self];
   }
 }
@@ -220,11 +211,11 @@ static NSSet *sAccessorPropertiesSet = nil;
 
 + (void)initialize {
   if ([SdefElement class] == self) {
-    sAccessorSet = [[NSSet setWithObject:@"accessors"] retain];
-    sAccessorPropertiesSet = [[NSSet setWithObjects:
+    sAccessorSet = [NSSet setWithObject:@"accessors"];
+    sAccessorPropertiesSet = [NSSet setWithObjects:
                               @"accIndex", @"accId", @"accName",
                               @"accRange", @"accRelative", @"accTest",
-                              nil] retain];
+                              nil];
   }
 }
 
@@ -272,10 +263,6 @@ static NSSet *sAccessorPropertiesSet = nil;
 - (void)sdefInit {
   [super sdefInit];
   [self setIsLeaf:YES];
-}
-
-- (void)dealloc {
-  [super dealloc];
 }
 
 #pragma mark -

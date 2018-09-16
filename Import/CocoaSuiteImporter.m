@@ -71,7 +71,7 @@ NSDictionary *_CocoaScriptingFindTerminology(NSString *base, NSString *name) {
       }
     } while (search);
   }
-  return [dterm autorelease];
+  return dterm;
 }
 
 - (id)initWithContentsOfFile:(NSString *)file {
@@ -89,21 +89,10 @@ NSDictionary *_CocoaScriptingFindTerminology(NSString *base, NSString *name) {
         [self addSuite:dsuite terminology:terminology];
       }
     }
-    if (!ok) {
-      [self release];
+    if (!ok)
       self = nil;
-    }
   }
   return self;
-}
-
-- (void)dealloc {
-  [sd_roots release];
-  [sd_cache release];
-  
-  [sd_suites release];
-  [sd_terminologies release];
-  [super dealloc];
 }
 
 #pragma mark -
@@ -182,7 +171,7 @@ static NSArray *ASKStandardsSuites(void) {
     [openPanel setAllowedFileTypes:[NSArray arrayWithObjects:@"scriptSuite", nil]];
     switch([openPanel runModal]) {
       case NSOKButton:
-        file = ([[openPanel URLs] count]) ? [[openPanel URLs] objectAtIndex:0] : nil;
+        file = ([[openPanel filenames] count]) ? [[openPanel filenames] objectAtIndex:0] : nil;
         break;
     }
     if (file) {
@@ -210,8 +199,7 @@ static NSArray *ASKStandardsSuites(void) {
 }
 
 - (void)preloadSuite:(NSDictionary *)dictionary {
-  NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-  
+  @autoreleasepool {
   /* Check type */
   NSString *type = [dictionary objectForKey:@"Type"];
   if (type) {
@@ -250,7 +238,7 @@ static NSArray *ASKStandardsSuites(void) {
     if ([entry isKindOfClass:[NSDictionary class]])
       [self preloadSuite:entry];
   }
-  [pool release];
+  }
 }
 
 - (BOOL)preload {
@@ -383,10 +371,8 @@ static NSArray *ASKStandardsSuites(void) {
   
   while (idx-- > 0) {
     SdefSuite *suite = [[SdefSuite alloc] initWithName:nil suite:[sd_suites objectAtIndex:idx] andTerminology:[sd_terminologies objectAtIndex:idx]];
-    if (suite) {
+    if (suite)
       [suites addObject:suite];
-      [suite release];
-    }    
   }
   
   return [suites count] > 0;

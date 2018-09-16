@@ -7,6 +7,7 @@
  */
 
 #import "SdefProcessor.h"
+#import "SdefDictionary.h"
 #import "SdefDocument.h"
 #import "SdefEditor.h"
 
@@ -25,14 +26,6 @@
 
 - (id)initWithSdefDocument:(SdefDocument *)aDocument {
   return [self initWithInput:aDocument];
-}
-
-- (void)dealloc {
-  [sd_input release];
-  [sd_output release];
-  [sd_version release];
-  [sd_includes release];
-  [super dealloc];
 }
 
 #pragma mark -
@@ -120,7 +113,6 @@
   }
   
   [task setArguments:args];
-  [args release];
   
   // Here we register as an observer of the NSFileHandleReadCompletionNotification, which lets
   // us know when there is data waiting for us to grab it in the task's file handle (the pipe
@@ -157,12 +149,8 @@
   
   NSData *data;
   while ((data = [[[task standardOutput] fileHandleForReading] availableData]) && [data length]) {
-    [sd_msg appendString:[[[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding] autorelease]];
+    [sd_msg appendString:[[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding]];
   }
-  
-  [task release];
-  
-  [sd_msg autorelease];
   NSString *result = [sd_msg length] ? sd_msg : nil;
   sd_msg = nil;
   return result;
@@ -173,7 +161,7 @@
 - (void)getData:(NSNotification *)aNotification {
   NSData *data = [[aNotification userInfo] objectForKey:NSFileHandleNotificationDataItem];
   if ([data length]) {
-    [sd_msg appendString:[[[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding] autorelease]];
+    [sd_msg appendString:[[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding]];
   }
   // we need to schedule the file handle go read more data in the background again.
   [[aNotification object] readInBackgroundAndNotify];  
@@ -186,8 +174,7 @@
 }
 - (void)setInput:(id)input {
   if (sd_input != input) {
-    [sd_input release];
-    sd_input = [input retain];
+    sd_input = input;
   }
 }
 
@@ -196,8 +183,7 @@
 }
 - (void)setOutput:(NSString *)output {
   if (sd_output != output) {
-    [sd_output release];
-    sd_output = [output copy];
+    sd_output = output;
   }
 }
 
@@ -206,8 +192,7 @@
 }
 - (void)setVersion:(NSString *)aVersion {
   if (sd_version != aVersion) {
-    [sd_version release];
-    sd_version = [aVersion copy];
+    sd_version = aVersion;
   }
 }
 
@@ -216,8 +201,7 @@
 }
 - (void)setIncludes:(NSArray *)includes {
   if (sd_includes != includes) {
-    [sd_includes release];
-    sd_includes = [includes copy];
+    sd_includes = includes;
   }
 }
 

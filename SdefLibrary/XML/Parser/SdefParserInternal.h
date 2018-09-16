@@ -7,6 +7,8 @@
  *
  */
 
+#import "SdefBase.h"
+
 #include <libxml/tree.h>
 
 @interface SdefDOMParser : NSObject {
@@ -23,17 +25,16 @@
 
 - (void)abortWithError:(NSInteger)code reason:(NSString *)msg;
 
-- (CFStringEncoding)cfencoding;
-
-- (NSStringEncoding)nsencoding;
+- (NSStringEncoding)encoding;
 
 @end
 
+typedef id SdefXMLStructure;
 @interface NSObject (SdefDOMParserDelegate)
 
-- (void *)parser:(SdefDOMParser *)parser createStructureForNode:(xmlNodePtr)node;
-- (void)parser:(SdefDOMParser *)parser addChild:(void *)aChild toStructure:(void *)aStruct;
-- (void)parser:(SdefDOMParser *)parser endStructure:(void *)structure;
+- (SdefXMLStructure)parser:(SdefDOMParser *)parser createStructureForNode:(xmlNodePtr)node;
+- (void)parser:(SdefDOMParser *)parser addChild:(SdefXMLStructure)aChild toStructure:(SdefXMLStructure)aStruct;
+- (void)parser:(SdefDOMParser *)parser endStructure:(SdefXMLStructure)structure;
 
 @end
 
@@ -47,5 +48,5 @@ SPX_PRIVATE
 const xmlChar *_SdefXMLAttributeGetValue(xmlAttr *attr);
 
 SPX_PRIVATE
-CFDictionaryRef _SdefXMLCreateDictionaryWithAttributes(xmlAttr *attr, CFStringEncoding encoding);
+NSDictionary *_SdefXMLCreateDictionaryWithAttributes(xmlAttr *attr, NSStringEncoding encoding);
 

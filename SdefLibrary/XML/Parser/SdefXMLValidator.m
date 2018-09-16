@@ -9,16 +9,16 @@
 #import "SdefXMLValidator.h"
 
 @interface SdefXMLElement : NSObject {
-  CFSetRef _elements;
-  CFSetRef _attributes;
+  NSSet *_elements;
+  NSSet *_attributes;
 }
 
-- (id)initWithElements:(CFStringRef *)attribute count:(NSUInteger)cnt;
+- (id)initWithElements:(NSString * const __unsafe_unretained *)elements count:(NSUInteger)cnt;
 
 /* Return Leopard if attributes contains 'id' */
 /* Return Leopard if element contains 'xref' */
-- (SdefValidatorVersion)acceptAttribute:(CFStringRef)attribute value:(CFStringRef)value;
-- (SdefValidatorVersion)acceptElement:(CFStringRef)element;
+- (SdefValidatorVersion)acceptAttribute:(NSString *)attribute value:(NSString *)value;
+- (SdefValidatorVersion)acceptElement:(NSString *)element;
 
 - (instancetype)ATTLIST:(NSString *)attribute, ... SPX_REQUIRES_NIL_TERMINATION;
 
@@ -51,36 +51,33 @@
 @implementation SdefXMLValidator
 
 static 
-CFMutableDictionaryRef sValidators = NULL;
+NSMutableDictionary *sValidators = nil;
 
 static inline SPX_REQUIRES_NIL_TERMINATION
 SdefXMLElement *_ELEMENT(Class cls, NSString *name, ...) {
   NSInteger idx = -1;
-  CFStringRef items[32];
+  __unsafe_unretained NSString * items[32];
 
   va_list ap;
   va_start(ap, name);
   do {
     idx++;
     assert(idx < 32);
-    items[idx] = va_arg(ap, CFStringRef);
+    items[idx] = va_arg(ap, NSString *);
   } while (items[idx]);
   va_end(ap);
 
   SdefXMLElement *elt = [[cls alloc] initWithElements:items count:idx];
-  CFDictionarySetValue(sValidators, SPXNSToCFString(name), elt);
-  [elt release];
-
+  sValidators[name] = elt;
   return elt;
 }
+
 #define ELEMENT(name, cls, ...) _ELEMENT([cls class], name, ##__VA_ARGS__)
 #define EMPTY nil
 
 + (void)initialize {
   if ([SdefXMLValidator class] == self) {
-    sValidators = CFDictionaryCreateMutable(kCFAllocatorDefault, 0, 
-                                            &kCFCopyStringDictionaryKeyCallBacks,
-                                            &kCFTypeDictionaryValueCallBacks);
+    sValidators = [[NSMutableDictionary alloc] init];
 
     /* xinclude: base on W3C Working Draft 10 November 2003 */
     [ELEMENT(@"include", SdefXMLElement, EMPTY)
@@ -130,7 +127,7 @@ SdefXMLElement *_ELEMENT(Class cls, NSString *name, ...) {
              @"documentation", @"xref", nil)
      ATTLIST:@"name", @"id", @"code", @"description", @"hidden", nil];
     // Ditto for event
-    CFDictionarySetValue(sValidators, @"event", cmd);
+    sValidators[@"event"] = cmd;
     
     /* direct-parameter */
     [ELEMENT(@"direct-parameter", SdefXMLElement, @"type", nil)
@@ -216,44 +213,37 @@ SdefXMLElement *_ELEMENT(Class cls, NSString *name, ...) {
 - (id)init {
   if (self = [super init]) {
     sd_version = kSdefParserVersionAll;
-    sd_stack = CFArrayCreateMutable(kCFAllocatorDefault, 0, &kCFTypeArrayCallBacks);
+    sd_stack = [[NSMutableArray alloc] init];
   }
   return self;
-}
-
-- (void)dealloc {
-  if (sd_stack) CFRelease(sd_stack);
-  [super dealloc];
 }
 
 - (SdefValidatorVersion)version {
   return sd_version;
 }
 
-- (CFStringRef)element {
-  CFIndex count = CFArrayGetCount(sd_stack);
-  if (count <= 0) return NULL;
-  return CFArrayGetValueAtIndex(sd_stack, count - 1);
+- (NSString *)element {
+  return sd_stack.lastObject;
 }
 
-- (void)startElement:(CFStringRef)element {
-  CFArrayAppendValue(sd_stack, element);
+- (void)startElement:(NSString *)element {
+  [sd_stack addObject:element];
 }
 
-- (void)endElement:(CFStringRef)element {
-  CFStringRef last = [self element];
-  if (!last || !CFEqual(element, last)) {
+- (void)endElement:(NSString *)element {
+  NSString * last = [self element];
+  if (!last || ![element isEqualToString:last]) {
     spx_log_warning("Invalid validator stack state");
   }
   if (last)
-    CFArrayRemoveValueAtIndex(sd_stack, CFArrayGetCount(sd_stack) - 1);
+    [sd_stack removeLastObject];
 }
 
 - (NSString *)invalidAttribute:(NSString *)attribute inElement:(NSString *)element {
   return [NSString stringWithFormat:@"unexpected attribute '%@' found in element '%@'", attribute, element];
 }
 
-- (NSString *)invalidAttribute:(CFStringRef)attribute inElement:(CFStringRef)element forVersion:(SdefValidatorVersion)version {
+- (NSString *)invalidAttribute:(NSString *)attribute inElement:(NSString *)element forVersion:(SdefValidatorVersion)version {
   NSString *os = @"unknown";
   switch (version) {
     case kSdefParserVersionTiger:
@@ -272,7 +262,7 @@ SdefXMLElement *_ELEMENT(Class cls, NSString *name, ...) {
   return [NSString stringWithFormat:@"unexpected attribute '%@' found in element '%@' for %@ sdef format.", attribute, element, os];
 }
 
-- (NSString *)invalidElementError:(CFStringRef)element {
+- (NSString *)invalidElementError:(NSString *)element {
   if (![self element]) {
     return [NSString stringWithFormat:@"unexpected root element %@", element];
   } else {
@@ -280,15 +270,15 @@ SdefXMLElement *_ELEMENT(Class cls, NSString *name, ...) {
   }
 }
 
-- (SdefValidatorVersion)checkAttributes:(CFDictionaryRef)attributes forElement:(CFStringRef)element error:(NSString **)error {
+- (SdefValidatorVersion)checkAttributes:(NSDictionary *)attributes forElement:(NSString *)element error:(NSString * __autoreleasing *)error {
   SdefValidatorVersion version = sd_version;
-  if (attributes && CFDictionaryGetCount(attributes) > 0) {
-    SdefXMLElement *validator = (id)CFDictionaryGetValue(sValidators, element);
+  if (attributes && attributes.count > 0) {
+    SdefXMLElement *validator = sValidators[element];
     if (validator) {
-      for (NSString *attr in SPXCFToNSDictionary(attributes)) {
-        version &= [validator acceptAttribute:(CFStringRef)attr value:CFDictionaryGetValue(attributes, attr)];
+      for (NSString *attr in attributes) {
+        version &= [validator acceptAttribute:attr value:attributes[attr]];
         if (kSdefParserVersionUnknown == version) {
-          if (error) *error = [self invalidAttribute:attr inElement:(id)element];
+          if (error) *error = [self invalidAttribute:attr inElement:element];
           break;
         }
       }
@@ -297,13 +287,13 @@ SdefXMLElement *_ELEMENT(Class cls, NSString *name, ...) {
   return version;
 }
 
-- (SdefValidatorResult)validateElement:(CFStringRef)element attributes:(CFDictionaryRef)attributes error:(NSString **)error {
+- (SdefValidatorResult)validateElement:(NSString *)element attributes:(NSDictionary *)attributes error:(NSString * __autoreleasing *)error {
   if (error) *error = nil;
   SdefXMLElement *validator;
   if ([self element]) {
-    validator = (id)CFDictionaryGetValue(sValidators, [self element]);
+    validator = sValidators[self.element];
   } else {
-    validator = (id)CFDictionaryGetValue(sValidators, @"__sdef__");
+    validator = sValidators[@"__sdef__"];
   }
   if (validator) {
     SdefValidatorVersion version = [validator acceptElement:element];
@@ -332,17 +322,17 @@ SdefXMLElement *_ELEMENT(Class cls, NSString *name, ...) {
 #pragma mark -
 @implementation SdefXMLElement
 
-- (id)initWithElements:(CFStringRef *)elements count:(NSUInteger)cnt {
+- (id)initWithElements:(NSString * const __unsafe_unretained *)elements count:(NSUInteger)cnt {
   if (self = [super init]) {
     if (cnt > 0)
-      _elements = CFSetCreate(kCFAllocatorDefault, (const void **)elements, cnt, &kCFTypeSetCallBacks);
+      _elements = [[NSSet alloc] init];
   }
   return self;
 }
 
 - (instancetype)ATTLIST:(NSString *)name, ... {
-  CFStringRef items[32];
-  items[0] = SPXNSToCFString(name);
+  NSString * items[32];
+  items[0] = name;
   
   va_list ap;
   CFIndex idx = 0;
@@ -350,48 +340,43 @@ SdefXMLElement *_ELEMENT(Class cls, NSString *name, ...) {
   do {
     idx++;
     assert(idx < 32);
-    items[idx] = va_arg(ap, CFStringRef);
+    items[idx] = va_arg(ap, NSString *);
   } while (items[idx]);
   va_end(ap);
   
-  _attributes = CFSetCreate(kCFAllocatorDefault, (const void **)items, idx, &kCFTypeSetCallBacks);
+  _attributes = [NSSet setWithObjects:items count:idx];
   return self;
 }
 
-- (void)dealloc {
-  SPXCFRelease(_attributes);
-  SPXCFRelease(_elements);
-  [super dealloc];
-}
-
-- (SdefValidatorVersion)acceptAttribute:(CFStringRef)attribute value:(CFStringRef)value {
-  if (_attributes && CFSetContainsValue(_attributes, attribute)) {
-    if (CFEqual(attribute, CFSTR("requires-access"))) {
+- (SdefValidatorVersion)acceptAttribute:(NSString *)attribute value:(NSString *)value {
+  if (_attributes && [_attributes containsObject:attribute]) {
+    if ([attribute isEqualToString:@"requires-access"]) {
       return kSdefParserVersionMountainLionAndLater;
     }
-    return CFEqual(attribute, CFSTR("id")) ? kSdefParserVersionLeopardAndLater : kSdefParserVersionAll;
+    return [attribute isEqualToString:@"id"] ? kSdefParserVersionLeopardAndLater : kSdefParserVersionAll;
   }
   return kSdefParserVersionUnknown;
 }
-- (SdefValidatorVersion)acceptElement:(CFStringRef)element {
+
+- (SdefValidatorVersion)acceptElement:(NSString *)element {
   if (_elements) {
-    if (CFSetContainsValue(_elements, element)) {
-      if (CFEqual(element, CFSTR("type"))) {
+    if ([_elements containsObject:element]) {
+      if ([element isEqualToString:@"type"]) {
         /* type element is for Tiger and above */
         return kSdefParserVersionTigerAndLater;
-      } else if (CFEqual(element, CFSTR("xref")) || CFEqual(element, CFSTR("include"))) {
+      } else if ([element isEqualToString:@"xref"] || [element isEqualToString:@"include"]) {
         return kSdefParserVersionLeopardAndLater;
-      } else if (CFEqual(element, CFSTR("access-group"))) {
+      } else if ([element isEqualToString:@"access-group"]) {
         return kSdefParserVersionMountainLionAndLater;
       } else {
         return kSdefParserVersionAll;
       }
-    } else if (CFEqual(element, CFSTR("synonyms")) && CFSetContainsValue(_elements, CFSTR("synonym"))) {
+    } else if ([element isEqualToString:@"synonyms"] && [_elements containsObject:@"synonym"]) {
       /* special synonyms case */ 
       return kSdefParserVersionPanther;
     }
   }
-  if (CFEqual(element, CFSTR("include")))
+  if ([element isEqualToString:@"include"])
     return kSdefParserVersionLeopardAndLater;
 
   return kSdefParserVersionUnknown;
@@ -402,12 +387,12 @@ SdefXMLElement *_ELEMENT(Class cls, NSString *name, ...) {
 #pragma mark -
 @implementation SdefXMLCocoa
 
-- (SdefValidatorVersion)acceptAttribute:(CFStringRef)attribute value:(CFStringRef)value {
+- (SdefValidatorVersion)acceptAttribute:(NSString *)attribute value:(NSString *)value {
   /* type-values appear in Leopard */
-  if (CFEqual(attribute, CFSTR("boolean-value")) || 
-      CFEqual(attribute, CFSTR("integer-value")) ||
-      CFEqual(attribute, CFSTR("string-value")) ||
-      CFEqual(attribute, CFSTR("insert-at-beginning"))) {
+  if ([attribute isEqualToString:@"boolean-value"] ||
+      [attribute isEqualToString:@"integer-value"] ||
+      [attribute isEqualToString:@"string-value"] ||
+      [attribute isEqualToString:@"insert-at-beginning"]) {
     return kSdefParserVersionLeopardAndLater;
   }
   return [super acceptAttribute:attribute value:value];
@@ -418,9 +403,9 @@ SdefXMLElement *_ELEMENT(Class cls, NSString *name, ...) {
 
 @implementation SdefXMLEnumeration
 
-- (SdefValidatorVersion)acceptAttribute:(CFStringRef)attribute value:(CFStringRef)value {
+- (SdefValidatorVersion)acceptAttribute:(NSString *)attribute value:(NSString *)value {
   /* inline appears in Tiger */
-  if (CFEqual(attribute, CFSTR("inline"))) {
+  if ([attribute isEqualToString:@"inline"]) {
     return kSdefParserVersionTigerAndLater;
   }
   return [super acceptAttribute:attribute value:value];
@@ -430,11 +415,11 @@ SdefXMLElement *_ELEMENT(Class cls, NSString *name, ...) {
 
 @implementation SdefXMLProperty
 
-- (SdefValidatorVersion)acceptAttribute:(CFStringRef)attribute value:(CFStringRef)value {
+- (SdefValidatorVersion)acceptAttribute:(NSString *)attribute value:(NSString *)value {
   /* in-properties replace not-in-properties in Tiger */
-  if (CFEqual(attribute, CFSTR("in-properties"))) {
+  if ([attribute isEqualToString:@"in-properties"]) {
     return kSdefParserVersionTigerAndLater;
-  } else if (CFEqual(attribute, CFSTR("not-in-properties"))) {
+  } else if ([attribute isEqualToString:@"not-in-properties"]) {
     return kSdefParserVersionPanther;
   } 
   return [super acceptAttribute:attribute value:value];
@@ -444,11 +429,11 @@ SdefXMLElement *_ELEMENT(Class cls, NSString *name, ...) {
 
 @implementation SdefXMLRespondsTo
 
-- (SdefValidatorVersion)acceptAttribute:(CFStringRef)attribute value:(CFStringRef)value {
+- (SdefValidatorVersion)acceptAttribute:(NSString *)attribute value:(NSString *)value {
   /* command replace name in Leopard */
-  if (CFEqual(attribute, CFSTR("command"))) {
+  if ([attribute isEqualToString:@"command"]) {
     return kSdefParserVersionLeopardAndLater;
-  } else if (CFEqual(attribute, CFSTR("name"))) {
+  } else if ([attribute isEqualToString:@"name"]) {
     /* name is supported for compatibility but should not be use is recent suites */
     return kSdefParserVersionAll;
   } 
@@ -460,17 +445,17 @@ SdefXMLElement *_ELEMENT(Class cls, NSString *name, ...) {
 #pragma mark -
 @implementation SdefXMLClass
 
-- (SdefValidatorVersion)acceptElement:(CFStringRef)element {
-  if (CFEqual(element, CFSTR("element")) ||
-      CFEqual(element, CFSTR("property")) ||
-      CFEqual(element, CFSTR("responds-to"))) {
+- (SdefValidatorVersion)acceptElement:(NSString *)element {
+  if ([element isEqualToString:@"element"] ||
+      [element isEqualToString:@"property"] ||
+      [element isEqualToString:@"responds-to"]) {
     return kSdefParserVersionTigerAndLater;
-  } else if (CFEqual(element, CFSTR("elements")) ||
-             CFEqual(element, CFSTR("properties")) ||
-             CFEqual(element, CFSTR("responds-to-commands")) ||
-             CFEqual(element, CFSTR("responds-to-events"))) {
+  } else if ([element isEqualToString:@"elements"] ||
+             [element isEqualToString:@"properties"] ||
+             [element isEqualToString:@"responds-to-commands"] ||
+             [element isEqualToString:@"responds-to-events"]) {
     return kSdefParserVersionPanther;
-  } else if (CFEqual(element, CFSTR("type"))) {
+  } else if ([element isEqualToString:@"type"]) {
     /* Not in DTD */
     return kSdefParserVersionAll;
   }
@@ -481,20 +466,20 @@ SdefXMLElement *_ELEMENT(Class cls, NSString *name, ...) {
 
 @implementation SdefXMLSuite
 
-- (SdefValidatorVersion)acceptElement:(CFStringRef)element {
-  if (CFEqual(element, CFSTR("enumeration")) ||
-      CFEqual(element, CFSTR("record-type")) ||
-      CFEqual(element, CFSTR("value-type")) ||
-      CFEqual(element, CFSTR("command")) ||
-      CFEqual(element, CFSTR("class")) ||
-      CFEqual(element, CFSTR("event"))) {
+- (SdefValidatorVersion)acceptElement:(NSString *)element {
+  if ([element isEqualToString:@"enumeration"] ||
+      [element isEqualToString:@"record-type"] ||
+      [element isEqualToString:@"value-type"] ||
+      [element isEqualToString:@"command"] ||
+      [element isEqualToString:@"class"] ||
+      [element isEqualToString:@"event"]) {
     return kSdefParserVersionTigerAndLater;
-  } else if (CFEqual(element, CFSTR("class-extension"))) {
+  } else if ([element isEqualToString:@"class-extension"]) {
     return kSdefParserVersionTigerAndLater;
-  } else if (CFEqual(element, CFSTR("types")) ||
-             CFEqual(element, CFSTR("classes")) ||
-             CFEqual(element, CFSTR("commands")) ||
-             CFEqual(element, CFSTR("events"))) {
+  } else if ([element isEqualToString:@"types"] ||
+             [element isEqualToString:@"classes"] ||
+             [element isEqualToString:@"commands"] ||
+             [element isEqualToString:@"events"]) {
     return kSdefParserVersionPanther;
   } 
   return [super acceptElement:element];

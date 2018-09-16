@@ -112,10 +112,7 @@ SPX_PRIVATE
 NSString *SdefTypeStringForTypes(NSArray *types);
 
 #pragma mark -
-@interface SdefTypedOrphanObject : SdefTypedObject <NSCopying, NSCoding> {
-@private
-  NSObject<SdefObject> *_owner;
-}
+@interface SdefTypedOrphanObject : SdefTypedObject <NSCopying, NSCoding>
 
 @property(nonatomic, assign) id<SdefObject> owner;
 

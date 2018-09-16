@@ -9,6 +9,8 @@
 #import "SdefXInclude.h"
 
 #import "SdefParser.h"
+#import "SdefDocument.h"
+#import "SdefDictionary.h"
 
 @implementation SdefXInclude
 
@@ -31,16 +33,10 @@
 
 - (id)initWithCoder:(NSCoder *)aCoder {
   if (self = [super initWithCoder:aCoder]) {
-    _href = [[aCoder decodeObjectForKey:@"SXIncludeHRef"] retain];
-    _pointer = [[aCoder decodeObjectForKey:@"SXIncludePointer"] retain];
+    _href = [aCoder decodeObjectForKey:@"SXIncludeHRef"];
+    _pointer = [aCoder decodeObjectForKey:@"SXIncludePointer"];
   }
   return self;
-}
-
-- (void)dealloc {
-  [_pointer release];
-  [_href release];
-  [super dealloc];
 }
 
 #pragma mark -

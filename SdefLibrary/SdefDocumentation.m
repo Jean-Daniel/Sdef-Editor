@@ -28,7 +28,7 @@
 
 - (id)initWithCoder:(NSCoder *)aCoder {
   if (self = [super initWithCoder:aCoder]) {
-    _content = [[aCoder decodeObjectForKey:@"SDContent"] retain];
+    _content = [aCoder decodeObjectForKey:@"SDContent"];
   }
   return self;
 }
@@ -52,28 +52,22 @@
   return self;
 }
 
-- (void)dealloc {
-  [_content release];
-  [super dealloc];
-}
-
 #pragma mark -
 - (BOOL)isHtml {
-  return sd_slFlags.html;
+  return _slFlags.html;
 }
 - (void)setHtml:(BOOL)flag {
   flag = flag ? 1 : 0;
-  if (flag != sd_slFlags.html) {
-    [[[self undoManager] prepareWithInvocationTarget:self] setHtml:sd_slFlags.html];
+  if (flag != _slFlags.html) {
+    [[[self undoManager] prepareWithInvocationTarget:self] setHtml:_slFlags.html];
     /* Undo */
-    sd_slFlags.html = flag;
+    _slFlags.html = flag;
   }
 }
 
 - (void)setContent:(NSString *)newContent {
   if (_content != newContent) {
     [[self undoManager] registerUndoWithTarget:self selector:_cmd object:_content];
-    [_content release];
     _content = [newContent copy];
   }
 }

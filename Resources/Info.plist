@@ -129,8 +129,6 @@
 	</array>
 	<key>CFBundleExecutable</key>
 	<string>${EXECUTABLE_NAME}</string>
-	<key>CFBundleIconFile</key>
-	<string>SdefEditor</string>
 	<key>CFBundleIdentifier</key>
 	<string>org.shadowlab.SdefEditor</string>
 	<key>CFBundleInfoDictionaryVersion</key>
@@ -145,6 +143,8 @@
 	<string>SdEd</string>
 	<key>CFBundleVersion</key>
 	<string>${CURRENT_PROJECT_VERSION}</string>
+	<key>LSApplicationCategoryType</key>
+	<string>public.app-category.developer-tools</string>
 	<key>NSAppleScriptEnabled</key>
 	<string>NO</string>
 	<key>NSMainNibFile</key>

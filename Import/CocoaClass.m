@@ -53,43 +53,35 @@
       }
       
       if (isContents) {
-        SdefContents *contents = [[SdefContents allocWithZone:[self zone]] initWithName:key
-                                                                                  suite:psuite
-                                                                         andTerminology:pterm];
+        SdefContents *contents = [[SdefContents alloc] initWithName:key
+                                                              suite:psuite
+                                                     andTerminology:pterm];
         [self setContents:contents];
-        [contents release];
       } else {
-        SdefProperty *property = [[SdefProperty allocWithZone:[self zone]] initWithName:key
-                                                                                  suite:psuite
-                                                                         andTerminology:pterm];
+        SdefProperty *property = [[SdefProperty alloc] initWithName:key
+                                                              suite:psuite
+                                                     andTerminology:pterm];
         [[self properties] appendChild:property];
-        [property release];
       }
     }
-    [suiteItems release];
-    [termItems release];
     
     /* Elements */
     suiteItems = [suite objectForKey:@"ToManyRelationships"];
     for (NSString *key in suiteItems) {
-      SdefElement *element = [[SdefElement allocWithZone:[self zone]] initWithName:key
-                                                                             suite:[suiteItems objectForKey:key]
-                                                                    andTerminology:nil];
-      if (element) {
+      SdefElement *element = [[SdefElement alloc] initWithName:key
+                                                         suite:[suiteItems objectForKey:key]
+                                                andTerminology:nil];
+      if (element)
         [[self elements] appendChild:element];
-        [element release];
-      }
     }
     
     suiteItems = [suite objectForKey:@"SupportedCommands"];
     for (NSString *key in suiteItems) {
-      SdefRespondsTo *cmd = [[SdefRespondsTo allocWithZone:[self zone]] initWithName:key
+      SdefRespondsTo *cmd = [[SdefRespondsTo alloc] initWithName:key
                                                            suite:suiteItems
                                                   andTerminology:nil];
-      if (cmd) {
+      if (cmd)
         [[self commands] appendChild:cmd];
-        [cmd release];
-      }
     }
   }
   return self;

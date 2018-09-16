@@ -12,12 +12,12 @@
 @protocol SdefParserDelegate;
 @class SdefXMLValidator, SdefDocumentationParser;
 @interface SdefParser : NSObject {
-  id<SdefParserDelegate> sd_delegate;
+  __unsafe_unretained id<SdefParserDelegate> sd_delegate;
   
   SdefVersion sd_version;
   NSMutableArray *sd_comments;
   NSMutableArray *sd_xincludes;
-  CFMutableDictionaryRef sd_metas;
+  NSMutableDictionary *sd_metas;
   
   /* root element */
   NSMutableArray *sd_roots;

@@ -23,14 +23,14 @@
   StringPtr pStr = (StringPtr)bytes;
   length = StrLength(pStr);
   CFStringRef str = CFStringCreateWithPascalString(kCFAllocatorDefault, pStr, kCFStringEncodingMacRoman);
-  [self setName:(id)str];
+  [self setName:SPXCFToNSString(str)];
   bytes += length + 1;
   CFRelease(str);
   
   pStr = (StringPtr)bytes;
   length = StrLength(pStr);
   str = CFStringCreateWithPascalString(kCFAllocatorDefault, pStr, kCFStringEncodingMacRoman);
-  [self setDesc:(id)str];
+  [self setDesc:SPXCFToNSString(str)];
   bytes += length + 1;
   CFRelease(str);
   
@@ -48,10 +48,9 @@
   bytes += 2;
   if (*val > 0) {
     for (NSUInteger idx = 0; idx < *val; idx++) {
-      SdefVerb *verb = [[SdefVerb allocWithZone:[self zone]] init];
+      SdefVerb *verb = [[SdefVerb alloc] init];
       bytes += [verb parseData:bytes];
       [[self commands] appendChild:verb];
-      [verb release];
     }
   }
   
@@ -59,10 +58,9 @@
   bytes += 2;
   if (*val > 0) {
     for (NSUInteger idx = 0; idx < *val; idx++) {
-      SdefClass *class = [[SdefClass allocWithZone:[self zone]] init];
+      SdefClass *class = [[SdefClass alloc] init];
       bytes += [class parseData:bytes];
       [[self classes] appendChild:class];
-      [class release];
     }
   }
   
@@ -97,10 +95,9 @@
   bytes += 2;
   if (*val > 0) {
     for (NSUInteger idx = 0; idx < *val; idx++) {
-      SdefEnumeration *enumeration = [[SdefEnumeration allocWithZone:[self zone]] init];
+      SdefEnumeration *enumeration = [[SdefEnumeration alloc] init];
       bytes += [enumeration parseData:bytes];
       [[self types] appendChild:enumeration];
-      [enumeration release];
     }
   }
   

@@ -20,14 +20,14 @@
   StringPtr pStr = (StringPtr)bytes;
   length = StrLength(pStr);
   CFStringRef str = (length) ? CFStringCreateWithPascalString(kCFAllocatorDefault, pStr, kCFStringEncodingMacRoman) : nil;
-  [self setName:(id)str];
+  [self setName:SPXCFToNSString(str)];
   bytes += length + 1;
   if (str) CFRelease(str);
   
   pStr = (StringPtr)bytes;
   length = StrLength(pStr);
   str = (length) ? CFStringCreateWithPascalString(kCFAllocatorDefault, pStr, kCFStringEncodingMacRoman) : nil;
-  [self setDesc:(id)str];
+  [self setDesc:SPXCFToNSString(str)];
   bytes += length + 1;
   if (str) CFRelease(str);
   
@@ -54,7 +54,7 @@
   pStr = (StringPtr)bytes;
   length = StrLength(pStr);
   str = (length) ? CFStringCreateWithPascalString(kCFAllocatorDefault, pStr, kCFStringEncodingMacRoman) : nil;
-  [[self result] setDesc:(id)str];
+  [[self result] setDesc:SPXCFToNSString(str)];
   bytes += length + 1;
   if (str) CFRelease(str);
   
@@ -78,7 +78,7 @@
   pStr = (StringPtr)bytes;
   length = StrLength(pStr);
   str = (length) ? CFStringCreateWithPascalString(kCFAllocatorDefault, pStr, kCFStringEncodingMacRoman) : nil;
-  [[self directParameter] setDesc:(id)str];
+  [[self directParameter] setDesc:SPXCFToNSString(str)];
   bytes += length + 1;
   if (str) CFRelease(str);
   
@@ -99,10 +99,9 @@
   bytes += 2;
   if (*val > 0) {
     for (NSUInteger idx = 0; idx < *val; idx++) {
-      SdefParameter *param = [[SdefParameter allocWithZone:[self zone]] init];
+      SdefParameter *param = [[SdefParameter alloc] init];
       bytes += [param parseData:bytes];
       [self appendChild:param];
-      [param release];
     }
   }
 
@@ -121,7 +120,7 @@
   StringPtr pStr = (StringPtr)bytes;
   length = StrLength(pStr);
   CFStringRef str = (length) ? CFStringCreateWithPascalString(kCFAllocatorDefault, pStr, kCFStringEncodingMacRoman) : nil;
-  [self setName:(id)str];
+  [self setName:SPXCFToNSString(str)];
   bytes += length + 1;
   if (str) CFRelease(str);
   
@@ -142,7 +141,7 @@
   pStr = (StringPtr)bytes;
   length = StrLength(pStr);
   str = (length) ? CFStringCreateWithPascalString(kCFAllocatorDefault, pStr, kCFStringEncodingMacRoman) : nil;
-  [self setDesc:(id)str];
+  [self setDesc:SPXCFToNSString(str)];
   bytes += length + 1;
   if (str) CFRelease(str);
   

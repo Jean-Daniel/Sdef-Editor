@@ -1,5 +1,4 @@
 
-#include "../hadron/xcconfigs/os/snowleopard.xcconfig"
-#include "../hadron/xcconfigs/compiler/clang.xcconfig"
+#include "../hadron/xcconfigs/os/yosemite.xcconfig"
 
 HADRON_PATH = hadron

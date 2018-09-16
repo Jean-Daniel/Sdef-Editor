@@ -67,10 +67,7 @@ static inline BOOL SdefEditorExistsForItem(SdefObject *item) {
 
 - (void)dealloc {
   [self setDocument:nil];
-  [sd_viewControllers release];
   [sd_tree unbind:@"autoSelect"];
-  [sd_tree release];
-  [super dealloc];
 }
 
 #pragma mark -
@@ -142,8 +139,6 @@ static inline BOOL SdefEditorExistsForItem(SdefObject *item) {
 //  [[self window] setToolbar:tb];
 //  [tb setVisible:NO];
 //  [tb release];
-  if (WBSystemMinorVersion() < 5)
-    [[self window] setBackgroundColor:[NSColor colorWithCalibratedWhite:0xe8/255. alpha:1]];
   [super windowDidLoad];
 }
 
@@ -327,7 +322,6 @@ static inline BOOL SdefEditorExistsForItem(SdefObject *item) {
       NSAssert1(ctrl != nil, @"Unable to instanciate controller: %@", class);
       if (ctrl) {
         [sd_viewControllers setObject:ctrl forKey:key];
-        [ctrl release];
         [tabViewItem setView:[ctrl sdefView]];
       }
     }
@@ -514,10 +508,9 @@ static inline BOOL SdefEditorExistsForItem(SdefObject *item) {
       id child;
       id children = [tree childEnumerator];
       while (child = [children nextObject]) {
-        [child retain];
+        // TODO: child.remove may release child. Make sure ARC keep it alive
         [child remove];
         [destination appendChild:child];
-        [child release];
       }
     } else {
       [destination appendChild:tree];

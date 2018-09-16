@@ -21,12 +21,6 @@
   return self;
 }
 
-- (void)dealloc {
-  [_sdp release];
-  [_rez release];
-  [super dealloc];
-}
-
 #pragma mark -
 - (BOOL)windowShouldClose:(id)sender {
   BOOL isDir;

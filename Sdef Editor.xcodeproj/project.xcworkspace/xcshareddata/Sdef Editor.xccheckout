@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDESourceControlProjectFavoriteDictionaryKey</key>
+	<false/>
+	<key>IDESourceControlProjectIdentifier</key>
+	<string>622BA7B2-0400-4C7D-A247-93B4F1BE5D34</string>
+	<key>IDESourceControlProjectName</key>
+	<string>Sdef Editor</string>
+	<key>IDESourceControlProjectOriginsDictionary</key>
+	<dict>
+		<key>774AFAB791880CE4E105D7CED223786E045A1D08</key>
+		<string>github.com:Jean-Daniel/Sdef-Editor.git</string>
+		<key>7A36A968102EC3079874D51F5F23039BCF93C104</key>
+		<string>github.com:Jean-Daniel/WonderBox.git</string>
+	</dict>
+	<key>IDESourceControlProjectPath</key>
+	<string>Sdef Editor.xcodeproj</string>
+	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
+	<dict>
+		<key>774AFAB791880CE4E105D7CED223786E045A1D08</key>
+		<string>../..</string>
+		<key>7A36A968102EC3079874D51F5F23039BCF93C104</key>
+		<string>../..WonderBox</string>
+	</dict>
+	<key>IDESourceControlProjectURL</key>
+	<string>github.com:Jean-Daniel/Sdef-Editor.git</string>
+	<key>IDESourceControlProjectVersion</key>
+	<integer>111</integer>
+	<key>IDESourceControlProjectWCCIdentifier</key>
+	<string>774AFAB791880CE4E105D7CED223786E045A1D08</string>
+	<key>IDESourceControlProjectWCConfigurations</key>
+	<array>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>774AFAB791880CE4E105D7CED223786E045A1D08</string>
+			<key>IDESourceControlWCCName</key>
+			<string>Sdef%20Editor</string>
+		</dict>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>7A36A968102EC3079874D51F5F23039BCF93C104</string>
+			<key>IDESourceControlWCCName</key>
+			<string>Sdef%20EditorWonderBox</string>
+		</dict>
+	</array>
+</dict>
+</plist>

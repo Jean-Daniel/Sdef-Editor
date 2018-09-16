@@ -6,6 +6,8 @@
  *  Copyright © 2006 - 2007 Shadow Lab. All rights reserved.
  */
 
+#import <Cocoa/Cocoa.h>
+
 #import <WonderBox/WBUITreeNode.h>
 
 typedef NS_ENUM(uint32_t, SdefObjectType) {
@@ -184,11 +186,7 @@ NSString *SdefObjectTypeName(SdefObjectType type);
 @end
 
 #pragma mark -
-@interface SdefCollection : SdefObject <NSCopying, NSCoding> {
-  @private
-  Class _contentType;
-  NSString *_elementName;
-}
+@interface SdefCollection : SdefObject <NSCopying, NSCoding>
 
 @property(nonatomic, assign) Class contentType;
 @property(nonatomic, copy) NSString *elementName;

@@ -29,7 +29,7 @@
 
 - (id)initWithCoder:(NSCoder *)aCoder {
   if (self = [super initWithCoder:aCoder]) {
-    sd_documentation = [[aCoder decodeObjectForKey:@"SODocumentation"] retain];
+    sd_documentation = [aCoder decodeObjectForKey:@"SODocumentation"];
   }
   return self;
 }
@@ -42,8 +42,6 @@
 #pragma mark -
 - (void)dealloc {
   [sd_documentation setOwner:nil];
-  [sd_documentation release];
-  [super dealloc];
 }
 
 - (NSString *)description {
@@ -69,9 +67,8 @@
 #pragma mark Optionals children
 - (SdefDocumentation *)documentation {
   if (!sd_documentation && sd_soFlags.hasDocumentation) {
-    SdefDocumentation *doc = [[SdefDocumentation allocWithZone:[self zone]] init];
+    SdefDocumentation *doc = [[SdefDocumentation alloc] init];
     [self setDocumentation:doc];
-    [doc release];
   }
   return sd_documentation;
 }
@@ -79,8 +76,7 @@
 - (void)setDocumentation:(SdefDocumentation *)doc {
   if (sd_documentation != doc) {
     [sd_documentation setOwner:nil];
-    [sd_documentation release];
-    sd_documentation = [doc retain];
+    sd_documentation = doc;
     [sd_documentation setOwner:self];
   }	
 }
@@ -107,18 +103,15 @@
 
 - (id)initWithCoder:(NSCoder *)aCoder {
   if (self = [super initWithCoder:aCoder]) {
-    sd_impl = [[aCoder decodeObjectForKey:@"STImplementation"] retain];
-    _accessGroup = [[aCoder decodeObjectForKey:@"STAccessGroup"] retain];
+    sd_impl = [aCoder decodeObjectForKey:@"STImplementation"];
+    _accessGroup = [aCoder decodeObjectForKey:@"STAccessGroup"];
   }
   return self;
 }
 
 - (void)dealloc {
   [_accessGroup setOwner:nil];
-  [_accessGroup release];
   [sd_impl setOwner:nil];
-  [sd_impl release];
-  [super dealloc];
 }
 
 #pragma mark -
@@ -136,9 +129,7 @@
 
 - (SdefAccessGroup *)accessGroup {
   if (!_accessGroup && sd_soFlags.hasAccessGroup) {
-    SdefAccessGroup *group = [[SdefAccessGroup alloc] init];
-    self.accessGroup = group;
-    [group release];
+    self.accessGroup = [[SdefAccessGroup alloc] init];
   }
   return _accessGroup;
 }
@@ -153,9 +144,8 @@
 
 - (SdefImplementation *)impl {
   if (!sd_impl && sd_soFlags.hasImplementation) {
-    SdefImplementation *impl = [[SdefImplementation allocWithZone:[self zone]] init];
+    SdefImplementation *impl = [[SdefImplementation alloc] init];
     [self setImpl:impl];
-    [impl release];
   }
   return sd_impl;
 }
@@ -163,8 +153,7 @@
 - (void)setImpl:(SdefImplementation *)newImpl {
   if (sd_impl != newImpl) {
     [sd_impl setOwner:nil];
-    [sd_impl release];
-    sd_impl = [newImpl retain];
+    sd_impl = newImpl;
     [sd_impl setOwner:self];
   }
 }
@@ -211,22 +200,13 @@
 
 - (id)initWithCoder:(NSCoder *)aCoder {
   if (self = [super initWithCoder:aCoder]) {
-    sd_id = [[aCoder decodeObjectForKey:@"STID"] retain];
-    sd_code = [[aCoder decodeObjectForKey:@"STCodeStr"] retain];
-    sd_desc = [[aCoder decodeObjectForKey:@"STDescription"] retain];
-    sd_xrefs = [[aCoder decodeObjectForKey:@"STXRefs"] retain];
-    sd_synonyms = [[aCoder decodeObjectForKey:@"STSynonyms"] retain];
+    sd_id = [aCoder decodeObjectForKey:@"STID"];
+    sd_code = [aCoder decodeObjectForKey:@"STCodeStr"];
+    sd_desc = [aCoder decodeObjectForKey:@"STDescription"];
+    sd_xrefs = [aCoder decodeObjectForKey:@"STXRefs"];
+    sd_synonyms = [aCoder decodeObjectForKey:@"STSynonyms"];
   }
   return self;
-}
-
-- (void)dealloc {
-  [sd_id release];
-  [sd_code release];
-  [sd_desc release];
-  [sd_xrefs release];
-  [sd_synonyms release];
-  [super dealloc];
 }
 
 - (NSString *)description {
@@ -257,8 +237,7 @@
   if (sd_id != anId) {
     [[self undoManager] registerUndoWithTarget:self selector:_cmd object:sd_id];
     [[self undoManager] setActionName:NSLocalizedStringFromTable(@"Change ID", @"SdefLibrary", @"Undo Action: Change id.")];
-    [sd_id release];
-    sd_id = [anId copyWithZone:[self zone]];
+    sd_id = [anId copy];
   }
 }
 
@@ -270,8 +249,7 @@
   if (sd_code != str) {
     [[self undoManager] registerUndoWithTarget:self selector:_cmd object:sd_code];
     [[self undoManager] setActionName:NSLocalizedStringFromTable(@"Change Code", @"SdefLibrary", @"Undo Action: Change code.")];
-    [sd_code release];
-    sd_code = [str copyWithZone:[self zone]];
+    sd_code = [str copy];
   }
 }
 
@@ -283,8 +261,7 @@
   if (sd_desc != aDescription) {
     [[self undoManager] registerUndoWithTarget:self selector:_cmd object:sd_desc];
     [[self undoManager] setActionName:NSLocalizedStringFromTable(@"Change Description", @"SdefLibrary", @"Undo Action: Change description.")];
-    [sd_desc release];
-    sd_desc = [aDescription copyWithZone:[self zone]];
+    sd_desc = [aDescription copy];
   }
 }
 
@@ -298,7 +275,6 @@
   if ([self hasXrefs]) {
     if (sd_xrefs != xrefs) {
       [[self undoManager] registerUndoWithTarget:self selector:_cmd object:sd_xrefs];
-      [sd_xrefs release];
       sd_xrefs = [xrefs mutableCopy];
       [sd_xrefs makeObjectsPerformSelector:@selector(setOwner:) withObject:self];
     }
@@ -356,7 +332,7 @@
 #pragma mark Synonyms KVC
 - (NSArray *)synonyms {
   if (!sd_synonyms && [self hasSynonyms]) {
-    sd_synonyms = [[NSMutableArray allocWithZone:[self zone]] init];
+    sd_synonyms = [[NSMutableArray alloc] init];
   }
   return sd_synonyms;
 }
@@ -367,7 +343,6 @@
     if (undo) {
       [undo registerUndoWithTarget:self selector:_cmd object:sd_synonyms];
     }
-    [sd_synonyms release];
     sd_synonyms = [synonyms mutableCopy];
     [sd_synonyms makeObjectsPerformSelector:@selector(setOwner:) withObject:self];
   }
@@ -432,7 +407,7 @@
 
 - (id)initWithCoder:(NSCoder *)aCoder {
   if (self = [super initWithCoder:aCoder]) {
-    sd_types = [[aCoder decodeObjectForKey:@"STTypes"] retain];
+    sd_types = [aCoder decodeObjectForKey:@"STTypes"];
   }
   return self;
 }
@@ -448,11 +423,6 @@
     sd_types = [[NSMutableArray alloc] init];
   }
   return self;
-}
-
-- (void)dealloc {
-  [sd_types release];
-  [super dealloc];
 }
 
 #pragma mark -
@@ -499,7 +469,6 @@
       [undo setActionName:NSLocalizedStringFromTable(@"Change Types", @"SdefLibrary", @"Undo Action: Change type.")];
     }
     [self willChangeValueForKey:@"type"];
-    [sd_types release];
     sd_types = [objects mutableCopy];
     [self didChangeValueForKey:@"type"];
     [sd_types makeObjectsPerformSelector:@selector(setOwner:) withObject:self];
@@ -637,7 +606,7 @@ NSString *SdefTypeStringForTypes(NSArray *types) {
       [str appendString:[type name]];
     }
   }
-  return [str autorelease];
+  return str;
 }
 
 WB_INLINE
@@ -650,7 +619,7 @@ SdefType *__SdefTypeFromString(NSString *str) {
   } else {
     type = [[SdefType alloc] initWithName:str];
   }
-  return [type autorelease];
+  return type;
 }
 
 NSArray *SdefTypesForTypeString(NSString *aType) {
@@ -664,7 +633,7 @@ NSArray *SdefTypesForTypeString(NSString *aType) {
   } else {
     types = [[NSArray alloc] initWithObjects:__SdefTypeFromString(aType), nil];
   }
-  return [types autorelease];
+  return types;
 }
 
 Boolean SdefTypeStringEqual(NSString *c1, NSString *c2) {

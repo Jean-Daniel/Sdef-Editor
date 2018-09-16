@@ -26,8 +26,8 @@ NSString * const SdefInvalidTemplateException = @"SdefInvalidTemplate";
 static NSString * const kSdefTemplateExtension = @"sdtpl";
 static NSString * const kSdefTemplateFolder = @"Sdef Editor/Templates/";
 
-static NSArray *SdefTemplatePaths(void);
-static NSDictionary *SdefTemplatesAtPath(NSString *path);
+static NSArray<NSURL *> *SdefTemplateURLs(void);
+static NSDictionary<NSString *, SdefTemplate *> *SdefTemplatesAtURL(NSURL *path);
 
 static NSString * const kSdtplVersion = @"Version"; /* Number */
 static NSString * const kSdtplDisplayName = @"DisplayName"; /* NSString */
@@ -54,23 +54,19 @@ NSString * const SdtplDefinitionEventsKey = @"Events";
 @implementation SdefTemplate
 
 + (NSDictionary *)findAllTemplates {
-  NSArray *paths = SdefTemplatePaths();
-  NSUInteger idx = [paths count];
   /* Add entries will replace existing entries, so use a reverse enumerator */
   NSMutableDictionary *templates = [[NSMutableDictionary alloc] init];
-  while (idx-- > 0) {
-    NSString *path = [paths objectAtIndex:idx];
-    [templates addEntriesFromDictionary:SdefTemplatesAtPath(path)];
+  for (NSURL *url in SdefTemplateURLs()) {
+    [templates addEntriesFromDictionary:SdefTemplatesAtURL(url)];
   }
-  return [templates autorelease];
+  return templates;
 }
 
-- (id)initWithPath:(NSString *)aPath {
+- (instancetype)initWithPath:(NSString *)aPath {
   if (self = [super init]) {
     @try {
       [self setPath:aPath];
     } @catch (NSException *exception) {
-      [self release];
       self = nil;
       [exception raise];
     }
@@ -78,32 +74,14 @@ NSString * const SdtplDefinitionEventsKey = @"Events";
   return self;
 }
 
-- (void)dealloc {
-  [sd_def release];
-  [sd_tpls release];
-  [sd_path release];
-  [sd_name release];
-  [sd_infos release];
-  [sd_styles release];
-  [sd_information release];
-  [super dealloc];
-}
-
 #pragma mark -
 - (void)reset {
-  [sd_def release];
   sd_def = nil;
-  [sd_tpls release];
   sd_tpls = nil;
-  [sd_path release];
   sd_path = nil;
-  [sd_name release];
   sd_name = nil;
-  [sd_infos release];
   sd_infos = nil;
-  [sd_styles release];
   sd_styles = nil;
-  [sd_information release];
   sd_information = nil;
   sd_selectedStyle = nil;
   bzero(&sd_tpFlags, sizeof(sd_tpFlags));
@@ -121,7 +99,6 @@ NSString * const SdtplDefinitionEventsKey = @"Events";
     [NSException raise:SdefInvalidTemplateException format:@"%@ doesn't contains a valid Info.plist file.", [sd_path lastPathComponent]];
     return;
   }
-  [sd_infos retain];
   
   /* Set format */
   if ([sd_infos objectForKey:kSdtplTemplateFormat]) {
@@ -129,15 +106,14 @@ NSString * const SdtplDefinitionEventsKey = @"Events";
   }
   
   /* Set Defaults Strings: AddValue set value if key does not exist, else do nothing */
-  CFMutableDictionaryRef formats = (CFMutableDictionaryRef)[sd_infos objectForKey:kSdtplTemplateStrings];
+  NSMutableDictionary *formats = [sd_infos objectForKey:kSdtplTemplateStrings];
   if (!formats) {
-    formats = (CFMutableDictionaryRef)[[NSMutableDictionary alloc] init];
-    [sd_infos setObject:(id)formats forKey:kSdtplTemplateStrings];
-    [(id)formats release];
+    formats = [[NSMutableDictionary alloc] init];
+    [sd_infos setObject:formats forKey:kSdtplTemplateStrings];
   }
-  CFDictionaryAddValue(formats, StdplVariableLinks, @"<a href=\"%@#%@\">%@</a>");  
-  CFDictionaryAddValue(formats, StdplVariableAnchorFormat, @"<a name=\"%@\" />");
-  CFDictionaryAddValue(formats, StdplVariableStyleLink, @"<link rel=\"stylesheet\" type=\"text/css\" href=\"%@\" />");
+  formats[StdplVariableLinks] = @"<a href=\"%@#%@\">%@</a>";
+  formats[StdplVariableAnchorFormat] = @"<a name=\"%@\" />";
+  formats[StdplVariableStyleLink] = @"<link rel=\"stylesheet\" type=\"text/css\" href=\"%@\" />";
 //  CFDictionaryAddValue(formats, @"Superclass.Description", @"inherits some of its properties from the %@ class");
   
   /* Check CSS */
@@ -178,26 +154,22 @@ NSString * const SdtplDefinitionEventsKey = @"Events";
     [NSException raise:SdefInvalidTemplateException format:@"%@ Definition does not contains a valid \"DictionaryTemplate\" key.", [sd_path lastPathComponent]];
     return;
   } else {
-    [sd_def retain];
     Class tplClass = sd_tpFlags.html ? [WBXMLTemplate class] : [WBTemplate class];
     sd_tpls = [[NSMutableDictionary alloc] initWithCapacity:[sd_def count]];
-    NSString *key;
-    id keys = [sd_def keyEnumerator];
-    while (key = [keys nextObject]) {
-      NSDictionary *tplDef = [sd_def objectForKey:key];
+    [sd_def enumerateKeysAndObjectsUsingBlock:^(id  _Nonnull key, NSDictionary * _Nonnull tplDef, BOOL * _Nonnull stop) {
       /* Get encoding */
       NSString *encoding = [tplDef objectForKey:SdtplDefinitionFileEncoding];
       CFStringEncoding cfe = encoding ? CFStringConvertIANACharSetNameToEncoding((CFStringRef)encoding) : kCFStringEncodingInvalidId;
       /* If undefined or invalid, use utf-8 for html templates and system encoding for other templates */
       NSStringEncoding ste = (cfe != kCFStringEncodingInvalidId) ? CFStringConvertEncodingToNSStringEncoding(cfe) :
-        (sd_tpFlags.html ? NSUTF8StringEncoding : [NSString defaultCStringEncoding]);
-      
+      (sd_tpFlags.html ? NSUTF8StringEncoding : [NSString defaultCStringEncoding]);
+
       WBTemplate *tpl = [[tplClass alloc] initWithContentsOfFile:
-        [sd_path stringByAppendingPathComponent:[tplDef objectForKey:SdtplDefinitionFileKey]] encoding:ste];
+                         [sd_path stringByAppendingPathComponent:[tplDef objectForKey:SdtplDefinitionFileKey]] encoding:ste];
       [tpl setRemoveBlockLine:[[tplDef objectForKey:SdtplDefinitionRemoveBlockLine] boolValue]];
       [sd_tpls setObject:tpl forKey:key];
-      [tpl release];
-    }
+    }];
+
   }
   
   sd_tpFlags.toc = kSdefTemplateTOCNone;
@@ -227,7 +199,6 @@ NSString * const SdtplDefinitionEventsKey = @"Events";
     [self loadInfo:template];
     [self loadDefinition:template];
   }
-  [template release];
 }
 
 #pragma mark -
@@ -241,8 +212,9 @@ NSString * const SdtplDefinitionEventsKey = @"Events";
 
 - (NSString *)displayName {
   if (!sd_name) {
-    sd_name = [[sd_infos objectForKey:kSdtplDisplayName] retain];
-    if (!sd_name) sd_name = [[[sd_path lastPathComponent] stringByDeletingPathExtension] retain];
+    sd_name = [sd_infos objectForKey:kSdtplDisplayName];
+    if (!sd_name)
+      sd_name = [[sd_path lastPathComponent] stringByDeletingPathExtension];
   }
   return sd_name;
 }
@@ -322,39 +294,35 @@ NSString * const SdtplDefinitionEventsKey = @"Events";
 
 #pragma mark -
 #pragma mark Private Functions Implementations
-static NSArray *SdefTemplatePaths(void) {
-	NSMutableArray *paths = [NSMutableArray array];
-  NSString *path = [[WBFSFindFolder(kApplicationSupportFolderType, kUserDomain, NO) path] stringByAppendingPathComponent:kSdefTemplateFolder];
-	if (path) [paths addObject:path];
-	
-	path = [[WBFSFindFolder(kApplicationSupportFolderType, kLocalDomain, NO) path] stringByAppendingPathComponent:kSdefTemplateFolder];
-	if (path) [paths addObject:path];
-	
-	path = [[WBFSFindFolder(kApplicationSupportFolderType, kNetworkDomain, NO) path] stringByAppendingPathComponent:kSdefTemplateFolder];
-	if (path) [paths addObject:path];
-	
-	path = [[[NSBundle mainBundle] resourcePath] stringByAppendingPathComponent:@"Templates"];
+static NSArray<NSURL *> *SdefTemplateURLs(void) {
+  NSMutableArray *paths = [NSMutableArray array];
+
+  for (NSURL *path in [NSFileManager.defaultManager URLsForDirectory:NSApplicationSupportDirectory inDomains:NSAllDomainsMask]) {
+    [paths addObject:[path URLByAppendingPathComponent:kSdefTemplateFolder isDirectory:YES]];
+  }
+
+  NSURL *path = [[[NSBundle mainBundle] resourceURL] URLByAppendingPathComponent:@"Templates"];
 	if (path) [paths addObject:path];
 	
   return paths; // order: User, Library, Network and Built-in
 }
 
 static
-NSDictionary *SdefTemplatesAtPath(NSString *path) {
+NSDictionary *SdefTemplatesAtURL(NSURL *url) {
   NSMutableDictionary *templates = [NSMutableDictionary dictionary];
-  NSArray *names = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:path error:NULL];
-  NSUInteger idx = [names count];
-  while (idx-- > 0) {
-    NSString *name = [names objectAtIndex:idx];
-    if ([[name pathExtension] isEqualToString:kSdefTemplateExtension]) {
+  NSArray<NSURL *> *urls = [NSFileManager.defaultManager contentsOfDirectoryAtURL:url
+                                                       includingPropertiesForKeys:nil
+                                                                          options:NSDirectoryEnumerationSkipsSubdirectoryDescendants
+                                                                            error:NULL];
+  for (NSURL *file in urls) {
+    if ([[file pathExtension] isEqualToString:kSdefTemplateExtension]) {
       SdefTemplate *tpl = nil;
       @try {
-        tpl = [[SdefTemplate alloc] initWithPath:[path stringByAppendingPathComponent:name]];
-        [templates setObject:tpl forKey:[tpl menuName]];
+        tpl = [[SdefTemplate alloc] initWithPath:file.path];
+        templates[tpl.menuName] = tpl;
       } @catch (id exception) {
         SPXCLogException(exception);
       }
-      [tpl release];
     }
   }
   return templates;

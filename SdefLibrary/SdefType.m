@@ -34,7 +34,7 @@
 - (NSString *)description {
   return [NSString stringWithFormat:@"<%@ %p> {name=%@ list=%@}", 
     NSStringFromClass([self class]), self,
- [self name], sd_slFlags.list ? @"YES" : @"NO"];
+ [self name], _slFlags.list ? @"YES" : @"NO"];
 }
 
 #pragma mark -
@@ -49,19 +49,19 @@
 }
 
 - (BOOL)isList {
-  return sd_slFlags.list;
+  return _slFlags.list;
 }
 
 - (void)setList:(BOOL)list {
   list = list ? 1 : 0;
-  if (list != sd_slFlags.list) {
+  if (list != _slFlags.list) {
     [[self owner] willChangeValueForKey:@"type"];
     NSUndoManager *undo = [self undoManager];
     if (undo) {
-      [[undo prepareWithInvocationTarget:self] setList:sd_slFlags.list];
+      [[undo prepareWithInvocationTarget:self] setList:_slFlags.list];
       [undo setActionName:NSLocalizedStringFromTable(@"Check/Uncheck List", @"SdefLibrary", @"Undo Action: Check/Uncheck List.")];
     }
-    sd_slFlags.list = list;
+    _slFlags.list = list;
     [[self owner] didChangeValueForKey:@"type"];
   }
 }

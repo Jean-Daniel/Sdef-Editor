@@ -6,6 +6,8 @@
  *  Copyright © 2006 - 2007 Shadow Lab. All rights reserved.
  */
 
+#import "SdefBase.h"
+
 enum {
   kSdefParserVersionUnknown = 0,
   kSdefParserVersionPanther = 1 << 0,
@@ -29,16 +31,16 @@ typedef NSUInteger SdefValidatorVersion;
 
 @interface SdefXMLValidator : NSObject {
 @private
-  CFMutableArrayRef sd_stack;
+  NSMutableArray *sd_stack;
   SdefValidatorVersion sd_version;
 }
 
 - (SdefValidatorVersion)version;
 
-- (CFStringRef)element;
-- (void)startElement:(CFStringRef)element;
-- (void)endElement:(CFStringRef)element;
+- (NSString *)element;
+- (void)startElement:(NSString *)element;
+- (void)endElement:(NSString *)element;
 
-- (SdefValidatorResult)validateElement:(CFStringRef)element attributes:(CFDictionaryRef)attributes error:(NSString **)error;
+- (SdefValidatorResult)validateElement:(NSString *)element attributes:(NSDictionary *)attributes error:(NSString **)error;
 
 @end

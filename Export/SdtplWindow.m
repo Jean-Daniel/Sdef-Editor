@@ -40,14 +40,9 @@
 
 - (id)initWithDocument:(SdefDocument *)aDoc {
   if (self = [super init]) {
-    sd_document = [aDoc retain];
+    sd_document = aDoc;
   }
   return self;
-}
-
-- (void)dealloc {
-  [sd_document release];
-  [super dealloc];
 }
 
 #pragma mark -
@@ -55,19 +50,19 @@
   /* Init Disclosure Panel */
   WBCollapseViewItem *item = [[WBCollapseViewItem alloc] initWithView:generalView identifier:@"general"];
   item.title = @"General";
-  [collapseView addItem:[item autorelease]];
+  [collapseView addItem:item];
 
   item = [[WBCollapseViewItem alloc] initWithView:tocView identifier:@"toc"];
   item.title = @"Table Of Content";
-  [collapseView addItem:[item autorelease]];
+  [collapseView addItem:item];
 
   item = [[WBCollapseViewItem alloc] initWithView:htmlView identifier:@"options"];
   item.title = @"HTML Options";
-  [collapseView addItem:[item autorelease]];
+  [collapseView addItem:item];
 
   item = [[WBCollapseViewItem alloc] initWithView:infoView identifier:@"description"];
   item.title = @"Description";
-  [collapseView addItem:[item autorelease]];
+  [collapseView addItem:item];
 
   NSScrollView *scroll = [collapseView enclosingScrollView];
   // 10.6 compat
@@ -97,18 +92,14 @@
   /* Init Templates Menu */
   NSArray *tpls = [[SdefTemplate findAllTemplates] allValues];
   NSSortDescriptor *sort = [[NSSortDescriptor alloc] initWithKey:@"displayName" ascending:YES selector:@selector(caseInsensitiveCompare:)];
-  NSArray *sorts = [[NSArray alloc] initWithObjects:sort, nil];
-  [sort release];
-  
-  tpls = [tpls sortedArrayUsingDescriptors:sorts];
-  [sorts release];
+  tpls = [tpls sortedArrayUsingDescriptors:@[sort]];
+
   NSUInteger idx = [tpls count];
   while (idx-- > 0) {
     SdefTemplate *tpl = [tpls objectAtIndex:idx];
     NSMenuItem *menuItem = [[NSMenuItem alloc] initWithTitle:[tpl menuName] action:nil keyEquivalent:@""];
     [menuItem setRepresentedObject:tpl];
     [[templates menu] insertItem:menuItem atIndex:0];
-    [menuItem release];
   }
   
   [templates selectItemAtIndex:0];
@@ -139,9 +130,8 @@
 }
 
 - (IBAction)export:(id)sender {
-  [self retain];
-  [NSApp endSheet:[self window]];
-  [[self window] close];
+  [NSApp endSheet:self.window];
+  [self.window close];
   NSSavePanel *panel = [NSSavePanel savePanel];
   [panel setCanSelectHiddenExtension:YES];
   [panel setTitle:@"Create Dictionary"];
@@ -152,13 +142,12 @@
                   if (NSOKButton == result) {
                     NSURL *file = [panel URL];
                     @try {
-                      [generator writeDictionary:[sd_document dictionary] toFile:[file path]];
+                      [generator writeDictionary:[self->sd_document dictionary] toFile:[file path]];
                     } @catch (id exception) {
                       SPXLogException(exception);
                     }
                   }
                   [self close:nil];
-                  [self autorelease];
                 }];
 }
 
@@ -205,8 +194,6 @@
       [item setRepresentedObject:tpl];
       [item setTag:1];
       [[templates menu] insertItem:item atIndex:0];
-      [item release];
-      [tpl release];
       return YES;
     }
   }

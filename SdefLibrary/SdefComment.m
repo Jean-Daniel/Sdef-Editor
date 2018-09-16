@@ -27,7 +27,7 @@
 
 - (id)initWithCoder:(NSCoder *)aCoder {
   if (self = [super initWithCoder:aCoder]) {
-    _value = [[aCoder decodeObjectForKey:@"SCValue"] retain];
+    _value = [aCoder decodeObjectForKey:@"SCValue"];
   }
   return self;
 }
@@ -38,7 +38,7 @@
 }
 
 + (id)commentWithString:(NSString *)aString {
-  return [[[self alloc] initWithString:aString] autorelease]; 
+  return [[self alloc] initWithString:aString]; 
 }
 
 - (id)init {
@@ -50,11 +50,6 @@
     [self setValue:aString];
   }
   return self;
-}
-
-- (void)dealloc {
-  [_value release];
-  [super dealloc];
 }
 
 #pragma mark -

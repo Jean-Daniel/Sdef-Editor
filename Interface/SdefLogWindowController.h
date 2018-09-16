@@ -8,10 +8,7 @@
 
 #import <Cocoa/Cocoa.h>
 
-@interface SdefLogWindowController : NSWindowController {
-@private
-  NSTextView *_logView;
-}
+@interface SdefLogWindowController : NSWindowController
 
 @property(nonatomic, assign) IBOutlet NSTextView *logView;
 

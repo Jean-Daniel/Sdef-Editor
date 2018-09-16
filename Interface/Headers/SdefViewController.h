@@ -6,6 +6,8 @@
  *  Copyright © 2006 - 2007 Shadow Lab. All rights reserved.
  */
 
+#import "SdefBase.h"
+
 @class SdefObject, SdefDocument, SdefClassManager;
 @interface SdefViewController : NSObject {
   IBOutlet NSView *sdefView;

@@ -29,20 +29,12 @@
 
 - (id)initWithNibName:(NSString *)name {
   if (self = [super init]) {
-    id nib = [[NSNib alloc] initWithNibNamed:name bundle:nil];
-    [nib instantiateNibWithOwner:self topLevelObjects:&sd_nibTopLevelObjects];
-    [sd_nibTopLevelObjects retain];
-    [sd_nibTopLevelObjects makeObjectsPerformSelector:@selector(release)];
-    [nib release];
+    NSNib *nib = [[NSNib alloc] initWithNibNamed:name bundle:nil];
+    NSArray *objects = nil;
+    [nib instantiateWithOwner:self topLevelObjects:&objects];
+    sd_nibTopLevelObjects = objects;
   }
   return self;
-}
-
-- (void)dealloc {
-  [sd_types release];
-  [sd_object release];
-  [sd_nibTopLevelObjects release];
-  [super dealloc];
 }
 
 #pragma mark -
@@ -62,11 +54,9 @@
 - (void)setObject:(SdefObject *)newObject {
   if (sd_object != newObject) {
     [self willChangeValueForKey:@"object"];
-    [sd_object release];
-    sd_object = [newObject retain];
+    sd_object = newObject;
     [self didChangeValueForKey:@"object"];
   }
-  [sd_types release];
   sd_types = nil;
 }
 
@@ -96,11 +86,7 @@
     [editor setField:[sender typeField]];
     [editor setObject:[self editedObject:sender]];
     [editor setReleasedWhenClosed:YES];
-    [NSApp beginSheet:[editor window]
-       modalForWindow:[sender window]
-        modalDelegate:nil
-       didEndSelector:nil
-          contextInfo:nil];
+    [[sender window] beginSheet:editor.window completionHandler:nil];
   }
 }
 
@@ -123,7 +109,6 @@
 - (NSArray *)types {
   if (!sd_types) {
     sd_types = [[self classManager] types];
-    [sd_types retain];
   }
   return sd_types;
 }
@@ -165,7 +150,7 @@
 @implementation SdefTypeColorTransformer
 
 + (id)transformer {
-  return [[[self alloc] init] autorelease];
+  return [[self alloc] init];
 }
 
 + (Class)transformedValueClass {
@@ -179,7 +164,7 @@
 - (id)transformedValue:(id)value {
   static NSColor *color = nil;
   if (!color) {
-    color = [[NSColor colorWithCalibratedRed:.5 green:.5 blue:.75 alpha:1] retain];
+    color = [NSColor colorWithCalibratedRed:.5 green:.5 blue:.75 alpha:1];
   }
   return ([value respondsToSelector:@selector(hasCustomType)] && [value hasCustomType]) ? color : [NSColor blackColor];
 }
@@ -194,7 +179,7 @@
 @implementation SdefAccessTransformer
 
 + (id)transformer {
-  return [[[self alloc] init] autorelease];
+  return [[self alloc] init];
 }
 
 // information that can be used to analyze available transformer instances (especially used inside Interface Builder)
@@ -241,7 +226,7 @@
 @implementation SdefObjectNameTransformer
 
 + (id)transformer {
-  return [[[self alloc] init] autorelease];
+  return [[self alloc] init];
 }
 
 // information that can be used to analyze available transformer instances (especially used inside Interface Builder)
@@ -264,7 +249,7 @@
     if ([object name])
       [names addObject:[object name]];
   }
-  return [names autorelease];
+  return names;
 }
 
 /* Returns access value */

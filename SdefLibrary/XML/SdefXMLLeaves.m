@@ -174,7 +174,6 @@
         /* Tiger also support CDData */
         [html setCDData:YES];
         [node appendChild:html];
-        [html release];
       } else {
         [node setContent:[_content stringByEscapingEntities:nil]];
       }

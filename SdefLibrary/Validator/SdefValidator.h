@@ -6,6 +6,8 @@
  *  Copyright © 2006 - 2007 Shadow Lab. All rights reserved.
  */
 
+#import "SdefBase.h"
+
 #import <WonderBox/WBWindowController.h>
 
 @interface SdefValidator : WBWindowController {

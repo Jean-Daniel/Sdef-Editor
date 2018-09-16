@@ -64,7 +64,6 @@ const OSType kCocoaSuiteDefinitionHFSType = 'ScSu';
     if ([ctrl respondsToSelector:@selector(setAutosavingDelay:)]) {
       [ctrl setAutosavingDelay:60];
     }
-    [ctrl release];
     
     [[NSUserDefaults standardUserDefaults] registerDefaults:@{
      @"SdefOpenAtStartup" : @(YES),
@@ -101,13 +100,11 @@ const OSType kCocoaSuiteDefinitionHFSType = 'ScSu';
   if (export) {
     NSMenuItem *item  = [[export submenu] itemAtIndex:0];
     if (item) {
-      [item retain];
-      [[export submenu] removeItem:item];
+      [[export submenu] removeItem:item]; // WARNING: item lifecycle
       [item setTitle:NSLocalizedString(@"Create Dictionary...", @"Create dictionary 64 bits title")];
       NSInteger idx = [file indexOfItem:export];
       [file removeItem:export];
       [file insertItem:item atIndex:idx];
-      [item release];
     }
   }
 #endif
@@ -154,20 +151,20 @@ const OSType kCocoaSuiteDefinitionHFSType = 'ScSu';
   }
   NSString *suitePath = [[NSBundle mainBundle] pathForResource:suite ofType:@"sdef"];
   if (suitePath) {
-    NSError *error = nil;
     NSDocumentController *ctrl = [NSDocumentController sharedDocumentController];
-    NSDocument *doc = [ctrl openDocumentWithContentsOfURL:[NSURL fileURLWithPath:suitePath] display:NO error:&error];
-    if (doc) {
-      [doc setFileURL:nil];
-      [doc makeWindowControllers];
-      [doc showWindows];
-    } else if (error) {
-      [NSApp presentError:error];
-    }
+    [ctrl openDocumentWithContentsOfURL:[NSURL fileURLWithPath:suitePath] display:NO
+                      completionHandler:
+     ^(NSDocument * _Nullable document, BOOL documentWasAlreadyOpen, NSError * _Nullable error) {
+       if (document) {
+         [document setFileURL:nil];
+         [document makeWindowControllers];
+         [document showWindows];
+       } else if (error) {
+         [NSApp presentError:error];
+       }
+     }];
   }
 }
-
-
 
 - (IBAction)openSdefReference:(id)sender {
   
@@ -181,13 +178,11 @@ const OSType kCocoaSuiteDefinitionHFSType = 'ScSu';
   [NSApp runModalForWindow:[panel window]];
   WBApplication *appli = [panel selection];
   if (appli) {
-    NSString *path = [appli path];
+    NSURL *url = appli.URL;
     
-    SdefImporter *importer = [[OSASdefImporter alloc] initWithFile:path];
+    SdefImporter *importer = [[OSASdefImporter alloc] initWithURL:url];
     [self importWithImporter:importer];
-    [importer release];
   }
-  [panel release];
 }
 
 - (void)importWithImporter:(SdefImporter *)importer {
@@ -236,7 +231,6 @@ const OSType kCocoaSuiteDefinitionHFSType = 'ScSu';
   } else {
     NSRunAlertPanel(@"Sorry! Sdef Editor cannot import this definition", @"Try with desdp(1) tools (see 'man desdp')", @"OK", nil, nil);
   }
-  [importer release];
 }
 
 - (IBAction)importCocoaTerminology:(id)sender {
@@ -277,15 +271,12 @@ const OSType kCocoaSuiteDefinitionHFSType = 'ScSu';
   NSURL *file = [[openPanel URLs] objectAtIndex:0];
   AeteImporter *aete = [[AeteImporter alloc] initWithContentsOfFile:[file path]];
   [self importWithImporter:aete];
-  [aete release];
 }
 
 - (IBAction)importSystemSuites:(id)sender {
   AeteImporter *aete = [[AeteImporter alloc] initWithSystemSuites];
-  if (aete) {
+  if (aete)
     [self importWithImporter:aete];
-    [aete release];
-  }
 }
 
 - (IBAction)importApplicationAete:(id)sender {
@@ -301,17 +292,13 @@ const OSType kCocoaSuiteDefinitionHFSType = 'ScSu';
     NSString *bid = [appli bundleIdentifier];
     if (bid)
       aete = [[AeteImporter alloc] initWithApplicationBundleIdentifier:bid];
-    else
-      aete = [[AeteImporter alloc] initWithApplicationSignature:[appli signature]];
     
     if (aete) {
       [self importWithImporter:aete];
-      [aete release];
     } else {
       NSBeep();
     }
   }
-  [panel release];
 }
 
 #pragma mark -
@@ -323,10 +310,10 @@ const OSType kCocoaSuiteDefinitionHFSType = 'ScSu';
     [self importCocoaScriptFile:filename];
     return YES;
   } else {
-    if ((noErr == WBLSIsApplicationAtPath((CFStringRef)filename, &isapp)) && isapp) {
-      SdefImporter *importer = [[OSASdefImporter alloc] initWithFile:filename];
+    NSURL *url = [NSURL fileURLWithPath:filename];
+    if ((noErr == WBLSIsApplicationAtURL(SPXNSToCFURL(url), &isapp)) && isapp) {
+      SdefImporter *importer = [[OSASdefImporter alloc] initWithURL:url];
       [self importWithImporter:importer];
-      [importer release];
       return YES;
     }
   }
@@ -345,9 +332,7 @@ const OSType kCocoaSuiteDefinitionHFSType = 'ScSu';
   NSMenu *menu = [[NSMenu alloc] initWithTitle:@"Debug"];
   [menu addItemWithTitle:@"Import System Suites" action:@selector(importSystemSuites:) keyEquivalent:@""];
   [debugMenu setSubmenu:menu];
-  [menu release];
   [[NSApp mainMenu] insertItem:debugMenu atIndex:[[NSApp mainMenu] numberOfItems] -1];
-  [debugMenu release];
 }
 
 @end

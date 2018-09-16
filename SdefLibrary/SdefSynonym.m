@@ -31,8 +31,8 @@
 
 - (id)initWithCoder:(NSCoder *)aCoder {
   if (self = [super initWithCoder:aCoder]) {
-    _code = [[aCoder decodeObjectForKey:@"SYCode"] retain];
-    _impl = [[aCoder decodeObjectForKey:@"SYImpl"] retain];
+    _code = [aCoder decodeObjectForKey:@"SYCode"];
+    _impl = [aCoder decodeObjectForKey:@"SYImpl"];
   }
   return self;
 }
@@ -42,32 +42,24 @@
   return kSdefType_Synonym;
 }
 
-- (void)dealloc {
-  [_impl release];
-  [_code release];
-  [super dealloc];
-}
-
 - (NSString *)description {
   return [NSString stringWithFormat:@"<%@ %p> {name=%@ code=%@ hidden=%@}", 
     NSStringFromClass([self class]), self,
- [self name], _code, sd_slFlags.hidden ? @"YES" : @"NO"];
+ [self name], _code, _slFlags.hidden ? @"YES" : @"NO"];
 }
 
 #pragma mark -
 - (SdefImplementation *)impl {
   if (!_impl) {
-    SdefImplementation *impl = [[SdefImplementation allocWithZone:[self zone]] init];
+    SdefImplementation *impl = [[SdefImplementation alloc] init];
     [self setImpl:impl];
-    [impl release];
   }
   return _impl;
 }
 - (void)setImpl:(SdefImplementation *)newImpl {
   if (_impl != newImpl) {
     [_impl setOwner:nil];
-    [_impl release];
-    _impl = [newImpl retain];
+    _impl = newImpl;
     [_impl setOwner:self];
   }
 }

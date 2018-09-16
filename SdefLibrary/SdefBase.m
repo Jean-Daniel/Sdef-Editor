@@ -7,6 +7,7 @@
  */
 
 #import "SdefBase.h"
+#import "SdefSuite.h"
 #import "SdefComment.h"
 #import "SdefDocument.h"
 #import "SdefDictionary.h"
@@ -43,7 +44,7 @@ NSImage *SdefImageNamed(NSString *name) {
     NSUInteger length;
     const uint8_t*buffer = [aCoder decodeBytesForKey:@"SOFlags" returnedLength:&length];
     memcpy(&sd_soFlags, buffer, length);    
-    sd_comments = [[aCoder decodeObjectForKey:@"SOComments"] retain];
+    sd_comments = [aCoder decodeObjectForKey:@"SOComments"];
   }
   return self;
 }
@@ -81,12 +82,6 @@ NSImage *SdefImageNamed(NSString *name) {
     [self sdefInit];
   }
   return self;
-}
-
-- (void)dealloc {
-  [sd_comments release];
-  [sd_includes release];
-  [super dealloc];
 }
 
 #pragma mark -
@@ -339,7 +334,7 @@ NSMutableArray *comments(SdefObject *self) {
 
 - (id)initWithCoder:(NSCoder *)aCoder {
   if (self = [super initWithCoder:aCoder]) {
-    _elementName = [[aCoder decodeObjectForKey:@"SCElementName"] retain];
+    _elementName = [aCoder decodeObjectForKey:@"SCElementName"];
     _contentType = NSClassFromString([aCoder decodeObjectForKey:@"SCContentType"]);
   }
   return self;
@@ -357,11 +352,6 @@ NSMutableArray *comments(SdefObject *self) {
 - (void)sdefInit {
   [super sdefInit];
   [self setRemovable:NO];
-}
-
-- (void)dealloc {
-  [_elementName release];
-  [super dealloc];
 }
 
 #pragma mark -
@@ -478,13 +468,15 @@ NSString *SdefNameFromCocoaName(NSString *cocoa) {
   CFRange range = CFRangeMake(0, [cocoa length]);
   CFRange character;
   while (CFStringFindCharacterFromSet(sdef, upper, range, 0, &character) && character.location != kCFNotFound) {
-    if (character.location) CFStringInsert(sdef, (character.location++), CFSTR(" "));
+    if (character.location)
+      CFStringInsert(sdef, (character.location++), CFSTR(" "));
     range.location = character.location + character.length;
     range.length = CFStringGetLength(sdef) - range.location;
     if (!range.length)
       break;
   }
-  if (!english) english = CFLocaleCreate(kCFAllocatorDefault, CFSTR("English"));
+  if (!english)
+    english = CFLocaleCreate(kCFAllocatorDefault, CFSTR("English"));
   CFStringLowercase(sdef, english);
-  return [(id)sdef autorelease];
+  return CFAutorelease(sdef);
 }

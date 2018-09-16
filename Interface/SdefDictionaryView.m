@@ -18,9 +18,8 @@
 }
 
 - (IBAction)addSuite:(id)sender {
-  SdefSuite *suite = [[SdefSuite allocWithZone:[[self object] zone]] init];
+  SdefSuite *suite = [[SdefSuite alloc] init];
   [[self object] appendChild:suite];
-  [suite release];
 }
 
 @end

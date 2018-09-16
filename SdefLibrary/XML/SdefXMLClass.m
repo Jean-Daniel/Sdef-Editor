@@ -9,6 +9,7 @@
 #import "SdefXMLBase.h"
 #import "SdefXMLNode.h"
 
+#import "SdefImplementation.h"
 #import "SdefClassManager.h"
 #import "SdefContents.h"
 #import "SdefClass.h"

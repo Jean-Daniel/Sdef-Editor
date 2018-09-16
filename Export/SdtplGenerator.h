@@ -6,7 +6,7 @@
  *  Copyright © 2006 - 2007 Shadow Lab. All rights reserved.
  */
 
-#import <Foundation/Foundation.h>
+#import "SdefBase.h"
 
 enum {
   kSdtplInline		= 0,
@@ -59,7 +59,7 @@ NSString * const SdtplBlockTableOfContent;
   NSString *sd_cssFile;
   NSMutableSet *sd_cancel;
   SdefClassManager *sd_manager; /* Weak */
-  NSMapTable *sd_formats;
+  NSMutableDictionary *sd_formats;
   NSMapTable *sd_links, *sd_files, *sd_anchors;
 }
 

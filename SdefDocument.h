@@ -6,6 +6,8 @@
  *  Copyright © 2006 - 2007 Shadow Lab. All rights reserved.
  */
 
+#import "SdefBase.h"
+
 @protocol SdefParserDelegate;
 @class SdefObject, SdefDictionary, SdefClassManager;
 @class SdefWindowController, SdefSymbolBrowser, SdefValidator;

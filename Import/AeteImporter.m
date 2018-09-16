@@ -42,19 +42,18 @@ OSStatus _GetTerminologyFromAppleEvent(AppleEvent *theEvent, NSMutableArray *ter
 //  require_noerr(err, bail);
   
   OSStatus err = WBAEAddSInt32(theEvent, keyDirectObject, 0);
-  require_noerr(err, bail);
+  spx_require_noerr(err, bail);
   
   err = WBAESendEventReturnAEDescList(theEvent, &aetes);
-  require_noerr(err, bail);
+  spx_require_noerr(err, bail);
 
   err = AECountItems(&aetes, &count);
-  require_noerr(err, bail);
+  spx_require_noerr(err, bail);
 
   for (CFIndex idx = 1; idx <= count; idx++) {
-    CFDataRef data = NULL;
-    WBAECopyNthCFDataFromDescList(&aetes, idx, typeAETE, NULL, &data);
+    CFDataRef data = WBAECopyNthCFDataFromDescList(&aetes, idx, typeAETE, NULL, NULL);
     if (data) {
-      [terminolgies addObject:(id)data];
+      [terminolgies addObject:SPXCFToNSData(data)];
       CFRelease(data);
     }
   }
@@ -70,26 +69,24 @@ bail:
     sd_aetes = [[NSMutableArray alloc] init];
     if (target) {
       OSStatus err = WBAECreateEventWithTarget(target, kASAppleScriptSuite, kGetAEUT, &theEvent);
-      require_noerr(err, bail);
+      spx_require_noerr(err, bail);
       
       err = _GetTerminologyFromAppleEvent(&theEvent, sd_aetes);
       WBAEDisposeDesc(&theEvent);
       
       err = WBAECreateEventWithTarget(target, kASAppleScriptSuite, kGetAETE, &theEvent);
-      require_noerr(err, bail);
+      spx_require_noerr(err, bail);
       
       err = _GetTerminologyFromAppleEvent(&theEvent, sd_aetes);
       WBAEDisposeDesc(&theEvent);
     
-      require(sd_aetes && [sd_aetes count], bail);
+      spx_require(sd_aetes && [sd_aetes count], bail);
     }
   }
   return self;
 /* On Error */
 bail:
-  [sd_aetes release];
   sd_aetes = nil;
-  [self release];
   self = nil;
   return self;
 }
@@ -106,10 +103,9 @@ bail:
         AEDesc aetes = WBAEEmptyDesc();
         err = OSAGetSysTerminology(asct, kOSAModeNull, 0, &aetes);
         if (noErr == err) {
-          CFDataRef data = NULL;
-          WBAECopyCFDataFromDescriptor(&aetes, &data);
+          CFDataRef data = WBAECopyCFDataFromDescriptor(&aetes, NULL);
           if (data) {
-            [sd_aetes addObject:(id)data];
+            [sd_aetes addObject:SPXCFToNSData(data)];
             CFRelease(data);
           }
           WBAEDisposeDesc(&aetes);
@@ -122,37 +118,12 @@ bail:
   return self;
 }
 
-- (id)initWithApplicationSignature:(OSType)signature {
+- (instancetype)initWithApplicationBundleIdentifier:(NSString *)identifier {
   AEDesc target;
-  OSStatus err = WBAECreateTargetWithSignature(signature, &target);
+  OSStatus err = WBAECreateTargetWithBundleID(SPXNSToCFString(identifier), &target);
   if (noErr == err) {
     self = [self _initWithTarget:&target];
   } else {
-    [self release];
-    self = nil;
-  }
-  WBAEDisposeDesc(&target);
-  if (self) {
-    FSRef app;
-    sd_dictionary = [[SdefDictionary alloc] init];
-    if (noErr == LSGetApplicationForInfo(kLSUnknownType, signature, NULL, kLSRolesAll, &app, NULL)) {
-      CFStringRef name = NULL;
-      if (noErr == LSCopyDisplayNameForRef(&app, &name) && name) {
-        [sd_dictionary setTitle:(NSString *)name];
-        CFRelease(name);
-      }
-    }
-  }
-  return self;
-}
-
-- (id)initWithApplicationBundleIdentifier:(NSString *)identifier {
-  AEDesc target;
-  OSStatus err = WBAECreateTargetWithBundleID((CFStringRef)identifier, &target);
-  if (noErr == err) {
-    self = [self _initWithTarget:&target];
-  } else {
-    [self release];
     self = nil;
   }
   WBAEDisposeDesc(&target);
@@ -161,10 +132,10 @@ bail:
     FSRef app;
     sd_dictionary = [[SdefDictionary alloc] init];
     if (noErr == LSGetApplicationForInfo(kLSUnknownType, kLSUnknownType, 
-                                         (CFStringRef)identifier, kLSRolesAll, &app, NULL)) {
+                                         SPXNSToCFString(identifier), kLSRolesAll, &app, NULL)) {
       CFStringRef name = NULL;
       if (noErr == LSCopyDisplayNameForRef(&app, &name) && name) {
-        [sd_dictionary setTitle:(NSString *)name];
+        [sd_dictionary setTitle:SPXCFToNSString(name)];
         CFRelease(name);
       }
     }
@@ -192,7 +163,6 @@ bail:
         NSData *aete = [[NSData alloc] initWithHandle:aeteH];
         if (aete) {
           [sd_aetes addObject:aete];
-          [aete release];
         }
       }
       /* Extensions */
@@ -202,13 +172,11 @@ bail:
         NSData *aete = [[NSData alloc] initWithHandle:aeteH];
         if (aete) {
           [sd_aetes addObject:aete];
-          [aete release];
         }
       }
       CloseResFile(fileRef);
     }
     if (!sd_aetes) {
-      [self release];
       self = nil;
     }
   }
@@ -216,7 +184,7 @@ bail:
     sd_dictionary = [[SdefDictionary alloc] init];
     CFStringRef name = NULL;
     if (noErr == LSCopyDisplayNameForRef(aRef, &name) && name) {
-      [sd_dictionary setTitle:[(NSString *)name stringByDeletingPathExtension]];
+      [sd_dictionary setTitle:[SPXCFToNSString(name) stringByDeletingPathExtension]];
       CFRelease(name);
     }
   }
@@ -225,19 +193,13 @@ bail:
 
 - (id)initWithContentsOfFile:(NSString *)aFile {
   FSRef aRef;
-  if (![aFile getFSRef:&aRef]) {
-    [self release];
-    self = nil;
-  } else {
+  Boolean isDirectory;
+  if (noErr == FSPathMakeRef([aFile fileSystemRepresentation], &aRef, &isDirectory)) {
     self = [self initWithFSRef:&aRef];
+  } else {
+    self = nil;
   }
   return self;
-}
-
-- (void)dealloc {
-  [sd_aetes release];
-  [sd_dictionary release];
-  [super dealloc];
 }
 
 #pragma mark -
@@ -257,10 +219,9 @@ bail:
       offset += sizeof(AeteHeader);
       NSUInteger scount = header->suiteCount;
       while (scount-- > 0) {
-        SdefSuite *suite = [[SdefSuite allocWithZone:[self zone]] init];
+        SdefSuite *suite = [[SdefSuite alloc] init];
         bytes += [suite parseData:bytes];
         [suites addObject:suite];
-        [suite release];
       }
     } @catch (id exception) {
       SPXLogException(exception);

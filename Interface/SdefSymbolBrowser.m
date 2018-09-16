@@ -19,7 +19,7 @@
 #import "SdefClass.h"
 #import "SdefVerb.h"
 
-static BOOL SdefSearchFilter(NSString *search, SdefObject *object, void *ctxt);
+static BOOL SdefSearchFilter(NSString *search, SdefObject *object, SdefSearchField field);
 
 @interface SdefObject (SdefBrowserExtension)
 - (NSString *)browserType;
@@ -42,7 +42,6 @@ static BOOL SdefSearchFilter(NSString *search, SdefObject *object, void *ctxt);
 - (void)dealloc {
   [self setDocument:nil];
   [searchField setTarget:nil];
-  [super dealloc];
 }
 
 - (void)setDocument:(NSDocument *)aDocument {
@@ -110,8 +109,11 @@ static BOOL SdefSearchFilter(NSString *search, SdefObject *object, void *ctxt);
   
   [[searchField cell] setSearchMenuTemplate:menu];
   [self limitSearch:[menu itemAtIndex:0]];
-  [menu release];
-  [symbols setFilterFunction:SdefSearchFilter context:&sd_filter];
+
+  SdefSearchField field = sd_filter;
+  [symbols setFilterBlock:^BOOL(NSString *search, SdefObject *object) {
+    return SdefSearchFilter(search, object, field);
+  }];
   id search = [[[[self window] toolbar] items] objectAtIndex:2];
   [search setTarget:symbols];
   [search setAction:@selector(search:)];
@@ -123,7 +125,7 @@ static BOOL SdefSearchFilter(NSString *search, SdefObject *object, void *ctxt);
 - (IBAction)openSymbol:(id)sender {
   NSInteger row = [sender clickedRow];
   if (row != -1) {
-    id symbol = [symbols objectAtIndex:row];
+    id symbol = [symbols objectAtArrangedObjectIndex:row];
     id ctrl = [[self document] documentWindow];
     [ctrl setSelection:[symbol container]];
     [ctrl showWindow:sender];
@@ -136,10 +138,10 @@ BOOL __NSStringContains(NSString *str, NSString *substr) {
 }
 
 #pragma mark Search Support
-BOOL SdefSearchFilter(NSString *search, SdefObject *object, void *ctxt) {
-  if (!search) return YES;
+BOOL SdefSearchFilter(NSString *search, SdefObject *object, SdefSearchField field) {
+  if (!search)
+    return YES;
   NSString *str = nil;
-  SdefSearchField field = *(SdefSearchField *)ctxt;
   switch (field) {
     case kSdefSearchAll:
       return __NSStringContains([object name], search) ||
@@ -343,7 +345,6 @@ BOOL SdefSearchFilter(NSString *search, SdefObject *object, void *ctxt) {
   [[self window] setToolbar:toolbar];
   
   searchField = (id)[[[toolbar items] objectAtIndex:2] view];
-  [toolbar release];
 }
 
 - (void)windowWillClose:(NSNotification *)aNotification {
@@ -366,7 +367,7 @@ BOOL SdefSearchFilter(NSString *search, SdefObject *object, void *ctxt) {
     [item setLabel:NSLocalizedString(@"SEARCH_FIELD", @"Inspector Toolbar item label")];
     [item setToolTip:NSLocalizedString(@"SEARCH_FIELD_TOOLTIP", @"Search Field")];
   }
-  return [item autorelease];
+  return item;
 }
 
 - (NSArray *)toolbarDefaultItemIdentifiers:(NSToolbar *)toolbar {
@@ -388,7 +389,6 @@ BOOL SdefSearchFilter(NSString *search, SdefObject *object, void *ctxt) {
     [self setView:searchField];
     [self setMinSize:[searchField frame].size];
     [self setMaxSize:[searchField frame].size];
-    [searchField release];
   }
   return self;
 }

@@ -56,25 +56,21 @@
   [child setContentType:[SdefEnumeration class]];
   [child setElementName:@"types"];
   [self appendChild:child];
-  [child release];
   
   child = [[SdefCollection alloc] initWithName:NSLocalizedStringFromTable(@"Classes", @"SdefLibrary", @"Classes Collection default name")];
   [child setContentType:[SdefClass class]];
   [child setElementName:@"classes"];
   [self appendChild:child];
-  [child release];
   
   child = [[SdefCollection alloc] initWithName:NSLocalizedStringFromTable(@"Commands", @"SdefLibrary", @"Commands Collection default name")];
   [child setContentType:[SdefVerb class]];
   [child setElementName:@"commands"];
   [self appendChild:child];
-  [child release];
   
   child = [[SdefCollection alloc] initWithName:NSLocalizedStringFromTable(@"Events", @"SdefLibrary", @"Events Collection default name")];
   [child setContentType:[SdefVerb class]];
   [child setElementName:@"events"];
   [self appendChild:child];
-  [child release];
 }
 
 - (SdefTypeCollection *)types {

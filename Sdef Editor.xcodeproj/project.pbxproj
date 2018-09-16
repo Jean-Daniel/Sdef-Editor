@@ -18,7 +18,6 @@
 		1B3556B016844CD0005D0D0A /* NSString+WonderBox.h in Headers */ = {isa = PBXBuildFile; fileRef = 1B3555C616844B6F005D0D0A /* NSString+WonderBox.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		1B3556B516844D76005D0D0A /* WBLSFunctions.h in Headers */ = {isa = PBXBuildFile; fileRef = 1B3555FC16844B6F005D0D0A /* WBLSFunctions.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		1B3556B716844D9B005D0D0A /* NSArrayController+WonderBox.h in Headers */ = {isa = PBXBuildFile; fileRef = 1B35558616844B6F005D0D0A /* NSArrayController+WonderBox.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		1B3556B916844DD1005D0D0A /* WBAliasedApplication.h in Headers */ = {isa = PBXBuildFile; fileRef = 1B3555CB16844B6F005D0D0A /* WBAliasedApplication.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		1B3556BA16844DD6005D0D0A /* WBApplication.h in Headers */ = {isa = PBXBuildFile; fileRef = 1B3555CF16844B6F005D0D0A /* WBApplication.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		1B3556BB16844DE7005D0D0A /* WBTableDataSource.h in Headers */ = {isa = PBXBuildFile; fileRef = 1B3555A216844B6F005D0D0A /* WBTableDataSource.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		1B3556BC16844DEB005D0D0A /* WBOutlineViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 1B3555A016844B6F005D0D0A /* WBOutlineViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -30,39 +29,11 @@
 		1B3556C316844E9E005D0D0A /* WBTemplateParser.h in Headers */ = {isa = PBXBuildFile; fileRef = 1B35567816844B6F005D0D0A /* WBTemplateParser.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		1B3556C416844EA2005D0D0A /* WBXMLTemplate.h in Headers */ = {isa = PBXBuildFile; fileRef = 1B35567A16844B6F005D0D0A /* WBXMLTemplate.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		1B3556C516844EEB005D0D0A /* NSTabView+WonderBox.h in Headers */ = {isa = PBXBuildFile; fileRef = 1B35559416844B6F005D0D0A /* NSTabView+WonderBox.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		1B39DEBF16845F830048F1E9 /* WBFunctions.m in Sources */ = {isa = PBXBuildFile; fileRef = 1B3555F116844B6F005D0D0A /* WBFunctions.m */; };
-		1B39DEC116845F980048F1E9 /* WBFSFunctions.m in Sources */ = {isa = PBXBuildFile; fileRef = 1B3555EF16844B6F005D0D0A /* WBFSFunctions.m */; };
-		1B39DEC216845FA00048F1E9 /* WBAEFunctions.c in Sources */ = {isa = PBXBuildFile; fileRef = 1B3555E616844B6F005D0D0A /* WBAEFunctions.c */; };
-		1B39DEC316845FF30048F1E9 /* WBTemplate.m in Sources */ = {isa = PBXBuildFile; fileRef = 1B35567716844B6F005D0D0A /* WBTemplate.m */; };
-		1B39DEC416845FF30048F1E9 /* WBTemplateParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 1B35567916844B6F005D0D0A /* WBTemplateParser.m */; };
-		1B39DEC516845FF30048F1E9 /* WBXMLTemplate.m in Sources */ = {isa = PBXBuildFile; fileRef = 1B35567B16844B6F005D0D0A /* WBXMLTemplate.m */; };
-		1B39DEC6168460220048F1E9 /* WBSplitview.m in Sources */ = {isa = PBXBuildFile; fileRef = 1B35563516844B6F005D0D0A /* WBSplitview.m */; };
-		1B39DECA1684607A0048F1E9 /* WBTreeNode.m in Sources */ = {isa = PBXBuildFile; fileRef = 1B3555E216844B6F005D0D0A /* WBTreeNode.m */; };
 		1B39DECB1684609E0048F1E9 /* NSImage+WonderBox.h in Headers */ = {isa = PBXBuildFile; fileRef = 1B35558E16844B6F005D0D0A /* NSImage+WonderBox.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		1B39DECC168460A10048F1E9 /* NSImage+WonderBox.m in Sources */ = {isa = PBXBuildFile; fileRef = 1B35558F16844B6F005D0D0A /* NSImage+WonderBox.m */; };
-		1B39DECD168460C10048F1E9 /* NSAlert+WonderBox.m in Sources */ = {isa = PBXBuildFile; fileRef = 1B35558516844B6F005D0D0A /* NSAlert+WonderBox.m */; };
-		1B39DECE168460C70048F1E9 /* NSArrayController+WonderBox.m in Sources */ = {isa = PBXBuildFile; fileRef = 1B35558716844B6F005D0D0A /* NSArrayController+WonderBox.m */; };
-		1B39DECF168460D50048F1E9 /* NSTabView+WonderBox.m in Sources */ = {isa = PBXBuildFile; fileRef = 1B35559516844B6F005D0D0A /* NSTabView+WonderBox.m */; };
-		1B39DED0168460E00048F1E9 /* NSData+WonderBox.m in Sources */ = {isa = PBXBuildFile; fileRef = 1B3555BD16844B6F005D0D0A /* NSData+WonderBox.m */; };
-		1B39DED1168460EA0048F1E9 /* NSString+WonderBox.m in Sources */ = {isa = PBXBuildFile; fileRef = 1B3555C716844B6F005D0D0A /* NSString+WonderBox.m */; };
-		1B39DED2168461050048F1E9 /* WBUITreeNode.m in Sources */ = {isa = PBXBuildFile; fileRef = 1B3555A716844B6F005D0D0A /* WBUITreeNode.m */; };
-		1B39DED3168461080048F1E9 /* WBWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1B3555A916844B6F005D0D0A /* WBWindowController.m */; };
-		1B39DED4168461110048F1E9 /* WBTableDataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 1B3555A316844B6F005D0D0A /* WBTableDataSource.m */; };
-		1B39DED5168461630048F1E9 /* WBOutlineViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1B3555A116844B6F005D0D0A /* WBOutlineViewController.m */; };
-		1B39DED6168461700048F1E9 /* WBAlias.m in Sources */ = {isa = PBXBuildFile; fileRef = 1B3555CA16844B6F005D0D0A /* WBAlias.m */; };
-		1B39DED7168461720048F1E9 /* WBApplication.m in Sources */ = {isa = PBXBuildFile; fileRef = 1B3555D016844B6F005D0D0A /* WBApplication.m */; };
-		1B39DED8168461750048F1E9 /* WBAliasedApplication.m in Sources */ = {isa = PBXBuildFile; fileRef = 1B3555CC16844B6F005D0D0A /* WBAliasedApplication.m */; };
-		1B39DED9168461780048F1E9 /* WBExtendedTreeNode.m in Sources */ = {isa = PBXBuildFile; fileRef = 1B3555D416844B6F005D0D0A /* WBExtendedTreeNode.m */; };
 		1B39DEDA168461880048F1E9 /* WBAlias.h in Headers */ = {isa = PBXBuildFile; fileRef = 1B3555C916844B6F005D0D0A /* WBAlias.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		1B39DEDB168461930048F1E9 /* WBProcessFunctions.h in Headers */ = {isa = PBXBuildFile; fileRef = 1B35560316844B6F005D0D0A /* WBProcessFunctions.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		1B39DEDC168461950048F1E9 /* WBProcessFunctions.c in Sources */ = {isa = PBXBuildFile; fileRef = 1B35560216844B6F005D0D0A /* WBProcessFunctions.c */; };
-		1B39DEDD168461A70048F1E9 /* WBLSFunctions.m in Sources */ = {isa = PBXBuildFile; fileRef = 1B3555FD16844B6F005D0D0A /* WBLSFunctions.m */; };
-		1B39DEE01684624A0048F1E9 /* WBOutlineView.m in Sources */ = {isa = PBXBuildFile; fileRef = 1B35559F16844B6F005D0D0A /* WBOutlineView.m */; };
-		1B39DEE1168462520048F1E9 /* WBTextFieldCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 1B35563B16844B6F005D0D0A /* WBTextFieldCell.m */; };
-		1B39DEE2168462550048F1E9 /* WBImageAndTextCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 1B35562F16844B6F005D0D0A /* WBImageAndTextCell.m */; };
 		1B39DEE3168462640048F1E9 /* WBImageAndTextCell.h in Headers */ = {isa = PBXBuildFile; fileRef = 1B35562E16844B6F005D0D0A /* WBImageAndTextCell.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		1B39DEE4168462680048F1E9 /* WBTextFieldCell.h in Headers */ = {isa = PBXBuildFile; fileRef = 1B35563A16844B6F005D0D0A /* WBTextFieldCell.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		1B39DEE51684626F0048F1E9 /* WBOutlineView.h in Headers */ = {isa = PBXBuildFile; fileRef = 1B35559E16844B6F005D0D0A /* WBOutlineView.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		1B39DEE9168462970048F1E9 /* WBGeometry.h in Headers */ = {isa = PBXBuildFile; fileRef = 1B39DEE61684628E0048F1E9 /* WBGeometry.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		1B39DEF6168462C80048F1E9 /* WBHSplitBar.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 1B39DEF1168462BA0048F1E9 /* WBHSplitBar.tiff */; };
 		1B39DEF7168462C80048F1E9 /* WBSplitDot.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 1B39DEF3168462BA0048F1E9 /* WBSplitDot.tiff */; };
@@ -72,56 +43,85 @@
 		1B5ECF520CD62807007B8226 /* SdefXIncludeView.m in Sources */ = {isa = PBXBuildFile; fileRef = 1B5ECF500CD62807007B8226 /* SdefXIncludeView.m */; };
 		1B5FEC8F0BD8E58100F57412 /* SdefXRef.h in Headers */ = {isa = PBXBuildFile; fileRef = 1B5FEC8D0BD8E58100F57412 /* SdefXRef.h */; };
 		1B5FEC900BD8E58100F57412 /* SdefXRef.m in Sources */ = {isa = PBXBuildFile; fileRef = 1B5FEC8E0BD8E58100F57412 /* SdefXRef.m */; };
+		1B607CC0214C71DA006AE849 /* SdefRecord.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1B607C9C214C71D8006AE849 /* SdefRecord.xib */; };
+		1B607CC1214C71DA006AE849 /* SdefSymbolBrowser.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1B607C9E214C71D9006AE849 /* SdefSymbolBrowser.xib */; };
+		1B607CC2214C71DA006AE849 /* ImportApplicationSdef.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1B607CA0214C71D9006AE849 /* ImportApplicationSdef.xib */; };
+		1B607CC3214C71DA006AE849 /* ImportApplicationAete.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1B607CA2214C71D9006AE849 /* ImportApplicationAete.xib */; };
+		1B607CC4214C71DA006AE849 /* SdefValidator.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1B607CA4214C71D9006AE849 /* SdefValidator.xib */; };
+		1B607CC5214C71DA006AE849 /* SdefVerb.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1B607CA6214C71D9006AE849 /* SdefVerb.xib */; };
+		1B607CC6214C71DA006AE849 /* SdefClass.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1B607CA8214C71D9006AE849 /* SdefClass.xib */; };
+		1B607CC7214C71DA006AE849 /* SdefInspector.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1B607CAA214C71D9006AE849 /* SdefInspector.xib */; };
+		1B607CC8214C71DA006AE849 /* SdefEnumeration.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1B607CAC214C71D9006AE849 /* SdefEnumeration.xib */; };
+		1B607CC9214C71DA006AE849 /* SdtplExport.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1B607CAE214C71D9006AE849 /* SdtplExport.xib */; };
+		1B607CCA214C71DA006AE849 /* SdefDocument.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1B607CB0214C71D9006AE849 /* SdefDocument.xib */; };
+		1B607CCB214C71DA006AE849 /* SdefExport.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1B607CB2214C71D9006AE849 /* SdefExport.xib */; };
+		1B607CCC214C71DA006AE849 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1B607CB4214C71DA006AE849 /* MainMenu.xib */; };
+		1B607CCD214C71DA006AE849 /* SdefTypesEditor.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1B607CB6214C71DA006AE849 /* SdefTypesEditor.xib */; };
+		1B607CCE214C71DA006AE849 /* Preferences.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1B607CB8214C71DA006AE849 /* Preferences.xib */; };
+		1B607CCF214C71DA006AE849 /* SdefImporterWarning.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1B607CBA214C71DA006AE849 /* SdefImporterWarning.xib */; };
+		1B607CD0214C71DA006AE849 /* SdefDictionary.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1B607CBC214C71DA006AE849 /* SdefDictionary.xib */; };
+		1B607CD1214C71DA006AE849 /* SdefSuite.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1B607CBE214C71DA006AE849 /* SdefSuite.xib */; };
+		1B73B39A214F01F6006AE849 /* Sdef Editor.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1B73B399214F01F6006AE849 /* Sdef Editor.xcassets */; };
 		1B73E9CC0CD7965C00FC60B2 /* SdefParserInternal.h in Headers */ = {isa = PBXBuildFile; fileRef = 1B73E9CB0CD7965B00FC60B2 /* SdefParserInternal.h */; };
 		1B73ECA70CD7A73400FC60B2 /* SdefParserInternal.m in Sources */ = {isa = PBXBuildFile; fileRef = 1B73ECA60CD7A73400FC60B2 /* SdefParserInternal.m */; };
-		1B814DD6176BA39F0060B7F8 /* WBCGFunctions.mm in Sources */ = {isa = PBXBuildFile; fileRef = 1BB675F7168EE29200B06EFA /* WBCGFunctions.mm */; };
-		1B814DD7176BA3A60060B7F8 /* WBGeometry.m in Sources */ = {isa = PBXBuildFile; fileRef = 1B39DEE71684628F0048F1E9 /* WBGeometry.m */; };
 		1B86FF4E1797F1EC007C25DC /* SdefAccessGroup.h in Headers */ = {isa = PBXBuildFile; fileRef = 1B86FF4D1797F1EC007C25DC /* SdefAccessGroup.h */; };
 		1B86FF521797F1F9007C25DC /* SdefAccessGroup.m in Sources */ = {isa = PBXBuildFile; fileRef = 1B86FF501797F1F9007C25DC /* SdefAccessGroup.m */; };
 		1B86FF561797F95D007C25DC /* SdefXMLAccessGroup.m in Sources */ = {isa = PBXBuildFile; fileRef = 1B86FF541797F95D007C25DC /* SdefXMLAccessGroup.m */; };
-		1B877DB30D37E685007A59B5 /* SdefDocument.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1B877DB10D37E685007A59B5 /* SdefDocument.xib */; };
-		1B877DB80D37E6A2007A59B5 /* SdefImporterWarning.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1B877DB60D37E6A2007A59B5 /* SdefImporterWarning.xib */; };
-		1B877DC70D37E719007A59B5 /* ImportApplicationSdef.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1B877DC50D37E719007A59B5 /* ImportApplicationSdef.xib */; };
-		1B877DCB0D37E728007A59B5 /* ImportApplicationAete.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1B877DC90D37E728007A59B5 /* ImportApplicationAete.xib */; };
-		1B877DD80D37E780007A59B5 /* SdtplExport.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1B877DD60D37E780007A59B5 /* SdtplExport.xib */; };
-		1B877DDC0D37E78C007A59B5 /* SdefValidator.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1B877DDA0D37E78C007A59B5 /* SdefValidator.xib */; };
-		1B877DE10D37E7A6007A59B5 /* SdefTypesEditor.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1B877DDF0D37E7A6007A59B5 /* SdefTypesEditor.xib */; };
-		1B877DE50D37E7B1007A59B5 /* SdefSymbolBrowser.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1B877DE30D37E7B1007A59B5 /* SdefSymbolBrowser.xib */; };
 		1B8AAC8C0D815722003E6ECF /* Carbon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1B8AAC8B0D815721003E6ECF /* Carbon.framework */; };
 		1B8AAC910D815726003E6ECF /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1B8AAC900D815725003E6ECF /* Cocoa.framework */; };
 		1B8AAC950D815729003E6ECF /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1B8AAC940D815729003E6ECF /* WebKit.framework */; };
-		1BADAC850D8BE1A30006EB32 /* SdefVerb.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1BADAC830D8BE1A30006EB32 /* SdefVerb.xib */; };
-		1BADAC8D0D8BE2250006EB32 /* SdefSuite.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1BADAC8B0D8BE2250006EB32 /* SdefSuite.xib */; };
-		1BADAC910D8BE2D60006EB32 /* SdefClass.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1BADAC8F0D8BE2D60006EB32 /* SdefClass.xib */; };
-		1BADACA20D8BE3740006EB32 /* SdefRecord.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1BADACA00D8BE3740006EB32 /* SdefRecord.xib */; };
-		1BADACA70D8BE3B80006EB32 /* SdefDictionary.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1BADACA50D8BE3B80006EB32 /* SdefDictionary.xib */; };
-		1BADACAB0D8BE3DA0006EB32 /* SdefEnumeration.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1BADACA90D8BE3DA0006EB32 /* SdefEnumeration.xib */; };
+		1BADECB019607157005A70E6 /* WBFunctions.m in Sources */ = {isa = PBXBuildFile; fileRef = 1B3555F116844B6F005D0D0A /* WBFunctions.m */; };
+		1BADECB119607157005A70E6 /* WBFSFunctions.mm in Sources */ = {isa = PBXBuildFile; fileRef = 1B3555EF16844B6F005D0D0A /* WBFSFunctions.mm */; };
+		1BADECB219607157005A70E6 /* WBAEFunctions.mm in Sources */ = {isa = PBXBuildFile; fileRef = 1B3555E616844B6F005D0D0A /* WBAEFunctions.mm */; };
+		1BADECB319607157005A70E6 /* WBTemplate.m in Sources */ = {isa = PBXBuildFile; fileRef = 1B35567716844B6F005D0D0A /* WBTemplate.m */; };
+		1BADECB419607157005A70E6 /* WBTemplateParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 1B35567916844B6F005D0D0A /* WBTemplateParser.m */; };
+		1BADECB519607157005A70E6 /* WBXMLTemplate.m in Sources */ = {isa = PBXBuildFile; fileRef = 1B35567B16844B6F005D0D0A /* WBXMLTemplate.m */; };
+		1BADECB619607157005A70E6 /* WBSplitview.m in Sources */ = {isa = PBXBuildFile; fileRef = 1B35563516844B6F005D0D0A /* WBSplitview.m */; };
+		1BADECB719607157005A70E6 /* WBTreeNode.m in Sources */ = {isa = PBXBuildFile; fileRef = 1B3555E216844B6F005D0D0A /* WBTreeNode.m */; };
+		1BADECB819607157005A70E6 /* NSImage+WonderBox.m in Sources */ = {isa = PBXBuildFile; fileRef = 1B35558F16844B6F005D0D0A /* NSImage+WonderBox.m */; };
+		1BADECB919607157005A70E6 /* NSAlert+WonderBox.m in Sources */ = {isa = PBXBuildFile; fileRef = 1B35558516844B6F005D0D0A /* NSAlert+WonderBox.m */; };
+		1BADECBA19607157005A70E6 /* NSArrayController+WonderBox.m in Sources */ = {isa = PBXBuildFile; fileRef = 1B35558716844B6F005D0D0A /* NSArrayController+WonderBox.m */; };
+		1BADECBB19607157005A70E6 /* NSTabView+WonderBox.m in Sources */ = {isa = PBXBuildFile; fileRef = 1B35559516844B6F005D0D0A /* NSTabView+WonderBox.m */; };
+		1BADECBC19607157005A70E6 /* NSData+WonderBox.m in Sources */ = {isa = PBXBuildFile; fileRef = 1B3555BD16844B6F005D0D0A /* NSData+WonderBox.m */; };
+		1BADECBD19607157005A70E6 /* NSString+WonderBox.m in Sources */ = {isa = PBXBuildFile; fileRef = 1B3555C716844B6F005D0D0A /* NSString+WonderBox.m */; };
+		1BADECBE19607157005A70E6 /* WBUITreeNode.m in Sources */ = {isa = PBXBuildFile; fileRef = 1B3555A716844B6F005D0D0A /* WBUITreeNode.m */; };
+		1BADECBF19607157005A70E6 /* WBWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1B3555A916844B6F005D0D0A /* WBWindowController.m */; };
+		1BADECC019607157005A70E6 /* WBTableDataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 1B3555A316844B6F005D0D0A /* WBTableDataSource.m */; };
+		1BADECC119607157005A70E6 /* WBOutlineViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1B3555A116844B6F005D0D0A /* WBOutlineViewController.m */; };
+		1BADECC219607157005A70E6 /* WBAlias.m in Sources */ = {isa = PBXBuildFile; fileRef = 1B3555CA16844B6F005D0D0A /* WBAlias.m */; };
+		1BADECC319607157005A70E6 /* WBApplication.m in Sources */ = {isa = PBXBuildFile; fileRef = 1B3555D016844B6F005D0D0A /* WBApplication.m */; };
+		1BADECC519607157005A70E6 /* WBExtendedTreeNode.m in Sources */ = {isa = PBXBuildFile; fileRef = 1B3555D416844B6F005D0D0A /* WBExtendedTreeNode.m */; };
+		1BADECC619607157005A70E6 /* WBProcessFunctions.c in Sources */ = {isa = PBXBuildFile; fileRef = 1B35560216844B6F005D0D0A /* WBProcessFunctions.c */; };
+		1BADECC719607157005A70E6 /* WBLSFunctions.mm in Sources */ = {isa = PBXBuildFile; fileRef = 1B3555FD16844B6F005D0D0A /* WBLSFunctions.mm */; };
+		1BADECC919607157005A70E6 /* WBTextFieldCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 1B35563B16844B6F005D0D0A /* WBTextFieldCell.m */; };
+		1BADECCA19607157005A70E6 /* WBImageAndTextCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 1B35562F16844B6F005D0D0A /* WBImageAndTextCell.m */; };
+		1BADECCB19607157005A70E6 /* WBCollapseView.m in Sources */ = {isa = PBXBuildFile; fileRef = 1BB675DB168EE1EB00B06EFA /* WBCollapseView.m */; };
+		1BADECCC19607157005A70E6 /* WBCollapseViewInternal.m in Sources */ = {isa = PBXBuildFile; fileRef = 1BB675DD168EE1EB00B06EFA /* WBCollapseViewInternal.m */; };
+		1BADECCD19607157005A70E6 /* WBCollapseViewItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 1BB675DF168EE1EB00B06EFA /* WBCollapseViewItem.m */; };
+		1BADECCE19607157005A70E6 /* WBGradient.m in Sources */ = {isa = PBXBuildFile; fileRef = 1BB675ED168EE24100B06EFA /* WBGradient.m */; };
+		1BADECCF19607157005A70E6 /* WBInterpolationFunction.m in Sources */ = {isa = PBXBuildFile; fileRef = 1BB675F2168EE25C00B06EFA /* WBInterpolationFunction.m */; };
+		1BADECD019607157005A70E6 /* WBCGFunctions.mm in Sources */ = {isa = PBXBuildFile; fileRef = 1BB675F7168EE29200B06EFA /* WBCGFunctions.mm */; };
+		1BADECD119607157005A70E6 /* WBGeometry.m in Sources */ = {isa = PBXBuildFile; fileRef = 1B39DEE71684628F0048F1E9 /* WBGeometry.m */; };
+		1BADECD21960719E005A70E6 /* WonderBox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1B35556B16844B02005D0D0A /* WonderBox.framework */; };
+		1BADECD4196071D4005A70E6 /* WonderBox.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 1B35556B16844B02005D0D0A /* WonderBox.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		1BB1E2280BE26E5300EEB652 /* SdefEditor.m in Sources */ = {isa = PBXBuildFile; fileRef = 98D3A8C5079EC8670049A8FC /* SdefEditor.m */; };
 		1BB5C6C71798357C004058BA /* SdefLogWindowController.h in Headers */ = {isa = PBXBuildFile; fileRef = 1BB5C6C41798357C004058BA /* SdefLogWindowController.h */; };
 		1BB5C6C81798357C004058BA /* SdefLogWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1BB5C6C51798357C004058BA /* SdefLogWindowController.m */; };
 		1BB5C6C91798357C004058BA /* SdefLogWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1BB5C6C61798357C004058BA /* SdefLogWindow.xib */; };
-		1BB675E1168EE1EB00B06EFA /* WBCollapseView.m in Sources */ = {isa = PBXBuildFile; fileRef = 1BB675DB168EE1EB00B06EFA /* WBCollapseView.m */; };
-		1BB675E3168EE1EB00B06EFA /* WBCollapseViewInternal.m in Sources */ = {isa = PBXBuildFile; fileRef = 1BB675DD168EE1EB00B06EFA /* WBCollapseViewInternal.m */; };
-		1BB675E5168EE1EB00B06EFA /* WBCollapseViewItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 1BB675DF168EE1EB00B06EFA /* WBCollapseViewItem.m */; };
 		1BB675E7168EE1F200B06EFA /* WBCollapseView.h in Headers */ = {isa = PBXBuildFile; fileRef = 1BB675DA168EE1EB00B06EFA /* WBCollapseView.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		1BB675E9168EE1F200B06EFA /* WBCollapseViewItem.h in Headers */ = {isa = PBXBuildFile; fileRef = 1BB675DE168EE1EB00B06EFA /* WBCollapseViewItem.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		1BB675EB168EE21C00B06EFA /* WBCollapseViewInternal.h in Headers */ = {isa = PBXBuildFile; fileRef = 1BB675DC168EE1EB00B06EFA /* WBCollapseViewInternal.h */; };
-		1BB675EF168EE24100B06EFA /* WBGradient.m in Sources */ = {isa = PBXBuildFile; fileRef = 1BB675ED168EE24100B06EFA /* WBGradient.m */; };
 		1BB675F0168EE24300B06EFA /* WBGradient.h in Headers */ = {isa = PBXBuildFile; fileRef = 1BB675EC168EE24100B06EFA /* WBGradient.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		1BB675F4168EE25C00B06EFA /* WBInterpolationFunction.m in Sources */ = {isa = PBXBuildFile; fileRef = 1BB675F2168EE25C00B06EFA /* WBInterpolationFunction.m */; };
 		1BB675F5168EE26500B06EFA /* WBInterpolationFunction.h in Headers */ = {isa = PBXBuildFile; fileRef = 1BB675F1168EE25C00B06EFA /* WBInterpolationFunction.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		1BB675F9168EE29200B06EFA /* WBCGFunctions.h in Headers */ = {isa = PBXBuildFile; fileRef = 1BB675F6168EE29200B06EFA /* WBCGFunctions.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		1BB67602168EE2AA00B06EFA /* WBClassCluster.h in Headers */ = {isa = PBXBuildFile; fileRef = 1BB675FD168EE2A500B06EFA /* WBClassCluster.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		1BC332C60CD894C3009109F0 /* SdefXInclude.h in Headers */ = {isa = PBXBuildFile; fileRef = 1BC332C40CD894C3009109F0 /* SdefXInclude.h */; };
 		1BC332C70CD894C3009109F0 /* SdefXInclude.m in Sources */ = {isa = PBXBuildFile; fileRef = 1BC332C50CD894C3009109F0 /* SdefXInclude.m */; };
-		1BCF18250D244AD2009CCAFB /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1BCF18230D244AD2009CCAFB /* MainMenu.xib */; };
-		1BCF18290D244B85009CCAFB /* SdefExport.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1BCF18270D244B85009CCAFB /* SdefExport.xib */; };
-		1BCF182D0D244C0E009CCAFB /* SdefInspector.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1BCF182B0D244C0E009CCAFB /* SdefInspector.xib */; };
-		1BCF18310D244C44009CCAFB /* Preferences.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1BCF182F0D244C44009CCAFB /* Preferences.xib */; };
 		1BDDBEFD0FACBB8B00EECDEE /* ASDictionary.m in Sources */ = {isa = PBXBuildFile; fileRef = 98F47BD607D141690097C497 /* ASDictionary.m */; };
 		1BE05BAD0BDD1F2800334FBF /* SdefTypeValidator.m in Sources */ = {isa = PBXBuildFile; fileRef = 1BE05BAC0BDD1F2800334FBF /* SdefTypeValidator.m */; };
 		1BE05C0A0BDD21EB00334FBF /* SdefLeavesValidator.m in Sources */ = {isa = PBXBuildFile; fileRef = 1BE05C090BDD21EB00334FBF /* SdefLeavesValidator.m */; };
-		8D15AC2F0486D014006FF6A4 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 089C165FFE840EACC02AAC07 /* InfoPlist.strings */; };
+		1BFF24FD214EE210006AE849 /* WBTableView.h in Headers */ = {isa = PBXBuildFile; fileRef = 1B3555A416844B6F005D0D0A /* WBTableView.h */; };
+		1BFF24FE214EE216006AE849 /* WBTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 1B3555A516844B6F005D0D0A /* WBTableView.m */; };
 		9803414407ADC6B00052F203 /* ScriptSuiteIcon.icns in Resources */ = {isa = PBXBuildFile; fileRef = 9803414307ADC6B00052F203 /* ScriptSuiteIcon.icns */; };
 		98057B5907B50A5B00C2D3C7 /* Sdef Editor Help in Resources */ = {isa = PBXBuildFile; fileRef = 98057B2307B50A5B00C2D3C7 /* Sdef Editor Help */; };
 		980AC38108327EF2002EF5F5 /* Value.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 980AC38008327EF2002EF5F5 /* Value.tiff */; };
@@ -206,7 +206,6 @@
 		9863F7A7078B2E0C0022F623 /* RemoveMini.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 9863F7A3078B2E0C0022F623 /* RemoveMini.tiff */; };
 		9863F7A8078B2E0C0022F623 /* RemoveMini_Pressed.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 9863F7A4078B2E0C0022F623 /* RemoveMini_Pressed.tiff */; };
 		9863F7A9078B2E0C0022F623 /* AddMini_Pressed.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 9863F7A5078B2E0C0022F623 /* AddMini_Pressed.tiff */; };
-		9868410607A30B15001694EA /* SdefEditor.icns in Resources */ = {isa = PBXBuildFile; fileRef = 9868410507A30B15001694EA /* SdefEditor.icns */; };
 		986B1A32081862D3004CF2EA /* SdtplWindow.h in Headers */ = {isa = PBXBuildFile; fileRef = 9825DDC807F4AC16006D5F5C /* SdtplWindow.h */; };
 		986B93D807AB0AE400AB131C /* ImporterWarning.m in Sources */ = {isa = PBXBuildFile; fileRef = 986B93D607AB0AE400AB131C /* ImporterWarning.m */; };
 		98757FE8078856590038C05B /* SdefDictionary.m in Sources */ = {isa = PBXBuildFile; fileRef = 98757FE6078856590038C05B /* SdefDictionary.m */; };
@@ -279,8 +278,6 @@
 		98EA0CFC078C9D2100ECCB4B /* SdefEnumerationView.m in Sources */ = {isa = PBXBuildFile; fileRef = 98EA0CFA078C9D2100ECCB4B /* SdefEnumerationView.m */; };
 		98EF19B9078B182F0073D736 /* SdefWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 98EF19B7078B182F0073D736 /* SdefWindowController.m */; };
 		98EF19CC078B206B0073D736 /* SdefViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 98EF19CA078B206B0073D736 /* SdefViewController.m */; };
-		98F15DE607A42653007A93DA /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 98F15DE207A42653007A93DA /* Localizable.strings */; };
-		98F15DE707A42653007A93DA /* SdefLibrary.strings in Resources */ = {isa = PBXBuildFile; fileRef = 98F15DE407A42653007A93DA /* SdefLibrary.strings */; };
 		98F2D33207B2D42400F2EEC2 /* Preferences.m in Sources */ = {isa = PBXBuildFile; fileRef = 98F2D33107B2D42400F2EEC2 /* Preferences.m */; };
 		98F3F21B0795197200D8BFAE /* SdefClassView.m in Sources */ = {isa = PBXBuildFile; fileRef = 98F3F21A0795197200D8BFAE /* SdefClassView.m */; };
 		98F8A84C081A831800CBF3D8 /* Frame Dictionary.sdtpl in Copy Templates */ = {isa = PBXBuildFile; fileRef = 98F8A842081A830E00CBF3D8 /* Frame Dictionary.sdtpl */; };
@@ -300,6 +297,17 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
+		1BADECD3196071BD005A70E6 /* Copy Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				1BADECD4196071D4005A70E6 /* WonderBox.framework in Copy Frameworks */,
+			);
+			name = "Copy Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		98F940A407F888FB0014708A /* Copy Templates */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
@@ -316,14 +324,13 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		089C1660FE840EACC02AAC07 /* English */ = {isa = PBXFileReference; fileEncoding = 10; lastKnownFileType = text.plist.strings; name = English; path = English.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		1B35555C16844A90005D0D0A /* debug.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = debug.xcconfig; sourceTree = "<group>"; };
 		1B35555D16844A90005D0D0A /* project.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = project.xcconfig; sourceTree = "<group>"; };
 		1B35555E16844A90005D0D0A /* release.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = release.xcconfig; sourceTree = "<group>"; };
 		1B35556016844A90005D0D0A /* application.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = application.xcconfig; sourceTree = "<group>"; };
 		1B35556116844A90005D0D0A /* archive.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = archive.xcconfig; sourceTree = "<group>"; };
 		1B35556216844A90005D0D0A /* bundle.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = bundle.xcconfig; sourceTree = "<group>"; };
-		1B35556316844A90005D0D0A /* dylib.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = dylib.xcconfig; sourceTree = "<group>"; };
+		1B35556316844A90005D0D0A /* framework.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; name = framework.xcconfig; path = ../../hadron/xcconfigs/target/framework.xcconfig; sourceTree = "<group>"; };
 		1B35556416844A90005D0D0A /* executable.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = executable.xcconfig; sourceTree = "<group>"; };
 		1B35556B16844B02005D0D0A /* WonderBox.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = WonderBox.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		1B35556C16844B02005D0D0A /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
@@ -352,8 +359,6 @@
 		1B35559916844B6F005D0D0A /* NSUserDefaults+WonderBox.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "NSUserDefaults+WonderBox.m"; sourceTree = "<group>"; };
 		1B35559A16844B6F005D0D0A /* WBDateTableColumn.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WBDateTableColumn.h; sourceTree = "<group>"; };
 		1B35559B16844B6F005D0D0A /* WBDateTableColumn.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WBDateTableColumn.m; sourceTree = "<group>"; };
-		1B35559E16844B6F005D0D0A /* WBOutlineView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WBOutlineView.h; sourceTree = "<group>"; };
-		1B35559F16844B6F005D0D0A /* WBOutlineView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WBOutlineView.m; sourceTree = "<group>"; };
 		1B3555A016844B6F005D0D0A /* WBOutlineViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WBOutlineViewController.h; sourceTree = "<group>"; };
 		1B3555A116844B6F005D0D0A /* WBOutlineViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WBOutlineViewController.m; sourceTree = "<group>"; };
 		1B3555A216844B6F005D0D0A /* WBTableDataSource.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WBTableDataSource.h; sourceTree = "<group>"; };
@@ -380,24 +385,22 @@
 		1B3555C716844B6F005D0D0A /* NSString+WonderBox.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "NSString+WonderBox.m"; sourceTree = "<group>"; };
 		1B3555C916844B6F005D0D0A /* WBAlias.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WBAlias.h; sourceTree = "<group>"; };
 		1B3555CA16844B6F005D0D0A /* WBAlias.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WBAlias.m; sourceTree = "<group>"; };
-		1B3555CB16844B6F005D0D0A /* WBAliasedApplication.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WBAliasedApplication.h; sourceTree = "<group>"; };
-		1B3555CC16844B6F005D0D0A /* WBAliasedApplication.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WBAliasedApplication.m; sourceTree = "<group>"; };
 		1B3555CF16844B6F005D0D0A /* WBApplication.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WBApplication.h; sourceTree = "<group>"; };
 		1B3555D016844B6F005D0D0A /* WBApplication.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WBApplication.m; sourceTree = "<group>"; };
 		1B3555D316844B6F005D0D0A /* WBExtendedTreeNode.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WBExtendedTreeNode.h; sourceTree = "<group>"; };
 		1B3555D416844B6F005D0D0A /* WBExtendedTreeNode.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WBExtendedTreeNode.m; sourceTree = "<group>"; };
 		1B3555E116844B6F005D0D0A /* WBTreeNode.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WBTreeNode.h; sourceTree = "<group>"; };
 		1B3555E216844B6F005D0D0A /* WBTreeNode.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WBTreeNode.m; sourceTree = "<group>"; };
-		1B3555E616844B6F005D0D0A /* WBAEFunctions.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = WBAEFunctions.c; sourceTree = "<group>"; };
+		1B3555E616844B6F005D0D0A /* WBAEFunctions.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = WBAEFunctions.mm; sourceTree = "<group>"; };
 		1B3555E716844B6F005D0D0A /* WBAEFunctions.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WBAEFunctions.h; sourceTree = "<group>"; };
-		1B3555EC16844B6F005D0D0A /* WBFinderSuite.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = WBFinderSuite.c; sourceTree = "<group>"; };
+		1B3555EC16844B6F005D0D0A /* WBFinderSuite.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = WBFinderSuite.cpp; sourceTree = "<group>"; };
 		1B3555ED16844B6F005D0D0A /* WBFinderSuite.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WBFinderSuite.h; sourceTree = "<group>"; };
 		1B3555EE16844B6F005D0D0A /* WBFSFunctions.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WBFSFunctions.h; sourceTree = "<group>"; };
-		1B3555EF16844B6F005D0D0A /* WBFSFunctions.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WBFSFunctions.m; sourceTree = "<group>"; };
+		1B3555EF16844B6F005D0D0A /* WBFSFunctions.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = WBFSFunctions.mm; sourceTree = "<group>"; };
 		1B3555F016844B6F005D0D0A /* WBFunctions.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WBFunctions.h; sourceTree = "<group>"; };
 		1B3555F116844B6F005D0D0A /* WBFunctions.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WBFunctions.m; sourceTree = "<group>"; };
 		1B3555FC16844B6F005D0D0A /* WBLSFunctions.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WBLSFunctions.h; sourceTree = "<group>"; };
-		1B3555FD16844B6F005D0D0A /* WBLSFunctions.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WBLSFunctions.m; sourceTree = "<group>"; };
+		1B3555FD16844B6F005D0D0A /* WBLSFunctions.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = WBLSFunctions.mm; sourceTree = "<group>"; };
 		1B35560216844B6F005D0D0A /* WBProcessFunctions.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = WBProcessFunctions.c; sourceTree = "<group>"; };
 		1B35560316844B6F005D0D0A /* WBProcessFunctions.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WBProcessFunctions.h; sourceTree = "<group>"; };
 		1B35562E16844B6F005D0D0A /* WBImageAndTextCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WBImageAndTextCell.h; sourceTree = "<group>"; };
@@ -424,28 +427,33 @@
 		1B5ECF500CD62807007B8226 /* SdefXIncludeView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = SdefXIncludeView.m; sourceTree = "<group>"; };
 		1B5FEC8D0BD8E58100F57412 /* SdefXRef.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = SdefXRef.h; sourceTree = "<group>"; };
 		1B5FEC8E0BD8E58100F57412 /* SdefXRef.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = SdefXRef.m; sourceTree = "<group>"; };
+		1B607C9D214C71D8006AE849 /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = English.lproj/SdefRecord.xib; sourceTree = "<group>"; };
+		1B607C9F214C71D9006AE849 /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = English.lproj/SdefSymbolBrowser.xib; sourceTree = "<group>"; };
+		1B607CA1214C71D9006AE849 /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = English.lproj/ImportApplicationSdef.xib; sourceTree = "<group>"; };
+		1B607CA3214C71D9006AE849 /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = English.lproj/ImportApplicationAete.xib; sourceTree = "<group>"; };
+		1B607CA5214C71D9006AE849 /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = English.lproj/SdefValidator.xib; sourceTree = "<group>"; };
+		1B607CA7214C71D9006AE849 /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = English.lproj/SdefVerb.xib; sourceTree = "<group>"; };
+		1B607CA9214C71D9006AE849 /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = English.lproj/SdefClass.xib; sourceTree = "<group>"; };
+		1B607CAB214C71D9006AE849 /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = English.lproj/SdefInspector.xib; sourceTree = "<group>"; };
+		1B607CAD214C71D9006AE849 /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = English.lproj/SdefEnumeration.xib; sourceTree = "<group>"; };
+		1B607CAF214C71D9006AE849 /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = English.lproj/SdtplExport.xib; sourceTree = "<group>"; };
+		1B607CB1214C71D9006AE849 /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = English.lproj/SdefDocument.xib; sourceTree = "<group>"; };
+		1B607CB3214C71D9006AE849 /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = English.lproj/SdefExport.xib; sourceTree = "<group>"; };
+		1B607CB5214C71DA006AE849 /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = English.lproj/MainMenu.xib; sourceTree = "<group>"; };
+		1B607CB7214C71DA006AE849 /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = English.lproj/SdefTypesEditor.xib; sourceTree = "<group>"; };
+		1B607CB9214C71DA006AE849 /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = English.lproj/Preferences.xib; sourceTree = "<group>"; };
+		1B607CBB214C71DA006AE849 /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = English.lproj/SdefImporterWarning.xib; sourceTree = "<group>"; };
+		1B607CBD214C71DA006AE849 /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = English.lproj/SdefDictionary.xib; sourceTree = "<group>"; };
+		1B607CBF214C71DA006AE849 /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = English.lproj/SdefSuite.xib; sourceTree = "<group>"; };
+		1B73B399214F01F6006AE849 /* Sdef Editor.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Sdef Editor.xcassets"; sourceTree = "<group>"; };
 		1B73E9CB0CD7965B00FC60B2 /* SdefParserInternal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = SdefParserInternal.h; sourceTree = "<group>"; };
 		1B73ECA60CD7A73400FC60B2 /* SdefParserInternal.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = SdefParserInternal.m; sourceTree = "<group>"; };
 		1B86FF4D1797F1EC007C25DC /* SdefAccessGroup.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SdefAccessGroup.h; sourceTree = "<group>"; };
 		1B86FF501797F1F9007C25DC /* SdefAccessGroup.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SdefAccessGroup.m; sourceTree = "<group>"; };
 		1B86FF541797F95D007C25DC /* SdefXMLAccessGroup.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SdefXMLAccessGroup.m; sourceTree = "<group>"; };
-		1B877DB20D37E685007A59B5 /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = English.lproj/SdefDocument.xib; sourceTree = "<group>"; };
-		1B877DB70D37E6A2007A59B5 /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = English.lproj/SdefImporterWarning.xib; sourceTree = "<group>"; };
-		1B877DC60D37E719007A59B5 /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = English.lproj/ImportApplicationSdef.xib; sourceTree = "<group>"; };
-		1B877DCA0D37E728007A59B5 /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = English.lproj/ImportApplicationAete.xib; sourceTree = "<group>"; };
-		1B877DD70D37E780007A59B5 /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = English.lproj/SdtplExport.xib; sourceTree = "<group>"; };
-		1B877DDB0D37E78C007A59B5 /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = English.lproj/SdefValidator.xib; sourceTree = "<group>"; };
-		1B877DE00D37E7A6007A59B5 /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = English.lproj/SdefTypesEditor.xib; sourceTree = "<group>"; };
-		1B877DE40D37E7B1007A59B5 /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = Resources/English.lproj/SdefSymbolBrowser.xib; sourceTree = "<group>"; };
 		1B8AAC8B0D815721003E6ECF /* Carbon.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Carbon.framework; path = System/Library/Frameworks/Carbon.framework; sourceTree = SDKROOT; };
 		1B8AAC900D815725003E6ECF /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
 		1B8AAC940D815729003E6ECF /* WebKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebKit.framework; path = System/Library/Frameworks/WebKit.framework; sourceTree = SDKROOT; };
-		1BADAC840D8BE1A30006EB32 /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = English.lproj/SdefVerb.xib; sourceTree = "<group>"; };
-		1BADAC8C0D8BE2250006EB32 /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = English.lproj/SdefSuite.xib; sourceTree = "<group>"; };
-		1BADAC900D8BE2D60006EB32 /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = English.lproj/SdefClass.xib; sourceTree = "<group>"; };
-		1BADACA10D8BE3740006EB32 /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = English.lproj/SdefRecord.xib; sourceTree = "<group>"; };
-		1BADACA60D8BE3B80006EB32 /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = English.lproj/SdefDictionary.xib; sourceTree = "<group>"; };
-		1BADACAA0D8BE3DA0006EB32 /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = English.lproj/SdefEnumeration.xib; sourceTree = "<group>"; };
 		1BB5C6C41798357C004058BA /* SdefLogWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SdefLogWindowController.h; sourceTree = "<group>"; };
 		1BB5C6C51798357C004058BA /* SdefLogWindowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SdefLogWindowController.m; sourceTree = "<group>"; };
 		1BB5C6C61798357C004058BA /* SdefLogWindow.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SdefLogWindow.xib; sourceTree = "<group>"; };
@@ -468,10 +476,6 @@
 		1BB67601168EE2A500B06EFA /* WBSingleton.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WBSingleton.h; sourceTree = "<group>"; };
 		1BC332C40CD894C3009109F0 /* SdefXInclude.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = SdefXInclude.h; sourceTree = "<group>"; };
 		1BC332C50CD894C3009109F0 /* SdefXInclude.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = SdefXInclude.m; sourceTree = "<group>"; };
-		1BCF18240D244AD2009CCAFB /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = English.lproj/MainMenu.xib; sourceTree = "<group>"; };
-		1BCF18280D244B85009CCAFB /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = English.lproj/SdefExport.xib; sourceTree = "<group>"; };
-		1BCF182C0D244C0E009CCAFB /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = English.lproj/SdefInspector.xib; sourceTree = "<group>"; };
-		1BCF18300D244C44009CCAFB /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = English.lproj/Preferences.xib; sourceTree = "<group>"; };
 		1BE05BAC0BDD1F2800334FBF /* SdefTypeValidator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = SdefTypeValidator.m; sourceTree = "<group>"; };
 		1BE05C090BDD21EB00334FBF /* SdefLeavesValidator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = SdefLeavesValidator.m; sourceTree = "<group>"; };
 		2A37F4C4FDCFA73011CA2CEA /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = /System/Library/Frameworks/AppKit.framework; sourceTree = "<absolute>"; };
@@ -524,7 +528,6 @@
 		9863F7A3078B2E0C0022F623 /* RemoveMini.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = RemoveMini.tiff; sourceTree = "<group>"; };
 		9863F7A4078B2E0C0022F623 /* RemoveMini_Pressed.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = RemoveMini_Pressed.tiff; sourceTree = "<group>"; };
 		9863F7A5078B2E0C0022F623 /* AddMini_Pressed.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = AddMini_Pressed.tiff; sourceTree = "<group>"; };
-		9868410507A30B15001694EA /* SdefEditor.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = SdefEditor.icns; sourceTree = "<group>"; };
 		986B93D507AB0AE400AB131C /* ImporterWarning.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = ImporterWarning.h; sourceTree = "<group>"; };
 		986B93D607AB0AE400AB131C /* ImporterWarning.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; name = ImporterWarning.m; path = Interface/ImporterWarning.m; sourceTree = SOURCE_ROOT; };
 		98757FE5078856590038C05B /* SdefDictionary.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; name = SdefDictionary.h; path = Headers/SdefDictionary.h; sourceTree = "<group>"; };
@@ -635,8 +638,6 @@
 		98EF19C9078B206B0073D736 /* SdefViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = SdefViewController.h; sourceTree = "<group>"; };
 		98EF19CA078B206B0073D736 /* SdefViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = SdefViewController.m; sourceTree = "<group>"; };
 		98F11E1007D3B07F002C874A /* ASDictionaryStream.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = ASDictionaryStream.m; sourceTree = "<group>"; };
-		98F15DE307A42653007A93DA /* English */ = {isa = PBXFileReference; fileEncoding = 10; lastKnownFileType = text.plist.strings; name = English; path = English.lproj/Localizable.strings; sourceTree = "<group>"; };
-		98F15DE507A42653007A93DA /* English */ = {isa = PBXFileReference; fileEncoding = 10; lastKnownFileType = text.plist.strings; name = English; path = English.lproj/SdefLibrary.strings; sourceTree = "<group>"; };
 		98F2D2D407B2096500F2EEC2 /* CocoaObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = CocoaObject.h; sourceTree = "<group>"; };
 		98F2D2D507B2096500F2EEC2 /* CocoaObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = CocoaObject.m; sourceTree = "<group>"; };
 		98F2D2DD07B20B7500F2EEC2 /* CocoaSuite.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = CocoaSuite.m; sourceTree = "<group>"; };
@@ -670,6 +671,7 @@
 				1B8AAC910D815726003E6ECF /* Cocoa.framework in Frameworks */,
 				1B8AAC950D815729003E6ECF /* WebKit.framework in Frameworks */,
 				1B8AAC8C0D815722003E6ECF /* Carbon.framework in Frameworks */,
+				1BADECD21960719E005A70E6 /* WonderBox.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -723,7 +725,7 @@
 				1B35556016844A90005D0D0A /* application.xcconfig */,
 				1B35556116844A90005D0D0A /* archive.xcconfig */,
 				1B35556216844A90005D0D0A /* bundle.xcconfig */,
-				1B35556316844A90005D0D0A /* dylib.xcconfig */,
+				1B35556316844A90005D0D0A /* framework.xcconfig */,
 				1B35556416844A90005D0D0A /* executable.xcconfig */,
 			);
 			path = target;
@@ -751,8 +753,6 @@
 				1B35558316844B6F005D0D0A /* Categories */,
 				1B35559A16844B6F005D0D0A /* WBDateTableColumn.h */,
 				1B35559B16844B6F005D0D0A /* WBDateTableColumn.m */,
-				1B35559E16844B6F005D0D0A /* WBOutlineView.h */,
-				1B35559F16844B6F005D0D0A /* WBOutlineView.m */,
 				1B3555A016844B6F005D0D0A /* WBOutlineViewController.h */,
 				1B3555A116844B6F005D0D0A /* WBOutlineViewController.m */,
 				1B3555A216844B6F005D0D0A /* WBTableDataSource.h */,
@@ -804,8 +804,6 @@
 				1B3555CA16844B6F005D0D0A /* WBAlias.m */,
 				1B3555CF16844B6F005D0D0A /* WBApplication.h */,
 				1B3555D016844B6F005D0D0A /* WBApplication.m */,
-				1B3555CB16844B6F005D0D0A /* WBAliasedApplication.h */,
-				1B3555CC16844B6F005D0D0A /* WBAliasedApplication.m */,
 				1B3555D316844B6F005D0D0A /* WBExtendedTreeNode.h */,
 				1B3555D416844B6F005D0D0A /* WBExtendedTreeNode.m */,
 				1BB675F1168EE25C00B06EFA /* WBInterpolationFunction.h */,
@@ -842,18 +840,18 @@
 			children = (
 				1B39DEE61684628E0048F1E9 /* WBGeometry.h */,
 				1B39DEE71684628F0048F1E9 /* WBGeometry.m */,
-				1B3555E616844B6F005D0D0A /* WBAEFunctions.c */,
+				1B3555E616844B6F005D0D0A /* WBAEFunctions.mm */,
 				1B3555E716844B6F005D0D0A /* WBAEFunctions.h */,
 				1BB675F6168EE29200B06EFA /* WBCGFunctions.h */,
 				1BB675F7168EE29200B06EFA /* WBCGFunctions.mm */,
-				1B3555EC16844B6F005D0D0A /* WBFinderSuite.c */,
+				1B3555EC16844B6F005D0D0A /* WBFinderSuite.cpp */,
 				1B3555ED16844B6F005D0D0A /* WBFinderSuite.h */,
 				1B3555EE16844B6F005D0D0A /* WBFSFunctions.h */,
-				1B3555EF16844B6F005D0D0A /* WBFSFunctions.m */,
+				1B3555EF16844B6F005D0D0A /* WBFSFunctions.mm */,
 				1B3555F016844B6F005D0D0A /* WBFunctions.h */,
 				1B3555F116844B6F005D0D0A /* WBFunctions.m */,
 				1B3555FC16844B6F005D0D0A /* WBLSFunctions.h */,
-				1B3555FD16844B6F005D0D0A /* WBLSFunctions.m */,
+				1B3555FD16844B6F005D0D0A /* WBLSFunctions.mm */,
 				1B35560216844B6F005D0D0A /* WBProcessFunctions.c */,
 				1B35560316844B6F005D0D0A /* WBProcessFunctions.h */,
 			);
@@ -958,17 +956,14 @@
 		2A37F4B8FDCFA73011CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				1B73B399214F01F6006AE849 /* Sdef Editor.xcassets */,
 				9863F7D2078B376B0022F623 /* Images */,
 				98057B2307B50A5B00C2D3C7 /* Sdef Editor Help */,
 				98A52D3F079F1F96003F17E8 /* SdefFile.icns */,
-				9868410507A30B15001694EA /* SdefEditor.icns */,
 				98DDF4AC07DC405000EF07E2 /* SdtplBundle.icns */,
 				98DA3AD208411C28003C07A3 /* SdefDictionary.icns */,
 				9803414307ADC6B00052F203 /* ScriptSuiteIcon.icns */,
 				8D15AC360486D014006FF6A4 /* Info.plist */,
-				089C165FFE840EACC02AAC07 /* InfoPlist.strings */,
-				98F15DE207A42653007A93DA /* Localizable.strings */,
-				98F15DE407A42653007A93DA /* SdefLibrary.strings */,
 				98D9B3D40876AEFB001AC5B1 /* Skeleton.sdef */,
 				98168E0007A29025002B893D /* NSCoreSuite.sdef */,
 				98168E0407A29036002B893D /* NSTextSuite.sdef */,
@@ -976,18 +971,18 @@
 				1B4D28E61796CA3D0017CCA3 /* CocoaStandard.sdef */,
 				98F940B407F889560014708A /* Templates */,
 				98EA0B8B078C883E00ECCB4B /* Sdef Tabs */,
-				1BCF18230D244AD2009CCAFB /* MainMenu.xib */,
-				1BCF18270D244B85009CCAFB /* SdefExport.xib */,
-				1BCF182F0D244C44009CCAFB /* Preferences.xib */,
-				1BCF182B0D244C0E009CCAFB /* SdefInspector.xib */,
-				1B877DB10D37E685007A59B5 /* SdefDocument.xib */,
-				1B877DB60D37E6A2007A59B5 /* SdefImporterWarning.xib */,
-				1B877DC50D37E719007A59B5 /* ImportApplicationSdef.xib */,
-				1B877DC90D37E728007A59B5 /* ImportApplicationAete.xib */,
-				1B877DD60D37E780007A59B5 /* SdtplExport.xib */,
-				1B877DDA0D37E78C007A59B5 /* SdefValidator.xib */,
-				1B877DDF0D37E7A6007A59B5 /* SdefTypesEditor.xib */,
-				1B877DE30D37E7B1007A59B5 /* SdefSymbolBrowser.xib */,
+				1B607CB4214C71DA006AE849 /* MainMenu.xib */,
+				1B607CA2214C71D9006AE849 /* ImportApplicationAete.xib */,
+				1B607CA0214C71D9006AE849 /* ImportApplicationSdef.xib */,
+				1B607CB8214C71DA006AE849 /* Preferences.xib */,
+				1B607CB0214C71D9006AE849 /* SdefDocument.xib */,
+				1B607CB2214C71D9006AE849 /* SdefExport.xib */,
+				1B607CBA214C71DA006AE849 /* SdefImporterWarning.xib */,
+				1B607CAA214C71D9006AE849 /* SdefInspector.xib */,
+				1B607C9E214C71D9006AE849 /* SdefSymbolBrowser.xib */,
+				1B607CB6214C71DA006AE849 /* SdefTypesEditor.xib */,
+				1B607CA4214C71D9006AE849 /* SdefValidator.xib */,
+				1B607CAE214C71D9006AE849 /* SdtplExport.xib */,
 			);
 			path = Resources;
 			sourceTree = "<group>";
@@ -1278,12 +1273,12 @@
 		98EA0B8B078C883E00ECCB4B /* Sdef Tabs */ = {
 			isa = PBXGroup;
 			children = (
-				1BADAC830D8BE1A30006EB32 /* SdefVerb.xib */,
-				1BADAC8B0D8BE2250006EB32 /* SdefSuite.xib */,
-				1BADAC8F0D8BE2D60006EB32 /* SdefClass.xib */,
-				1BADACA00D8BE3740006EB32 /* SdefRecord.xib */,
-				1BADACA50D8BE3B80006EB32 /* SdefDictionary.xib */,
-				1BADACA90D8BE3DA0006EB32 /* SdefEnumeration.xib */,
+				1B607CA6214C71D9006AE849 /* SdefVerb.xib */,
+				1B607CBE214C71DA006AE849 /* SdefSuite.xib */,
+				1B607CA8214C71D9006AE849 /* SdefClass.xib */,
+				1B607C9C214C71D8006AE849 /* SdefRecord.xib */,
+				1B607CBC214C71DA006AE849 /* SdefDictionary.xib */,
+				1B607CAC214C71D9006AE849 /* SdefEnumeration.xib */,
 			);
 			name = "Sdef Tabs";
 			sourceTree = "<group>";
@@ -1360,7 +1355,6 @@
 				1B3556C016844E87005D0D0A /* NSAlert+WonderBox.h in Headers */,
 				1B3556BF16844E6A005D0D0A /* NSData+WonderBox.h in Headers */,
 				1B3556C516844EEB005D0D0A /* NSTabView+WonderBox.h in Headers */,
-				1B3556B916844DD1005D0D0A /* WBAliasedApplication.h in Headers */,
 				1B3556C216844E9C005D0D0A /* WBTemplate.h in Headers */,
 				1B39DEDA168461880048F1E9 /* WBAlias.h in Headers */,
 				1B39DEDB168461930048F1E9 /* WBProcessFunctions.h in Headers */,
@@ -1371,8 +1365,8 @@
 				1B3556AD16844C2E005D0D0A /* WBWindowController.h in Headers */,
 				1B39DECB1684609E0048F1E9 /* NSImage+WonderBox.h in Headers */,
 				1B39DEE3168462640048F1E9 /* WBImageAndTextCell.h in Headers */,
+				1BFF24FD214EE210006AE849 /* WBTableView.h in Headers */,
 				1B39DEE4168462680048F1E9 /* WBTextFieldCell.h in Headers */,
-				1B39DEE51684626F0048F1E9 /* WBOutlineView.h in Headers */,
 				1B39DEE9168462970048F1E9 /* WBGeometry.h in Headers */,
 				1B3556B016844CD0005D0D0A /* NSString+WonderBox.h in Headers */,
 				1B3556AA16844C04005D0D0A /* WBExtendedTreeNode.h in Headers */,
@@ -1481,6 +1475,7 @@
 			buildPhases = (
 				984A8C4F07DB29CB00591F7A /* Headers */,
 				98F940A407F888FB0014708A /* Copy Templates */,
+				1BADECD3196071BD005A70E6 /* Copy Frameworks */,
 				8D15AC2B0486D014006FF6A4 /* Resources */,
 				8D15AC300486D014006FF6A4 /* Sources */,
 				8D15AC330486D014006FF6A4 /* Frameworks */,
@@ -1501,13 +1496,14 @@
 /* Begin PBXProject section */
 		2A37F4A9FDCFA73011CA2CEA /* Project object */ = {
 			isa = PBXProject;
+			attributes = {
+			};
 			buildConfigurationList = 98A7CBEC0855010F000D862B /* Build configuration list for PBXProject "Sdef Editor" */;
 			compatibilityVersion = "Xcode 3.1";
 			developmentRegion = English;
 			hasScannedForEncodings = 1;
 			knownRegions = (
-				en,
-				fr,
+				English,
 			);
 			mainGroup = 2A37F4AAFDCFA73011CA2CEA /* SDef Editor */;
 			projectDirPath = "";
@@ -1532,28 +1528,35 @@
 			buildActionMask = 2147483647;
 			files = (
 				9863F7A6078B2E0C0022F623 /* AddMini.tiff in Resources */,
+				1B607CC8214C71DA006AE849 /* SdefEnumeration.xib in Resources */,
+				1B607CD1214C71DA006AE849 /* SdefSuite.xib in Resources */,
 				98D5AAE7078C6FDD00DD07B7 /* Param.tiff in Resources */,
 				98A5D64807B522A00038ECC5 /* Misc.tiff in Resources */,
 				9863F7A7078B2E0C0022F623 /* RemoveMini.tiff in Resources */,
 				98D363A8078A7E8C00669D72 /* Type.tiff in Resources */,
 				98D363AD078A7E8C00669D72 /* Enum.tiff in Resources */,
 				98D363AB078A7E8C00669D72 /* Function.tiff in Resources */,
+				1B607CC2214C71DA006AE849 /* ImportApplicationSdef.xib in Resources */,
 				98D5AABE078C6EA700DD07B7 /* Member.tiff in Resources */,
+				1B607CCB214C71DA006AE849 /* SdefExport.xib in Resources */,
 				98D363AA078A7E8C00669D72 /* Property.tiff in Resources */,
 				9863F7A8078B2E0C0022F623 /* RemoveMini_Pressed.tiff in Resources */,
+				1B607CC7214C71DA006AE849 /* SdefInspector.xib in Resources */,
 				9863F7A9078B2E0C0022F623 /* AddMini_Pressed.tiff in Resources */,
+				1B607CD0214C71DA006AE849 /* SdefDictionary.xib in Resources */,
 				98D363A7078A7E8C00669D72 /* Class.tiff in Resources */,
 				98D363A9078A7E8C00669D72 /* Folder.tiff in Resources */,
 				9820CD280793467D008D397F /* Suite.tiff in Resources */,
+				1B607CC0214C71DA006AE849 /* SdefRecord.xib in Resources */,
+				1B73B39A214F01F6006AE849 /* Sdef Editor.xcassets in Resources */,
 				9820CD270793467D008D397F /* Dictionary.tiff in Resources */,
-				8D15AC2F0486D014006FF6A4 /* InfoPlist.strings in Resources */,
-				98F15DE607A42653007A93DA /* Localizable.strings in Resources */,
-				98F15DE707A42653007A93DA /* SdefLibrary.strings in Resources */,
 				98168E0107A29025002B893D /* NSCoreSuite.sdef in Resources */,
 				98168E0507A29036002B893D /* NSTextSuite.sdef in Resources */,
 				98A52D40079F1F96003F17E8 /* SdefFile.icns in Resources */,
-				9868410607A30B15001694EA /* SdefEditor.icns in Resources */,
 				9803414407ADC6B00052F203 /* ScriptSuiteIcon.icns in Resources */,
+				1B607CC4214C71DA006AE849 /* SdefValidator.xib in Resources */,
+				1B607CC9214C71DA006AE849 /* SdtplExport.xib in Resources */,
+				1B607CC3214C71DA006AE849 /* ImportApplicationAete.xib in Resources */,
 				98057B5907B50A5B00C2D3C7 /* Sdef Editor Help in Resources */,
 				98DDF4AD07DC405000EF07E2 /* SdtplBundle.icns in Resources */,
 				98DDCFE207F1FA0200541DFA /* EditSymbol.tiff in Resources */,
@@ -1561,37 +1564,27 @@
 				980AC38108327EF2002EF5F5 /* Value.tiff in Resources */,
 				980AC38308327EFB002EF5F5 /* Record.tiff in Resources */,
 				98E316680840961F003EC9D5 /* EditType.tiff in Resources */,
+				1B607CCC214C71DA006AE849 /* MainMenu.xib in Resources */,
+				1B607CCA214C71DA006AE849 /* SdefDocument.xib in Resources */,
 				98E3176E0840B5B0003EC9D5 /* AppleScriptKit.sdef in Resources */,
 				98E98CE40840D96F0093BA77 /* Element.tiff in Resources */,
+				1B607CC1214C71DA006AE849 /* SdefSymbolBrowser.xib in Resources */,
 				98DA3AD308411C28003C07A3 /* SdefDictionary.icns in Resources */,
 				98D9B3D50876AEFB001AC5B1 /* Skeleton.sdef in Resources */,
+				1B607CCE214C71DA006AE849 /* Preferences.xib in Resources */,
 				9818ECAF0BD57C230079867A /* Class-Extension.tiff in Resources */,
 				985E08150BDC0C13005BD3C3 /* valid-warning.tiff in Resources */,
+				1B607CC6214C71DA006AE849 /* SdefClass.xib in Resources */,
 				985E08160BDC0C13005BD3C3 /* valid-note.tiff in Resources */,
 				985E08170BDC0C13005BD3C3 /* valid-error.tiff in Resources */,
 				98CFED520BE34D9700567DC6 /* Content.tiff in Resources */,
 				1B5ECF320CD62725007B8226 /* XInclude.tiff in Resources */,
-				1BCF18250D244AD2009CCAFB /* MainMenu.xib in Resources */,
-				1BCF18290D244B85009CCAFB /* SdefExport.xib in Resources */,
-				1BCF182D0D244C0E009CCAFB /* SdefInspector.xib in Resources */,
-				1BCF18310D244C44009CCAFB /* Preferences.xib in Resources */,
-				1B877DB30D37E685007A59B5 /* SdefDocument.xib in Resources */,
-				1B877DB80D37E6A2007A59B5 /* SdefImporterWarning.xib in Resources */,
-				1B877DC70D37E719007A59B5 /* ImportApplicationSdef.xib in Resources */,
-				1B877DCB0D37E728007A59B5 /* ImportApplicationAete.xib in Resources */,
-				1B877DD80D37E780007A59B5 /* SdtplExport.xib in Resources */,
-				1B877DDC0D37E78C007A59B5 /* SdefValidator.xib in Resources */,
-				1B877DE10D37E7A6007A59B5 /* SdefTypesEditor.xib in Resources */,
-				1B877DE50D37E7B1007A59B5 /* SdefSymbolBrowser.xib in Resources */,
-				1BADAC850D8BE1A30006EB32 /* SdefVerb.xib in Resources */,
-				1BADAC8D0D8BE2250006EB32 /* SdefSuite.xib in Resources */,
-				1BADAC910D8BE2D60006EB32 /* SdefClass.xib in Resources */,
-				1BADACA20D8BE3740006EB32 /* SdefRecord.xib in Resources */,
-				1BADACA70D8BE3B80006EB32 /* SdefDictionary.xib in Resources */,
-				1BADACAB0D8BE3DA0006EB32 /* SdefEnumeration.xib in Resources */,
+				1B607CCD214C71DA006AE849 /* SdefTypesEditor.xib in Resources */,
 				1B39DEF6168462C80048F1E9 /* WBHSplitBar.tiff in Resources */,
 				1B39DEF7168462C80048F1E9 /* WBSplitDot.tiff in Resources */,
 				1B39DEF8168462C80048F1E9 /* WBVSplitBar.tiff in Resources */,
+				1B607CCF214C71DA006AE849 /* SdefImporterWarning.xib in Resources */,
+				1B607CC5214C71DA006AE849 /* SdefVerb.xib in Resources */,
 				1BB5C6C91798357C004058BA /* SdefLogWindow.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1603,6 +1596,39 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1BADECC219607157005A70E6 /* WBAlias.m in Sources */,
+				1BADECC119607157005A70E6 /* WBOutlineViewController.m in Sources */,
+				1BADECBA19607157005A70E6 /* NSArrayController+WonderBox.m in Sources */,
+				1BADECCD19607157005A70E6 /* WBCollapseViewItem.m in Sources */,
+				1BADECC719607157005A70E6 /* WBLSFunctions.mm in Sources */,
+				1BADECC519607157005A70E6 /* WBExtendedTreeNode.m in Sources */,
+				1BADECB819607157005A70E6 /* NSImage+WonderBox.m in Sources */,
+				1BADECB419607157005A70E6 /* WBTemplateParser.m in Sources */,
+				1BADECCC19607157005A70E6 /* WBCollapseViewInternal.m in Sources */,
+				1BADECB319607157005A70E6 /* WBTemplate.m in Sources */,
+				1BADECBF19607157005A70E6 /* WBWindowController.m in Sources */,
+				1BADECC319607157005A70E6 /* WBApplication.m in Sources */,
+				1BFF24FE214EE216006AE849 /* WBTableView.m in Sources */,
+				1BADECCA19607157005A70E6 /* WBImageAndTextCell.m in Sources */,
+				1BADECB619607157005A70E6 /* WBSplitview.m in Sources */,
+				1BADECC619607157005A70E6 /* WBProcessFunctions.c in Sources */,
+				1BADECB019607157005A70E6 /* WBFunctions.m in Sources */,
+				1BADECB119607157005A70E6 /* WBFSFunctions.mm in Sources */,
+				1BADECCE19607157005A70E6 /* WBGradient.m in Sources */,
+				1BADECB919607157005A70E6 /* NSAlert+WonderBox.m in Sources */,
+				1BADECB519607157005A70E6 /* WBXMLTemplate.m in Sources */,
+				1BADECCB19607157005A70E6 /* WBCollapseView.m in Sources */,
+				1BADECC019607157005A70E6 /* WBTableDataSource.m in Sources */,
+				1BADECBE19607157005A70E6 /* WBUITreeNode.m in Sources */,
+				1BADECB719607157005A70E6 /* WBTreeNode.m in Sources */,
+				1BADECC919607157005A70E6 /* WBTextFieldCell.m in Sources */,
+				1BADECD119607157005A70E6 /* WBGeometry.m in Sources */,
+				1BADECBD19607157005A70E6 /* NSString+WonderBox.m in Sources */,
+				1BADECCF19607157005A70E6 /* WBInterpolationFunction.m in Sources */,
+				1BADECBB19607157005A70E6 /* NSTabView+WonderBox.m in Sources */,
+				1BADECBC19607157005A70E6 /* NSData+WonderBox.m in Sources */,
+				1BADECD019607157005A70E6 /* WBCGFunctions.mm in Sources */,
+				1BADECB219607157005A70E6 /* WBAEFunctions.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1689,40 +1715,6 @@
 				1B73ECA70CD7A73400FC60B2 /* SdefParserInternal.m in Sources */,
 				1BC332C70CD894C3009109F0 /* SdefXInclude.m in Sources */,
 				1BDDBEFD0FACBB8B00EECDEE /* ASDictionary.m in Sources */,
-				1B39DEBF16845F830048F1E9 /* WBFunctions.m in Sources */,
-				1B39DEC116845F980048F1E9 /* WBFSFunctions.m in Sources */,
-				1B39DEC216845FA00048F1E9 /* WBAEFunctions.c in Sources */,
-				1B39DEC316845FF30048F1E9 /* WBTemplate.m in Sources */,
-				1B39DEC416845FF30048F1E9 /* WBTemplateParser.m in Sources */,
-				1B39DEC516845FF30048F1E9 /* WBXMLTemplate.m in Sources */,
-				1B39DEC6168460220048F1E9 /* WBSplitview.m in Sources */,
-				1B39DECA1684607A0048F1E9 /* WBTreeNode.m in Sources */,
-				1B39DECC168460A10048F1E9 /* NSImage+WonderBox.m in Sources */,
-				1B39DECD168460C10048F1E9 /* NSAlert+WonderBox.m in Sources */,
-				1B39DECE168460C70048F1E9 /* NSArrayController+WonderBox.m in Sources */,
-				1B39DECF168460D50048F1E9 /* NSTabView+WonderBox.m in Sources */,
-				1B39DED0168460E00048F1E9 /* NSData+WonderBox.m in Sources */,
-				1B39DED1168460EA0048F1E9 /* NSString+WonderBox.m in Sources */,
-				1B39DED2168461050048F1E9 /* WBUITreeNode.m in Sources */,
-				1B39DED3168461080048F1E9 /* WBWindowController.m in Sources */,
-				1B39DED4168461110048F1E9 /* WBTableDataSource.m in Sources */,
-				1B39DED5168461630048F1E9 /* WBOutlineViewController.m in Sources */,
-				1B39DED6168461700048F1E9 /* WBAlias.m in Sources */,
-				1B39DED7168461720048F1E9 /* WBApplication.m in Sources */,
-				1B39DED8168461750048F1E9 /* WBAliasedApplication.m in Sources */,
-				1B39DED9168461780048F1E9 /* WBExtendedTreeNode.m in Sources */,
-				1B39DEDC168461950048F1E9 /* WBProcessFunctions.c in Sources */,
-				1B39DEDD168461A70048F1E9 /* WBLSFunctions.m in Sources */,
-				1B39DEE01684624A0048F1E9 /* WBOutlineView.m in Sources */,
-				1B39DEE1168462520048F1E9 /* WBTextFieldCell.m in Sources */,
-				1B39DEE2168462550048F1E9 /* WBImageAndTextCell.m in Sources */,
-				1BB675E1168EE1EB00B06EFA /* WBCollapseView.m in Sources */,
-				1BB675E3168EE1EB00B06EFA /* WBCollapseViewInternal.m in Sources */,
-				1BB675E5168EE1EB00B06EFA /* WBCollapseViewItem.m in Sources */,
-				1BB675EF168EE24100B06EFA /* WBGradient.m in Sources */,
-				1BB675F4168EE25C00B06EFA /* WBInterpolationFunction.m in Sources */,
-				1B814DD6176BA39F0060B7F8 /* WBCGFunctions.mm in Sources */,
-				1B814DD7176BA3A60060B7F8 /* WBGeometry.m in Sources */,
 				1B86FF521797F1F9007C25DC /* SdefAccessGroup.m in Sources */,
 				1B86FF561797F95D007C25DC /* SdefXMLAccessGroup.m in Sources */,
 				1BB5C6C81798357C004058BA /* SdefLogWindowController.m in Sources */,
@@ -1740,173 +1732,148 @@
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
-		089C165FFE840EACC02AAC07 /* InfoPlist.strings */ = {
+		1B607C9C214C71D8006AE849 /* SdefRecord.xib */ = {
 			isa = PBXVariantGroup;
 			children = (
-				089C1660FE840EACC02AAC07 /* English */,
-			);
-			name = InfoPlist.strings;
-			sourceTree = "<group>";
-		};
-		1B877DB10D37E685007A59B5 /* SdefDocument.xib */ = {
-			isa = PBXVariantGroup;
-			children = (
-				1B877DB20D37E685007A59B5 /* English */,
-			);
-			name = SdefDocument.xib;
-			sourceTree = "<group>";
-		};
-		1B877DB60D37E6A2007A59B5 /* SdefImporterWarning.xib */ = {
-			isa = PBXVariantGroup;
-			children = (
-				1B877DB70D37E6A2007A59B5 /* English */,
-			);
-			name = SdefImporterWarning.xib;
-			sourceTree = "<group>";
-		};
-		1B877DC50D37E719007A59B5 /* ImportApplicationSdef.xib */ = {
-			isa = PBXVariantGroup;
-			children = (
-				1B877DC60D37E719007A59B5 /* English */,
-			);
-			name = ImportApplicationSdef.xib;
-			sourceTree = "<group>";
-		};
-		1B877DC90D37E728007A59B5 /* ImportApplicationAete.xib */ = {
-			isa = PBXVariantGroup;
-			children = (
-				1B877DCA0D37E728007A59B5 /* English */,
-			);
-			name = ImportApplicationAete.xib;
-			sourceTree = "<group>";
-		};
-		1B877DD60D37E780007A59B5 /* SdtplExport.xib */ = {
-			isa = PBXVariantGroup;
-			children = (
-				1B877DD70D37E780007A59B5 /* English */,
-			);
-			name = SdtplExport.xib;
-			sourceTree = "<group>";
-		};
-		1B877DDA0D37E78C007A59B5 /* SdefValidator.xib */ = {
-			isa = PBXVariantGroup;
-			children = (
-				1B877DDB0D37E78C007A59B5 /* English */,
-			);
-			name = SdefValidator.xib;
-			sourceTree = "<group>";
-		};
-		1B877DDF0D37E7A6007A59B5 /* SdefTypesEditor.xib */ = {
-			isa = PBXVariantGroup;
-			children = (
-				1B877DE00D37E7A6007A59B5 /* English */,
-			);
-			name = SdefTypesEditor.xib;
-			sourceTree = "<group>";
-		};
-		1B877DE30D37E7B1007A59B5 /* SdefSymbolBrowser.xib */ = {
-			isa = PBXVariantGroup;
-			children = (
-				1B877DE40D37E7B1007A59B5 /* English */,
-			);
-			name = SdefSymbolBrowser.xib;
-			path = ..;
-			sourceTree = "<group>";
-		};
-		1BADAC830D8BE1A30006EB32 /* SdefVerb.xib */ = {
-			isa = PBXVariantGroup;
-			children = (
-				1BADAC840D8BE1A30006EB32 /* English */,
-			);
-			name = SdefVerb.xib;
-			sourceTree = "<group>";
-		};
-		1BADAC8B0D8BE2250006EB32 /* SdefSuite.xib */ = {
-			isa = PBXVariantGroup;
-			children = (
-				1BADAC8C0D8BE2250006EB32 /* English */,
-			);
-			name = SdefSuite.xib;
-			sourceTree = "<group>";
-		};
-		1BADAC8F0D8BE2D60006EB32 /* SdefClass.xib */ = {
-			isa = PBXVariantGroup;
-			children = (
-				1BADAC900D8BE2D60006EB32 /* English */,
-			);
-			name = SdefClass.xib;
-			sourceTree = "<group>";
-		};
-		1BADACA00D8BE3740006EB32 /* SdefRecord.xib */ = {
-			isa = PBXVariantGroup;
-			children = (
-				1BADACA10D8BE3740006EB32 /* English */,
+				1B607C9D214C71D8006AE849 /* English */,
 			);
 			name = SdefRecord.xib;
 			sourceTree = "<group>";
 		};
-		1BADACA50D8BE3B80006EB32 /* SdefDictionary.xib */ = {
+		1B607C9E214C71D9006AE849 /* SdefSymbolBrowser.xib */ = {
 			isa = PBXVariantGroup;
 			children = (
-				1BADACA60D8BE3B80006EB32 /* English */,
+				1B607C9F214C71D9006AE849 /* English */,
 			);
-			name = SdefDictionary.xib;
+			name = SdefSymbolBrowser.xib;
 			sourceTree = "<group>";
 		};
-		1BADACA90D8BE3DA0006EB32 /* SdefEnumeration.xib */ = {
+		1B607CA0214C71D9006AE849 /* ImportApplicationSdef.xib */ = {
 			isa = PBXVariantGroup;
 			children = (
-				1BADACAA0D8BE3DA0006EB32 /* English */,
+				1B607CA1214C71D9006AE849 /* English */,
 			);
-			name = SdefEnumeration.xib;
+			name = ImportApplicationSdef.xib;
 			sourceTree = "<group>";
 		};
-		1BCF18230D244AD2009CCAFB /* MainMenu.xib */ = {
+		1B607CA2214C71D9006AE849 /* ImportApplicationAete.xib */ = {
 			isa = PBXVariantGroup;
 			children = (
-				1BCF18240D244AD2009CCAFB /* English */,
+				1B607CA3214C71D9006AE849 /* English */,
 			);
-			name = MainMenu.xib;
+			name = ImportApplicationAete.xib;
 			sourceTree = "<group>";
 		};
-		1BCF18270D244B85009CCAFB /* SdefExport.xib */ = {
+		1B607CA4214C71D9006AE849 /* SdefValidator.xib */ = {
 			isa = PBXVariantGroup;
 			children = (
-				1BCF18280D244B85009CCAFB /* English */,
+				1B607CA5214C71D9006AE849 /* English */,
 			);
-			name = SdefExport.xib;
+			name = SdefValidator.xib;
 			sourceTree = "<group>";
 		};
-		1BCF182B0D244C0E009CCAFB /* SdefInspector.xib */ = {
+		1B607CA6214C71D9006AE849 /* SdefVerb.xib */ = {
 			isa = PBXVariantGroup;
 			children = (
-				1BCF182C0D244C0E009CCAFB /* English */,
+				1B607CA7214C71D9006AE849 /* English */,
+			);
+			name = SdefVerb.xib;
+			sourceTree = "<group>";
+		};
+		1B607CA8214C71D9006AE849 /* SdefClass.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				1B607CA9214C71D9006AE849 /* English */,
+			);
+			name = SdefClass.xib;
+			sourceTree = "<group>";
+		};
+		1B607CAA214C71D9006AE849 /* SdefInspector.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				1B607CAB214C71D9006AE849 /* English */,
 			);
 			name = SdefInspector.xib;
 			sourceTree = "<group>";
 		};
-		1BCF182F0D244C44009CCAFB /* Preferences.xib */ = {
+		1B607CAC214C71D9006AE849 /* SdefEnumeration.xib */ = {
 			isa = PBXVariantGroup;
 			children = (
-				1BCF18300D244C44009CCAFB /* English */,
+				1B607CAD214C71D9006AE849 /* English */,
+			);
+			name = SdefEnumeration.xib;
+			sourceTree = "<group>";
+		};
+		1B607CAE214C71D9006AE849 /* SdtplExport.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				1B607CAF214C71D9006AE849 /* English */,
+			);
+			name = SdtplExport.xib;
+			sourceTree = "<group>";
+		};
+		1B607CB0214C71D9006AE849 /* SdefDocument.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				1B607CB1214C71D9006AE849 /* English */,
+			);
+			name = SdefDocument.xib;
+			sourceTree = "<group>";
+		};
+		1B607CB2214C71D9006AE849 /* SdefExport.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				1B607CB3214C71D9006AE849 /* English */,
+			);
+			name = SdefExport.xib;
+			sourceTree = "<group>";
+		};
+		1B607CB4214C71DA006AE849 /* MainMenu.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				1B607CB5214C71DA006AE849 /* English */,
+			);
+			name = MainMenu.xib;
+			sourceTree = "<group>";
+		};
+		1B607CB6214C71DA006AE849 /* SdefTypesEditor.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				1B607CB7214C71DA006AE849 /* English */,
+			);
+			name = SdefTypesEditor.xib;
+			sourceTree = "<group>";
+		};
+		1B607CB8214C71DA006AE849 /* Preferences.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				1B607CB9214C71DA006AE849 /* English */,
 			);
 			name = Preferences.xib;
 			sourceTree = "<group>";
 		};
-		98F15DE207A42653007A93DA /* Localizable.strings */ = {
+		1B607CBA214C71DA006AE849 /* SdefImporterWarning.xib */ = {
 			isa = PBXVariantGroup;
 			children = (
-				98F15DE307A42653007A93DA /* English */,
+				1B607CBB214C71DA006AE849 /* English */,
 			);
-			name = Localizable.strings;
+			name = SdefImporterWarning.xib;
 			sourceTree = "<group>";
 		};
-		98F15DE407A42653007A93DA /* SdefLibrary.strings */ = {
+		1B607CBC214C71DA006AE849 /* SdefDictionary.xib */ = {
 			isa = PBXVariantGroup;
 			children = (
-				98F15DE507A42653007A93DA /* English */,
+				1B607CBD214C71DA006AE849 /* English */,
 			);
-			name = SdefLibrary.strings;
+			name = SdefDictionary.xib;
+			sourceTree = "<group>";
+		};
+		1B607CBE214C71DA006AE849 /* SdefSuite.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				1B607CBF214C71DA006AE849 /* English */,
+			);
+			name = SdefSuite.xib;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */
@@ -1914,24 +1881,36 @@
 /* Begin XCBuildConfiguration section */
 		1B35557A16844B02005D0D0A /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 1B35556316844A90005D0D0A /* framework.xcconfig */;
 			buildSettings = {
+				CODE_SIGN_IDENTITY = "Mac Developer";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 3DT6DNJE39;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				FRAMEWORK_VERSION = A;
 				INFOPLIST_FILE = WonderBox/Info.plist;
+				PRODUCT_BUNDLE_IDENTIFIER = com.xenonium.WonderBox;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				WRAPPER_EXTENSION = framework;
 			};
 			name = Debug;
 		};
 		1B35557B16844B02005D0D0A /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 1B35556316844A90005D0D0A /* framework.xcconfig */;
 			buildSettings = {
+				CODE_SIGN_IDENTITY = "Mac Developer";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 3DT6DNJE39;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				FRAMEWORK_VERSION = A;
 				INFOPLIST_FILE = WonderBox/Info.plist;
+				PRODUCT_BUNDLE_IDENTIFIER = com.xenonium.WonderBox;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				WRAPPER_EXTENSION = framework;
 			};
 			name = Release;
@@ -1941,7 +1920,6 @@
 			baseConfigurationReference = 1B35555E16844A90005D0D0A /* release.xcconfig */;
 			buildSettings = {
 				CLANG_WARN_DOCUMENTATION_COMMENTS = NO;
-				WONDERBOX = "";
 			};
 			name = Release;
 		};
@@ -1949,11 +1927,17 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 1B35556016844A90005D0D0A /* application.xcconfig */;
 			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_IDENTITY = "Mac Developer";
+				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 266;
+				DEVELOPMENT_TEAM = 3DT6DNJE39;
 				HEADER_SEARCH_PATHS = /usr/include/libxml2;
 				INFOPLIST_FILE = Resources/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @loader_path/../Frameworks";
 				OTHER_LDFLAGS = "-lxml2";
-				PRODUCT_NAME = "Sdef Editor";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 			};
 			name = Release;
 		};
@@ -1961,11 +1945,17 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 1B35556016844A90005D0D0A /* application.xcconfig */;
 			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_IDENTITY = "Mac Developer";
+				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 266;
+				DEVELOPMENT_TEAM = 3DT6DNJE39;
 				HEADER_SEARCH_PATHS = /usr/include/libxml2;
 				INFOPLIST_FILE = Resources/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @loader_path/../Frameworks";
 				OTHER_LDFLAGS = "-lxml2";
-				PRODUCT_NAME = "Sdef Editor";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 			};
 			name = Debug;
 		};
@@ -1974,7 +1964,6 @@
 			baseConfigurationReference = 1B35555C16844A90005D0D0A /* debug.xcconfig */;
 			buildSettings = {
 				CLANG_WARN_DOCUMENTATION_COMMENTS = NO;
-				WONDERBOX = "";
 			};
 			name = Debug;
 		};

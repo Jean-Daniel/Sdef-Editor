@@ -11,6 +11,7 @@
 
 #import "SdefType.h"
 #import "SdefObjects.h"
+#import "SdefAccessGroup.h"
 #import "SdefDocumentation.h"
 #import "SdefImplementation.h"
 
@@ -144,7 +145,6 @@
           [meta deleteCharactersInRange:NSMakeRange([meta length] - 1, 1)];
           [node setMeta:meta forKey:@"xrefs"];
         }
-        [meta release];
       }
     }
     
@@ -182,23 +182,23 @@
         ok = [scanner scanString:@":" intoString:NULL];
       if (ok) {
         do {
-          NSInteger hidden;
           NSString *target;
+          NSInteger hidden = 0;
           ok = [scanner scanUpToString:@"," intoString:&target];
-          if (ok) ok = [scanner scanString:@"," intoString:NULL];
-          if (ok) ok = [scanner scanInteger:&hidden];
+          if (ok)
+            ok = [scanner scanString:@"," intoString:NULL];
+          if (ok)
+            ok = [scanner scanInteger:&hidden];
           if (ok) {
             SdefXRef *ref = [[SdefXRef alloc] init];
             [ref setTarget:target];
             [ref setHidden:hidden];
             [self addXRef:ref];
-            [ref release];
           }
           /* advance to next */
           if (![scanner isAtEnd]) ok = [scanner scanString:@"," intoString:NULL];
         } while (ok);
       }
-      [scanner release];
     }
   }
 }
@@ -263,7 +263,6 @@
           }
         }
         [node setAttribute:string forKey:@"type"];
-        [string release];
       }
     } else {
       if ([self hasCustomType]) {

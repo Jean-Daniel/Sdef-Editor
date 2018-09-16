@@ -6,6 +6,8 @@
  *  Copyright © 2006 - 2007 Shadow Lab. All rights reserved.
  */
 
+#import "SdefBase.h"
+
 SPX_PRIVATE
 NSString * const ScriptingDefinitionFileType;
 SPX_PRIVATE
@@ -20,7 +22,7 @@ SPX_PRIVATE
 const OSType kCocoaSuiteDefinitionHFSType;
 
 @class SdefImporter;
-@interface SdefEditor : NSObject {
+@interface SdefEditor : NSObject<NSApplicationDelegate> {
 
 }
 

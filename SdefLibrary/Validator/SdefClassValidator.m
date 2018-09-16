@@ -8,6 +8,7 @@
 
 #import "SdefValidatorBase.h"
 #import "SdefClassManager.h"
+#import "SdefContents.h"
 #import "SdefClass.h"
 
 @implementation SdefClass (SdefValidator)

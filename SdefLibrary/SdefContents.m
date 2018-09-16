@@ -42,10 +42,6 @@
   return @"Content";
 }
 
-- (void)dealloc {
-  [super dealloc];
-}
-
 #pragma mark -
 - (void)sdefInit {
   [super sdefInit];

@@ -30,8 +30,6 @@
 - (void)dealloc {
   [warningsTable setDelegate:nil];
   [warningsTable setDataSource:nil];
-  [sd_warnings release];
-  [super dealloc];
 }
 
 #pragma mark -
@@ -48,8 +46,7 @@
 
 - (void)setWarnings:(NSArray *)warnings {
   if (sd_warnings != warnings) {
-    [sd_warnings release];
-    sd_warnings = [warnings retain];
+    sd_warnings = warnings;
     [warningsTable reloadData];
   }
 }

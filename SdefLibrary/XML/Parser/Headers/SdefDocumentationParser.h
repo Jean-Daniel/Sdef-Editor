@@ -14,15 +14,15 @@
   @private
   NSInteger sd_html;
   SdefDocumentation *sd_doc;
-  CFMutableStringRef sd_content;
+  NSMutableString *sd_content;
 }
 
 - (id)initWithDocumentation:(SdefDocumentation *)doc;
 
 - (void)close;
 
-- (void *)parser:(SdefDOMParser *)parser createStructureForNode:(xmlNodePtr)node;
-- (void)parser:(SdefDOMParser *)parser addChild:(void *)child toStructure:(void *)parent;
-- (void)parser:(SdefDOMParser *)parser endStructure:(void *)structure;
+- (SdefXMLStructure)parser:(SdefDOMParser *)parser createStructureForNode:(xmlNodePtr)node;
+- (void)parser:(SdefDOMParser *)parser addChild:(SdefXMLStructure)child toStructure:(SdefXMLStructure)parent;
+- (void)parser:(SdefDOMParser *)parser endStructure:(SdefXMLStructure)structure;
 
 @end
