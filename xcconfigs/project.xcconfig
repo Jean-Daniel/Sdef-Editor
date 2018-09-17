@@ -2,3 +2,5 @@
 #include "../hadron/xcconfigs/os/yosemite.xcconfig"
 
 HADRON_PATH = hadron
+
+WARNING_CFLAGS = $(inherited) -Wno-old-style-cast

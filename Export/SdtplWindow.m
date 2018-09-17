@@ -139,7 +139,7 @@
   [panel setNameFieldStringValue:[[sd_document displayName] stringByDeletingPathExtension]];
   [panel beginSheetModalForWindow:[[sd_document documentWindow] window]
                 completionHandler:^(NSInteger result) {
-                  if (NSOKButton == result) {
+                  if (NSModalResponseOK == result) {
                     NSURL *file = [panel URL];
                     @try {
                       [generator writeDictionary:[self->sd_document dictionary] toFile:[file path]];
@@ -181,7 +181,7 @@
   [openPanel setTreatsFilePackagesAsDirectories:NO];
   if ([openPanel runModalForDirectory:nil
                                  file:nil
-                                types:[NSArray arrayWithObject:@"sdtpl"]] == NSOKButton) {
+                                types:[NSArray arrayWithObject:@"sdtpl"]] == NSModalResponseOK) {
     NSString *file = [[openPanel filenames] objectAtIndex:0];
     SdefTemplate *tpl = [[SdefTemplate alloc] initWithPath:file];
     if (tpl) {

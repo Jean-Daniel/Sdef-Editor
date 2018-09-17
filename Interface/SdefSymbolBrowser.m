@@ -371,7 +371,7 @@ BOOL SdefSearchFilter(NSString *search, SdefObject *object, SdefSearchField fiel
 }
 
 - (NSArray *)toolbarDefaultItemIdentifiers:(NSToolbar *)toolbar {
-  return [NSArray arrayWithObjects:@"SdefToggleEditSymbolDrawer", NSToolbarFlexibleSpaceItemIdentifier, @"SdefSearchFieldToolbarItem", nil];
+  return @[@"SdefToggleEditSymbolDrawer", NSToolbarFlexibleSpaceItemIdentifier, @"SdefSearchFieldToolbarItem"];
 }
 
 - (NSArray *)toolbarAllowedItemIdentifiers:(NSToolbar *)toolbar {

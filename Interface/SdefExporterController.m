@@ -72,34 +72,36 @@ static NSString *SystemMajorVersion(void) {
   [openPanel setAllowsMultipleSelection:NO];
   [openPanel setTreatsFilePackagesAsDirectories:YES];
   [openPanel beginSheetModalForWindow:[[sd_document documentWindow] window]
-                    completionHandler:^(NSInteger code) {
-                      if ((code == NSOKButton) && ([[openPanel URLs] count] > 0)) {
+                    completionHandler:^(NSModalResponse code) {
+                      if ((code == NSModalResponseOK) && ([[openPanel URLs] count] > 0)) {
                         SdefProcessor *proc = [[SdefProcessor alloc] initWithSdefDocument:[self sdefDocument]];
                         [proc setOutput:[[[openPanel URLs] objectAtIndex:0] path]];
                         
                         NSMutableArray *defs = [[NSMutableArray alloc] init];
-                        if ([[includes arrangedObjects] count]) {
-                          id item;
-                          id items = [[includes arrangedObjects] objectEnumerator];
-                          while (item = [items nextObject]) {
-                            [defs addObject:[item valueForKey:@"path"]];
-                          }
+                        for (id item in self->includes.arrangedObjects) {
+                          [defs addObject:[item valueForKey:@"path"]];
                         }
-                        if (includeCore) [defs addObject:[[NSBundle mainBundle] pathForResource:@"NSCoreSuite" ofType:@"sdef"]];
-                        if (includeText) [defs addObject:[[NSBundle mainBundle] pathForResource:@"NSTextSuite" ofType:@"sdef"]];
+                        if (self->includeCore)
+                          [defs addObject:[[NSBundle mainBundle] pathForResource:@"NSCoreSuite" ofType:@"sdef"]];
+                        if (self->includeText)
+                          [defs addObject:[[NSBundle mainBundle] pathForResource:@"NSTextSuite" ofType:@"sdef"]];
                         
                         if ([defs count])
                           [proc setIncludes:defs];
                         
                         SdefProcessorFormat format = 0;
-                        if (resourceFormat || rsrcFormat) format |= kSdefResourceFormat;
-                        if (cocoaFormat) format |= (kSdefScriptSuiteFormat | kSdefScriptTerminologyFormat);
-                        if (sbmFormat) format |= kSdefScriptBridgeImplementationFormat;
-                        if (sbhFormat) format |= kSdefScriptBridgeHeaderFormat;
+                        if (self->resourceFormat || self->rsrcFormat)
+                          format |= kSdefResourceFormat;
+                        if (self->cocoaFormat)
+                          format |= (kSdefScriptSuiteFormat | kSdefScriptTerminologyFormat);
+                        if (self->sbmFormat)
+                          format |= kSdefScriptBridgeImplementationFormat;
+                        if (self->sbhFormat)
+                          format |= kSdefScriptBridgeHeaderFormat;
                         
                         [proc setFormat:format];
                         
-                        [proc setVersion:sd_version ? : SystemMajorVersion()];
+                        [proc setVersion:self->sd_version ? : SystemMajorVersion()];
                         @try {
                           NSString *result = [proc process];
                           if (result) {
@@ -113,9 +115,9 @@ static NSString *SystemMajorVersion(void) {
 //                                            @"%@",
 //                                            NSLocalizedString(@"OK", @"Default Button"), nil, nil, result);
                           }
-                          if (rsrcFormat) {
+                          if (self->rsrcFormat) {
                             [self compileResourceFile:[proc output]];
-                            if (!resourceFormat) {
+                            if (!self->resourceFormat) {
                               [[NSFileManager defaultManager] removeItemAtPath:[[proc output] stringByAppendingPathComponent:@"Scripting.r"] error:NULL];
                             }
                           }
@@ -212,9 +214,11 @@ static NSString *SystemMajorVersion(void) {
   // The path to the binary is the first argument that was passed in
 	rezTool = [[NSUserDefaults standardUserDefaults] stringForKey:@"SdefRezToolPath"];
 	if (rezTool && ![[NSFileManager defaultManager] fileExistsAtPath:rezTool]) {
-		NSRunAlertPanel(@"Rez not found", @"Set the Rez tool path in Sdef Editor Preferences", @"OK", nil, nil);
+    NSAlert *alert = [[NSAlert alloc] init];
+    alert.messageText = @"Rez tool not found";
+    alert.informativeText = @"Set the Rez tool path in Sdef Editor Preferences";
+    [alert runModal];
 	} else {
-
 		NSTask *rez = [[NSTask alloc] init];
     NSMutableArray *args = [NSMutableArray array];
     if (rezTool) {
@@ -239,10 +243,10 @@ static NSString *SystemMajorVersion(void) {
   [openPanel setCanChooseDirectories:NO];
   [openPanel setAllowsMultipleSelection:YES];
   [openPanel setTreatsFilePackagesAsDirectories:YES];
-  [openPanel setAllowedFileTypes:[NSArray arrayWithObjects:@"sdef", ScriptingDefinitionFileUTI,
-                                  NSFileTypeForHFSTypeCode(kScriptingDefinitionHFSType), nil]];
+  [openPanel setAllowedFileTypes:@[@"sdef", ScriptingDefinitionFileUTI,
+                                  NSFileTypeForHFSTypeCode(kScriptingDefinitionHFSType)]];
   switch ([openPanel runModal]) {
-    case NSCancelButton:
+    case NSModalResponseCancel:
       return;
   }
   for (NSURL *file in [openPanel URLs]) {

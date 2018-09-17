@@ -14,7 +14,7 @@ NSString *SdefSaveDocToolbarItemIdentifier = @"org.shadowlab.sdef.toolbar.save";
 NSString *SdefOpenReferenceToolbarItemIdentifier = @"org.shadowlab.sdef.toolbar.reference";
 
 - (NSArray *)toolbarAllowedItemIdentifiers: (NSToolbar *) toolbar {
-  return [NSArray arrayWithObjects: SdefSaveDocToolbarItemIdentifier,
+  return @[SdefSaveDocToolbarItemIdentifier,
     SdefOpenReferenceToolbarItemIdentifier,
     //NSToolbarPrintItemIdentifier,
     //NSToolbarShowColorsItemIdentifier,
@@ -22,15 +22,15 @@ NSString *SdefOpenReferenceToolbarItemIdentifier = @"org.shadowlab.sdef.toolbar.
     NSToolbarCustomizeToolbarItemIdentifier,
     NSToolbarFlexibleSpaceItemIdentifier,
     NSToolbarSpaceItemIdentifier,
-    NSToolbarSeparatorItemIdentifier, nil];
+    NSToolbarSeparatorItemIdentifier];
 }
 
 - (NSArray *)toolbarDefaultItemIdentifiers: (NSToolbar *) toolbar {
-  return [NSArray arrayWithObjects: SdefSaveDocToolbarItemIdentifier,
+  return @[SdefSaveDocToolbarItemIdentifier,
     NSToolbarSeparatorItemIdentifier,
     SdefOpenReferenceToolbarItemIdentifier,
     NSToolbarFlexibleSpaceItemIdentifier,
-    NSToolbarSpaceItemIdentifier, nil];
+    NSToolbarSpaceItemIdentifier];
 }
 
 - (NSToolbarItem *)toolbar:(NSToolbar *)toolbar

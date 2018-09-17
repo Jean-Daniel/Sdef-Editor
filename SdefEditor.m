@@ -244,7 +244,7 @@ const OSType kCocoaSuiteDefinitionHFSType = 'ScSu';
   [openPanel setTreatsFilePackagesAsDirectories:YES];
   [openPanel setAllowedFileTypes:[NSArray arrayWithObject:@"scriptSuite"]];
   switch([openPanel runModal]) {
-    case NSCancelButton:
+    case NSModalResponseCancel:
       return;
   }
   if (![[openPanel URLs] count]) return;
@@ -263,7 +263,7 @@ const OSType kCocoaSuiteDefinitionHFSType = 'ScSu';
   [openPanel setAllowsMultipleSelection:NO];
   [openPanel setTreatsFilePackagesAsDirectories:YES];
   switch([openPanel runModal]) {
-    case NSCancelButton:
+    case NSModalResponseCancel:
       return;
   }
   if (![[openPanel URLs] count]) return;
@@ -305,12 +305,12 @@ const OSType kCocoaSuiteDefinitionHFSType = 'ScSu';
 #pragma mark Application Delegate
 - (BOOL)application:(NSApplication *)theApplication openFile:(NSString *)filename {
   Boolean isapp = false;
-  NSString *type = [[NSDocumentController sharedDocumentController] typeFromFileExtension:[filename pathExtension]];
+  NSURL *url = [NSURL fileURLWithPath:filename];
+  NSString *type = [[NSDocumentController sharedDocumentController] typeForContentsOfURL:url error:NULL];
   if ([type isEqualToString:CocoaSuiteDefinitionFileType]) {
     [self importCocoaScriptFile:filename];
     return YES;
   } else {
-    NSURL *url = [NSURL fileURLWithPath:filename];
     if ((noErr == WBLSIsApplicationAtURL(SPXNSToCFURL(url), &isapp)) && isapp) {
       SdefImporter *importer = [[OSASdefImporter alloc] initWithURL:url];
       [self importWithImporter:importer];

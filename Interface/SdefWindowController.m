@@ -365,7 +365,7 @@ static inline BOOL SdefEditorExistsForItem(SdefObject *item) {
       NSBeep();
       break;
     default:
-      [pboard declareTypes:[NSArray arrayWithObjects:SdefTreePboardType, SdefInfoPboardType, NSStringPboardType, nil] owner:nil];
+      [pboard declareTypes:@[SdefTreePboardType, SdefInfoPboardType, NSStringPboardType] owner:nil];
       if ([selection objectType] == kSdefType_RespondsTo ||
           ([selection objectType] == kSdefType_Collection && [(SdefCollection *)selection acceptsObjectType:kSdefType_RespondsTo])) {
         id str = nil;

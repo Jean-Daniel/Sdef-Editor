@@ -62,9 +62,9 @@
   [openPanel setCanChooseDirectories:NO];
   [openPanel setAllowsMultipleSelection:NO];
   [openPanel setTreatsFilePackagesAsDirectories:NO];
-  [openPanel setAllowedFileTypes:[NSArray arrayWithObjects:@"app", kUTTypeApplication, nil]];
+  [openPanel setAllowedFileTypes:@[@"app", SPXCFToNSString(kUTTypeApplication)]];
   switch ([openPanel runModal]) {
-    case NSCancelButton:
+    case NSModalResponseCancel:
       return;
   }
   if ([[openPanel URLs] count] == 0)
