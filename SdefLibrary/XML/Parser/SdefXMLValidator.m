@@ -325,7 +325,7 @@ SdefXMLElement *_ELEMENT(Class cls, NSString *name, ...) {
 - (id)initWithElements:(NSString * const __unsafe_unretained *)elements count:(NSUInteger)cnt {
   if (self = [super init]) {
     if (cnt > 0)
-      _elements = [[NSSet alloc] init];
+      _elements = [[NSSet alloc] initWithObjects:elements count:cnt];
   }
   return self;
 }
