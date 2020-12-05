@@ -9,3 +9,5 @@ This project includes submodules that must be checked out before building. To do
 git submodule init
 git submodule update
 ```
+
+Additionally, you will need to change the Team setting in the Signing & Capabilities section of each target's settings.
