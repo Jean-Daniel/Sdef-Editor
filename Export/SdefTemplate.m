@@ -321,7 +321,7 @@ NSDictionary *SdefTemplatesAtURL(NSURL *url) {
         tpl = [[SdefTemplate alloc] initWithPath:file.path];
         templates[tpl.menuName] = tpl;
       } @catch (id exception) {
-        SPXCLogException(exception);
+        spx_log_exception(exception);
       }
     }
   }

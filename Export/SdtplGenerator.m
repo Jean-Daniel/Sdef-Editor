@@ -403,7 +403,7 @@ NSString *SdefEscapedString(NSString *value, NSUInteger format) {
       bwrite = [self writeDictionary:dictionary usingTemplate:root];
     } @catch (id exception) {
       bwrite = NO;
-      SPXLogException(exception);
+      spx_log_exception(exception);
     }
 
     if (bwrite) {
@@ -413,7 +413,7 @@ NSString *SdefEscapedString(NSString *value, NSUInteger format) {
           @try {
             [self writeIndex:dictionary usingTemplate:root];
           } @catch (id exception) {
-            SPXLogException(exception);
+            spx_log_exception(exception);
           }
         }
       }
@@ -447,7 +447,7 @@ NSString *SdefEscapedString(NSString *value, NSUInteger format) {
               NSString *file = [self tocFile];
               [self writeTemplate:root toFile:file representedObject:dictionary];
             } @catch (id exception) {
-              SPXLogException(exception);
+              spx_log_exception(exception);
             }
           }
         }
@@ -804,7 +804,7 @@ static NSString * const _kNullPlaceholder = @"__null__";
   BOOL isDir;
   if ([[NSFileManager defaultManager] fileExistsAtPath:path isDirectory:&isDir]) {
     if (kSdefTemplateFileSkip == sd_gnFlags.existingFile ) {
-      SPXDebug(@"Skip File %@", path);
+      spx_debug("Skip File %@", path);
       return NO;
     } else if (kSdefTemplateFileAsk == sd_gnFlags.existingFile) {
       NSAlert *alert = [NSAlert alertWithMessageText:@"File already exist!"

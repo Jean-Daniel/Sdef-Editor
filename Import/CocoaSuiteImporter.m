@@ -133,7 +133,7 @@ static NSArray *ASKStandardsSuites(void) {
 }
 
 - (void)loadSuite:(NSString *)suite {
-  SPXDebug(@"Load suite: %@", suite);
+  spx_debug("Load suite: %@", suite);
   if ([suite isEqualToString:@"NSCoreSuite"] || [suite isEqualToString:@"NSTextSuite"]) {
     sd_std = YES;
     [sd_cache addObject:@"NSCoreSuite"];
@@ -255,7 +255,7 @@ static NSArray *ASKStandardsSuites(void) {
     if (dico) {
       for (NSUInteger idx = 0; idx < [dico count]; idx++) {
         SdefSuite *suite = [dico childAtIndex:idx];
-        SPXDebug(@"Load core suite: %@", suite);
+        spx_debug("Load core suite: %@", suite);
         [manager addSuite:suite];
       }
     }

@@ -88,7 +88,7 @@ const OSType kCocoaSuiteDefinitionHFSType = 'ScSu';
 }
 
 - (void)showWelcome {
-  SPXTrace();
+  spx_trace();
 }
 
 - (void)awakeFromNib {
@@ -219,7 +219,7 @@ const OSType kCocoaSuiteDefinitionHFSType = 'ScSu';
       NSRunAlertPanel(@"Importation failed!", @"Sdef Editor cannot import this file. Is it in a valid format?", @"OK", nil, nil);
     }
   } @catch (id exception) {
-    SPXLogException(exception);
+    spx_log_exception(exception);
     NSBeep();
   }
 }

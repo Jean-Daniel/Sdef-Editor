@@ -224,7 +224,7 @@ NSImage *SdefImageNamed(NSString *name) {
 - (void)setXrefs:(NSArray *)xrefs {
   // does nothing.
   if (![self hasXrefs])
-    SPXLogWarning(@"Try to set xrefs on a invalid item %@", self);
+    spx_log("#WARNING Try to set xrefs on a invalid item %@", self);
 }
 
 - (BOOL)hasXInclude {

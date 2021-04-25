@@ -69,7 +69,7 @@
       @try {
         [elt appendStringToStream:stream];
       } @catch (id exception) {
-        SPXLogException(exception);
+        spx_log_exception(exception);
       }
     }
   }
@@ -93,7 +93,7 @@
       @try {
         [prop appendStringToStream:stream];
       } @catch (id exception) {
-        SPXLogException(exception);
+        spx_log_exception(exception);
       }
     }
   }

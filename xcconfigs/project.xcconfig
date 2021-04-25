@@ -1,6 +1,29 @@
 
-#include "../hadron/xcconfigs/os/yosemite.xcconfig"
+#include "../hadron/xcconfigs/os/elcapitan.xcconfig"
+
+// team.xcconfig contains a single DEVELOPMENT_TEAM entry
+#include "team.xcconfig"
 
 HADRON_PATH = hadron
 
 WARNING_CFLAGS = $(inherited) -Wno-old-style-cast
+
+//:configuration = Debug
+// MARKETING_VERSION = 1.0.6
+// CURRENT_PROJECT_VERSION = 10006
+
+// automatic code sign
+CODE_SIGN_STYLE = Automatic
+PROVISIONING_PROFILE_SPECIFIER =
+
+// so we don't include swift runtime libraries :-)
+IPHONEOS_DEPLOYMENT_TARGET = 13.2
+
+
+LOCALIZED_STRING_MACRO_NAMES = LocalizedString NSLocalizedString CFBundleCopyLocalizedString
+
+// Multi platform target support
+
+EXCLUDED_SOURCE_FILE_NAMES = macOS/* iOS/*
+INCLUDED_SOURCE_FILE_NAMES[sdk=macosx*] = macOS/*
+INCLUDED_SOURCE_FILE_NAMES[sdk=iphoneos*] = iOS/*

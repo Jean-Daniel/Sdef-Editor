@@ -144,7 +144,7 @@
                     @try {
                       [generator writeDictionary:[self->sd_document dictionary] toFile:[file path]];
                     } @catch (id exception) {
-                      SPXLogException(exception);
+                      spx_log_exception(exception);
                     }
                   }
                   [self close:nil];

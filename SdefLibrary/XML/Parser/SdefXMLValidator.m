@@ -233,7 +233,7 @@ SdefXMLElement *_ELEMENT(Class cls, NSString *name, ...) {
 - (void)endElement:(NSString *)element {
   NSString * last = [self element];
   if (!last || ![element isEqualToString:last]) {
-    spx_log_warning("Invalid validator stack state");
+    spx_log("#WARNING Invalid validator stack state");
   }
   if (last)
     [sd_stack removeLastObject];
@@ -311,7 +311,7 @@ SdefXMLElement *_ELEMENT(Class cls, NSString *name, ...) {
     }
   } else {
     sd_version = kSdefParserVersionUnknown;
-    SPXDebug(@"Invalid validator for element '%@' !", [self element]);
+    spx_debug("Invalid validator for element '%@' !", [self element]);
   }
 
   return sd_version;

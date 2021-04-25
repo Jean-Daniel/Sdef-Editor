@@ -52,7 +52,7 @@ NSDictionary *_SdefXMLCreateDictionaryWithAttributes(xmlAttr *attr, NSStringEnco
           }
         }
       } else {
-        SPXDebug(@"Ignore attribute: %s:%s", attr->ns->prefix, attr->name);
+        spx_debug("Ignore attribute: %s:%s", attr->ns->prefix, attr->name);
       }
     }
     attr = attr->next;

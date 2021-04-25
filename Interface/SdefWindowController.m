@@ -436,7 +436,7 @@ static inline BOOL SdefEditorExistsForItem(SdefObject *item) {
       @try {
         destination = [(SdefSuite *)[selection firstParentOfType:kSdefType_Suite] valueForKey:str];
       } @catch (id exception) {
-        SPXLogException(exception);
+        spx_log_exception(exception);
         destination = nil;
       }
     }
@@ -457,7 +457,7 @@ static inline BOOL SdefEditorExistsForItem(SdefObject *item) {
       @try {
         destination = [(SdefClass *)[selection firstParentOfType:kSdefType_Class] valueForKey:str];
       } @catch (id exception) {
-        SPXLogException(exception);
+        spx_log_exception(exception);
         destination = nil;
       }
     }
@@ -482,7 +482,7 @@ static inline BOOL SdefEditorExistsForItem(SdefObject *item) {
         @try {
           destination = [suite valueForKey:str];
         } @catch (id exception) {
-          SPXLogException(exception);
+          spx_log_exception(exception);
           destination = nil;
         }
       }
@@ -494,7 +494,7 @@ static inline BOOL SdefEditorExistsForItem(SdefObject *item) {
         @try {
           destination = [class valueForKey:str];
         } @catch (id exception) {
-          SPXLogException(exception);
+          spx_log_exception(exception);
           destination = nil;
         }
       }

@@ -121,7 +121,7 @@
                       dico = AppleScriptDictionaryFromSdefDictionary([self dictionary]);
                     } @catch (id exception) {
                       dico = nil;
-                      SPXLogException(exception);
+                      spx_log_exception(exception);
                     }
                     if (!dico || ![NSArchiver archiveRootObject:dico toFile:[file path]]) {
                       NSBeginAlertSheet(@"Unable to create ASDictionary!",
@@ -166,7 +166,7 @@
       data = [gen xmlDataForVersion:version];
     } @catch (id exception) {
       NSBeep();
-      SPXLogException(exception);
+      spx_log_exception(exception);
     }
   }
   return data;

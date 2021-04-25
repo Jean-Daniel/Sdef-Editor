@@ -139,7 +139,7 @@
       @try {
         [input writeData:data];
       } @catch (id exception) {
-        SPXLogException(exception);
+        spx_log_exception(exception);
       }
     }
     [input closeFile];

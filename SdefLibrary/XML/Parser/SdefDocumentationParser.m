@@ -167,7 +167,7 @@
   if (sd_html > 0) {
     [sd_content appendCString:(const char *)data encoding:[parser encoding]];
   } else {
-    spx_log_warning("Encounter a CDData block outside html element");
+    spx_log("#WARNING Encounter a CDData block outside html element");
   }
 }
 
@@ -203,10 +203,10 @@
 //      break;
 //    case XML_DTD_NODE:
 //    case XML_DOCUMENT_TYPE_NODE:
-//      SPXDebug(@"Data Type ID: kCFXMLNodeTypeDocumentType (%s)", node->content);
+//      spx_debug("Data Type ID: kCFXMLNodeTypeDocumentType (%s)", node->content);
 //      break;
     default:
-      SPXDebug(@"Unknown Data Type ID: %ld (%s)", (long)node->type, node->name);
+      spx_debug("Unknown Data Type ID: %ld (%s)", (long)node->type, node->name);
   }
   return structure;
 }

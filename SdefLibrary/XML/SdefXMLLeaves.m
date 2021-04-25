@@ -38,7 +38,7 @@
   [NSException raise:NSInvalidArgumentException format:@"%@ does not support children", self];
 }
 - (void)addXMLComment:(NSString *)comment {
-  SPXTrace();
+  spx_trace();
 }
 
 - (void)setXMLMetas:(NSDictionary *)metas {

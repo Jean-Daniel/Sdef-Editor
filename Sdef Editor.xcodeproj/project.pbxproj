@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 45;
+	objectVersion = 53;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -70,6 +70,7 @@
 		1B8AAC8C0D815722003E6ECF /* Carbon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1B8AAC8B0D815721003E6ECF /* Carbon.framework */; };
 		1B8AAC910D815726003E6ECF /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1B8AAC900D815725003E6ECF /* Cocoa.framework */; };
 		1B8AAC950D815729003E6ECF /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1B8AAC940D815729003E6ECF /* WebKit.framework */; };
+		1BABE1A32477E1B8006AE849 /* team.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 1BABE1A22477E1B8006AE849 /* team.xcconfig */; };
 		1BADECB019607157005A70E6 /* WBFunctions.m in Sources */ = {isa = PBXBuildFile; fileRef = 1B3555F116844B6F005D0D0A /* WBFunctions.m */; };
 		1BADECB119607157005A70E6 /* WBFSFunctions.mm in Sources */ = {isa = PBXBuildFile; fileRef = 1B3555EF16844B6F005D0D0A /* WBFSFunctions.mm */; };
 		1BADECB219607157005A70E6 /* WBAEFunctions.mm in Sources */ = {isa = PBXBuildFile; fileRef = 1B3555E616844B6F005D0D0A /* WBAEFunctions.mm */; };
@@ -454,6 +455,8 @@
 		1B8AAC8B0D815721003E6ECF /* Carbon.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Carbon.framework; path = System/Library/Frameworks/Carbon.framework; sourceTree = SDKROOT; };
 		1B8AAC900D815725003E6ECF /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
 		1B8AAC940D815729003E6ECF /* WebKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebKit.framework; path = System/Library/Frameworks/WebKit.framework; sourceTree = SDKROOT; };
+		1BABE1A22477E1B8006AE849 /* team.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = team.xcconfig; sourceTree = "<group>"; };
+		1BABE1A42477E42B006AE849 /* Sdef Editor.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "Sdef Editor.entitlements"; sourceTree = "<group>"; };
 		1BB5C6C41798357C004058BA /* SdefLogWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SdefLogWindowController.h; sourceTree = "<group>"; };
 		1BB5C6C51798357C004058BA /* SdefLogWindowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SdefLogWindowController.m; sourceTree = "<group>"; };
 		1BB5C6C61798357C004058BA /* SdefLogWindow.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SdefLogWindow.xib; sourceTree = "<group>"; };
@@ -711,6 +714,7 @@
 		1B35555B16844A90005D0D0A /* xcconfigs */ = {
 			isa = PBXGroup;
 			children = (
+				1BABE1A22477E1B8006AE849 /* team.xcconfig */,
 				1B35555C16844A90005D0D0A /* debug.xcconfig */,
 				1B35555D16844A90005D0D0A /* project.xcconfig */,
 				1B35555E16844A90005D0D0A /* release.xcconfig */,
@@ -956,6 +960,7 @@
 		2A37F4B8FDCFA73011CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				1BABE1A42477E42B006AE849 /* Sdef Editor.entitlements */,
 				1B73B399214F01F6006AE849 /* Sdef Editor.xcassets */,
 				9863F7D2078B376B0022F623 /* Images */,
 				98057B2307B50A5B00C2D3C7 /* Sdef Editor Help */,
@@ -1499,7 +1504,7 @@
 			attributes = {
 			};
 			buildConfigurationList = 98A7CBEC0855010F000D862B /* Build configuration list for PBXProject "Sdef Editor" */;
-			compatibilityVersion = "Xcode 3.1";
+			compatibilityVersion = "Xcode 11.4";
 			developmentRegion = English;
 			hasScannedForEncodings = 1;
 			knownRegions = (
@@ -1570,6 +1575,7 @@
 				98E98CE40840D96F0093BA77 /* Element.tiff in Resources */,
 				1B607CC1214C71DA006AE849 /* SdefSymbolBrowser.xib in Resources */,
 				98DA3AD308411C28003C07A3 /* SdefDictionary.icns in Resources */,
+				1BABE1A32477E1B8006AE849 /* team.xcconfig in Resources */,
 				98D9B3D50876AEFB001AC5B1 /* Skeleton.sdef in Resources */,
 				1B607CCE214C71DA006AE849 /* Preferences.xib in Resources */,
 				9818ECAF0BD57C230079867A /* Class-Extension.tiff in Resources */,
@@ -1929,14 +1935,21 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = "Resources/Sdef Editor.entitlements";
 				CODE_SIGN_IDENTITY = "Mac Developer";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 266;
+				CURRENT_PROJECT_VERSION = 270;
 				DEVELOPMENT_TEAM = 3DT6DNJE39;
+				ENABLE_HARDENED_RUNTIME = YES;
 				HEADER_SEARCH_PATHS = /usr/include/libxml2;
 				INFOPLIST_FILE = Resources/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @loader_path/../Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@loader_path/../Frameworks",
+				);
+				MARKETING_VERSION = 1.7;
 				OTHER_LDFLAGS = "-lxml2";
+				PRODUCT_BUNDLE_IDENTIFIER = org.shadowlab.SdefEditor;
 				PROVISIONING_PROFILE_SPECIFIER = "";
 			};
 			name = Release;
@@ -1947,14 +1960,21 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = "Resources/Sdef Editor.entitlements";
 				CODE_SIGN_IDENTITY = "Mac Developer";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 266;
+				CURRENT_PROJECT_VERSION = 270;
 				DEVELOPMENT_TEAM = 3DT6DNJE39;
+				ENABLE_HARDENED_RUNTIME = YES;
 				HEADER_SEARCH_PATHS = /usr/include/libxml2;
 				INFOPLIST_FILE = Resources/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @loader_path/../Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@loader_path/../Frameworks",
+				);
+				MARKETING_VERSION = 1.7;
 				OTHER_LDFLAGS = "-lxml2";
+				PRODUCT_BUNDLE_IDENTIFIER = org.shadowlab.SdefEditor;
 				PROVISIONING_PROFILE_SPECIFIER = "";
 			};
 			name = Debug;

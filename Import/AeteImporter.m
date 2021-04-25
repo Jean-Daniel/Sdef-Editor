@@ -224,7 +224,7 @@ bail:
         [suites addObject:suite];
       }
     } @catch (id exception) {
-      SPXLogException(exception);
+      spx_log_exception(exception);
       [suites removeAllObjects];
       return NO;
     }
