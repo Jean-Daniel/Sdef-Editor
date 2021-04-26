@@ -102,8 +102,8 @@
 		1BADECCF19607157005A70E6 /* WBInterpolationFunction.m in Sources */ = {isa = PBXBuildFile; fileRef = 1BB675F2168EE25C00B06EFA /* WBInterpolationFunction.m */; };
 		1BADECD019607157005A70E6 /* WBCGFunctions.mm in Sources */ = {isa = PBXBuildFile; fileRef = 1BB675F7168EE29200B06EFA /* WBCGFunctions.mm */; };
 		1BADECD119607157005A70E6 /* WBGeometry.m in Sources */ = {isa = PBXBuildFile; fileRef = 1B39DEE71684628F0048F1E9 /* WBGeometry.m */; };
-		1BADECD21960719E005A70E6 /* .framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1B35556B16844B02005D0D0A /* .framework */; };
-		1BADECD4196071D4005A70E6 /* .framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 1B35556B16844B02005D0D0A /* .framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
+		1BADECD21960719E005A70E6 /* WonderBox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1B35556B16844B02005D0D0A /* WonderBox.framework */; };
+		1BADECD4196071D4005A70E6 /* WonderBox.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 1B35556B16844B02005D0D0A /* WonderBox.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		1BB1E2280BE26E5300EEB652 /* SdefEditor.m in Sources */ = {isa = PBXBuildFile; fileRef = 98D3A8C5079EC8670049A8FC /* SdefEditor.m */; };
 		1BB5C6C71798357C004058BA /* SdefLogWindowController.h in Headers */ = {isa = PBXBuildFile; fileRef = 1BB5C6C41798357C004058BA /* SdefLogWindowController.h */; };
 		1BB5C6C81798357C004058BA /* SdefLogWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1BB5C6C51798357C004058BA /* SdefLogWindowController.m */; };
@@ -303,7 +303,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				1BADECD4196071D4005A70E6 /* .framework in Copy Frameworks */,
+				1BADECD4196071D4005A70E6 /* WonderBox.framework in Copy Frameworks */,
 			);
 			name = "Copy Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -332,7 +332,7 @@
 		1B35556216844A90005D0D0A /* bundle.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = bundle.xcconfig; sourceTree = "<group>"; };
 		1B35556316844A90005D0D0A /* framework.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; name = framework.xcconfig; path = ../../hadron/xcconfigs/target/framework.xcconfig; sourceTree = "<group>"; };
 		1B35556416844A90005D0D0A /* executable.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = executable.xcconfig; sourceTree = "<group>"; };
-		1B35556B16844B02005D0D0A /* .framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = .framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		1B35556B16844B02005D0D0A /* WonderBox.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = WonderBox.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		1B35556C16844B02005D0D0A /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
 		1B35556E16844B02005D0D0A /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
 		1B35558416844B6F005D0D0A /* NSAlert+WonderBox.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NSAlert+WonderBox.h"; sourceTree = "<group>"; };
@@ -671,7 +671,7 @@
 				1B8AAC910D815726003E6ECF /* Cocoa.framework in Frameworks */,
 				1B8AAC950D815729003E6ECF /* WebKit.framework in Frameworks */,
 				1B8AAC8C0D815722003E6ECF /* Carbon.framework in Frameworks */,
-				1BADECD21960719E005A70E6 /* .framework in Frameworks */,
+				1BADECD21960719E005A70E6 /* WonderBox.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -703,7 +703,7 @@
 			isa = PBXGroup;
 			children = (
 				8D15AC370486D014006FF6A4 /* Sdef Editor.app */,
-				1B35556B16844B02005D0D0A /* .framework */,
+				1B35556B16844B02005D0D0A /* WonderBox.framework */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -1466,7 +1466,7 @@
 			);
 			name = WonderBox;
 			productName = WonderBox;
-			productReference = 1B35556B16844B02005D0D0A /* .framework */;
+			productReference = 1B35556B16844B02005D0D0A /* WonderBox.framework */;
 			productType = "com.apple.product-type.framework";
 		};
 		8D15AC270486D014006FF6A4 /* Sdef Editor */ = {
@@ -1885,12 +1885,13 @@
 			buildSettings = {
 				CODE_SIGN_IDENTITY = "Mac Developer";
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = J79Y4KWZQ2;
+				DEVELOPMENT_TEAM = 3DT6DNJE39;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				FRAMEWORK_VERSION = A;
 				INFOPLIST_FILE = WonderBox/Info.plist;
 				PRODUCT_BUNDLE_IDENTIFIER = com.xenonium.WonderBox;
+				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				WRAPPER_EXTENSION = framework;
 			};
@@ -1902,12 +1903,13 @@
 			buildSettings = {
 				CODE_SIGN_IDENTITY = "Mac Developer";
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = J79Y4KWZQ2;
+				DEVELOPMENT_TEAM = 3DT6DNJE39;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				FRAMEWORK_VERSION = A;
 				INFOPLIST_FILE = WonderBox/Info.plist;
 				PRODUCT_BUNDLE_IDENTIFIER = com.xenonium.WonderBox;
+				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				WRAPPER_EXTENSION = framework;
 			};
@@ -1918,7 +1920,6 @@
 			baseConfigurationReference = 1B35555E16844A90005D0D0A /* release.xcconfig */;
 			buildSettings = {
 				CLANG_WARN_DOCUMENTATION_COMMENTS = NO;
-				OTHER_CODE_SIGN_FLAGS = "--timestamp=none";
 			};
 			name = Release;
 		};
@@ -1931,13 +1932,11 @@
 				CODE_SIGN_IDENTITY = "Mac Developer";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 266;
-				DEVELOPMENT_TEAM = J79Y4KWZQ2;
+				DEVELOPMENT_TEAM = 3DT6DNJE39;
 				HEADER_SEARCH_PATHS = /usr/include/libxml2;
 				INFOPLIST_FILE = Resources/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @loader_path/../Frameworks";
-				OTHER_CODE_SIGN_FLAGS = "";
 				OTHER_LDFLAGS = "-lxml2";
-				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 			};
 			name = Release;
@@ -1951,13 +1950,11 @@
 				CODE_SIGN_IDENTITY = "Mac Developer";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 266;
-				DEVELOPMENT_TEAM = J79Y4KWZQ2;
+				DEVELOPMENT_TEAM = 3DT6DNJE39;
 				HEADER_SEARCH_PATHS = /usr/include/libxml2;
 				INFOPLIST_FILE = Resources/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @loader_path/../Frameworks";
-				OTHER_CODE_SIGN_FLAGS = "";
 				OTHER_LDFLAGS = "-lxml2";
-				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 			};
 			name = Debug;
@@ -1967,7 +1964,6 @@
 			baseConfigurationReference = 1B35555C16844A90005D0D0A /* debug.xcconfig */;
 			buildSettings = {
 				CLANG_WARN_DOCUMENTATION_COMMENTS = NO;
-				OTHER_CODE_SIGN_FLAGS = "--timestamp=none";
 			};
 			name = Debug;
 		};
