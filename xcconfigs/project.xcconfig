@@ -1,5 +1,5 @@
 
-#include "../hadron/xcconfigs/os/elcapitan.xcconfig"
+#include "../hadron/xcconfigs/os/catalina.xcconfig"
 
 // team.xcconfig contains a single DEVELOPMENT_TEAM entry
 #include "team.xcconfig"
@@ -15,9 +15,6 @@ WARNING_CFLAGS = $(inherited) -Wno-old-style-cast
 // automatic code sign
 CODE_SIGN_STYLE = Automatic
 PROVISIONING_PROFILE_SPECIFIER =
-
-// so we don't include swift runtime libraries :-)
-IPHONEOS_DEPLOYMENT_TARGET = 13.2
 
 
 LOCALIZED_STRING_MACRO_NAMES = LocalizedString NSLocalizedString CFBundleCopyLocalizedString

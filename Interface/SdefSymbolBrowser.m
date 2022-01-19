@@ -385,7 +385,7 @@ BOOL SdefSearchFilter(NSString *search, SdefObject *object, SdefSearchField fiel
 - (id)initWithItemIdentifier:(NSString *)itemIdentifier {
   if (self = [super initWithItemIdentifier:itemIdentifier]) {
     id searchField = [[NSSearchField alloc] initWithFrame:NSMakeRect(0, 0, 120, 19)];
-    [[searchField cell] setControlSize:NSSmallControlSize];
+    [[searchField cell] setControlSize:NSControlSizeSmall];
     [self setView:searchField];
     [self setMinSize:[searchField frame].size];
     [self setMaxSize:[searchField frame].size];

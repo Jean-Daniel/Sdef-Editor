@@ -826,7 +826,7 @@ static NSString * const _kNullPlaceholder = @"__null__";
           sd_gnFlags.cancel = 1;
           return NO;
       }
-      if ([all state] == NSOnState) {
+      if ([all state] == NSControlStateValueOn) {
         sd_gnFlags.existingFile = kSdefTemplateFileReplace;
       }
     }

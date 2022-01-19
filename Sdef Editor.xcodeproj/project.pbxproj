@@ -70,7 +70,6 @@
 		1B8AAC8C0D815722003E6ECF /* Carbon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1B8AAC8B0D815721003E6ECF /* Carbon.framework */; };
 		1B8AAC910D815726003E6ECF /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1B8AAC900D815725003E6ECF /* Cocoa.framework */; };
 		1B8AAC950D815729003E6ECF /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1B8AAC940D815729003E6ECF /* WebKit.framework */; };
-		1BABE1A32477E1B8006AE849 /* team.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 1BABE1A22477E1B8006AE849 /* team.xcconfig */; };
 		1BADECB019607157005A70E6 /* WBFunctions.m in Sources */ = {isa = PBXBuildFile; fileRef = 1B3555F116844B6F005D0D0A /* WBFunctions.m */; };
 		1BADECB119607157005A70E6 /* WBFSFunctions.mm in Sources */ = {isa = PBXBuildFile; fileRef = 1B3555EF16844B6F005D0D0A /* WBFSFunctions.mm */; };
 		1BADECB219607157005A70E6 /* WBAEFunctions.mm in Sources */ = {isa = PBXBuildFile; fileRef = 1B3555E616844B6F005D0D0A /* WBAEFunctions.mm */; };
@@ -428,24 +427,6 @@
 		1B5ECF500CD62807007B8226 /* SdefXIncludeView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = SdefXIncludeView.m; sourceTree = "<group>"; };
 		1B5FEC8D0BD8E58100F57412 /* SdefXRef.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = SdefXRef.h; sourceTree = "<group>"; };
 		1B5FEC8E0BD8E58100F57412 /* SdefXRef.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = SdefXRef.m; sourceTree = "<group>"; };
-		1B607C9D214C71D8006AE849 /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = English.lproj/SdefRecord.xib; sourceTree = "<group>"; };
-		1B607C9F214C71D9006AE849 /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = English.lproj/SdefSymbolBrowser.xib; sourceTree = "<group>"; };
-		1B607CA1214C71D9006AE849 /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = English.lproj/ImportApplicationSdef.xib; sourceTree = "<group>"; };
-		1B607CA3214C71D9006AE849 /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = English.lproj/ImportApplicationAete.xib; sourceTree = "<group>"; };
-		1B607CA5214C71D9006AE849 /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = English.lproj/SdefValidator.xib; sourceTree = "<group>"; };
-		1B607CA7214C71D9006AE849 /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = English.lproj/SdefVerb.xib; sourceTree = "<group>"; };
-		1B607CA9214C71D9006AE849 /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = English.lproj/SdefClass.xib; sourceTree = "<group>"; };
-		1B607CAB214C71D9006AE849 /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = English.lproj/SdefInspector.xib; sourceTree = "<group>"; };
-		1B607CAD214C71D9006AE849 /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = English.lproj/SdefEnumeration.xib; sourceTree = "<group>"; };
-		1B607CAF214C71D9006AE849 /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = English.lproj/SdtplExport.xib; sourceTree = "<group>"; };
-		1B607CB1214C71D9006AE849 /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = English.lproj/SdefDocument.xib; sourceTree = "<group>"; };
-		1B607CB3214C71D9006AE849 /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = English.lproj/SdefExport.xib; sourceTree = "<group>"; };
-		1B607CB5214C71DA006AE849 /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = English.lproj/MainMenu.xib; sourceTree = "<group>"; };
-		1B607CB7214C71DA006AE849 /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = English.lproj/SdefTypesEditor.xib; sourceTree = "<group>"; };
-		1B607CB9214C71DA006AE849 /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = English.lproj/Preferences.xib; sourceTree = "<group>"; };
-		1B607CBB214C71DA006AE849 /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = English.lproj/SdefImporterWarning.xib; sourceTree = "<group>"; };
-		1B607CBD214C71DA006AE849 /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = English.lproj/SdefDictionary.xib; sourceTree = "<group>"; };
-		1B607CBF214C71DA006AE849 /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = English.lproj/SdefSuite.xib; sourceTree = "<group>"; };
 		1B73B399214F01F6006AE849 /* Sdef Editor.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Sdef Editor.xcassets"; sourceTree = "<group>"; };
 		1B73E9CB0CD7965B00FC60B2 /* SdefParserInternal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = SdefParserInternal.h; sourceTree = "<group>"; };
 		1B73ECA60CD7A73400FC60B2 /* SdefParserInternal.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = SdefParserInternal.m; sourceTree = "<group>"; };
@@ -481,6 +462,24 @@
 		1BC332C50CD894C3009109F0 /* SdefXInclude.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = SdefXInclude.m; sourceTree = "<group>"; };
 		1BE05BAC0BDD1F2800334FBF /* SdefTypeValidator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = SdefTypeValidator.m; sourceTree = "<group>"; };
 		1BE05C090BDD21EB00334FBF /* SdefLeavesValidator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = SdefLeavesValidator.m; sourceTree = "<group>"; };
+		1BEEAF952798A99C006AE849 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/ImportApplicationAete.xib; sourceTree = "<group>"; };
+		1BEEAF962798A99C006AE849 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/ImportApplicationSdef.xib; sourceTree = "<group>"; };
+		1BEEAF972798A99C006AE849 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/MainMenu.xib; sourceTree = "<group>"; };
+		1BEEAF982798A99C006AE849 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/Preferences.xib; sourceTree = "<group>"; };
+		1BEEAF992798A99C006AE849 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/SdefDocument.xib; sourceTree = "<group>"; };
+		1BEEAF9A2798A99C006AE849 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/SdefExport.xib; sourceTree = "<group>"; };
+		1BEEAF9B2798A99C006AE849 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/SdefImporterWarning.xib; sourceTree = "<group>"; };
+		1BEEAF9C2798A99C006AE849 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/SdefInspector.xib; sourceTree = "<group>"; };
+		1BEEAF9D2798A99C006AE849 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/SdefSymbolBrowser.xib; sourceTree = "<group>"; };
+		1BEEAF9E2798A99C006AE849 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/SdefTypesEditor.xib; sourceTree = "<group>"; };
+		1BEEAF9F2798A99D006AE849 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/SdefValidator.xib; sourceTree = "<group>"; };
+		1BEEAFA02798A99D006AE849 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/SdtplExport.xib; sourceTree = "<group>"; };
+		1BEEAFA12798A99D006AE849 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/SdefClass.xib; sourceTree = "<group>"; };
+		1BEEAFA22798A99D006AE849 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/SdefDictionary.xib; sourceTree = "<group>"; };
+		1BEEAFA32798A99D006AE849 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/SdefEnumeration.xib; sourceTree = "<group>"; };
+		1BEEAFA42798A99D006AE849 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/SdefRecord.xib; sourceTree = "<group>"; };
+		1BEEAFA52798A99D006AE849 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/SdefSuite.xib; sourceTree = "<group>"; };
+		1BEEAFA62798A99D006AE849 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/SdefVerb.xib; sourceTree = "<group>"; };
 		2A37F4C4FDCFA73011CA2CEA /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = /System/Library/Frameworks/AppKit.framework; sourceTree = "<absolute>"; };
 		2A37F4C5FDCFA73011CA2CEA /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = /System/Library/Frameworks/Foundation.framework; sourceTree = "<absolute>"; };
 		8D15AC360486D014006FF6A4 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -1502,13 +1501,14 @@
 		2A37F4A9FDCFA73011CA2CEA /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
+				LastUpgradeCheck = 1320;
 			};
 			buildConfigurationList = 98A7CBEC0855010F000D862B /* Build configuration list for PBXProject "Sdef Editor" */;
 			compatibilityVersion = "Xcode 11.4";
-			developmentRegion = English;
+			developmentRegion = en;
 			hasScannedForEncodings = 1;
 			knownRegions = (
-				English,
+				en,
 			);
 			mainGroup = 2A37F4AAFDCFA73011CA2CEA /* SDef Editor */;
 			projectDirPath = "";
@@ -1575,7 +1575,6 @@
 				98E98CE40840D96F0093BA77 /* Element.tiff in Resources */,
 				1B607CC1214C71DA006AE849 /* SdefSymbolBrowser.xib in Resources */,
 				98DA3AD308411C28003C07A3 /* SdefDictionary.icns in Resources */,
-				1BABE1A32477E1B8006AE849 /* team.xcconfig in Resources */,
 				98D9B3D50876AEFB001AC5B1 /* Skeleton.sdef in Resources */,
 				1B607CCE214C71DA006AE849 /* Preferences.xib in Resources */,
 				9818ECAF0BD57C230079867A /* Class-Extension.tiff in Resources */,
@@ -1741,7 +1740,7 @@
 		1B607C9C214C71D8006AE849 /* SdefRecord.xib */ = {
 			isa = PBXVariantGroup;
 			children = (
-				1B607C9D214C71D8006AE849 /* English */,
+				1BEEAFA42798A99D006AE849 /* en */,
 			);
 			name = SdefRecord.xib;
 			sourceTree = "<group>";
@@ -1749,7 +1748,7 @@
 		1B607C9E214C71D9006AE849 /* SdefSymbolBrowser.xib */ = {
 			isa = PBXVariantGroup;
 			children = (
-				1B607C9F214C71D9006AE849 /* English */,
+				1BEEAF9D2798A99C006AE849 /* en */,
 			);
 			name = SdefSymbolBrowser.xib;
 			sourceTree = "<group>";
@@ -1757,7 +1756,7 @@
 		1B607CA0214C71D9006AE849 /* ImportApplicationSdef.xib */ = {
 			isa = PBXVariantGroup;
 			children = (
-				1B607CA1214C71D9006AE849 /* English */,
+				1BEEAF962798A99C006AE849 /* en */,
 			);
 			name = ImportApplicationSdef.xib;
 			sourceTree = "<group>";
@@ -1765,7 +1764,7 @@
 		1B607CA2214C71D9006AE849 /* ImportApplicationAete.xib */ = {
 			isa = PBXVariantGroup;
 			children = (
-				1B607CA3214C71D9006AE849 /* English */,
+				1BEEAF952798A99C006AE849 /* en */,
 			);
 			name = ImportApplicationAete.xib;
 			sourceTree = "<group>";
@@ -1773,7 +1772,7 @@
 		1B607CA4214C71D9006AE849 /* SdefValidator.xib */ = {
 			isa = PBXVariantGroup;
 			children = (
-				1B607CA5214C71D9006AE849 /* English */,
+				1BEEAF9F2798A99D006AE849 /* en */,
 			);
 			name = SdefValidator.xib;
 			sourceTree = "<group>";
@@ -1781,7 +1780,7 @@
 		1B607CA6214C71D9006AE849 /* SdefVerb.xib */ = {
 			isa = PBXVariantGroup;
 			children = (
-				1B607CA7214C71D9006AE849 /* English */,
+				1BEEAFA62798A99D006AE849 /* en */,
 			);
 			name = SdefVerb.xib;
 			sourceTree = "<group>";
@@ -1789,7 +1788,7 @@
 		1B607CA8214C71D9006AE849 /* SdefClass.xib */ = {
 			isa = PBXVariantGroup;
 			children = (
-				1B607CA9214C71D9006AE849 /* English */,
+				1BEEAFA12798A99D006AE849 /* en */,
 			);
 			name = SdefClass.xib;
 			sourceTree = "<group>";
@@ -1797,7 +1796,7 @@
 		1B607CAA214C71D9006AE849 /* SdefInspector.xib */ = {
 			isa = PBXVariantGroup;
 			children = (
-				1B607CAB214C71D9006AE849 /* English */,
+				1BEEAF9C2798A99C006AE849 /* en */,
 			);
 			name = SdefInspector.xib;
 			sourceTree = "<group>";
@@ -1805,7 +1804,7 @@
 		1B607CAC214C71D9006AE849 /* SdefEnumeration.xib */ = {
 			isa = PBXVariantGroup;
 			children = (
-				1B607CAD214C71D9006AE849 /* English */,
+				1BEEAFA32798A99D006AE849 /* en */,
 			);
 			name = SdefEnumeration.xib;
 			sourceTree = "<group>";
@@ -1813,7 +1812,7 @@
 		1B607CAE214C71D9006AE849 /* SdtplExport.xib */ = {
 			isa = PBXVariantGroup;
 			children = (
-				1B607CAF214C71D9006AE849 /* English */,
+				1BEEAFA02798A99D006AE849 /* en */,
 			);
 			name = SdtplExport.xib;
 			sourceTree = "<group>";
@@ -1821,7 +1820,7 @@
 		1B607CB0214C71D9006AE849 /* SdefDocument.xib */ = {
 			isa = PBXVariantGroup;
 			children = (
-				1B607CB1214C71D9006AE849 /* English */,
+				1BEEAF992798A99C006AE849 /* en */,
 			);
 			name = SdefDocument.xib;
 			sourceTree = "<group>";
@@ -1829,7 +1828,7 @@
 		1B607CB2214C71D9006AE849 /* SdefExport.xib */ = {
 			isa = PBXVariantGroup;
 			children = (
-				1B607CB3214C71D9006AE849 /* English */,
+				1BEEAF9A2798A99C006AE849 /* en */,
 			);
 			name = SdefExport.xib;
 			sourceTree = "<group>";
@@ -1837,7 +1836,7 @@
 		1B607CB4214C71DA006AE849 /* MainMenu.xib */ = {
 			isa = PBXVariantGroup;
 			children = (
-				1B607CB5214C71DA006AE849 /* English */,
+				1BEEAF972798A99C006AE849 /* en */,
 			);
 			name = MainMenu.xib;
 			sourceTree = "<group>";
@@ -1845,7 +1844,7 @@
 		1B607CB6214C71DA006AE849 /* SdefTypesEditor.xib */ = {
 			isa = PBXVariantGroup;
 			children = (
-				1B607CB7214C71DA006AE849 /* English */,
+				1BEEAF9E2798A99C006AE849 /* en */,
 			);
 			name = SdefTypesEditor.xib;
 			sourceTree = "<group>";
@@ -1853,7 +1852,7 @@
 		1B607CB8214C71DA006AE849 /* Preferences.xib */ = {
 			isa = PBXVariantGroup;
 			children = (
-				1B607CB9214C71DA006AE849 /* English */,
+				1BEEAF982798A99C006AE849 /* en */,
 			);
 			name = Preferences.xib;
 			sourceTree = "<group>";
@@ -1861,7 +1860,7 @@
 		1B607CBA214C71DA006AE849 /* SdefImporterWarning.xib */ = {
 			isa = PBXVariantGroup;
 			children = (
-				1B607CBB214C71DA006AE849 /* English */,
+				1BEEAF9B2798A99C006AE849 /* en */,
 			);
 			name = SdefImporterWarning.xib;
 			sourceTree = "<group>";
@@ -1869,7 +1868,7 @@
 		1B607CBC214C71DA006AE849 /* SdefDictionary.xib */ = {
 			isa = PBXVariantGroup;
 			children = (
-				1B607CBD214C71DA006AE849 /* English */,
+				1BEEAFA22798A99D006AE849 /* en */,
 			);
 			name = SdefDictionary.xib;
 			sourceTree = "<group>";
@@ -1877,7 +1876,7 @@
 		1B607CBE214C71DA006AE849 /* SdefSuite.xib */ = {
 			isa = PBXVariantGroup;
 			children = (
-				1B607CBF214C71DA006AE849 /* English */,
+				1BEEAFA52798A99D006AE849 /* en */,
 			);
 			name = SdefSuite.xib;
 			sourceTree = "<group>";

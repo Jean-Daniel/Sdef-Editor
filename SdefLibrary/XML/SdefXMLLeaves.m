@@ -288,7 +288,7 @@
   }
   /* insert at beginning */
   if (attr == [attrs objectForKey:@"insert-at-beginning"]) {
-    [self setInsertAtBeginning:[attr caseInsensitiveCompare:@"YES"]];
+    [self setInsertAtBeginning:[attr caseInsensitiveCompare:@"YES"] == NSOrderedSame];
   }
 }
 
